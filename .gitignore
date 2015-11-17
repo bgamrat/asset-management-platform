@@ -1,0 +1,9 @@
+/app/cache
+/app/logs
+/nbproject
+/composer.phar
+/vendor
+/bin/doctrine
+/bin/doctrine-dbal
+/bin/doctrine.php
+/bin/security-checker
