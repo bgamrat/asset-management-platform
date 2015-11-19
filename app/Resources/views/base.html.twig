@@ -3,13 +3,23 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        <p>Base</p>
-        {% block fos_user_content %}{% endblock %}
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+        {% stylesheets
+            '@dojo_dijit_css'
+            'css/main.css'
+            filter='cssrewrite' output='css/compiled/app.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body class="claro">
+    <h3>Menu Demo</h3>
+    <div id="mainMenu"></div>
+    <p>Last selected: <span id="lastSelected">none</span></p>
+    <p>Base</p>
+
+{% block body %}{% endblock %}
+{% include 'parts/page_footer_script.html.twig' %}
+{% block javascripts %}{% endblock %}
+</body>
 </html>
