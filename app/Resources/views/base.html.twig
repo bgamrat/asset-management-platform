@@ -5,7 +5,8 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% stylesheets
             '@dojo_dijit_css'
-            'css/main.css'
+            '@dgrid_css'
+            '@main_css'
             filter='cssrewrite' output='css/compiled/app.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
@@ -17,7 +18,7 @@
     <div id="mainMenu"></div>
     <p>Last selected: <span id="lastSelected">none</span></p>
     <p>Base</p>
-
+{% block fos_user_content %}{% endblock %}
 {% block body %}{% endblock %}
 {% include 'parts/page_footer_script.html.twig' %}
 {% block javascripts %}{% endblock %}

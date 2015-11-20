@@ -52,13 +52,22 @@ assetic:
         main_js:
             inputs:
                 - 'common/release/app/main.js'
-        #main_css:
+        main_css:
+            inputs:
+                - 'css/main.css'
         dojo_js:
             inputs:
-                - 'common/dojo/dojo/dojo.js'
+                - 'common/release/dojo/dojo.js'
         dojo_dijit_css:
             inputs:
-                - 'common/dojo/dijit/themes/claro/claro.css'
+                - 'common/release/dojo/resources/dojo.css'
+                - 'common/release/dojo/resources/dnd.css'
+                - 'common/release/dijit/themes/claro/claro.css'
+        dgrid_css:
+            inputs:
+                - 'common/release/dgrid/css/dgrid.css'
+                - 'common/release/dgrid/css/skins/claro.css'
+                - 'common/release/dijit/themes/claro/claro.css'
 
 # Doctrine Configuration
 doctrine:

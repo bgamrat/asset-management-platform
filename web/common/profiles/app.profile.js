@@ -34,23 +34,25 @@ var profile = {
 	// Uses Closure Compiler as the JavaScript minifier. This can also be set to "shrinksafe" to use ShrinkSafe,
 	// though ShrinkSafe is deprecated and not recommended.
 	// This option defaults to "" (no compression) if not provided.
-	//optimize: 'closure',
+	optimize: 'closure',
 
 	// We're building layers, so we need to set the minifier to use for those, too.
 	// This defaults to "shrinksafe" if not provided.
-	//layerOptimize: 'closure',
+	layerOptimize: 'closure',
 
 	// A list of packages that will be built. The same packages defined in the loader should be defined here in the
 	// build profile.
 	packages: [
 		// Using a string as a package is shorthand for `{ name: 'app', location: 'app' }`
 		'app',
-		'dgrid',
+                'dojo',
 		'dijit',
-		'dojo',
 		'dojox',
 		'put-selector',
-		'xstyle'
+		'xstyle',
+                'rql',
+		'dstore',
+		'dgrid'
 	],
 
 	// Strips all calls to console functions within the code. You can also set this to "warn" to strip everything
@@ -85,9 +87,12 @@ var profile = {
 		// layer, the module referenced by the layer is always included in the layer (in this case, `app/main`), so it
 		// does not need to be explicitly defined in the `include` array.
 		'app/main': {
-		    include : [ "dojo/_base/declare", "dojo/request", 
-                    "dojo/store/JsonRest",
+		    include : [ "dojo/request", 'dojo/dojo', 'dojo/domReady', 'dojo/_base/declare',
+                    "dojo/on", "dojo/aspect", "dojo/has", "dojo/_base/sniff",
+                    "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Deferred",
                     "dojo/dom", "dijit/registry", "dijit/Menu", "dijit/MenuItem", 
+                    "dgrid/List", "dgrid/OnDemandGrid", "dgrid/Selection", "dgrid/Keyboard", 
+                    "dstore/RequestMemory",
 		    "dijit/tree/ObjectStoreModel", "dijit/Tree" ]
 		}
 	},
