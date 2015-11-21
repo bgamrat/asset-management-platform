@@ -38,11 +38,11 @@ require([
     menu.startup();
 
     var grid = new OnDemandGrid({
-        collection: new RequestMemory({target: '/hof-batting.json'}),
+        collection: new RequestMemory({target: '/api/admin/user/list'}),
         columns: {
-            first: 'First Name',
-            last: 'Last Name',
-            totalG: 'Games Played'
+            username: 'Username',
+            email: 'Email',
+            enabled: 'Enabled'
         }
     }, 'grid');
 
