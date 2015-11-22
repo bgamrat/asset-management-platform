@@ -3,12 +3,8 @@
 {% block body %}
     <div id="wrapper">
         Admin User
-        {% for user in users %}
-            * {{ user.id }} - {{ user.username }}
-        {% else %}
-            No users have been found.
-        {% endfor %}
         <div id="grid">
         </div>
+        {{ form(user_form) }}
     </div>
 {% endblock %}

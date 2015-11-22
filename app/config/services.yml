@@ -10,17 +10,17 @@ services:
 
 services:
     app.form.registration:
-        class: AppBundle\Form\RegistrationFormType
+        class: AppBundle\Form\User\RegistrationFormType
         tags:
             - { name: "form.type", alias: "app_user_registration" }
 
     app.form.invitation:
-        class: AppBundle\Form\InvitationFormType
+        class: AppBundle\Form\User\InvitationFormType
         arguments: ['@app.form.data_transformer.invitation']
         tags:
             - { name: "form.type", alias: "app_invitation_type" }
 
     app.form.data_transformer.invitation:
-        class: AppBundle\Form\DataTransformer\InvitationToCodeTransformer
+        class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false

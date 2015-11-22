@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\UserBundle\Model\UserManager as BaseUserManager;
+use AppBundle\Entity\User;
+use AppBundle\Form\Admin\User\UserType;
 
 class UserController extends Controller
 {
@@ -19,13 +21,11 @@ class UserController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        /**
-         * Show all users
-         */
-        $users = $this->get( 'fos_user.user_manager' )->findUsers();
+        $user = new User();
+        $user_form = $this->createForm(new UserType(), $user);
 
         return $this->render( 'admin/user/index.html.twig', array(
-                    'users' => $users,
+                    'user_form' => $user_form->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }

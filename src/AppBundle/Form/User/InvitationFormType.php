@@ -1,12 +1,12 @@
 <?php
 
-namespace AppBundle\Form;
+namespace AppBundle\Form\User;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
-use AppBundle\Form\DataTransformer\InvitationToCodeTransformer;
+use AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer;
 
 class InvitationFormType extends AbstractType
 {
