@@ -34,3 +34,15 @@ doctrine:
         dbname:   "%database_name%"
         user:     "%database_user%"
         password: "%database_password%"
+
+assetic:
+    assets:
+        dojo_js:
+            inputs:
+                - 'common/release/dojo/dojo.js'
+        main_js:
+            inputs:
+                - 'common/release/app/main.js'
+        admin_js:
+            inputs:
+                - 'common/release/app/admin.js'

@@ -1,50 +1,7 @@
-require([
-    "dojo/dom",
-    "dijit/registry",
-    "dijit/Menu",
-    "dijit/MenuItem",
-    'dstore/RequestMemory',
-    'dgrid/OnDemandGrid',
-    "dojo/domReady!"
-], function (dom, registry, Menu, MenuItem, RequestMemory, OnDemandGrid) {
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-    // a menu item selection handler
-    var onItemSelect = function (event) {
-        dom.byId("lastSelected").innerHTML = this.get("label");
-    };
-    // create the Menu container
-    var menu = new Menu({},"mainMenu");
 
-    // create and add child item widgets
-    // for each of "edit", "view", "task"
-    menu.addChild(new MenuItem({
-        id: "edit",
-        label: "Edit",
-        onClick: onItemSelect
-    }));
-
-    menu.addChild(new MenuItem({
-        id: "view",
-        label: "View",
-        onClick: onItemSelect
-    }));
-
-    menu.addChild(new MenuItem({
-        id: "task",
-        label: "Task",
-        onClick: onItemSelect
-    }));
-
-    menu.startup();
-
-    var grid = new OnDemandGrid({
-        collection: new RequestMemory({target: '/api/admin/user/list'}),
-        columns: {
-            username: 'Username',
-            email: 'Email',
-            enabled: 'Enabled'
-        }
-    }, 'grid');
-
-    grid.startup();
-});

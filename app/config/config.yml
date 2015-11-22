@@ -52,6 +52,9 @@ assetic:
         main_js:
             inputs:
                 - 'common/release/app/main.js'
+        admin_js:
+            inputs:
+                - 'common/release/app/admin.js'
         main_css:
             inputs:
                 - 'css/main.css'

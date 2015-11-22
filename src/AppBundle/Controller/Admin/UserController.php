@@ -22,7 +22,7 @@ class UserController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $user = new User();
-        $user_form = $this->createForm(new UserType(), $user);
+        $user_form = $this->createForm( new UserType(), $user );
 
         return $this->render( 'admin/user/index.html.twig', array(
                     'user_form' => $user_form->createView(),
@@ -37,13 +37,36 @@ class UserController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $users = $this->get( 'fos_user.user_manager' )->findUsers();
-        
+
         $data = [];
-        foreach ($users as $u) {
+        foreach( $users as $u )
+        {
             $item = ['username' => $u->getUsername(),
                 'email' => $u->getEmail(),
                 'enabled' => $u->isEnabled()];
             $data[] = $item;
+        }
+
+        // calls json_encode and sets the Content-Type header
+        return new JsonResponse( $data );
+    }
+
+    /**
+     *  @Route("/api/admin/user/{username}")
+     */
+    public function apiUser( $username )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
+        if( $user !== null )
+        {
+            $data = ['username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'enabled' => $user->isEnabled()];
+        }
+        else
+        {
+            $data = [ 'error' => 'Not found'];
         }
 
         // calls json_encode and sets the Content-Type header

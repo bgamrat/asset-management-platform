@@ -44,6 +44,17 @@ monolog:
 
 assetic:
     use_controller: true
+    assets:
+        dojo_js:
+            inputs:
+                - 'common/dojo-release-1.10.4-src/dojo/dojo.js'
+        main_js:
+            inputs:
+                - 'common/app/main.js'
+        admin_js:
+            inputs:
+                - 'common/app/admin/user.js'
+        
 
 #swiftmailer:
 #    delivery_address: me@example.com

@@ -30,7 +30,7 @@ class UserType extends AbstractType
 
     public function getName()
     {
-        return 'post';
+        return 'user';
     }
 
 }

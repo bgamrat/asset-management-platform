@@ -88,13 +88,18 @@ var profile = {
 		// does not need to be explicitly defined in the `include` array.
 		'app/main': {
 		    include : [ "dojo/request", 'dojo/dojo', 'dojo/domReady', 'dojo/_base/declare',
-                    "dojo/on", "dojo/aspect", "dojo/has", "dojo/_base/sniff",
+                    "dojo/on", "dojo/aspect", "dojo/has", "dojo/_base/sniff", "dojo/json", "dojo/request/xhr",
+                    "dojo/dom-attr","dojo/_base/declare",
                     "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Deferred",
                     "dojo/dom", "dijit/registry", "dijit/Menu", "dijit/MenuItem", 
                     "dgrid/List", "dgrid/OnDemandGrid", "dgrid/Selection", "dgrid/Keyboard", 
                     "dstore/RequestMemory",
-		    "dijit/tree/ObjectStoreModel", "dijit/Tree" ]
-		}
+		    "dijit/tree/ObjectStoreModel", "dijit/Tree"]
+		},
+                
+                "app/admin/user": {
+                    include: ["app/main"]
+                }
 	},
 
 	// Providing hints to the build system allows code to be conditionally removed on a more granular level than simple

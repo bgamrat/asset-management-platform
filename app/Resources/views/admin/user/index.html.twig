@@ -1,10 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.base.html.twig' %}
 
-{% block body %}
+{% block admin_user_content %}
     <div id="wrapper">
         Admin User
         <div id="grid">
         </div>
-        {{ form(user_form) }}
+        {{ form(user_form, { 'attr': {'id': 'user-view-form'} }) }}
     </div>
 {% endblock %}

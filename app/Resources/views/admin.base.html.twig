@@ -14,13 +14,21 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 <body class="claro">
+    Admin Base
     <h3>Menu Demo</h3>
     <div id="mainMenu"></div>
     <p>Last selected: <span id="lastSelected">none</span></p>
     <p>Base</p>
+{% block body %}
+{% block admin_user_content %}{% endblock %}
+{% endblock %}
 
-{% block body %}{% endblock %}
 {% include 'parts/page_footer_script.html.twig' %}
+{% javascripts
+    '@admin_js'
+%}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
 {% block javascripts %}{% endblock %}
 </body>
 </html>
