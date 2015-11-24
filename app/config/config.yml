@@ -49,28 +49,21 @@ assetic:
         #yui_css:
         #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
     assets:
-        main_js:
-            inputs:
-                - 'common/release/app/main.js'
-        admin_js:
-            inputs:
-                - 'common/release/app/admin.js'
         main_css:
             inputs:
                 - 'css/main.css'
-        dojo_js:
+        admin_css:
             inputs:
-                - 'common/release/dojo/dojo.js'
+                - 'css/admin.css'
         dojo_dijit_css:
             inputs:
                 - 'common/release/dojo/resources/dojo.css'
                 - 'common/release/dojo/resources/dnd.css'
-                - 'common/release/dijit/themes/claro/claro.css'
+                - 'common/release/dijit/themes/tundra/tundra.css'
         dgrid_css:
             inputs:
                 - 'common/release/dgrid/css/dgrid.css'
-                - 'common/release/dgrid/css/skins/claro.css'
-                - 'common/release/dijit/themes/claro/claro.css'
+                - 'common/release/dgrid/css/skins/tundra.css'
 
 # Doctrine Configuration
 doctrine:

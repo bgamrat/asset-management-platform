@@ -7,13 +7,14 @@
             '@dojo_dijit_css'
             '@dgrid_css'
             '@main_css'
+            '@admin_css'
             filter='cssrewrite' output='css/compiled/app.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
-<body class="claro">
+<body class="tundra">
     Admin Base
     <h3>Menu Demo</h3>
     <div id="mainMenu"></div>

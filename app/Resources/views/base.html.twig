@@ -13,12 +13,12 @@
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
-<body class="claro">
+<body class="tundra">
     <h3>Menu Demo</h3>
     <div id="mainMenu"></div>
     <p>Last selected: <span id="lastSelected">none</span></p>
     <p>Base</p>
-
+{% block fos_user_content %}{% endblock %}
 {% block body %}{% endblock %}
 {% include 'parts/page_footer_script.html.twig' %}
 {% block javascripts %}{% endblock %}

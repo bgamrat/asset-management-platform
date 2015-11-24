@@ -5,6 +5,11 @@
         Admin User
         <div id="grid">
         </div>
-        {{ form(user_form, { 'attr': {'id': 'user-view-form'} }) }}
+        <div id="user-view-dialog">
+            {{ form(user_form, { 'attr': {'id': 'user-view-form'} }) }}
+            <div class="center">
+            <button id="save-btn" type="button">Save</button>
+            </div>
+        </div>
     </div>
 {% endblock %}
