@@ -86,16 +86,30 @@ var profile = {
 		// but this helps provide a basic illustration of how multi-layer builds work.) Note that when you create a new
 		// layer, the module referenced by the layer is always included in the layer (in this case, `app/main`), so it
 		// does not need to be explicitly defined in the `include` array.
-		'app/main': {
-		    include : [ "dojo/request", 'dojo/dojo', 'dojo/domReady', 'dojo/_base/declare',
-                    "dojo/on", "dojo/aspect", "dojo/has", "dojo/_base/sniff", "dojo/json", "dojo/request/xhr",
-                    "dojo/dom-attr","dojo/_base/declare",
-                    "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Deferred",
-                    "dojo/dom", "dijit/registry", "dijit/Menu", "dijit/MenuItem", 
-                    "dgrid/List", "dgrid/OnDemandGrid", "dgrid/Selection", "dgrid/Keyboard", 
-                    "dstore/RequestMemory",
-		    "dijit/tree/ObjectStoreModel", "dijit/Tree"]
-		},
+                'app/main': {
+                    include: [
+                        "dojo/dojo",
+                        "dojo/_base/declare",
+                        "dojo/dom",
+                        "dojo/dom-attr",
+                        "dojo/dom-construct",
+                        "dojo/on",
+                        "dojo/request/xhr",
+                        "dojo/json",
+                        "dojo/aspect",
+                        "dojo/query",
+                        "dijit/registry",
+                        "dijit/form/ValidationTextBox",
+                        "dijit/form/CheckBox",
+                        "dijit/form/Button",
+                        "dijit/Dialog",
+                        'dstore/RequestMemory',
+                        'dgrid/OnDemandGrid',
+                        "dgrid/Selection",
+                        'dgrid/Editor',
+                        "app/nls/core",
+                        "dijit/nls/common"]
+                },
                 
                 "app/admin/user": {
                     include: ["app/main"]

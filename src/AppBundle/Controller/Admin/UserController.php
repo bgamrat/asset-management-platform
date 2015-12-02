@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,6 +54,7 @@ class UserController extends Controller
 
     /**
      *  @Route("/api/admin/user/{username}")
+     *  @Method({"GET"})
      */
     public function apiUser( $username )
     {
@@ -63,6 +65,30 @@ class UserController extends Controller
             $data = ['username' => $user->getUsername(),
                 'email' => $user->getEmail(),
                 'enabled' => $user->isEnabled()];
+        }
+        else
+        {
+            $data = [ 'error' => 'Not found'];
+        }
+
+        // calls json_encode and sets the Content-Type header
+        return new JsonResponse( $data );
+    }
+
+    /**
+     *  @Route("/api/admin/user/{username}")
+     *  @Method({"DELETE"})
+     */
+    public function apiUserDelete( $username )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
+        if( $user !== null )
+        {
+            $data = ['username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'enabled' => $user->isEnabled(),
+                'deleted' => true];
         }
         else
         {

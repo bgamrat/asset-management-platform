@@ -17,17 +17,20 @@ require([
     'dgrid/OnDemandGrid',
     "dgrid/Selection",
     'dgrid/Editor',
+    "dojo/i18n!app/nls/core",
+    "dojo/i18n!dijit/nls/common",
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, ValidationTextBox, CheckBox, Button, Dialog,
-        RequestMemory, OnDemandGrid, Selection, Editor) {
+        RequestMemory, OnDemandGrid, Selection, Editor, core, common) {
 
     var newBtn = new Button({
-        label: "New"
+        label: core["new"]
     }, 'new-btn');
     newBtn.startup();
+
     var removeBtn = new Button({
-        label: "Remove"
+        label: core.remove
     }, 'remove-btn');
     removeBtn.startup();
 
@@ -41,12 +44,12 @@ require([
     enabledCheckBox.startup();
 
     var saveBtn = new Button({
-        label: "Save"
+        label: core.save
     }, 'save-btn');
     saveBtn.startup();
 
     var userViewDialog = new Dialog({
-        title: "View"
+        title: core.view
     }, "user-view-dialog");
     userViewDialog.startup();
     userViewDialog.on("cancel", function (event) {
@@ -57,18 +60,18 @@ require([
         collection: new RequestMemory({target: '/api/admin/user/list'}),
         columns: {
             username: {
-                label: 'Username'
+                label: core.username
             },
             email: {
-                label: 'Email'
+                label: core.email
             },
             enabled: {
-                label: 'Enabled'
+                label: core.enabled
             },
             remove: {
                 width: "10%",
                 editor: CheckBox,
-                label: 'Remove',
+                label: core.remove,
                 sortable: false,
                 className: "remove-cb",
                 renderHeaderCell: function (node) {
@@ -82,7 +85,6 @@ require([
     grid.startup();
 
     grid.on(".dgrid-row:click", function (event) {
-        console.log(event);
         var options = {handleAs: "json"};
         var row = grid.row(event);
         var cell = grid.cell(event);
@@ -99,22 +101,27 @@ require([
                 domAttr.set("user_email", "value", data.email);
                 domAttr.set("user_enabled", "checked", data.enabled === true);
             });
-        } else {
-            if( confirm("Are you sure?") ) {
-                options.method = "DELETE";
-                xhr("/api/admin/user/" + username, options).then(function (data) {
-                    grid.removeRow(row);
-                });
-            }
         }
     });
 
     var cbAll = new CheckBox({}, "cb-all");
     cbAll.startup();
     cbAll.on("click", function (event) {
+        var state = this.checked;
         query(".dgrid-row .remove-cb input").forEach(function (node) {
-            registry.byId(node.id).set("checked", !node.checked);
+            registry.byId(node.id).set("checked", state);
         });
+    });
+
+    removeBtn.on("click", function (event) {
+        if( confirm(core.areyousure) ) {
+            query(".dgrid-row .remove-cb input").forEach(function (node) {
+                var row = grid.row(node);
+                xhr("/api/admin/user/" + row.data.username, {handleAs: "json", method: "DELETE"}).then(function (data) {
+                    grid.removeRow(row);
+                });
+            });
+        }
     });
 
     aspect.before(grid, "removeRow", function (rowElement) {
