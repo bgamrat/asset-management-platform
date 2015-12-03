@@ -108,7 +108,8 @@ var profile = {
                         "dgrid/Selection",
                         'dgrid/Editor',
                         "app/nls/core",
-                        "dijit/nls/common"]
+                        "dijit/nls/common",
+                        "app/lib/common"]
                 },
                 
                 "app/admin/user": {

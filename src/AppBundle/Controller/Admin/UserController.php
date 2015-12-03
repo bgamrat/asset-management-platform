@@ -44,7 +44,11 @@ class UserController extends Controller
         {
             $item = ['username' => $u->getUsername(),
                 'email' => $u->getEmail(),
-                'enabled' => $u->isEnabled()];
+                'enabled' => $u->isEnabled(),
+                'locked' => $u->isLocked(),
+                'roles' => $u->getRoles(),
+                'groups' => $u->getGroups()
+                ];
             $data[] = $item;
         }
 

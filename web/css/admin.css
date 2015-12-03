@@ -6,8 +6,12 @@
     padding: 25px;
     border-bottom: 1px solid;
 }
-
 .dgrid-column-remove {
     width: 50px;
     text-align: center;
+}
+.field-enabled,
+.field-locked {
+    text-align: center;
+    width: 75px;
 }

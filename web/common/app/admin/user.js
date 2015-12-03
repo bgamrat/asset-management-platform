@@ -18,11 +18,11 @@ require([
     "dgrid/Selection",
     'dgrid/Editor',
     "dojo/i18n!app/nls/core",
-    "dojo/i18n!dijit/nls/common",
+    "app/lib/common",
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, ValidationTextBox, CheckBox, Button, Dialog,
-        RequestMemory, OnDemandGrid, Selection, Editor, core, common) {
+        RequestMemory, OnDemandGrid, Selection, Editor, core, lib) {
 
     var newBtn = new Button({
         label: core["new"]
@@ -66,10 +66,34 @@ require([
                 label: core.email
             },
             enabled: {
-                label: core.enabled
+                label: core.enabled,
+                editor: CheckBox,
+                sortable: false
+            },
+            locked: {
+                label: core.locked,
+                editor: CheckBox,
+                sortable: false
+            },
+            groups: {
+                label: core.groups,
+                sortable: true,
+                formatter: function (value, object) {
+                    if( lib.isEmpty(value) ) {
+                        return '';
+                    } else {
+                        return 'stuff';
+                    }
+                }
+            },
+            roles: {
+                label: core.roles,
+                sortable: true,
+                formatter: function (value, object) {
+                    return value.join('<br>');
+                }
             },
             remove: {
-                width: "10%",
                 editor: CheckBox,
                 label: core.remove,
                 sortable: false,
@@ -126,10 +150,13 @@ require([
 
     aspect.before(grid, "removeRow", function (rowElement) {
         // Destroy the checkbox widgets
-        var cellElement = grid.cell(rowElement, "remove").element,
-                widget = (cellElement.contents || cellElement).widget;
-        if( widget ) {
-            widget.destroyRecursive();
+        var e, elements = [grid.cell(rowElement, "remove").element, grid.cell(rowElement, "enabled"), grid.cell(rowElement, "locked")];
+        var widget;
+        for (e in elements) {
+            widget = (e.contents || e).widget;
+            if( widget ) {
+                widget.destroyRecursive();
+            }
         }
     });
 
