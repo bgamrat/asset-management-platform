@@ -109,11 +109,12 @@ require([
     grid.startup();
 
     grid.on(".dgrid-row:click", function (event) {
+        var checkBoxes = [ "enabled", "locked", "remove" ];
         var options = {handleAs: "json"};
         var row = grid.row(event);
         var cell = grid.cell(event);
         var username = row.data.username;
-        if( cell.column.field !== "remove" ) {
+        if( checkBoxes.indexOf(cell.column.field) === -1 ) {
             if( typeof grid.selection[0] !== "undefined" ) {
                 grid.clearSelection();
             }

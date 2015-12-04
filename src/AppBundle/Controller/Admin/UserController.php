@@ -8,7 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use FOS\UserBundle\Model\UserManager as BaseUserManager;
+use FOS\UserBundle\Model\UserManager;
+use FOS\UserBundle\Model\GroupManager;
 use AppBundle\Entity\User;
 use AppBundle\Form\Admin\User\UserType;
 
@@ -63,6 +64,13 @@ class UserController extends Controller
     public function apiUser( $username )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        
+        $groups = $this->get('fos_user.group_manager')->findGroups();
+        $groupNames = [];
+        foreach ($groups as $g) {
+            $groupNames[] = $g->getName();
+        }
+        
         $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
         if( $user !== null )
         {
