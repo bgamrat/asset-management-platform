@@ -17,14 +17,29 @@ class UserController extends Controller
 {
 
     /**
-     * @Route("/admin/user", name="adminuser")
+     * @Route("/admin/user")
      */
     public function indexAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
+        $groups = $this->get( 'fos_user.group_manager' )->findGroups();
+        $groupNames = [];
+        foreach( $groups as $g )
+        {
+            $groupNames[] = $g->getName();
+        }
+
         $user = new User();
         $user_form = $this->createForm( new UserType(), $user );
+        /*
+          $user_form->add( 'groups', ChoiceType::class, [
+          'choices' => $groupNames,
+          'choices_as_values' => true,
+          'multiple' => false
+          ] );
+         * 
+         */
 
         return $this->render( 'admin/user/index.html.twig', array(
                     'user_form' => $user_form->createView(),
@@ -49,7 +64,7 @@ class UserController extends Controller
                 'locked' => $u->isLocked(),
                 'roles' => $u->getRoles(),
                 'groups' => $u->getGroups()
-                ];
+            ];
             $data[] = $item;
         }
 
@@ -64,27 +79,67 @@ class UserController extends Controller
     public function apiUser( $username )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        
-        $groups = $this->get('fos_user.group_manager')->findGroups();
-        $groupNames = [];
-        foreach ($groups as $g) {
-            $groupNames[] = $g->getName();
-        }
-        
+
         $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
         if( $user !== null )
         {
             $data = ['username' => $user->getUsername(),
                 'email' => $user->getEmail(),
                 'enabled' => $user->isEnabled()];
+            $status = JsonResponse::HTTP_OK;
         }
         else
         {
-            $data = [ 'error' => 'Not found'];
+            $status = JsonResponse::HTTP_NOT_FOUND;
         }
 
-        // calls json_encode and sets the Content-Type header
-        return new JsonResponse( $data );
+        return new JsonResponse( $data, $status );
+    }
+
+    /**
+     *  @Route("/api/admin/user/{username}")
+     *  @Method({"POST"})
+     */
+    public function apiUserPost( $username )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
+        if( $user !== null )
+        {
+            $status = JsonResponse::HTTP_CONFLICT;
+        }
+        else
+        {
+            // Save data
+            $status = JsonResponse::HTTP_CREATED;
+        }
+
+        return new JsonResponse( $data, $status, ['location' => '/api/admin/user/' . $username] );
+    }
+
+    /**
+     *  @Route("/api/admin/user/{username}")
+     *  @Method({"PUT"})
+     */
+    public function apiUserPut( $username )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
+        if( $user !== null )
+        {
+            $data = ['username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'enabled' => $user->isEnabled()];
+            $status = JsonResponse::HTTP_NO_CONTENT;
+        }
+        else
+        {
+            $status = JsonResponse::HTTP_NOT_FOUND;
+        }
+
+        return new JsonResponse( $data, $status );
     }
 
     /**
@@ -97,17 +152,14 @@ class UserController extends Controller
         $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
         if( $user !== null )
         {
-            $data = ['username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-                'enabled' => $user->isEnabled(),
-                'deleted' => true];
+            // Do delete
+            $status = JsonResponse::HTTP_OK;
         }
         else
         {
-            $data = [ 'error' => 'Not found'];
+            $status = JsonResponse::HTTP_NOT_FOUND;
         }
 
-        // calls json_encode and sets the Content-Type header
         return new JsonResponse( $data );
     }
 
