@@ -51,4 +51,13 @@ class User extends BaseUser
     {
         return $this->invitation;
     }
+    
+    public function hasGroup($name = '') {
+        if ($name !== '') {
+            return parent::hasGroup($name);
+        } else {
+            return false;
+        }
+    }
+    
 }

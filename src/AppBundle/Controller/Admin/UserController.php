@@ -27,20 +27,12 @@ class UserController extends Controller
         $groupNames = [];
         foreach( $groups as $g )
         {
-            $groupNames[] = $g->getName();
+            $groupNames[$g->getName()] = $g->getId();
         }
 
         $user = new User();
-        $user_form = $this->createForm( new UserType(), $user );
-        /*
-          $user_form->add( 'groups', ChoiceType::class, [
-          'choices' => $groupNames,
-          'choices_as_values' => true,
-          'multiple' => false
-          ] );
-         * 
-         */
-
+        $user_form = $this->createForm( UserType::class, $user, ['group_names' => $groupNames ]);
+        
         return $this->render( 'admin/user/index.html.twig', array(
                     'user_form' => $user_form->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
@@ -61,9 +53,7 @@ class UserController extends Controller
             $item = ['username' => $u->getUsername(),
                 'email' => $u->getEmail(),
                 'enabled' => $u->isEnabled(),
-                'locked' => $u->isLocked(),
-                'roles' => $u->getRoles(),
-                'groups' => $u->getGroups()
+                'locked' => $u->isLocked()
             ];
             $data[] = $item;
         }

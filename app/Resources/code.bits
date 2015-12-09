@@ -5,3 +5,27 @@ ValidationTextBox editor for dgrid
         required: true,
         pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" 
     }
+
+
+DGrid empty object handler for column
+
+            groups: {
+                label: core.groups,
+                sortable: true,
+                formatter: function (value, object) {
+                    if( lib.isEmpty(value) ) {
+                        return '';
+                    } else {
+                        return 'stuff';
+                    }
+                }
+            },
+
+DGrid formatter to convert a comma separated list to one separated by <br>
+            roles: {
+                label: core.roles,
+                sortable: true,
+                formatter: function (value, object) {
+                    return value.join('<br>');
+                }
+            },

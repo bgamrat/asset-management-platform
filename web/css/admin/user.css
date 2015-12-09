@@ -1,0 +1,16 @@
+#user > div {
+    padding: 5px;
+    margin: 0 auto;
+}
+
+#user > div label {
+    font-weight: bolder;
+    width: 62px;
+    display: inline-block;
+    text-align: right;
+    padding-right: 7px;
+}
+
+#user .dijitSelect .dijitButtonContents {
+    width: 160px;
+}

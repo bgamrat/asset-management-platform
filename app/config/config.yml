@@ -22,6 +22,10 @@ framework:
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
+    assets:
+        version: 'v5'
+        version_format: '%%s?version=%%s'
+        base_path: ~
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
@@ -54,7 +58,8 @@ assetic:
                 - 'css/main.css'
         admin_css:
             inputs:
-                - 'css/admin.css'
+                - 'css/admin/admin.css'
+                - 'css/admin/user.css'
         dojo_dijit_css:
             inputs:
                 - 'common/release/dojo/resources/dojo.css'

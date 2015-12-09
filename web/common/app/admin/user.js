@@ -11,6 +11,7 @@ require([
     "dijit/registry",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
+    "dijit/form/Select",
     "dijit/form/Button",
     "dijit/Dialog",
     'dstore/RequestMemory',
@@ -21,7 +22,7 @@ require([
     "app/lib/common",
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
-        registry, ValidationTextBox, CheckBox, Button, Dialog,
+        registry, ValidationTextBox, CheckBox, Select, Button, Dialog,
         RequestMemory, OnDemandGrid, Selection, Editor, core, lib) {
 
     var newBtn = new Button({
@@ -34,7 +35,8 @@ require([
     }, 'remove-btn');
     removeBtn.startup();
 
-    var emailInput = new ValidationTextBox({}, "user_email");
+    var emailInput = new ValidationTextBox({pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" 
+}, "user_email");
     emailInput.startup();
 
     var usernameInput = new ValidationTextBox({}, "user_username");
@@ -42,6 +44,12 @@ require([
 
     var enabledCheckBox = new CheckBox({}, "user_enabled");
     enabledCheckBox.startup();
+    
+    var lockedCheckBox = new CheckBox({}, "user_locked");
+    lockedCheckBox.startup();
+    
+    var userGroupsSelect = new Select({}, "user_groups");
+    userGroupsSelect.startup();
 
     var saveBtn = new Button({
         label: core.save
@@ -74,24 +82,6 @@ require([
                 label: core.locked,
                 editor: CheckBox,
                 sortable: false
-            },
-            groups: {
-                label: core.groups,
-                sortable: true,
-                formatter: function (value, object) {
-                    if( lib.isEmpty(value) ) {
-                        return '';
-                    } else {
-                        return 'stuff';
-                    }
-                }
-            },
-            roles: {
-                label: core.roles,
-                sortable: true,
-                formatter: function (value, object) {
-                    return value.join('<br>');
-                }
             },
             remove: {
                 editor: CheckBox,

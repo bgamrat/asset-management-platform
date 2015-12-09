@@ -10,3 +10,11 @@
 /web/common/dojo-release-1.10.4-src
 /web/common/release
 *.log
+autoload.php
+bin
+composer
+var
+web/assetic
+web/js
+web/web
+
