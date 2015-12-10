@@ -29,3 +29,15 @@ DGrid formatter to convert a comma separated list to one separated by <br>
                     return value.join('<br>');
                 }
             },
+
+Get groups (in a controller)
+            $groups = $this->get( 'fos_user.group_manager' )->findGroups();
+            $groupNames = [];
+            foreach( $groups as $g )
+            {
+                $groupNames[$g->getName()] = $g->getId();
+            }
+
+Groups in field (this needs to be different)
+             ->add( 'groups', ChoiceType::class, [
+                    'choices' => $data['group_names'],

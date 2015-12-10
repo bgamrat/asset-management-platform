@@ -35,19 +35,19 @@ require([
     }, 'remove-btn');
     removeBtn.startup();
 
-    var emailInput = new ValidationTextBox({pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" 
-}, "user_email");
+    var emailInput = new ValidationTextBox({pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$"
+    }, "user_email");
     emailInput.startup();
 
-    var usernameInput = new ValidationTextBox({}, "user_username");
+    var usernameInput = new ValidationTextBox({readOnly: true}, "user_username");
     usernameInput.startup();
 
     var enabledCheckBox = new CheckBox({}, "user_enabled");
     enabledCheckBox.startup();
-    
+
     var lockedCheckBox = new CheckBox({}, "user_locked");
     lockedCheckBox.startup();
-    
+
     var userGroupsSelect = new Select({}, "user_groups");
     userGroupsSelect.startup();
 
@@ -55,6 +55,23 @@ require([
         label: core.save
     }, 'save-btn');
     saveBtn.startup();
+    saveBtn.on("click", function (event) {
+        var options = {
+            handleAs: "json",
+            method: "put",
+            data: {
+                "user[id]": domAttr.get("user_id", "value"),
+                "user[email]": emailInput.get("value"),
+                "user[enabled]": enabledCheckBox.get("checked"),
+                "user[locked]": lockedCheckBox.get("checked"),
+                "user[groups]": userGroupsSelect.get("value"),
+                "user[_token]": domAttr.get("user__token", "value")
+            }
+        };
+        xhr("/api/admin/user/" + usernameInput.get("value"), options).then(function (data) {
+            userViewDialog.hide();
+        });
+    });
 
     var userViewDialog = new Dialog({
         title: core.view
@@ -99,7 +116,7 @@ require([
     grid.startup();
 
     grid.on(".dgrid-row:click", function (event) {
-        var checkBoxes = [ "enabled", "locked", "remove" ];
+        var checkBoxes = ["enabled", "locked", "remove"];
         var options = {handleAs: "json"};
         var row = grid.row(event);
         var cell = grid.cell(event);
@@ -112,9 +129,13 @@ require([
             options.method = "GET";
             xhr("/api/admin/user/" + username, options).then(function (data) {
                 userViewDialog.show();
-                domAttr.set("user_username", "value", data.username);
-                domAttr.set("user_email", "value", data.email);
-                domAttr.set("user_enabled", "checked", data.enabled === true);
+                domAttr.set("user_id", "value", data.id);
+                domAttr.set("user__token", "value", data.token);
+                usernameInput.set("value", data.username);
+                emailInput.set("value", data.email);
+                enabledCheckBox.set("checked", data.enabled === true);
+                lockedCheckBox.set("checked", data.locked === true);
+                userGroupsSelect.set("value", data.groups);
             });
         }
     });
@@ -143,7 +164,7 @@ require([
         // Destroy the checkbox widgets
         var e, elements = [grid.cell(rowElement, "remove").element, grid.cell(rowElement, "enabled"), grid.cell(rowElement, "locked")];
         var widget;
-        for (e in elements) {
+        for( e in elements ) {
             widget = (e.contents || e).widget;
             if( widget ) {
                 widget.destroyRecursive();

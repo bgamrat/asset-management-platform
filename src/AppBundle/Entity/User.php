@@ -1,4 +1,5 @@
 <?php
+
 // src/AppBundle/Entity/User.php
 
 namespace AppBundle\Entity;
@@ -13,13 +14,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User extends BaseUser
 {
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Group")
      * @ORM\JoinTable(name="fos_user_user_group",
@@ -28,7 +29,6 @@ class User extends BaseUser
      * )
      */
     protected $groups;
-    
     /**
      * @ORM\OneToOne(targetEntity="Invitation")
      * @ORM\JoinColumn(referencedColumnName="code")
@@ -42,7 +42,7 @@ class User extends BaseUser
         // your own logic
     }
 
-    public function setInvitation(Invitation $invitation)
+    public function setInvitation( Invitation $invitation )
     {
         $this->invitation = $invitation;
     }
@@ -51,13 +51,41 @@ class User extends BaseUser
     {
         return $this->invitation;
     }
-    
-    public function hasGroup($name = '') {
-        if ($name !== '') {
-            return parent::hasGroup($name);
-        } else {
+
+    public function hasGroup( $name = '' )
+    {
+        if( $name !== '' )
+        {
+            return parent::hasGroup( $name );
+        }
+        else
+        {
             return false;
         }
     }
-    
+
+    public function setGroups( $groups = [] )
+    {
+        // TODO
+        /*
+        if( is_array( $groups ) )
+        {
+            if( count( $groups ) > 0 )
+            {
+                foreach( $groups as $g )
+                {
+                    $this->addGroup( $g );
+                }
+            }
+        }
+        else
+        {
+            if( is_numeric( $groups ) )
+            {
+                $this->addGroup($groups);
+            }
+        }
+         * 
+         */
+    }
 }

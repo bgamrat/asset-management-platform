@@ -9,11 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\UserBundle\Model\UserManager;
-use FOS\UserBundle\Model\GroupManager;
+use FOS\UserBundle\Model\GroupManager as GroupManager;
 use AppBundle\Entity\User;
+use AppBundle\Entity\Group;
 use AppBundle\Form\Admin\User\UserType;
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\View\View;
 
-class UserController extends Controller
+class UserController extends FOSRestController
 {
 
     /**
@@ -23,16 +26,9 @@ class UserController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $groups = $this->get( 'fos_user.group_manager' )->findGroups();
-        $groupNames = [];
-        foreach( $groups as $g )
-        {
-            $groupNames[$g->getName()] = $g->getId();
-        }
-
         $user = new User();
-        $user_form = $this->createForm( UserType::class, $user, ['group_names' => $groupNames ]);
-        
+        $user_form = $this->createForm( UserType::class, $user );
+
         return $this->render( 'admin/user/index.html.twig', array(
                     'user_form' => $user_form->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
@@ -68,14 +64,14 @@ class UserController extends Controller
      */
     public function apiUser( $username )
     {
+        $serializer = $this->get('serializer');
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
         if( $user !== null )
         {
-            $data = ['username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-                'enabled' => $user->isEnabled()];
+            $user_form = $this->createForm( UserType::class, $user );
+            $data = $user_form->getData();
             $status = JsonResponse::HTTP_OK;
         }
         else
@@ -97,6 +93,7 @@ class UserController extends Controller
         $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
         if( $user !== null )
         {
+            $user_form = $this->createForm( UserType::class, $user );
             $status = JsonResponse::HTTP_CONFLICT;
         }
         else
@@ -112,17 +109,29 @@ class UserController extends Controller
      *  @Route("/api/admin/user/{username}")
      *  @Method({"PUT"})
      */
-    public function apiUserPut( $username )
+    public function apiUserPut( Request $request, $username )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-
+        $data = null;
         $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
         if( $user !== null )
         {
-            $data = ['username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-                'enabled' => $user->isEnabled()];
-            $status = JsonResponse::HTTP_NO_CONTENT;
+            $user = new User();
+            $user_form = $this->createForm( UserType::class, $user );
+            $user_form->handleRequest( $request );
+            if( $user_form->isValid() )
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist( $user );
+                $em->flush();
+                $status = JsonResponse::HTTP_NO_CONTENT;
+            }
+            else
+            {
+                echo 'bad data';
+            }
+
+            $status = 201;
         }
         else
         {

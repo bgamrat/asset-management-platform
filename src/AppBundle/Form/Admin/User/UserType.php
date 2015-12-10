@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class UserType extends AbstractType
 {
@@ -16,20 +17,17 @@ class UserType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $data )
     {
         $builder
-                ->add( 'username', TextType::class )
-                ->add( 'email', TextType::class )
-                ->add( 'enabled', CheckboxType::class )
-                ->add( 'locked', CheckboxType::class )
-                ->add( 'groups', ChoiceType::class, [
-                    'choices' => $data['group_names'],
-                ] );
+        ->add( 'id', HiddenType::class )
+        ->add( 'username', TextType::class )
+        ->add( 'email', TextType::class )
+        ->add( 'enabled', CheckboxType::class )
+        ->add( 'locked', CheckboxType::class );
     }
 
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\User',
-            'group_names' => []
+            'data_class' => 'AppBundle\Entity\User'
         ) );
     }
 
