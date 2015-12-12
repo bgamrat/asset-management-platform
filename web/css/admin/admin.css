@@ -1,3 +1,6 @@
+.dgrid-row-table {
+    height: auto;
+}
 #controls {
     display:flex;
     display: -webkit-flex;

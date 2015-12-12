@@ -26,8 +26,15 @@ class UserController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
+        $groups = $this->get( 'fos_user.group_manager' )->findGroups();
+        $groupNames = [];
+        foreach( $groups as $g )
+        {
+            $groupNames[$g->getName()] = $g->getId();
+        }
+
         $user = new User();
-        $user_form = $this->createForm( UserType::class, $user );
+        $user_form = $this->createForm( UserType::class, $user, ['groups' => $groupNames] );
 
         return $this->render( 'admin/user/index.html.twig', array(
                     'user_form' => $user_form->createView(),
@@ -46,7 +53,9 @@ class UserController extends FOSRestController
         $data = [];
         foreach( $users as $u )
         {
-            $item = ['username' => $u->getUsername(),
+            $item = [
+                'id' => $u->getId(),
+                'username' => $u->getUsername(),
                 'email' => $u->getEmail(),
                 'enabled' => $u->isEnabled(),
                 'locked' => $u->isLocked()
@@ -59,19 +68,24 @@ class UserController extends FOSRestController
     }
 
     /**
-     *  @Route("/api/admin/user/{username}")
+     *  @Route("/api/admin/user/{id}")
      *  @Method({"GET"})
      */
-    public function apiUser( $username )
+    public function apiUser( $id )
     {
-        $serializer = $this->get('serializer');
+        $serializer = $this->get( 'serializer' );
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['id' => $id] );
         if( $user !== null )
         {
-            $user_form = $this->createForm( UserType::class, $user );
-            $data = $user_form->getData();
+            $data = [
+                'username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'groups' => $user->getGroups(),
+                'enabled' => $user->isEnabled(),
+                'locked' => $user->isLocked()
+            ];
             $status = JsonResponse::HTTP_OK;
         }
         else
@@ -83,14 +97,14 @@ class UserController extends FOSRestController
     }
 
     /**
-     *  @Route("/api/admin/user/{username}")
+     *  @Route("/api/admin/user")
      *  @Method({"POST"})
      */
-    public function apiUserPost( $username )
+    public function apiUserPost( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy( [ 'id' => $id ] );
         if( $user !== null )
         {
             $user_form = $this->createForm( UserType::class, $user );
@@ -106,14 +120,14 @@ class UserController extends FOSRestController
     }
 
     /**
-     *  @Route("/api/admin/user/{username}")
+     *  @Route("/api/admin/user/{id}")
      *  @Method({"PUT"})
      */
-    public function apiUserPut( Request $request, $username )
+    public function apiUserPut( Request $request, $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $data = null;
-        $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy([ 'id' => $id ] );
         if( $user !== null )
         {
             $user = new User();
@@ -142,13 +156,13 @@ class UserController extends FOSRestController
     }
 
     /**
-     *  @Route("/api/admin/user/{username}")
+     *  @Route("/api/admin/user/{id}")
      *  @Method({"DELETE"})
      */
-    public function apiUserDelete( $username )
+    public function apiUserDelete( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $user = $this->get( 'fos_user.user_manager' )->findUserByUsername( $username );
+        $user = $this->get( 'fos_user.user_manager' )->findUserById( $id );
         if( $user !== null )
         {
             // Do delete

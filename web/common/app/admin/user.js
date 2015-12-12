@@ -60,7 +60,6 @@ require([
             handleAs: "json",
             method: "put",
             data: {
-                "user[id]": domAttr.get("user_id", "value"),
                 "user[email]": emailInput.get("value"),
                 "user[enabled]": enabledCheckBox.get("checked"),
                 "user[locked]": lockedCheckBox.get("checked"),
@@ -68,7 +67,7 @@ require([
                 "user[_token]": domAttr.get("user__token", "value")
             }
         };
-        xhr("/api/admin/user/" + usernameInput.get("value"), options).then(function (data) {
+        xhr("/api/admin/user/" + domAttr.get("user_id", "value"), options).then(function (data) {
             userViewDialog.hide();
         });
     });
@@ -120,16 +119,16 @@ require([
         var options = {handleAs: "json"};
         var row = grid.row(event);
         var cell = grid.cell(event);
-        var username = row.data.username;
+        var id = row.data.id;
         if( checkBoxes.indexOf(cell.column.field) === -1 ) {
             if( typeof grid.selection[0] !== "undefined" ) {
                 grid.clearSelection();
             }
             grid.select(row);
             options.method = "GET";
-            xhr("/api/admin/user/" + username, options).then(function (data) {
+            xhr("/api/admin/user/" + id, options).then(function (data) {
                 userViewDialog.show();
-                domAttr.set("user_id", "value", data.id);
+                domAttr.set("user_id", "value", id);
                 domAttr.set("user__token", "value", data.token);
                 usernameInput.set("value", data.username);
                 emailInput.set("value", data.email);

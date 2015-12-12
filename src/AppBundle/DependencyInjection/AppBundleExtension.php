@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\FileLocator;
 
-class FOSUserExtension extends Extension
+class AppExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
