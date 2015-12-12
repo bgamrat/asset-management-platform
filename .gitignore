@@ -3,15 +3,10 @@
 /nbproject
 /composer.phar
 /vendor
-/bin/doctrine
-/bin/doctrine-dbal
-/bin/doctrine.php
-/bin/security-checker
 /web/common/dojo-release-1.10.4-src
 /web/common/release
 *.log
 autoload.php
-bin
 composer
 var
 web/assetic

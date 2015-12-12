@@ -41,3 +41,111 @@ Get groups (in a controller)
 Groups in field (this needs to be different)
              ->add( 'groups', ChoiceType::class, [
                     'choices' => $data['group_names'],
+
+
+PostgreSQL
+
+/var/lib/pgsql/data/pg_hba.conf
+
+// Use login access
+# TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+
+# "local" is for Unix domain socket connections only
+local   all         all                               md5
+# IPv4 local connections:
+host    all         all         127.0.0.1/32          md5
+# IPv6 local connections:
+host    all         all         ::1/128               md5
+
+Create database and user
+
+create database dev;
+create role dev;
+alter database dev owner dev;
+alter role dev login;
+
+\password dev
+\password postgres
+
+
+
+
+Permissions for Symfony
+mkdir -p var/cache var/logs
+sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs
+sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs
+
+Install assets
+
+ php bin/console assets:install --symlink --relative
+
+Symfony Environment variables
+
+more /etc/profile.d/bash.sh
+export SYMFONY_ENV=dev
+export SYMFONY_DEBUG=true
+
+Apache conf file
+
+<VirtualHost *:80>
+ServerName symfony-dev
+ServerAlias asus-tower-centos
+DocumentRoot /var/www/html/symfony-dev/web
+
+SetEnv SYMFONY_ENV dev
+SetEnv USE_DEBUGGING 1
+
+<Directory /var/www/html/symfony-dev/web>
+AllowOverride None
+Order Allow,Deny
+Allow from All
+
+<IfModule mod_rewrite.c>
+Options -MultiViews
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ app_dev.php [QSA,L]
+</IfModule>
+</Directory>
+
+# uncomment the following lines if you install assets as symlinks
+# or run into problems when compiling LESS/Sass/CoffeScript assets
+# <Directory /var/www/project>
+#     Options FollowSymlinks
+# </Directory>
+
+ErrorLog /var/log/httpd/symfony-dev_error.log
+CustomLog /var/log/httpd/symfony-dev_access.log combined
+
+
+Update doctrine schema 
+
+php bin/console doctrine:schema:update --force
+
+Get Dojo and Dgid
+
+Get Dojo and build
+cd web/common
+http://download.dojotoolkit.org/release-1.10.4/dojo-release-1.10.4-src.tar.gz
+tar xzf dojo*
+wget https://github.com/SitePen/dgrid/archive/master.zip
+unzip master.zip
+mv dgrid-master dojo-release-1.10.4-src
+wget https://github.com/SitePen/dstore/archive/1.x.zip
+unzip 1.x.zip
+mv dstore-1.x dojo-release-1.10.4-src
+wget https://github.com/persvr/rql/archive/master.zip
+unzip master.zip
+mv rql-master *src/rql
+cd *src
+mv dgrid-master dgrid
+mv dstore-1.x dstore
+mv rql-master rql
+symlink -rf ../app
+cd ..
+./build.sh
+
+
+Create user with FOS User Bundle
+
+php bin/console fos:user:create adminuser --super-admin
