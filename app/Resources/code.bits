@@ -42,12 +42,15 @@ Groups in field (this needs to be different)
              ->add( 'groups', ChoiceType::class, [
                     'choices' => $data['group_names'],
 
+<<<<<<< Updated upstream
 PostgreSQL
 
 /var/lib/pgsql/data/pg_hba.conf
 
 // Use login access
 
+=======
+>>>>>>> Stashed changes
 Setup PostgreSQL
 
 /var/lib/pgsql/data/pg_hba.conf
@@ -71,6 +74,7 @@ alter role dev login;
 \password dev
 \password postgres
 
+<<<<<<< Updated upstream
 Permissions for Symfony
 mkdir -p var/cache var/logs
 sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs
@@ -152,6 +156,15 @@ php bin/console fos:user:create adminuser --super-admin
 
 Add .json to all api requests
 
+=======
+
+Get Dojo and build
+cd web/common
+http://download.dojotoolkit.org/release-1.10.4/dojo-release-1.10.4-src.tar.gz
+tar xzf dojo*
+./build.sh
+
+>>>>>>> Stashed changes
 <IfModule mod_rewrite.c>
 Options -MultiViews
 RewriteEngine On
@@ -163,6 +176,13 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ app_dev.php [QSA,L]
 </IfModule>
 
+<<<<<<< Updated upstream
 Checking routing
 
 php bin/console router:match  --method GET /api/admin/user/1
+=======
+
+Checking routing
+
+php bin/console router:match  --method GET /api/admin/user/1
+>>>>>>> Stashed changes
