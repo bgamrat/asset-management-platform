@@ -42,12 +42,16 @@ Groups in field (this needs to be different)
              ->add( 'groups', ChoiceType::class, [
                     'choices' => $data['group_names'],
 
-
 PostgreSQL
 
 /var/lib/pgsql/data/pg_hba.conf
 
 // Use login access
+
+Setup PostgreSQL
+
+/var/lib/pgsql/data/pg_hba.conf
+
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 
 # "local" is for Unix domain socket connections only
@@ -66,9 +70,6 @@ alter role dev login;
 
 \password dev
 \password postgres
-
-
-
 
 Permissions for Symfony
 mkdir -p var/cache var/logs
@@ -124,7 +125,6 @@ php bin/console doctrine:schema:update --force
 
 Get Dojo and Dgid
 
-Get Dojo and build
 cd web/common
 http://download.dojotoolkit.org/release-1.10.4/dojo-release-1.10.4-src.tar.gz
 tar xzf dojo*
@@ -162,3 +162,7 @@ RewriteRule ^(api.*) $1.json [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ app_dev.php [QSA,L]
 </IfModule>
+
+Checking routing
+
+php bin/console router:match  --method GET /api/admin/user/1
