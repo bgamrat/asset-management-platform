@@ -126,7 +126,7 @@ require([
             }
             grid.select(row);
             options.method = "GET";
-            xhr("/api/admin/user/" + id, options).then(function (data) {
+            xhr.get("/api/admin/user/" + id + ".json", options).then(function (data) {
                 userViewDialog.show();
                 domAttr.set("user_id", "value", id);
                 domAttr.set("user__token", "value", data.token);
@@ -135,7 +135,7 @@ require([
                 enabledCheckBox.set("checked", data.enabled === true);
                 lockedCheckBox.set("checked", data.locked === true);
                 userGroupsSelect.set("value", data.groups);
-            });
+            }, lib.xhrError);
         }
     });
 
@@ -170,6 +170,4 @@ require([
             }
         }
     });
-
-
 });

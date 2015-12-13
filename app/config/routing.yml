@@ -6,6 +6,10 @@ app_admin:
     resource: "@AppBundle/Controller/Admin"
     type:     annotation
     
+app_admin_rest:
+    path:     .json$
+    defaults: { _format: json }
+    
 static:
     path: /privacy
     defaults:

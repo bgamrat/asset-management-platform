@@ -1,4 +1,5 @@
-require(["dojo/domReady!"],function () {
+require(["dojo/domReady!"], function (aspect) {
+   
     return {
         isEmpty: function (obj) {
             // Thanks to: http://stackoverflow.com/a/32108184/2182349
@@ -11,7 +12,11 @@ require(["dojo/domReady!"],function () {
                 }
                 return true;
             }
+        },
+        xhrError: function (err) {
+            console.log(err);
         }
 
     };
 });
+

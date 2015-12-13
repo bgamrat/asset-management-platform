@@ -2,9 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +12,12 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\Group;
 use AppBundle\Form\Admin\User\UserType;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\View\View;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Controller\Annotations\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\Controller\Annotations\RequestParam;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 class UserController extends FOSRestController
 {
@@ -44,6 +47,7 @@ class UserController extends FOSRestController
 
     /**
      * @Route("/api/admin/user/list")
+     * @View(statusCode=200)
      */
     public function apiUserListAction()
     {
@@ -62,22 +66,20 @@ class UserController extends FOSRestController
             ];
             $data[] = $item;
         }
-
-        // calls json_encode and sets the Content-Type header
-        return new JsonResponse( $data );
+        return $data;
     }
 
     /**
-     *  @Route("/api/admin/user/{id}")
-     *  @Method({"GET"})
+     *  @Route("/api/admin/user/{id}.json")
+     *  @Method("GET")
+     *  @View()
      */
-    public function apiUser( $id )
+    public function apiUserGetAction( $id )
     {
-        $serializer = $this->get( 'serializer' );
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['id' => $id] );
-        if( $user !== null )
+        if($user !== null )
         {
             $data = [
                 'username' => $user->getUsername(),
@@ -90,21 +92,26 @@ class UserController extends FOSRestController
         }
         else
         {
+            $data = [
+                'error' => 'Not found'
+            ];
             $status = JsonResponse::HTTP_NOT_FOUND;
         }
 
-        return new JsonResponse( $data, $status );
+        return $data;
     }
 
     /**
      *  @Route("/api/admin/user")
      *  @Method({"POST"})
+     *  @ParamConverter("post", converter="fos_rest.request_body")
+     *  @View(statusCode=201)
      */
-    public function apiUserPost( Request $request )
+    public function apiUserPostAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $user = $this->get( 'fos_user.user_manager' )->findUserBy( [ 'id' => $id ] );
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy( [ 'id' => $id] );
         if( $user !== null )
         {
             $user_form = $this->createForm( UserType::class, $user );
@@ -122,12 +129,14 @@ class UserController extends FOSRestController
     /**
      *  @Route("/api/admin/user/{id}")
      *  @Method({"PUT"})
+     *  @View(statusCode=204)
+     *  @ParamConverter("put", converter="fos_rest.request_body")
      */
-    public function apiUserPut( Request $request, $id )
+    public function apiUserPutAction( Request $request, $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $data = null;
-        $user = $this->get( 'fos_user.user_manager' )->findUserBy([ 'id' => $id ] );
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy( [ 'id' => $id] );
         if( $user !== null )
         {
             $user = new User();
@@ -158,8 +167,9 @@ class UserController extends FOSRestController
     /**
      *  @Route("/api/admin/user/{id}")
      *  @Method({"DELETE"})
+     *  @View(statusCode=200)
      */
-    public function apiUserDelete( $id )
+    public function apiUserDeleteAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $user = $this->get( 'fos_user.user_manager' )->findUserById( $id );

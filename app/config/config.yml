@@ -100,6 +100,9 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
     
+sensio_framework_extra:
+    request: { converters: true }
+
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
@@ -109,3 +112,41 @@ fos_user:
     registration:
         form:
             type: app_user_registration
+
+fos_rest:
+    view:
+        view_response_listener: true
+        force_redirects:
+            html: true
+        formats:
+            json: true
+        templating_formats:
+            json: false
+            html: true
+        mime_types:
+            json: ['application/json', 'application/x-json']
+        failed_validation: HTTP_BAD_REQUEST
+    body_listener: true
+    param_fetcher_listener: true
+    allowed_methods_listener: true
+    access_denied_listener:
+        json: true
+    body_converter:
+        enabled: true
+        validate: true
+        validation_errors_argument: validationErrors # This is the default value
+    exception:
+        enabled: true
+    routing_loader:
+        default_format: json
+    format_listener:
+        rules:
+            -
+                # http://symfony.com/doc/current/bundles/FOSRestBundle/format_listener.html
+                path: ^/api/
+                priorities: ['json', 'html', 'xml']
+                fallback_format: ~
+                prefer_extension: true
+                methods: [ 'get', 'post', 'put', 'delete']
+            - { path: '^/', stop: true }
+
