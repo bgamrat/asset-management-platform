@@ -74,7 +74,6 @@ alter role dev login;
 \password dev
 \password postgres
 
-<<<<<<< Updated upstream
 Permissions for Symfony
 mkdir -p var/cache var/logs
 sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs
@@ -176,13 +175,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ app_dev.php [QSA,L]
 </IfModule>
 
-<<<<<<< Updated upstream
 Checking routing
 
 php bin/console router:match  --method GET /api/admin/user/1
-=======
 
-Checking routing
-
-php bin/console router:match  --method GET /api/admin/user/1
->>>>>>> Stashed changes

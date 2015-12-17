@@ -51,9 +51,6 @@ assetic:
         main_js:
             inputs:
                 - 'common/app/main.js'
-        lib_js:
-            inputs:
-                - 'common/app/lib/common.js'
         admin_js:
             inputs:
                 - 'common/app/admin/user.js'

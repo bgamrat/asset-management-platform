@@ -7,7 +7,7 @@ app_admin:
     type:     annotation
     
 app_admin_rest:
-    path:     .json$
+    path:   ^/api
     defaults: { _format: json }
     
 static:

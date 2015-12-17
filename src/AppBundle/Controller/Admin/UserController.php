@@ -30,14 +30,14 @@ class UserController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $groups = $this->get( 'fos_user.group_manager' )->findGroups();
-        $groupNames = [];
-        foreach( $groups as $g )
+        $groupNames = [ ];
+        foreach ( $groups as $g )
         {
             $groupNames[$g->getName()] = $g->getId();
         }
 
         $user = new User();
-        $user_form = $this->createForm( UserType::class, $user, ['groups' => $groupNames] );
+        $user_form = $this->createForm( UserType::class, $user, ['groups' => $groupNames ] );
 
         return $this->render( 'admin/user/index.html.twig', array(
                     'user_form' => $user_form->createView(),
@@ -47,6 +47,7 @@ class UserController extends FOSRestController
 
     /**
      * @Route("/api/admin/user/list")
+     * @Method({"GET"})
      * @View(statusCode=200)
      */
     public function apiUserListAction()
@@ -54,8 +55,8 @@ class UserController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $users = $this->get( 'fos_user.user_manager' )->findUsers();
 
-        $data = [];
-        foreach( $users as $u )
+        $data = [ ];
+        foreach ( $users as $u )
         {
             $item = [
                 'id' => $u->getId(),
@@ -78,8 +79,8 @@ class UserController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['id' => $id] );
-        if($user !== null )
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['id' => $id ] );
+        if ( $user !== null )
         {
             $data = [
                 'username' => $user->getUsername(),
@@ -88,21 +89,16 @@ class UserController extends FOSRestController
                 'enabled' => $user->isEnabled(),
                 'locked' => $user->isLocked()
             ];
-            $status = JsonResponse::HTTP_OK;
+            return $data;
         }
         else
         {
-            $data = [
-                'error' => 'Not found'
-            ];
-            $status = JsonResponse::HTTP_NOT_FOUND;
+            throw $this->createNotFoundException( 'Not found!' );
         }
-
-        return $data;
     }
 
     /**
-     *  @Route("/api/admin/user")
+     *  @Route("/api/admin/user/{id}.json")
      *  @Method({"POST"})
      *  @ParamConverter("post", converter="fos_rest.request_body")
      *  @View(statusCode=201)
@@ -111,23 +107,20 @@ class UserController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $user = $this->get( 'fos_user.user_manager' )->findUserBy( [ 'id' => $id] );
-        if( $user !== null )
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy( [ 'id' => $id ] );
+        if ( $user !== null )
         {
             $user_form = $this->createForm( UserType::class, $user );
             $status = JsonResponse::HTTP_CONFLICT;
         }
         else
         {
-            // Save data
-            $status = JsonResponse::HTTP_CREATED;
+            throw $this->createNotFoundException( 'Not found!' );
         }
-
-        return new JsonResponse( $data, $status, ['location' => '/api/admin/user/' . $username] );
     }
 
     /**
-     *  @Route("/api/admin/user/{id}")
+     *  @Route("/api/admin/user/{id}.json")
      *  @Method({"PUT"})
      *  @View(statusCode=204)
      *  @ParamConverter("put", converter="fos_rest.request_body")
@@ -136,36 +129,29 @@ class UserController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $data = null;
-        $user = $this->get( 'fos_user.user_manager' )->findUserBy( [ 'id' => $id] );
-        if( $user !== null )
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy( [ 'id' => $id ] );
+        if ( $user !== null )
         {
             $user = new User();
             $user_form = $this->createForm( UserType::class, $user );
             $user_form->handleRequest( $request );
-            if( $user_form->isValid() )
+            if ( $user_form->isValid() )
             {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist( $user );
                 $em->flush();
-                $status = JsonResponse::HTTP_NO_CONTENT;
+              
             }
-            else
-            {
-                echo 'bad data';
-            }
-
-            $status = 201;
+            return $user_form;
         }
         else
         {
-            $status = JsonResponse::HTTP_NOT_FOUND;
-        }
-
-        return new JsonResponse( $data, $status );
+            throw $this->createNotFoundException( 'Not found!' );
+        };
     }
 
     /**
-     *  @Route("/api/admin/user/{id}")
+     *  @Route("/api/admin/user/{id}.json")
      *  @Method({"DELETE"})
      *  @View(statusCode=200)
      */
@@ -173,17 +159,15 @@ class UserController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $user = $this->get( 'fos_user.user_manager' )->findUserById( $id );
-        if( $user !== null )
+        if ( $user !== null )
         {
             // Do delete
             $status = JsonResponse::HTTP_OK;
         }
         else
         {
-            $status = JsonResponse::HTTP_NOT_FOUND;
+            throw $this->createNotFoundException( 'Not found!' );
         }
-
-        return new JsonResponse( $data );
     }
 
 }

@@ -18,13 +18,13 @@ require([
     'dgrid/OnDemandGrid',
     "dgrid/Selection",
     'dgrid/Editor',
-    "dojo/i18n!app/nls/core",
-    "app/lib/common",
+    "lib/common",
+    "dojo/i18n!nls/core",
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, ValidationTextBox, CheckBox, Select, Button, Dialog,
-        RequestMemory, OnDemandGrid, Selection, Editor, core, lib) {
-
+        RequestMemory, OnDemandGrid, Selection, Editor, lib, core) {
+    
     var newBtn = new Button({
         label: core["new"]
     }, 'new-btn');
@@ -67,7 +67,7 @@ require([
                 "user[_token]": domAttr.get("user__token", "value")
             }
         };
-        xhr("/api/admin/user/" + domAttr.get("user_id", "value"), options).then(function (data) {
+        xhr("/api/admin/user/" + domAttr.get("user_id", "value") + '.json', options).then(function (data) {
             userViewDialog.hide();
         });
     });
@@ -126,7 +126,7 @@ require([
             }
             grid.select(row);
             options.method = "GET";
-            xhr.get("/api/admin/user/" + id + ".json", options).then(function (data) {
+            xhr.get("/api/admin/user/" + id + '.json', options).then(function (data) {
                 userViewDialog.show();
                 domAttr.set("user_id", "value", id);
                 domAttr.set("user__token", "value", data.token);
@@ -152,7 +152,7 @@ require([
         if( confirm(core.areyousure) ) {
             query(".dgrid-row .remove-cb input").forEach(function (node) {
                 var row = grid.row(node);
-                xhr("/api/admin/user/" + row.data.username, {handleAs: "json", method: "DELETE"}).then(function (data) {
+                xhr("/api/admin/user/" + row.data.id + '.json', {handleAs: "json", method: "DELETE"}).then(function (data) {
                     grid.removeRow(row);
                 });
             });
