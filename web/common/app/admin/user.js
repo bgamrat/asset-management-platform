@@ -24,11 +24,30 @@ require([
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, ValidationTextBox, CheckBox, Select, Button, Dialog,
         RequestMemory, OnDemandGrid, Selection, Editor, lib, core) {
-    
+
+    var userViewDialog = new Dialog({
+        title: core.view
+    }, "user-view-dialog");
+    userViewDialog.startup();
+    userViewDialog.on("cancel", function (event) {
+        grid.clearSelection();
+    });
+
     var newBtn = new Button({
         label: core["new"]
     }, 'new-btn');
     newBtn.startup();
+    newBtn.on("click", function (event) {
+        domAttr.set("user_id", "value", '');
+        domAttr.set("user__token", "value", '');
+        usernameInput.set("value", "");
+        usernameInput.set("readOnly", false);
+        emailInput.set("value", "");
+        enabledCheckBox.set("checked", true);
+        lockedCheckBox.set("checked", false);
+        userGroupsSelect.set("value", []);
+        userViewDialog.set("title",core["new"]).show();
+    });
 
     var removeBtn = new Button({
         label: core.remove
@@ -70,14 +89,6 @@ require([
         xhr("/api/admin/user/" + domAttr.get("user_id", "value") + '.json', options).then(function (data) {
             userViewDialog.hide();
         });
-    });
-
-    var userViewDialog = new Dialog({
-        title: core.view
-    }, "user-view-dialog");
-    userViewDialog.startup();
-    userViewDialog.on("cancel", function (event) {
-        grid.clearSelection();
     });
 
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({

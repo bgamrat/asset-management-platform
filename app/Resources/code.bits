@@ -179,3 +179,4 @@ Checking routing
 
 php bin/console router:match  --method GET /api/admin/user/1
 
+ php bin/console assetic:dump
