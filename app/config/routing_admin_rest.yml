@@ -1,0 +1,4 @@
+app_admin_users:
+    type:     rest
+    resource: AppBundle\Controller\Admin\UsersController
+    name_prefix:   admin_

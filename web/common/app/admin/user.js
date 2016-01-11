@@ -86,13 +86,13 @@ require([
                 "user[_token]": domAttr.get("user__token", "value")
             }
         };
-        xhr("/api/admin/user/" + domAttr.get("user_id", "value") + '.json', options).then(function (data) {
+        xhr("/admin/users/" + domAttr.get("user_id", "value"), options).then(function (data) {
             userViewDialog.hide();
-        });
+        }, lib.xhrError);
     });
 
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
-        collection: new RequestMemory({target: '/api/admin/user/list'}),
+        collection: new RequestMemory({target: '/admin/users'}),
         columns: {
             username: {
                 label: core.username
@@ -137,7 +137,7 @@ require([
             }
             grid.select(row);
             options.method = "GET";
-            xhr.get("/api/admin/user/" + id + '.json', options).then(function (data) {
+            xhr.get("/admin/users/" + id, options).then(function (data) {
                 userViewDialog.show();
                 domAttr.set("user_id", "value", id);
                 domAttr.set("user__token", "value", data.token);
@@ -163,7 +163,7 @@ require([
         if( confirm(core.areyousure) ) {
             query(".dgrid-row .remove-cb input").forEach(function (node) {
                 var row = grid.row(node);
-                xhr("/api/admin/user/" + row.data.id + '.json', {handleAs: "json", method: "DELETE"}).then(function (data) {
+                xhr("/admin/users/" + row.data.id, {handleAs: "json", method: "DELETE"}).then(function (data) {
                     grid.removeRow(row);
                 });
             });

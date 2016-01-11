@@ -139,6 +139,7 @@ fos_rest:
         enabled: true
     routing_loader:
         default_format: json
+        include_format: false
     format_listener:
         rules:
             -

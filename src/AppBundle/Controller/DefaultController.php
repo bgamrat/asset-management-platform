@@ -19,16 +19,5 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
         ));
     }
-    
-    /**
-     * @Route("/admin")
-     */
-    public function adminAction()
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
-        // replace this example code with whatever you need
-        return $this->render('default/admin.html.twig', array(
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-        ));
-    }
+   
 }

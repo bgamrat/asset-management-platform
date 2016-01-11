@@ -3,6 +3,7 @@ define({
         "areyousure": "Are you sure?",
         "email": "Email",
         "enabled": "Enabled",
+        "error": "Error",
         "groups": "Groups",
         "locked": "Locked",
         "new": "New",

@@ -3,13 +3,14 @@ app:
     type:     annotation
     
 app_admin:
-    resource: "@AppBundle/Controller/Admin"
+    resource: AppBundle\Controller\AdminController
     type:     annotation
     
 app_admin_rest:
-    path:   ^/api
-    defaults: { _format: json }
-    
+    type: rest
+    prefix: /admin
+    resource: routing_admin_rest.yml
+
 static:
     path: /privacy
     defaults:
