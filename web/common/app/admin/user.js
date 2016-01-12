@@ -75,15 +75,19 @@ require([
     }, 'save-btn');
     saveBtn.startup();
     saveBtn.on("click", function (event) {
+        var data = JSON.stringify({
+                "email": emailInput.get("value"),
+                "enabled": enabledCheckBox.get("checked"),
+                "locked": lockedCheckBox.get("checked"),
+                "groups": userGroupsSelect.get("value"),
+                "_token": { "id": "user", "value": domAttr.get("user__token", "value") }
+            });
         var options = {
             handleAs: "json",
             method: "put",
-            data: {
-                "user[email]": emailInput.get("value"),
-                "user[enabled]": enabledCheckBox.get("checked"),
-                "user[locked]": lockedCheckBox.get("checked"),
-                "user[groups]": userGroupsSelect.get("value"),
-                "user[_token]": domAttr.get("user__token", "value")
+            data: data,
+            headers: { "Content-Type": "application/json",
+                "X-Token": domAttr.get("user__token", "value")
             }
         };
         xhr("/admin/users/" + domAttr.get("user_id", "value"), options).then(function (data) {
@@ -140,7 +144,7 @@ require([
             xhr.get("/admin/users/" + id, options).then(function (data) {
                 userViewDialog.show();
                 domAttr.set("user_id", "value", id);
-                domAttr.set("user__token", "value", data.token);
+                domAttr.set("user__token", "value", data._token.value);
                 usernameInput.set("value", data.username);
                 emailInput.set("value", data.email);
                 enabledCheckBox.set("checked", data.enabled === true);

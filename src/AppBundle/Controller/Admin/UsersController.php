@@ -15,6 +15,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations\View;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class UsersController extends FOSRestController
 {
@@ -52,7 +53,11 @@ class UsersController extends FOSRestController
         $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['id' => $id] );
         if( $user !== null )
         {
+            $csrf = $this->get('security.csrf.token_manager');
+            $token = $csrf->refreshToken('user');
+
             $data = [
+                '_token' => $token,
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),
                 'groups' => $user->getGroups(),
@@ -84,18 +89,18 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * @ParamConverter(options={"id" = "user_id"})
+     * @ParamConverter("user",  converter="fos_rest.request_body", options={"id"})
+     * @View(statusCode=204)
      */
-    public function putUserAction( $id )
+    public function putUserAction( Request $request, $id, User $user)
     {
+        $token = $request->headers->get('X-Token');   
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $data = null;
-        $user = $this->get( 'fos_user.user_manager' )->findUserBy( [ 'id' => $id] );
         if( $user !== null )
         {
-            $user = new User();
-            $user_form = $this->createForm( UserType::class, $user );
-            $user_form->handleRequest( $request );
+            $user_form = $this->createForm( UserType::class );
+            $user_form->setData($user);
+            var_dump($user_form->getData());//->get_token()->setData($token);
             if( $user_form->isValid() )
             {
                 $em = $this->getDoctrine()->getManager();

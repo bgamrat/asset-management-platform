@@ -32,7 +32,8 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults( array(
             'groups' => [],
-            'data_class' => 'AppBundle\Entity\User'
+            'data_class' => 'AppBundle\Entity\User',
+            'intention' => 'user'
         ) );
     }
 

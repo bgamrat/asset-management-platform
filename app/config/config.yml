@@ -114,6 +114,7 @@ fos_user:
             type: app_user_registration
 
 fos_rest:
+    disable_csrf_role: ROLE_API
     view:
         view_response_listener: true
         force_redirects:
@@ -144,8 +145,8 @@ fos_rest:
         rules:
             -
                 # http://symfony.com/doc/current/bundles/FOSRestBundle/format_listener.html
-                path: ^/api/
-                priorities: ['json', 'html', 'xml']
+                path: ^/admin/user/
+                priorities: ['json', 'html', 'xml','form']
                 fallback_format: ~
                 prefer_extension: true
                 methods: [ 'get', 'post', 'put', 'delete']
