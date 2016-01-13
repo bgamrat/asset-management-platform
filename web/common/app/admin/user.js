@@ -25,6 +25,8 @@ require([
         registry, ValidationTextBox, CheckBox, Select, Button, Dialog,
         RequestMemory, OnDemandGrid, Selection, Editor, lib, core) {
 
+    var userId = null;
+
     var userViewDialog = new Dialog({
         title: core.view
     }, "user-view-dialog");
@@ -38,14 +40,11 @@ require([
     }, 'new-btn');
     newBtn.startup();
     newBtn.on("click", function (event) {
-        domAttr.set("user_id", "value", '');
-        domAttr.set("user__token", "value", '');
         usernameInput.set("value", "");
         usernameInput.set("readOnly", false);
         emailInput.set("value", "");
         enabledCheckBox.set("checked", true);
         lockedCheckBox.set("checked", false);
-        userGroupsSelect.set("value", []);
         userViewDialog.set("title",core["new"]).show();
     });
 
@@ -67,8 +66,12 @@ require([
     var lockedCheckBox = new CheckBox({}, "user_locked");
     lockedCheckBox.startup();
 
-    var userGroupsSelect = new Select({}, "user_groups");
-    userGroupsSelect.startup();
+    var userGroupsCheckBoxes = [];
+    query('input[id^="user_groups"]').forEach(function(node){
+        var i;
+        i = userGroupsCheckBoxes.push(new CheckBox({ label: node.name}, node.id));
+        userGroupsCheckBoxes[i-1].startup();
+    });
 
     var saveBtn = new Button({
         label: core.save
@@ -77,20 +80,18 @@ require([
     saveBtn.on("click", function (event) {
         var data = JSON.stringify({
                 "email": emailInput.get("value"),
+                "username": usernameInput.get("value"),
                 "enabled": enabledCheckBox.get("checked"),
                 "locked": lockedCheckBox.get("checked"),
-                "groups": userGroupsSelect.get("value"),
-                "_token": { "id": "user", "value": domAttr.get("user__token", "value") }
+                "groups": []
             });
         var options = {
             handleAs: "json",
             method: "put",
             data: data,
-            headers: { "Content-Type": "application/json",
-                "X-Token": domAttr.get("user__token", "value")
-            }
+            headers: { "Content-Type": "application/json" }
         };
-        xhr("/admin/users/" + domAttr.get("user_id", "value"), options).then(function (data) {
+        xhr("/admin/users/" + userId, options).then(function (data) {
             userViewDialog.hide();
         }, lib.xhrError);
     });
@@ -143,13 +144,11 @@ require([
             options.method = "GET";
             xhr.get("/admin/users/" + id, options).then(function (data) {
                 userViewDialog.show();
-                domAttr.set("user_id", "value", id);
-                domAttr.set("user__token", "value", data._token.value);
+                userId = id;
                 usernameInput.set("value", data.username);
                 emailInput.set("value", data.email);
                 enabledCheckBox.set("checked", data.enabled === true);
                 lockedCheckBox.set("checked", data.locked === true);
-                userGroupsSelect.set("value", data.groups);
             }, lib.xhrError);
         }
     });

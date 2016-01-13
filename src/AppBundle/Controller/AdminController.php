@@ -29,8 +29,7 @@ class AdminController extends Controller
             $groupNames[$g->getName()] = $g->getId();
         }
 
-        $user = new User();
-        $user_form = $this->createForm( UserType::class, $user, ['groups' => $groupNames ] );
+        $user_form = $this->createForm( UserType::class, null, ['groups' => $groupNames ] );
 
         return $this->render( 'admin/index.html.twig', array(
                     'user_form' => $user_form->createView(),

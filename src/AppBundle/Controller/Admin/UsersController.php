@@ -53,11 +53,7 @@ class UsersController extends FOSRestController
         $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['id' => $id] );
         if( $user !== null )
         {
-            $csrf = $this->get('security.csrf.token_manager');
-            $token = $csrf->refreshToken('user');
-
             $data = [
-                '_token' => $token,
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),
                 'groups' => $user->getGroups(),
@@ -92,15 +88,14 @@ class UsersController extends FOSRestController
      * @ParamConverter("user",  converter="fos_rest.request_body", options={"id"})
      * @View(statusCode=204)
      */
-    public function putUserAction( Request $request, $id, User $user)
+    public function putUserAction( $id, User $user )
     {
-        $token = $request->headers->get('X-Token');   
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         if( $user !== null )
         {
             $user_form = $this->createForm( UserType::class );
             $user_form->setData($user);
-            var_dump($user_form->getData());//->get_token()->setData($token);
+            var_dump($user_form->get("email")->isValid());
             if( $user_form->isValid() )
             {
                 $em = $this->getDoctrine()->getManager();
