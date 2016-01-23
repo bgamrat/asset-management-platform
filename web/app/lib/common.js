@@ -1,6 +1,6 @@
 define([
     "dijit/Dialog",
-    "dojo/i18n!nls/core",
+    "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (Dialog, core) {
     "use strict";

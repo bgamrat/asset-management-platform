@@ -55,20 +55,20 @@ assetic:
     assets:
         main_css:
             inputs:
-                - 'css/main.css'
+                - 'app/css/main.css'
         admin_css:
             inputs:
-                - 'css/admin/admin.css'
-                - 'css/admin/user.css'
+                - 'app/css/admin/admin.css'
+                - 'app/css/admin/user.css'
         dojo_dijit_css:
             inputs:
-                - 'common/release/dojo/resources/dojo.css'
-                - 'common/release/dojo/resources/dnd.css'
-                - 'common/release/dijit/themes/tundra/tundra.css'
+                - 'vendor/release/dojo/resources/dojo.css'
+                - 'vendor/release/dojo/resources/dnd.css'
+                - 'vendor/release/dijit/themes/tundra/tundra.css'
         dgrid_css:
             inputs:
-                - 'common/release/dgrid/css/dgrid.css'
-                - 'common/release/dgrid/css/skins/tundra.css'
+                - 'vendor/release/dgrid/css/dgrid.css'
+                - 'vendor/release/dgrid/css/skins/tundra.css'
 
 # Doctrine Configuration
 doctrine:

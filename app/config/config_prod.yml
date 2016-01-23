@@ -39,10 +39,10 @@ assetic:
     assets:
         dojo_js:
             inputs:
-                - 'common/release/dojo/dojo.js'
+                - 'vendor/release/dojo/dojo.js'
         main_js:
             inputs:
-                - 'common/release/app/main.js'
+                - 'vendor/release/app/main.js'
         admin_js:
             inputs:
-                - 'common/release/app/admin.js'
+                - 'vendor/release/app/admin.js'

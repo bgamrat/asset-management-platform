@@ -10,6 +10,9 @@ autoload.php
 composer
 var
 web/assetic
+web/css
 web/js
-web/web
-
+web/vendor
+!web/vendor/profiles
+!web/vendor/profiles/app.profile.js
+!web/vendor/build.sh

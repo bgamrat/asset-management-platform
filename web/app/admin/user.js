@@ -18,8 +18,8 @@ require([
     'dgrid/OnDemandGrid',
     "dgrid/Selection",
     'dgrid/Editor',
-    "lib/common",
-    "dojo/i18n!nls/core",
+    "app/lib/common",
+    "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, ValidationTextBox, CheckBox, Select, Button, Dialog,
@@ -67,7 +67,7 @@ require([
     lockedCheckBox.startup();
 
     var userGroupsCheckBoxes = [];
-    query('input[id^="user_groups"]').forEach(function(node){
+    query('[data-type="user-group-cb"]').forEach(function(node){
         var i;
         i = userGroupsCheckBoxes.push(new CheckBox({ label: node.name}, node.id));
         userGroupsCheckBoxes[i-1].startup();
@@ -79,6 +79,7 @@ require([
     saveBtn.startup();
     saveBtn.on("click", function (event) {
         var data = JSON.stringify({
+                "id": userId,
                 "email": emailInput.get("value"),
                 "username": usernameInput.get("value"),
                 "enabled": enabledCheckBox.get("checked"),

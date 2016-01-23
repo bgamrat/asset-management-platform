@@ -3,9 +3,9 @@
 			// Enable the AMD loader
 			async: true,
 			// Define the base URL for all of our modules and packages
-			baseUrl: '/common/release',
-                                                        paths: { "lib":"/common/app/lib",
-                                                                       "nls": "/common/app/nls"},
+			baseUrl: '/vendor/release',
+                                                        paths: { "lib":"/app/lib",
+                                                                       "nls": "/app/nls"},
 			// Enable debugging
 			isDebug: true,
 			// Register the packages we are going to be using. These same packages should be defined in the
@@ -14,7 +14,7 @@
 				// Using a string as a package is shorthand for `{ name: 'app', location: 'app' }`
                                                                            'lib',
                                                                            'nls',
-				'app',
+                                                                           {"name":'app',"location":'/app'},
 				'dgrid',
 				'dijit',
 				'dojo',

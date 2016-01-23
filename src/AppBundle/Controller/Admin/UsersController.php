@@ -15,7 +15,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations\View;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class UsersController extends FOSRestController
 {
@@ -85,29 +85,22 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * @ParamConverter("user",  converter="fos_rest.request_body", options={"id"})
+     * @ParamConverter("user",  converter="fos_rest.request_body")
      * @View(statusCode=204)
      */
-    public function putUserAction( $id, User $user )
+    public function putUserAction( User $user, ConstraintViolationListInterface $validationErrors )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        if( $user !== null )
+        if( count( $validationErrors ) > 0 )
         {
-            $user_form = $this->createForm( UserType::class );
-            $user_form->setData($user);
-            var_dump($user_form->get("email")->isValid());
-            if( $user_form->isValid() )
-            {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist( $user );
-                $em->flush();
-            }
-            return $user_form;
+            die ('not valid');
         }
         else
         {
-            throw $this->createNotFoundException( 'Not found!' );
-        };
+            $em = $this->getDoctrine()->getManager();
+            $em->persist( $user );
+            $em->flush();
+        }
     }
 
     public function deleteUserAction( $id )

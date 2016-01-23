@@ -15,18 +15,16 @@ class UserType extends AbstractType
 
     public function buildForm( FormBuilderInterface $builder, array $data )
     {
-        var_dump($data['groups']);
-
         $builder
-                ->add( 'username', TextType::class )
-                ->add( 'email', TextType::class )
-                ->add( 'enabled', CheckboxType::class )
-                ->add( 'locked', CheckboxType::class )
-                ->add( 'groups', ChoiceType::class, [
-                    'choices' => $data['groups'],
-                    'multiple' => true,
-                    'expanded' => true
-                ] );
+                ->add( 'username', TextType::class );
+                //->add( 'email', TextType::class )
+                //->add( 'enabled', CheckboxType::class )
+                //->add( 'locked', CheckboxType::class )
+                //->add( 'groups', ChoiceType::class, [
+                //    'choices' => $data['groups'],
+                //    'multiple' => true,
+                //    'expanded' => true
+                //] );
     }
 
     public function configureOptions( OptionsResolver $resolver )

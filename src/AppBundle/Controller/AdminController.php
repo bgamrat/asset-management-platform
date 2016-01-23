@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class AdminController extends Controller
 {
     /**
-     * @Route("/admin")
+     * @Route("/admin/")
      */
     public function indexAction( Request $request )
     {
@@ -26,18 +26,16 @@ class AdminController extends Controller
         $groupNames = [ ];
         foreach ( $groups as $g )
         {
-            $groupNames[$g->getName()] = $g->getId();
+            $groupNames[$g->getId()] = $g->getName();
         }
 
-        $user_form = $this->createForm( UserType::class, null, ['groups' => $groupNames ] );
-
         return $this->render( 'admin/index.html.twig', array(
-                    'user_form' => $user_form->createView(),
+                    'admin_user_groups' => $groupNames,
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
     
-    public function getAdminction ( $slug ) {
+    public function getAdminAction ( $slug ) {
         // Supports routing
     }
 }

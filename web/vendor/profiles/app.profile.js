@@ -44,7 +44,7 @@ var profile = {
 	// build profile.
 	packages: [
 		// Using a string as a package is shorthand for `{ name: 'app', location: 'app' }`
-		'app',
+		{ name: 'app', location: '../../app' },
                 'dojo',
 		'dijit',
 		'dojox',

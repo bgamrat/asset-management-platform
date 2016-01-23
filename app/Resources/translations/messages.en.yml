@@ -1,2 +1,18 @@
-Invitation:
+admin:
+    Admin
+email:
+    Email
+enabled:
+    Enabled
+groups:
+    Groups
+invitation:
     Invitation
+locked:
+    Locked
+password:
+    Password
+user:
+    User
+username:
+    Username
