@@ -15,6 +15,7 @@ require([
     "dijit/form/Button",
     "dijit/Dialog",
     'dstore/RequestMemory',
+    'dstore/Trackable',
     'dgrid/OnDemandGrid',
     "dgrid/Selection",
     'dgrid/Editor',
@@ -23,7 +24,7 @@ require([
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, ValidationTextBox, CheckBox, Select, Button, Dialog,
-        RequestMemory, OnDemandGrid, Selection, Editor, lib, core) {
+        RequestMemory, Trackable, OnDemandGrid, Selection, Editor, lib, core) {
 
     var userId = null;
 
@@ -94,11 +95,13 @@ require([
         };
         xhr("/admin/users/" + userId, options).then(function (data) {
             userViewDialog.hide();
+            grid.refresh();
         }, lib.xhrError);
     });
 
+    var TrackableMemory = declare([RequestMemory,Trackable]);
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
-        collection: new RequestMemory({target: '/admin/users'}),
+        collection: new TrackableMemory({target: '/admin/users'}),
         columns: {
             username: {
                 label: core.username

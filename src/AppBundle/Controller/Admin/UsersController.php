@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use FOS\UserBundle\Model\UserManager;
+// use FOS\UserBundle\Doctrine\UserManager;
 use FOS\UserBundle\Model\GroupManager as GroupManager;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Group;
@@ -85,20 +85,26 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * @ParamConverter("user",  converter="fos_rest.request_body")
+     * @ParamConverter("userPut",  converter="fos_rest.request_body")
      * @View(statusCode=204)
      */
-    public function putUserAction( User $user, ConstraintViolationListInterface $validationErrors )
+    public function putUserAction( $id, User $userPut, ConstraintViolationListInterface $validationErrors )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         if( count( $validationErrors ) > 0 )
         {
-            die ('not valid');
+            die( 'not valid' );
         }
         else
         {
             $em = $this->getDoctrine()->getManager();
-            $em->persist( $user );
+            $user = $em->getRepository('AppBundle:User')->find($id);
+            $user->setEmail($userPut->getEmailCanonical());
+            $user->setEnabled($userPut->isEnabled());
+            $user->setLocked($userPut->isLocked());
+            if ($userPut->getPassword()) {
+                $user->setPassword($userPut->getPassword());
+            }
             $em->flush();
         }
     }
