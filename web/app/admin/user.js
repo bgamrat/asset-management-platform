@@ -14,7 +14,8 @@ require([
     "dijit/form/Select",
     "dijit/form/Button",
     "dijit/Dialog",
-    'dstore/RequestMemory',
+    'dstore/Rest',
+    'dstore/SimpleQuery',
     'dstore/Trackable',
     'dgrid/OnDemandGrid',
     "dgrid/Selection",
@@ -24,7 +25,7 @@ require([
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, ValidationTextBox, CheckBox, Select, Button, Dialog,
-        RequestMemory, Trackable, OnDemandGrid, Selection, Editor, lib, core) {
+        Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, lib, core) {
 
     var userId = null;
 
@@ -99,9 +100,9 @@ require([
         }, lib.xhrError);
     });
 
-    var TrackableMemory = declare([RequestMemory,Trackable]);
+    var TrackableRest = declare([Rest,SimpleQuery,Trackable]);
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
-        collection: new TrackableMemory({target: '/admin/users'}),
+        collection: new TrackableRest({target: '/admin/users'}),
         columns: {
             username: {
                 label: core.username
