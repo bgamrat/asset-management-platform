@@ -47,7 +47,7 @@ require([
         emailInput.set("value", "");
         enabledCheckBox.set("checked", true);
         lockedCheckBox.set("checked", false);
-        userViewDialog.set("title",core["new"]).show();
+        userViewDialog.set("title", core["new"]).show();
     });
 
     var removeBtn = new Button({
@@ -69,10 +69,10 @@ require([
     lockedCheckBox.startup();
 
     var userGroupsCheckBoxes = [];
-    query('[data-type="user-group-cb"]').forEach(function(node){
+    query('[data-type="user-group-cb"]').forEach(function (node) {
         var i;
-        i = userGroupsCheckBoxes.push(new CheckBox({ label: node.name}, node.id));
-        userGroupsCheckBoxes[i-1].startup();
+        i = userGroupsCheckBoxes.push(new CheckBox({label: node.name}, node.id));
+        userGroupsCheckBoxes[i - 1].startup();
     });
 
     var saveBtn = new Button({
@@ -81,18 +81,18 @@ require([
     saveBtn.startup();
     saveBtn.on("click", function (event) {
         var data = JSON.stringify({
-                "id": userId,
-                "email": emailInput.get("value"),
-                "username": usernameInput.get("value"),
-                "enabled": enabledCheckBox.get("checked"),
-                "locked": lockedCheckBox.get("checked"),
-                "groups": []
-            });
+            "id": userId,
+            "email": emailInput.get("value"),
+            "username": usernameInput.get("value"),
+            "enabled": enabledCheckBox.get("checked"),
+            "locked": lockedCheckBox.get("checked"),
+            "groups": []
+        });
         var options = {
             handleAs: "json",
             method: "put",
             data: data,
-            headers: { "Content-Type": "application/json" }
+            headers: {"Content-Type": "application/json"}
         };
         xhr("/admin/users/" + userId, options).then(function (data) {
             userViewDialog.hide();
@@ -100,9 +100,9 @@ require([
         }, lib.xhrError);
     });
 
-    var TrackableRest = declare([Rest,SimpleQuery,Trackable]);
+    var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
-        collection: new TrackableRest({target: '/admin/users'}),
+        collection: new TrackableRest({target: '/admin/user'}),
         columns: {
             username: {
                 label: core.username
@@ -137,7 +137,6 @@ require([
 
     grid.on(".dgrid-row:click", function (event) {
         var checkBoxes = ["enabled", "locked", "remove"];
-        var options = {handleAs: "json"};
         var row = grid.row(event);
         var cell = grid.cell(event);
         var id = row.data.id;
@@ -146,14 +145,13 @@ require([
                 grid.clearSelection();
             }
             grid.select(row);
-            options.method = "GET";
-            xhr.get("/admin/users/" + id, options).then(function (data) {
-                userViewDialog.show();
+            grid.collection.get(id).then(function (user) {
                 userId = id;
-                usernameInput.set("value", data.username);
-                emailInput.set("value", data.email);
-                enabledCheckBox.set("checked", data.enabled === true);
-                lockedCheckBox.set("checked", data.locked === true);
+                usernameInput.set("value", user.username);
+                emailInput.set("value", user.email);
+                enabledCheckBox.set("checked", user.enabled === true);
+                lockedCheckBox.set("checked", user.locked === true);
+                userViewDialog.show();
             }, lib.xhrError);
         }
     });

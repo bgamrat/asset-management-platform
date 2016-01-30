@@ -10,22 +10,25 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\UserBundle\Model\GroupManager as GroupManager;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Group;
-use AppBundle\Form\Admin\User\UserType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
 
 class UsersController extends FOSRestController
 {
 
     /**
+     * @Route("/admin/user")
      * @View()
      */
-    public function getUsersAction()
+    public function cgetAction()
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
         $users = $this->get( 'fos_user.user_manager' )->findUsers();
 
         $data = [];
@@ -44,9 +47,10 @@ class UsersController extends FOSRestController
     }
 
     /**
+     * @Route("/admin/user/{id}")
      * @View()
      */
-    public function getUserAction( $id )
+    public function getAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
@@ -68,7 +72,7 @@ class UsersController extends FOSRestController
         }
     }
 
-    public function postUserAction( Request $request )
+    public function postAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
@@ -88,7 +92,7 @@ class UsersController extends FOSRestController
      * @ParamConverter("userPut",  converter="fos_rest.request_body")
      * @View(statusCode=204)
      */
-    public function putUserAction( $id, User $userPut, ConstraintViolationListInterface $validationErrors )
+    public function putAction( $id, User $userPut, ConstraintViolationListInterface $validationErrors )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         if( count( $validationErrors ) > 0 )
@@ -98,18 +102,19 @@ class UsersController extends FOSRestController
         else
         {
             $em = $this->getDoctrine()->getManager();
-            $user = $em->getRepository('AppBundle:User')->find($id);
-            $user->setEmail($userPut->getEmailCanonical());
-            $user->setEnabled($userPut->isEnabled());
-            $user->setLocked($userPut->isLocked());
-            if ($userPut->getPassword()) {
-                $user->setPassword($userPut->getPassword());
+            $user = $em->getRepository( 'AppBundle:User' )->find( $id );
+            $user->setEmail( $userPut->getEmailCanonical() );
+            $user->setEnabled( $userPut->isEnabled() );
+            $user->setLocked( $userPut->isLocked() );
+            if( $userPut->getPassword() )
+            {
+                $user->setPassword( $userPut->getPassword() );
             }
             $em->flush();
         }
     }
 
-    public function deleteUserAction( $id )
+    public function deleteAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $user = $this->get( 'fos_user.user_manager' )->findUserById( $id );

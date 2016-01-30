@@ -102,6 +102,8 @@ swiftmailer:
     
 sensio_framework_extra:
     request: { converters: true }
+    view: 
+        annotations: false
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
@@ -145,7 +147,7 @@ fos_rest:
         rules:
             -
                 # http://symfony.com/doc/current/bundles/FOSRestBundle/format_listener.html
-                path: ^/admin/user/
+                path: ^/admin/user
                 priorities: ['json', 'html', 'xml','form']
                 fallback_format: ~
                 prefer_extension: true

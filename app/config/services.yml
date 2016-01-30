@@ -1,5 +1,4 @@
-imports:
-    - { resource: '../../vendor/friendsofsymfony/user-bundle/Resources/config/orm_group.xml' }
+
 
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
@@ -26,3 +25,6 @@ services:
         class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false 
+
+    fos_user.doctrine_registry:
+        alias: doctrine

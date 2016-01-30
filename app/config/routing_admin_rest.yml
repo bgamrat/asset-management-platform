@@ -1,4 +1,9 @@
+app_admin:
+    resource: AppBundle\Controller\AdminController
+    type:     rest
+
 app_admin_users:
+    parent:   app_admin
     type:     rest
     resource: AppBundle\Controller\Admin\UsersController
     name_prefix:   admin_

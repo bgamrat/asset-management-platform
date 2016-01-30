@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class AdminController extends Controller
 {
+
     /**
      * @Route("/admin/")
      */
@@ -22,20 +23,20 @@ class AdminController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $groups = $this->get( 'fos_user.group_manager' )->findGroups();
-        $groupNames = [ ];
-        foreach ( $groups as $g )
-        {
-            $groupNames[$g->getId()] = $g->getName();
-        }
+        $user_form = $this->createForm( UserType::class, null, [] );
 
         return $this->render( 'admin/index.html.twig', array(
-                    'admin_user_groups' => $groupNames,
+                    'user_form' => $user_form->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
-    
-    public function getAdminAction ( $slug ) {
-        // Supports routing
+
+    /**
+     * @Route("/admin/{slug}")
+     */
+    public function getAdminAction( $slug )
+    {
+        
     }
+
 }

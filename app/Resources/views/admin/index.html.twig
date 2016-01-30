@@ -10,36 +10,7 @@
         <div id="grid">
         </div>
         <div id="user-view-dialog">
-            <div class="input block">
-                <label for="user_username">{{ 'username' | trans }}</label>
-                <input type="text" id="user_username">
-            </div>
-            <div class="input block">
-                <label for="user_email">{{ 'email' | trans }}</label>
-                <input type="text" id="user_email">
-            </div>
-            <div class="input block">
-                <input type="checkbox" id="user_enabled">
-                <label for="user_enabled">{{ 'enabled' | trans }}</label>
-            </div>
-            <div class="input block">
-                <input type="checkbox" id="user_locked">
-                <label for="user_locked">{{ 'locked' | trans }}</label>
-            </div>
-            <div class="input block">
-                <label for="user_password">{{ 'password' | trans }}</label>
-                <input type="text" id="user_password">
-            </div>
-            <div class="input block">
-                <label for="user_groups">{{ 'groups' | trans }}</label>
-                <ul id="user_groups">
-                    {% for key,value in admin_user_groups %}
-                        <li>
-                            <input type="checkbox" id="user_groups[{{ key }}]" value="{{ key }}" data-type="user-group-cb">{{ value | trans }}</option>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+            {{ form(user_form) }}  
             <div class="center">
                 <button id="save-btn" type="button">Save</button>
             </div>
