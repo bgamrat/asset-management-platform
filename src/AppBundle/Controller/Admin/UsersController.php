@@ -6,17 +6,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-// use FOS\UserBundle\Doctrine\UserManager;
+use Doctrine\Common\Collections\Criteria;
 use FOS\UserBundle\Model\GroupManager as GroupManager;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Group;
 use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\Annotations\RequestParam;
+use FOS\RestBundle\Request\ParamFetcher;
 
 class UsersController extends FOSRestController
 {
@@ -25,14 +27,23 @@ class UsersController extends FOSRestController
      * @Route("/admin/user")
      * @View()
      */
-    public function cgetAction()
+    public function cgetAction( Request $request )
     {
+
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        if( $request->headers->has( 'X-Range' ) )
+        {
+            // TODO: Add validation
+            $range = $request->headers->get( 'X-Range' );
+            $values = explode( '-', explode( '=', $range )[1] );
+            $offset = $values[0];
+            $limit = $values[1] - $offset;
+        }
 
-        $users = $this->get( 'fos_user.user_manager' )->findUsers();
-
+        $em = $this->getDoctrine()->getManager();
+        $userCollection = $em->getRepository( 'AppBundle:User' )->findBy( [], ['username' => 'asc'], $limit, $offset );
         $data = [];
-        foreach( $users as $u )
+        foreach( $userCollection as $u )
         {
             $item = [
                 'id' => $u->getId(),

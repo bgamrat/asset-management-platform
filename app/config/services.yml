@@ -24,7 +24,7 @@ services:
     app.form.data_transformer.invitation:
         class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
         arguments: ['@doctrine.orm.entity_manager']
-        public: false 
+        public: false
 
     fos_user.doctrine_registry:
         alias: doctrine

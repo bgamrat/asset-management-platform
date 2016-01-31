@@ -7,3 +7,8 @@ app_admin_users:
     type:     rest
     resource: AppBundle\Controller\Admin\UsersController
     name_prefix:   admin_
+    
+app_admin_users_grid:
+    parent: app_admin
+    name_prefix: admin_
+    resource: AppBundle\Controller\Admin\UsersController

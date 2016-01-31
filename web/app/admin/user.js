@@ -96,13 +96,12 @@ require([
         };
         xhr("/admin/users/" + userId, options).then(function (data) {
             userViewDialog.hide();
-            grid.refresh();
         }, lib.xhrError);
     });
 
     var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
-        collection: new TrackableRest({target: '/admin/user'}),
+        collection: new TrackableRest({target: '/admin/user', useRangeHeaders: true}),
         columns: {
             username: {
                 label: core.username

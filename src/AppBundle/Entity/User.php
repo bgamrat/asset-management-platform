@@ -14,8 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User extends BaseUser
 {
+
     const ROLE_API = 'ROLE_API';
-    
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -53,40 +54,4 @@ class User extends BaseUser
         return $this->invitation;
     }
 
-    public function hasGroup( $name = '' )
-    {
-        if( $name !== '' )
-        {
-            return parent::hasGroup( $name );
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public function setGroups( $groups = [] )
-    {
-        // TODO
-        /*
-        if( is_array( $groups ) )
-        {
-            if( count( $groups ) > 0 )
-            {
-                foreach( $groups as $g )
-                {
-                    $this->addGroup( $g );
-                }
-            }
-        }
-        else
-        {
-            if( is_numeric( $groups ) )
-            {
-                $this->addGroup($groups);
-            }
-        }
-         * 
-         */
-    }
 }
