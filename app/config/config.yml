@@ -129,15 +129,17 @@ fos_rest:
         mime_types:
             json: ['application/json', 'application/x-json']
         failed_validation: HTTP_BAD_REQUEST
-    body_listener: true
-    param_fetcher_listener: true
+    body_listener: 
+        default_format: json
+    param_fetcher_listener: 
+        force: true
     allowed_methods_listener: true
     access_denied_listener:
         json: true
     body_converter:
         enabled: true
         validate: true
-        validation_errors_argument: validationErrors # This is the default value
+        # validation_errors_argument: validationErrors # This is the default value
     exception:
         enabled: true
     routing_loader:
@@ -147,10 +149,9 @@ fos_rest:
         rules:
             -
                 # http://symfony.com/doc/current/bundles/FOSRestBundle/format_listener.html
-                path: ^/admin/user
+                path: ^/admin/users
                 priorities: ['json', 'html', 'xml','form']
                 fallback_format: ~
-                prefer_extension: true
                 methods: [ 'get', 'post', 'put', 'delete']
             - { path: '^/', stop: true }
 

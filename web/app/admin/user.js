@@ -80,28 +80,21 @@ require([
     }, 'save-btn');
     saveBtn.startup();
     saveBtn.on("click", function (event) {
-        var data = JSON.stringify({
+        var data = {
             "id": userId,
             "email": emailInput.get("value"),
-            "username": usernameInput.get("value"),
             "enabled": enabledCheckBox.get("checked"),
             "locked": lockedCheckBox.get("checked"),
             "groups": []
-        });
-        var options = {
-            handleAs: "json",
-            method: "put",
-            data: data,
-            headers: {"Content-Type": "application/json"}
         };
-        xhr("/admin/users/" + userId, options).then(function (data) {
+        grid.collection.put(data).then(function (data) {  
             userViewDialog.hide();
         }, lib.xhrError);
     });
 
     var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
-        collection: new TrackableRest({target: '/admin/user', useRangeHeaders: true}),
+        collection: new TrackableRest({target: '/admin/users', useRangeHeaders: true}),
         columns: {
             username: {
                 label: core.username

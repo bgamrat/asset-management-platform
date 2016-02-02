@@ -31,12 +31,6 @@ class AdminController extends Controller
                 ) );
     }
 
-    /**
-     * @Route("/admin/{slug}")
-     */
-    public function getAdminAction( $slug )
-    {
-        
-    }
+
 
 }
