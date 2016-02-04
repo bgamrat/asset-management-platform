@@ -1,9 +1,0 @@
-app_admin:
-    resource: AppBundle\Controller\AdminController
-    type:     rest
-
-app_admin_users:
-    type:     rest
-    resource: AppBundle\Controller\Admin\UsersController
-    name_prefix:   admin_user_
-    prefix: /admin

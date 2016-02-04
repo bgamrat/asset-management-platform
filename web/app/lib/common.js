@@ -22,6 +22,10 @@ define([
             return true;
         }
     }
+    function textError(msg) {
+        errorDialog.set("content", msg);
+        errorDialog.show();
+    }
     function  xhrError(err) {
         var errObj = JSON.parse(err.response.text);
         errorDialog.set("content", errObj.message);
@@ -29,6 +33,7 @@ define([
     }
     return {
         isEmpty: isEmpty,
+        textError: textError,
         xhrError: xhrError
     }
 });

@@ -5,6 +5,8 @@ define({
         "enabled": "Enabled",
         "error": "Error",
         "groups": "Groups",
+        "invalid": "Invalid",
+        "invalid_form": "Invalid data",
         "locked": "Locked",
         "new": "New",
         "remove": "Remove",

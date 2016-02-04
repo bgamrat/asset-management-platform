@@ -1,26 +1,12 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\Api;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\Common\Collections\Criteria;
-use FOS\UserBundle\Model\GroupManager as GroupManager;
-use AppBundle\Entity\User as User;
-use AppBundle\Entity\Group;
-use FOS\RestBundle\Controller\FOSRestController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use FOS\RestBundle\Controller\Annotations\View;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\Annotations\RequestParam;
-use FOS\RestBundle\Controller\Annotations\NoRoute;
-use FOS\RestBundle\Request\ParamFetcher;
 use AppBundle\Form\Admin\User\UserType;
+use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations\View;
 
 class UsersController extends FOSRestController
 {
@@ -114,6 +100,8 @@ class UsersController extends FOSRestController
         $user->setEmail( $data['email'] );
         $user->setEnabled( $data['enabled'] );
         $user->setLocked( $data['locked'] );
+        $validator = $this->get('validator');
+        $errors = $validator->validate($user);
         $em->flush();
     }
 

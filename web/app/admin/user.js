@@ -9,6 +9,7 @@ require([
     "dojo/aspect",
     "dojo/query",
     "dijit/registry",
+    "dijit/form/Form",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
     "dijit/form/Select",
@@ -24,7 +25,7 @@ require([
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
-        registry, ValidationTextBox, CheckBox, Select, Button, Dialog,
+        registry, Form, ValidationTextBox, CheckBox, Select, Button, Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, lib, core) {
 
     var userId = null;
@@ -55,7 +56,7 @@ require([
     }, 'remove-btn');
     removeBtn.startup();
 
-    var emailInput = new ValidationTextBox({pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$"
+    var emailInput = new ValidationTextBox({required: true, pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$"
     }, "user_email");
     emailInput.startup();
 
@@ -75,26 +76,33 @@ require([
         userGroupsCheckBoxes[i - 1].startup();
     });
 
+    var userForm = new Form({},"user-form");
+    userForm.startup();
+
     var saveBtn = new Button({
         label: core.save
     }, 'save-btn');
     saveBtn.startup();
     saveBtn.on("click", function (event) {
-        var data = {
-            "id": userId,
-            "email": emailInput.get("value"),
-            "enabled": enabledCheckBox.get("checked"),
-            "locked": lockedCheckBox.get("checked"),
-            "groups": []
-        };
-        grid.collection.put(data).then(function (data) {  
-            userViewDialog.hide();
-        }, lib.xhrError);
+        if( userForm.validate() ) {
+            var data = {
+                "id": userId,
+                "email": emailInput.get("value"),
+                "enabled": enabledCheckBox.get("checked"),
+                "locked": lockedCheckBox.get("checked"),
+                "groups": []
+            };
+            grid.collection.put(data).then(function (data) {
+                userViewDialog.hide();
+            }, lib.xhrError);
+        } else {
+            lib.textError(core.invalid_form)
+        }
     });
 
     var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
-        collection: new TrackableRest({target: '/admin/users', useRangeHeaders: true}),
+        collection: new TrackableRest({target: '/api/users', useRangeHeaders: true}),
         columns: {
             username: {
                 label: core.username

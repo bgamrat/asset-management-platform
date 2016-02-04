@@ -2,9 +2,9 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
  
-app_admin_rest:
+app_rest:
     type: rest
-    resource: routing_admin_rest.yml
+    resource: routing_rest.yml
     
 static:
     path: /privacy
