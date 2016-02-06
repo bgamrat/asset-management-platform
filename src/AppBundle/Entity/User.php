@@ -25,6 +25,11 @@ class User extends BaseUser
     protected $id;
     
     /**
+     * @Assert\Email(message="fos_user.email.invalid")
+     * @var string
+     */
+    protected $email;
+    /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Group")
      * @ORM\JoinTable(name="fos_user_user_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},

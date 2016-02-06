@@ -28,3 +28,10 @@ services:
 
     fos_user.doctrine_registry:
         alias: doctrine
+        
+    app.util.dstore:
+        class: AppBundle\Util\DStore
+        
+    app.util.form:
+        class: AppBundle\Util\Form
+        

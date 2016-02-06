@@ -102,7 +102,7 @@ require([
 
     var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
-        collection: new TrackableRest({target: '/api/users', useRangeHeaders: true}),
+        collection: new TrackableRest({target: '/api/users', useRangeHeaders: true, useSortHeaders: true}),
         columns: {
             username: {
                 label: core.username

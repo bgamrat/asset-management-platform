@@ -17,17 +17,11 @@ class UsersController extends FOSRestController
     public function getUsersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        if( $request->headers->has( 'X-Range' ) )
-        {
-            // TODO: Add validation
-            $range = $request->headers->get( 'X-Range' );
-            $values = explode( '-', explode( '=', $range )[1] );
-            $offset = $values[0];
-            $limit = $values[1] - $offset;
-        }
+        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'username' );
 
         $em = $this->getDoctrine()->getManager();
-        $userCollection = $em->getRepository( 'AppBundle:User' )->findBy( [], ['username' => 'asc'], $limit, $offset );
+        $userCollection = $em->getRepository( 'AppBundle:User' )->findBy(
+                [], [$dstore['sort-field'] => $dstore['sort-direction']], $dstore['limit'], $dstore['offset'] );
         $data = [];
         foreach( $userCollection as $u )
         {
@@ -95,14 +89,26 @@ class UsersController extends FOSRestController
         // TODO: Add validation
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $data = json_decode( $request->getContent(), true );
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository( 'AppBundle:User' )->find( $id );
-        $user->setEmail( $data['email'] );
-        $user->setEnabled( $data['enabled'] );
-        $user->setLocked( $data['locked'] );
-        $validator = $this->get('validator');
-        $errors = $validator->validate($user);
-        $em->flush();
+
+        $form = $this->createForm( UserType::class, null, [] );
+        unset( $data['id'] );
+        $form->submit( $data );
+        if( !$form->isValid() )
+        {
+            throw HttpException( 400, $form->getErrors( true, false ) );
+        }
+        else
+        {
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository( 'AppBundle:User' )->find( $id );
+            $user->setEmail( $data['email'] );
+            $user->setEnabled( $data['enabled'] );
+            $user->setLocked( $data['locked'] );
+            $userManager = $this->get( 'fos_user.user_manager' );
+            $canonicalEmail = $userManager->canonicalizeEmail( $data['email'] );
+            $em->persist( $user );
+            $em->flush();
+        }
     }
 
     /**
