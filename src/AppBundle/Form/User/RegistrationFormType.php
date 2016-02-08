@@ -9,12 +9,12 @@ class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('invitation', 'app_invitation_type');
+        $builder->add('invitation', 'AppBundle\Form\User\InvitationFormType');
     }
 
     public function getParent()
     {
-        return 'fos_user_registration';
+        return 'FOS\UserBundle\Form\Type\RegistrationFormType';
     }
 
     public function getName()

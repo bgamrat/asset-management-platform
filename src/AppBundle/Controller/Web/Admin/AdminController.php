@@ -4,11 +4,6 @@ namespace AppBundle\Controller\Web\Admin;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use FOS\UserBundle\Model\UserManager;
-use FOS\UserBundle\Model\GroupManager as GroupManager;
-use AppBundle\Entity\User;
-use AppBundle\Entity\Group;
 use AppBundle\Form\Admin\User\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

@@ -114,7 +114,7 @@ fos_user:
         group_class: AppBundle\Entity\Group
     registration:
         form:
-            type: app_user_registration
+            type: AppBundle\Form\User\RegistrationFormType
 
 fos_rest:
     disable_csrf_role: ROLE_API

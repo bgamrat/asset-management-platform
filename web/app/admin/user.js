@@ -28,6 +28,8 @@ require([
         registry, Form, ValidationTextBox, CheckBox, Select, Button, Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, lib, core) {
 
+    var action = null;
+
     var userId = null;
 
     var userViewDialog = new Dialog({
@@ -49,6 +51,7 @@ require([
         enabledCheckBox.set("checked", true);
         lockedCheckBox.set("checked", false);
         userViewDialog.set("title", core["new"]).show();
+        action = "new";
     });
 
     var removeBtn = new Button({
@@ -86,15 +89,22 @@ require([
     saveBtn.on("click", function (event) {
         if( userForm.validate() ) {
             var data = {
-                "id": userId,
                 "email": emailInput.get("value"),
                 "enabled": enabledCheckBox.get("checked"),
                 "locked": lockedCheckBox.get("checked"),
                 "groups": []
             };
-            grid.collection.put(data).then(function (data) {
-                userViewDialog.hide();
-            }, lib.xhrError);
+            if (action === "view") {
+                data.id = userId;
+                grid.collection.put(data).then(function (data) {
+                    userViewDialog.hide();
+                }, lib.xhrError);
+            } else {
+                data.username = usernameInput.get("value"),
+                grid.collection.add(data).then(function (data) {
+                    userViewDialog.hide();
+                }, lib.xhrError);
+            }
         } else {
             lib.textError(core.invalid_form)
         }
@@ -146,6 +156,7 @@ require([
             }
             grid.select(row);
             grid.collection.get(id).then(function (user) {
+                action = "view";
                 userId = id;
                 usernameInput.set("value", user.username);
                 emailInput.set("value", user.email);

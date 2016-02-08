@@ -17,10 +17,11 @@ class UserType extends AbstractType
 
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        
+
         $builder
-                ->add( 'username', TextType::class )
+               // TODO: fix ->add( 'id', null, ['attr' => [ 'style' => 'display:none'],'disabled' => true, 'mapped' => false] )
                 ->add( 'email', TextType::class )
+                ->add( 'username', TextType::class )
                 ->add( 'enabled', CheckboxType::class )
                 ->add( 'locked', CheckboxType::class )
                 ->add( 'groups', EntityType::class, [
