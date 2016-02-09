@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\User;
 use AppBundle\Form\Admin\User\UserType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
 
 class UsersController extends FOSRestController
@@ -40,11 +42,11 @@ class UsersController extends FOSRestController
     /**
      * @View()
      */
-    public function getUserAction( $id )
+    public function getUserAction( $username )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['id' => $id] );
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['username' => $username] );
         if( $user !== null )
         {
             $data = [
@@ -63,30 +65,39 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * @View()
      */
     public function postUserAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        $formProcessor->validateFormData( $this->createForm( UserType::class, null, [ ] ), $data );
+        $formProcessor->validateFormData( $this->createForm( UserType::class, null, [] ), $data );
         $manipulator = $this->get( 'fos_user.util.user_manipulator' );
-        $manipulator->create( $data['username'], md5(rand(5,10)), $data['email'], false, false );
+        $user = $manipulator->create( $data['username'], md5( rand( 5, 10 ) ), $data['email'], false, false );
+        if( $user !== null )
+        {
+            $response = new Response();
+            $response->setStatusCode( 201 );
+            $response->headers->set( 'Location', $this->generateUrl(
+                            'app_admin_user_get_user', array('username' => $user->getUsername()), true // absolute
+                    )
+            );
+            return $response;
+        }
     }
 
     /**
      * @View(statusCode=204)
      */
-    public function putUserAction( $id, Request $request )
+    public function putUserAction( $username, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        $formProcessor->validateFormData( $this->createForm( UserType::class, null, [ ] ), $data );
+        $formProcessor->validateFormData( $this->createForm( UserType::class, null, [] ), $data );
         $userManager = $this->get( 'fos_user.user_manager' );
-        $user = $userManager->findUserBy( ['id' => $id] );
+        $user = $userManager->findUserBy( ['username' => $username] );
         $user->setEmail( $data['email'] );
         $user->setEnabled( $data['enabled'] );
         $user->setLocked( $data['locked'] );
@@ -96,7 +107,7 @@ class UsersController extends FOSRestController
     /**
      * @View()
      */
-    public function deleteUserAction( $id )
+    public function deleteUserAction( $username )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $user = $this->get( 'fos_user.user_manager' )->findUserById( $id );

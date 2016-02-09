@@ -30,8 +30,6 @@ require([
 
     var action = null;
 
-    var userId = null;
-
     var userViewDialog = new Dialog({
         title: core.view
     }, "user-view-dialog");
@@ -89,18 +87,17 @@ require([
     saveBtn.on("click", function (event) {
         if( userForm.validate() ) {
             var data = {
+                "username": usernameInput.get("value"),
                 "email": emailInput.get("value"),
                 "enabled": enabledCheckBox.get("checked"),
                 "locked": lockedCheckBox.get("checked"),
                 "groups": []
             };
             if (action === "view") {
-                data.id = userId;
                 grid.collection.put(data).then(function (data) {
                     userViewDialog.hide();
                 }, lib.xhrError);
             } else {
-                data.username = usernameInput.get("value"),
                 grid.collection.add(data).then(function (data) {
                     userViewDialog.hide();
                 }, lib.xhrError);
@@ -144,20 +141,20 @@ require([
         selectionMode: "none"
     }, 'grid');
     grid.startup();
-
+    grid.collection.track();
+    
     grid.on(".dgrid-row:click", function (event) {
         var checkBoxes = ["enabled", "locked", "remove"];
         var row = grid.row(event);
         var cell = grid.cell(event);
-        var id = row.data.id;
+        var username = row.data.username;
         if( checkBoxes.indexOf(cell.column.field) === -1 ) {
             if( typeof grid.selection[0] !== "undefined" ) {
                 grid.clearSelection();
             }
             grid.select(row);
-            grid.collection.get(id).then(function (user) {
+            grid.collection.get(username).then(function (user) {
                 action = "view";
-                userId = id;
                 usernameInput.set("value", user.username);
                 emailInput.set("value", user.email);
                 enabledCheckBox.set("checked", user.enabled === true);
@@ -180,7 +177,7 @@ require([
         if( confirm(core.areyousure) ) {
             query(".dgrid-row .remove-cb input").forEach(function (node) {
                 var row = grid.row(node);
-                xhr("/admin/users/" + row.data.id, {handleAs: "json", method: "DELETE"}).then(function (data) {
+                xhr("/admin/users/" + row.data.username, {handleAs: "json", method: "DELETE"}).then(function (data) {
                     grid.removeRow(row);
                 });
             });
@@ -197,5 +194,9 @@ require([
                 widget.destroyRecursive();
             }
         }
+    });
+    
+    grid.collection.on("add, update, delete", function(){
+        // TODO: Update position of items in grid
     });
 });
