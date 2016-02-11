@@ -22,13 +22,31 @@ class UsersController extends FOSRestController
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'username' );
 
         $em = $this->getDoctrine()->getManager();
-        $userCollection = $em->getRepository( 'AppBundle:User' )->findBy(
-                [], [$dstore['sort-field'] => $dstore['sort-direction']], $dstore['limit'], $dstore['offset'] );
+        $queryBuilder = $em->createQueryBuilder()->select( ['u'] )
+                ->from( 'AppBundle:User', 'u' )
+                ->orderBy( 'u.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        if( $dstore['limit'] !== null )
+        {
+            $queryBuilder->setMaxResults( $dstore['limit'] );
+        }
+        if( $dstore['offset'] !== null )
+        {
+            $queryBuilder->setFirstResult( $dstore['offset'] );
+        }
+        if( $dstore['filter'] !== null )
+        {
+            $queryBuilder->where(
+                            $queryBuilder->expr()->orX(
+                                    $queryBuilder->expr()->like( 'u.username', '?1' ), $queryBuilder->expr()->like( 'u.email', '?1' ) )
+                    )
+                    ->setParameter( 1, $dstore['filter'] );
+        }
+        $query = $queryBuilder->getQuery();
+        $userCollection = $query->getResult();
         $data = [];
         foreach( $userCollection as $u )
         {
             $item = [
-                'id' => $u->getId(),
                 'username' => $u->getUsername(),
                 'email' => $u->getEmail(),
                 'enabled' => $u->isEnabled(),
@@ -72,18 +90,21 @@ class UsersController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $formProcessor->validateFormData( $this->createForm( UserType::class, null, [] ), $data );
-        $manipulator = $this->get( 'fos_user.util.user_manipulator' );
-        $user = $manipulator->create( $data['username'], md5( rand( 5, 10 ) ), $data['email'], false, false );
-        if( $user !== null )
-        {
-            $response = new Response();
-            $response->setStatusCode( 201 );
-            $response->headers->set( 'Location', $this->generateUrl(
-                            'app_admin_user_get_user', array('username' => $user->getUsername()), true // absolute
-                    )
-            );
-            return $response;
-        }
+        $userManager = $this->get( 'fos_user.user_manager' );
+        $user = $userManager->createUser();
+        $user->setUsername( $data['username'] );
+        $user->setEmail( $data['email'] );
+        $user->setEnabled( $data['enabled'] );
+        $user->setLocked( $data['locked'] );
+        $user->setPassword( md5( 'junk' ) );
+        $userManager->updateUser( $user, true );
+        $response = new Response();
+        $response->setStatusCode( 201 );
+        $response->headers->set( 'Location', $this->generateUrl(
+                        'app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
+                )
+        );
+        return $response;
     }
 
     /**

@@ -10,6 +10,7 @@ require([
     "dojo/query",
     "dijit/registry",
     "dijit/form/Form",
+    "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
     "dijit/form/Select",
@@ -25,8 +26,9 @@ require([
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
-        registry, Form, ValidationTextBox, CheckBox, Select, Button, Dialog,
-        Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, lib, core) {
+        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button, Dialog,
+        Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor,
+        lib, core) {
 
     var action = null;
 
@@ -77,7 +79,7 @@ require([
         userGroupsCheckBoxes[i - 1].startup();
     });
 
-    var userForm = new Form({},"user-form");
+    var userForm = new Form({}, "user-form");
     userForm.startup();
 
     var saveBtn = new Button({
@@ -93,7 +95,7 @@ require([
                 "locked": lockedCheckBox.get("checked"),
                 "groups": []
             };
-            if (action === "view") {
+            if( action === "view" ) {
                 grid.collection.put(data).then(function (data) {
                     userViewDialog.hide();
                 }, lib.xhrError);
@@ -107,9 +109,14 @@ require([
         }
     });
 
+    var filterInput = new TextBox({ placeHolder: core.filter }, "filter-input");
+    filterInput.startup();
+
     var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
+    var store = new TrackableRest({target: '/api/users', useRangeHeaders: true,idProperty: 'username'});
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
-        collection: new TrackableRest({target: '/api/users', useRangeHeaders: true, useSortHeaders: true}),
+        collection: store,
+        className: "dgrid-autoheight",
         columns: {
             username: {
                 label: core.username
@@ -142,7 +149,7 @@ require([
     }, 'grid');
     grid.startup();
     grid.collection.track();
-    
+
     grid.on(".dgrid-row:click", function (event) {
         var checkBoxes = ["enabled", "locked", "remove"];
         var row = grid.row(event);
@@ -195,8 +202,14 @@ require([
             }
         }
     });
-    
-    grid.collection.on("add, update, delete", function(){
-        // TODO: Update position of items in grid
+
+    on(dom.byId('grid-filter-form'), 'submit', function (event) {
+        event.preventDefault();
+        grid.set('collection', store.filter({
+            // Pass a RegExp to Memory's filter method
+            // Note: this code does not go out of its way to escape
+            // characters that have special meaning in RegExps
+            match: new RegExp(filterInput.get("value").replace(/\W/,''), 'i')
+        }));
     });
 });

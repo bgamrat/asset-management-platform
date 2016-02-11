@@ -14,9 +14,3 @@
 #user .dijitSelect .dijitButtonContents {
     width: 160px;
 }
-
-/* TODO: Add classes to form divs */
-label[for="user_id"],
-#user_id {
-    display: none;
-}

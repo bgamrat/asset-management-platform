@@ -4,6 +4,7 @@ define({
         "email": "Email",
         "enabled": "Enabled",
         "error": "Error",
+        "filter": "Filter",
         "groups": "Groups",
         "invalid": "Invalid",
         "invalid_form": "Invalid data",

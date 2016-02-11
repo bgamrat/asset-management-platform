@@ -4,6 +4,8 @@ email:
     Email
 enabled:
     Enabled
+filter:
+    Filter
 groups:
     Groups
 invitation:
