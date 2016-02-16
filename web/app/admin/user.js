@@ -87,6 +87,7 @@ require([
     }, 'save-btn');
     saveBtn.startup();
     saveBtn.on("click", function (event) {
+        var beforeId, beforeIdFilter, filter;
         if( userForm.validate() ) {
             var data = {
                 "username": usernameInput.get("value"),
@@ -100,20 +101,25 @@ require([
                     userViewDialog.hide();
                 }, lib.xhrError);
             } else {
-                grid.collection.add(data).then(function (data) {
-                    userViewDialog.hide();
-                }, lib.xhrError);
+                filter = new store.Filter();
+                beforeIdFilter = filter.gt('username', data.username);
+                store.filter(beforeIdFilter).sort('username').fetchRange({start: 0, end: 1}).then(function (results) {
+                    beforeId = (results.length > 0) ? results[0].username : null;
+                    grid.collection.add(data,{"beforeId": beforeId}).then(function (data) {
+                        userViewDialog.hide();
+                    }, lib.xhrError);
+                });
             }
         } else {
             lib.textError(core.invalid_form)
         }
     });
 
-    var filterInput = new TextBox({ placeHolder: core.filter }, "filter-input");
+    var filterInput = new TextBox({placeHolder: core.filter}, "filter-input");
     filterInput.startup();
 
     var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-    var store = new TrackableRest({target: '/api/users', useRangeHeaders: true,idProperty: 'username'});
+    var store = new TrackableRest({target: '/api/users', useRangeHeaders: true, idProperty: 'username'});
     var grid = new (declare([OnDemandGrid, Selection, Editor]))({
         collection: store,
         className: "dgrid-autoheight",
@@ -209,7 +215,7 @@ require([
             // Pass a RegExp to Memory's filter method
             // Note: this code does not go out of its way to escape
             // characters that have special meaning in RegExps
-            match: new RegExp(filterInput.get("value").replace(/\W/,''), 'i')
+            match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
         }));
     });
 });

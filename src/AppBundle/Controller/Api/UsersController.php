@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\User;
+use AppBundle\Util\DStore;
 use AppBundle\Form\Admin\User\UserType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,11 +36,20 @@ class UsersController extends FOSRestController
         }
         if( $dstore['filter'] !== null )
         {
-            $queryBuilder->where(
+            switch( $dstore['filter'][DStore::OP] )
+            {
+                case DStore::LIKE:
+                    $queryBuilder->where(
                             $queryBuilder->expr()->orX(
                                     $queryBuilder->expr()->like( 'u.username', '?1' ), $queryBuilder->expr()->like( 'u.email', '?1' ) )
-                    )
-                    ->setParameter( 1, $dstore['filter'] );
+                    );
+                    break;
+                case DStore::GT:
+                    $queryBuilder->where(
+                            $queryBuilder->expr()->gt( 'u.username', '?1' )
+                    );
+            }
+            $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
         $query = $queryBuilder->getQuery();
         $userCollection = $query->getResult();
@@ -84,27 +94,9 @@ class UsersController extends FOSRestController
 
     /**
      */
-    public function postUserAction( Request $request )
+    public function postUserAction( $username, Request $request )
     {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $formProcessor = $this->get( 'app.util.form' );
-        $data = $formProcessor->getJsonData( $request );
-        $formProcessor->validateFormData( $this->createForm( UserType::class, null, [] ), $data );
-        $userManager = $this->get( 'fos_user.user_manager' );
-        $user = $userManager->createUser();
-        $user->setUsername( $data['username'] );
-        $user->setEmail( $data['email'] );
-        $user->setEnabled( $data['enabled'] );
-        $user->setLocked( $data['locked'] );
-        $user->setPassword( md5( 'junk' ) );
-        $userManager->updateUser( $user, true );
-        $response = new Response();
-        $response->setStatusCode( 201 );
-        $response->headers->set( 'Location', $this->generateUrl(
-                        'app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
-                )
-        );
-        return $response;
+        return $this->putUserAction( $username, $request );
     }
 
     /**
@@ -119,10 +111,23 @@ class UsersController extends FOSRestController
         $formProcessor->validateFormData( $this->createForm( UserType::class, null, [] ), $data );
         $userManager = $this->get( 'fos_user.user_manager' );
         $user = $userManager->findUserBy( ['username' => $username] );
+        if( $user === null )
+        {
+            $user = $userManager->createUser();
+            $user->setUsername( $data['username'] );
+            $user->setPassword( md5( 'junk' ) );
+        }
         $user->setEmail( $data['email'] );
         $user->setEnabled( $data['enabled'] );
         $user->setLocked( $data['locked'] );
         $userManager->updateUser( $user, true );
+        $response = new Response();
+        $response->setStatusCode( 201 );
+        $response->headers->set( 'Location', $this->generateUrl(
+                        'app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
+                )
+        );
+        return $response;
     }
 
     /**
