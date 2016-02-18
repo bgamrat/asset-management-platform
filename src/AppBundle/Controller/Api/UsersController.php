@@ -100,7 +100,7 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * @View(statusCode=204)
+     * @View()
      */
     public function putUserAction( $username, Request $request )
     {
@@ -131,16 +131,16 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * @View()
+     * @View(statusCode=204)
      */
     public function deleteUserAction( $username )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $user = $this->get( 'fos_user.user_manager' )->findUserById( $id );
+        $userManager = $this->get( 'fos_user.user_manager' );
+        $user = $userManager->findUserBy( ['username' => $username] );
         if( $user !== null )
         {
-            // Do delete
-            $status = JsonResponse::HTTP_OK;
+            $userManager->deleteUser( $user );
         }
         else
         {

@@ -1,6 +1,8 @@
 define({
     root: ({
         "areyousure": "Are you sure?",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
         "email": "Email",
         "enabled": "Enabled",
         "error": "Error",
@@ -10,6 +12,7 @@ define({
         "invalid_form": "Invalid data",
         "locked": "Locked",
         "new": "New",
+        "okay": "Okay",
         "remove": "Remove",
         "roles": "Roles",
         "save": "Save",

@@ -58,6 +58,17 @@ require([
         label: core.remove
     }, 'remove-btn');
     removeBtn.startup();
+    removeBtn.on("click", function (event) {
+        var markedForDeletion = query(".dgrid-row .remove-cb input:checked");
+        if( markedForDeletion.length > 0 ) {
+            lib.confirmAction(core.areyousure, function () {
+                markedForDeletion.forEach(function (node) {
+                    var row = grid.row(node);
+                    store.remove(row.data.username);
+                });
+            });
+        }
+    });
 
     var emailInput = new ValidationTextBox({required: true, pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$"
     }, "user_email");
@@ -105,7 +116,7 @@ require([
                 beforeIdFilter = filter.gt('username', data.username);
                 store.filter(beforeIdFilter).sort('username').fetchRange({start: 0, end: 1}).then(function (results) {
                     beforeId = (results.length > 0) ? results[0].username : null;
-                    grid.collection.add(data,{"beforeId": beforeId}).then(function (data) {
+                    grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
                         userViewDialog.hide();
                     }, lib.xhrError);
                 });
@@ -184,17 +195,6 @@ require([
         query(".dgrid-row .remove-cb input").forEach(function (node) {
             registry.byId(node.id).set("checked", state);
         });
-    });
-
-    removeBtn.on("click", function (event) {
-        if( confirm(core.areyousure) ) {
-            query(".dgrid-row .remove-cb input").forEach(function (node) {
-                var row = grid.row(node);
-                xhr("/admin/users/" + row.data.username, {handleAs: "json", method: "DELETE"}).then(function (data) {
-                    grid.removeRow(row);
-                });
-            });
-        }
     });
 
     aspect.before(grid, "removeRow", function (rowElement) {
