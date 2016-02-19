@@ -129,6 +129,29 @@ class UsersController extends FOSRestController
         );
         return $response;
     }
+    
+    /**
+     * @View(statusCode=204)
+     */
+    public function patchUserAction ($username, Request $request) {
+        $formProcessor = $this->get( 'app.util.form' );
+        $data = $formProcessor->getJsonData( $request );
+        $userManager = $this->get( 'fos_user.user_manager' );
+        $user = $userManager->findUserBy( ['username' => $username] );
+        if( $user !== null ) {
+            if (isset($data['field']) && is_bool($formProcessor->strToBool($data['value']))) {
+                switch ($data['field']) {
+                    case 'enabled':
+                        $user->setEnabled($data['value']);
+                        break;
+                    case 'locked':
+                        $user->setLocked($data['value']);
+                        break;
+                }
+                $userManager->updateUser( $user, true );
+            }
+        }
+    }
 
     /**
      * @View(statusCode=204)

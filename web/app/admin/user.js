@@ -22,12 +22,13 @@ require([
     'dgrid/OnDemandGrid',
     "dgrid/Selection",
     'dgrid/Editor',
+    'put-selector/put',
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button, Dialog,
-        Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor,
+        Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         lib, core) {
 
     var action = null;
@@ -144,15 +145,25 @@ require([
             enabled: {
                 label: core.enabled,
                 editor: CheckBox,
-                sortable: false
+                editOn: "click",
+                sortable: false,
+                renderCell: function (object,value,td) {
+                    if (value == 'false') {
+                        put(td,'div .dijit. dijitReset. dijitInline .dijitCheckBox',value);
+                    } else {
+                        put(td,'span .dijitToggleButton.dijitCheckBoxIconChecked',value);
+                    }
+                }
             },
             locked: {
                 label: core.locked,
                 editor: CheckBox,
+                editOn: "click",
                 sortable: false
             },
             remove: {
                 editor: CheckBox,
+                editOn: "click",
                 label: core.remove,
                 sortable: false,
                 className: "remove-cb",
@@ -171,8 +182,9 @@ require([
         var checkBoxes = ["enabled", "locked", "remove"];
         var row = grid.row(event);
         var cell = grid.cell(event);
+        var field = cell.column.field;
         var username = row.data.username;
-        if( checkBoxes.indexOf(cell.column.field) === -1 ) {
+        if( checkBoxes.indexOf(field) === -1 ) {
             if( typeof grid.selection[0] !== "undefined" ) {
                 grid.clearSelection();
             }
@@ -185,6 +197,17 @@ require([
                 lockedCheckBox.set("checked", user.locked === true);
                 userViewDialog.show();
             }, lib.xhrError);
+        } else {
+            switch (field) {
+                case "enabled":
+                case "locked":
+                    xhr("/api/users/"+username, {
+                        method: "PATCH",
+                        data: { "field": field,
+                            "value": row.data[field] }
+                    });
+                    break;    
+            }
         }
     });
 

@@ -12,10 +12,20 @@ class Form
     public function getJsonData( Request $request )
     {
         $data = json_decode( $request->getContent(), true );
-        unset($data['id']);
         return $data;
     }
 
+    public function strToBool( $string ) {
+        if ($string === 'true') {
+            return true;
+        } else {
+            if ($string === 'false') {
+                return false;
+            }
+        }
+        return null;
+    }
+    
     public function validateFormData( BaseForm $form, $data )
     {
         $form->submit( $data );
