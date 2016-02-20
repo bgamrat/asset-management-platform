@@ -48,5 +48,5 @@ define([
         isEmpty: isEmpty,
         textError: textError,
         xhrError: xhrError
-    }
+    };
 });

@@ -140,12 +140,13 @@ class UsersController extends FOSRestController
         $user = $userManager->findUserBy( ['username' => $username] );
         if( $user !== null ) {
             if (isset($data['field']) && is_bool($formProcessor->strToBool($data['value']))) {
+                $value = $formProcessor->strToBool($data['value']);
                 switch ($data['field']) {
                     case 'enabled':
-                        $user->setEnabled($data['value']);
+                        $user->setEnabled($value);
                         break;
                     case 'locked':
-                        $user->setLocked($data['value']);
+                        $user->setLocked($value);
                         break;
                 }
                 $userManager->updateUser( $user, true );

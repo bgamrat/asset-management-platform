@@ -24,12 +24,13 @@ require([
     'dgrid/Editor',
     'put-selector/put',
     "app/lib/common",
+    "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button, Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        lib, core) {
+        lib, libGrid, core) {
 
     var action = null;
 
@@ -145,32 +146,29 @@ require([
             enabled: {
                 label: core.enabled,
                 editor: CheckBox,
-                editOn: "click",
+                editOn: "dblclick",
                 sortable: false,
-                renderCell: function (object,value,td) {
-                    if (value == 'false') {
-                        put(td,'div .dijit. dijitReset. dijitInline .dijitCheckBox',value);
-                    } else {
-                        put(td,'span .dijitToggleButton.dijitCheckBoxIconChecked',value);
-                    }
-                }
+                renderCell: libGrid.renderGridCheckbox
             },
             locked: {
                 label: core.locked,
                 editor: CheckBox,
-                editOn: "click",
-                sortable: false
+                editOn: "dblclick",
+                sortable: false,
+                renderCell: libGrid.renderGridCheckbox
             },
             remove: {
                 editor: CheckBox,
-                editOn: "click",
+                editorArgs: { "checked": false },
+                editOn: "dblclick",
                 label: core.remove,
                 sortable: false,
                 className: "remove-cb",
                 renderHeaderCell: function (node) {
                     var inp = domConstruct.create("input", {id: "cb-all", type: "checkbox"});
                     return inp;
-                }
+                },
+                renderCell: libGrid.renderGridCheckbox
             }
         },
         selectionMode: "none"
@@ -197,26 +195,37 @@ require([
                 lockedCheckBox.set("checked", user.locked === true);
                 userViewDialog.show();
             }, lib.xhrError);
-        } else {
-            switch (field) {
-                case "enabled":
-                case "locked":
-                    xhr("/api/users/"+username, {
-                        method: "PATCH",
-                        data: { "field": field,
-                            "value": row.data[field] }
-                    });
-                    break;    
-            }
         }
     });
 
+    grid.on('.field-enabled:dgrid-datachange, .field-locked:dgrid-datachange', function (event) {
+        var row = grid.row(event);
+        var cell = grid.cell(event);
+        var field = cell.column.field;
+        var username = row.data.username;
+        var value = event.value;
+        switch( field ) {
+            case "enabled":
+            case "locked":
+                xhr("/api/users/" + username, {
+                    method: "PATCH",
+                    handleAs: "json",
+                    headers: { 'Content-Type': 'application/json' },
+                    data: JSON.stringify({"field": field,
+                        "value": value})
+                });
+                break;
+        }
+    });
+    
     var cbAll = new CheckBox({}, "cb-all");
     cbAll.startup();
     cbAll.on("click", function (event) {
         var state = this.checked;
-        query(".dgrid-row .remove-cb input").forEach(function (node) {
-            registry.byId(node.id).set("checked", state);
+        query(".dgrid-row .remove-cb").forEach(function (node) {
+            var cell = grid.cell(node);
+            cell.checked = state;
+            //registry.byId(node.id).set("checked", state);
         });
     });
 

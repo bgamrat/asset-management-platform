@@ -16,10 +16,10 @@ class Form
     }
 
     public function strToBool( $string ) {
-        if ($string === 'true') {
+        if (in_array($string,[true,'true','on',1,'1','enabled'])) {
             return true;
         } else {
-            if ($string === 'false') {
+            if (in_array($string,[false,'false','off',0,'0','disabled'])) {
                 return false;
             }
         }
