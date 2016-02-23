@@ -92,6 +92,27 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        
+        #entity_managers:
+        #    default:
+        #        mappings:
+        #            gedmo_loggable:
+        #                type: annotation
+        #                prefix: Gedmo\Loggable\Entity
+        #                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
+        #                alias: GedmoLoggable # (optional) it will default to the name set for the mappingmapping
+        #                is_bundle: false
+        #        filters:
+        #            softdeleteable:
+        #                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+        #                enabled: true
+ 
+#stof_doctrine_extensions:
+#    default_locale: en_US
+#    orm:
+#        default:
+#            tree: true
+#            timestampable: true
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -155,4 +176,12 @@ fos_rest:
                 fallback_format: ~
                 methods: [ 'get', 'post', 'put', 'delete']
             - { path: '^/', stop: true }
-
+            
+knp_menu:
+    # use "twig: false" to disable the Twig extension and the TwigRenderer
+    twig:
+        template: knp_menu.html.twig
+    #  if true, enables the helper for PHP templates
+    templating: false
+    # the renderer to use, list is also available by default
+    default_renderer: twig
