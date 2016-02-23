@@ -5,10 +5,10 @@ define([
     "use strict";
 
     function renderGridCheckbox(object, value, td) {
-        if( value === false ) {
-            put(td, "span.dijit.dijitReset.dijitInline.dijitCheckBox", "");
-        } else {
+        if( value === true ) {
             put(td, "span.dijit.dijitReset.dijitInline.dijitCheckBox.dijitCheckBoxChecked.dijitChecked", "");
+        } else {
+            put(td, "span.dijit.dijitReset.dijitInline.dijitCheckBox", "");
         }
     };
 

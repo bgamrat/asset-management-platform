@@ -16,5 +16,7 @@ password:
     Password
 user:
     User
+user.admin:
+    User Admin
 username:
     Username

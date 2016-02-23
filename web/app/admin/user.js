@@ -146,36 +146,33 @@ require([
             enabled: {
                 label: core.enabled,
                 editor: CheckBox,
-                editOn: "dblclick",
+                editOn: "click",
                 sortable: false,
                 renderCell: libGrid.renderGridCheckbox
             },
             locked: {
                 label: core.locked,
                 editor: CheckBox,
-                editOn: "dblclick",
+                editOn: "click",
                 sortable: false,
                 renderCell: libGrid.renderGridCheckbox
             },
             remove: {
                 editor: CheckBox,
-                editorArgs: { "checked": false },
-                editOn: "dblclick",
                 label: core.remove,
                 sortable: false,
                 className: "remove-cb",
                 renderHeaderCell: function (node) {
                     var inp = domConstruct.create("input", {id: "cb-all", type: "checkbox"});
                     return inp;
-                },
-                renderCell: libGrid.renderGridCheckbox
+                }
             }
         },
         selectionMode: "none"
     }, 'grid');
     grid.startup();
     grid.collection.track();
-
+    
     grid.on(".dgrid-row:click", function (event) {
         var checkBoxes = ["enabled", "locked", "remove"];
         var row = grid.row(event);
@@ -210,22 +207,20 @@ require([
                 xhr("/api/users/" + username, {
                     method: "PATCH",
                     handleAs: "json",
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                     data: JSON.stringify({"field": field,
                         "value": value})
                 });
                 break;
         }
     });
-    
+
     var cbAll = new CheckBox({}, "cb-all");
     cbAll.startup();
     cbAll.on("click", function (event) {
         var state = this.checked;
         query(".dgrid-row .remove-cb").forEach(function (node) {
-            var cell = grid.cell(node);
-            cell.checked = state;
-            //registry.byId(node.id).set("checked", state);
+            registry.findWidgets(node)[0].set("checked", state);
         });
     });
 
