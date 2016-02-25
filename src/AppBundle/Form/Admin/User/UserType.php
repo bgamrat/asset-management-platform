@@ -29,7 +29,8 @@ class UserType extends AbstractType
                     'choice_label' => 'name',
                     'multiple' => true,
                     'choices_as_values' => true,
-                    'expanded' => true
+                    'expanded' => true,
+                    'attr'=> array('data-type'=>'user-group-cb')
                 ] );
     }
 

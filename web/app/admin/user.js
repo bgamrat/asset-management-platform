@@ -85,11 +85,13 @@ require([
     var lockedCheckBox = new CheckBox({}, "user_locked");
     lockedCheckBox.startup();
 
-    var userGroupsCheckBoxes = [];
-    query('[data-type="user-group-cb"]').forEach(function (node) {
-        var i;
-        i = userGroupsCheckBoxes.push(new CheckBox({label: node.name}, node.id));
-        userGroupsCheckBoxes[i - 1].startup();
+    var userGroupsCheckBoxes = {};
+    query('[data-type="user-group-cb"] input[type="checkbox"]').forEach(function (node) {
+        var label, cb;
+        label = query('label[for="' + node.id + '"]')[0].textContent;
+        cb = new CheckBox({label: label}, node.id);
+        cb.startup();
+        userGroupsCheckBoxes[node.id.replace(/^\w+_(\d+)$/, '$1')] = cb;
     });
 
     var userForm = new Form({}, "user-form");
@@ -100,14 +102,20 @@ require([
     }, 'save-btn');
     saveBtn.startup();
     saveBtn.on("click", function (event) {
-        var beforeId, beforeIdFilter, filter;
+        var beforeId, beforeIdFilter, filter, g, groups;
         if( userForm.validate() ) {
+            groups = [];
+            for( g in userGroupsCheckBoxes ) {
+                if( userGroupsCheckBoxes[g].get("checked") === true ) {
+                    groups.push(g);
+                }
+            }
             var data = {
                 "username": usernameInput.get("value"),
                 "email": emailInput.get("value"),
                 "enabled": enabledCheckBox.get("checked"),
                 "locked": lockedCheckBox.get("checked"),
-                "groups": []
+                "groups": groups
             };
             if( action === "view" ) {
                 grid.collection.put(data).then(function (data) {
@@ -172,7 +180,7 @@ require([
     }, 'grid');
     grid.startup();
     grid.collection.track();
-    
+
     grid.on(".dgrid-row:click", function (event) {
         var checkBoxes = ["enabled", "locked", "remove"];
         var row = grid.row(event);
@@ -185,11 +193,19 @@ require([
             }
             grid.select(row);
             grid.collection.get(username).then(function (user) {
+                var g;
                 action = "view";
                 usernameInput.set("value", user.username);
                 emailInput.set("value", user.email);
                 enabledCheckBox.set("checked", user.enabled === true);
                 lockedCheckBox.set("checked", user.locked === true);
+                for( g in userGroupsCheckBoxes ) {
+                    if( user.groups.indexOf(parseInt(g)) !== -1 ) {
+                        userGroupsCheckBoxes[g].set("checked", true);
+                    } else {
+                        userGroupsCheckBoxes[g].set("checked", false);
+                    }
+                }
                 userViewDialog.show();
             }, lib.xhrError);
         }

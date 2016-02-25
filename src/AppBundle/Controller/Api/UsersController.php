@@ -80,10 +80,14 @@ class UsersController extends FOSRestController
             $data = [
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),
-                'groups' => $user->getGroups(),
+                'groups' => [],
                 'enabled' => $user->isEnabled(),
                 'locked' => $user->isLocked()
             ];
+            $groups = $user->getGroups();
+            foreach ($groups as $g) {
+                $data['groups'][] = $g->getId();
+            }
             return $data;
         }
         else
@@ -120,6 +124,22 @@ class UsersController extends FOSRestController
         $user->setEmail( $data['email'] );
         $user->setEnabled( $data['enabled'] );
         $user->setLocked( $data['locked'] );
+        $groupManager = $this->get('fos_user.group_manager');
+        $allGroups = $groupManager->findGroups();
+        $allGroupNames = [];
+        foreach ($allGroups as $g) {
+            $allGroupNames[] = $g->getName();
+        }
+        foreach ($allGroupNames as $g) {
+            $g = $groupManager->findGroupByName($g);
+            if (!in_array($g->getId(),$data['groups'])) {
+                $user->removeGroup($g);
+            } else {
+                if (!$user->hasGroup($g)) {
+                    $user->addGroup($g);
+                }
+            }
+        }
         $userManager->updateUser( $user, true );
         $response = new Response();
         $response->setStatusCode( 201 );
