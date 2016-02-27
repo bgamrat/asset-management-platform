@@ -10,6 +10,7 @@ services:
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
 
 services:
+
     app.form.registration:
         class: AppBundle\Form\User\RegistrationFormType
         tags:
@@ -55,6 +56,3 @@ services:
 
     fos_user.doctrine_registry:
         alias: doctrine
-        
-    fos_user.util.canonicalizer:
-        class: FOS\UserBundle\Util\Canonicalizer

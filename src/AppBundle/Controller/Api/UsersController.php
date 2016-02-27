@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class UsersController extends FOSRestController
 {
@@ -85,7 +86,8 @@ class UsersController extends FOSRestController
                 'locked' => $user->isLocked()
             ];
             $groups = $user->getGroups();
-            foreach ($groups as $g) {
+            foreach( $groups as $g )
+            {
                 $data['groups'][] = $g->getId();
             }
             return $data;
@@ -109,64 +111,85 @@ class UsersController extends FOSRestController
     public function putUserAction( $username, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-
+        $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        $formProcessor->validateFormData( $this->createForm( UserType::class, null, [] ), $data );
-        $userManager = $this->get( 'fos_user.user_manager' );
-        $user = $userManager->findUserBy( ['username' => $username] );
-        if( $user === null )
+        $form = $this->createForm( UserType::class, null, [] );
+        try
         {
-            $user = $userManager->createUser();
-            $user->setUsername( $data['username'] );
-            $user->setPassword( md5( 'junk' ) );
-        }
-        $user->setEmail( $data['email'] );
-        $user->setEnabled( $data['enabled'] );
-        $user->setLocked( $data['locked'] );
-        $groupManager = $this->get('fos_user.group_manager');
-        $allGroups = $groupManager->findGroups();
-        $allGroupNames = [];
-        foreach ($allGroups as $g) {
-            $allGroupNames[] = $g->getName();
-        }
-        foreach ($allGroupNames as $g) {
-            $g = $groupManager->findGroupByName($g);
-            if (!in_array($g->getId(),$data['groups'])) {
-                $user->removeGroup($g);
-            } else {
-                if (!$user->hasGroup($g)) {
-                    $user->addGroup($g);
+            $formValid = $formProcessor->validateFormData( $form, $data );
+            $userManager = $this->get( 'fos_user.user_manager' );
+            $user = $userManager->findUserBy( ['username' => $username] );
+            if( $user === null )
+            {
+                $user = $userManager->createUser();
+                $user->setUsername( $data['username'] );
+                $user->setPassword( md5( 'junk' ) );
+            }
+            $user->setEmail( $data['email'] );
+            $user->setEnabled( $data['enabled'] );
+            $user->setLocked( $data['locked'] );
+            $groupManager = $this->get( 'fos_user.group_manager' );
+            $allGroups = $groupManager->findGroups();
+            $allGroupNames = [];
+            foreach( $allGroups as $g )
+            {
+                $allGroupNames[] = $g->getName();
+            }
+            foreach( $allGroupNames as $g )
+            {
+                $g = $groupManager->findGroupByName( $g );
+                if( !in_array( $g->getId(), $data['groups'] ) )
+                {
+                    $user->removeGroup( $g );
+                }
+                else
+                {
+                    if( !$user->hasGroup( $g ) )
+                    {
+                        $user->addGroup( $g );
+                    }
                 }
             }
+            $userManager->updateUser( $user, true );
+
+            $response->setStatusCode( 201 );
+            $response->headers->set( 'Location', $this->generateUrl(
+                            'app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
+                    )
+            );
         }
-        $userManager->updateUser( $user, true );
-        $response = new Response();
-        $response->setStatusCode( 201 );
-        $response->headers->set( 'Location', $this->generateUrl(
-                        'app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
-                )
-        );
+        catch( \Exception $e )
+        {
+            $response->setStatusCode(400);
+            $response->setContent(json_encode(
+                    ['message' => 'errors', 'errors' => $e->getMessage() ]
+                    ));
+        }
         return $response;
     }
-    
+
     /**
      * @View(statusCode=204)
      */
-    public function patchUserAction ($username, Request $request) {
+    public function patchUserAction( $username, Request $request )
+    {
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $userManager = $this->get( 'fos_user.user_manager' );
         $user = $userManager->findUserBy( ['username' => $username] );
-        if( $user !== null ) {
-            if (isset($data['field']) && is_bool($formProcessor->strToBool($data['value']))) {
-                $value = $formProcessor->strToBool($data['value']);
-                switch ($data['field']) {
+        if( $user !== null )
+        {
+            if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
+            {
+                $value = $formProcessor->strToBool( $data['value'] );
+                switch( $data['field'] )
+                {
                     case 'enabled':
-                        $user->setEnabled($value);
+                        $user->setEnabled( $value );
                         break;
                     case 'locked':
-                        $user->setLocked($value);
+                        $user->setLocked( $value );
                         break;
                 }
                 $userManager->updateUser( $user, true );

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "76d30bc3bd7dabeaf93e7f44ab4ca169",
-    "content-hash": "79e5d493b198c83c66fff41c0bb46739",
+    "hash": "1951fb0db7d637cdb81f946e2591ded3",
+    "content-hash": "d128f3d270ec9321e3fab0cf3ef07c71",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -57,7 +57,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/07a9af2d4de5f9ef0bf2d9ae94421e5fc50d7859",
                 "reference": "f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
                 "shasum": ""
             },
@@ -981,7 +981,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/1e3ee30d1f636b38a78cb1372aaa72a2ba769929",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/f63081525ac93b31b5f50268b6fae89b1a8df132",
                 "reference": "1e3ee30d1f636b38a78cb1372aaa72a2ba769929",
                 "shasum": ""
             },
@@ -1937,7 +1937,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/3392ea0037a4bf9230b81363145776e4fdce66a9",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/8328069d9f5322f0e7b3c3518485acfdc94c3942",
                 "reference": "3392ea0037a4bf9230b81363145776e4fdce66a9",
                 "shasum": ""
             },
@@ -2685,7 +2685,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/ad8b147af196c8ddf19662db14336f93f8c0e514",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/ac91535054d025937d897d78ebb5fc2da5e955a4",
                 "reference": "ad8b147af196c8ddf19662db14336f93f8c0e514",
                 "shasum": ""
             },

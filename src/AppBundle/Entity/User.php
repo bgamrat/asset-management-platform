@@ -25,10 +25,24 @@ class User extends BaseUser
     protected $id;
     
     /**
+     * @Assert\NotBlank(message="fos_user.email_blank")
      * @Assert\Email(message="fos_user.email.invalid")
      * @var string
      */
     protected $email;
+    
+    /**
+     * @Assert\NotBlank(message="fos_user.username.blank")
+     * @Assert\Length(min=2,max=255,minMessage="fos_user.username.short",maxMessage="fos_user.username.long")
+     * @var string
+     */
+    protected $username;
+    /**
+     * @ Assert\NotBlank(message="fos_user.password_blank")
+     * @ Assert\Length(min=8,max=4096,minMessage="error.password.short",maxMessage="error.password.long")
+     * @var string
+     */
+    protected $password;
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Group")
      * @ORM\JoinTable(name="fos_user_user_group",
@@ -36,6 +50,7 @@ class User extends BaseUser
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
      */
+
     protected $groups;
     /**
      * @ORM\OneToOne(targetEntity="Invitation")

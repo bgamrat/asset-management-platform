@@ -2,15 +2,13 @@
 
 namespace AppBundle\Form\Admin\User;
 
-use Doctrine\ORM\EntityRepository;
-use AppBundle\Entity\Group;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
 
 class UserType extends AbstractType
 {
@@ -19,18 +17,18 @@ class UserType extends AbstractType
     {
 
         $builder
-               // TODO: fix ->add( 'id', null, ['attr' => [ 'style' => 'display:none'],'disabled' => true, 'mapped' => false] )
-                ->add( 'email', TextType::class )
-                ->add( 'username', TextType::class )
-                ->add( 'enabled', CheckboxType::class )
-                ->add( 'locked', CheckboxType::class )
+                ->add( 'email', TextType::class,['label' => 'email'] )
+                ->add( 'username', TextType::class, ['label' => 'username','validation_groups' => array('registration')] )
+                ->add( 'enabled', CheckboxType::class,['label' => 'enabled'] )
+                ->add( 'locked', CheckboxType::class,['label' => 'locked'] )
                 ->add( 'groups', EntityType::class, [
                     'class' => 'AppBundle:Group',
                     'choice_label' => 'name',
                     'multiple' => true,
                     'choices_as_values' => true,
                     'expanded' => true,
-                    'attr'=> array('data-type'=>'user-group-cb')
+                    'attr' => array('data-type' => 'user-group-cb'),
+                    'label' => 'groups'
                 ] );
     }
 
@@ -39,6 +37,7 @@ class UserType extends AbstractType
         $resolver->setDefaults( array(
             'groups' => [],
             'data_class' => 'AppBundle\Entity\User'
+            
         ) );
     }
 

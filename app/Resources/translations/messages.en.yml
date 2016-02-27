@@ -4,6 +4,11 @@ email:
     Email
 enabled:
     Enabled
+error:
+    password_short:
+        Password must be at least eight characters
+    password_long:
+        Password must not be longer than 4096 characters
 filter:
     Filter
 groups:

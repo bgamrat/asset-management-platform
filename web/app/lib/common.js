@@ -40,7 +40,18 @@ define([
     }
     function xhrError(err) {
         var errObj = JSON.parse(err.response.text);
-        errorDialog.set("content", errObj.message);
+        if (typeof errObj.errors !== "undefined") {
+            errorDialog.set("content", errObj.errors.replace("\n","<br>"));
+            if (typeof errObj.message !== "undefined") {
+                errorDialog.set("title", errObj.message);
+            }
+        } else {
+            if (typeof errObj.message !== "undefined") {
+                errorDialog.set("content",errObj.message);
+            } else {
+                errorDialog.set("content",errObj);
+            }
+        }
         errorDialog.show();
     }
     return {
