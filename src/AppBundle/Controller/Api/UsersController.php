@@ -81,15 +81,11 @@ class UsersController extends FOSRestController
             $data = [
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),
-                'groups' => [],
+                'roles' => [],
                 'enabled' => $user->isEnabled(),
                 'locked' => $user->isLocked()
             ];
-            $groups = $user->getGroups();
-            foreach( $groups as $g )
-            {
-                $data['groups'][] = $g->getId();
-            }
+            $data['roles'] = $user->getRoles();
             return $data;
         }
         else
@@ -114,7 +110,7 @@ class UsersController extends FOSRestController
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( UserType::class, null, [] );
+        $form = $this->createForm( UserType::class, null, ['roles' => $this->get('service.role_hierarchy.roles')] );
         try
         {
             $formValid = $formProcessor->validateFormData( $form, $data );
@@ -129,25 +125,30 @@ class UsersController extends FOSRestController
             $user->setEmail( $data['email'] );
             $user->setEnabled( $data['enabled'] );
             $user->setLocked( $data['locked'] );
-            $groupManager = $this->get( 'fos_user.group_manager' );
-            $allGroups = $groupManager->findGroups();
-            $allGroupNames = [];
-            foreach( $allGroups as $g )
+            
+            $roles = $this->get('security.role_hierarchy');
+          
+            
+            
+            $roleManager = $this->get( 'fos_user.role_manager' );
+            $allRoles = $roleManager->findRoles();
+            $allRoleNames = [];
+            foreach( $allRoles as $g )
             {
-                $allGroupNames[] = $g->getName();
+                $allRoleNames[] = $g->getName();
             }
-            foreach( $allGroupNames as $g )
+            foreach( $allRoleNames as $g )
             {
-                $g = $groupManager->findGroupByName( $g );
-                if( !in_array( $g->getId(), $data['groups'] ) )
+                $g = $roleManager->findRoleByName( $g );
+                if( !in_array( $g->getId(), $data['roles'] ) )
                 {
-                    $user->removeGroup( $g );
+                    $user->removeRole( $g );
                 }
                 else
                 {
-                    if( !$user->hasGroup( $g ) )
+                    if( !$user->hasRole( $g ) )
                     {
-                        $user->addGroup( $g );
+                        $user->addRole( $g );
                     }
                 }
             }

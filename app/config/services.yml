@@ -42,9 +42,10 @@ services:
             - user                             # alias of the form type
             - null                             # data to bind, this is where your entity could go if you have that defined as a service
             - { validation_groups: [Registration] } # validation groups
- 
+
     app.form.type.user:
-        class: AppBundle\Form\User\Type\UserType
+        class: AppBundle\Form\Admin\User\UserType
+        arguments: ['%security.role_hierarchy.roles%']
         tags:
         - { name: form.type, alias: user }
              

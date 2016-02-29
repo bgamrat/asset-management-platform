@@ -19,6 +19,8 @@ locked:
     Locked
 password:
     Password
+roles:
+    Roles
 user:
     User
 user.admin:
