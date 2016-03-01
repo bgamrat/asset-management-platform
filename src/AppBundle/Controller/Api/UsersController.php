@@ -5,12 +5,14 @@ namespace AppBundle\Controller\Api;
 use AppBundle\Entity\User;
 use AppBundle\Util\DStore;
 use AppBundle\Form\Admin\User\UserType;
+use AppBundle\Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+
 
 class UsersController extends FOSRestController
 {
@@ -110,7 +112,7 @@ class UsersController extends FOSRestController
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( UserType::class, null, ['roles' => $this->get('service.role_hierarchy.roles')] );
+        $form = $this->createForm( UserType::class, null, [] );
         try
         {
             $formValid = $formProcessor->validateFormData( $form, $data );
@@ -125,11 +127,11 @@ class UsersController extends FOSRestController
             $user->setEmail( $data['email'] );
             $user->setEnabled( $data['enabled'] );
             $user->setLocked( $data['locked'] );
-            
-            $roles = $this->get('security.role_hierarchy');
-          
-            
-            
+
+            $roles = $this->get( 'security.role_hierarchy' );
+
+
+
             $roleManager = $this->get( 'fos_user.role_manager' );
             $allRoles = $roleManager->findRoles();
             $allRoleNames = [];
@@ -162,10 +164,10 @@ class UsersController extends FOSRestController
         }
         catch( \Exception $e )
         {
-            $response->setStatusCode(400);
-            $response->setContent(json_encode(
-                    ['message' => 'errors', 'errors' => $e->getMessage() ]
-                    ));
+            $response->setStatusCode( 400 );
+            $response->setContent( json_encode(
+                            ['message' => 'errors', 'errors' => $e->getMessage()]
+            ) );
         }
         return $response;
     }
@@ -215,5 +217,7 @@ class UsersController extends FOSRestController
             throw $this->createNotFoundException( 'Not found!' );
         }
     }
+
+
 
 }

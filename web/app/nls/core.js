@@ -10,12 +10,14 @@ define({
         "groups": "Groups",
         "invalid": "Invalid",
         "invalid_form": "Invalid data",
+        "invite": "Invite",
         "locked": "Locked",
         "new": "New",
         "okay": "Okay",
         "remove": "Remove",
         "roles": "Roles",
         "save": "Save",
+        "send": "Send",
         "username": "Username",
         "view": "View"
     })

@@ -197,3 +197,6 @@ EntityType (From UserType.php)
                     'attr' => array('data-type' => 'user-group-cb'),
                     'label' => 'groups'
                 ] )
+
+Set HTML attributes 
+{{ form(invitation_form, {'attr': {'id': 'user-invitation-form'}}) 

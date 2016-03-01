@@ -44,7 +44,7 @@ require([
 
     var newBtn = new Button({
         label: core["new"]
-    }, 'new-btn');
+    }, 'user-new-btn');
     newBtn.startup();
     newBtn.on("click", function (event) {
         usernameInput.set("value", "");
@@ -58,10 +58,10 @@ require([
 
     var removeBtn = new Button({
         label: core.remove
-    }, 'remove-btn');
+    }, 'user-remove-btn');
     removeBtn.startup();
     removeBtn.on("click", function (event) {
-        var markedForDeletion = query(".dgrid-row .remove-cb input:checked");
+        var markedForDeletion = query(".dgrid-row .remove-cb input:checked", grid);
         if( markedForDeletion.length > 0 ) {
             lib.confirmAction(core.areyousure, function () {
                 markedForDeletion.forEach(function (node) {
@@ -94,12 +94,12 @@ require([
         userRolesCheckBoxes[label] = cb;
     });
 
-    var userForm = new Form({}, "user-form");
+    var userForm = new Form({}, '[name="user"]');
     userForm.startup();
 
     var saveBtn = new Button({
         label: core.save
-    }, 'save-btn');
+    }, 'user-save-btn');
     saveBtn.startup();
     saveBtn.on("click", function (event) {
         var beforeId, beforeIdFilter, filter, g, roles;
@@ -136,7 +136,43 @@ require([
         }
     });
 
-    var filterInput = new TextBox({placeHolder: core.filter}, "filter-input");
+
+    var userInviteDialog = new Dialog({
+        title: core.invite
+    }, "user-invite-dialog");
+    userInviteDialog.startup();
+
+    var inviteBtn = new Button({
+        label: core["invite"]
+    }, 'user-invite-btn');
+    inviteBtn.startup();
+    inviteBtn.on("click", function (event) {
+        emailInput.set("value", "");
+        userInviteDialog.set("title", core["invite"]).show();
+    })
+
+    var inviteEmailInput = new ValidationTextBox({required: true, pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$"
+    }, "invitation_email");
+    inviteEmailInput.startup();
+
+    var inviteSendBtn = new Button({
+        label: core.send
+    }, 'user-invite-send-btn');
+    inviteSendBtn.startup();
+    inviteSendBtn.on("click", function (event) {
+        if( userInviteForm.validate() ) {
+            xhr("/admin/user/invite", {
+                method: "POST",
+                handleAs: "json",
+                headers: {'Content-Type': 'application/json'},
+                data: JSON.stringify({"email": inviteEmailInput.get("value")})
+            });
+        }
+    });
+    var userInviteForm = new Form({}, '[name="invitation"]');
+    userInviteForm.startup();
+
+    var filterInput = new TextBox({placeHolder: core.filter}, "user-filter-input");
     filterInput.startup();
 
     var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
@@ -177,7 +213,7 @@ require([
             }
         },
         selectionMode: "none"
-    }, 'grid');
+    }, 'user-grid');
     grid.startup();
     grid.collection.track();
 
@@ -235,7 +271,7 @@ require([
     cbAll.startup();
     cbAll.on("click", function (event) {
         var state = this.checked;
-        query(".dgrid-row .remove-cb").forEach(function (node) {
+        query(".dgrid-row .remove-cb", grid).forEach(function (node) {
             registry.findWidgets(node)[0].set("checked", state);
         });
     });
@@ -252,7 +288,7 @@ require([
         }
     });
 
-    on(dom.byId('grid-filter-form'), 'submit', function (event) {
+    on(dom.byId('user-grid-filter-form'), 'submit', function (event) {
         event.preventDefault();
         grid.set('collection', store.filter({
             // Pass a RegExp to Memory's filter method

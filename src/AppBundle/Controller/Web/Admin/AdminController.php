@@ -2,11 +2,14 @@
 
 namespace AppBundle\Controller\Web\Admin;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Form\Admin\User\InvitationType;
 use AppBundle\Form\Admin\User\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use AppBundle\Entity\Invitation;
 
 class AdminController extends Controller
 {
@@ -18,11 +21,46 @@ class AdminController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $user_form = $this->createForm( UserType::class, null, [ ] );
+        $user_form = $this->createForm( UserType::class, null, [] );
+        $invitation_form = $this->createForm( InvitationType::class, null, [] );
 
         return $this->render( 'admin/index.html.twig', array(
                     'user_form' => $user_form->createView(),
+                    'invitation_form' => $invitation_form->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
+
+    /**
+     * @Route("/admin/user/invite")
+     * @Method("POST")
+     */
+    public function inviteUserAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $response = new Response();
+        $formProcessor = $this->get( 'app.util.form' );
+        $data = $formProcessor->getJsonData( $request );
+        $form = $this->createForm( InvitationType::class, null, [] );
+        try
+        {
+            $formValid = $formProcessor->validateFormData( $form, $data );
+            $invitation = new Invitation();
+            $invitation->setEmail( $data['email'] );
+            $invitation->send();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist( $invitation );
+            $em->flush();
+            $response->setStatusCode( 204 );
+        }
+        catch( \Exception $e )
+        {
+            $response->setStatusCode( 400 );
+            $response->setContent( json_encode(
+                            ['message' => 'errors', 'errors' => $e->getMessage()]
+            ) );
+        }
+        return $response;
+    }
+
 }

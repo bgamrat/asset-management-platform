@@ -21,6 +21,10 @@ password:
     Password
 roles:
     Roles
+save:
+    Save
+send:
+    Send
 user:
     User
 user.admin:

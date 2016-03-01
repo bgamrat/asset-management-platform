@@ -1,16 +1,36 @@
-#user > div {
+
+#user-controls {
+    display:flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    padding: 25px;
+    border-bottom: 1px solid;
+}
+.dgrid-row-table {
+    height: auto;
+}
+
+.dgrid-column-remove {
+    width: 50px;
+    text-align: center;
+}
+.field-enabled,
+.field-locked {
+    text-align: center;
+    width: 75px;
+}
+[name="user"] > div {
     padding: 5px;
     margin: 0 auto;
 }
-
-#user > div label {
+[name="user"] > div label {
     font-weight: bolder;
     width: 62px;
     display: inline-block;
     text-align: right;
     padding-right: 7px;
 }
-
-#user .dijitSelect .dijitButtonContents {
+[name="user"] .dijitSelect .dijitButtonContents {
     width: 160px;
 }

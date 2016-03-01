@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /** @ORM\Entity */
 class Invitation
@@ -10,7 +11,11 @@ class Invitation
     /** @ORM\Id @ORM\Column(type="string", length=6) */
     protected $code;
 
-    /** @ORM\Column(type="string", length=256) */
+    /** @ORM\Column(type="string", length=256) 
+     * @Assert\NotBlank(message="fos_user.email_blank")
+     * @Assert\Email(message="fos_user.email.invalid")
+     * @var string
+     */
     protected $email;
 
     /**
