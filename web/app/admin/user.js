@@ -147,7 +147,7 @@ require([
     }, 'user-invite-btn');
     inviteBtn.startup();
     inviteBtn.on("click", function (event) {
-        emailInput.set("value", "");
+        inviteEmailInput.set("value", "");
         userInviteDialog.set("title", core["invite"]).show();
     })
 
@@ -165,8 +165,11 @@ require([
                 method: "POST",
                 handleAs: "json",
                 headers: {'Content-Type': 'application/json'},
-                data: JSON.stringify({"email": inviteEmailInput.get("value")})
-            });
+                data: JSON.stringify({"email": inviteEmailInput.get("value")})}).then(function () {
+                userInviteDialog.hide();
+            }, lib.xhrError);
+        } else {
+            lib.textError(core.invalid_form)
         }
     });
     var userInviteForm = new Form({}, '[name="invitation"]');

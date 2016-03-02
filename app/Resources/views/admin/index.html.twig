@@ -29,6 +29,13 @@
             <div class="center">
                 <button id="user-invite-send-btn" type="button">{{'send'|trans}}</button>
             </div>
+            <div>
+                <ul>
+                {% for invitation in outstanding_invitations %}
+                    <li>{{ invitation.email }}</li>
+                {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}

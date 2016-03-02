@@ -23,10 +23,14 @@ class AdminController extends Controller
 
         $user_form = $this->createForm( UserType::class, null, [] );
         $invitation_form = $this->createForm( InvitationType::class, null, [] );
+        
+        $em = $this->getDoctrine()->getManager();
+        $outstandingInvitations = $em->getRepository('AppBundle:Invitation')->findAll();
 
         return $this->render( 'admin/index.html.twig', array(
                     'user_form' => $user_form->createView(),
                     'invitation_form' => $invitation_form->createView(),
+                    'outstanding_invitations' => $outstandingInvitations,
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
@@ -45,10 +49,21 @@ class AdminController extends Controller
         try
         {
             $formValid = $formProcessor->validateFormData( $form, $data );
+            
+            $em = $this->getDoctrine()->getManager();
+            $checkForExisting = $em->getRepository('AppBundle:Invitation')->findOneByEmail($data['email']);
+            if ($checkForExisting !== null) {
+                throw new \Exception('invitation.exists');
+            }
+            $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['email' => $data['email']] );
+            if ($user !== null) {
+                throw new \Exception('user.exists');
+            }
+            
             $invitation = new Invitation();
             $invitation->setEmail( $data['email'] );
             $invitation->send();
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist( $invitation );
             $em->flush();
             $response->setStatusCode( 204 );
