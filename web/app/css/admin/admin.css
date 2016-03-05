@@ -1,0 +1,7 @@
+.admin-body-wrapper {
+    margin: 0 auto;
+    padding: 15px;
+}
+div > label {
+    margin-top: 10px;
+}

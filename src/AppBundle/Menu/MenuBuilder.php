@@ -21,9 +21,11 @@ class MenuBuilder
 
     public function createMainMenu(array $options)
     {
-        $menu = $this->factory->createItem('root');
+        $menu = $this->factory->createItem('home');
 
-        $menu->addChild('Home', array('route' => 'homepage'));
+        $menu->addChild('Home', ['route' => 'homepage']);
+        $menu->addChild( 'Admin');
+        $menu['Admin']->addChild('User',[ 'route' => 'app_web_admin_admin_user']);
         // ... add more children
 
         return $menu;

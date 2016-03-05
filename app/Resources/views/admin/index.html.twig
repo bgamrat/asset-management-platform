@@ -1,41 +1,8 @@
 {% block title %}{{ 'user.admin'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
-{% block admin_user_content %}
-    <div id="user-wrapper">
-        Admin User
-        <div id="user-controls">
-            <div>
-            <button id="user-new-btn" type="button">{{ 'new'|trans }}</button>
-            <button id="user-invite-btn" type="button">{{ 'invite'|trans }}</button>
-            </div>
-            <div>
-            <form id="user-grid-filter-form">
-                <label for="filter-input">{{ 'filter'|trans }}<input type="text" id="user-filter-input">
-            </form>
-            </div>
-            <button id="user-remove-btn" type="button">{{ 'remove'|trans }}</button>
-        </div>
-        <div id="user-grid">
-        </div>
-        <div id="user-view-dialog">
-            {{ form(user_form) }}  
-            <div class="center">
-                <button id="user-save-btn" type="button">{{ 'save'|trans }}</button>
-            </div>
-        </div>
-        <div id="user-invite-dialog">
-            {{ form(invitation_form) }}  
-            <div class="center">
-                <button id="user-invite-send-btn" type="button">{{'send'|trans}}</button>
-            </div>
-            <div>
-                <ul>
-                {% for invitation in outstanding_invitations %}
-                    <li>{{ invitation.email }}</li>
-                {% endfor %}
-                </ul>
-            </div>
-        </div>
+{% block admin_content %}
+    <div id="admin-wrapper">
+        <h1>{{ 'admin'|trans }}</h1>
     </div>
 {% endblock %}

@@ -11,15 +11,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Entity\Invitation;
 
-class AdminController extends Controller
+/**
+ * Description of UserController
+ *
+ * @author bgamrat
+ */
+class UserController
 {
-    /**
-     * @Route("/admin")
-     */
-    public function indexAction () {
-         return $this->render( 'admin/index.html.twig');
-    }
-    
     /**
      * @Route("/admin/user/")
      * @Method("GET")
@@ -84,5 +82,6 @@ class AdminController extends Controller
         }
         return $response;
     }
+
 
 }

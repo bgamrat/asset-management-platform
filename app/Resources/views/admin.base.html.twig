@@ -15,14 +15,16 @@
 </head>
 <body class="tundra">
 {{ knp_menu_render('main') }}
-    Admin Base
-    <h3>Menu Demo</h3>
-    <div id="mainMenu"></div>
-    <p>Last selected: <span id="lastSelected">none</span></p>
-    <p>Base</p>
+<ul class="path">
+{% for item in knp_menu_get_breadcrumbs_array('main') %}
+<li>{{ item.label|trans }}{{item.uri}}</li>
+{% endfor %}
+</ul>
+<div class="admin-body-wrapper">
 {% block body %}
-{% block admin_user_content %}{% endblock %}
+{% block admin_content %}{% endblock %}
 {% endblock %}
+</div>
 
 {% include 'parts/page_footer_script.html.twig' %}
 {% javascripts

@@ -4,3 +4,7 @@
     text-align: center;
     margin: 0 auto;
 }
+.dgrid-column-remove {
+    width: 50px;
+    text-align: center;
+}
