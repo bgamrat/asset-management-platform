@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-
 class UsersController extends FOSRestController
 {
 
@@ -26,6 +25,9 @@ class UsersController extends FOSRestController
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'username' );
 
         $em = $this->getDoctrine()->getManager();
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $em->getFilters()->disable('softdeleteable');
+        }
         $queryBuilder = $em->createQueryBuilder()->select( ['u'] )
                 ->from( 'AppBundle:User', 'u' )
                 ->orderBy( 'u.' . $dstore['sort-field'], $dstore['sort-direction'] );
@@ -63,8 +65,11 @@ class UsersController extends FOSRestController
                 'username' => $u->getUsername(),
                 'email' => $u->getEmail(),
                 'enabled' => $u->isEnabled(),
-                'locked' => $u->isLocked()
+                'locked' => $u->isLocked(),
             ];
+            if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+                $item['deleted_at'] = $u->getDeletedAt();
+            }
             $data[] = $item;
         }
         return $data;
@@ -206,18 +211,18 @@ class UsersController extends FOSRestController
     public function deleteUserAction( $username )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $userManager = $this->get( 'fos_user.user_manager' );
-        $user = $userManager->findUserBy( ['username' => $username] );
+        $em = $this->getDoctrine()->getManager();
+        $em->getFilters()->enable('softdeleteable');
+        $user = $em->getRepository( 'AppBundle:User' )->findOneBy( ['username' => $username] );
         if( $user !== null )
         {
-            $userManager->deleteUser( $user );
+            $em->remove( $user );
+            $em->flush();
         }
         else
         {
             throw $this->createNotFoundException( 'Not found!' );
         }
     }
-
-
 
 }

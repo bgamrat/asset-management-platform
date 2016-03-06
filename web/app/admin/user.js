@@ -61,7 +61,7 @@ require([
     }, 'user-remove-btn');
     removeBtn.startup();
     removeBtn.on("click", function (event) {
-        var markedForDeletion = query(".dgrid-row .remove-cb input:checked", grid);
+        var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "user-grid");
         if( markedForDeletion.length > 0 ) {
             lib.confirmAction(core.areyousure, function () {
                 markedForDeletion.forEach(function (node) {
@@ -215,6 +215,13 @@ require([
                 }
             }
         },
+        renderRow: function (object) {
+            var rowElement = this.inherited(arguments);
+            if( object.deleted_at !== null ) {
+                rowElement.className += ' deleted';
+            }
+            return rowElement;
+        },
         selectionMode: "none"
     }, 'user-grid');
     grid.startup();
@@ -274,7 +281,7 @@ require([
     cbAll.startup();
     cbAll.on("click", function (event) {
         var state = this.checked;
-        query(".dgrid-row .remove-cb", grid).forEach(function (node) {
+        query(".dgrid-row .remove-cb", "user-grid").forEach(function (node) {
             registry.findWidgets(node)[0].set("checked", state);
         });
     });

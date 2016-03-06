@@ -5,3 +5,6 @@
 div > label {
     margin-top: 10px;
 }
+.deleted {
+    text-decoration: line-through;
+}
