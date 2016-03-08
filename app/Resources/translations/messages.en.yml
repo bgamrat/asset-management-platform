@@ -27,14 +27,6 @@ password:
     Password
 remove:
     Remove
-ROLE_ADMIN:
-    Admin
-ROLE_API:
-    REST Access
-ROLE_SUPER_ADMIN:
-    Super Admin
-ROLE_USER:
-    User
 roles:
     Roles
 save:

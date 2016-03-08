@@ -120,7 +120,7 @@ class UsersController extends FOSRestController
         $form = $this->createForm( UserType::class, null, [] );
         try
         {
-            $formValid = $formProcessor->validateFormData( $form, $data );
+            $formProcessor->validateFormData( $form, $data );
             $userManager = $this->get( 'fos_user.user_manager' );
             $user = $userManager->findUserBy( ['username' => $username] );
             if( $user === null )
@@ -132,36 +132,16 @@ class UsersController extends FOSRestController
             $user->setEmail( $data['email'] );
             $user->setEnabled( $data['enabled'] );
             $user->setLocked( $data['locked'] );
-
-            $roles = $this->get( 'security.role_hierarchy' );
-
-
-
-            $roleManager = $this->get( 'fos_user.role_manager' );
-            $allRoles = $roleManager->findRoles();
-            $allRoleNames = [];
-            foreach( $allRoles as $g )
-            {
-                $allRoleNames[] = $g->getName();
+            $roleNames = [];
+            $roles = $form->get('roles')->getData();
+            foreach ($roles as $role) {
+                $roleNames[] = $role->name;
             }
-            foreach( $allRoleNames as $g )
-            {
-                $g = $roleManager->findRoleByName( $g );
-                if( !in_array( $g->getId(), $data['roles'] ) )
-                {
-                    $user->removeRole( $g );
-                }
-                else
-                {
-                    if( !$user->hasRole( $g ) )
-                    {
-                        $user->addRole( $g );
-                    }
-                }
-            }
+            $user->setRoles($roleNames);
+            
             $userManager->updateUser( $user, true );
 
-            $response->setStatusCode( 201 );
+            $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204 );
             $response->headers->set( 'Location', $this->generateUrl(
                             'app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
                     )
@@ -171,7 +151,7 @@ class UsersController extends FOSRestController
         {
             $response->setStatusCode( 400 );
             $response->setContent( json_encode(
-                            ['message' => 'errors', 'errors' => $e->getMessage()]
+                            ['message' => 'errors', 'errors' => $e->getMessage(), 'file' => $e->getFile(), 'line'=>$e->getLine(), 'trace' => $e->getTraceAsString()]
             ) );
         }
         return $response;

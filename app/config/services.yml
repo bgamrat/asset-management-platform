@@ -48,7 +48,7 @@ services:
         arguments: ['%security.role_hierarchy.roles%']
         tags:
         - { name: form.type, alias: user }
-             
+        
     app.menu_builder:
         class: AppBundle\Menu\MenuBuilder
         arguments: ["@knp_menu.factory"]

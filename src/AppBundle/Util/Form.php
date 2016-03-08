@@ -40,5 +40,4 @@ class Form
         }
         return true;
     }
-
 }

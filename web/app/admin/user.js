@@ -107,7 +107,8 @@ require([
             roles = [];
             for( r in userRolesCheckBoxes ) {
                 if( userRolesCheckBoxes[r].get("checked") === true ) {
-                    roles.push(r);
+                    roles.push(parseInt(userRolesCheckBoxes[r].get("id").replace(/.*(\d+)$/,"$1")));
+                    //roles.push(r);
                 }
             }
             var data = {
@@ -217,7 +218,7 @@ require([
         },
         renderRow: function (object) {
             var rowElement = this.inherited(arguments);
-            if( object.deleted_at !== null ) {
+            if( typeof object.deleted_at !== "undefined" && object.deleted_at !== null ) {
                 rowElement.className += ' deleted';
             }
             return rowElement;
