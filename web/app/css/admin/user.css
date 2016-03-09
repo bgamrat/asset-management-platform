@@ -35,10 +35,12 @@
 [name="user"] .dijitSelect .dijitButtonContents {
     width: 160px;
 }
-ul#user_roles li {
+ul#user_roles li,
+ul#user_groups li {
     list-style-type: none;
     list-style-position: inside;
 }
-ul#user_roles li label {
+ul#user_roles li label,
+ul#user_groups li label {
     width: auto;
 }

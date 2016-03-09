@@ -85,6 +85,15 @@ require([
     var lockedCheckBox = new CheckBox({}, "user_locked");
     lockedCheckBox.startup();
 
+    var userGroupsCheckBoxes = {};
+    query('[data-type="user-group-cb"] input[type="checkbox"]').forEach(function (node) {
+        var label, cb;
+        label = query('label[for="' + node.id + '"]')[0].textContent;
+        cb = new CheckBox({label: label}, node.id);
+        cb.startup();
+        userGroupsCheckBoxes[node.id.replace(/^\w+_(\d+)$/, '$1')] = cb;
+    });
+
     var userRolesCheckBoxes = {};
     query('[data-type="user-role-cb"] input[type="checkbox"]').forEach(function (node) {
         var label, cb;
@@ -102,12 +111,18 @@ require([
     }, 'user-save-btn');
     saveBtn.startup();
     saveBtn.on("click", function (event) {
-        var beforeId, beforeIdFilter, filter, g, roles;
+        var beforeId, beforeIdFilter, filter, g, groups, r, roles;
         if( userForm.validate() ) {
+            groups = [];
+            for( g in userGroupsCheckBoxes ) {
+                if( userGroupsCheckBoxes[g].get("checked") === true ) {
+                    groups.push(g);
+                }
+            }
             roles = [];
             for( r in userRolesCheckBoxes ) {
                 if( userRolesCheckBoxes[r].get("checked") === true ) {
-                    roles.push(parseInt(userRolesCheckBoxes[r].get("id").replace(/.*(\d+)$/,"$1")));
+                    roles.push(parseInt(userRolesCheckBoxes[r].get("id").replace(/.*(\d+)$/, "$1")));
                     //roles.push(r);
                 }
             }
@@ -116,6 +131,7 @@ require([
                 "email": emailInput.get("value"),
                 "enabled": enabledCheckBox.get("checked"),
                 "locked": lockedCheckBox.get("checked"),
+                "groups": groups,
                 "roles": roles
             };
             if( action === "view" ) {
@@ -246,6 +262,13 @@ require([
                 emailInput.set("value", user.email);
                 enabledCheckBox.set("checked", user.enabled === true);
                 lockedCheckBox.set("checked", user.locked === true);
+                for( g in userGroupsCheckBoxes ) {
+                    if( user.groups.indexOf(parseInt(g)) !== -1 ) {
+                        userGroupsCheckBoxes[g].set("checked", true);
+                    } else {
+                        userGroupsCheckBoxes[g].set("checked", false);
+                    }
+                }
                 for( r in userRolesCheckBoxes ) {
                     if( user.roles.indexOf(r) !== -1 ) {
                         userRolesCheckBoxes[r].set("checked", true);

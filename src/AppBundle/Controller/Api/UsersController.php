@@ -25,8 +25,9 @@ class UsersController extends FOSRestController
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'username' );
 
         $em = $this->getDoctrine()->getManager();
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $em->getFilters()->disable('softdeleteable');
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['u'] )
                 ->from( 'AppBundle:User', 'u' )
@@ -65,9 +66,10 @@ class UsersController extends FOSRestController
                 'username' => $u->getUsername(),
                 'email' => $u->getEmail(),
                 'enabled' => $u->isEnabled(),
-                'locked' => $u->isLocked(),
+                'locked' => $u->isLocked()
             ];
-            if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+            {
                 $item['deleted_at'] = $u->getDeletedAt();
             }
             $data[] = $item;
@@ -88,11 +90,17 @@ class UsersController extends FOSRestController
             $data = [
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),
-                'roles' => [],
                 'enabled' => $user->isEnabled(),
-                'locked' => $user->isLocked()
+                'locked' => $user->isLocked(),
+                'groups' => [],
+                'roles' => []
             ];
             $data['roles'] = $user->getRoles();
+            $groups = $user->getGroups();
+            foreach( $groups as $g )
+            {
+                $data['groups'][] = $g->getId();
+            }
             return $data;
         }
         else
@@ -133,15 +141,37 @@ class UsersController extends FOSRestController
             $user->setEnabled( $data['enabled'] );
             $user->setLocked( $data['locked'] );
             $roleNames = [];
-            $roles = $form->get('roles')->getData();
-            foreach ($roles as $role) {
+            $roles = $form->get( 'roles' )->getData();
+            foreach( $roles as $role )
+            {
                 $roleNames[] = $role->name;
             }
-            $user->setRoles($roleNames);
-            
+            $user->setRoles( $roleNames );
+            $groupManager = $this->get( 'fos_user.group_manager' );
+            $allGroups = $groupManager->findGroups();
+            $allGroupNames = [];
+            foreach( $allGroups as $g )
+            {
+                $allGroupNames[] = $g->getName();
+            }
+            foreach( $allGroupNames as $g )
+            {
+                $g = $groupManager->findGroupByName( $g );
+                if( !in_array( $g->getId(), $data['groups'] ) )
+                {
+                    $user->removeGroup( $g );
+                }
+                else
+                {
+                    if( !$user->hasGroup( $g ) )
+                    {
+                        $user->addGroup( $g );
+                    }
+                }
+            }
             $userManager->updateUser( $user, true );
 
-            $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204 );
+            $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
             $response->headers->set( 'Location', $this->generateUrl(
                             'app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
                     )
@@ -151,7 +181,7 @@ class UsersController extends FOSRestController
         {
             $response->setStatusCode( 400 );
             $response->setContent( json_encode(
-                            ['message' => 'errors', 'errors' => $e->getMessage(), 'file' => $e->getFile(), 'line'=>$e->getLine(), 'trace' => $e->getTraceAsString()]
+                            ['message' => 'errors', 'errors' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()]
             ) );
         }
         return $response;
@@ -192,7 +222,7 @@ class UsersController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-        $em->getFilters()->enable('softdeleteable');
+        $em->getFilters()->enable( 'softdeleteable' );
         $user = $em->getRepository( 'AppBundle:User' )->findOneBy( ['username' => $username] );
         if( $user !== null )
         {

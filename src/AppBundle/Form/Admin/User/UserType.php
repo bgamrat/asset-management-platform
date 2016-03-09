@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,6 +34,14 @@ class UserType extends AbstractType
                 ->add( 'username', TextType::class, ['label' => 'username', 'validation_groups' => array('registration')] )
                 ->add( 'enabled', CheckboxType::class, ['label' => 'enabled'] )
                 ->add( 'locked', CheckboxType::class, ['label' => 'locked'] )
+                ->add( 'groups', EntityType::class, [
+                    'class' => 'AppBundle:Group',
+                    'choice_label' => 'name',
+                    'multiple' => true,
+                    'choices_as_values' => true,
+                    'expanded' => true,
+                    'attr'=> array('data-type'=>'user-group-cb')
+                ] )
                 ->add( 'roles', ChoiceType::class, ['choices' => $this->_roles,
                     'multiple' => true,
                     'choices_as_values' => true,
@@ -45,6 +54,7 @@ class UserType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
+            'groups' => [],
             'data_class' => 'AppBundle\Entity\User'
         ) );
     }
