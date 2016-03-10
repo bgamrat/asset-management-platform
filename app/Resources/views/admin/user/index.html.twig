@@ -41,7 +41,9 @@
 {% endblock %}
 
 {% block javascripts %}
-{% javascripts '@admin_user_js' %}
-<script src="{{ asset_url }}"></script>
-{% endjavascripts %}  
+    <script>
+        require(["app/admin/user"], function(user){
+            user.run();
+        });
+    </script>
 {% endblock %}

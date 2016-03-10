@@ -51,11 +51,9 @@ assetic:
         main_js:
             inputs:
                 - 'app/main.js'
-        admin_user_js:
+        admin_js:
             inputs:
                 - 'app/admin/user.js'
-        admin_invitation_js:
-            inputs:
                 - 'app/admin/invitation.js'
         
 

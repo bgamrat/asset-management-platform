@@ -29,7 +29,10 @@
 {% include 'parts/page_footer_script.html.twig' %}
 
 {% block javascripts %}
-    <script src="{{ asset_url }}"></script>
+{% javascripts '@admin_js' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}  
 {% endblock %}
+
 </body>
 </html>

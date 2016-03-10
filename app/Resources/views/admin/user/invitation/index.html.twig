@@ -16,8 +16,11 @@
         </div>
     </div>
 {% endblock %}
+
 {% block javascripts %}
-{% javascripts '@admin_invitation_js' %}
-<script src="{{ asset_url }}"></script>
-{% endjavascripts %}  
+    <script>
+        require(["app/admin/invitation"], function(invitation){
+            invitation.run();
+        });
+    </script>
 {% endblock %}
