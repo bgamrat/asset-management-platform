@@ -16,7 +16,7 @@ use AppBundle\Entity\Invitation;
  *
  * @author bgamrat
  */
-class UserController
+class UserController extends Controller
 {
     /**
      * @Route("/admin/user/")

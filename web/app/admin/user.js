@@ -116,7 +116,7 @@ require([
             groups = [];
             for( g in userGroupsCheckBoxes ) {
                 if( userGroupsCheckBoxes[g].get("checked") === true ) {
-                    groups.push(g);
+                    groups.push(parseInt(g));
                 }
             }
             roles = [];

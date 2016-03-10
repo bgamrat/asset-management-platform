@@ -41,48 +41,4 @@ class AdminController extends Controller
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
-
-    /**
-     * @Route("/admin/user/invite")
-     * @Method("POST")
-     */
-    public function inviteUserAction( Request $request )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $response = new Response();
-        $formProcessor = $this->get( 'app.util.form' );
-        $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( InvitationType::class, null, [] );
-        try
-        {
-            $formValid = $formProcessor->validateFormData( $form, $data );
-            
-            $em = $this->getDoctrine()->getManager();
-            $checkForExisting = $em->getRepository('AppBundle:Invitation')->findOneByEmail($data['email']);
-            if ($checkForExisting !== null) {
-                throw new \Exception('invitation.exists');
-            }
-            $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['email' => $data['email']] );
-            if ($user !== null) {
-                throw new \Exception('user.exists');
-            }
-            
-            $invitation = new Invitation();
-            $invitation->setEmail( $data['email'] );
-            $invitation->send();
-
-            $em->persist( $invitation );
-            $em->flush();
-            $response->setStatusCode( 204 );
-        }
-        catch( \Exception $e )
-        {
-            $response->setStatusCode( 400 );
-            $response->setContent( json_encode(
-                            ['message' => 'errors', 'errors' => $e->getMessage()]
-            ) );
-        }
-        return $response;
-    }
-
 }

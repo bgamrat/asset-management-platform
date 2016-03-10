@@ -17,6 +17,8 @@ home:
         Home
 invitation:
     Invitation
+invitation.user.admin:
+    User Invitation Admin
 invite:
         Invite
 locked:

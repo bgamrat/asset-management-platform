@@ -52,15 +52,13 @@ class User extends BaseUser
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
+     * @Gedmo\Versioned
      */
+    protected $groups;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $deletedAt;
-    /**
-     * @Gedmo\Versioned
-     */
-    protected $groups;
     /**
      * @Gedmo\Versioned
      * @Assert\Choice(multiple=true, min=0, choices = {"ROLE_USER","ROLE_ADMIN","ROLE_SUPER_ADMIN","ROLE_API"}, message = "Invalid role")
@@ -79,6 +77,9 @@ class User extends BaseUser
         // your own logic
     }
 
+    /*
+     * This supports the form validation code
+     */
     public function addRole($role) {
         if (is_object($role)) {
             if (isset($role->name)) {

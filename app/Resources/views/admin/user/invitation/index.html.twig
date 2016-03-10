@@ -1,0 +1,23 @@
+{% block title %}{{ 'invitation.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="invitation-wrapper">
+        <h1>{{ 'invitation.user.admin'|trans }}</h1>
+        <div id="invitation-controls">
+            <div>
+            <form id="invitation-grid-filter-form">
+                <label for="filter-input">{{ 'filter'|trans }}<input type="text" id="invitation-filter-input">
+            </form>
+            </div>
+            <button id="invitation-remove-btn" type="button">{{ 'remove'|trans }}</button>
+        </div>
+        <div id="invitation-grid">
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+{% javascripts '@admin_invitation_js' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}  
+{% endblock %}

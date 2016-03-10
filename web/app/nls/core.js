@@ -18,6 +18,7 @@ define({
         "roles": "Roles",
         "save": "Save",
         "send": "Send",
+        "sent": "Sent",
         "username": "Username",
         "view": "View"
     })

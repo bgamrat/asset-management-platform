@@ -66,7 +66,7 @@ class UsersController extends FOSRestController
                 'username' => $u->getUsername(),
                 'email' => $u->getEmail(),
                 'enabled' => $u->isEnabled(),
-                'locked' => $u->isLocked()
+                'locked' => $u->isLocked(),
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
@@ -92,14 +92,14 @@ class UsersController extends FOSRestController
                 'email' => $user->getEmail(),
                 'enabled' => $user->isEnabled(),
                 'locked' => $user->isLocked(),
-                'groups' => [],
-                'roles' => []
             ];
-            $data['roles'] = $user->getRoles();
-            $groups = $user->getGroups();
-            foreach( $groups as $g )
+            if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
-                $data['groups'][] = $g->getId();
+                $data['roles'] = $user->getRoles();
+                $data['groups'] = [];
+                foreach ($user->getGroups() as $group) {
+                    $data['groups'][] = $group->getId();
+                }
             }
             return $data;
         }
@@ -154,15 +154,15 @@ class UsersController extends FOSRestController
             {
                 $allGroupNames[] = $g->getName();
             }
-            foreach( $allGroupNames as $g )
+            foreach( $allGroupNames as $groupName )
             {
-                $g = $groupManager->findGroupByName( $g );
+                $g = $groupManager->findGroupByName( $groupName );
                 if( !in_array( $g->getId(), $data['groups'] ) )
                 {
                     $user->removeGroup( $g );
                 }
                 else
-                {
+                {   
                     if( !$user->hasGroup( $g ) )
                     {
                         $user->addGroup( $g );
@@ -177,7 +177,7 @@ class UsersController extends FOSRestController
                     )
             );
         }
-        catch( \Exception $e )
+        catch( Exception $e )
         {
             $response->setStatusCode( 400 );
             $response->setContent( json_encode(

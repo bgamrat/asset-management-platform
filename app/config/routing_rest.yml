@@ -7,3 +7,9 @@ app_admin_users:
     resource: AppBundle\Controller\Api\UsersController
     name_prefix:   app_admin_user_
     prefix: /api
+    
+app_admin_users_invitations:
+    type: rest
+    resource: AppBundle\Controller\Api\InvitationsController
+    name_prefix: app_admin_user_invitation
+    prefix: /api
