@@ -14,25 +14,32 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 <body class="tundra">
-{{ knp_menu_render('main') }}
-<ul class="path">
-{% for item in knp_menu_get_breadcrumbs_array('main') %}
-<li>{{ item.label|trans }}{{item.uri}}</li>
-{% endfor %}
-</ul>
-<div class="admin-body-wrapper">
-{% block body %}
-{% block admin_content %}{% endblock %}
-{% endblock %}
+    <nav id="admin-top-menu">
+        {{ knp_menu_render('main') }}
+    </nav>
+    <ul class="path">
+        {% for item in knp_menu_get_breadcrumbs_array('main') %}
+            <li>{{ item.label|trans }}{{item.uri}}</li>
+            {% endfor %}
+    </ul>
+    <div class="admin-body-wrapper">
+        {% block body %}
+        {% block admin_content %}{% endblock %}
+    {% endblock %}
 </div>
 
 {% include 'parts/page_footer_script.html.twig' %}
 
-{% block javascripts %}
-{% javascripts '@admin_js' %}
-<script src="{{ asset_url }}"></script>
-{% endjavascripts %}  
-{% endblock %}
 
+{% block javascripts %}
+    {% javascripts '@admin_js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %} 
+{% endblock %}
+<script>
+    require(["app/admin/menu"], function (menu) {
+        menu.run();
+    });
+</script>
 </body>
 </html>
