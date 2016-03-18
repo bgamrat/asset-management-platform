@@ -26,10 +26,13 @@ class MenuBuilder
         $menu = $this->factory->createItem( 'home' );
 
         $menu->addChild( 'Home', ['route' => 'homepage'] );
-        $menu->addChild( 'Admin' )
-                ->addChild( 'User', [ 'route' => 'app_web_admin_admin_user'] )
-                    ->addChild( 'Invitation', [ 'route' => 'app_web_admin_invitation_invitation'] );
-        // ... add more children
+        $admin = $menu->addChild( 'Admin' );
+        $admin->addChild( 'Groups' );
+        $admin->addChild( 'Locations' );
+        $user = $admin->addChild( 'User');
+        $user->addChild( 'Users', [ 'route' => 'app_web_admin_admin_user'] );
+        $user->addChild( 'Invitation', [ 'route' => 'app_web_admin_invitation_invitation'] );
+        $menu->addChild('Logout', ['route' => 'fos_user_security_logout']);
 
         return $menu;
     }

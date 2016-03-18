@@ -4,13 +4,11 @@ define([
     "dojo/dom-attr",
     "dojo/dom-construct",
     "dojo/on",
-    "dojo/request/xhr",
-    "dojo/json",
-    "dojo/aspect",
     "dojo/query",
     "dijit/registry",
     "dijit/MenuBar",
     "dijit/MenuBarItem",
+    "dijit/PopupMenuItem",
     "dijit/PopupMenuBarItem",
     "dijit/MenuItem",
     "dijit/DropDownMenu",
@@ -20,35 +18,55 @@ define([
     "dojo/i18n!app/nls/core",
     "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
-        registry, MenuBar, MenuBarItem, PopupMenuBarItem, MenuItem, DropDownMenu, Dialog,
+], function (declare, dom, domAttr, domConstruct, on, query, registry,
+        MenuBar, MenuBarItem, PopupMenuItem, PopupMenuBarItem, MenuItem, DropDownMenu, Dialog,
         lib, libGrid, core) {
 
     function run() {
         var menuBar = new MenuBar({}, "admin-top-menu");
 
-        function createMenuItem(widget,parent) {
-            var children, node, item, i, nextLabel = "";
-            console.log(widget);
-            console.log(parent);
+        function createMenuItem(widget, parent, depth) {
+            var children, node, item, i, label, nextNode;
+            var popupMenuObj, labelObj, link;
             children = query(parent).children();
             for( i = 0; i < children.length; i++ ) {
                 node = children[i];
-                console.log(node);
+                nextNode = (typeof children[i + 1] !== "undefined") ? children[i + 1] : null;
                 switch( node.tagName ) {
+                    case "SPAN":
                     case "A":
-                        item = new MenuBarItem({label: node.textContent.trim()}, node);
+                        label = node.textContent.trim();
+                        if( typeof node.href !== "undefined") {
+                            link = node.href;
+                        } else {
+                            link = null;
+                        }
+                        if( nextNode !== null && nextNode.tagName === "UL" ) {
+                            popup = new DropDownMenu();
+                            popupMenuObj = {label: label, popup: popup};
+                            if( depth <= 1 ) {
+                                item = new PopupMenuBarItem(popupMenuObj);
+                            } else {
+                                item = new PopupMenuItem(popupMenuObj);
+                            }
+                            createMenuItem(popup, nextNode);
+                        } else {
+                            labelObj = {label: label};
+                            if( depth <= 1 ) {
+                                item = new MenuBarItem(labelObj);
+                            } else {
+                                item = new MenuItem(labelObj);
+                            }
+                        }
+                        if( link !== null ) {
+                            item.on("click", function () {
+                                location.href = link
+                            });
+                        }
                         widget.addChild(item);
                         break;
-                    case "UL":
-                        item = new DropDownMenu();
-                        widget.addChild(new PopupMenuBarItem({label: nextLabel, popup:item}));
-                        widget = item;    
                     case "LI":
-                        createMenuItem(widget,node);     
-                        break;
-                    case "SPAN":
-                        nextLabel = node.textContent.trim();
+                        createMenuItem(widget, node, depth + 1);
                         break;
                 }
             }
@@ -56,10 +74,9 @@ define([
 
         var menuElements = query("#admin-top-menu ul");
         if( menuElements.length > 0 ) {
-            createMenuItem(menuBar,menuElements[0]);
+            createMenuItem(menuBar, menuElements[0], 0);
             domConstruct.destroy(menuElements[0]);
         }
-
         menuBar.startup();
     }
     return {
