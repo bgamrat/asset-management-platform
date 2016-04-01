@@ -15,7 +15,7 @@
 </head>
 <body class="tundra">
     <nav id="admin-top-menu">
-        {{ knp_menu_render('main') }}
+        {{ knp_menu_render('admin') }}
     </nav>
     <ul class="path">
         {% for item in knp_menu_get_breadcrumbs_array('main') %}
@@ -28,7 +28,7 @@
     {% endblock %}
 </div>
 
-{% include 'parts/page_footer_script.html.twig' %}
+{% include 'parts/admin/page_footer_script.html.twig' %}
 
 
 {% block javascripts %}

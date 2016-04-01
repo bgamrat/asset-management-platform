@@ -52,8 +52,18 @@ services:
     app.menu_builder:
         class: AppBundle\Menu\MenuBuilder
         arguments: ["@knp_menu.factory"]
+        calls:
+            - [setContainer, ["@service_container"]]
         tags:
-            - { name: knp_menu.menu_builder, method: createMainMenu, alias: main } # The alias is what is used to retrieve the menu
+            - { name: knp_menu.menu_builder, method: createAdminMenu, alias: admin }
+            - { name: knp_menu.menu_builder, method: createMainMenu, alias: main }
+            - { name: knp_menu.menu_builder, method: createUserMenu, alias: user }
+
+    app.menu_voter_request:
+        class: AppBundle\Menu\RequestVoter
+        arguments: ["@request_stack"]
+        tags:
+            - { name: knp_menu.voter }
 
     fos_user.doctrine_registry:
         alias: doctrine

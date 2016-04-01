@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% stylesheets
-            '@dojo_dijit_css'
-            '@dgrid_css'
             '@main_css'
-            filter='cssrewrite' output='css/compiled/app.css' %}
+            filter='cssrewrite' output='css/compiled/main.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body class="tundra">
-    <h3>Menu Demo</h3>
-    <div id="mainMenu"></div>
-    <p>Last selected: <span id="lastSelected">none</span></p>
-    <p>Base</p>
-{% block fos_user_content %}{% endblock %}
-{% block body %}{% endblock %}
-{% include 'parts/page_footer_script.html.twig' %}
+<body role="document">
+    Base!
+
+    {% include 'parts/user/nav.html.twig' %}
+
+    <div class="container content" role="main">
+        {% block body %}
+        {% endblock %}
+        {% block fos_user_content %}{% endblock %}
+    </div>
+        
+{% include 'parts/user/page_footer_script.html.twig' %}
 {% block javascripts %}{% endblock %}
 </body>
 </html>

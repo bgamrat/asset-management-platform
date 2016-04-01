@@ -60,6 +60,9 @@ assetic:
         main_css:
             inputs:
                 - 'app/css/main.css'
+                - 'vendor/bootstrap-7-col/css/bootstrap.css'
+                - 'vendor/bootstrap-7-col/css/bootstrap-theme.css'
+                - 'vendor/font-awesome-4.5.0/font-awesome.min.css'
         admin_css:
             inputs:
                 - 'app/css/admin/admin.css'
@@ -74,6 +77,12 @@ assetic:
             inputs:
                 - 'vendor/release/dgrid/css/dgrid.css'
                 - 'vendor/release/dgrid/css/skins/tundra.css'
+        main_js:
+            inputs:
+                - 'app/main/main.js'
+        user_js:
+            inputs:
+                - 'vendor/bootstrap-7-col/js/bootstrap.js'
 
 # Doctrine Configuration
 doctrine:
