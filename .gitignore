@@ -11,6 +11,9 @@ web/assetic
 web/css
 web/js
 web/vendor
+!web/vendor
+web/vendor/dojo-release-1.10.4-src
+web/vendor/release
 !web/vendor/profiles
 !web/vendor/profiles/app.profile.js
 !web/vendor/build.sh
