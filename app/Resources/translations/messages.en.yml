@@ -1,43 +1,48 @@
-admin:
-    Admin
-email:
-    Email
-enabled:
-    Enabled
+common:
+    admin:
+        Admin
+    email:
+        Email
+    enabled:
+        Enabled
+    filter:
+        Filter
+    group:
+        Group
+    home:
+        Home
+    invite:
+        Invite
+    locked:
+        Locked
+    new:
+        New
+    password:
+        Password
+    remove:
+        Remove
+    roles:
+        Roles
+    save:
+        Save
+    send:
+        Send
+    user:
+        User
+    username:
+        Username
 error:
     password_short:
         Password must be at least eight characters
     password_long:
         Password must not be longer than 4096 characters
-filter:
-    Filter
-group:
-    Group
-home:
-        Home
 invitation:
-    Invitation
-invitation.user.admin:
-    User Invitation Admin
-invite:
-        Invite
-locked:
-    Locked
-new:
-    New
-password:
-    Password
-remove:
-    Remove
-roles:
-    Roles
-save:
-    Save
-send:
-    Send
+    user: 
+        Invitation
+    admin:
+        User Invitation Admin
 user:
-    User
-user.admin:
-    User Admin
-username:
-    Username
+    forgot_password_link:
+        Forgot your password?
+    admin:
+        User Admin

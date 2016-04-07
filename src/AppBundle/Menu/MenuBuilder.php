@@ -54,7 +54,11 @@ class MenuBuilder implements ContainerAwareInterface
             $menu->addChild( 'User', array('label' => 'Hi ' . $username) )
                     ->setAttribute( 'dropdown', true )
                     ->setAttribute( 'icon', 'fa fa-user' );
-            $menu['User']->addChild( 'Edit profile', array('route' => 'homepage') )
+            if ($this->container->get( 'security.authorization_checker' )->isGranted ( 'ROLE_ADMIN')) {
+                $menu['User']->addChild( 'Admin', array('route' => 'app_web_admin_admin_index') )
+                    ->setAttribute( 'icon', 'fa fa-star' );
+            }
+            $menu['User']->addChild( 'Edit profile', array('route' => 'fos_user_profile_edit') )
                     ->setAttribute( 'icon', 'fa fa-edit' );
             $menu['User']->addChild( 'Logout', ['route' => 'fos_user_security_logout'] );
         }
