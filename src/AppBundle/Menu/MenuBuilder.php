@@ -31,11 +31,11 @@ class MenuBuilder implements ContainerAwareInterface
         $menu = $this->factory->createItem( 'home' );
         $menu->setChildrenAttribute( 'class', 'nav navbar-nav' );
 
-        $menu->addChild( 'Home', ['route' => 'homepage'] )
+        $menu->addChild( 'home', ['label' => 'common.home', 'route' => 'homepage'] )
                 ->setAttribute( 'icon', 'fa fa-home' );
         if( !$this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
         {
-            $menu->addChild( 'Log in', ['route' => 'fos_user_security_login'] )
+            $menu->addChild( 'login', ['label' => 'common.log_in', 'route' => 'fos_user_security_login'] )
                     ->setAttribute( 'icon', 'fa fa-login' );
         }
         return $menu;
@@ -49,18 +49,20 @@ class MenuBuilder implements ContainerAwareInterface
 
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
         {
-            $user = $this->container->get('security.token_storage')->getToken()->getUser();
+            $user = $this->container->get( 'security.token_storage' )->getToken()->getUser();
             $username = $user->getUsername();
-            $menu->addChild( 'User', array('label' => 'Hi ' . $username) )
+            $menu->addChild( 'user', ['label' => $username] )
+                    ->setExtra( 'translation_domain', 'AppBundle' )
                     ->setAttribute( 'dropdown', true )
                     ->setAttribute( 'icon', 'fa fa-user' );
-            if ($this->container->get( 'security.authorization_checker' )->isGranted ( 'ROLE_ADMIN')) {
-                $menu['User']->addChild( 'Admin', array('route' => 'app_web_admin_admin_index') )
-                    ->setAttribute( 'icon', 'fa fa-star' );
+            if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN' ) )
+            {
+                $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'app_web_admin_admin_index') )
+                        ->setAttribute( 'icon', 'fa fa-star' );
             }
-            $menu['User']->addChild( 'Edit profile', array('route' => 'fos_user_profile_edit') )
+            $menu['user']->addChild( 'edit_profile', array('label' => 'edit.profile', 'route' => 'fos_user_profile_edit') )
                     ->setAttribute( 'icon', 'fa fa-edit' );
-            $menu['User']->addChild( 'Logout', ['route' => 'fos_user_security_logout'] );
+            $menu['user']->addChild( 'logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
         }
 
         return $menu;
@@ -68,16 +70,17 @@ class MenuBuilder implements ContainerAwareInterface
 
     public function createAdminMenu( array $options )
     {
-        $menu = $this->factory->createItem( 'home' );
+        $menu = $this->factory->createItem( 'admin', [ 'label' => 'common.admin'] );
 
-        $menu->addChild( 'Home', ['route' => 'homepage'] );
-        $admin = $menu->addChild( 'Admin' );
-        $admin->addChild( 'Groups' );
-        $admin->addChild( 'Locations' );
-        $user = $admin->addChild( 'User' );
-        $user->addChild( 'Users', [ 'route' => 'app_web_admin_admin_user'] );
-        $user->addChild( 'Invitation', [ 'route' => 'app_web_admin_invitation_invitation'] );
-        $menu->addChild( 'Logout', ['route' => 'fos_user_security_logout'] );
+        $menu->addChild( 'home', ['route' => 'homepage', 'label' => 'common.home'] )
+                ->setExtra( 'translation_domain', 'AppBundle' );
+        $menu->addChild( 'admin', ['label' => 'common.admin'] );
+        $menu['admin']->addChild( 'groups', ['label' => 'common.groups'] );
+        $menu['admin']->addChild( 'locations', ['label' => 'common.locations'] );
+        $menu['admin']->addChild( 'user', ['label' => 'common.users'] );
+        $menu['admin']['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'app_web_admin_admin_user'] );
+        $menu['admin']['user']->addChild( 'invitations', ['label' => 'user.invitation', 'route' => 'app_web_admin_invitation_invitation'] );
+        $menu->addChild( 'logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
 
         return $menu;
     }

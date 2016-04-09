@@ -9,12 +9,20 @@ common:
         Filter
     group:
         Group
+    groups:
+        Groups
     home:
         Home
     invite:
         Invite
+    locations:
+        Locations
     locked:
         Locked
+    log_in:
+        Log in
+    log_out:
+        Log out
     new:
         New
     password:
@@ -29,6 +37,8 @@ common:
         Send
     user:
         User
+    users:
+        Users
     username:
         Username
 error:
@@ -42,7 +52,11 @@ invitation:
     admin:
         User Invitation Admin
 user:
-    forgot_password_link:
-        Forgot your password?
     admin:
         User Admin
+    forgot_password_link:
+        Forgot your password?
+    invite:
+        Invite
+    invitation:
+        Invitation

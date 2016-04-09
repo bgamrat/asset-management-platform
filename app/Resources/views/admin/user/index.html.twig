@@ -6,28 +6,28 @@
         <h1>{{ 'user.admin'|trans }}</h1>
         <div id="user-controls">
             <div>
-            <button id="user-new-btn" type="button">{{ 'new'|trans }}</button>
-            <button id="user-invite-btn" type="button">{{ 'invite'|trans }}</button>
+            <button id="user-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            <button id="user-invite-btn" type="button">{{ 'user.invite'|trans }}</button>
             </div>
             <div>
             <form id="user-grid-filter-form">
-                <label for="filter-input">{{ 'filter'|trans }}<input type="text" id="user-filter-input">
+                <label for="filter-input">{{ 'common.filter'|trans }}<input type="text" id="user-filter-input">
             </form>
             </div>
-            <button id="user-remove-btn" type="button">{{ 'remove'|trans }}</button>
+            <button id="user-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
         </div>
         <div id="user-grid">
         </div>
         <div id="user-view-dialog">
             {{ form(user_form) }}
             <div class="center">
-                <button id="user-save-btn" type="button">{{ 'save'|trans }}</button>
+                <button id="user-save-btn" type="button">{{ 'common.save'|trans }}</button>
             </div>
         </div>
         <div id="user-invite-dialog">
             {{ form(invitation_form) }}  
             <div class="center">
-                <button id="user-invite-send-btn" type="button">{{'send'|trans}}</button>
+                <button id="user-invite-send-btn" type="button">{{'common.send'|trans}}</button>
             </div>
             <div>
                 <ul>

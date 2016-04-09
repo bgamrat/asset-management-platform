@@ -15,7 +15,7 @@ class InvitationType extends AbstractType
 
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $builder->add( 'email', TextType::class, ['label' => 'email'] );
+        $builder->add( 'email', TextType::class, ['label' => 'common.email'] );
     }
 
     public function configureOptions( OptionsResolver $resolver )

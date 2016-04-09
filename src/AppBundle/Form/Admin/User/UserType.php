@@ -30,15 +30,16 @@ class UserType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'email', TextType::class, ['label' => 'email'] )
-                ->add( 'username', TextType::class, ['label' => 'username', 'validation_groups' => array('registration')] )
-                ->add( 'enabled', CheckboxType::class, ['label' => 'enabled'] )
-                ->add( 'locked', CheckboxType::class, ['label' => 'locked'] )
+                ->add( 'email', TextType::class, ['label' => 'common.email'] )
+                ->add( 'username', TextType::class, ['label' => 'common.username', 'validation_groups' => array('registration')] )
+                ->add( 'enabled', CheckboxType::class, ['label' => 'common.enabled'] )
+                ->add( 'locked', CheckboxType::class, ['label' => 'common.locked'] )
                 ->add( 'groups', EntityType::class, [
                     'class' => 'AppBundle:Group',
                     'choice_label' => 'name',
                     'multiple' => true,
                     'choices_as_values' => true,
+                    'label' => 'common.groups',
                     'expanded' => true,
                     'attr'=> array('data-type'=>'user-group-cb')
                 ] )
@@ -46,7 +47,7 @@ class UserType extends AbstractType
                     'multiple' => true,
                     'choices_as_values' => true,
                     'expanded' => true,
-                    'label' => 'roles',
+                    'label' => 'common.roles',
                     'choice_label' => 'name',
                     'attr' => [ 'data-type' => 'user-role-cb']] );
     }
