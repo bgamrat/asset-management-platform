@@ -21,13 +21,13 @@ define([
 ], function (declare, dom, domAttr, domConstruct, on, query, registry,
         MenuBar, MenuBarItem, PopupMenuItem, PopupMenuBarItem, MenuItem, DropDownMenu, Dialog,
         lib, libGrid, core) {
-
+    "use strict";
     function run() {
         var menuBar = new MenuBar({}, "admin-top-menu");
 
         function createMenuItem(widget, parent, depth) {
             var children, node, item, i, label, nextNode;
-            var popupMenuObj, labelObj, link;
+            var popup, popupMenuObj, labelObj, link;
             children = query(parent).children();
             for( i = 0; i < children.length; i++ ) {
                 node = children[i];

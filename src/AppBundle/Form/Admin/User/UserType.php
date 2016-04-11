@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Admin\User;
 
 use Symfony\Component\Form\AbstractType;
+use AppBundle\Form\Common\PersonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -32,6 +33,14 @@ class UserType extends AbstractType
         $builder
                 ->add( 'email', TextType::class, ['label' => 'common.email'] )
                 ->add( 'username', TextType::class, ['label' => 'common.username', 'validation_groups' => array('registration')] )
+                ->add( 'person', CollectionType::class, array(
+                    'entry_type' => PersonType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => true,
+                    'required' => false,
+                    'label' => false
+                ) )
                 ->add( 'enabled', CheckboxType::class, ['label' => 'common.enabled'] )
                 ->add( 'locked', CheckboxType::class, ['label' => 'common.locked'] )
                 ->add( 'groups', EntityType::class, [
@@ -41,7 +50,7 @@ class UserType extends AbstractType
                     'choices_as_values' => true,
                     'label' => 'common.groups',
                     'expanded' => true,
-                    'attr'=> array('data-type'=>'user-group-cb')
+                    'attr' => array('data-type' => 'user-group-cb')
                 ] )
                 ->add( 'roles', ChoiceType::class, ['choices' => $this->_roles,
                     'multiple' => true,

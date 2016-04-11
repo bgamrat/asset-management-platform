@@ -27,6 +27,8 @@ common:
         New
     password:
         Password
+    person:
+        Person
     remove:
         Remove
     roles:
@@ -41,16 +43,27 @@ common:
         Users
     username:
         Username
+        
 error:
     password_short:
         Password must be at least eight characters
     password_long:
         Password must not be longer than 4096 characters
+        
 invitation:
     user: 
         Invitation
     admin:
         User Invitation Admin
+        
+person:
+    firstname:
+        First name
+    lastname:
+        Last name
+    middleinitial:
+        Middle initial
+                
 user:
     admin:
         User Admin

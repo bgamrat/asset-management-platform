@@ -10,28 +10,33 @@ services:
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
 
 services:
-
-    app.form.registration:
-        class: AppBundle\Form\User\RegistrationFormType
-        tags:
-            - { name: "form.type", alias: "app_user_registration" }
-
+    
+    app.form.data_transformer.invitation:
+        class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+        
     app.form.invitation:
         class: AppBundle\Form\User\InvitationFormType
         arguments: ['@app.form.data_transformer.invitation']
         tags:
             - { name: "form.type", alias: "app_invitation_type" }
 
-    app.form.data_transformer.invitation:
-        class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
-        arguments: ['@doctrine.orm.entity_manager']
-        public: false
-        
-    app.util.dstore:
-        class: AppBundle\Util\DStore
-        
-    app.util.form:
-        class: AppBundle\Util\Form
+    app.form.person:
+        class: AppBundle\Form\Common\PersonFormType
+        tags:
+            - { name: "form.type", alias: "app_common_person" }
+    
+    app.form.registration:
+        class: AppBundle\Form\User\RegistrationFormType
+        tags:
+            - { name: "form.type", alias: "app_user_registration" }
+
+    app.form.type.user:
+        class: AppBundle\Form\Admin\User\UserType
+        arguments: ['%security.role_hierarchy.roles%']
+        tags:
+        - { name: form.type, alias: user }
         
     app.form.user:
         factory_method: createNamed
@@ -42,13 +47,7 @@ services:
             - user                             # alias of the form type
             - null                             # data to bind, this is where your entity could go if you have that defined as a service
             - { validation_groups: [Registration] } # validation groups
-
-    app.form.type.user:
-        class: AppBundle\Form\Admin\User\UserType
-        arguments: ['%security.role_hierarchy.roles%']
-        tags:
-        - { name: form.type, alias: user }
-        
+               
     app.menu_builder:
         class: AppBundle\Menu\MenuBuilder
         arguments: ["@knp_menu.factory"]
@@ -64,6 +63,12 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
+            
+    app.util.dstore:
+        class: AppBundle\Util\DStore
+        
+    app.util.form:
+        class: AppBundle\Util\Form
 
     fos_user.doctrine_registry:
         alias: doctrine

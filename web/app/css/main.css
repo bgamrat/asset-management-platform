@@ -2,11 +2,13 @@
 .container.content {
     margin-top: 60px;
 }
-.center {
-    text-align: center;
-    margin: 0 auto;
+.inline-block {
+    display: inline-block;
+    vertical-align: top;
 }
-.dgrid-column-remove {
-    width: 50px;
-    text-align: center;
+.justify > div {
+    display:flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
 }

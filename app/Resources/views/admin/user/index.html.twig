@@ -6,20 +6,46 @@
         <h1>{{ 'user.admin'|trans }}</h1>
         <div id="user-controls">
             <div>
-            <button id="user-new-btn" type="button">{{ 'common.new'|trans }}</button>
-            <button id="user-invite-btn" type="button">{{ 'user.invite'|trans }}</button>
+                <button id="user-new-btn" type="button">{{ 'common.new'|trans }}</button>
+                <button id="user-invite-btn" type="button">{{ 'user.invite'|trans }}</button>
             </div>
             <div>
-            <form id="user-grid-filter-form">
-                <label for="filter-input">{{ 'common.filter'|trans }}<input type="text" id="user-filter-input">
-            </form>
+                <form id="user-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="user-filter-input">
+                </form>
             </div>
             <button id="user-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
         </div>
         <div id="user-grid">
         </div>
         <div id="user-view-dialog">
-            {{ form(user_form) }}
+            {{form_start(user_form)}}
+                <fieldset class="inline-block">
+                    <legend>{{'common.user'|trans}}</legend>
+                    <div class="justify">
+                        {{form_row(user_form.username)}}
+                    </div>
+                    <div class="justify">
+                        {{form_row(user_form.email)}}
+                    </div>
+                    {{form_row(user_form.enabled)}}
+                    {{form_row(user_form.locked)}}
+                    {{form_row(user_form.groups)}}
+                    {{form_row(user_form.roles)}}
+                </fieldset>
+                <fieldset class="inline-block">
+                    <legend>{{'common.person'|trans}}</legend>
+                    <div class="justify">
+                        {{form_row(person_form.firstname)}}
+                    </div>
+                    <div class="justify">
+                        {{form_row(person_form.middleinitial)}}
+                    </div>
+                    <div class="justify">
+                        {{form_row(person_form.lastname)}}
+                    </div>
+                </fieldset>
+            {{ form_end(user_form) }}
             <div class="center">
                 <button id="user-save-btn" type="button">{{ 'common.save'|trans }}</button>
             </div>
@@ -31,9 +57,9 @@
             </div>
             <div>
                 <ul>
-                {% for invitation in outstanding_invitations %}
-                    <li>{{ invitation.email }}</li>
-                {% endfor %}
+                    {% for invitation in outstanding_invitations %}
+                        <li>{{ invitation.email }}</li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -42,7 +68,7 @@
 
 {% block javascripts %}
     <script>
-        require(["app/admin/user"], function(user){
+        require(["app/admin/user"], function (user) {
             user.run();
         });
     </script>

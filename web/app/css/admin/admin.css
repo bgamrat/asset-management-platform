@@ -2,9 +2,26 @@
     margin: 0 auto;
     padding: 15px;
 }
-div > label {
-    margin-top: 10px;
-}
 .deleted {
     text-decoration: line-through;
+}
+.dgrid-column-remove {
+    width: 50px;
+    text-align: center;
+}
+.dgrid-row-table {
+    height: auto;
+}
+.field-enabled,
+.field-locked {
+    text-align: center;
+    width: 75px;
+}
+fieldset > div {
+    margin: 5px;
+    padding: 3px;
+}
+fieldset label {
+    font-weight: bold;
+    margin: 0 5px;
 }

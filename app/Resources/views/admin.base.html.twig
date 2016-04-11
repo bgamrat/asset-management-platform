@@ -3,11 +3,11 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% stylesheets '@dojo_dijit_css'
+        {% stylesheets 
+            '@dojo_dijit_css'
             '@dgrid_css'
-            '@main_css'
             '@admin_css'
-            filter='cssrewrite' output='css/compiled/app.css' %}
+            filter='cssrewrite' output='css/compiled/app-admin.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
     {% block stylesheets %}{% endblock %}
@@ -29,7 +29,6 @@
 </div>
 
 {% include 'parts/admin/page_footer_script.html.twig' %}
-
 
 {% block javascripts %}
     {% javascripts '@admin_js' %}

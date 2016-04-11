@@ -7,7 +7,7 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% stylesheets
             '@main_css'
-            filter='cssrewrite' output='css/compiled/main.css' %}
+            filter='cssrewrite' output='css/compiled/app.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
     {% block stylesheets %}{% endblock %}

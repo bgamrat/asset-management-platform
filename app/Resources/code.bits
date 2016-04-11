@@ -200,3 +200,12 @@ EntityType (From UserType.php)
 
 Set HTML attributes 
 {{ form(invitation_form, {'attr': {'id': 'user-invitation-form'}}) 
+
+php bin/console generate:doctrine:entity --entity=AppBundle:Person  --fields="firstname:string(length=64 nullable=false unique=false) \
+ lastname:string(length=64 nullable=false unique=false) \
+ middleinitial:string(length=1 nullable=true unique=false) \
+ fos_user_id:integer(nullable=false unique=true) )"
+
+php bin/console generate:doctrine:form AppBundle:Person
+
+php bin/console doctrine:schema:update --force

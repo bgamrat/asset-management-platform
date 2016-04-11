@@ -23,6 +23,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
+    "app/admin/person",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -30,10 +31,12 @@ define([
 ], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button, Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
+        person,
         lib, libGrid, core) {
-
     function run() {
         var action = null;
+
+        person.run();
 
         var userViewDialog = new Dialog({
             title: core.view
