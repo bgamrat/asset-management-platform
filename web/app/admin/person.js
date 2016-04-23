@@ -15,11 +15,11 @@ define([
         lib, core) {
     "use strict";
     function run() {
-        var firstnameInput = new ValidationTextBox({readOnly: true}, "person_firstname");
+        var firstnameInput = new ValidationTextBox({}, "person_firstname");
         firstnameInput.startup();
-        var middleInitialInput = new ValidationTextBox({readOnly: true}, "person_middleinitial");
+        var middleInitialInput = new ValidationTextBox({}, "person_middleinitial");
         middleInitialInput.startup();
-        var lastnameInput = new ValidationTextBox({readOnly: true}, "person_lastname");
+        var lastnameInput = new ValidationTextBox({}, "person_lastname");
         lastnameInput.startup();
     }
     return {

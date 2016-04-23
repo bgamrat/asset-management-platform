@@ -8,6 +8,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use AppBundle\Entity\Person;
 
 /**
  * @ORM\Entity
@@ -70,6 +71,12 @@ class User extends BaseUser
      * @Assert\NotNull(message="Your invitation is wrong", groups={"Registration"})
      */
     protected $invitation;
+    /**
+     * @ORM\OneToOne(targetEntity="Person")
+     * @ORM\JoinColumn(referencedColumnName="id")
+     * @Gedmo\Versioned
+     */
+    protected $person;
 
     public function __construct()
     {
@@ -99,6 +106,15 @@ class User extends BaseUser
         return $this->invitation;
     }
 
+    public function setPerson( Person $person )
+    {
+        $this->person = $person;
+    }
+
+    public function getPerson()
+    {
+        return $this->person;
+    }
     public function getDeletedAt()
     {
         return $this->deletedAt;

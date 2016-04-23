@@ -25,3 +25,10 @@ fieldset label {
     font-weight: bold;
     margin: 0 5px;
 }
+fieldset legend {
+    font-weight: bold;
+    font-size: 1.2em;
+    border-bottom: 1px solid #ddd;
+    display: inline-block;
+    width: 95%;
+}

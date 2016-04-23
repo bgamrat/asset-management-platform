@@ -57,12 +57,25 @@ assetic:
         #yui_css:
         #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
     assets:
+        # CSS
         admin_css:
             inputs:
                 - 'app/css/main.css'
                 - 'app/css/admin/admin.css'
                 - 'app/css/admin/user.css'
                 - 'app/css/admin/invitation.css'
+        # User side - stock Bootstrap
+        bootstrap_css:
+            inputs:
+                - 'vendor/bootstrap-3.3.6-dist/css/bootstrap.css'
+                - 'vendor/bootstrap-3.3.6-dist/css/bootstrap-theme.css'
+                - 'vendor/font-awesome-4.5.0/font-awesome.min.css'
+        # User side - custom Bootstrap (7 column)
+        calendar_css:
+            inputs:
+                - 'vendor/bootstrap-7-col/css/bootstrap.css'
+                - 'vendor/bootstrap-7-col/css/bootstrap-theme.css'
+                - 'vendor/font-awesome-4.5.0/font-awesome.min.css'
         dgrid_css:
             inputs:
                 - 'vendor/release/dgrid/css/dgrid.css'
@@ -72,16 +85,19 @@ assetic:
                 - 'vendor/release/dojo/resources/dojo.css'
                 - 'vendor/release/dojo/resources/dnd.css'
                 - 'vendor/release/dijit/themes/tundra/tundra.css'
+        # User side - common CSS
         main_css:
             inputs:
-                - 'vendor/bootstrap-7-col/css/bootstrap.css'
-                - 'vendor/bootstrap-7-col/css/bootstrap-theme.css'
-                - 'vendor/font-awesome-4.5.0/font-awesome.min.css'
                 - 'app/css/main.css'
+        # JavaScript
+        # Admin JavaScript
         main_js:
             inputs:
                 - 'app/main/main.js'
-        user_js:
+        bootstrap_js:
+            inputs:
+                - 'vendor/bootstrap-3.3.6-dist/js/bootstrap.js'
+        calendar_js:
             inputs:
                 - 'vendor/bootstrap-7-col/js/bootstrap.js'
 

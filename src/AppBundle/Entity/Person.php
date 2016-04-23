@@ -30,14 +30,14 @@ class Person
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=true)
+     * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=false)
      * @Gedmo\Versioned
      */
     private $firstname;
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=64, nullable=true, unique=true)
+     * @ORM\Column(name="lastname", type="string", length=64, nullable=true, unique=false)
      * @Gedmo\Versioned
      */
     private $lastname;
@@ -51,12 +51,11 @@ class Person
     /**
      * @var int
      *
-     * @ORM\Column(name="fos_user_id", type="integer", nullable=true, unique=true)
      * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumn(referencedColumnName="id")
      * @Gedmo\Versioned
      */
-    private $fos_user_id;
+    private $user;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
