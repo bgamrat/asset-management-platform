@@ -6,3 +6,10 @@ parameters:
     database_name: dev
     database_user: dev
     database_password: dev
+    
+    legacy_database_driver: pdo_pgsql
+    legacy_database_host: 127.0.0.1
+    legacy_database_port: 5432
+    legacy_database_name: legacy
+    legacy_database_user: dev
+    legacy_database_password: dev

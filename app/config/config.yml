@@ -104,13 +104,25 @@ assetic:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   pdo_mysql
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
-        charset:  UTF8
+        default_connection: default
+        connections:
+            default:
+                driver:   "%database_driver%"
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
+                charset:  UTF8
+                
+            legacy:
+                driver:   '%legacy_database_driver%'
+                host:     '%legacy_database_host%'
+                port:     '%legacy_database_port%'
+                dbname:   '%legacy_database_name%'
+                user:     '%legacy_database_user%'
+                password: '%legacy_database_password%'
+                charset:  UTF8
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
         #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
@@ -120,11 +132,14 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
+        default_entity_manager: default
+
         entity_managers:
             default:        
                 naming_strategy: doctrine.orm.naming_strategy.underscore
                 auto_mapping: true
                 mappings:
+                    AppBundle: ~
                     gedmo_loggable:
                         type: annotation
                         prefix: Gedmo\Loggable\Entity
@@ -135,7 +150,10 @@ doctrine:
                     softdeleteable:
                         class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
                         enabled: true
-
+            legacy:
+                connection: legacy
+                mappings:                    
+                    LegacyAuthBundle: ~
         
 stof_doctrine_extensions:
     default_locale: en_US
@@ -159,12 +177,12 @@ sensio_framework_extra:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: AppBundle\Entity\User
+    user_class: Common\AppBundle\Entity\User
     group:
-        group_class: AppBundle\Entity\Group
+        group_class: Common\AppBundle\Entity\Group
     registration:
         form:
-            type: AppBundle\Form\User\RegistrationFormType
+            type: Common\AppBundle\Form\User\RegistrationFormType
 
 fos_rest:
     disable_csrf_role: ROLE_API

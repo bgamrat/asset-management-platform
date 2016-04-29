@@ -1,4 +1,5 @@
-
+imports:
+    - { resource: "@LegacyAuthBundle/Resources/config/services.yml" }
 
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
@@ -12,28 +13,28 @@ services:
 services:
     
     app.form.data_transformer.invitation:
-        class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
+        class: Common\AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false
         
     app.form.invitation:
-        class: AppBundle\Form\User\InvitationFormType
+        class: Common\AppBundle\Form\User\InvitationFormType
         arguments: ['@app.form.data_transformer.invitation']
         tags:
             - { name: "form.type", alias: "app_invitation_type" }
 
     app.form.person:
-        class: AppBundle\Form\Common\PersonFormType
+        class: Common\AppBundle\Form\Common\PersonFormType
         tags:
             - { name: "form.type", alias: "app_common_person" }
     
     app.form.registration:
-        class: AppBundle\Form\User\RegistrationFormType
+        class: Common\AppBundle\Form\User\RegistrationFormType
         tags:
             - { name: "form.type", alias: "app_user_registration" }
 
     app.form.type.user:
-        class: AppBundle\Form\Admin\User\UserType
+        class: Common\AppBundle\Form\Admin\User\UserType
         arguments: ['%security.role_hierarchy.roles%']
         tags:
         - { name: form.type, alias: user }
@@ -49,7 +50,7 @@ services:
             - { validation_groups: [Registration] } # validation groups
                
     app.menu_builder:
-        class: AppBundle\Menu\MenuBuilder
+        class: Common\AppBundle\Menu\MenuBuilder
         arguments: ["@knp_menu.factory"]
         calls:
             - [setContainer, ["@service_container"]]
@@ -59,16 +60,16 @@ services:
             - { name: knp_menu.menu_builder, method: createUserMenu, alias: user }
 
     app.menu_voter_request:
-        class: AppBundle\Menu\RequestVoter
+        class: Common\AppBundle\Menu\RequestVoter
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
             
     app.util.dstore:
-        class: AppBundle\Util\DStore
+        class: Common\AppBundle\Util\DStore
         
     app.util.form:
-        class: AppBundle\Util\Form
+        class: Common\AppBundle\Util\Form
 
     fos_user.doctrine_registry:
         alias: doctrine

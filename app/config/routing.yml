@@ -1,10 +1,14 @@
-app:
+app_admin:
     resource: "@AppBundle/Controller/"
     type:     annotation
  
 app_rest:
     type: rest
     resource: routing_rest.yml
+    
+legacy_app:
+    resource: "@LegacyAuthBundle/Resources/config/routing.yml"
+    prefix:   / 
     
 static:
     path: /privacy

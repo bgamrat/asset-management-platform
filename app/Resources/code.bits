@@ -208,4 +208,8 @@ php bin/console generate:doctrine:entity --entity=AppBundle:Person  --fields="fi
 
 php bin/console generate:doctrine:form AppBundle:Person
 
-php bin/console doctrine:schema:update --force
+php bin/console doctrine:schema:update --force -em=(entity manager)
+
+grant all on database legacy to dev;
+
+php bin/console list

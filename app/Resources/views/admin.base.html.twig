@@ -17,11 +17,6 @@
     <nav id="admin-top-menu">
         {{ knp_menu_render('admin',{'template': 'parts/admin/knp_menu.html.twig'}) }}
     </nav>
-    <ul class="path">
-        {% for item in knp_menu_get_breadcrumbs_array('admin') %}
-            <li>{{ item.label|trans }}{{item.uri}}</li>
-        {% endfor %}
-    </ul>
     <div class="admin-body-wrapper">
         {% block body %}
         {% block admin_content %}{% endblock %}
