@@ -40,7 +40,7 @@ define([
     }
     function xhrError(err) {
         var errObj = JSON.parse(err.response.text);
-        if (typeof errObj.errors !== "undefined") {
+        if (typeof errObj.errors !== "undefined" && errObj.errors !== null) {
             errorDialog.set("content", errObj.errors.replace("\n","<br>"));
             if (typeof errObj.message !== "undefined") {
                 errorDialog.set("title", errObj.message);

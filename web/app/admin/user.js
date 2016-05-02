@@ -1,5 +1,6 @@
 define([
     "dojo/_base/declare",
+    "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
     "dojo/dom-construct",
@@ -28,7 +29,7 @@ define([
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (declare, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
+], function (declare, lang, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button, Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         person,
@@ -136,8 +137,10 @@ define([
                     "enabled": enabledCheckBox.get("checked"),
                     "locked": lockedCheckBox.get("checked"),
                     "groups": groups,
-                    "roles": roles
+                    "roles": roles,
+                    "person": person.getData()
                 };
+                data
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
                         userViewDialog.hide();
@@ -280,6 +283,7 @@ define([
                             userRolesCheckBoxes[r].set("checked", false);
                         }
                     }
+                    person.setData(user.person);
                     userViewDialog.show();
                 }, lib.xhrError);
             }

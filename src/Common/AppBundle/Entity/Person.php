@@ -6,12 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Common\AppBundle\Entity\User;
 
 /**
  * Person
  *
  * @ORM\Table(name="person")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
+ * @ORM\Entity(repositoryClass="Common\AppBundle\Repository\PersonRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("fos_user_id")
@@ -30,29 +31,29 @@ class Person
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="firstname", type="string", length=64, nullable=false, unique=false)
      * @Gedmo\Versioned
      */
     private $firstname;
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="lastname", type="string", length=64, nullable=false, unique=false)
      * @Gedmo\Versioned
      */
     private $lastname;
     /**
      * @var string
      *
-     * @ORM\Column(name="middleinitial", type="string", length=1, nullable=true, unique=true)
+     * @ORM\Column(name="middleinitial", type="string", length=1, nullable=true, unique=false)
      * @Gedmo\Versioned
      */
     private $middleinitial;
     /**
      * @var int
      *
-     * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn(referencedColumnName="id")
+     * @ ORM\OneToOne(targetEntity="User", inversedBy="person")
+     * @ ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
     private $user;
@@ -147,13 +148,13 @@ class Person
     /**
      * Set fosUserId
      *
-     * @param int $fosUserId
+     * @param int $user
      *
      * @return Person
      */
-    public function setFosUserId( $fosUserId )
+    public function setUser(User $user )
     {
-        $this->fos_user_id = $fosUserId;
+        $this->user = $user;
 
         return $this;
     }
@@ -163,9 +164,9 @@ class Person
      *
      * @return int
      */
-    public function getFosUserId()
+    public function getUser()
     {
-        return $this->fos_user_id;
+        return $this->user;
     }
 
     public function getDeletedAt()

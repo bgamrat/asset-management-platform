@@ -14,16 +14,32 @@ define([
         registry, TextBox, ValidationTextBox,
         lib, core) {
     "use strict";
-    function run() {
-        var firstnameInput = new ValidationTextBox({}, "person_firstname");
-        firstnameInput.startup();
-        var middleInitialInput = new ValidationTextBox({}, "person_middleinitial");
+    
+    var firstnameInput = new ValidationTextBox({}, "person_firstname");
+    var middleInitialInput = new ValidationTextBox({}, "person_middleinitial");
+    var lastnameInput = new ValidationTextBox({}, "person_lastname");
+    
+    function run() {  
+        firstnameInput.startup();       
         middleInitialInput.startup();
-        var lastnameInput = new ValidationTextBox({}, "person_lastname");
         lastnameInput.startup();
     }
+    function getData() {
+        return {
+            "firstname": firstnameInput.get('value'),
+            "middleinitial": middleInitialInput.get('value'),
+            "lastname": lastnameInput.get('value')
+        }
+    }
+    function setData(user) {
+        firstnameInput.set('value', user.firstname);
+        middleInitialInput.set('value', user.middleinitial);
+        lastnameInput.set('value', user.lastname);
+    }
     return {
-        run: run
+        getData: getData,
+        run: run,
+        setData: setData
     }
 }
 );

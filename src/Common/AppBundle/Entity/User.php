@@ -10,12 +10,14 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @UniqueEntity("person_id")
  */
 class User extends BaseUser
 {
@@ -73,8 +75,8 @@ class User extends BaseUser
      */
     protected $invitation;
     /**
-     * @ORM\OneToOne(targetEntity="Person")
-     * @ORM\JoinColumn(referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Person", mappedBy="user")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
     protected $person;

@@ -92,6 +92,7 @@ class UsersController extends FOSRestController
                 'email' => $user->getEmail(),
                 'enabled' => $user->isEnabled(),
                 'locked' => $user->isLocked(),
+                'person' => $user->getPerson()
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
@@ -128,7 +129,10 @@ class UsersController extends FOSRestController
         $form = $this->createForm( UserType::class, null, [] );
         try
         {
-            $formProcessor->validateFormData( $form, $data );
+            $form->handleRequest($request);
+            if (!$form->isValid()) 
+                throw new \Exception($form->getErrors(true,true));
+            //$formProcessor->validateFormData( $form, $data );
             $userManager = $this->get( 'fos_user.user_manager' );
             $user = $userManager->findUserBy( ['username' => $username] );
             if( $user === null )
