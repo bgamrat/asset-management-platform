@@ -17,7 +17,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="fos_user")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @UniqueEntity("person_id")
  */
 class User extends BaseUser
 {
@@ -77,7 +76,6 @@ class User extends BaseUser
     /**
      * @ORM\OneToOne(targetEntity="Person", mappedBy="user")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
-     * @Gedmo\Versioned
      */
     protected $person;
 
@@ -110,8 +108,9 @@ class User extends BaseUser
     }
 
     public function setPerson( Person $person )
-    {
+    {  
         $this->person = $person;
+        $person->setUser($this);
     }
 
     public function getPerson()

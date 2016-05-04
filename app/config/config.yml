@@ -218,7 +218,7 @@ fos_rest:
         rules:
             -
                 # http://symfony.com/doc/current/bundles/FOSRestBundle/format_listener.html
-                path: ^/admin/users
+                path: ^/admin/user
                 priorities: ['json', 'html', 'xml','form']
                 fallback_format: ~
                 methods: [ 'get', 'post', 'put', 'delete']

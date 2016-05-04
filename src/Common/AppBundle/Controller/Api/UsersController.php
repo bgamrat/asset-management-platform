@@ -2,8 +2,10 @@
 
 namespace Common\AppBundle\Controller\Api;
 
+use Common\AppBundle\Entity\Person;
 use Common\AppBundle\Entity\User;
 use Common\AppBundle\Util\DStore;
+use Common\AppBundle\Util\Group;
 use Common\AppBundle\Form\Admin\User\UserType;
 use Common\AppBundle\Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -12,6 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 class UsersController extends FOSRestController
 {
@@ -91,14 +96,25 @@ class UsersController extends FOSRestController
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),
                 'enabled' => $user->isEnabled(),
-                'locked' => $user->isLocked(),
-                'person' => $user->getPerson()
+                'locked' => $user->isLocked()
             ];
+            $person = $user->getPerson();
+            if ($person !== null) {
+                $data['person'] = [
+                    'firstname' => $person->getFirstname(),
+                    'middleinitial' => $person->getMiddleinitial(),
+                    'lastname' => $person->getLastname()
+                ];
+            } else {
+                $data['person'] = array_fill_keys(['firstname','middleinitial','lastname'],'');
+            }
+
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
                 $data['roles'] = $user->getRoles();
                 $data['groups'] = [];
-                foreach ($user->getGroups() as $group) {
+                foreach( $user->getGroups() as $group )
+                {
                     $data['groups'][] = $group->getId();
                 }
             }
@@ -129,10 +145,7 @@ class UsersController extends FOSRestController
         $form = $this->createForm( UserType::class, null, [] );
         try
         {
-            $form->handleRequest($request);
-            if (!$form->isValid()) 
-                throw new \Exception($form->getErrors(true,true));
-            //$formProcessor->validateFormData( $form, $data );
+            $formProcessor->validateFormData( $form, $data );
             $userManager = $this->get( 'fos_user.user_manager' );
             $user = $userManager->findUserBy( ['username' => $username] );
             if( $user === null )
@@ -141,43 +154,17 @@ class UsersController extends FOSRestController
                 $user->setUsername( $data['username'] );
                 $user->setPassword( md5( 'junk' ) );
             }
-            $user->setEmail( $data['email'] );
-            $user->setEnabled( $data['enabled'] );
-            $user->setLocked( $data['locked'] );
-            $roleNames = [];
-            $roles = $form->get( 'roles' )->getData();
-            foreach( $roles as $role )
-            {
-                $roleNames[] = $role->name;
-            }
-            $user->setRoles( $roleNames );
-            $groupManager = $this->get( 'fos_user.group_manager' );
-            $allGroups = $groupManager->findGroups();
-            $allGroupNames = [];
-            foreach( $allGroups as $g )
-            {
-                $allGroupNames[] = $g->getName();
-            }
-            foreach( $allGroupNames as $groupName )
-            {
-                $g = $groupManager->findGroupByName( $groupName );
-                if( !in_array( $g->getId(), $data['groups'] ) )
-                {
-                    $user->removeGroup( $g );
-                }
-                else
-                {   
-                    if( !$user->hasGroup( $g ) )
-                    {
-                        $user->addGroup( $g );
-                    }
-                }
-            }
+            $roleUtil = $this->get( 'app.util.role' );
+            $roleUtil->processRoleUpdates( $form->get( 'roles' )->getData() );
+            $groupUtil = $this->get( 'app.util.group' );
+            $groupUtil->processGroupUpdates( $user, $data );
+            $personUtil = $this->get( 'app.util.person' );
+            $personUtil->processPersonUpdates( $user, $data['person'] );
             $userManager->updateUser( $user, true );
 
             $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
             $response->headers->set( 'Location', $this->generateUrl(
-                            'app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
+                            'common_app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
                     )
             );
         }

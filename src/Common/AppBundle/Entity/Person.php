@@ -50,11 +50,8 @@ class Person
      */
     private $middleinitial;
     /**
-     * @var int
-     *
-     * @ ORM\OneToOne(targetEntity="User", inversedBy="person")
-     * @ ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
-     * @Gedmo\Versioned
+     * @ORM\OneToOne(targetEntity="User", inversedBy="person")
+     * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
      */
     private $user;
     /**
@@ -155,7 +152,7 @@ class Person
     public function setUser(User $user )
     {
         $this->user = $user;
-
+        $user->setPerson($this);
         return $this;
     }
 

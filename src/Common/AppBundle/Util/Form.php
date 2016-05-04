@@ -8,13 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Form
 {
-
-    public function getJsonData( Request $request )
-    {
-        $data = json_decode( $request->getContent(), true );
-        return $data;
-    }
-
     public function strToBool( $string )
     {
         if( in_array( $string, [true, 'true', 'on', 1, '1', 'enabled'] ) )
@@ -30,10 +23,17 @@ class Form
         }
         return null;
     }
+    
+    public function getJsonData( Request $request )
+    {
+        $data = json_decode( $request->getContent(), true );
+        return $data;
+    }
 
     public function validateFormData( BaseForm $form, $data )
-    {
+    {       
         $form->submit( $data );
+       
         if( !$form->isValid() )
         {
             throw new \Exception($form->getErrors(true,true));

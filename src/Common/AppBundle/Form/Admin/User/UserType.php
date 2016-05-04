@@ -4,6 +4,7 @@ namespace Common\AppBundle\Form\Admin\User;
 
 use Common\AppBundle\Form\Common\PersonType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -15,16 +16,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class UserType extends AbstractType
 {
 
-    private $_roles = null;
+    private $roles = null;
 
     public function __construct( Array $roles )
     {
-        $this->_roles = [];
+        $this->roles = [];
         foreach( $roles as $n => $r )
         {
-            $this->_roles[$n] = new \stdClass();
-            $this->_roles[$n]->name = $n;
-            $this->_roles[$n]->value = $n;
+            $this->roles[$n] = new \stdClass();
+            $this->roles[$n]->name = $n;
+            $this->roles[$n]->value = $n;
         }
     }
 
@@ -33,13 +34,12 @@ class UserType extends AbstractType
         $builder
                 ->add( 'email', TextType::class, ['label' => 'common.email'] )
                 ->add( 'username', TextType::class, ['label' => 'common.username', 'validation_groups' => array('registration')] )
-                ->add( 'person', CollectionType::class, array(
-                    'entry_type' => PersonType::class,
-                    'allow_add' => true,
-                    'allow_delete' => true,
+                ->add( 'person', PersonType::class, array(
+                    'data_class' => 'Common\AppBundle\Entity\Person',
                     'by_reference' => true,
                     'required' => false,
-                    'label' => false
+                    'label' => false,
+                    'empty_data' => null
                 ) )
                 ->add( 'enabled', CheckboxType::class, ['label' => 'common.enabled'] )
                 ->add( 'locked', CheckboxType::class, ['label' => 'common.locked'] )
@@ -52,7 +52,7 @@ class UserType extends AbstractType
                     'expanded' => true,
                     'attr' => array('data-type' => 'user-group-cb')
                 ] )
-                ->add( 'roles', ChoiceType::class, ['choices' => $this->_roles,
+                ->add( 'roles', ChoiceType::class, ['choices' => $this->roles,
                     'multiple' => true,
                     'choices_as_values' => true,
                     'expanded' => true,

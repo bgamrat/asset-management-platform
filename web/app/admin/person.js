@@ -1,5 +1,6 @@
 define([
     "dojo/_base/declare",
+    "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
     "dojo/dom-construct",
@@ -10,7 +11,7 @@ define([
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (declare, dom, domAttr, domConstruct, on,
+], function (declare, lang, dom, domAttr, domConstruct, on,
         registry, TextBox, ValidationTextBox,
         lib, core) {
     "use strict";
@@ -32,9 +33,19 @@ define([
         }
     }
     function setData(user) {
-        firstnameInput.set('value', user.firstname);
-        middleInitialInput.set('value', user.middleinitial);
-        lastnameInput.set('value', user.lastname);
+        if (typeof user === "object") {
+            if (user === null) {
+                user = {};
+            }
+            user = lang.mixin({firstname: '', middleinitial: '', lastname: ''}, user);
+            firstnameInput.set('value', user.firstname);
+            middleInitialInput.set('value', user.middleinitial);
+            lastnameInput.set('value', user.lastname);
+        } else {
+            firstnameInput.set('value', '');
+            middleInitialInput.set('value', '');
+            lastnameInput.set('value', '');
+        }
     }
     return {
         getData: getData,
