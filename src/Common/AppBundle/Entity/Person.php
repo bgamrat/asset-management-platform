@@ -53,7 +53,7 @@ class Person
      * @ORM\OneToOne(targetEntity="User", inversedBy="person")
      * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
      */
-    private $user;
+    private $user = null;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
@@ -152,7 +152,9 @@ class Person
     public function setUser(User $user )
     {
         $this->user = $user;
-        $user->setPerson($this);
+        if ($user->getPerson() === null) {
+            $user->setPerson($this);
+        }
         return $this;
     }
 

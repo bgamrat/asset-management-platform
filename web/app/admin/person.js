@@ -16,9 +16,9 @@ define([
         lib, core) {
     "use strict";
     
-    var firstnameInput = new ValidationTextBox({}, "person_firstname");
-    var middleInitialInput = new ValidationTextBox({}, "person_middleinitial");
-    var lastnameInput = new ValidationTextBox({}, "person_lastname");
+    var firstnameInput = new ValidationTextBox({}, "user_person_firstname");
+    var middleInitialInput = new ValidationTextBox({}, "user_person_middleinitial");
+    var lastnameInput = new ValidationTextBox({}, "user_person_lastname");
     
     function run() {  
         firstnameInput.startup();       

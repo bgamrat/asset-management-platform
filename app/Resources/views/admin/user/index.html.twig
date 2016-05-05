@@ -36,13 +36,13 @@
                 <fieldset class="inline-block">
                     <legend>{{'common.person'|trans}}</legend>
                     <div class="justify">
-                        {{form_row(person_form.firstname)}}
+                        {{form_row(user_form.person.firstname)}}
                     </div>
                     <div class="justify">
-                        {{form_row(person_form.middleinitial)}}
+                        {{form_row(user_form.person.middleinitial)}}
                     </div>
                     <div class="justify">
-                        {{form_row(person_form.lastname)}}
+                        {{form_row(user_form.person.lastname)}}
                     </div>
                 </fieldset>
             {{ form_end(user_form) }}

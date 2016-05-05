@@ -146,8 +146,8 @@ class UsersController extends FOSRestController
         try
         {
             $formProcessor->validateFormData( $form, $data );
-            $userManager = $this->get( 'fos_user.user_manager' );
-            $user = $userManager->findUserBy( ['username' => $username] );
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository('AppBundle:User')->findOneBy( ['username' => $username] );
             if( $user === null )
             {
                 $user = $userManager->createUser();
@@ -155,12 +155,13 @@ class UsersController extends FOSRestController
                 $user->setPassword( md5( 'junk' ) );
             }
             $roleUtil = $this->get( 'app.util.role' );
-            $roleUtil->processRoleUpdates( $form->get( 'roles' )->getData() );
+            $roleUtil->processRoleUpdates( $user, $form->get( 'roles' )->getData() );
             $groupUtil = $this->get( 'app.util.group' );
             $groupUtil->processGroupUpdates( $user, $data );
             $personUtil = $this->get( 'app.util.person' );
             $personUtil->processPersonUpdates( $user, $data['person'] );
-            $userManager->updateUser( $user, true );
+            $em->persist($user);
+            $em->flush();
 
             $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
             $response->headers->set( 'Location', $this->generateUrl(

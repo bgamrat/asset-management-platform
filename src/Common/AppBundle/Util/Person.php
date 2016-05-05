@@ -15,12 +15,14 @@ class Person
 
     public function processPersonUpdates( User $user, $data )
     {
-        $person = new PersonEntity();
+        $person = $user->getPerson();
+        if ($person === null) {
+            $person = new PersonEntity();
+        }
         $person->setFirstname( $data['firstname'] );
         $person->setMiddleinitial( $data['middleinitial'] );
         $person->setLastname( $data['lastname'] );
-        $person->persist();
-        $user->setPerson( $person );
+        $user->setPerson($person);
     }
 
 }

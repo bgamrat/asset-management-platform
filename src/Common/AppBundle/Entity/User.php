@@ -74,10 +74,10 @@ class User extends BaseUser
      */
     protected $invitation;
     /**
-     * @ORM\OneToOne(targetEntity="Person", mappedBy="user")
+     * @ORM\OneToOne(targetEntity="Person", mappedBy="user", cascade={"persist"})
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
-    protected $person;
+    protected $person = null;
 
     public function __construct()
     {
@@ -110,7 +110,9 @@ class User extends BaseUser
     public function setPerson( Person $person )
     {  
         $this->person = $person;
-        $person->setUser($this);
+        if ($person->getUser() === null) {
+            $person->setUser($this);
+        }
     }
 
     public function getPerson()
