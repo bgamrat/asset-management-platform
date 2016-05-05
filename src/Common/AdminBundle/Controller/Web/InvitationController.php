@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\AppBundle\Controller\Web\Admin;
+namespace Common\AdminBundle\Controller\Web;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

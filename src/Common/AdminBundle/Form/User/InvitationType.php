@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\AppBundle\Form\Admin\User;
+namespace Common\AdminBundle\Form\User;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

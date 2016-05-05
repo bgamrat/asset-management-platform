@@ -1,13 +1,13 @@
 <?php
 
-namespace Common\AppBundle\Controller\Api;
+namespace Common\AdminBundle\Controller\Api;
 
 use Common\AppBundle\Entity\Person;
 use Common\AppBundle\Entity\User;
-use Common\AppBundle\Util\DStore;
-use Common\AppBundle\Util\Group;
-use Common\AppBundle\Form\Admin\User\UserType;
-use Common\AppBundle\Form\Admin\User\InvitationType;
+use Common\AdminBundle\Util\DStore;
+use Common\AdminBundle\Util\Group;
+use Common\AdminBundle\Form\User\UserType;
+use Common\AdminBundle\Form\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ class UsersController extends FOSRestController
     public function getUsersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'username' );
+        $dstore = $this->get( 'admin.util.dstore' )->gridParams( $request, 'username' );
 
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -140,7 +140,7 @@ class UsersController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->get( 'admin.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $form = $this->createForm( UserType::class, null, [] );
         try
@@ -154,18 +154,18 @@ class UsersController extends FOSRestController
                 $user->setUsername( $data['username'] );
                 $user->setPassword( md5( 'junk' ) );
             }
-            $roleUtil = $this->get( 'app.util.role' );
+            $roleUtil = $this->get( 'admin.util.role' );
             $roleUtil->processRoleUpdates( $user, $form->get( 'roles' )->getData() );
-            $groupUtil = $this->get( 'app.util.group' );
+            $groupUtil = $this->get( 'admin.util.group' );
             $groupUtil->processGroupUpdates( $user, $data );
-            $personUtil = $this->get( 'app.util.person' );
+            $personUtil = $this->get( 'admin.util.person' );
             $personUtil->processPersonUpdates( $user, $data['person'] );
             $em->persist($user);
             $em->flush();
 
             $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
             $response->headers->set( 'Location', $this->generateUrl(
-                            'common_app_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
+                            'common_admin_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
                     )
             );
         }
@@ -184,7 +184,7 @@ class UsersController extends FOSRestController
      */
     public function patchUserAction( $username, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->get( 'admin.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $userManager = $this->get( 'fos_user.user_manager' );
         $user = $userManager->findUserBy( ['username' => $username] );

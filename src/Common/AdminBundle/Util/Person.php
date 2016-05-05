@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\AppBundle\Util;
+namespace Common\AdminBundle\Util;
 
 use Common\AppBundle\Entity\Person As PersonEntity;
 use Common\AppBundle\Entity\User;

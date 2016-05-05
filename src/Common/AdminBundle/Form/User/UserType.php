@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\AppBundle\Form\Admin\User;
+namespace Common\AdminBundle\Form\User;
 
 use Common\AppBundle\Form\Common\PersonType;
 use Symfony\Component\Form\AbstractType;

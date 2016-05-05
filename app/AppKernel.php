@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new FOS\RestBundle\FOSRestBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Common\AppBundle\AppBundle(),
+            new Common\AdminBundle\AdminBundle(),
             new Legacy\LegacyAuthBundle\LegacyAuthBundle(),
         );
 

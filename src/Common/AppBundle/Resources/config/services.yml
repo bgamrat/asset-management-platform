@@ -27,12 +27,6 @@ services:
         class: Common\AppBundle\Form\User\RegistrationFormType
         tags:
             - { name: "form.type", alias: "app_user_registration" }
-
-    app.form.type.user:
-        class: Common\AppBundle\Form\Admin\User\UserType
-        arguments: ['%security.role_hierarchy.roles%']
-        tags:
-        - { name: form.type, alias: user }
         
     app.form.user:
         factory_method: createNamed
@@ -50,7 +44,6 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
         tags:
-            - { name: knp_menu.menu_builder, method: createAdminMenu, alias: admin }
             - { name: knp_menu.menu_builder, method: createMainMenu, alias: main }
             - { name: knp_menu.menu_builder, method: createUserMenu, alias: user }
 
@@ -59,19 +52,3 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
-            
-    app.util.dstore:
-        class: Common\AppBundle\Util\DStore
-        
-    app.util.form:
-        class: Common\AppBundle\Util\Form
-        
-    app.util.group:
-        class: Common\AppBundle\Util\Group
-        arguments: ["@fos_user.group_manager"]
-  
-    app.util.person:
-        class: Common\AppBundle\Util\Person
-        
-    app.util.role:
-        class: Common\AppBundle\Util\Role

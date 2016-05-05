@@ -140,6 +140,7 @@ doctrine:
                 auto_mapping: true
                 mappings:
                     AppBundle: ~
+                    AdminBundle: ~
                     gedmo_loggable:
                         type: annotation
                         prefix: Gedmo\Loggable\Entity

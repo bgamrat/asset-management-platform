@@ -1,11 +1,11 @@
 <?php
 
-namespace Common\AppBundle\Controller\Web\Admin;
+namespace Common\AdminBundle\Controller\Web;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Common\AppBundle\Form\Admin\User\InvitationType;
-use Common\AppBundle\Form\Admin\User\UserType;
+use Common\AdminBundle\Form\User\InvitationType;
+use Common\AdminBundle\Form\User\UserType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

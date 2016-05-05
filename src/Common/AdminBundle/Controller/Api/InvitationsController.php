@@ -1,10 +1,10 @@
 <?php
 
-namespace Common\AppBundle\Controller\Api;
+namespace Common\AdminBundle\Controller\Api;
 
 use Common\AppBundle\Entity\Invitation;
-use Common\AppBundle\Util\DStore;
-use Common\AppBundle\Form\Admin\User\InvitationType;
+use Common\AdminBundle\Util\DStore;
+use Common\AdminBundle\Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

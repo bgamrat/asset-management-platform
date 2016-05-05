@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\AppBundle\Util;
+namespace Common\AdminBundle\Util;
 
 use Common\AppBundle\Form\Admin\User\UserType;
 use Symfony\Component\Form\Form as BaseForm;

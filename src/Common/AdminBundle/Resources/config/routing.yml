@@ -1,0 +1,7 @@
+admin:
+    resource: "@AdminBundle/Controller/"
+    type:     annotation
+     
+admin_rest:
+    type: rest
+    resource: routing_rest.yml

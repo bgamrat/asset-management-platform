@@ -57,7 +57,7 @@ class MenuBuilder implements ContainerAwareInterface
                     ->setAttribute( 'icon', 'fa fa-user' );
             if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN' ) )
             {
-                $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'common_app_web_admin_admin_index') )
+                $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'common_admin_web_admin_index') )
                         ->setAttribute( 'icon', 'fa fa-star' );
             }
             $menu['user']->addChild( 'edit_profile', array('label' => 'edit.profile', 'route' => 'fos_user_profile_edit') )
@@ -67,22 +67,4 @@ class MenuBuilder implements ContainerAwareInterface
 
         return $menu;
     }
-
-    public function createAdminMenu( array $options )
-    {
-        $menu = $this->factory->createItem( 'admin', [ 'label' => 'common.admin'] );
-
-        $menu->addChild( 'home', ['route' => 'homepage', 'label' => 'common.home'] )
-                ->setExtra( 'translation_domain', 'AppBundle' );
-        $menu->addChild( 'admin', ['label' => 'common.admin'] );
-        $menu['admin']->addChild( 'groups', ['label' => 'common.groups'] );
-        $menu['admin']->addChild( 'locations', ['label' => 'common.locations'] );
-        $menu['admin']->addChild( 'user', ['label' => 'common.users'] );
-        $menu['admin']['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'common_app_web_admin_admin_user'] );
-        $menu['admin']['user']->addChild( 'invitations', ['label' => 'user.invitation', 'route' => 'common_app_web_admin_invitation_invitation'] );
-        $menu->addChild( 'logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
-
-        return $menu;
-    }
-
 }
