@@ -30,7 +30,7 @@ class MenuBuilder implements ContainerAwareInterface
     {
         $menu = $this->factory->createItem( 'admin', [ 'label' => 'common.admin'] );
 
-        $menu->addChild( 'home', ['route' => 'homepage', 'label' => 'common.home'] )
+        $menu->addChild( 'home', ['route' => 'root', 'label' => 'common.home'] )
                 ->setExtra( 'translation_domain', 'AppBundle' );
         $menu->addChild( 'admin', ['label' => 'common.admin'] );
         $menu['admin']->addChild( 'groups', ['label' => 'common.groups'] );

@@ -31,7 +31,7 @@ class MenuBuilder implements ContainerAwareInterface
         $menu = $this->factory->createItem( 'home' );
         $menu->setChildrenAttribute( 'class', 'nav navbar-nav' );
 
-        $menu->addChild( 'home', ['label' => 'common.home', 'route' => 'homepage'] )
+        $menu->addChild( 'home', ['label' => 'common.home', 'route' => 'root'] )
                 ->setAttribute( 'icon', 'fa fa-home' );
         if( !$this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
         {
@@ -57,7 +57,7 @@ class MenuBuilder implements ContainerAwareInterface
                     ->setAttribute( 'icon', 'fa fa-user' );
             if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN' ) )
             {
-                $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'common_admin_web_admin_index') )
+                $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'admin') )
                         ->setAttribute( 'icon', 'fa fa-star' );
             }
             $menu['user']->addChild( 'edit_profile', array('label' => 'edit.profile', 'route' => 'fos_user_profile_edit') )
