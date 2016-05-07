@@ -20,9 +20,8 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new Common\AppBundle\AppBundle(),
-            new Common\AdminBundle\AdminBundle(),
-            new Legacy\LegacyAuthBundle\LegacyAuthBundle(),
+            new AppBundle\AppBundle(),
+            new LegacyBridgeBundle\LegacyBridgeBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

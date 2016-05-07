@@ -1,0 +1,3 @@
+legacy_app_homepage:
+    path:     /
+    defaults: { _controller: LegacyBridgeBundle:Default:index }

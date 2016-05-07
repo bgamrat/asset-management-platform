@@ -140,7 +140,6 @@ doctrine:
                 auto_mapping: true
                 mappings:
                     AppBundle: ~
-                    AdminBundle: ~
                     gedmo_loggable:
                         type: annotation
                         prefix: Gedmo\Loggable\Entity
@@ -154,7 +153,7 @@ doctrine:
             legacy:
                 connection: legacy
                 mappings:                    
-                    LegacyAuthBundle: ~
+                    LegacyBridgeBundle: ~
         
 stof_doctrine_extensions:
     default_locale: en_US
@@ -178,12 +177,12 @@ sensio_framework_extra:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: Common\AppBundle\Entity\User
+    user_class: AppBundle\Entity\User
     group:
-        group_class: Common\AppBundle\Entity\Group
+        group_class: AppBundle\Entity\Group
     registration:
         form:
-            type: Common\AppBundle\Form\User\RegistrationFormType
+            type: AppBundle\Form\User\RegistrationFormType
 
 fos_rest:
     disable_csrf_role: ROLE_API

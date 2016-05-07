@@ -1,0 +1,10 @@
+security:
+    encoders:
+       LegacyBridgeBundle\Entity\LegacyUser: bcrypt
+       
+    providers:
+        legacy_user_provider:
+            entity: 
+                class: LegacyBridgeBundle:LegacyUser
+                property: username
+                manager_name: legacy

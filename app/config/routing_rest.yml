@@ -1,0 +1,11 @@
+app_admin_users:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\UsersController
+    name_prefix:   app_admin_api_user_
+    prefix: /api
+    
+app_admin_users_invitations:
+    type: rest
+    resource: AppBundle\Controller\Api\Admin\InvitationsController
+    name_prefix: app_admin_api_user_invitation_
+    prefix: /api

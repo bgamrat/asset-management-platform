@@ -1,5 +1,5 @@
 imports:
-    - { resource: "@LegacyAuthBundle/Resources/config/security.yml" }
+    - { resource: "@LegacyBridgeBundle/Resources/config/security.yml" }
 
 security:
     encoders:

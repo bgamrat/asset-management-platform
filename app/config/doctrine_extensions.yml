@@ -3,7 +3,7 @@ services:
     
         # KernelRequest listener
     extension.listener:
-        class: Common\AppBundle\Listener\DoctrineExtensionListener
+        class: AppBundle\Listener\DoctrineExtensionListener
         calls:
             - [ setContainer, [ "@service_container" ] ]
         tags:

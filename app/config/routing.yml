@@ -2,12 +2,12 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
-admin:
-    resource: "@AdminBundle/Resources/config/routing.yml"
-    prefix:   / 
+admin_rest:
+    type: rest
+    resource: routing_rest.yml
     
 legacy_app:
-    resource: "@LegacyAuthBundle/Resources/config/routing.yml"
+    resource: "@LegacyBridgeBundle/Resources/config/routing.yml"
     prefix:   / 
     
 static:
