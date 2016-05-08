@@ -68,16 +68,18 @@ class MenuBuilder implements ContainerAwareInterface
         {
             $user = $this->container->get( 'security.token_storage' )->getToken()->getUser();
             $username = $user->getUsername();
-            $menu->addChild( 'user', ['label' => $username] )
+            $menu->addChild( 'user' )
                     ->setExtra( 'translation_domain', 'AppBundle' )
                     ->setAttribute( 'dropdown', true )
                     ->setAttribute( 'icon', 'fa fa-user' );
+            $menu['user']->setLabel($username)->setExtra( 'translation_domain', false );
+
             if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN' ) )
             {
-                $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'app_web_admin_admin_index') )
-                        ->setAttribute( 'icon', 'fa fa-star' );
+                $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'app_admin_index') )
+                        ->setAttribute( 'icon', 'fa fa-star-o' );
             }
-            $menu['user']->addChild( 'edit_profile', array('label' => 'edit.profile', 'route' => 'fos_user_profile_edit') )
+            $menu['user']->addChild( 'edit_profile', array('label' => 'user.profile', 'route' => 'fos_user_profile_edit') )
                     ->setAttribute( 'icon', 'fa fa-edit' );
             $menu['user']->addChild( 'logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
         }

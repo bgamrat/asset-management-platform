@@ -1,6 +1,9 @@
 security:
     encoders:
-       LegacyBridgeBundle\Entity\LegacyUser: bcrypt
+        LegacyBridgeBundle\Entity\LegacyUser: 
+            id: legacy_plain_md5_password_encoder
+            hash_algorithm: md5
+            encode_as_base64: false
        
     providers:
         legacy_user_provider:

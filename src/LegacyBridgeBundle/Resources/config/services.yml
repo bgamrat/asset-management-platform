@@ -1,1 +1,4 @@
 services:
+    legacy_plain_md5_password_encoder:
+        class: LegacyBridgeBundle\Security\PasswordEncoder\PlainMd5
+        hash_algorithm: md5

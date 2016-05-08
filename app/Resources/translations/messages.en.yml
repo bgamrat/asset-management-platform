@@ -73,3 +73,5 @@ user:
         Invite
     invitation:
         Invitation
+    profile:
+        Profile
