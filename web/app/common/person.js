@@ -8,12 +8,12 @@ define([
     "dijit/registry",
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
-    "app/common/phone_numbers",
+    "app/common/phoneNumbers",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domConstruct, on,
-        registry, TextBox, ValidationTextBox,
+        registry, TextBox, ValidationTextBox, phoneNumbers,
         lib, core) {
     "use strict";
     
@@ -25,6 +25,7 @@ define([
         firstnameInput.startup();       
         middleInitialInput.startup();
         lastnameInput.startup();
+        phoneNumbers.run();
     }
     function getData() {
         return {

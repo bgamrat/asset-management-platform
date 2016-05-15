@@ -38,3 +38,16 @@ fieldset .sub-form-legend {
     border-bottom: 1px solid #ddd;
     display: inline-block;
 }
+.add-one-more-row {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.remove-form-row {
+    cursor: pointer;
+}
+.form-row.phone-number:nth-child(2) .remove-form-row {
+    display:none;
+}
+.form-row {
+    margin: 5px 0;
+}

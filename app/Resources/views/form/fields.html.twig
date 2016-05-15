@@ -36,7 +36,10 @@
 {%- endblock choice_widget_collapsed -%}
 
 {% block _user_person_phone_numbers_entry_row %}
-    <span class="phone-number type-select">{{ form_widget(form.type) }}</span>
-    <span class="phone-number input">{{ form_widget(form.number) }}</span>
-    <span class="phone-number comment">{{ form_widget(form.comment) }}</span>
+    <div class="form-row phone-number">
+        <span class="type-select">{{ form_widget(form.type) }}</span>
+        <span class="input">{{ form_widget(form.number) }}</span>
+        <span class="comment">{{ form_widget(form.comment) }}</span>
+        <span class="remove-form-row fa fa-remove" title="{{'common.remove'|trans}}"></span>
+    </div>
 {% endblock %}

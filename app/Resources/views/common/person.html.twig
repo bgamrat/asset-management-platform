@@ -9,7 +9,5 @@
     <div class="justify">
         {{form_row(form.lastname)}}
     </div>
-
-    <span class="sub-form-legend">{{'common.phone_numbers'|trans}}</span>
-    {{form_row(form.phone_numbers)}}
+    {% include 'common/phone_numbers.html.twig' with {'form': form.phone_numbers } %}
 </fieldset>

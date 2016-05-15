@@ -64,6 +64,7 @@ assetic:
                 - 'app/css/admin/admin.css'
                 - 'app/css/admin/user.css'
                 - 'app/css/admin/invitation.css'
+                - 'vendor/font-awesome-4.5.0/font-awesome.min.css'
         # User side - stock Bootstrap
         bootstrap_css:
             inputs:
