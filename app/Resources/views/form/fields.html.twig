@@ -1,19 +1,42 @@
 {% extends 'form_div_layout.html.twig' %}
 
-{% block choice_widget %}
+{% form_theme form _self %}
+
+{% block choice_widget_expanded %}
     {% spaceless %}
-        {% if expanded %}
-            <ul {{ block('widget_container_attributes') }}>
-                {% for child in form %}
-                    <li>
-                        {{ form_widget(child) }}
-                        {{ form_label(child) }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            {# just let the choice widget render the select tag #}
-            {{ block('choice_widget') }}
-        {% endif %}
+        <ul {{ block('widget_container_attributes') }}>
+            {% for child in form %}
+                <li>
+                    {{ form_widget(child) }}
+                    {{ form_label(child) }}
+                </li>
+            {% endfor %}
+        </ul>
     {% endspaceless %}
+{% endblock %}
+
+{%- block choice_widget_collapsed -%}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- endif -%}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple" {% else %} {% endif %}
+        {%- if placeholder is not none -%}
+            {% set blank_value = (placeholder != '') ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) %}
+            {% set blank = { 'value': '', 'label': '{{ blank_value|raw }}'} %}
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set choices = preferred_choices|merge(choices) %}
+            {%- if choices|length > 0 and separator is not none -%}
+                {% set choices = choices|merge([{'label':'{{separator}}','disabled':true}]) %}
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        data-options="{{options|json_encode()}}" data-selected="{% if required and value is empty %}{else}-1{% endif %}">
+    </select>
+{%- endblock choice_widget_collapsed -%}
+
+{% block _user_person_phone_numbers_entry_row %}
+    <span class="phone-number type-select">{{ form_widget(form.type) }}</span>
+    <span class="phone-number input">{{ form_widget(form.number) }}</span>
+    <span class="phone-number comment">{{ form_widget(form.comment) }}</span>
 {% endblock %}

@@ -76,6 +76,7 @@ services:
             - [setContainer, ["@service_container"]]
         tags:
             - { name: knp_menu.menu_builder, method: createAdminMenu, alias: admin }
+            - { name: knp_menu.menu_builder, method: createCalendarMenu, alias: calendar }
             - { name: knp_menu.menu_builder, method: createMainMenu, alias: main }
             - { name: knp_menu.menu_builder, method: createUserMenu, alias: user }
 

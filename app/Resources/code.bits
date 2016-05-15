@@ -213,3 +213,5 @@ php bin/console doctrine:schema:update --force -em=(entity manager)
 grant all on database legacy to dev;
 
 php bin/console list
+
+ * @ORM\Table(name="person")

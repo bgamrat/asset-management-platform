@@ -32,3 +32,9 @@ fieldset legend {
     display: inline-block;
     width: 95%;
 }
+fieldset .sub-form-legend {
+    font-weight: bold;
+    font-size: 1.1em;
+    border-bottom: 1px solid #ddd;
+    display: inline-block;
+}

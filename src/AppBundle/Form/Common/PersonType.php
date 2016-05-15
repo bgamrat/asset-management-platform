@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use AppBundle\Form\Common\PhoneNumbersType;
 
 class PersonType extends AbstractType
 {
@@ -19,7 +21,17 @@ class PersonType extends AbstractType
         $builder
                 ->add( 'firstname', TextType::class, ['label' => 'person.firstname'] )
                 ->add( 'lastname', TextType::class, ['label' => 'person.lastname'] )
-                ->add( 'middleinitial', TextType::class, ['label' => 'person.middleinitial'] );
+                ->add( 'middleinitial', TextType::class, ['label' => 'person.middleinitial'] )
+                ->add( 'phone_numbers', CollectionType::class, array(
+                    'entry_type' => PhoneNumbersType::class,
+                    'by_reference' => true,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true
+                ) );
     }
 
     /**

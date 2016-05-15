@@ -24,7 +24,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/admin/person",
+    "app/common/person",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",

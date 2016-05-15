@@ -76,6 +76,7 @@ assetic:
                 - 'vendor/bootstrap-7-col/css/bootstrap.css'
                 - 'vendor/bootstrap-7-col/css/bootstrap-theme.css'
                 - 'vendor/font-awesome-4.5.0/font-awesome.min.css'
+                - 'app/css/calendar.css'
         dgrid_css:
             inputs:
                 - 'vendor/release/dgrid/css/dgrid.css'

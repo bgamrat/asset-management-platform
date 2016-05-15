@@ -54,12 +54,26 @@ class Person
      * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
      */
     private $user = null;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="PhoneNumber")
+     * @ORM\JoinTable(name="person_phone_number",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="phone_number_id", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    private $phoneNumbers;
+    
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
     private $deletedAt;
 
+    public function __construct() {
+        $this->phoneNumbers = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *

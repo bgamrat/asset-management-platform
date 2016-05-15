@@ -8,6 +8,7 @@ define([
     "dijit/registry",
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
+    "app/common/phone_numbers",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
@@ -32,15 +33,15 @@ define([
             "lastname": lastnameInput.get('value')
         }
     }
-    function setData(user) {
-        if (typeof user === "object") {
-            if (user === null) {
-                user = {};
+    function setData(person) {
+        if (typeof person === "object") {
+            if (person === null) {
+                person = {};
             }
-            user = lang.mixin({firstname: '', middleinitial: '', lastname: ''}, user);
-            firstnameInput.set('value', user.firstname);
-            middleInitialInput.set('value', user.middleinitial);
-            lastnameInput.set('value', user.lastname);
+            person = lang.mixin({firstname: '', middleinitial: '', lastname: ''}, person);
+            firstnameInput.set('value', person.firstname);
+            middleInitialInput.set('value', person.middleinitial);
+            lastnameInput.set('value', person.lastname);
         } else {
             firstnameInput.set('value', '');
             middleInitialInput.set('value', '');

@@ -33,18 +33,7 @@
                     {{form_row(user_form.groups)}}
                     {{form_row(user_form.roles)}}
                 </fieldset>
-                <fieldset class="inline-block">
-                    <legend>{{'common.person'|trans}}</legend>
-                    <div class="justify">
-                        {{form_row(user_form.person.firstname)}}
-                    </div>
-                    <div class="justify">
-                        {{form_row(user_form.person.middleinitial)}}
-                    </div>
-                    <div class="justify">
-                        {{form_row(user_form.person.lastname)}}
-                    </div>
-                </fieldset>
+                {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
             {{ form_end(user_form) }}
             <div class="center">
                 <button id="user-save-btn" type="button">{{ 'common.save'|trans }}</button>

@@ -5,13 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
         {% stylesheets
             '@bootstrap_css'
             '@main_css'
             filter='cssrewrite' output='css/compiled/app.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
-    {% block stylesheets %}{% endblock %}
+    {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -25,10 +26,13 @@
     <div class="container content" role="main">
         {% block body %}
         {% endblock %}
-        {% block fos_user_content %}{% endblock %}
+        {% block fos_user_content %}
+        {% endblock %}
     </div>
         
+{% block footer %}
 {% include 'parts/user/page_footer_script.html.twig' %}
+{% endblock %}
 {% block javascripts %}{% endblock %}
 </body>
 </html>

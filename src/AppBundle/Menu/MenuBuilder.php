@@ -25,19 +25,21 @@ class MenuBuilder implements ContainerAwareInterface
     {
         $this->factory = $factory;
     }
-    
+
     public function createAdminMenu( array $options )
     {
         $menu = $this->factory->createItem( 'admin', [ 'label' => 'common.admin'] );
 
         $menu->addChild( 'admin', ['route' => 'root', 'label' => 'common.home'] )
                 ->setExtra( 'translation_domain', 'AppBundle' );
-        $menu->addChild( 'admin', ['label' => 'common.admin'] );
-        $menu['admin']->addChild( 'groups', ['label' => 'common.groups'] );
-        $menu['admin']->addChild( 'locations', ['label' => 'common.locations'] );
-        $menu['admin']->addChild( 'user', ['label' => 'common.users'] );
-        $menu['admin']['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'app_admin_user_index'] );
-        $menu['admin']['user']->addChild( 'invitations', ['label' => 'user.invitation', 'route' => 'app_admin_user_invitation_index'] );
+        $menu->addChild( 'assets', ['label' => 'common.assets'] );
+        $menu['assets']->addChild( 'assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_index'] );
+        $menu['assets']->addChild( 'brands', ['label' => 'asset.brands'] );
+        $menu['assets']->addChild( 'vendors', ['label' => 'asset.vendors'] );
+        
+        $menu->addChild( 'user', ['label' => 'common.users'] );
+        $menu['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'app_admin_user_index'] );
+        $menu['user']->addChild( 'invitations', ['label' => 'user.invitation', 'route' => 'app_admin_user_invitation_index'] );
         $menu->addChild( 'logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
 
         return $menu;
@@ -58,9 +60,21 @@ class MenuBuilder implements ContainerAwareInterface
         return $menu;
     }
 
+    public function createCalendarMenu( array $options )
+    {
+        $menu = $this->factory->createItem( 'calendar' );
+
+        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
+        {
+            $menu->setChildrenAttribute( 'class', 'nav navbar-nav' );
+            $menu->addChild( 'calendar', ['label' => 'common.calendar', 'route' => 'calendar'] )
+                    ->setAttribute( 'icon', 'fa fa-calendar' );
+        }
+        return $menu;
+    }
+
     public function createUserMenu( array $options )
     {
-
         $menu = $this->factory->createItem( 'user' );
         $menu->setChildrenAttribute( 'class', 'nav navbar-nav navbar-right' );
 
@@ -72,7 +86,7 @@ class MenuBuilder implements ContainerAwareInterface
                     ->setExtra( 'translation_domain', 'AppBundle' )
                     ->setAttribute( 'dropdown', true )
                     ->setAttribute( 'icon', 'fa fa-user' );
-            $menu['user']->setLabel($username)->setExtra( 'translation_domain', false );
+            $menu['user']->setLabel( $username )->setExtra( 'translation_domain', false );
 
             if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN' ) )
             {
@@ -86,4 +100,5 @@ class MenuBuilder implements ContainerAwareInterface
 
         return $menu;
     }
+
 }
