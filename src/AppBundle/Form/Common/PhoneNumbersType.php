@@ -28,7 +28,9 @@ class PhoneNumbersType extends AbstractType
                     'required' => true,
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'number', TextType::class )
+                ->add( 'phonenumber', TextType::class, [
+                    
+                ] )
                 ->add( 'comment', TextType::class )
         ;
     }
@@ -39,7 +41,7 @@ class PhoneNumbersType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\PhoneNumberType'
+            'data_class' => 'AppBundle\Entity\PhoneNumber'
         ) );
     }
 

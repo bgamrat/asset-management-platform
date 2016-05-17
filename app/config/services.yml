@@ -35,6 +35,9 @@ services:
     app.util.person:
         class: AppBundle\Util\Person
         
+    app.util.phone_number:
+        class: AppBundle\Util\PhoneNumber
+        
     app.util.role:
         class: AppBundle\Util\Role
 

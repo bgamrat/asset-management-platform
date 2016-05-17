@@ -105,6 +105,17 @@ class UsersController extends FOSRestController
                     'middleinitial' => $person->getMiddleinitial(),
                     'lastname' => $person->getLastname()
                 ];
+                $phoneNumbers = $person->getPhonenumbers();
+                if ($phoneNumbers !== null) {
+                    $data['person']['phonenumbers'] = [];
+                    foreach ($phoneNumbers as $phone) {
+                        $data['person']['phonenumbers'][] =
+                                ['type' => $phone->getType(),
+                                    'phonenumber' => $phone->getPhonenumber(),
+                                    'comment' => $phone->getComment()];
+                    }
+                    
+                }
             } else {
                 $data['person'] = array_fill_keys(['firstname','middleinitial','lastname'],'');
             }
@@ -160,6 +171,11 @@ class UsersController extends FOSRestController
             $groupUtil->processGroupUpdates( $user, $data );
             $personUtil = $this->get( 'app.util.person' );
             $personUtil->processPersonUpdates( $user, $data['person'] );
+            $person = $user->getPerson();
+            if ($person !== null) {
+                $phoneNumberUtil = $this->get( 'app.util.phone_number' );
+                $phoneNumberUtil->processPhoneNumberUpdates( $person, $data['person']['phone_numbers'] );
+            }
             $em->persist($user);
             $em->flush();
 

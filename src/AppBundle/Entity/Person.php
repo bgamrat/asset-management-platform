@@ -30,7 +30,12 @@ class Person
     private $id;
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 64,
+     *      minMessage = "person.firstname error.must_be_at_least {{ limit }} common.characters",
+     *      maxMessage = "person.firstname error.must_be_less_than_or_equal_to {{ limit }} common.characters",
+     * )
      * @ORM\Column(name="firstname", type="string", length=64, nullable=false, unique=false)
      * @Gedmo\Versioned
      */
@@ -38,6 +43,12 @@ class Person
     /**
      * @var string
      *
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 64,
+     *      minMessage = "person.lastname error.must_be_at_least {{ limit }} common.characters",
+     *      maxMessage = "person.lastname error.must_be_less_than_or_equal_to {{ limit }} common.characters",
+     * )
      * @ORM\Column(name="lastname", type="string", length=64, nullable=false, unique=false)
      * @Gedmo\Versioned
      */
@@ -45,6 +56,11 @@ class Person
     /**
      * @var string
      *
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 1,
+     *      exactMessage = "person.middleinitial error.must_be_exactly {{ limit }} common.character"
+     * )
      * @ORM\Column(name="middleinitial", type="string", length=1, nullable=true, unique=false)
      * @Gedmo\Versioned
      */
@@ -54,26 +70,25 @@ class Person
      * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
      */
     private $user = null;
-    
     /**
-     * @ORM\ManyToMany(targetEntity="PhoneNumber")
+     * @ORM\ManyToMany(targetEntity="PhoneNumber", cascade={"persist"})
      * @ORM\JoinTable(name="person_phone_number",
-     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="phone_number_id", referencedColumnName="id", unique=true)}
      *      )
      */
-    private $phoneNumbers;
-    
+    private $phoneNumbers = null;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
     private $deletedAt;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->phoneNumbers = new ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -163,11 +178,12 @@ class Person
      *
      * @return Person
      */
-    public function setUser(User $user )
+    public function setUser( User $user )
     {
         $this->user = $user;
-        if ($user->getPerson() === null) {
-            $user->setPerson($this);
+        if( $user->getPerson() === null )
+        {
+            $user->setPerson( $this );
         }
         return $this;
     }
@@ -192,6 +208,22 @@ class Person
         $this->deletedAt = $deletedAt;
         $this->setEnabled( false );
         $this->setLocked( true );
+    }
+    
+    public function getPhonenumbers() {
+        return $this->phoneNumbers;
+    }
+
+    public function addPhonenumber( PhoneNumber $phoneNumber )
+    {
+        if (!$this->phoneNumbers->contains($phoneNumber)) {
+            $this->phoneNumbers->add( $phoneNumber );
+        }
+    }
+
+    public function removePhonenumber( PhoneNumber $phoneNumber )
+    {
+        $this->phoneNumbers->removeElement( $phoneNumber );
     }
 
 }

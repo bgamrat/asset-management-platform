@@ -15,6 +15,10 @@ common:
         Assets
     calendar:
         Calendar
+    character:
+        character
+    characters:
+        characters
     comment:
         Comment
     email:
@@ -67,6 +71,14 @@ common:
         Username
         
 error:
+    cannot_be_null:
+        cannot be null
+    must_be_at_least:
+        must be at least
+    must_be_less_than_or_equal_to:
+        must be less than or equal to
+    invalid_phone_number:
+        Phone numbers can contain digits, lowercase x (for extension), periods, commas, parentheses, dashes and plus signs
     password_short:
         Password must be at least eight characters
     password_long:

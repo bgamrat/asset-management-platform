@@ -30,7 +30,8 @@ class PersonType extends AbstractType
                     'empty_data' => null,
                     'allow_add' => true,
                     'allow_delete' => true,
-                    'delete_empty' => true
+                    'delete_empty' => true,
+                    'mapped' => false
                 ) );
     }
 

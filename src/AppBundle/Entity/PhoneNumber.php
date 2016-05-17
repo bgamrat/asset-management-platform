@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use AppBundle\Entity\PhoneNumberType;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -26,9 +27,11 @@ class PhoneNumber
     private $type;
 
     /**
-     * @ORM\Column(type="string", length=24, name="phone_number")
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/^[0-9x\.\,\ \+\(\)-]{2,24}$/", message="error.invalid_phone_number")
+     * @ORM\Column(type="string", length=24, name="phone_number", nullable=false)
      */
-    private $phoneNumber;
+    private $phone_number;
 
     /**
      * @ORM\Column(type="string", length=24, nullable=true)
@@ -76,9 +79,9 @@ class PhoneNumber
      *
      * @return PhoneNumber
      */
-    public function setPhoneNumber($phoneNumber)
+    public function setPhonenumber($phoneNumber)
     {
-        $this->phoneNumber = $phoneNumber;
+        $this->phone_number = $phoneNumber;
     
         return $this;
     }
@@ -88,9 +91,9 @@ class PhoneNumber
      *
      * @return string
      */
-    public function getPhoneNumber()
+    public function getPhonenumber()
     {
-        return $this->phoneNumber;
+        return $this->phone_number;
     }
 
     /**

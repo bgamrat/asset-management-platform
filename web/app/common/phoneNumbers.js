@@ -28,81 +28,141 @@ define([
     var dataPrototype;
     var prototypeNode, prototypeContent;
     var base, select, store;
+    var typeSelect = [], numberInput = [], commentInput = [];
+    var divIdInUse = null;
 
-    function cloneNewNode(node) {
-        var typeSelect;
+    function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__name__/g, phoneNumberId);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
         var base = prototypeNode.id + "_" + phoneNumberId + "_";
-        var typeSelect = new Select({
+        typeSelect[phoneNumberId] = new Select({
             store: store,
-            placeholder: core.type
+            placeholder: core.type,
+            required: true
         }, base + "type");
-        typeSelect.startup();
-        var numberInput = new ValidationTextBox({"placeholder":core.phone_number}, base + "number");
-        numberInput.startup();
-        var commentInput = new ValidationTextBox({"placeholder":core.comment}, base + "comment");
-        commentInput.startup();
+        typeSelect[phoneNumberId].startup();
+        numberInput[phoneNumberId] = new ValidationTextBox({
+            placeholder: core.phone_number,
+            trim: true,
+            pattern: "^[0-9x\.\,\ \+\(\)-]{2,24}$",
+            required: true
+        }, base + "phonenumber");
+        numberInput[phoneNumberId].startup();
+        commentInput[phoneNumberId] = new ValidationTextBox({
+            placeholder: core.comment,
+            trim: true,
+            required: false
+        }, base + "comment");
+        commentInput[phoneNumberId].startup();
         phoneNumberId++;
     }
 
     function run() {
 
-        var q, phoneLine, base, select, data, storeData, d, memoryStore;
-        q = query('[id$="phone_numbers"]');
-        if( q.length > 0 ) {
-
-            prototypeNode = q[0];
-            dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-            prototypeContent = dataPrototype.replace(/__name__/g, phoneNumberId);
-            base = prototypeNode.id + "_" + phoneNumberId + "_";
-            select = base + "type";
-            domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-            data = JSON.parse(domAttr.get(select, "data-options"));
-            // Convert the data to an array of objects
-            storeData = [];
-            for( d in data ) {
-                storeData.push(data[d]);
-            }
-            memoryStore = new Memory({
-                idProperty: "value",
-                data: storeData});
-            store = new ObjectStore({objectStore: memoryStore});
-
-            query('[id$="phone_numbers"]').forEach(function (node, index) {
-                if( index !== 0 ) {
-                    cloneNewNode(node);
-                }
-                createDijits();
-            });
-
-            query('.phone-numbers .add-one-more-row').on("click", function (event) {
-                var target = event.target.parentNode;
-                cloneNewNode(target);
-                createDijits();
-            });
-            
-            on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
-                var target = event.target.parentNode;
-                domConstruct.destroy(target);
-            });
+        var phoneLine, base, select, data, storeData, d, memoryStore;
+        if( arguments.length > 0 ) {
+            setDivId(arguments[0]);
         }
+
+        prototypeNode = dom.byId(getDivId());
+        dataPrototype = domAttr.get(prototypeNode, "data-prototype");
+        prototypeContent = dataPrototype.replace(/__name__/g, phoneNumberId);
+        base = prototypeNode.id + "_" + phoneNumberId + "_";
+        select = base + "type";
+        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+        data = JSON.parse(domAttr.get(select, "data-options"));
+        // Convert the data to an array of objects
+        storeData = [];
+        for( d in data ) {
+            storeData.push(data[d]);
+        }
+        memoryStore = new Memory({
+            idProperty: "value",
+            data: storeData});
+        store = new ObjectStore({objectStore: memoryStore});
+
+        query('[id$="phone_numbers"]').forEach(function (node, index) {
+            if( index !== 0 ) {
+                cloneNewNode();
+            }
+            createDijits();
+        });
+
+        query('.phone-numbers .add-one-more-row').on("click", function (event) {
+            var target = event.target.parentNode;
+            cloneNewNode();
+            createDijits();
+        });
+
+        on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
+            var target = event.target.parentNode;
+            domConstruct.destroy(target);
+        });
     }
 
     function getData() {
-        return {
+        var i, returnData = [];
+        for( i = 0; i < phoneNumberId; i++ ) {
+            returnData.push(
+                    {"type": typeSelect[i].get('value'),
+                        "phonenumber": numberInput[i].get('value'),
+                        "comment": commentInput[i].get('value')
+                    });
         }
+        return returnData;
     }
-    function setData(phoneNumbers) {
-        if( typeof phoneNumbers === "object" ) {
-            if( phoneNumbers === null ) {
-                phoneNumbers = {};
-            }
-            phoneNumbers = lang.mixin({type: '', number: '', comment: ''}, phoneNumbers);
+
+    function getDivId() {
+        var q;
+        if( divIdInUse !== null ) {
+            q = divIdInUse;
         } else {
+            q = query('[id$="phone_numbers"]');
+            if( q.length > 0 ) {
+                q = q[0];
+            }
+        }
+        return q;
+    }
+
+    function setDivId(divId) {
+        divIdInUse = divId;
+    }
+
+    function setData(phoneNumbers) {
+        var i, p, obj;
+
+        query(".form-row.phone-number", prototypeNode.parentNode).forEach(function (node, index) {
+            if (index !== 0) {
+                typeSelect[index].destroyRecursive();
+                numberInput[index].destroyRecursive();
+                commentInput[index].destroyRecursive();
+                domConstruct.destroy(node);
+            }
+        });
+        
+        if( typeof phoneNumbers === "object" && phoneNumbers !== null && phoneNumbers.length > 0) {
+
+            i = 0;
+            phoneNumberId = 1;
+            for( p in phoneNumbers ) {
+                if (i !== 0) {
+                    cloneNewNode();
+                    createDijits();
+                }
+                obj = phoneNumbers[p];
+                typeSelect[i].set('value', obj.type);
+                numberInput[i].set('value', obj.phonenumber);
+                commentInput[i].set('value', obj.comment);
+                i++;
+            }
+        } else {
+            typeSelect[0].set('value', "");
+            numberInput[0].set('value', "");
+            commentInput[0].set('value', "");
         }
     }
     return {
