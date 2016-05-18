@@ -98,16 +98,19 @@ define([
         });
 
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
-            var target = event.target.parentNode;
-            domConstruct.destroy(target);
+            var target = event.target;
+            var targetParent = target.parentNode;
+            var id = parseInt(target.id.replace(/\D/g, ''));
+            destroyRow(id, targetParent);
         });
     }
 
     function getData() {
         var i, returnData = [];
-        for( i = 0; i < phoneNumberId; i++ ) {
+        for( i in typeSelect ) {
             returnData.push(
-                    {"type": typeSelect[i].get('value'),
+                    {
+                        "type": typeSelect[i].get('value'),
                         "phonenumber": numberInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
@@ -136,20 +139,17 @@ define([
         var i, p, obj;
 
         query(".form-row.phone-number", prototypeNode.parentNode).forEach(function (node, index) {
-            if (index !== 0) {
-                typeSelect[index].destroyRecursive();
-                numberInput[index].destroyRecursive();
-                commentInput[index].destroyRecursive();
-                domConstruct.destroy(node);
+            if( index !== 0 ) {
+                destroyRow(index, node);
             }
         });
-        
-        if( typeof phoneNumbers === "object" && phoneNumbers !== null && phoneNumbers.length > 0) {
+
+        if( typeof phoneNumbers === "object" && phoneNumbers !== null && phoneNumbers.length > 0 ) {
 
             i = 0;
             phoneNumberId = 1;
             for( p in phoneNumbers ) {
-                if (i !== 0) {
+                if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();
                 }
@@ -165,6 +165,17 @@ define([
             commentInput[0].set('value', "");
         }
     }
+    
+    function destroyRow(id, target) {
+        typeSelect[id].destroyRecursive();
+        typeSelect.splice(id, 1);
+        numberInput[id].destroyRecursive();
+        numberInput.splice(id, 1);
+        commentInput[id].destroyRecursive();
+        commentInput.splice(id, 1);
+        domConstruct.destroy(target);
+    }
+    
     return {
         getData: getData,
         run: run,
