@@ -21,7 +21,7 @@ define([
 ], function (declare, lang, dom, domAttr, domConstruct, on,
         query, ObjectStore, Memory,
         registry, TextBox, ValidationTextBox, Select, Button,
-        lib, core) {
+        common, lib, core) {
     "use strict";
 
     var phoneNumberId = 0;
@@ -30,6 +30,7 @@ define([
     var base, select, store;
     var typeSelect = [], numberInput = [], commentInput = [];
     var divIdInUse = null;
+    var addOneMoreControl = null;
 
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__name__/g, phoneNumberId);
@@ -62,7 +63,7 @@ define([
 
     function run() {
 
-        var phoneLine, base, select, data, storeData, d, memoryStore;
+        var base, select, data, storeData, d, memoryStore;
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
@@ -91,10 +92,16 @@ define([
             createDijits();
         });
 
-        query('.phone-numbers .add-one-more-row').on("click", function (event) {
+        addOneMoreControl = query('.phone-numbers .add-one-more-row');
+        //addOneMoreControl = addOneMoreControl[0];
+                
+        addOneMoreControl.on("click", function (event) {
             var target = event.target.parentNode;
             cloneNewNode();
             createDijits();
+            if (typeSelect.length >= common.constant.MAX_PHONE_NUMBERS) {
+                addOneMoreControl.classList.add("hidden");
+            }
         });
 
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
@@ -102,6 +109,9 @@ define([
             var targetParent = target.parentNode;
             var id = parseInt(target.id.replace(/\D/g, ''));
             destroyRow(id, targetParent);
+            if (typeSelect.length <= common.constant.MAX_PHONE_NUMBERS) {
+                addOneMoreControl.classList.remove("hidden");
+            }
         });
     }
 

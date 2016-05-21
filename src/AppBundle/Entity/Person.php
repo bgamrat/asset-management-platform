@@ -71,6 +71,14 @@ class Person
      */
     private $user = null;
     /**
+     * @ORM\ManyToMany(targetEntity="Address", cascade={"persist"})
+     * @ORM\JoinTable(name="person_address",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    private $address = null;
+    /**
      * @ORM\ManyToMany(targetEntity="PhoneNumber", cascade={"persist"})
      * @ORM\JoinTable(name="person_phone_number",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},

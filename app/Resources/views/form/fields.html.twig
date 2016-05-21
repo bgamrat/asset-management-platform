@@ -16,30 +16,46 @@
 {% endblock %}
 
 {%- block choice_widget_collapsed -%}
-    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
-        {% set required = false %}
-    {%- endif -%}
-    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple" {% else %} {% endif %}
-        {%- if placeholder is not none -%}
-            {% set blank_value = (placeholder != '') ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) %}
-            {% set blank = { 'value': '', 'label': '{{ blank_value|raw }}'} %}
-        {%- endif -%}
-        {%- if preferred_choices|length > 0 -%}
-            {% set choices = preferred_choices|merge(choices) %}
-            {%- if choices|length > 0 and separator is not none -%}
-                {% set choices = choices|merge([{'label':'{{separator}}','disabled':true}]) %}
-            {%- endif -%}
-        {%- endif -%}
-        {%- set options = choices -%}
-        data-options="{{options|json_encode()}}" data-selected="{% if required and value is empty %}{else}-1{% endif %}">
-    </select>
+{%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+{% set required = false %}
+{%- endif -%}
+<select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple" {% else %} {% endif %}
+                                                          {%- if placeholder is not none -%}
+                                                          {% set blank_value = (placeholder != '') ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) %}
+                                                          {% set blank = { 'value': '', 'label': '{{ blank_value|raw }}'} %}
+                                                          {%- endif -%}
+                                                          {%- if preferred_choices|length > 0 -%}
+                                                          {% set choices = preferred_choices|merge(choices) %}
+                                                          {%- if choices|length > 0 and separator is not none -%}
+                                                          {% set choices = choices|merge([{'label':'{{separator}}','disabled':true}]) %}
+                                                          {%- endif -%}
+                                                          {%- endif -%}
+                                                          {%- set options = choices -%}
+                                                          data-options="{{options|json_encode()}}" data-selected="{% if required and value is empty %}{else}-1{% endif %}">
+</select>
 {%- endblock choice_widget_collapsed -%}
 
+{% block _user_person_address_entry_row %}
+{% spaceless %}
+    <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__name__"><i class="fa fa-remove"></i></div>
+    <div class="form-row address justify">
+        {{ form_row(form.street1) }}
+        {{ form_row(form.street2) }}
+        {{ form_row(form.city) }}
+        {{ form_row(form.state_province) }}
+        {{ form_row(form.postal_code) }}
+        {{ form_row(form.country) }}
+    </div>
+{% endspaceless %}
+{% endblock %}
+
 {% block _user_person_phone_numbers_entry_row %}
+{% spaceless %}
     <div class="form-row phone-number">
         <span class="type-select">{{ form_widget(form.type) }}</span>
         <span class="input">{{ form_widget(form.phonenumber) }}</span>
         <span class="comment">{{ form_widget(form.comment) }}</span>
-        <span class="remove-form-row fa fa-remove" title="{{'common.remove'|trans}}" id="remove-phone-__name__"></span>
+        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__name__"><i class="fa fa-remove"></i></span>
     </div>
+{% endspaceless %}
 {% endblock %}

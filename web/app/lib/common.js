@@ -58,6 +58,10 @@ define([
         confirmAction: confirmAction,
         isEmpty: isEmpty,
         textError: textError,
-        xhrError: xhrError
+        xhrError: xhrError,
+        constant: {
+            MAX_PHONE_NUMBERS: 5,
+            MAX_ADDRESSES: 3
+        }
     };
 });

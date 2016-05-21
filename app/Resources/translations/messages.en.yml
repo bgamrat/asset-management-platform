@@ -9,6 +9,8 @@ asset:
 common:
     add_one_more:
         Add one more
+    address:
+        Address
     admin:
         Admin
     assets:
@@ -19,8 +21,12 @@ common:
         character
     characters:
         characters
+    city:
+        City
     comment:
         Comment
+    country:
+        Country
     email:
         Email
     enabled:
@@ -53,6 +59,8 @@ common:
         Phone Number
     phone_numbers:
         Phone Numbers
+    postal_code:
+        Zip
     remove:
         Remove
     roles:
@@ -61,6 +69,10 @@ common:
         Save
     send:
         Send
+    state_province:
+        State
+    street:
+        Street
     type:
         Type
     user:

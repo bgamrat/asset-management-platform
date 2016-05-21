@@ -51,3 +51,19 @@ fieldset .sub-form-legend {
 .form-row {
     margin: 5px 0;
 }
+.form-row .phone-numbers .type-select,
+.form-row .phone-numbers .phone-number {
+    width: 100px;
+}
+.person .name,
+.person .addresses {
+    width: 300px;
+}
+.person .address {
+    display: inline-block;
+}
+.addresses .remove-form-row {
+    display: inline-block;
+    padding-top: 10px;
+    vertical-align: top;
+}

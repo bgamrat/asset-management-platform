@@ -18,7 +18,7 @@ use AppBundle\Entity\Invitation;
 class TestController extends Controller
 {
     /**
-     * @Route("/admin/user/test")
+     * @Route("/admin/test")
      * @Method("GET")
      */
     public function indexAction( Request $request )

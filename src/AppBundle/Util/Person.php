@@ -16,13 +16,16 @@ class Person
     public function processPersonUpdates( User $user, $data )
     {
         $person = $user->getPerson();
-        if ($person === null) {
+        if( $person === null )
+        {
             $person = new PersonEntity();
         }
         $person->setFirstname( $data['firstname'] );
         $person->setMiddleinitial( $data['middleinitial'] );
         $person->setLastname( $data['lastname'] );
-        $user->setPerson($person);
+        $phoneNumberUtil = $this->get( 'app.util.phone_number' );
+        $phoneNumberUtil->processPhoneNumberUpdates( $person, $data['person']['phone_numbers'] );
+        $user->setPerson( $person );
     }
 
 }

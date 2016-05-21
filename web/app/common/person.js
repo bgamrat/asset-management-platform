@@ -9,11 +9,13 @@ define([
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "app/common/phoneNumbers",
+    "app/common/address",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domConstruct, on,
-        registry, TextBox, ValidationTextBox, phoneNumbers,
+        registry, TextBox, ValidationTextBox, 
+        phoneNumbers, address,
         lib, core) {
     "use strict";
     
@@ -26,6 +28,7 @@ define([
         trim: true,
         uppercase: true,
         pattern: "^[A-Z]$",
+        maxLength: 1,
         required: false
     }, "user_person_middleinitial");
     var lastnameInput = new ValidationTextBox({
@@ -38,13 +41,15 @@ define([
         middleInitialInput.startup();
         lastnameInput.startup();
         phoneNumbers.run('user_person_phone_numbers');
+        address.run('user_person_address');
     }
     function getData() {
         return {
             "firstname": firstnameInput.get('value'),
             "middleinitial": middleInitialInput.get('value'),
             "lastname": lastnameInput.get('value'),
-            "phone_numbers": phoneNumbers.getData()
+            "phone_numbers": phoneNumbers.getData(),
+            "address": address.getData()
         }
     }
     function setData(person) {

@@ -215,3 +215,6 @@ grant all on database legacy to dev;
 php bin/console list
 
  * @ORM\Table(name="person")
+
+php bin/console generate:bundle --bundle-name=AssetBundle --dir=/var/www/html/symfony-dev/src  --format=annotation
+
