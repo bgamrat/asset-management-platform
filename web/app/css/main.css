@@ -2,6 +2,13 @@
 .container.content {
     margin-top: 60px;
 }
+.hidden {
+    display: none;
+}
+.hide-on-load {
+    position: relative;
+    left: -10000px;
+}
 .inline-block {
     display: inline-block;
     vertical-align: top;
@@ -12,4 +19,9 @@
     justify-content: space-between;
     -webkit-justify-content: space-between;
     margin: 5px;
+}
+.loading {
+    height: 500px;
+    width: 100%;
+    background: url('/images/loading.gif') no-repeat center;
 }

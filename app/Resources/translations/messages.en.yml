@@ -3,10 +3,16 @@ asset:
         Brands
     manufacturer:
         Manufacturer
+    manufacturers:
+        Manufacturers
+    vendor:
+        Vendor
     vendors:
         Vendors
         
 common:
+    active:
+        Active
     add_one_more:
         Add one more
     address:
@@ -49,6 +55,8 @@ common:
         Log in
     log_out:
         Log out
+    name:
+        Name
     new:
         New
     password:
@@ -73,6 +81,8 @@ common:
         State
     street:
         Street
+    street2:
+        ' '
     type:
         Type
     user:

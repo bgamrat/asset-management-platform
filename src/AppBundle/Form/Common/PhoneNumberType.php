@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 
-class PhoneNumbersType extends AbstractType
+class PhoneNumberType extends AbstractType
 {
 
     /**
@@ -28,8 +28,7 @@ class PhoneNumbersType extends AbstractType
                     'required' => true,
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'phonenumber', TextType::class, [
-                    
+                ->add( 'phonenumber', TextType::class, [ 
                 ] )
                 ->add( 'comment', TextType::class )
         ;
@@ -47,7 +46,7 @@ class PhoneNumbersType extends AbstractType
 
     public function getName()
     {
-        return 'phone_numbers';
+        return 'phone_number';
     }
 
 }

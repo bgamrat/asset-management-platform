@@ -21,13 +21,14 @@ define([
 ], function (declare, lang, dom, domAttr, domConstruct, on,
         query, ObjectStore, Memory,
         registry, TextBox, ValidationTextBox, Select, Button,
-        common, lib, core) {
+        lib, core) {
     "use strict";
 
     var addressId = 0;
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var base, select, store;
+    var base, select, countryStore, typeStore;
+    var typeSelect = [];
     var street1Input = [], street2Input = [], cityInput = [];
     var stateProvinceInput = [], postalCodeInput = [], countrySelect = [];
     var divIdInUse = null;
@@ -40,6 +41,11 @@ define([
 
     function createDijits() {
         var base = prototypeNode.id + "_" + addressId + "_";
+        typeSelect[addressId] = new Select({
+            store: typeStore,
+            required: true
+        }, base + "type");
+        typeSelect[addressId].startup();
         street1Input[addressId] = new ValidationTextBox({
             trim: true,
             required: false
@@ -70,7 +76,7 @@ define([
         }, base + "postal_code");
         postalCodeInput[addressId].startup();
         countrySelect[addressId] = new Select({
-            store: store,
+            store: countryStore,
             required: true,
             value: 'US'
         }, base + "country");
@@ -80,7 +86,9 @@ define([
 
     function run() {
 
-        var base, select, data, storeData, d, memoryStore;
+        var base, select, data, d;
+        var countryStoreData, countryMemoryStore;
+        var typeStoreData, typeMemoryStore;
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
@@ -88,19 +96,32 @@ define([
         prototypeNode = dom.byId(getDivId());
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__name__/g, addressId);
-        base = prototypeNode.id + "_" + addressId + "_";
-        select = base + "country";
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+        
+        base = prototypeNode.id + "_" + addressId + "_";
+        select = base + "type";
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
-        storeData = [];
+        typeStoreData = [];
         for( d in data ) {
-            storeData.push(data[d]);
+            typeStoreData.push(data[d]);
         }
-        memoryStore = new Memory({
+        typeMemoryStore = new Memory({
             idProperty: "value",
-            data: storeData});
-        store = new ObjectStore({objectStore: memoryStore});
+            data: typeStoreData});
+        typeStore = new ObjectStore({objectStore: typeMemoryStore});
+        
+        select = base + "country";
+        data = JSON.parse(domAttr.get(select, "data-options"));
+        // Convert the data to an array of objects
+        countryStoreData = [];
+        for( d in data ) {
+            countryStoreData.push(data[d]);
+        }
+        countryMemoryStore = new Memory({
+            idProperty: "value",
+            data: countryStoreData});
+        countryStore = new ObjectStore({objectStore: countryMemoryStore});
 
         query('[id$="address"]').forEach(function (node, index) {
             if( index !== 0 ) {
@@ -115,7 +136,7 @@ define([
             var target = event.target.parentNode;
             cloneNewNode();
             createDijits();
-            if( countrySelect.length >= common.constant.MAX_ADDRESSES ) {
+            if( countrySelect.length >= lib.constant.MAX_ADDRESSES ) {
                 addOneMoreControl.classList.add("hidden");
             }
         });
@@ -125,7 +146,7 @@ define([
             var targetParent = target.parentNode;
             var id = parseInt(target.id.replace(/\D/g, ''));
             destroyRow(id, targetParent);
-            if( countrySelect.length <= common.constant.MAX_PHONE_NUMBERS ) {
+            if( countrySelect.length <= lib.constant.MAX_ADDRESSES ) {
                 addOneMoreControl.classList.remove("hidden");
             }
         });

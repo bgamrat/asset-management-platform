@@ -21,7 +21,7 @@ define([
 ], function (declare, lang, dom, domAttr, domConstruct, on,
         query, ObjectStore, Memory,
         registry, TextBox, ValidationTextBox, Select, Button,
-        common, lib, core) {
+        lib, core) {
     "use strict";
 
     var phoneNumberId = 0;
@@ -99,7 +99,7 @@ define([
             var target = event.target.parentNode;
             cloneNewNode();
             createDijits();
-            if (typeSelect.length >= common.constant.MAX_PHONE_NUMBERS) {
+            if (typeSelect.length >= lib.constant.MAX_PHONE_NUMBERS) {
                 addOneMoreControl.classList.add("hidden");
             }
         });
@@ -109,7 +109,7 @@ define([
             var targetParent = target.parentNode;
             var id = parseInt(target.id.replace(/\D/g, ''));
             destroyRow(id, targetParent);
-            if (typeSelect.length <= common.constant.MAX_PHONE_NUMBERS) {
+            if (typeSelect.length <= lib.constant.MAX_PHONE_NUMBERS) {
                 addOneMoreControl.classList.remove("hidden");
             }
         });

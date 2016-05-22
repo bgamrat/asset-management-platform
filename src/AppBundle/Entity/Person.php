@@ -180,6 +180,14 @@ class Person
     }
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean")
+     * 
+     */
+    private $active = true;
+
+    /**
      * Set fosUserId
      *
      * @param int $user
@@ -206,6 +214,34 @@ class Person
         return $this->user;
     }
 
+    public function setActive( $active )
+    {
+        $this->active = $active;
+    }
+
+    public function isActive( $active )
+    {
+        return $this->active;
+    }
+
+    public function getPhonenumbers()
+    {
+        return $this->phoneNumbers;
+    }
+
+    public function addPhonenumber( PhoneNumber $phoneNumber )
+    {
+        if( !$this->phoneNumbers->contains( $phoneNumber ) )
+        {
+            $this->phoneNumbers->add( $phoneNumber );
+        }
+    }
+
+    public function removePhonenumber( PhoneNumber $phoneNumber )
+    {
+        $this->phoneNumbers->removeElement( $phoneNumber );
+    }
+
     public function getDeletedAt()
     {
         return $this->deletedAt;
@@ -216,22 +252,6 @@ class Person
         $this->deletedAt = $deletedAt;
         $this->setEnabled( false );
         $this->setLocked( true );
-    }
-    
-    public function getPhonenumbers() {
-        return $this->phoneNumbers;
-    }
-
-    public function addPhonenumber( PhoneNumber $phoneNumber )
-    {
-        if (!$this->phoneNumbers->contains($phoneNumber)) {
-            $this->phoneNumbers->add( $phoneNumber );
-        }
-    }
-
-    public function removePhonenumber( PhoneNumber $phoneNumber )
-    {
-        $this->phoneNumbers->removeElement( $phoneNumber );
     }
 
 }

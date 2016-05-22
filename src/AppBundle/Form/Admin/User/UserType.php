@@ -48,6 +48,8 @@ class UserType extends AbstractType
                     'multiple' => true,
                     'label' => 'common.groups',
                     'expanded' => true,
+                    'choice_translation_domain' => false,
+                    //'translation_domain' => false,
                     'attr' => array('data-type' => 'user-group-cb')
                 ] )
                 ->add( 'roles', ChoiceType::class, ['choices' => $this->roles,
@@ -56,6 +58,8 @@ class UserType extends AbstractType
                     'expanded' => true,
                     'label' => 'common.roles',
                     'choice_label' => 'name',
+                    'choice_translation_domain' => false,
+                    //'translation_domain' => false,
                     'attr' => [ 'data-type' => 'user-role-cb']] );
     }
 

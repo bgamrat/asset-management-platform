@@ -40,21 +40,32 @@ define([
     }
     function xhrError(err) {
         var errObj = JSON.parse(err.response.text);
-        if (typeof errObj.errors !== "undefined" && errObj.errors !== null) {
-            errorDialog.set("content", errObj.errors.replace("\n","<br>"));
-            if (typeof errObj.message !== "undefined") {
+        if( typeof errObj.errors !== "undefined" && errObj.errors !== null ) {
+            errorDialog.set("content", errObj.errors.replace("\n", "<br>"));
+            if( typeof errObj.message !== "undefined" ) {
                 errorDialog.set("title", errObj.message);
             }
         } else {
-            if (typeof errObj.message !== "undefined") {
-                errorDialog.set("content",errObj.message);
+            if( typeof errObj.message !== "undefined" ) {
+                errorDialog.set("content", errObj.message);
             } else {
-                errorDialog.set("content",errObj);
+                errorDialog.set("content", errObj);
             }
         }
         errorDialog.show();
     }
+
+    function pageReady() {
+        document.querySelector(".loading").classList.add("hidden");
+        var i, nodes = document.querySelectorAll(".hide-on-load");
+        for( i = 0; i < nodes.length; i++ ) {
+            nodes[i].classList.remove("hide-on-load");
+        }
+        
+    }
+
     return {
+        pageReady: pageReady,
         confirmAction: confirmAction,
         isEmpty: isEmpty,
         textError: textError,

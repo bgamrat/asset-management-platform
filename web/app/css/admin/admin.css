@@ -9,9 +9,11 @@
     width: 50px;
     text-align: center;
 }
+/*
 .dgrid-row-table {
     height: auto;
 }
+*/
 .field-enabled,
 .field-locked {
     text-align: center;
@@ -61,9 +63,11 @@ fieldset .sub-form-legend {
 }
 .person .address {
     display: inline-block;
+    width: 290px;
 }
 .addresses .remove-form-row {
     display: inline-block;
     padding-top: 10px;
     vertical-align: top;
+    width: 10px;
 }

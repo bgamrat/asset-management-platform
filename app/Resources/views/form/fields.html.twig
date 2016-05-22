@@ -8,7 +8,7 @@
             {% for child in form %}
                 <li>
                     {{ form_widget(child) }}
-                    {{ form_label(child) }}
+                    {{ form_label(child, null, {translation_domain: choice_translation_domain}) }}
                 </li>
             {% endfor %}
         </ul>
@@ -39,6 +39,7 @@
 {% spaceless %}
     <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__name__"><i class="fa fa-remove"></i></div>
     <div class="form-row address justify">
+        {{ form_row(form.type) }}
         {{ form_row(form.street1) }}
         {{ form_row(form.street2) }}
         {{ form_row(form.city) }}

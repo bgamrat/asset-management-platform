@@ -34,8 +34,8 @@ class MenuBuilder implements ContainerAwareInterface
                 ->setExtra( 'translation_domain', 'AppBundle' );
         $menu->addChild( 'assets', ['label' => 'common.assets'] );
         $menu['assets']->addChild( 'assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_index'] );
-        $menu['assets']->addChild( 'brands', ['label' => 'asset.brands'] );
-        $menu['assets']->addChild( 'vendors', ['label' => 'asset.vendors'] );
+        $menu['assets']->addChild( 'manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index'] );
+        $menu['assets']->addChild( 'vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index'] );
         
         $menu->addChild( 'user', ['label' => 'common.users'] );
         $menu['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'app_admin_user_index'] );

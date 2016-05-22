@@ -1,0 +1,43 @@
+{% block title %}{{ 'asset.manufacturer'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="manufacturer-wrapper">
+        <h1>{{ 'asset.manufacturer'|trans }} {{'common.admin'|trans }}</h1>
+        <div class="grid-controls">
+            <div>
+                <button id="manufacturer-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            </div>
+            <div>
+                <form id="manufacturer-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="manufacturer-filter-input">
+                </form>
+            </div>
+            <button id="manufacturer-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+        </div>
+        <div id="manufacturer-grid">
+        </div>
+        <div id="manufacturer-view-dialog">
+            {{form_start(manufacturer_form)}}
+                <fieldset class="inline-block">
+                    <legend>{{'asset.manufacturer'|trans}}</legend>
+                    <div class="justify">
+                        {{form_row(manufacturer_form.name)}}
+                        {{form_row(manufacturer_form.active,{'attr': {'class': 'single-cb'}})}}
+                    </div>
+                </fieldset>
+            {{ form_end(manufacturer_form) }}
+            <div class="center">
+                <button id="manufacturer-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/manufacturer"], function (manufacturer) {
+            manufacturer.run();
+        });
+    </script>
+{% endblock %}

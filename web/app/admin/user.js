@@ -344,6 +344,8 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
+
+        lib.pageReady();
     }
     return {
         run: run

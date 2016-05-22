@@ -9,3 +9,15 @@ app_admin_users_invitations:
     resource: AppBundle\Controller\Api\Admin\InvitationsController
     name_prefix: app_admin_api_user_invitation_
     prefix: /api
+
+app_admin_asset_manufacturers:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Asset\ManufacturersController
+    name_prefix:   app_admin_api_manufacturer_
+    prefix: /api
+
+app_admin_asset_vendors:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Asset\VendorsController
+    name_prefix:   app_admin_api_vendor_
+    prefix: /api

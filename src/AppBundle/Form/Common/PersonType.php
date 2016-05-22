@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use AppBundle\Form\Common\PhoneNumbersType;
+use AppBundle\Form\Common\PhoneNumberType;
 use AppBundle\Form\Common\AddressType;
 
 class PersonType extends AbstractType
@@ -35,7 +35,7 @@ class PersonType extends AbstractType
                     'mapped' => false
                 ] )
                 ->add( 'phone_numbers', CollectionType::class, [
-                    'entry_type' => PhoneNumbersType::class,
+                    'entry_type' => PhoneNumberType::class,
                     'by_reference' => true,
                     'required' => false,
                     'label' => false,

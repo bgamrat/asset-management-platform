@@ -14,14 +14,15 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 <body class="tundra">
-    <nav id="admin-top-menu">
+    <div class="loading"></div>
+    <nav id="admin-top-menu" class="hide-on-load">
         {{ knp_menu_render('admin',{'template': 'parts/admin/knp_menu.html.twig'}) }}
     </nav>
-    <div class="admin-body-wrapper">
+    <div class="admin-body-wrapper hide-on-load">
     {% block body %}
         {% block admin_content %}{% endblock %}
     {% endblock %}
-</div>
+    </div>
 
 {% include 'parts/admin/page_footer_script.html.twig' %}
 
@@ -30,6 +31,7 @@
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %} 
 {% endblock %}
+
 <script>
     require(["app/admin/menu"], function (menu) {
         menu.run();

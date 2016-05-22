@@ -22,6 +22,13 @@ class Address
     private $id;
 
     /**
+     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="AddressType")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     */
+    private $type;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="street1", type="string", length=64, nullable=true, unique=true)

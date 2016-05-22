@@ -1,5 +1,6 @@
 define({
     root: ({
+        "active": "Active",
         "areyousure": "Are you sure?",
         "cancel": "Cancel",
         "comment": "Comment",
@@ -13,6 +14,7 @@ define({
         "invalid_form": "Invalid data",
         "invite": "Invite",
         "locked": "Locked",
+        "name": "Name",
         "new": "New",
         "okay": "Okay",
         "phone_number": "Phone number",
