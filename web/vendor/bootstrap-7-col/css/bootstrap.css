@@ -5,8 +5,8 @@
  */
 
 /*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=1af23b67e29dcca3af390d8f1862ef85)
- * Config saved to config.json and https://gist.github.com/1af23b67e29dcca3af390d8f1862ef85
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=bf119399843a5bf61fc7fae3806c54c7)
+ * Config saved to config.json and https://gist.github.com/bf119399843a5bf61fc7fae3806c54c7
  */
 /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
@@ -1591,39 +1591,39 @@ pre code {
 .container {
   margin-right: auto;
   margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 @media (min-width: 768px) {
   .container {
-    width: 750px;
+    width: 720px;
   }
 }
 @media (min-width: 992px) {
   .container {
-    width: 970px;
+    width: 940px;
   }
 }
 @media (min-width: 1200px) {
   .container {
-    width: 1170px;
+    width: 1140px;
   }
 }
 .container-fluid {
   margin-right: auto;
   margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 .row {
-  margin-left: -15px;
-  margin-right: -15px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7 {
   position: relative;
   min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7 {
   float: left;
@@ -2743,8 +2743,8 @@ select[multiple].input-lg {
   min-height: 27px;
 }
 .form-horizontal .form-group {
-  margin-left: -15px;
-  margin-right: -15px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 @media (min-width: 768px) {
   .form-horizontal .control-label {
@@ -2754,7 +2754,7 @@ select[multiple].input-lg {
   }
 }
 .form-horizontal .has-feedback .form-control-feedback {
-  right: 15px;
+  right: 0px;
 }
 @media (min-width: 768px) {
   .form-horizontal .form-group-lg .control-label {
@@ -3950,8 +3950,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-collapse {
   overflow-x: visible;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 0px;
+  padding-left: 0px;
   border-top: 1px solid transparent;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -3997,8 +3997,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .container-fluid > .navbar-header,
 .container > .navbar-collapse,
 .container-fluid > .navbar-collapse {
-  margin-right: -15px;
-  margin-left: -15px;
+  margin-right: 0px;
+  margin-left: 0px;
 }
 @media (min-width: 768px) {
   .container > .navbar-header,
@@ -4042,7 +4042,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-brand {
   float: left;
-  padding: 15px 15px;
+  padding: 15px 0px;
   font-size: 18px;
   line-height: 20px;
   height: 50px;
@@ -4057,13 +4057,13 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 @media (min-width: 768px) {
   .navbar > .container .navbar-brand,
   .navbar > .container-fluid .navbar-brand {
-    margin-left: -15px;
+    margin-left: 0px;
   }
 }
 .navbar-toggle {
   position: relative;
   float: right;
-  margin-right: 15px;
+  margin-right: 0px;
   padding: 9px 10px;
   margin-top: 8px;
   margin-bottom: 8px;
@@ -4090,7 +4090,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-nav {
-  margin: 7.5px -15px;
+  margin: 7.5px 0px;
 }
 .navbar-nav > li > a {
   padding-top: 10px;
@@ -4134,9 +4134,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-form {
-  margin-left: -15px;
-  margin-right: -15px;
-  padding: 10px 15px;
+  margin-left: 0px;
+  margin-right: 0px;
+  padding: 10px 0px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -4245,8 +4245,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 @media (min-width: 768px) {
   .navbar-text {
     float: left;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-left: 0px;
+    margin-right: 0px;
   }
 }
 @media (min-width: 768px) {
@@ -4255,7 +4255,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
   .navbar-right {
     float: right !important;
-    margin-right: -15px;
+    margin-right: 0px;
   }
   .navbar-right ~ .navbar-right {
     margin-right: 0;
@@ -4746,8 +4746,8 @@ a.badge:focus {
 .container .jumbotron,
 .container-fluid .jumbotron {
   border-radius: 6px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 .jumbotron .container {
   max-width: 100%;

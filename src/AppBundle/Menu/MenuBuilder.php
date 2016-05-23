@@ -69,6 +69,9 @@ class MenuBuilder implements ContainerAwareInterface
             $menu->setChildrenAttribute( 'class', 'nav navbar-nav' );
             $menu->addChild( 'calendar', ['label' => 'common.calendar', 'route' => 'calendar'] )
                     ->setAttribute( 'icon', 'fa fa-calendar' );
+            $menu->setChildrenAttribute( 'class', 'nav navbar-nav' );
+            $menu->addChild( 'map', ['label' => 'common.map', 'route' => 'map'] )
+                    ->setAttribute( 'icon', 'fa fa-map' );
         }
         return $menu;
     }

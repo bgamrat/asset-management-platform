@@ -4,11 +4,13 @@ namespace AppBundle\Entity;
 
 use AppBundle\Entity\PhoneNumberType;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="phone_number")
+ * @Gedmo\Loggable
  */
 class PhoneNumber
 {

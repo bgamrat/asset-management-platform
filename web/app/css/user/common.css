@@ -1,0 +1,14 @@
+.container.content {
+    margin-top: 60px;
+}
+.hidden {
+    display: none;
+}
+[data-target] {
+    cursor: pointer;
+}
+.loading {
+    height: 500px;
+    width: 100%;
+    background: url('/images/loading.gif') no-repeat center;
+}

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\User;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -25,7 +25,7 @@ class CalendarController extends Controller
             $sunday->add($oneDay);
         }
         
-        return $this->render('calendar/index.html.twig', array(
+        return $this->render('user/calendar/index.html.twig', array(
             'date' => $today,
             'days_of_the_week' => $daysOfTheWeek,
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),

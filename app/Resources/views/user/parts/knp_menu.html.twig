@@ -3,7 +3,7 @@
 {% extends 'knp_menu.html.twig' %}
 
 {% block item %}
-
+{% spaceless %}
     {% import "knp_menu.html.twig" as macros %}
     {% if item.displayed %}
         {%- set attributes = item.attributes %}
@@ -65,17 +65,21 @@
         {{ block('dividerElement') }}
         {%- endif %}
     {% endif %}
+{% endspaceless %}
 {% endblock %}
 
 {% block dividerElement %}
+{% spaceless %}
     {% if item.level == 1 %}
         <li class="divider-vertical"></li>
         {% else %}
         <li class="divider"></li>
         {% endif %}
-    {% endblock %}
+{% endspaceless %}
+{% endblock %}
 
 {% block linkElement %}
+{% spaceless %}
     {% import "knp_menu.html.twig" as macros %}
     <a href="{{ item.uri }}"{{ macros.attributes(item.linkAttributes) }}>
         {% if item.attribute('icon') is not empty  %}
@@ -83,6 +87,7 @@
         {% endif %}
         {{ block('label') }}
     </a>
+{% endspaceless %}
 {% endblock %}
 
 {% block spanElement %}

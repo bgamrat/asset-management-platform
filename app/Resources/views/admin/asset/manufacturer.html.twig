@@ -19,13 +19,18 @@
         </div>
         <div id="manufacturer-view-dialog">
             {{form_start(manufacturer_form)}}
-                <fieldset class="inline-block">
-                    <legend>{{'asset.manufacturer'|trans}}</legend>
-                    <div class="justify">
-                        {{form_row(manufacturer_form.name)}}
-                        {{form_row(manufacturer_form.active,{'attr': {'class': 'single-cb'}})}}
+            <fieldset class="inline-block">
+                <legend>{{'asset.manufacturer'|trans}}</legend>
+                <div class="justify">
+                    {{form_row(manufacturer_form.name)}}
+                    {{form_row(manufacturer_form.active,{'attr': {'class': 'single-cb'}})}}
+                    <div class="contacts">
+                        <span class="sub-form-legend">{{'common.contacts'|trans}}</span>
+                        {{form_row(manufacturer_form.contacts)}}
+                        <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                     </div>
-                </fieldset>
+                </div>
+            </fieldset>
             {{ form_end(manufacturer_form) }}
             <div class="center">
                 <button id="manufacturer-save-btn" type="button">{{ 'common.save'|trans }}</button>

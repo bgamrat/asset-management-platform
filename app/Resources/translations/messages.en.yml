@@ -10,6 +10,10 @@ asset:
     vendors:
         Vendors
         
+calendar:
+    controls:
+        Calendar Controls
+        
 common:
     active:
         Active
@@ -19,6 +23,8 @@ common:
         Address
     admin:
         Admin
+    apply:
+        Apply
     assets:
         Assets
     calendar:
@@ -55,6 +61,8 @@ common:
         Log in
     log_out:
         Log out
+    map:
+        Map
     name:
         Name
     new:
