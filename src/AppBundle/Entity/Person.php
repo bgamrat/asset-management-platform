@@ -29,6 +29,12 @@ class Person
      */
     private $id;
     /**
+     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="PersonType")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     */
+    private $type;
+    /**
      * @var string
      * @Assert\Length(
      *      min = 2,
@@ -44,6 +50,18 @@ class Person
      * @var string
      *
      * @Assert\Length(
+     *      min = 1,
+     *      max = 1,
+     *      exactMessage = "person.middleinitial error.must_be_exactly {{ limit }} common.character"
+     * )
+     * @ORM\Column(name="middleinitial", type="string", length=1, nullable=true, unique=false)
+     * @Gedmo\Versioned
+     */
+    private $middleinitial;
+    /**
+     * @var string
+     *
+     * @Assert\Length(
      *      min = 2,
      *      max = 64,
      *      minMessage = "person.lastname error.must_be_at_least {{ limit }} common.characters",
@@ -54,31 +72,6 @@ class Person
      */
     private $lastname;
     /**
-     * @var string
-     *
-     * @Assert\Length(
-     *      min = 1,
-     *      max = 1,
-     *      exactMessage = "person.middleinitial error.must_be_exactly {{ limit }} common.character"
-     * )
-     * @ORM\Column(name="middleinitial", type="string", length=1, nullable=true, unique=false)
-     * @Gedmo\Versioned
-     */
-    private $middleinitial;
-    /**
-     * @ORM\OneToOne(targetEntity="User", inversedBy="person")
-     * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
-     */
-    private $user = null;
-    /**
-     * @ORM\ManyToMany(targetEntity="Address", cascade={"persist"})
-     * @ORM\JoinTable(name="person_address",
-     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true)}
-     *      )
-     */
-    private $address = null;
-    /**
      * @ORM\ManyToMany(targetEntity="PhoneNumber", cascade={"persist"})
      * @ORM\JoinTable(name="person_phone_number",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
@@ -86,6 +79,33 @@ class Person
      *      )
      */
     private $phoneNumbers = null;
+    /**
+     * @ORM\ManyToMany(targetEntity="Email", cascade={"persist"})
+     * @ORM\JoinTable(name="person_email",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    protected $emails = null;
+    /**
+     * @ORM\ManyToMany(targetEntity="Address", cascade={"persist"})
+     * @ORM\JoinTable(name="person_address",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    private $addresses = null;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active = true;
+    /**
+     * @ORM\OneToOne(targetEntity="User", inversedBy="person")
+     * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
+     */
+    private $user = null;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
@@ -180,14 +200,6 @@ class Person
     }
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
-
-    /**
      * Set fosUserId
      *
      * @param int $user
@@ -224,12 +236,12 @@ class Person
         return $this->active;
     }
 
-    public function getPhonenumbers()
+    public function getPhoneNumbers()
     {
         return $this->phoneNumbers;
     }
 
-    public function addPhonenumber( PhoneNumber $phoneNumber )
+    public function addPhoneNumber( PhoneNumber $phoneNumber )
     {
         if( !$this->phoneNumbers->contains( $phoneNumber ) )
         {
@@ -237,9 +249,45 @@ class Person
         }
     }
 
-    public function removePhonenumber( PhoneNumber $phoneNumber )
+    public function removePhoneNumber( PhoneNumber $phoneNumber )
     {
         $this->phoneNumbers->removeElement( $phoneNumber );
+    }
+
+    public function getEmails()
+    {
+        return $this->emails;
+    }
+
+    public function addEmail( Email $email )
+    {
+        if( !$this->emails->contains( $email ) )
+        {
+            $this->emails->add( $email );
+        }
+    }
+
+    public function removeEmail( Email $email )
+    {
+        $this->email->removeElement( $email );
+    }
+
+    public function getAddresses()
+    {
+        return $this->addresss;
+    }
+
+    public function addAddress( Address $address )
+    {
+        if( !$this->addresss->contains( $address ) )
+        {
+            $this->addresss->add( $address );
+        }
+    }
+
+    public function removeAddress( Address $address )
+    {
+        $this->addresss->removeElement( $address );
     }
 
     public function getDeletedAt()
@@ -250,8 +298,11 @@ class Person
     public function setDeletedAt( $deletedAt )
     {
         $this->deletedAt = $deletedAt;
-        $this->setEnabled( false );
-        $this->setLocked( true );
+        if( $this->user !== null )
+        {
+            $this->user->setEnabled( false );
+            $this->user->setLocked( true );
+        }
     }
 
 }

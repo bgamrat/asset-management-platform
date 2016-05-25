@@ -3,12 +3,14 @@
 namespace AppBundle\Form\Common;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType As SymfonyEmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Doctrine\ORM\EntityRepository;
 
-class ContactType extends AbstractType
+class AppEmailType extends AbstractType
 {
 
     /**
@@ -19,22 +21,16 @@ class ContactType extends AbstractType
     {
         $builder
                 ->add( 'type', EntityType::class, [
-                    'class' => 'AppBundle:ContactType',
+                    'class' => 'AppBundle:EmailType',
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
-                    'label' => 'common.type',
+                    'label' => false,
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'person', PersonType::class, array(
-                    'data_class' => 'AppBundle\Entity\Person',
-                    'by_reference' => true,
-                    'required' => false,
-                    'label' => false,
-                    'empty_data' => null
-                ) )
-                ->add( 'email', TextType::class, ['label' => 'common.email'] )
+                ->add( 'email', SymfonyEmailType::class, [ 
+                ] )
                 ->add( 'comment', TextType::class )
         ;
     }
@@ -45,8 +41,13 @@ class ContactType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Contact'
+            'data_class' => 'AppBundle\Entity\Email'
         ) );
+    }
+
+    public function getName()
+    {
+        return 'email';
     }
 
 }

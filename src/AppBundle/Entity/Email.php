@@ -2,57 +2,44 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Entity\ContactType;
+use AppBundle\Entity\EmailType;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="contact") 
+ * @ORM\Table(name="email")
  * @Gedmo\Loggable
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Contact
+class Email
 {
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="ContactType")
+     * @ORM\ManyToOne(targetEntity="EmailType")
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      */
     private $type;
-    
-    /**
-     * @Assert\NotBlank(message="fos_user.email_blank")
-     * @Assert\Email(message="fos_user.email.invalid")
-     * @Gedmo\Versioned
-     * @var string
-     */
-    protected $email;
 
     /**
-     * @ORM\OneToOne(targetEntity="Person", mappedBy="contact", cascade={"persist"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/^[0-9x\.\,\ \+\(\)-]{2,24}$/", message="error.invalid_email")
+     * @ORM\Column(type="string", length=24, name="email", nullable=false)
      */
-    protected $person = null;
+    private $email;
 
     /**
      * @ORM\Column(type="string", length=24, nullable=true)
      */
     private $comment;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
+
     /**
      * Get id
      *
@@ -68,7 +55,7 @@ class Contact
      *
      * @param int $type
      *
-     * @return Contact
+     * @return Email
      */
     public function setType($type)
     {
@@ -88,27 +75,27 @@ class Contact
     }
 
     /**
-     * Set phoneNumber
+     * Set email
      *
-     * @param string $phoneNumber
+     * @param string $email
      *
-     * @return Contact
+     * @return Email
      */
-    public function setPhonenumber($phoneNumber)
+    public function setEmail($email)
     {
-        $this->contact = $phoneNumber;
+        $this->email = $email;
     
         return $this;
     }
 
     /**
-     * Get phoneNumber
+     * Get email
      *
      * @return string
      */
-    public function getPhonenumber()
+    public function getEmail()
     {
-        return $this->contact;
+        return $this->email;
     }
 
     /**
@@ -116,7 +103,7 @@ class Contact
      *
      * @param string $comment
      *
-     * @return Contact
+     * @return Email
      */
     public function setComment($comment)
     {
@@ -133,17 +120,5 @@ class Contact
     public function getComment()
     {
         return $this->comment;
-    }
-    
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
-    public function setDeletedAt( $deletedAt )
-    {
-        $this->deletedAt = $deletedAt;
-        $this->setEnabled( false );
-        $this->setLocked( true );
     }
 }

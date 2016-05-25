@@ -24,41 +24,41 @@ define([
         lib, core) {
     "use strict";
 
-    var phoneNumberId = 0;
+    var emailId = 0;
     var dataPrototype;
     var prototypeNode, prototypeContent;
     var base, select, store;
-    var typeSelect = [], numberInput = [], commentInput = [];
+    var typeSelect = [], emailInput = [], commentInput = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__phone__/g, phoneNumberId);
+        prototypeContent = dataPrototype.replace(/__email__/g, emailId);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
-        var base = getDivId() + '_' + phoneNumberId + '_';
-        typeSelect[phoneNumberId] = new Select({
+        var base = prototypeNode.id + "_" + emailId + "_";
+        typeSelect[emailId] = new Select({
             store: store,
             placeholder: core.type,
             required: true
         }, base + "type");
-        typeSelect[phoneNumberId].startup();
-        numberInput[phoneNumberId] = new ValidationTextBox({
-            placeholder: core.phone_number,
-            trim: true,
-            pattern: "^[0-9x\.\,\ \+\(\)-]{2,24}$",
-            required: true
-        }, base + "phonenumber");
-        numberInput[phoneNumberId].startup();
-        commentInput[phoneNumberId] = new ValidationTextBox({
+        typeSelect[emailId].startup();
+        emailInput[emailId] = new ValidationTextBox({
+            placeholder: core.email,
+            required: false,
+            pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$",
+            trim: true
+        }, base + "email");
+        emailInput[emailId].startup();
+        commentInput[emailId] = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
             required: false
         }, base + "comment");
-        commentInput[phoneNumberId].startup();
-        phoneNumberId++;
+        commentInput[emailId].startup();
+        emailId++;
     }
 
     function run() {
@@ -74,8 +74,8 @@ define([
             prototypeNode = dom.byId(getDivId());
         }
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__phone__/g, phoneNumberId);
-        base = prototypeNode.id + "_" + phoneNumberId;
+        prototypeContent = dataPrototype.replace(/__email__/g, emailId);
+        base = prototypeNode.id + "_" + emailId;
         select = base + "_type";
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
         data = JSON.parse(domAttr.get(select, "data-options"));
@@ -89,14 +89,14 @@ define([
             data: storeData});
         store = new ObjectStore({objectStore: memoryStore});
 
-        query('[id$="phone_numbers"]').forEach(function (node, index) {
+        query('[id$="emails"]').forEach(function (node, index) {
             if( index !== 0 ) {
                 cloneNewNode();
             }
             createDijits();
         });
 
-        addOneMoreControl = query('.phone-numbers .add-one-more-row');
+        addOneMoreControl = query('.emails .add-one-more-row');
                 
         addOneMoreControl.on("click", function (event) {
             var target = event.target.parentNode;
@@ -124,7 +124,7 @@ define([
             returnData.push(
                     {
                         "type": typeSelect[i].get('value'),
-                        "phonenumber": numberInput[i].get('value'),
+                        "email": emailInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
@@ -136,7 +136,7 @@ define([
         if( divIdInUse !== null ) {
             q = divIdInUse;
         } else {
-            q = query('[id$="phone_numbers"]');
+            q = query('[id$="emails"]');
             if( q.length > 0 ) {
                 q = q[0];
             }
@@ -145,36 +145,36 @@ define([
     }
 
     function setDivId(divId) {
-        divIdInUse = divId + '_phone_numbers';
+        divIdInUse = divId + '_emails';
     }
 
-    function setData(phoneNumbers) {
+    function setData(emails) {
         var i, p, obj;
 
-        query(".form-row.phone-number", prototypeNode.parentNode).forEach(function (node, index) {
+        query(".form-row.email", prototypeNode.parentNode).forEach(function (node, index) {
             if( index !== 0 ) {
                 destroyRow(index, node);
             }
         });
 
-        if( typeof phoneNumbers === "object" && phoneNumbers !== null && phoneNumbers.length > 0 ) {
+        if( typeof emails === "object" && emails !== null && emails.length > 0 ) {
 
             i = 0;
-            phoneNumberId = 1;
-            for( p in phoneNumbers ) {
+            emailId = 1;
+            for( p in emails ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();
                 }
-                obj = phoneNumbers[p];
+                obj = emails[p];
                 typeSelect[i].set('value', obj.type);
-                numberInput[i].set('value', obj.phonenumber);
+                emailInput[i].set('value', obj.email);
                 commentInput[i].set('value', obj.comment);
                 i++;
             }
         } else {
             typeSelect[0].set('value', "");
-            numberInput[0].set('value', "");
+            emailInput[0].set('value', "");
             commentInput[0].set('value', "");
         }
     }
@@ -182,8 +182,8 @@ define([
     function destroyRow(id, target) {
         typeSelect[id].destroyRecursive();
         typeSelect.splice(id, 1);
-        numberInput[id].destroyRecursive();
-        numberInput.splice(id, 1);
+        emailInput[id].destroyRecursive();
+        emailInput.splice(id, 1);
         commentInput[id].destroyRecursive();
         commentInput.splice(id, 1);
         domConstruct.destroy(target);

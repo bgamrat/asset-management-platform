@@ -1,0 +1,10 @@
+#manufacturer-view-dialog {
+    width: 660px;
+}
+.manufacturer-name {
+    font-size: 1.5em;
+    display: inline-block;
+}
+.manufacturer-name .dijitTextBox {
+    width: 225px;
+}

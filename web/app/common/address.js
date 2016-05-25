@@ -35,12 +35,12 @@ define([
     var addOneMoreControl = null;
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__name__/g, addressId);
+        prototypeContent = dataPrototype.replace(/__address__/g, addressId);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
-        var base = prototypeNode.id + "_" + addressId + "_";
+        var base = getDivId() + '_' + addressId + '_';
         typeSelect[addressId] = new Select({
             store: typeStore,
             required: true
@@ -48,7 +48,8 @@ define([
         typeSelect[addressId].startup();
         street1Input[addressId] = new ValidationTextBox({
             trim: true,
-            required: false
+            required: false,
+            placeholder: core.street
         }, base + "street1");
         street1Input[addressId].startup();
         street2Input[addressId] = new ValidationTextBox({
@@ -58,21 +59,24 @@ define([
         street2Input[addressId].startup();
         cityInput[addressId] = new ValidationTextBox({
             trim: true,
-            required: true
+            required: true,
+            placeholder: core.city
         }, base + "city");
         cityInput[addressId].startup();
         stateProvinceInput[addressId] = new ValidationTextBox({
             trim: true,
             required: true,
             uppercase: true,
-            maxLength: 2
+            maxLength: 2,
+            placeholder: core.state_province
         }, base + "state_province");
         stateProvinceInput[addressId].startup();
         postalCodeInput[addressId] = new ValidationTextBox({
             trim: true,
             pattern: "^[0-9A-Z-]{2,12}$",
             required: false,
-            uppercase: true
+            uppercase: true,
+            placeholder: core.postal_code
         }, base + "postal_code");
         postalCodeInput[addressId].startup();
         countrySelect[addressId] = new Select({
@@ -94,12 +98,16 @@ define([
         }
 
         prototypeNode = dom.byId(getDivId());
+        if (prototypeNode === null) {
+            setDivId(arguments[0]+'_0');
+            prototypeNode = dom.byId(getDivId());
+        }
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__name__/g, addressId);
+        prototypeContent = dataPrototype.replace(/__address__/g, addressId);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
         
-        base = prototypeNode.id + "_" + addressId + "_";
-        select = base + "type";
+        base = prototypeNode.id + "_" + addressId;
+        select = base + "_type";
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         typeStoreData = [];
@@ -111,7 +119,7 @@ define([
             data: typeStoreData});
         typeStore = new ObjectStore({objectStore: typeMemoryStore});
         
-        select = base + "country";
+        select = base + "_country";
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         countryStoreData = [];
@@ -182,7 +190,7 @@ define([
     }
 
     function setDivId(divId) {
-        divIdInUse = divId;
+        divIdInUse = divId + '_address';
     }
 
     function setData(address) {

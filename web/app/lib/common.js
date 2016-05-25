@@ -72,7 +72,8 @@ define([
         xhrError: xhrError,
         constant: {
             MAX_PHONE_NUMBERS: 5,
-            MAX_ADDRESSES: 3
+            MAX_ADDRESSES: 3,
+            MAX_CONTACTS: 5
         }
     };
 });

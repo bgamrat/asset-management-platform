@@ -32,7 +32,8 @@ class VendorType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'mapped' => false
+                    'mapped' => false,
+                    'prototype_name' => '__contact__'
                 ] )
         ;
     }

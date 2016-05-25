@@ -29,10 +29,11 @@ fieldset label {
 }
 fieldset legend {
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.3em;
     border-bottom: 1px solid #ddd;
     display: inline-block;
     width: 95%;
+    margin-bottom: 7px
 }
 fieldset .sub-form-legend {
     font-weight: bold;
@@ -53,21 +54,28 @@ fieldset .sub-form-legend {
 .form-row {
     margin: 5px 0;
 }
-.form-row .phone-numbers .type-select,
-.form-row .phone-numbers .phone-number {
+.form-row .phone-numbers .type-select {
     width: 100px;
 }
-.person .name,
-.person .addresses {
+.addresses {
     width: 300px;
-}
-.person .address {
-    display: inline-block;
-    width: 290px;
 }
 .addresses .remove-form-row {
     display: inline-block;
     padding-top: 10px;
     vertical-align: top;
     width: 10px;
+}
+.address {
+    display: inline-block;
+    width: 290px;
+}
+.contacts .type,
+.contacts .email,
+.contacts .person,
+.contacts .comment {
+    vertical-align: top
+}
+.form-row.address > * {
+    display:block;
 }

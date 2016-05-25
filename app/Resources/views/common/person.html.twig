@@ -1,10 +1,15 @@
 <fieldset class="person inline-block">
     <legend>{{'common.person'|trans}}</legend>
-    <div class="name justify">
-        {{form_row(form.firstname)}}
-        {{form_row(form.middleinitial)}}
-        {{form_row(form.lastname)}}
+    <div class="name">
+        {{form_widget(form.type)}}
+        {{form_widget(form.firstname)}}
+        {{form_widget(form.middleinitial)}}
+        {{form_widget(form.lastname)}}
     </div>
-    {% include 'common/address.html.twig' with { 'form' : form.address } %}
+    <div class="comment">
+        {{form_widget(form.comment)}}
+    </div>
+    {% include 'common/emails.html.twig' with {'form': form.emails } %}
     {% include 'common/phone_numbers.html.twig' with {'form': form.phone_numbers } %}
+    {% include 'common/address.html.twig' with { 'form' : form.address } %}
 </fieldset>

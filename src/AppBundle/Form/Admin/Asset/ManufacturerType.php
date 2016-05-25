@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use AppBundle\Form\Common\ContactType;
+use AppBundle\Form\Common\PersonType;
 
 class ManufacturerType extends AbstractType
 {
@@ -23,8 +23,8 @@ class ManufacturerType extends AbstractType
         $builder
                 ->add( 'name', TextType::class, ['label' => 'common.name'] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
-                ->add( 'contacts', CollectionType::class, [
-                    'entry_type' => ContactType::class,
+                ->add( 'person', CollectionType::class, [
+                    'entry_type' => PersonType::class,
                     'by_reference' => true,
                     'required' => false,
                     'label' => false,
@@ -32,7 +32,8 @@ class ManufacturerType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'mapped' => false
+                    'mapped' => false,
+                    'prototype_name' => '__person__'
                 ] )
         ;
     }

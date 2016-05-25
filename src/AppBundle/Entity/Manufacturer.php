@@ -39,9 +39,9 @@ class Manufacturer
      */
     private $active = true;
     /**
-     * @ORM\ManyToMany(targetEntity="Contact", cascade={"persist"})
-     * @ORM\JoinTable(name="manufacturer_contact",
-     *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
+     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
+     * @ORM\JoinTable(name="manufacturer_person",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", unique=true)}
      *      )
      */

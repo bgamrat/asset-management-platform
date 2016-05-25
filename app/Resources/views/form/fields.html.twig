@@ -35,28 +35,78 @@
 </select>
 {%- endblock choice_widget_collapsed -%}
 
-{% block _user_person_address_entry_row %}
+{%- block form_row -%}
+    <div{% if attr.class is defined %} class="{{attr.class|raw}}"{% endif %}>
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{% block _address_entry_row %}
 {% spaceless %}
-    <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__name__"><i class="fa fa-remove"></i></div>
-    <div class="form-row address justify">
-        {{ form_row(form.type) }}
-        {{ form_row(form.street1) }}
-        {{ form_row(form.street2) }}
-        {{ form_row(form.city) }}
-        {{ form_row(form.state_province) }}
-        {{ form_row(form.postal_code) }}
-        {{ form_row(form.country) }}
+    <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__address__"><i class="fa fa-remove"></i></div>
+    <div class="form-row address">
+        <div>{{ form_widget(form.type) }}</div>
+        <div>{{ form_widget(form.street1) }}</div>
+        <div>{{ form_widget(form.street2) }}</div>
+        <div>{{ form_widget(form.city) }}</div>
+        <div>{{ form_widget(form.state_province) }}</div>
+        <div>{{ form_widget(form.postal_code) }}</div>
+        <div>{{ form_widget(form.country) }}</div>
     </div>
 {% endspaceless %}
 {% endblock %}
 
-{% block _user_person_phone_numbers_entry_row %}
+{% block _phone_numbers_entry_row %}
 {% spaceless %}
     <div class="form-row phone-number">
         <span class="type-select">{{ form_widget(form.type) }}</span>
         <span class="input">{{ form_widget(form.phonenumber) }}</span>
         <span class="comment">{{ form_widget(form.comment) }}</span>
-        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__name__"><i class="fa fa-remove"></i></span>
+        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__phone__"><i class="fa fa-remove"></i></span>
     </div>
 {% endspaceless %}
 {% endblock %}
+
+{% block _emails_entry_row %}
+{% spaceless %}
+    <div class="form-row email">
+        <span class="type-select">{{ form_widget(form.type) }}</span>
+        <span class="input">{{ form_widget(form.email) }}</span>
+        <span class="comment">{{ form_widget(form.comment) }}</span>
+        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="email-__phone__"><i class="fa fa-remove"></i></span>
+    </div>
+{% endspaceless %}
+{% endblock %}
+
+{% block _manufacturer_person_entry_row %}
+    <div class="form-row contacts">
+        {% include 'common/person.html.twig' %}
+    </div>
+{% endblock %}
+
+{% block _manufacturer_person_entry_phone_numbers_entry_row %}
+{{ block('_phone_numbers_entry_row') }}
+{% endblock %}
+
+{% block _manufacturer_person_entry_emails_entry_row %}
+{{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _manufacturer_person_entry_address_entry_row %}
+{{ block('_address_entry_row') }}
+{% endblock %}
+
+{% block _user_person_phone_numbers_entry_row %}
+{{ block('_phone_numbers_entry_row') }}
+{% endblock %}
+
+{% block _user_person_emails_entry_row %}
+{{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _user_person_address_entry_row %}
+{{ block('_address_entry_row') }}
+{% endblock %}
+

@@ -24,6 +24,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
+    "app/common/person",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -31,7 +32,7 @@ define([
 ], function (declare, lang, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button, Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        lib, libGrid, core) {
+        person, lib, libGrid, core) {
     function run() {
         var action = null;
 
@@ -226,6 +227,8 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
+        
+        person.run('manufacturer_');
 
         lib.pageReady();
     }

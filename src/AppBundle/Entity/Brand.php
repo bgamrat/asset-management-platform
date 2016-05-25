@@ -7,14 +7,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * Vendor
+ * Brand
  *
- * @ORM\Table(name="vendor")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\VendorRepository")
+ * @ORM\Table(name="brand")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BrandRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Vendor
+class Brand
 {
 
     /**
@@ -60,7 +60,7 @@ class Vendor
      *
      * @param string $name
      *
-     * @return Vendor
+     * @return Brand
      */
     public function setName( $name )
     {

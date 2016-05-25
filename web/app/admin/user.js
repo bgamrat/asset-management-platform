@@ -37,8 +37,6 @@ define([
     function run() {
         var action = null;
 
-        person.run();
-
         var userViewDialog = new Dialog({
             title: core.view
         }, "user-view-dialog");
@@ -163,6 +161,7 @@ define([
             } else {
                 lib.textError(core.invalid_form)
             }
+            
         });
 
 
@@ -345,6 +344,7 @@ define([
             }));
         });
 
+        person.run('user_');
         lib.pageReady();
     }
     return {
