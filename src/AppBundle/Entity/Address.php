@@ -24,6 +24,7 @@ class Address
     /**
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="AddressType")
+     * @ORM\OrderBy({"type" = "ASC"})
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      */
     private $type;

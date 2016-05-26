@@ -31,6 +31,7 @@ class Person
     /**
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="PersonType")
+     * @ORM\OrderBy({"type" = "ASC"})
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      */
     private $type;

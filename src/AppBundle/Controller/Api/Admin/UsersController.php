@@ -105,13 +105,13 @@ class UsersController extends FOSRestController
                     'middleinitial' => $person->getMiddleinitial(),
                     'lastname' => $person->getLastname()
                 ];
-                $phoneNumbers = $person->getPhonenumbers();
+                $phoneNumbers = $person->getPhoneNumbers();
                 if ($phoneNumbers !== null) {
-                    $data['person']['phonenumbers'] = [];
+                    $data['person']['phone_numbers'] = [];
                     foreach ($phoneNumbers as $phone) {
-                        $data['person']['phonenumbers'][] =
+                        $data['person']['phone_numbers'][] =
                                 ['type' => $phone->getType(),
-                                    'phonenumber' => $phone->getPhonenumber(),
+                                    'phone_number' => $phone->getPhoneNumber(),
                                     'comment' => $phone->getComment()];
                     }
                     

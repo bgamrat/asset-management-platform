@@ -25,12 +25,28 @@ define([
     "use strict";
 
     var phoneNumberId = 0;
-    var dataPrototype;
-    var prototypeNode, prototypeContent;
-    var base, select, store;
+    var dataPrototype, prototypeNode, prototypeContent;
+    var store;
     var typeSelect = [], numberInput = [], commentInput = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
+
+    function getDivId() {
+        var q;
+        if( divIdInUse !== null ) {
+            q = divIdInUse;
+        } else {
+            q = query('[id$="phone_numbers"]');
+            if( q.length > 0 ) {
+                q = q[0];
+            }
+        }
+        return q;
+    }
+
+    function setDivId(divId) {
+        divIdInUse = divId + '_phone_numbers';
+    }
 
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__phone__/g, phoneNumberId);
@@ -61,6 +77,16 @@ define([
         phoneNumberId++;
     }
 
+    function destroyRow(id, target) {
+        typeSelect[id].destroyRecursive();
+        typeSelect.splice(id, 1);
+        numberInput[id].destroyRecursive();
+        numberInput.splice(id, 1);
+        commentInput[id].destroyRecursive();
+        commentInput.splice(id, 1);
+        domConstruct.destroy(target);
+    }
+
     function run() {
 
         var base, select, data, storeData, d, memoryStore;
@@ -69,15 +95,28 @@ define([
         }
 
         prototypeNode = dom.byId(getDivId());
-        if (prototypeNode === null) {
-            setDivId(arguments[0]+'_0');
+        if( prototypeNode === null ) {
+            setDivId(arguments[0] + '_0');
             prototypeNode = dom.byId(getDivId());
         }
+
+        if( prototypeNode === null ) {
+            lib.textError(getDivId() + " not found");
+            return;
+        }
+
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__phone__/g, phoneNumberId);
+        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+
         base = prototypeNode.id + "_" + phoneNumberId;
         select = base + "_type";
-        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+
+        if( dom.byId(select) === null ) {
+            lib.textError(base + " not found");
+            return;
+        }
+
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         storeData = [];
@@ -89,20 +128,15 @@ define([
             data: storeData});
         store = new ObjectStore({objectStore: memoryStore});
 
-        query('[id$="phone_numbers"]').forEach(function (node, index) {
-            if( index !== 0 ) {
-                cloneNewNode();
-            }
-            createDijits();
-        });
+        createDijits();
 
         addOneMoreControl = query('.phone-numbers .add-one-more-row');
-                
+
         addOneMoreControl.on("click", function (event) {
             var target = event.target.parentNode;
             cloneNewNode();
             createDijits();
-            if (typeSelect.length >= lib.constant.MAX_PHONE_NUMBERS) {
+            if( typeSelect.length >= lib.constant.MAX_PHONE_NUMBERS ) {
                 addOneMoreControl.classList.add("hidden");
             }
         });
@@ -112,7 +146,7 @@ define([
             var targetParent = target.parentNode;
             var id = parseInt(target.id.replace(/\D/g, ''));
             destroyRow(id, targetParent);
-            if (typeSelect.length <= lib.constant.MAX_PHONE_NUMBERS) {
+            if( typeSelect.length <= lib.constant.MAX_PHONE_NUMBERS ) {
                 addOneMoreControl.classList.remove("hidden");
             }
         });
@@ -124,28 +158,11 @@ define([
             returnData.push(
                     {
                         "type": typeSelect[i].get('value'),
-                        "phonenumber": numberInput[i].get('value'),
+                        "phone_number": numberInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
         return returnData;
-    }
-
-    function getDivId() {
-        var q;
-        if( divIdInUse !== null ) {
-            q = divIdInUse;
-        } else {
-            q = query('[id$="phone_numbers"]');
-            if( q.length > 0 ) {
-                q = q[0];
-            }
-        }
-        return q;
-    }
-
-    function setDivId(divId) {
-        divIdInUse = divId + '_phone_numbers';
     }
 
     function setData(phoneNumbers) {
@@ -168,7 +185,7 @@ define([
                 }
                 obj = phoneNumbers[p];
                 typeSelect[i].set('value', obj.type);
-                numberInput[i].set('value', obj.phonenumber);
+                numberInput[i].set('value', obj.phone_number);
                 commentInput[i].set('value', obj.comment);
                 i++;
             }
@@ -178,21 +195,10 @@ define([
             commentInput[0].set('value', "");
         }
     }
-    
-    function destroyRow(id, target) {
-        typeSelect[id].destroyRecursive();
-        typeSelect.splice(id, 1);
-        numberInput[id].destroyRecursive();
-        numberInput.splice(id, 1);
-        commentInput[id].destroyRecursive();
-        commentInput.splice(id, 1);
-        domConstruct.destroy(target);
-    }
-    
+
     return {
-        getData: getData,
         run: run,
+        getData: getData,
         setData: setData
     }
-}
-);
+});

@@ -25,6 +25,7 @@ class PhoneNumber
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="PhoneNumberType")
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     * @ORM\OrderBy({"type" = "ASC"})
      */
     private $type;
 
@@ -81,7 +82,7 @@ class PhoneNumber
      *
      * @return PhoneNumber
      */
-    public function setPhonenumber($phoneNumber)
+    public function setPhoneNumber($phoneNumber)
     {
         $this->phone_number = $phoneNumber;
     
@@ -93,7 +94,7 @@ class PhoneNumber
      *
      * @return string
      */
-    public function getPhonenumber()
+    public function getPhoneNumber()
     {
         return $this->phone_number;
     }

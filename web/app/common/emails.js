@@ -27,10 +27,18 @@ define([
     var emailId = 0;
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var base, select, store;
+    var store;
     var typeSelect = [], emailInput = [], commentInput = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
+
+    function getDivId() {
+        return divIdInUse;
+    }
+
+    function setDivId(divId) {
+        divIdInUse = divId + '_emails';
+    }
 
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__email__/g, emailId);
@@ -59,6 +67,16 @@ define([
         }, base + "comment");
         commentInput[emailId].startup();
         emailId++;
+    }
+    
+    function destroyRow(id, target) {
+        typeSelect[id].destroyRecursive();
+        typeSelect.splice(id, 1);
+        emailInput[id].destroyRecursive();
+        emailInput.splice(id, 1);
+        commentInput[id].destroyRecursive();
+        commentInput.splice(id, 1);
+        domConstruct.destroy(target);
     }
 
     function run() {
@@ -89,12 +107,7 @@ define([
             data: storeData});
         store = new ObjectStore({objectStore: memoryStore});
 
-        query('[id$="emails"]').forEach(function (node, index) {
-            if( index !== 0 ) {
-                cloneNewNode();
-            }
-            createDijits();
-        });
+        createDijits();
 
         addOneMoreControl = query('.emails .add-one-more-row');
                 
@@ -131,23 +144,6 @@ define([
         return returnData;
     }
 
-    function getDivId() {
-        var q;
-        if( divIdInUse !== null ) {
-            q = divIdInUse;
-        } else {
-            q = query('[id$="emails"]');
-            if( q.length > 0 ) {
-                q = q[0];
-            }
-        }
-        return q;
-    }
-
-    function setDivId(divId) {
-        divIdInUse = divId + '_emails';
-    }
-
     function setData(emails) {
         var i, p, obj;
 
@@ -179,19 +175,9 @@ define([
         }
     }
     
-    function destroyRow(id, target) {
-        typeSelect[id].destroyRecursive();
-        typeSelect.splice(id, 1);
-        emailInput[id].destroyRecursive();
-        emailInput.splice(id, 1);
-        commentInput[id].destroyRecursive();
-        commentInput.splice(id, 1);
-        domConstruct.destroy(target);
-    }
-    
     return {
-        getData: getData,
         run: run,
+        getData: getData,
         setData: setData
     }
 }

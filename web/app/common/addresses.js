@@ -25,14 +25,21 @@ define([
     "use strict";
 
     var addressId = 0;
-    var dataPrototype;
-    var prototypeNode, prototypeContent;
-    var base, select, countryStore, typeStore;
+    var dataPrototype, prototypeNode, prototypeContent;
+    var countryStore, typeStore;
     var typeSelect = [];
     var street1Input = [], street2Input = [], cityInput = [];
     var stateProvinceInput = [], postalCodeInput = [], countrySelect = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
+
+    function setDivId(divId) {
+        divIdInUse = divId + '_addresses';
+    }
+
+    function getDivId() {
+        return divIdInUse;
+    }
 
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__address__/g, addressId);
@@ -82,10 +89,25 @@ define([
         countrySelect[addressId] = new Select({
             store: countryStore,
             required: true,
-            value: 'US'
         }, base + "country");
         countrySelect[addressId].startup();
         addressId++;
+    }
+    
+    function destroyRow(id, target) {
+        street1Input[id].destroyRecursive();
+        street1Input.splice(id, 1);
+        street2Input[id].destroyRecursive();
+        street2Input.splice(id, 1);
+        cityInput[id].destroyRecursive();
+        cityInput.splice(id, 1);
+        stateProvinceInput[id].destroyRecursive();
+        stateProvinceInput.splice(id, 1);
+        postalCodeInput[id].destroyRecursive();
+        postalCodeInput.splice(id, 1);
+        countrySelect[id].destroyRecursive();
+        countrySelect.splice(id, 1);
+        domConstruct.destroy(target);
     }
 
     function run() {
@@ -93,6 +115,7 @@ define([
         var base, select, data, d;
         var countryStoreData, countryMemoryStore;
         var typeStoreData, typeMemoryStore;
+        
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
@@ -102,12 +125,24 @@ define([
             setDivId(arguments[0]+'_0');
             prototypeNode = dom.byId(getDivId());
         }
+        
+        if (prototypeNode === null) {
+            lib.textError(getDivId() + " not found");
+            return;
+        }
+        
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__address__/g, addressId);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
         
         base = prototypeNode.id + "_" + addressId;
         select = base + "_type";
+        
+        if (dom.byId(select) === null) {
+            lib.textError(select + " not found");
+            return;
+        } 
+        
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         typeStoreData = [];
@@ -124,6 +159,9 @@ define([
         // Convert the data to an array of objects
         countryStoreData = [];
         for( d in data ) {
+            if (data[d].value === "US") {
+                data[d].selected = true;
+            }
             countryStoreData.push(data[d]);
         }
         countryMemoryStore = new Memory({
@@ -131,14 +169,9 @@ define([
             data: countryStoreData});
         countryStore = new ObjectStore({objectStore: countryMemoryStore});
 
-        query('[id$="address"]').forEach(function (node, index) {
-            if( index !== 0 ) {
-                cloneNewNode();
-            }
-            createDijits();
-        });
+        createDijits();
 
-        addOneMoreControl = query('.addresses .add-one-more-row');
+        addOneMoreControl = query('.addresses .add-one-more-row', getDivId());
 
         addOneMoreControl.on("click", function (event) {
             var target = event.target.parentNode;
@@ -176,22 +209,6 @@ define([
         return returnData;
     }
 
-    function getDivId() {
-        var q;
-        if( divIdInUse !== null ) {
-            q = divIdInUse;
-        } else {
-            q = query('[id$="addresses"]');
-            if( q.length > 0 ) {
-                q = q[0];
-            }
-        }
-        return q;
-    }
-
-    function setDivId(divId) {
-        divIdInUse = divId + '_address';
-    }
 
     function setData(address) {
         var i, p, obj;
@@ -230,25 +247,9 @@ define([
         }
     }
 
-    function destroyRow(id, target) {
-        street1Input[id].destroyRecursive();
-        street1Input.splice(id, 1);
-        street2Input[id].destroyRecursive();
-        street2Input.splice(id, 1);
-        cityInput[id].destroyRecursive();
-        cityInput.splice(id, 1);
-        stateProvinceInput[id].destroyRecursive();
-        stateProvinceInput.splice(id, 1);
-        postalCodeInput[id].destroyRecursive();
-        postalCodeInput.splice(id, 1);
-        countrySelect[id].destroyRecursive();
-        countrySelect.splice(id, 1);
-        domConstruct.destroy(target);
-    }
-
     return {
-        getData: getData,
         run: run,
+        getData: getData,
         setData: setData
     }
 }

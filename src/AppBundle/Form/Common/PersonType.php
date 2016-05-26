@@ -60,7 +60,7 @@ class PersonType extends AbstractType
                     'mapped' => false,
                     'prototype_name' => '__email__'
                     ] )
-                ->add( 'address', CollectionType::class, [
+                ->add( 'addresses', CollectionType::class, [
                     'entry_type' => AddressType::class,
                     'by_reference' => true,
                     'required' => false,

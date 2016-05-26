@@ -14,14 +14,14 @@ define([
     "dojo/store/Memory",
     "app/common/emails",
     "app/common/phoneNumbers",
-    "app/common/address",
+    "app/common/addresses",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domConstruct, on,
         registry, TextBox, ValidationTextBox, Textarea, Select,
         ObjectStore, Memory,
-        emails, phoneNumbers, address,
+        emails, phoneNumbers, addresses,
         lib, core) {
 
     "use strict";
@@ -32,6 +32,14 @@ define([
     var prototypeNode, prototypeContent;
     var store;
     var personId = 0;
+       
+    function setDivId(divId) {
+        divIdInUse = divId + 'person';
+    }
+
+    function getDivId() {
+        return divIdInUse;
+    }
 
     function createDijits() {
         var base = getDivId() + '_';
@@ -92,12 +100,17 @@ define([
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
             prototypeContent = dataPrototype.replace(/__person__/g, personId);
             domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-            base = prototypeNode.id + "_" + personId + "_";
+            base = prototypeNode.id + "_0_";
         } else {
             base = getDivId()+'_';
         }
 
         select = base + "type";
+        
+        if (dom.byId(select) === null) {
+            lib.textError(select + " not found");
+            return;
+        }
         
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
@@ -113,9 +126,9 @@ define([
         createDijits();
         emails.run(getDivId());
         phoneNumbers.run(getDivId());
-        address.run(getDivId());
+        addresses.run(getDivId());
     }
-
+    
     function getData() {
         return {
             "type": typeSelect.get('value'),
@@ -124,49 +137,48 @@ define([
             "lastname": lastnameInput.get('value'),
             "emails": emails.getData(),
             "phone_numbers": phoneNumbers.getData(),
-            "address": address.getData()
+            "addresses": addresses.getData()
         }
     }
-
-    function getDivId() {
-        var q;
-        if( divIdInUse !== null ) {
-            q = divIdInUse;
-        } else {
-            q = query('[id$="person"]');
-            if( q.length > 0 ) {
-                q = q[0];
-            }
-        }
-        return q;
-    }
-
-    function setDivId(divId) {
-        divIdInUse = divId + 'person';
-    }
+    
     function setData(person) {
         if( typeof person === "object" ) {
             if( person === null ) {
                 person = {};
             }
             person = lang.mixin({firstname: '', middleinitial: '', lastname: ''}, person);
+            typeSelect.set('value', person.type);
             firstnameInput.set('value', person.firstname);
             middleInitialInput.set('value', person.middleinitial);
             lastnameInput.set('value', person.lastname);
-            if( typeof person.phonenumbers !== "undefined" ) {
-                phoneNumbers.setData(person.phonenumbers);
+            if( typeof person.phone_numbers !== "undefined" ) {
+                phoneNumbers.setData(person.phone_numbers);
             } else {
                 phoneNumbers.setData(null);
             }
+            if( typeof person.emails !== "undefined" ) {
+                emails.setData(person.emails);
+            } else {
+                emails.setData(null);
+            }
+            if( typeof person.addresses !== "undefined" ) {
+                addresses.setData(person.addresses);
+            } else {
+                addresses.setData(null);
+            }
         } else {
+            typeSelect.set('value','');
             firstnameInput.set('value', '');
             middleInitialInput.set('value', '');
             lastnameInput.set('value', '');
+            phoneNumbers.setData(null);
+            emails.setData(null);
+            addresses.setData(null);
         }
     }
-    return {
-        getData: getData,
+    return { 
         run: run,
+        getData: getData,
         setData: setData
     }
 }
