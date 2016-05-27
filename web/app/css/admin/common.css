@@ -1,11 +1,10 @@
 .hidden {
     display: none;
 }
-/*
 .hide-on-load {
     position: relative;
     left: -10000px;
-}*/
+}
 .inline-block {
     display: inline-block;
     vertical-align: top;
@@ -17,13 +16,11 @@
     -webkit-justify-content: space-between;
     margin: 5px;
 }
-/*
 .loading {
     height: 500px;
     width: 100%;
     background: url('/images/loading.gif') no-repeat center;
 }
-*/
 .text-right {
     text-align:right;
 }
@@ -39,4 +36,8 @@
 }
 .dijitSelect .dijitButtonContents {
     width: 160px;
+}
+.form-row.comment .dijitTextBox.dijitTextArea {
+    height:50px;
+    width: 300px;
 }

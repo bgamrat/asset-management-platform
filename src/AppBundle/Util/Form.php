@@ -33,10 +33,9 @@ class Form
     public function validateFormData( BaseForm $form, $data )
     {       
         $form->submit( $data );
-       
         if( !$form->isValid() )
         {
-            throw new \Exception($form->getErrors(true,true));
+            throw new \Exception($form->getErrors(true,true).PHP_EOL.'('.$form->getName().')');
         }
         return true;
     }

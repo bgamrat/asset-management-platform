@@ -18,27 +18,27 @@ class PhoneNumber
         if ($entity === null) {
             throw new \Exception('error.cannot_be_null');
         }
-        $existingPhoneNumbers = $entity->getPhonenumbers();
+        $existingPhoneNumbers = $entity->getPhoneNumbers();
         $existing = [];
         foreach ($existingPhoneNumbers as $p) {
-            $existing[preg_replace('/\D/','',$p->getPhonenumber())] = $p;
+            $existing[preg_replace('/\D/','',$p->getPhoneNumber())] = $p;
         }
         foreach($data as $phone) {
-            $digits = preg_replace('/\D/','',$phone['phonenumber']);
+            $digits = preg_replace('/\D/','',$phone['phone_number']);
             $key = array_search($digits,array_keys($existing),false);
             if ($key !== false) {
                 $phoneNumber = $existing[$digits];
                 unset($existing[$digits]);
             } else {
                 $phoneNumber = new PhoneNumberEntity();
-                $entity->addPhonenumber($phoneNumber);
+                $entity->addPhoneNumber($phoneNumber);
             }
             $phoneNumber->setType($phone['type']);
-            $phoneNumber->setPhoneNumber($phone['phonenumber']);
+            $phoneNumber->setPhoneNumber($phone['phone_number']);
             $phoneNumber->setComment($phone['comment']);
         }
         foreach ($existing as $leftOver) {
-            $entity->removePhonenumber($leftOver);
+            $entity->removePhoneNumber($leftOver);
         }
     }
 }

@@ -66,7 +66,7 @@ define([
             trim: true,
             pattern: "^[0-9x\.\,\ \+\(\)-]{2,24}$",
             required: true
-        }, base + "phonenumber");
+        }, base + "phone_number");
         numberInput[phoneNumberId].startup();
         commentInput[phoneNumberId] = new ValidationTextBox({
             placeholder: core.comment,

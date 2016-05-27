@@ -4,6 +4,9 @@ namespace AppBundle\Util;
 
 use AppBundle\Entity\Person As PersonEntity;
 use AppBundle\Entity\User;
+use AppBundle\Util\Address;
+use AppBundle\Util\Email;
+use AppBundle\Util\PhoneNumber;
 
 /**
  * Description of Person
@@ -12,6 +15,17 @@ use AppBundle\Entity\User;
  */
 class Person
 {
+
+    private $emailUtil;
+    private $phoneNumberUtil;
+    private $addressUtil;
+
+    public function __construct( PhoneNumber $phoneNumberUtil, Email $emailUtil, Address $addressUtil )
+    {
+        $this->emailUtil = $emailUtil;
+        $this->phoneNumberUtil = $phoneNumberUtil;
+        $this->addressUtil = $addressUtil;
+    }
 
     public function processPersonUpdates( User $user, $data )
     {
@@ -23,8 +37,9 @@ class Person
         $person->setFirstname( $data['firstname'] );
         $person->setMiddleinitial( $data['middleinitial'] );
         $person->setLastname( $data['lastname'] );
-        $phoneNumberUtil = $this->get( 'app.util.phone_number' );
-        $phoneNumberUtil->processPhoneNumberUpdates( $person, $data['person']['phone_numbers'] );
+        $this->phoneNumberUtil->processPhoneNumberUpdates( $person, $data['phone_numbers'] );
+        $this->emailUtil->processEmailUpdates( $person, $data['emails'] );
+        $this->addressUtil->processAddressUpdates( $person, $data['addresses'] );
         $user->setPerson( $person );
     }
 

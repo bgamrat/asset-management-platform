@@ -72,7 +72,9 @@ class PersonType extends AbstractType
                     'mapped' => false,
                     'prototype_name' => '__address__'
                 ] )
-                ->add( 'comment', TextareaType::class );
+                ->add( 'comment', TextareaType::class, [
+                    'required' => false
+                ] );
     }
 
     /**

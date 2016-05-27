@@ -39,6 +39,12 @@ class Manufacturer
      */
     private $active = true;
     /**
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $comment;
+    /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinTable(name="manufacturer_person",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
@@ -95,6 +101,30 @@ class Manufacturer
     public function isActive( )
     {
         return $this->active;
+    }
+    
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return Email
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+    
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
     
     public function getDeletedAt()

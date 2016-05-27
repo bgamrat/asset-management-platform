@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class AddressType extends AbstractType
@@ -36,6 +37,9 @@ class AddressType extends AbstractType
                 ->add( 'country', CountryType::class, ['label' => 'common.country',
                     'choices_as_values' => true,
                     'preferred_choices' => ['US' => 'US', 'CA' => 'CA', 'MX' => 'MX']] )
+                ->add( 'comment', TextareaType::class , [
+                    'required' => false
+                ] )
         ;
     }
 

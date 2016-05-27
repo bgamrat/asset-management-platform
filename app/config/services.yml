@@ -21,10 +21,16 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
+           
+    app.util.address:
+        class: AppBundle\Util\Address
             
     app.util.dstore:
         class: AppBundle\Util\DStore
-        
+ 
+    app.util.email:
+        class: AppBundle\Util\Email  
+
     app.util.form:
         class: AppBundle\Util\Form
         
@@ -34,6 +40,7 @@ services:
   
     app.util.person:
         class: AppBundle\Util\Person
+        arguments: ["@app.util.phone_number","@app.util.email","@app.util.address"]
         
     app.util.phone_number:
         class: AppBundle\Util\PhoneNumber

@@ -28,7 +28,7 @@ class PhoneNumberType extends AbstractType
                     'required' => true,
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'phonenumber', TextType::class, [ 
+                ->add( 'phone_number', TextType::class, [ 
                 ] )
                 ->add( 'comment', TextType::class )
         ;

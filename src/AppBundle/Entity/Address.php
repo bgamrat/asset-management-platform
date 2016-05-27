@@ -70,7 +70,12 @@ class Address
      * @ORM\Column(name="country", type="string", length=2, nullable=true)
      */
     private $country;
-
+    /**
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $comment;
 
     /**
      * Get id
@@ -80,6 +85,30 @@ class Address
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Set type
+     *
+     * @param int $type
+     *
+     * @return Address
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
@@ -225,5 +254,27 @@ class Address
     {
         return $this->country;
     }
-}
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return Email
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+    
+        return $this;
+    }
 
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+}

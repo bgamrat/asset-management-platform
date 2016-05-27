@@ -79,6 +79,13 @@ define([
 
         var activeCheckBox = new CheckBox({}, "manufacturer_active");
         activeCheckBox.startup();
+        
+        var commentInput = new Textarea({
+            placeholder: core.comment,
+            trim: true,
+            required: false
+        }, "manufacturer_comment");
+        commentInput.startup();
 
         var manufacturerForm = new Form({}, '[name="manufacturer"]');
         manufacturerForm.startup();
@@ -93,6 +100,7 @@ define([
                 var data = {
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
+                    "comment": commentInput.get("value")
                 };
                 data
                 if( action === "view" ) {

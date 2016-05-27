@@ -11,6 +11,7 @@ define([
     "dijit/registry",
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
+    "dijit/form/SimpleTextarea",
     "dijit/form/Select",
     "dijit/form/Button",
     "app/lib/common",
@@ -20,7 +21,7 @@ define([
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domConstruct, on,
         query, ObjectStore, Memory,
-        registry, TextBox, ValidationTextBox, Select, Button,
+        registry, TextBox, ValidationTextBox, SimpleTextarea, Select, Button,
         lib, core) {
     "use strict";
 
@@ -30,6 +31,7 @@ define([
     var typeSelect = [];
     var street1Input = [], street2Input = [], cityInput = [];
     var stateProvinceInput = [], postalCodeInput = [], countrySelect = [];
+    var commentInput = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
 
@@ -91,6 +93,12 @@ define([
             required: true,
         }, base + "country");
         countrySelect[addressId].startup();
+        commentInput[addressId] = new SimpleTextarea({
+            placeholder: core.comment,
+            trim: true,
+            required: false
+        }, base + "comment");
+        commentInput[addressId].startup();
         addressId++;
     }
     
@@ -107,6 +115,8 @@ define([
         postalCodeInput.splice(id, 1);
         countrySelect[id].destroyRecursive();
         countrySelect.splice(id, 1);
+        commentInput[id].destroyRecursive();
+        commentInput.splice(id, 1);
         domConstruct.destroy(target);
     }
 
@@ -198,12 +208,13 @@ define([
         for( i in countrySelect ) {
             returnData.push(
                     {
-                        "street1": stateProvinceInput[i].get('value'),
-                        "street2": stateProvinceInput[i].get('value'),
-                        "city": stateProvinceInput[i].get('value'),
+                        "street1": street1Input[i].get('value'),
+                        "street2": street2Input[i].get('value'),
+                        "city": cityInput[i].get('value'),
                         "state_province": stateProvinceInput[i].get('value'),
                         "postal_code": postalCodeInput[i].get('value'),
-                        "country": countrySelect[i].get('value')
+                        "country": countrySelect[i].get('value'),
+                        "comment": commentInput[i].get('value')
                     });
         }
         return returnData;
@@ -229,12 +240,13 @@ define([
                     createDijits();
                 }
                 obj = address[p];
-                street1Input[0].set('value', obj.street1);
-                street2Input[0].set('value', obj.street2);
-                cityInput[0].set('value', obj.city);
-                stateProvinceInput[0].set('value', obj.state_province);
-                postalCodeInput[0].set('value', obj.postal_code);
-                countrySelect[0].set('value', obj.country);
+                street1Input[i].set('value', obj.street1);
+                street2Input[i].set('value', obj.street2);
+                cityInput[i].set('value', obj.city);
+                stateProvinceInput[i].set('value', obj.state_province);
+                postalCodeInput[i].set('value', obj.postal_code);
+                countrySelect[i].set('value', obj.country);
+                commentInput[i].set('value', obj.comment);
                 i++;
             }
         } else {
@@ -244,6 +256,7 @@ define([
             stateProvinceInput[0].set('value', "");
             postalCodeInput[0].set('value', "");
             countrySelect[0].set('value', "");
+            commentInput[0].set('value', "");
         }
     }
 

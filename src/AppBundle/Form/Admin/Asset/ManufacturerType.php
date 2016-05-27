@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -23,6 +24,9 @@ class ManufacturerType extends AbstractType
         $builder
                 ->add( 'name', TextType::class, ['label' => 'common.name'] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
+                ->add( 'comment', TextareaType::class, [
+                    'required' => false
+                ]  )
                 ->add( 'person', CollectionType::class, [
                     'entry_type' => PersonType::class,
                     'by_reference' => true,

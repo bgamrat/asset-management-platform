@@ -45,15 +45,20 @@
 
 {% block _address_entry_row %}
 {% spaceless %}
-    <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__address__"><i class="fa fa-remove"></i></div>
-    <div class="form-row address">
-        <div>{{ form_widget(form.type) }}</div>
-        <div>{{ form_widget(form.street1) }}</div>
-        <div>{{ form_widget(form.street2) }}</div>
-        <div>{{ form_widget(form.city) }}</div>
-        <div>{{ form_widget(form.state_province) }}</div>
-        <div>{{ form_widget(form.postal_code) }}</div>
-        <div>{{ form_widget(form.country) }}</div>
+    <div class="justify">
+        <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__address__"><i class="fa fa-remove"></i></div>
+        <div class="form-row address">
+            <div>{{ form_widget(form.type) }}</div>
+            <div>{{ form_widget(form.street1) }}</div>
+            <div>{{ form_widget(form.street2) }}</div>
+            <div>{{ form_widget(form.city) }}</div>
+            <div>{{ form_widget(form.state_province) }}</div>
+            <div>{{ form_widget(form.postal_code) }}</div>
+            <div>{{ form_widget(form.country) }}</div>
+        </div>
+        <div class="form-row comment">
+            {{form_widget(form.comment)}}
+        </div>
     </div>
 {% endspaceless %}
 {% endblock %}
@@ -62,7 +67,7 @@
 {% spaceless %}
     <div class="form-row phone-number">
         <span class="type-select">{{ form_widget(form.type) }}</span>
-        <span class="input">{{ form_widget(form.phonenumber) }}</span>
+        <span class="input">{{ form_widget(form.phone_number) }}</span>
         <span class="comment">{{ form_widget(form.comment) }}</span>
         <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__phone__"><i class="fa fa-remove"></i></span>
     </div>
