@@ -13,7 +13,7 @@ use AppBundle\Entity\User;
 class PhoneNumber
 {
 
-    public function processPhoneNumberUpdates( $entity, $data )
+    public function update( $entity, $data )
     {
         if ($entity === null) {
             throw new \Exception('error.cannot_be_null');
@@ -25,17 +25,19 @@ class PhoneNumber
         }
         foreach($data as $phone) {
             $digits = preg_replace('/\D/','',$phone['phone_number']);
-            $key = array_search($digits,array_keys($existing),false);
-            if ($key !== false) {
-                $phoneNumber = $existing[$digits];
-                unset($existing[$digits]);
-            } else {
-                $phoneNumber = new PhoneNumberEntity();
-                $entity->addPhoneNumber($phoneNumber);
+            if ($digits !== '') {
+                $key = array_search($digits,array_keys($existing),false);
+                if ($key !== false) {
+                    $phoneNumber = $existing[$digits];
+                    unset($existing[$digits]);
+                } else {
+                    $phoneNumber = new PhoneNumberEntity();
+                    $entity->addPhoneNumber($phoneNumber);
+                }
+                $phoneNumber->setType($phone['type']);
+                $phoneNumber->setPhoneNumber($phone['phone_number']);
+                $phoneNumber->setComment($phone['comment']);
             }
-            $phoneNumber->setType($phone['type']);
-            $phoneNumber->setPhoneNumber($phone['phone_number']);
-            $phoneNumber->setComment($phone['comment']);
         }
         foreach ($existing as $leftOver) {
             $entity->removePhoneNumber($leftOver);

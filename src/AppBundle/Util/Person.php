@@ -3,7 +3,6 @@
 namespace AppBundle\Util;
 
 use AppBundle\Entity\Person As PersonEntity;
-use AppBundle\Entity\User;
 use AppBundle\Util\Address;
 use AppBundle\Util\Email;
 use AppBundle\Util\PhoneNumber;
@@ -27,9 +26,8 @@ class Person
         $this->addressUtil = $addressUtil;
     }
 
-    public function processPersonUpdates( User $user, $data )
+    public function update( PersonEntity $person, $data )
     {
-        $person = $user->getPerson();
         if( $person === null )
         {
             $person = new PersonEntity();
@@ -37,10 +35,9 @@ class Person
         $person->setFirstname( $data['firstname'] );
         $person->setMiddleinitial( $data['middleinitial'] );
         $person->setLastname( $data['lastname'] );
-        $this->phoneNumberUtil->processPhoneNumberUpdates( $person, $data['phone_numbers'] );
-        $this->emailUtil->processEmailUpdates( $person, $data['emails'] );
-        $this->addressUtil->processAddressUpdates( $person, $data['addresses'] );
-        $user->setPerson( $person );
+        $this->phoneNumberUtil->update( $person, $data['phone_numbers'] );
+        $this->emailUtil->update( $person, $data['emails'] );
+        $this->addressUtil->update( $person, $data['addresses'] );
     }
 
 }

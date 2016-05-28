@@ -6,6 +6,7 @@ define({
         "city": "City",
         "comment": "Comment",
         "confirm": "Confirm",
+        "country": "Country",
         "email": "Email",
         "enabled": "Enabled",
         "error": "Error",

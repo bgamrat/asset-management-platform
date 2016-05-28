@@ -271,25 +271,25 @@ class Person
 
     public function removeEmail( Email $email )
     {
-        $this->email->removeElement( $email );
+        $this->emails->removeElement( $email );
     }
 
     public function getAddresses()
     {
-        return $this->addresss;
+        return $this->addresses;
     }
 
     public function addAddress( Address $address )
     {
-        if( !$this->addresss->contains( $address ) )
+        if( !$this->addresses->contains( $address ) )
         {
-            $this->addresss->add( $address );
+            $this->addresses->add( $address );
         }
     }
 
     public function removeAddress( Address $address )
     {
-        $this->addresss->removeElement( $address );
+        $this->addressses->removeElement( $address );
     }
 
     public function getDeletedAt()

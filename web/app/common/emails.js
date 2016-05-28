@@ -99,6 +99,7 @@ define([
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         storeData = [];
+        storeData.push({value:"",label:core.type.toLowerCase()});
         for( d in data ) {
             storeData.push(data[d]);
         }
@@ -133,7 +134,7 @@ define([
 
     function getData() {
         var i, returnData = [];
-        for( i in typeSelect ) {
+        for( i = 0; i < emailId; i++ ) {
             returnData.push(
                     {
                         "type": typeSelect[i].get('value'),

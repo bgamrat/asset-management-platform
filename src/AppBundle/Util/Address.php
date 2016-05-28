@@ -13,38 +13,40 @@ use AppBundle\Entity\User;
 class Address
 {
 
-    public function processAddressUpdates( $entity, $data )
+    public function update( $entity, $data )
     {
         if( $entity === null )
         {
             throw new \Exception( 'error.cannot_be_null' );
         }
-        $existingAddresses = $entity->getAddresss();
+        $existingAddresses = $entity->getAddresses();
         $existing = [];
-        foreach( $existingAddresss as $p )
+        foreach( $existingAddresses as $p )
         {
-            $existing[] = $p;
+            $existing[] = (array)$p;
         }
-        foreach( $data as $address )
+        foreach( $data as $addressData )
         {
-            $key = array_search( $address, $existing, false );
-            if( $key !== false )
-            {
-                $address = $existing[$key];
-                unset( $existing[$key] );
-            }
-            else
-            {
-                $address = new AddressEntity();
-                $entity->addAddress( $address );
-                $address->setType( $address['type'] );
-                $address->setStreet1( $address['street1'] );
-                $address->setStreet2( $address['street2'] );
-                $address->setCity( $address['city'] );
-                $address->setState( $address['state'] );
-                $address->setPostalCode( $address['postal_code'] );
-                $address->setCountry( $address['country'] );
-                $address->setComment( $address['comment'] );
+            if ($addressData['city'] !== '' && $addressData['state_province'] !== '') {
+                $key = array_search( $addressData, $existing, false );
+                if( $key !== false )
+                {
+                    $address = $existing[$key];
+                    unset( $existing[$key] );
+                }
+                else
+                {
+                    $address = new AddressEntity();
+                    $address->setType( $addressData['type'] );
+                    $address->setStreet1( $addressData['street1'] );
+                    $address->setStreet2( $addressData['street2'] );
+                    $address->setCity( $addressData['city'] );
+                    $address->setStateProvince( $addressData['state_provine'] );
+                    $address->setPostalCode( $addressData['postal_code'] );
+                    $address->setCountry( $addressData['country'] );
+                    $address->setComment( $addressData['comment'] );
+                    $entity->addAddress( $address );
+                }
             }
         }
         foreach( $existing as $leftOver )

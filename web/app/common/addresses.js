@@ -92,6 +92,8 @@ define([
             store: countryStore,
             required: true,
         }, base + "country");
+        countrySelect[addressId].set('value', 'US');
+        countrySelect[addressId].set('displayedValue', 'United States');
         countrySelect[addressId].startup();
         commentInput[addressId] = new SimpleTextarea({
             placeholder: core.comment,
@@ -101,7 +103,7 @@ define([
         commentInput[addressId].startup();
         addressId++;
     }
-    
+
     function destroyRow(id, target) {
         street1Input[id].destroyRecursive();
         street1Input.splice(id, 1);
@@ -125,37 +127,38 @@ define([
         var base, select, data, d;
         var countryStoreData, countryMemoryStore;
         var typeStoreData, typeMemoryStore;
-        
+
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
 
         prototypeNode = dom.byId(getDivId());
-        if (prototypeNode === null) {
-            setDivId(arguments[0]+'_0');
+        if( prototypeNode === null ) {
+            setDivId(arguments[0] + '_0');
             prototypeNode = dom.byId(getDivId());
         }
-        
-        if (prototypeNode === null) {
+
+        if( prototypeNode === null ) {
             lib.textError(getDivId() + " not found");
             return;
         }
-        
+
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__address__/g, addressId);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-        
+
         base = prototypeNode.id + "_" + addressId;
         select = base + "_type";
-        
-        if (dom.byId(select) === null) {
+
+        if( dom.byId(select) === null ) {
             lib.textError(select + " not found");
             return;
-        } 
-        
+        }
+
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         typeStoreData = [];
+        typeStoreData.push({value: "", label: core.type.toLowerCase()});
         for( d in data ) {
             typeStoreData.push(data[d]);
         }
@@ -163,15 +166,13 @@ define([
             idProperty: "value",
             data: typeStoreData});
         typeStore = new ObjectStore({objectStore: typeMemoryStore});
-        
+
         select = base + "_country";
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         countryStoreData = [];
-        for( d in data ) {
-            if (data[d].value === "US") {
-                data[d].selected = true;
-            }
+        countryStoreData.push({value: "", label: core.country.toLowerCase()});
+        for( d = 0; d < data.length; d++ ) {
             countryStoreData.push(data[d]);
         }
         countryMemoryStore = new Memory({
@@ -205,9 +206,10 @@ define([
 
     function getData() {
         var i, returnData = [];
-        for( i in countrySelect ) {
+        for( i = 0; i < addressId; i++ ) {
             returnData.push(
                     {
+                        "type": typeSelect[i].get('value'),
                         "street1": street1Input[i].get('value'),
                         "street2": street2Input[i].get('value'),
                         "city": cityInput[i].get('value'),
