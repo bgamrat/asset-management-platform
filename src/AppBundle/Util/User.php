@@ -2,10 +2,10 @@
 
 namespace AppBundle\Util;
 
-use AppBundle\Entity\User;
+use AppBundle\Entity\User as UserEntity;
 use FOS\UserBundle\Doctrine\GroupManager;
 
-class Group
+class User
 {
     private $groupManager;
 
@@ -14,7 +14,7 @@ class Group
         $this->groupManager = $groupManager;
     }
 
-    public function processGroupUpdates( User $user, $data )
+    public function processGroupUpdates( UserEntity $user, $data )
     {
         $allGroups = $this->groupManager->findGroups();
         $allGroupNames = [];
@@ -38,5 +38,16 @@ class Group
             }
         }
     }
+    
+        public function processRoleUpdates( UserEntity $user, Array $roles )
+    {
+        $roleNames = [];
+        foreach( $roles as $role )
+        {
+            $roleNames[] = $role->name;
+        }
+        $user->setRoles( $roleNames );
+    }
+
 
 }

@@ -134,7 +134,6 @@ define([
         addOneMoreControl = query('.phone-numbers .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
-            var target = event.target.parentNode;
             cloneNewNode();
             createDijits();
             if( typeSelect.length >= lib.constant.MAX_PHONE_NUMBERS ) {

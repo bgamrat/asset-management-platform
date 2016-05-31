@@ -289,7 +289,7 @@ class Person
 
     public function removeAddress( Address $address )
     {
-        $this->addressses->removeElement( $address );
+        $this->addresses->removeElement( $address );
     }
 
     public function getDeletedAt()

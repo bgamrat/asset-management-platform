@@ -218,3 +218,7 @@ php bin/console list
 
 php bin/console generate:bundle --bundle-name=AssetBundle --dir=/var/www/html/symfony-dev/src  --format=annotation
 
+The class - often called an "entity", meaning a basic class that holds data - is simple and helps fulfill the business 
+requirement of needing products in your application. 
+
+You can think of a repository as a PHP class whose only job is to help you fetch entities of a certain class. 

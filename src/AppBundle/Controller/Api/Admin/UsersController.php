@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api\Admin;
 
 use AppBundle\Entity\Person;
+use AppBundle\Model\Person as PersonModel;
 use AppBundle\Entity\User;
 use AppBundle\Util\DStore;
 use AppBundle\Util\Group;
@@ -99,26 +100,8 @@ class UsersController extends FOSRestController
                 'locked' => $user->isLocked()
             ];
             $person = $user->getPerson();
-            if ($person !== null) {
-                $data['person'] = [
-                    'firstname' => $person->getFirstname(),
-                    'middleinitial' => $person->getMiddleinitial(),
-                    'lastname' => $person->getLastname()
-                ];
-                $phoneNumbers = $person->getPhoneNumbers();
-                if ($phoneNumbers !== null) {
-                    $data['person']['phone_numbers'] = [];
-                    foreach ($phoneNumbers as $phone) {
-                        $data['person']['phone_numbers'][] =
-                                ['type' => $phone->getType(),
-                                    'phone_number' => $phone->getPhoneNumber(),
-                                    'comment' => $phone->getComment()];
-                    }
-                    
-                }
-            } else {
-                $data['person'] = array_fill_keys(['firstname','middleinitial','lastname'],'');
-            }
+            $personModel = $this->get('app.model.person');
+            $data['person'] = $personModel->get($person);
 
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
@@ -165,13 +148,12 @@ class UsersController extends FOSRestController
                 $user->setUsername( $data['username'] );
                 $user->setPassword( md5( 'junk' ) );
             }
-            $roleUtil = $this->get( 'app.util.role' );
-            $roleUtil->processRoleUpdates( $user, $form->get( 'roles' )->getData() );
-            $groupUtil = $this->get( 'app.util.group' );
-            $groupUtil->processGroupUpdates( $user, $data );
+            $userUtil = $this->get( 'app.util.user' );
+            $userUtil->processRoleUpdates( $user, $form->get( 'roles' )->getData() );
+            $userUtil->processGroupUpdates( $user, $data );
             $person = $user->getPerson();
-            $personUtil = $this->get( 'app.util.person' );
-            $personUtil->update( $person, $data['person'] );
+            $personModel = $this->get( 'app.model.person' );
+            $personModel->update( $person, $data['person'] );
             $em->persist($user);
             $em->flush();
 

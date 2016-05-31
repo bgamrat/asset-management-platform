@@ -122,4 +122,13 @@ class Email
     {
         return $this->comment;
     }
+    
+    public function toArray()
+    {
+        return [
+            'type' => $this->getType(),
+            'phone_number' => $this->getEmail(),
+            'comment' => $this->getComment()
+        ];
+    }
 }

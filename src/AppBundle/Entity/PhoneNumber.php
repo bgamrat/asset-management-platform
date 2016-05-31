@@ -14,13 +14,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class PhoneNumber
 {
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="PhoneNumberType")
@@ -28,14 +28,12 @@ class PhoneNumber
      * @ORM\OrderBy({"type" = "ASC"})
      */
     private $type;
-
     /**
      * @Assert\NotBlank()
      * @Assert\Regex(pattern="/^[0-9x\.\,\ \+\(\)-]{2,24}$/", message="error.invalid_phone_number")
      * @ORM\Column(type="string", length=24, name="phone_number", nullable=false)
      */
     private $phone_number;
-
     /**
      * @ORM\Column(type="string", length=24, nullable=true)
      */
@@ -58,10 +56,10 @@ class PhoneNumber
      *
      * @return PhoneNumber
      */
-    public function setType($type)
+    public function setType( $type )
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
@@ -82,10 +80,10 @@ class PhoneNumber
      *
      * @return PhoneNumber
      */
-    public function setPhoneNumber($phoneNumber)
+    public function setPhoneNumber( $phoneNumber )
     {
         $this->phone_number = $phoneNumber;
-    
+
         return $this;
     }
 
@@ -106,10 +104,10 @@ class PhoneNumber
      *
      * @return PhoneNumber
      */
-    public function setComment($comment)
+    public function setComment( $comment )
     {
         $this->comment = $comment;
-    
+
         return $this;
     }
 
@@ -122,4 +120,14 @@ class PhoneNumber
     {
         return $this->comment;
     }
+
+    public function toArray()
+    {
+        return [
+            'type' => $this->getType(),
+            'phone_number' => $this->getPhoneNumber(),
+            'comment' => $this->getComment()
+        ];
+    }
+
 }

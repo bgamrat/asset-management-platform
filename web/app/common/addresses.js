@@ -185,7 +185,6 @@ define([
         addOneMoreControl = query('.addresses .add-one-more-row', getDivId());
 
         addOneMoreControl.on("click", function (event) {
-            var target = event.target.parentNode;
             cloneNewNode();
             createDijits();
             if( countrySelect.length >= lib.constant.MAX_ADDRESSES ) {
