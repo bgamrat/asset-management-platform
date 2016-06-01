@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Model;
+namespace AppBundle\Util;
 
 use AppBundle\Entity\PhoneNumber As PhoneNumberEntity;
 use AppBundle\Entity\User;
@@ -18,17 +18,6 @@ class PhoneNumber
     public function __construct( EntityManager $em)
     {
         $this->em = $em;
-    }
-
-
-    public function get( $phoneNumber )
-    {
-        $data = null;
-        if( $phoneNumber !== null )
-        {
-            $data = $phoneNumber->toArray();
-        }
-        return $data;
     }
 
     public function update( $entity, $data )

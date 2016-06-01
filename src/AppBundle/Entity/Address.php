@@ -32,35 +32,35 @@ class Address
     /**
      * @var string
      *
-     * @ORM\Column(name="street1", type="string", length=64, nullable=true, unique=true)
+     * @ORM\Column(name="street1", type="string", length=64, nullable=true, unique=false)
      */
     private $street1;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="street2", type="string", length=64, nullable=true, unique=true)
+     * @ORM\Column(name="street2", type="string", length=64, nullable=true, unique=false)
      */
     private $street2;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=64, nullable=true, unique=true)
+     * @ORM\Column(name="city", type="string", length=64, nullable=false, unique=false)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="state_province", type="string", length=32, nullable=true, unique=true)
+     * @ORM\Column(name="state_province", type="string", length=32, nullable=false, unique=false)
      */
     private $state_province;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="postal_code", type="string", length=16, nullable=true, unique=true)
+     * @ORM\Column(name="postal_code", type="string", length=16, nullable=true, unique=false)
      */
     private $postal_code;
 

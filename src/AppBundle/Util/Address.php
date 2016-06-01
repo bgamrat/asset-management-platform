@@ -1,7 +1,8 @@
 <?php
 
-namespace AppBundle\Model;
+namespace AppBundle\Util;
 
+use AppBundle\Entity\Person As PersonEntity;
 use AppBundle\Entity\Address As AddressEntity;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -20,23 +21,11 @@ class Address
         $this->em = $em;
     }
 
-    public function get( $address )
-    {
-        $data = null;
-        if( $address !== null )
-        {
-            $data = $address->toArray();
-        }
-        return $data;
-    }
-
     public function update( $entity, $data )
     {
         if( $entity === null )
         {
-            throw new \Exception( '
-
-            error. cannot_be_null' );
+            throw new \Exception( 'error.cannot_be_null' );
         }
         $existingAddresses = $entity->getAddresses();
         $existing = [];
@@ -64,6 +53,9 @@ class Address
                     $address->setPostalCode( $addressData['postal_code'] );
                     $address->setCountry( $addressData['country'] );
                     $address->setComment( $addressData['comment'] );
+                    if ($entity instanceof PersonEntity) {
+                        $address->setPerson($entity);
+                    }
                     $this->em->persist($address);
                     $entity->addAddress( $address );
                 }

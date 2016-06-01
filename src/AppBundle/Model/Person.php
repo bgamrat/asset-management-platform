@@ -3,9 +3,9 @@
 namespace AppBundle\Model;
 
 use AppBundle\Entity\Person As PersonEntity;
-use AppBundle\Model\Address;
-use AppBundle\Model\Email;
-use AppBundle\Model\PhoneNumber;
+use AppBundle\Util\Address As AddressUtil;
+use AppBundle\Util\Email As EmailUtil;
+use AppBundle\Util\PhoneNumber As PhoneNumberUtil;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -17,16 +17,16 @@ class Person
 {
 
     private $em;
-    private $email;
-    private $phoneNumber;
-    private $address;
+    private $emailUtil;
+    private $phoneNumberUtil;
+    private $addressUtil;
 
-    public function __construct( EntityManager $em, PhoneNumber $phoneNumber, Email $email, Address $address )
+    public function __construct( EntityManager $em, PhoneNumberUtil $phoneNumberUtil, EmailUtil $emailUtil, AddressUtil $addressUtil )
     {
         $this->em = $em;
-        $this->email = $email;
-        $this->phoneNumber = $phoneNumber;
-        $this->address = $address;
+        $this->emailUtil = $emailUtil;
+        $this->phoneNumberUtil = $phoneNumberUtil;
+        $this->addressUtil = $addressUtil;
     }
 
     public function get( $person )
@@ -46,7 +46,7 @@ class Person
                 $data['phone_numbers'] = [];
                 foreach( $phoneNumbers as $phone )
                 {
-                    $data['phone_numbers'][] = $this->phoneNumber->get( $phone );
+                    $data['phone_numbers'][] = $phone->toArray();
                 }
             }
             $emails = $person->getEmails();
@@ -55,7 +55,7 @@ class Person
                 $data['emails'] = [];
                 foreach( $emails as $email )
                 {
-                    $data['emails'][] = $this->email->get( $email );
+                    $data['emails'][] = $email->toArray();
                 }
             }
             $addresses = $person->getAddresses();
@@ -64,7 +64,7 @@ class Person
                 $data['addresses'] = [];
                 foreach( $addresses as $address )
                 {
-                    $data['addresses'][] = $this->address->get( $address );
+                    $data['addresses'][] = $address->toArray();
                 }
             }
         }
@@ -89,9 +89,9 @@ class Person
         $person->setComment( $data['comment'] );
         $this->em->persist($person);
         $entity->setPerson($person);
-        $this->phoneNumber->update( $person, $data['phone_numbers'] );
-        $this->email->update( $person, $data['emails'] );
-        $this->address->update( $person, $data['addresses'] );
+        $this->phoneNumberUtil->update( $person, $data['phone_numbers'] );
+        $this->emailUtil->update( $person, $data['emails'] );
+        $this->addressUtil->update( $person, $data['addresses'] );
         
     }
 

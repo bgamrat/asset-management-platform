@@ -150,8 +150,7 @@ class Email
     {
         return $this->person;
     }
-     
-    
+
     public function toArray()
     {
         return [

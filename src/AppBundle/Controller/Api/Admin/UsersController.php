@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Api\Admin;
 
 use AppBundle\Entity\Person;
-use AppBundle\Model\Person as PersonModel;
+use AppBundle\Util\Person as PersonUtil;
 use AppBundle\Entity\User;
 use AppBundle\Util\DStore;
 use AppBundle\Util\Group;

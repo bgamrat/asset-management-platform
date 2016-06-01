@@ -79,3 +79,16 @@ fieldset .sub-form-legend {
 .form-row.address > * {
     display:block;
 }
+
+.tundra .dijitMenu, .tundra .dijitMenuBar, .tundra .dijitDialog {
+    border-color: #9966ff;
+}
+.tundra .dijitMenuPassive .dijitMenuItemHover, .tundra .dijitComboBoxMenu .dijitMenuItemHover, .tundra .dijitMenuItemSelected {
+    background-color:  #7733ff;
+}
+.tundra .dgrid-row:hover {
+    background-color: #aa80ff;
+}
+.tundra .dgrid-selected {
+    background-color: #ccb3ff;
+}

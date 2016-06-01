@@ -21,22 +21,6 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
-           
-    app.model.address:
-        class: AppBundle\Model\Address
-        arguments: ['@doctrine.orm.entity_manager']
-           
-    app.model.email:
-        class: AppBundle\Model\Email 
-        arguments: ['@doctrine.orm.entity_manager']
-          
-    app.model.person:
-        class: AppBundle\Model\Person
-        arguments: ['@doctrine.orm.entity_manager',"@app.model.phone_number","@app.model.email","@app.model.address"]
-        
-    app.model.phone_number:
-        class: AppBundle\Model\PhoneNumber
-        arguments: ['@doctrine.orm.entity_manager']
 
     app.form.data_transformer.invitation:
         class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
@@ -86,11 +70,27 @@ services:
         tags:
             - { name: knp_menu.voter }
 
+    app.model.person:
+        class: AppBundle\Model\Person
+        arguments: ["@doctrine.orm.entity_manager","@app.util.phone_number","@app.util.email","@app.util.address"]
+        
     app.util.dstore:
         class: AppBundle\Util\DStore
+                   
+    app.util.address:
+        class: AppBundle\Util\Address
+        arguments: ['@doctrine.orm.entity_manager']
+           
+    app.util.email:
+        class: AppBundle\Util\Email 
+        arguments: ['@doctrine.orm.entity_manager']
 
     app.util.form:
         class: AppBundle\Util\Form
+
+    app.util.phone_number:
+        class: AppBundle\Util\PhoneNumber
+        arguments: ['@doctrine.orm.entity_manager']
         
     app.util.user:
         class: AppBundle\Util\User

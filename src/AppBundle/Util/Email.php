@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Model;
+namespace AppBundle\Util;
 
 use AppBundle\Entity\Email As EmailEntity;
 use Doctrine\ORM\EntityManager;
@@ -18,16 +18,6 @@ class Email
     public function __construct( EntityManager $em )
     {
         $this->em = $em;
-    }
-
-    public function get( $email )
-    {
-        $data = null;
-        if( $email !== null )
-        {
-            $data = $email->toArray();
-        }
-        return $data;
     }
 
     public function update( $entity, $data )
