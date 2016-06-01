@@ -4,6 +4,7 @@ namespace AppBundle\Model;
 
 use AppBundle\Entity\Address As AddressEntity;
 use AppBundle\Entity\User;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Description of Person
@@ -12,8 +13,14 @@ use AppBundle\Entity\User;
  */
 class Address
 {
+    private $em;
 
-    public function get( AddressEntity $address )
+    public function __construct( EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
+    public function get( $address )
     {
         $data = null;
         if( $address !== null )
@@ -57,6 +64,7 @@ class Address
                     $address->setPostalCode( $addressData['postal_code'] );
                     $address->setCountry( $addressData['country'] );
                     $address->setComment( $addressData['comment'] );
+                    $this->em->persist($address);
                     $entity->addAddress( $address );
                 }
             }
@@ -65,6 +73,7 @@ class Address
         {
             $entity->removeAddress( $leftOver );
         }
+        $this->em->persist($entity);
     }
 
 }

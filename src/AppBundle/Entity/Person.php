@@ -8,6 +8,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\User;
+use AppBundle\Entity\Email;
+use AppBundle\Entity\PhoneNumber;
+use AppBundle\Entity\Address;
 
 /**
  * Person
@@ -74,7 +77,13 @@ class Person
      */
     private $lastname;
     /**
-     * @ORM\ManyToMany(targetEntity="PhoneNumber", cascade={"persist"})
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $comment;
+    /**
+     * @ORM\OneToMany(targetEntity="PhoneNumber", mappedBy="person", cascade={"persist"})
      * @ORM\JoinTable(name="person_phone_number",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="phone_number_id", referencedColumnName="id", unique=true)}
@@ -82,7 +91,7 @@ class Person
      */
     private $phoneNumbers = null;
     /**
-     * @ORM\ManyToMany(targetEntity="Email", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Email", mappedBy="person", cascade={"persist"})
      * @ORM\JoinTable(name="person_email",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", unique=true)}
@@ -90,7 +99,7 @@ class Person
      */
     protected $emails = null;
     /**
-     * @ORM\ManyToMany(targetEntity="Address", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Address", mappedBy="person", cascade={"persist"})
      * @ORM\JoinTable(name="person_address",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true)}
@@ -117,6 +126,8 @@ class Person
     public function __construct()
     {
         $this->phoneNumbers = new ArrayCollection();
+        $this->emails = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     /**
@@ -127,6 +138,30 @@ class Person
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set type
+     *
+     * @param int $type
+     *
+     * @return Person
+     */
+    public function setType( $type )
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
@@ -199,6 +234,30 @@ class Person
     public function getMiddleinitial()
     {
         return $this->middleinitial;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return Email
+     */
+    public function setComment( $comment )
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 
     /**

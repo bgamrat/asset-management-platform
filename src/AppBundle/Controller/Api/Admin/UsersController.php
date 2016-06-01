@@ -151,9 +151,8 @@ class UsersController extends FOSRestController
             $userUtil = $this->get( 'app.util.user' );
             $userUtil->processRoleUpdates( $user, $form->get( 'roles' )->getData() );
             $userUtil->processGroupUpdates( $user, $data );
-            $person = $user->getPerson();
             $personModel = $this->get( 'app.model.person' );
-            $personModel->update( $person, $data['person'] );
+            $personModel->update( $user, $data['person'] );
             $em->persist($user);
             $em->flush();
 

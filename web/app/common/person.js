@@ -32,7 +32,7 @@ define([
     var prototypeNode, prototypeContent;
     var store;
     var personId = 0;
-       
+
     function setDivId(divId) {
         divIdInUse = divId + 'person';
     }
@@ -43,7 +43,7 @@ define([
 
     function createDijits() {
         var base = getDivId() + '_';
-        if (prototypeNode !== null) {
+        if( prototypeNode !== null ) {
             base += personId + '_';
         }
         typeSelect = new Select({
@@ -102,16 +102,16 @@ define([
             domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
             base = prototypeNode.id + "_0_";
         } else {
-            base = getDivId()+'_';
+            base = getDivId() + '_';
         }
 
         select = base + "type";
-        
-        if (dom.byId(select) === null) {
+
+        if( dom.byId(select) === null ) {
             lib.textError(select + " not found");
             return;
         }
-        
+
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         storeData = [];
@@ -128,19 +128,20 @@ define([
         phoneNumbers.run(getDivId());
         addresses.run(getDivId());
     }
-    
+
     function getData() {
         return {
             "type": typeSelect.get('value'),
             "firstname": firstnameInput.get('value'),
             "middleinitial": middleInitialInput.get('value'),
             "lastname": lastnameInput.get('value'),
+            "comment": commentInput.get('value'),
             "emails": emails.getData(),
             "phone_numbers": phoneNumbers.getData(),
             "addresses": addresses.getData()
         }
     }
-    
+
     function setData(person) {
         if( typeof person === "object" ) {
             if( person === null ) {
@@ -151,6 +152,7 @@ define([
             firstnameInput.set('value', person.firstname);
             middleInitialInput.set('value', person.middleinitial);
             lastnameInput.set('value', person.lastname);
+            commentInput.set('value', person.comment);
             if( typeof person.phone_numbers !== "undefined" ) {
                 phoneNumbers.setData(person.phone_numbers);
             } else {
@@ -167,16 +169,17 @@ define([
                 addresses.setData(null);
             }
         } else {
-            typeSelect.set('value','');
+            typeSelect.set('value', '');
             firstnameInput.set('value', '');
             middleInitialInput.set('value', '');
             lastnameInput.set('value', '');
+            commentInput.set('value', '');
             phoneNumbers.setData(null);
             emails.setData(null);
             addresses.setData(null);
         }
     }
-    return { 
+    return {
         run: run,
         getData: getData,
         setData: setData

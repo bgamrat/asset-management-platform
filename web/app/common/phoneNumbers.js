@@ -176,18 +176,16 @@ define([
 
         if( typeof phoneNumbers === "object" && phoneNumbers !== null && phoneNumbers.length > 0 ) {
 
-            i = 0;
             phoneNumberId = 1;
-            for( p in phoneNumbers ) {
+            for( i = 0; i < phoneNumbers.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();
                 }
-                obj = phoneNumbers[p];
+                obj = phoneNumbers[i];
                 typeSelect[i].set('value', obj.type);
                 numberInput[i].set('value', obj.phone_number);
                 commentInput[i].set('value', obj.comment);
-                i++;
             }
         } else {
             typeSelect[0].set('value', "");

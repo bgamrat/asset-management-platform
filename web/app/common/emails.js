@@ -155,18 +155,16 @@ define([
 
         if( typeof emails === "object" && emails !== null && emails.length > 0 ) {
 
-            i = 0;
             emailId = 1;
-            for( p in emails ) {
+            for( i = 0; i < emails.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();
                 }
-                obj = emails[p];
+                obj = emails[i];
                 typeSelect[i].set('value', obj.type);
                 emailInput[i].set('value', obj.email);
                 commentInput[i].set('value', obj.comment);
-                i++;
             }
         } else {
             typeSelect[0].set('value', "");

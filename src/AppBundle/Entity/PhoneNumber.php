@@ -38,6 +38,11 @@ class PhoneNumber
      * @ORM\Column(type="string", length=24, nullable=true)
      */
     private $comment;
+        /**
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="phoneNumbers")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     */
+    private $person;
 
     /**
      * Get id
@@ -119,6 +124,30 @@ class PhoneNumber
     public function getComment()
     {
         return $this->comment;
+    }
+    
+    /**
+     * Set person
+     *
+     * @param string $person
+     *
+     * @return PhoneNumber
+     */
+    public function setPerson($person)
+    {
+        $this->person = $person;
+    
+        return $this;
+    }
+
+    /**
+     * Get person
+     *
+     * @return string
+     */
+    public function getPerson()
+    {
+        return $this->person;
     }
 
     public function toArray()

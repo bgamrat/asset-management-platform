@@ -3,6 +3,7 @@
 namespace AppBundle\Model;
 
 use AppBundle\Entity\Email As EmailEntity;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Description of Person
@@ -12,12 +13,19 @@ use AppBundle\Entity\Email As EmailEntity;
 class Email
 {
 
-    public function get( EmailEntity $email )
+    private $em;
+
+    public function __construct( EntityManager $em )
+    {
+        $this->em = $em;
+    }
+
+    public function get( $email )
     {
         $data = null;
         if( $email !== null )
         {
-            $data =  $email->toArray();
+            $data = $email->toArray();
         }
         return $data;
     }
@@ -30,13 +38,11 @@ class Email
         }
 
         $existingEmails = $entity->getEmails();
-
         $existing = [];
         foreach( $existingEmails as $e )
         {
             $existing[$e->getEmail()] = $e->toArray();
         }
-
         foreach( $data as $emailData )
         {
             if( $emailData['email'] !== '' )
@@ -44,23 +50,29 @@ class Email
                 $key = array_search( $emailData['email'], array_keys( $existing ), false );
                 if( $key !== false )
                 {
-                    $email = $existing[$emailData['email']];
+                    $email = $existingEmails[$key];
                     unset( $existingEmails[$key] );
                 }
                 else
                 {
                     $email = new EmailEntity();
-                    $entity->addEmail( $email );
                 }
                 $email->setType( $emailData['type'] );
                 $email->setEmail( $emailData['email'] );
                 $email->setComment( $emailData['comment'] );
+                $email->setPerson($entity);
+                $this->em->persist( $email );
+                if( $key === false )
+                {
+                    $entity->addEmail( $email );
+                }
             }
         }
         foreach( $existingEmails as $leftOver )
         {
             $entity->removeEmail( $leftOver );
         }
+        $this->em->persist($entity);
     }
 
 }

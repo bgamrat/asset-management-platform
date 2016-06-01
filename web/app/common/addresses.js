@@ -231,16 +231,15 @@ define([
             }
         });
 
-        if( typeof address === "object" && address !== null && address.length > 0 ) {
+        if( typeof addresses === "object" && addresses !== null && addresses.length > 0 ) {
 
-            i = 0;
             addressId = 1;
-            for( p in address ) {
+            for( i = 0; i < addresses.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();
                 }
-                obj = address[p];
+                obj = address[i];
                 street1Input[i].set('value', obj.street1);
                 street2Input[i].set('value', obj.street2);
                 cityInput[i].set('value', obj.city);
@@ -248,7 +247,6 @@ define([
                 postalCodeInput[i].set('value', obj.postal_code);
                 countrySelect[i].set('value', obj.country);
                 commentInput[i].set('value', obj.comment);
-                i++;
             }
         } else {
             street1Input[0].set('value', "");

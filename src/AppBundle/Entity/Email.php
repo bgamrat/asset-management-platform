@@ -40,7 +40,11 @@ class Email
      * @ORM\Column(type="string", length=24, nullable=true)
      */
     private $comment;
-
+    /**
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="emails")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     */
+    private $person;
     /**
      * Get id
      *
@@ -123,11 +127,36 @@ class Email
         return $this->comment;
     }
     
+    /**
+     * Set person
+     *
+     * @param string $person
+     *
+     * @return Email
+     */
+    public function setPerson($person)
+    {
+        $this->person = $person;
+    
+        return $this;
+    }
+
+    /**
+     * Get person
+     *
+     * @return string
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+     
+    
     public function toArray()
     {
         return [
             'type' => $this->getType(),
-            'phone_number' => $this->getEmail(),
+            'email' => $this->getEmail(),
             'comment' => $this->getComment()
         ];
     }

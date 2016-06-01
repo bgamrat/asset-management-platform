@@ -4,6 +4,7 @@ namespace AppBundle\Model;
 
 use AppBundle\Entity\PhoneNumber As PhoneNumberEntity;
 use AppBundle\Entity\User;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Description of Person
@@ -11,9 +12,16 @@ use AppBundle\Entity\User;
  * @author bgamrat
  */
 class PhoneNumber
-{
+{   
+    private $em;
 
-    public function get( PhoneNumberEntity $phoneNumber )
+    public function __construct( EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
+
+    public function get( $phoneNumber )
     {
         $data = null;
         if( $phoneNumber !== null )
@@ -48,10 +56,12 @@ class PhoneNumber
                 else
                 {
                     $phoneNumber = new PhoneNumberEntity();
-                    $entity->addPhoneNumber( $phoneNumber );
                     $phoneNumber->setType( $phone['type'] );
                     $phoneNumber->setPhoneNumber( $phone['phone_number'] );
                     $phoneNumber->setComment( $phone['comment'] );
+                    $phoneNumber->setPerson($entity);
+                    $this->em->persist($phoneNumber);
+                    $entity->addPhoneNumber( $phoneNumber );
                 }
             }
         }
@@ -59,6 +69,7 @@ class PhoneNumber
         {
             $entity->removePhoneNumber( $leftOver );
         }
+        $this->em->persist($entity);
     }
 
 }
