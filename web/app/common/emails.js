@@ -77,6 +77,7 @@ define([
         commentInput[id].destroyRecursive();
         commentInput.splice(id, 1);
         domConstruct.destroy(target);
+        emailId--;
     }
 
     function run() {

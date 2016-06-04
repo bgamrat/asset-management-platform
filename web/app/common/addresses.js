@@ -90,7 +90,7 @@ define([
         postalCodeInput[addressId].startup();
         countrySelect[addressId] = new Select({
             store: countryStore,
-            required: true,
+            required: true
         }, base + "country");
         countrySelect[addressId].set('value', 'US');
         countrySelect[addressId].set('displayedValue', 'United States');
@@ -120,6 +120,7 @@ define([
         commentInput[id].destroyRecursive();
         commentInput.splice(id, 1);
         domConstruct.destroy(target);
+        addressId--;
     }
 
     function run() {
@@ -254,7 +255,7 @@ define([
             cityInput[0].set('value', "");
             stateProvinceInput[0].set('value', "");
             postalCodeInput[0].set('value', "");
-            countrySelect[0].set('value', "");
+            countrySelect[0].set('value', "US");
             commentInput[0].set('value', "");
         }
     }

@@ -12,10 +12,11 @@ use Doctrine\ORM\EntityManager;
  * @author bgamrat
  */
 class PhoneNumber
-{   
+{
+
     private $em;
 
-    public function __construct( EntityManager $em)
+    public function __construct( EntityManager $em )
     {
         $this->em = $em;
     }
@@ -28,9 +29,12 @@ class PhoneNumber
         }
         $existingPhoneNumbers = $entity->getPhoneNumbers();
         $existing = [];
-        foreach( $existingPhoneNumbers as $p )
+        if( !empty( $existingPhoneNumbers ) )
         {
-            $existing[(string) preg_replace( '/\D/', '', $p->getPhoneNumber() )] = $p->toArray();
+            foreach( $existingPhoneNumbers as $p )
+            {
+                $existing[(string) preg_replace( '/\D/', '', $p->getPhoneNumber() )] = $p->toArray();
+            }
         }
         foreach( $data as $phone )
         {
@@ -40,25 +44,29 @@ class PhoneNumber
                 $key = array_search( $digits, array_keys( $existing ), false );
                 if( $key !== false )
                 {
+                    $phoneNumber = $existingPhoneNumbers[$key];
                     unset( $existingPhoneNumbers[$key] );
                 }
                 else
                 {
                     $phoneNumber = new PhoneNumberEntity();
-                    $phoneNumber->setType( $phone['type'] );
-                    $phoneNumber->setPhoneNumber( $phone['phone_number'] );
-                    $phoneNumber->setComment( $phone['comment'] );
-                    $phoneNumber->setPerson($entity);
-                    $this->em->persist($phoneNumber);
-                    $entity->addPhoneNumber( $phoneNumber );
+                }
+                $phoneNumber->setType( $phone['type'] );
+                $phoneNumber->setPhoneNumber( $phone['phone_number'] );
+                $phoneNumber->setComment( $phone['comment'] );
+                $this->em->persist($phoneNumber);
+                if ($key === false) {
+                    $entity->addPhoneNumber($phoneNumber);
                 }
             }
         }
-        foreach( $existingPhoneNumbers as $leftOver )
+        if( !empty( $existingPhoneNumbers ) )
         {
-            $entity->removePhoneNumber( $leftOver );
+            foreach( $existingPhoneNumbers as $leftOver )
+            {
+                $entity->removePhoneNumber( $leftOver );
+            }
         }
-        $this->em->persist($entity);
     }
 
 }

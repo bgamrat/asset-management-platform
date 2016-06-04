@@ -6,6 +6,7 @@ use AppBundle\Entity\PhoneNumberType;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -38,12 +39,12 @@ class PhoneNumber
      * @ORM\Column(type="string", length=24, nullable=true)
      */
     private $comment;
-        /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="phoneNumbers")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Person", mappedBy="phoneNumbers")
      */
     private $person;
-
+    
     /**
      * Get id
      *
@@ -126,30 +127,16 @@ class PhoneNumber
         return $this->comment;
     }
     
-    /**
-     * Set person
-     *
-     * @param string $person
-     *
-     * @return PhoneNumber
-     */
-    public function setPerson($person)
-    {
-        $this->person = $person;
-    
-        return $this;
+    public function setPerson( Person $person )
+    {  
+        $person->addPhoneNumber($this);
     }
 
-    /**
-     * Get person
-     *
-     * @return string
-     */
     public function getPerson()
     {
         return $this->person;
     }
-
+    
     public function toArray()
     {
         return [

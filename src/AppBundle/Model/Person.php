@@ -75,24 +75,22 @@ class Person
         return $data;
     }
 
-    public function update( $entity = null, Array $data )
+    public function update( $person = null, Array $data )
     {
-        $person = $entity->getPerson();
         if( $person === null )
         {
-            $person = new PersonEntity(); 
-        }
+            $person = new PersonEntity();
+        } 
         $person->setType( $data['type'] );
         $person->setFirstname( $data['firstname'] );
         $person->setMiddleinitial( $data['middleinitial'] );
         $person->setLastname( $data['lastname'] );
         $person->setComment( $data['comment'] );
         $this->em->persist($person);
-        $entity->setPerson($person);
         $this->phoneNumberUtil->update( $person, $data['phone_numbers'] );
         $this->emailUtil->update( $person, $data['emails'] );
         $this->addressUtil->update( $person, $data['addresses'] );
-        
+        return $person;
     }
 
 }

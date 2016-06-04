@@ -83,29 +83,32 @@ class Person
      */
     private $comment;
     /**
-     * @ORM\OneToMany(targetEntity="PhoneNumber", mappedBy="person", cascade={"persist"})
+     * @var ArrayCollection $phoneNumbers
+     * @ORM\ManyToMany(targetEntity="PhoneNumber", inversedBy="person", cascade={"persist"})
      * @ORM\JoinTable(name="person_phone_number",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="phone_number_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="phone_number_id", referencedColumnName="id", unique=true, nullable=false)}
      *      )
      */
-    private $phoneNumbers = null;
+    private $phoneNumbers;
     /**
-     * @ORM\OneToMany(targetEntity="Email", mappedBy="person", cascade={"persist"})
+     * @var ArrayCollection $emails
+     * @ORM\ManyToMany(targetEntity="Email", inversedBy="person", cascade={"persist"})
      * @ORM\JoinTable(name="person_email",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", unique=true, nullable=false)}
      *      )
      */
-    protected $emails = null;
+    protected $emails;
     /**
-     * @ORM\OneToMany(targetEntity="Address", mappedBy="person", cascade={"persist"})
+     * @var ArrayCollection $addresses
+     * @ORM\ManyToMany(targetEntity="Address", inversedBy="person", cascade={"persist"})
      * @ORM\JoinTable(name="person_address",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true, nullable=false)}
      *      )
      */
-    private $addresses = null;
+    private $addresses;
     /**
      * @var boolean
      *
@@ -299,7 +302,7 @@ class Person
 
     public function getPhoneNumbers()
     {
-        return $this->phoneNumbers;
+        return $this->phoneNumbers->toArray();
     }
 
     public function addPhoneNumber( PhoneNumber $phoneNumber )
@@ -317,7 +320,7 @@ class Person
 
     public function getEmails()
     {
-        return $this->emails;
+        return $this->emails->toArray();
     }
 
     public function addEmail( Email $email )
@@ -335,7 +338,7 @@ class Person
 
     public function getAddresses()
     {
-        return $this->addresses;
+        return $this->addresses->toArray();
     }
 
     public function addAddress( Address $address )

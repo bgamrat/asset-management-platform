@@ -14,9 +14,10 @@ use Doctrine\ORM\EntityManager;
  */
 class Address
 {
+
     private $em;
 
-    public function __construct( EntityManager $em)
+    public function __construct( EntityManager $em )
     {
         $this->em = $em;
     }
@@ -29,9 +30,12 @@ class Address
         }
         $existingAddresses = $entity->getAddresses();
         $existing = [];
-        foreach( $existingAddresses as $a )
+        if( !empty( $existingAddresses ) )
         {
-            $existing[] = $a->toArray();
+            foreach( $existingAddresses as $a )
+            {
+                $existing[] = $a->toArray();
+            }
         }
         foreach( $data as $addressData )
         {
@@ -40,32 +44,34 @@ class Address
                 $key = array_search( $addressData, $existing, false );
                 if( $key !== false )
                 {
+                    $address = $existingAddresses[$key];
                     unset( $existingAddresses[$key] );
                 }
                 else
                 {
                     $address = new AddressEntity();
-                    $address->setType( $addressData['type'] );
-                    $address->setStreet1( $addressData['street1'] );
-                    $address->setStreet2( $addressData['street2'] );
-                    $address->setCity( $addressData['city'] );
-                    $address->setStateProvince( $addressData['state_province'] );
-                    $address->setPostalCode( $addressData['postal_code'] );
-                    $address->setCountry( $addressData['country'] );
-                    $address->setComment( $addressData['comment'] );
-                    if ($entity instanceof PersonEntity) {
-                        $address->setPerson($entity);
-                    }
-                    $this->em->persist($address);
-                    $entity->addAddress( $address );
+                }
+                $address->setType( $addressData['type'] );
+                $address->setStreet1( $addressData['street1'] );
+                $address->setStreet2( $addressData['street2'] );
+                $address->setCity( $addressData['city'] );
+                $address->setStateProvince( $addressData['state_province'] );
+                $address->setPostalCode( $addressData['postal_code'] );
+                $address->setCountry( $addressData['country'] );
+                $address->setComment( $addressData['comment'] );
+                $this->em->persist($address);
+                if ($key === false) {
+                    $entity->addAddress($address);
                 }
             }
         }
-        foreach( $existingAddresses as $leftOver )
+        if( !empty( $existingAddresses ) )
         {
-            $entity->removeAddress( $leftOver );
+            foreach( $existingAddresses as $leftOver )
+            {
+                $entity->removeAddress( $leftOver );
+            }
         }
-        $this->em->persist($entity);
     }
 
 }

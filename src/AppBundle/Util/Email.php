@@ -26,12 +26,14 @@ class Email
         {
             throw new \Exception( 'error.cannot_be_null' );
         }
-
         $existingEmails = $entity->getEmails();
         $existing = [];
-        foreach( $existingEmails as $e )
+        if( !empty( $existingEmails ) )
         {
-            $existing[$e->getEmail()] = $e->toArray();
+            foreach( $existingEmails as $e )
+            {
+                $existing[$e->getEmail()] = $e->toArray();
+            }
         }
         foreach( $data as $emailData )
         {
@@ -50,19 +52,20 @@ class Email
                 $email->setType( $emailData['type'] );
                 $email->setEmail( $emailData['email'] );
                 $email->setComment( $emailData['comment'] );
-                $email->setPerson($entity);
-                $this->em->persist( $email );
+                $this->em->persist($email);
                 if( $key === false )
                 {
-                    $entity->addEmail( $email );
+                    $entity->addEmail($email);
                 }
             }
         }
-        foreach( $existingEmails as $leftOver )
+        if( !empty( $existingEmails ) )
         {
-            $entity->removeEmail( $leftOver );
+            foreach( $existingEmails as $leftOver )
+            {
+                $entity->removeEmail( $leftOver );
+            }
         }
-        $this->em->persist($entity);
     }
 
 }

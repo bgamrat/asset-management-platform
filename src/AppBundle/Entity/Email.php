@@ -6,6 +6,7 @@ use AppBundle\Entity\EmailType;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -40,11 +41,12 @@ class Email
      * @ORM\Column(type="string", length=24, nullable=true)
      */
     private $comment;
+
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="emails")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="Person", mappedBy="emails")
      */
     private $person;
+
     /**
      * Get id
      *
@@ -126,31 +128,17 @@ class Email
     {
         return $this->comment;
     }
-    
-    /**
-     * Set person
-     *
-     * @param string $person
-     *
-     * @return Email
-     */
-    public function setPerson($person)
-    {
-        $this->person = $person;
-    
-        return $this;
+        
+    public function setPerson( Person $person )
+    {  
+        $person->addEmail($this);
     }
 
-    /**
-     * Get person
-     *
-     * @return string
-     */
     public function getPerson()
     {
         return $this->person;
     }
-
+    
     public function toArray()
     {
         return [

@@ -39,7 +39,7 @@ class User
         }
     }
     
-        public function processRoleUpdates( UserEntity $user, Array $roles )
+    public function processRoleUpdates( UserEntity $user, Array $roles )
     {
         $roleNames = [];
         foreach( $roles as $role )

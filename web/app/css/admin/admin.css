@@ -92,3 +92,7 @@ fieldset .sub-form-legend {
 .tundra .dgrid-selected {
     background-color: #ccb3ff;
 }
+.tundra .dijitDialogUnderlay._underlay {
+    opacity: 0.75;
+    background-color: #000;
+}

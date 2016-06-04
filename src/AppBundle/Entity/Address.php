@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Address
@@ -76,11 +77,12 @@ class Address
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
+
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="addresses")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="Person", mappedBy="addresses")
      */
     private $person;
+    
     /**
      * Get id
      *
@@ -281,31 +283,17 @@ class Address
     {
         return $this->comment;
     }
-        
-    /**
-     * Set person
-     *
-     * @param string $person
-     *
-     * @return Address
-     */
-    public function setPerson($person)
-    {
-        $this->person = $person;
     
-        return $this;
+    public function setPerson( Person $person )
+    {  
+        $person->addAddress($this);
     }
 
-    /**
-     * Get person
-     *
-     * @return string
-     */
     public function getPerson()
     {
         return $this->person;
     }
-
+    
     public function toArray()
     {
         return [
