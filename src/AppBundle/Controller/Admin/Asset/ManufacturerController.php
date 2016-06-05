@@ -27,11 +27,9 @@ class ManufacturerController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $manufacturerForm = $this->createForm( ManufacturerType::class, null, [] );
-        $brandForm = $this->createForm( BrandsType::class, null, [] );
 
         return $this->render( 'admin/asset/manufacturer.html.twig', array(
                     'manufacturer_form' => $manufacturerForm->createView(),
-                    'brand_form' => $brandForm->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }

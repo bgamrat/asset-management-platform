@@ -18,7 +18,10 @@
         <div id="manufacturer-grid">
         </div>
         <div id="manufacturer-view-dialog">
-            {{form_start(manufacturer_form)}}
+            {{form_start(manufacturer_form)}} 
+            <div class="text-right">
+                <button id="manufacturer-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
             <div class="manufacturer">
                 <fieldset class="name-active">
                     <legend>{{'asset.manufacturer'|trans}}</legend>
@@ -33,21 +36,19 @@
                     </div>
                     {{form_row(manufacturer_form.comment)}}
                 </fieldset>
-                <fieldset class="contacts">
-                    {{form_row(manufacturer_form.person)}}
-                </fieldset>
+                <div id="manufacturer-view-tabs">
+                    <div id="manufacturer-view-contacts-tab">
+                        <fieldset class="contacts">
+                            {{form_row(manufacturer_form.person)}}
+                        </fieldset>
+                    </div>
+                    <div id="manufacturer-view-brands-tab">
+                        {% include 'admin/asset/brands.html.twig' with { 'form' : manufacturer_form.brands } %}
+                    </div>
+                </div>
             </div>
             {{ form_end(manufacturer_form) }}
-            <div class="center">
-                <button id="manufacturer-save-btn" type="button">{{ 'common.save'|trans }}</button>
-            </div>
-        </div>
 
-        <div id="manufacturer-brand-view-dialog">
-            {% include 'admin/asset/brands.html.twig' with { 'form' : brand_form.brands } %}
-            <div class="center">
-                <button id="manufacturer-brand-save-btn" type="button">{{ 'common.save'|trans }}</button>
-            </div>
         </div>
     </div>
 {% endblock %}

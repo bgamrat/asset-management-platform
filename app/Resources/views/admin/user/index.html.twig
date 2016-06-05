@@ -20,24 +20,25 @@
         </div>
         <div id="user-view-dialog">
             {{form_start(user_form)}}
-                <fieldset class="inline-block">
-                    <legend>{{'common.user'|trans}}</legend>
-                    <div class="justify">
-                        {{form_row(user_form.username)}}
-                    </div>
-                    <div class="justify">
-                        {{form_row(user_form.email)}}
-                    </div>
-                    {{form_row(user_form.enabled)}}
-                    {{form_row(user_form.locked)}}
-                    {{form_row(user_form.groups)}}
-                    {{form_row(user_form.roles)}}
-                </fieldset>
-                {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
-            {{ form_end(user_form) }}
-            <div class="center">
+            <div class="text-right">
                 <button id="user-save-btn" type="button">{{ 'common.save'|trans }}</button>
             </div>
+            <fieldset class="inline-block">
+                <legend>{{'common.user'|trans}}</legend>
+                <div class="justify">
+                    {{form_row(user_form.username)}}
+                </div>
+                <div class="justify">
+                    {{form_row(user_form.email)}}
+                </div>
+                {{form_row(user_form.enabled)}}
+                {{form_row(user_form.locked)}}
+                {{form_row(user_form.groups)}}
+                {{form_row(user_form.roles)}}
+            </fieldset>
+            {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
+            {{ form_end(user_form) }}
+
         </div>
         <div id="user-invite-dialog">
             {{ form(invitation_form) }}  
@@ -48,7 +49,7 @@
                 <ul>
                     {% for invitation in outstanding_invitations %}
                         <li>{{ invitation.email }}</li>
-                    {% endfor %}
+                        {% endfor %}
                 </ul>
             </div>
         </div>

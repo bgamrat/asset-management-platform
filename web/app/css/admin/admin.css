@@ -19,7 +19,7 @@ fieldset legend {
     font-size: 1.3em;
     border-bottom: 1px solid #ddd;
     display: inline-block;
-    width: 95%;
+    width: 98%;
     margin-bottom: 7px
 }
 fieldset .sub-form-legend {
@@ -31,6 +31,8 @@ fieldset .sub-form-legend {
 .add-one-more-row {
     text-decoration: underline;
     cursor: pointer;
+    font-style: italic;
+    color: #888;
 }
 .remove-form-row {
     cursor: pointer;

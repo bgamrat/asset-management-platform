@@ -7,6 +7,7 @@ define({
         "city": "City",
         "comment": "Comment",
         "confirm": "Confirm",
+        "contacts": "Contacts",
         "country": "Country",
         "email": "Email",
         "enabled": "Enabled",

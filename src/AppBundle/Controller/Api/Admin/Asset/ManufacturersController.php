@@ -141,40 +141,22 @@ class ManufacturersController extends FOSRestController
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        if( isset( $data['brands'] ) )
-        {
-            $form = $this->createForm( BrandsType::class, null, [] );
-            unset( $data['name'] );
-        }
-        else
-        {
-            $form = $this->createForm( ManufacturerType::class, null, [] );
-        }
+        $form = $this->createForm( ManufacturerType::class, null, [] );
         try
         {
             $formProcessor->validateFormData( $form, $data );
             $em = $this->getDoctrine()->getManager();
             $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->findOneBy( ['name' => $name] );
 
-            if( isset( $data['brands'] ) )
+            if( $manufacturer === null )
             {
-                if( $manufacturer === null )
-                {
-                    throw $this->createNotFoundException( 'Not found!' );
-                }
-                $brandUtil = $this->get( 'app.util.brand' );
-                $brandUtil->update( $manufacturer, $data['brands'] );
+                $manufacturer = new Manufacturer();
+                $manufacturer->setName( $data['name'] );
             }
-            else
-            {
-                if( $manufacturer === null )
-                {
-                    $manufacturer = new Manufacturer();
-                    $manufacturer->setName( $data['name'] );
-                }
-                $contactUtil = $this->get( 'app.util.contact' );
-                $contactUtil->update( $manufacturer, $data['contacts'] );
-            }
+            $contactUtil = $this->get( 'app.util.contact' );
+            $contactUtil->update( $manufacturer, $data['contacts'] );
+            $brandUtil = $this->get( 'app.util.brand' );
+            $brandUtil->update( $manufacturer, $data['brands'] );
             $em->persist( $manufacturer );
             $em->flush();
 

@@ -18,6 +18,8 @@ define([
     "dijit/form/SimpleTextarea",
     "dijit/form/Button",
     "dijit/Dialog",
+    "dijit/layout/TabContainer",
+    "dijit/layout/ContentPane",
     'dstore/Rest',
     'dstore/SimpleQuery',
     'dstore/Trackable',
@@ -32,7 +34,8 @@ define([
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button, Dialog,
+        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button,
+        Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         person, brands, lib, libGrid, core) {
     function run() {
@@ -46,13 +49,22 @@ define([
             grid.clearSelection();
         });
 
-        var manufacturerBrandViewDialog = new Dialog({
-            title: core.view
-        }, "manufacturer-brand-view-dialog");
-        manufacturerBrandViewDialog.startup();
-        manufacturerBrandViewDialog.on("cancel", function (event) {
-            grid.clearSelection();
-        });
+        var tabContainer = new TabContainer({
+            style: "height: 500px; width: 100%;"
+        }, "manufacturer-view-tabs");
+
+        var contactsContentPane = new ContentPane({
+            title: core.contacts},
+        "manufacturer-view-contacts-tab"
+                );
+        tabContainer.addChild(contactsContentPane);
+
+        var brandsContentPane = new ContentPane({
+            title: core.brands},
+        "manufacturer-view-brands-tab"
+                );
+        tabContainer.addChild(brandsContentPane);
+        tabContainer.startup();
 
         var newBtn = new Button({
             label: core["new"]
@@ -134,29 +146,6 @@ define([
 
         var manufacturerBrandForm = new Form({}, '[name="brands"]');
         manufacturerBrandForm.startup();
-        
-        var brandSaveBtn = new Button({
-            label: core.save
-        }, 'manufacturer-brand-save-btn');
-        brandSaveBtn.startup();
-        brandSaveBtn.on("click", function (event) {
-            var s, manufacturerName;
-            if( manufacturerBrandForm.validate() ) {
-                for(s in grid.selection) {
-                    manufacturerName = s;
-                    break;
-                }
-                var data = {
-                    "name": manufacturerName,
-                    "brands": brands.getData()
-                };
-                grid.collection.put(data).then(function (data) {
-                    manufacturerBrandViewDialog.hide();
-                }, lib.xhrError);
-            } else {
-                lib.textError(core.invalid_form)
-            }
-        });
 
         var filterInput = new TextBox({placeHolder: core.filter}, "manufacturer-filter-input");
         filterInput.startup();
@@ -172,12 +161,12 @@ define([
                 },
                 brands: {
                     label: core.brands,
-                    renderCell: function(object, value, td) {
+                    renderCell: function (object, value, td) {
                         var b, nameList = [], content;
-                        for (b in object.brands) {
+                        for( b in object.brands ) {
                             nameList.push(object.brands[b].name);
                         }
-                        if (nameList.length > 0) {
+                        if( nameList.length > 0 ) {
                             content = nameList.join("\n");
                             put(td, "pre", content);
                         }
@@ -224,22 +213,15 @@ define([
                     grid.clearSelection();
                 }
                 grid.select(row);
-                if( field === "brands" ) {
-                    grid.collection.get(name+"/brands").then(function (manufacturer) {
-                        var r;
-                        action = "view";
-                        brands.setData(manufacturer.brands);
-                        manufacturerBrandViewDialog.show();
-                    }, lib.xhrError);
-                } else {
-                    grid.collection.get(name).then(function (manufacturer) {
-                        var r;
-                        action = "view";
-                        nameInput.set("value", manufacturer.name);
-                        activeCheckBox.set("checked", manufacturer.active === true);
-                        manufacturerViewDialog.show();
-                    }, lib.xhrError);
-                }
+                grid.collection.get(name).then(function (manufacturer) {
+                    var r;
+                    action = "view";
+                    nameInput.set("value", manufacturer.name);
+                    activeCheckBox.set("checked", manufacturer.active === true);
+                    //person.setData(manfucaturer.person);
+                    brands.setData(manufacturer.brands);
+                    manufacturerViewDialog.show();
+                }, lib.xhrError);
             }
         });
 
@@ -251,7 +233,6 @@ define([
             var value = event.value;
             switch( field ) {
                 case "active":
-                case "locked":
                     xhr("/api/manufacturers/" + name, {
                         method: "PATCH",
                         handleAs: "json",
@@ -295,7 +276,7 @@ define([
         });
 
         person.run('manufacturer');
-        brands.run('brands');
+        brands.run('manufacturer');
 
         lib.pageReady();
     }
