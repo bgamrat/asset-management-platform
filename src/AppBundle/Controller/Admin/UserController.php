@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function indexAction( Request $request )
     {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER', null, 'Unable to access this page!' );
 
         $user_form = $this->createForm( UserType::class, null, [] );
         $invitation_form = $this->createForm( InvitationType::class, null, [] );

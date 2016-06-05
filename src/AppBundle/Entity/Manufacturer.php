@@ -166,7 +166,7 @@ class Manufacturer
         return $this->contacts->toArray();
     }
 
-    public function addContact( Contact $contact )
+    public function addContact( Person $contact )
     {
         if( !$this->contacts->contains( $contact ) )
         {
@@ -174,7 +174,7 @@ class Manufacturer
         }
     }
 
-    public function removeContact( Contact $contact )
+    public function removeContact( Person $contact )
     {
         $this->contacts->removeElement( $contact );
     }

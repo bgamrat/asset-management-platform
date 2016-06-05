@@ -246,17 +246,17 @@ class Person
      */
     public function getFullName()
     {
-        $name = '';
+        $name = [];
         if (!empty($this->firstname)) {
-            $name .= ' '.$this->firstname;
+            $name[] = $this->firstname;
         }
         if (!empty($this->middleinitial)) {
-            $name .= ' '.$this->middleinitial;
+            $name[] = $this->middleinitial;
         }
         if (!empty($this->lastname)) {
-            $name .= ' '.$this->lastname;
+            $name[] = $this->lastname;
         }
-        return $name;
+        return implode(' ',$name);
     }
 
     /**

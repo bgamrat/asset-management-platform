@@ -6,23 +6,29 @@
         <h1>{{ 'user.admin'|trans }}</h1>
         <div class="grid-controls">
             <div>
-                <button id="user-new-btn" type="button">{{ 'common.new'|trans }}</button>
-                <button id="user-invite-btn" type="button">{{ 'user.invite'|trans }}</button>
+                {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                    <button id="user-new-btn" type="button">{{ 'common.new'|trans }}</button>
+                    <button id="user-invite-btn" type="button">{{ 'user.invite'|trans }}</button>
+                {% endif %}
             </div>
             <div>
                 <form id="user-grid-filter-form">
                     <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="user-filter-input">
                 </form>
             </div>
-            <button id="user-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                <button id="user-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+            {% endif %}
         </div>
         <div id="user-grid">
         </div>
         <div id="user-view-dialog">
             {{form_start(user_form)}}
-            <div class="text-right">
-                <button id="user-save-btn" type="button">{{ 'common.save'|trans }}</button>
-            </div>
+            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                <div class="text-right">
+                    <button id="user-save-btn" type="button">{{ 'common.save'|trans }}</button>
+                </div>
+            {% endif %}
             <fieldset class="inline-block">
                 <legend>{{'common.user'|trans}}</legend>
                 <div class="justify">
@@ -31,28 +37,33 @@
                 <div class="justify">
                     {{form_row(user_form.email)}}
                 </div>
-                {{form_row(user_form.enabled)}}
-                {{form_row(user_form.locked)}}
-                {{form_row(user_form.groups)}}
-                {{form_row(user_form.roles)}}
+                <div class="user-admin">
+                    {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                        {{form_row(user_form.enabled)}}
+                        {{form_row(user_form.locked)}}
+                        {{form_row(user_form.groups)}}
+                        {{form_row(user_form.roles)}}
+                    {% endif %}
+                </div>
             </fieldset>
             {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
             {{ form_end(user_form) }}
-
         </div>
-        <div id="user-invite-dialog">
-            {{ form(invitation_form) }}  
-            <div class="center">
-                <button id="user-invite-send-btn" type="button">{{'common.send'|trans}}</button>
-            </div>
-            <div>
-                <ul>
-                    {% for invitation in outstanding_invitations %}
-                        <li>{{ invitation.email }}</li>
+        {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+            <div id="user-invite-dialog">
+                {{ form(invitation_form) }}  
+                <div class="center">
+                    <button id="user-invite-send-btn" type="button">{{'common.send'|trans}}</button>
+                </div>
+                <div>
+                    <ul>
+                        {% for invitation in outstanding_invitations %}
+                            <li>{{ invitation.email }}</li>
                         {% endfor %}
-                </ul>
+                    </ul>
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}
 

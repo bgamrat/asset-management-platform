@@ -12,7 +12,7 @@ services:
 
     app.admin.form.type.user:
         class: AppBundle\Form\Admin\User\UserType
-        arguments: ['%security.role_hierarchy.roles%']
+        arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']
         tags:
         - { name: form.type, alias: user }
 
@@ -87,7 +87,7 @@ services:
         
     app.util.contact:
         class: AppBundle\Util\Contact
-        arguments: ['@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.entity_manager', '@app.model.person']
         
     app.util.email:
         class: AppBundle\Util\Email 

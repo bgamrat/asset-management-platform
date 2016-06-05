@@ -23,7 +23,7 @@ class UsersController extends FOSRestController
      */
     public function getUsersAction( Request $request )
     {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER', null, 'Unable to access this page!' );
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'username' );
 
         $em = $this->getDoctrine()->getManager();
@@ -42,22 +42,36 @@ class UsersController extends FOSRestController
         {
             $queryBuilder->setFirstResult( $dstore['offset'] );
         }
+        $filterQuery = null;
         if( $dstore['filter'] !== null )
         {
             switch( $dstore['filter'][DStore::OP] )
             {
                 case DStore::LIKE:
-                    $queryBuilder->where(
-                            $queryBuilder->expr()->orX(
-                                    $queryBuilder->expr()->like( 'u.username', '?1' ), $queryBuilder->expr()->like( 'u.email', '?1' ) )
+                    $filterQuery = $queryBuilder->expr()->orX(
+                            $queryBuilder->expr()->like( 'u.username', '?1' ), $queryBuilder->expr()->like( 'u.email', '?1' )
                     );
                     break;
                 case DStore::GT:
-                    $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'u.username', '?1' )
-                    );
+                    $filterQuery = $queryBuilder->expr()->gt( 'u.username', '?1' );
             }
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
+        }
+        if( !$this->isGranted( 'ROLE_ADMIN_USER_ADMIN' ) )
+        {
+            $deletedQuery = $queryBuilder->expr()->isNull( 'u.deletedAt' );
+            if( $filterQuery === null )
+            {
+                $filterQuery = $deletedQuery;
+            }
+            else
+            {
+                $filterQuery = $queryBuilder->expr()->and( $filterQuery, $deletedQuery );
+            }
+        }
+        if( $filterQuery !== null )
+        {
+            $queryBuilder->where( $filterQuery );
         }
         $query = $queryBuilder->getQuery();
         $userCollection = $query->getResult();
@@ -67,10 +81,13 @@ class UsersController extends FOSRestController
             $item = [
                 'username' => $u->getUsername(),
                 'email' => $u->getEmail(),
-                'enabled' => $u->isEnabled(),
-                'locked' => $u->isLocked(),
             ];
-            if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+            if( $this->isGranted( 'ROLE_ADMIN_USER' ) )
+            {
+                $item['enabled'] = $u->isEnabled();
+                $item['locked'] = $u->isLocked();
+            }
+            if( $this->isGranted( 'ROLE_ADMIN_USER_ADMIN' ) )
             {
                 $item['deleted_at'] = $u->getDeletedAt();
             }
@@ -84,7 +101,7 @@ class UsersController extends FOSRestController
      */
     public function getUserAction( $username )
     {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER', null, 'Unable to access this page!' );
 
         $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['username' => $username] );
         if( $user !== null )
@@ -92,15 +109,15 @@ class UsersController extends FOSRestController
             $data = [
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),
-                'enabled' => $user->isEnabled(),
-                'locked' => $user->isLocked()
             ];
             $person = $user->getPerson();
-            $personModel = $this->get('app.model.person');
-            $data['person'] = $personModel->get($person);
+            $personModel = $this->get( 'app.model.person' );
+            $data['person'] = $personModel->get( $person );
 
-            if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+            if( $this->isGranted( 'ROLE_ADMIN_USER' ) )
             {
+                $data['enabled'] = $user->isEnabled();
+                $data['locked'] = $user->isLocked();
                 $data['roles'] = $user->getRoles();
                 $data['groups'] = [];
                 foreach( $user->getGroups() as $group )
@@ -128,7 +145,7 @@ class UsersController extends FOSRestController
      */
     public function putUserAction( $username, Request $request )
     {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
@@ -137,7 +154,7 @@ class UsersController extends FOSRestController
         {
             $formProcessor->validateFormData( $form, $data );
             $em = $this->getDoctrine()->getManager();
-            $user = $em->getRepository('AppBundle:User')->findOneBy( ['username' => $username] );
+            $user = $em->getRepository( 'AppBundle:User' )->findOneBy( ['username' => $username] );
             if( $user === null )
             {
                 $user = $userManager->createUser();
@@ -149,8 +166,8 @@ class UsersController extends FOSRestController
             $userUtil->processGroupUpdates( $user, $data );
             $personModel = $this->get( 'app.model.person' );
             $person = $personModel->update( $user->getPerson(), $data['person'] );
-            $user->setPerson($person);
-            $em->persist($user);
+            $user->setPerson( $person );
+            $em->persist( $user );
             $em->flush();
 
             $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
@@ -174,6 +191,7 @@ class UsersController extends FOSRestController
      */
     public function patchUserAction( $username, Request $request )
     {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER_ADMIN', null, 'Unable to access this page!' );
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $userManager = $this->get( 'fos_user.user_manager' );

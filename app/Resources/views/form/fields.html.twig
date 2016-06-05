@@ -36,64 +36,72 @@
 {%- endblock choice_widget_collapsed -%}
 
 {%- block form_row -%}
-    <div{% if attr.class is defined %} class="{{attr.class|raw}}"{% endif %}>
-        {{- form_label(form) -}}
-        {{- form_errors(form) -}}
-        {{- form_widget(form) -}}
-    </div>
+<div{% if attr.class is defined %} class="{{attr.class|raw}}"{% endif %}>
+    {{- form_label(form) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form) -}}
+</div>
 {%- endblock form_row -%}
 
 {% block _address_entry_row %}
-{% spaceless %}
-    <div class="justify">
-        <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__address__"><i class="fa fa-remove"></i></div>
-        <div class="form-row address">
-            <div>{{ form_widget(form.type) }}</div>
-            <div>{{ form_widget(form.street1) }}</div>
-            <div>{{ form_widget(form.street2) }}</div>
-            <div>{{ form_widget(form.city) }}</div>
-            <div>{{ form_widget(form.state_province) }}</div>
-            <div>{{ form_widget(form.postal_code) }}</div>
-            <div>{{ form_widget(form.country) }}</div>
+    {% spaceless %}
+        <div class="justify">
+            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__address__"><i class="fa fa-remove"></i></div>
+                {% endif %}
+            <div class="form-row address">
+                <div>{{ form_widget(form.type) }}</div>
+                <div>{{ form_widget(form.street1) }}</div>
+                <div>{{ form_widget(form.street2) }}</div>
+                <div>{{ form_widget(form.city) }}</div>
+                <div>{{ form_widget(form.state_province) }}</div>
+                <div>{{ form_widget(form.postal_code) }}</div>
+                <div>{{ form_widget(form.country) }}</div>
+            </div>
+            <div class="form-row comment">
+                {{form_widget(form.comment)}}
+            </div>
         </div>
-        <div class="form-row comment">
-            {{form_widget(form.comment)}}
-        </div>
-    </div>
-{% endspaceless %}
+    {% endspaceless %}
 {% endblock %}
 
 {% block _brands_entry_row %}
-{% spaceless %}
-    <div class="form-row brand">
-        <span class="name">{{ form_widget(form.name) }}</span>
-        <span class="comment">{{ form_widget(form.comment) }}</span>
-        <span class="active">{{ form_widget(form.active) }}</span>
-        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="brand-__brand__"><i class="fa fa-remove"></i></span>
-    </div>
-{% endspaceless %}
+    {% spaceless %}
+        <div class="form-row brand">
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="brand-__brand__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>
+    {% endspaceless %}
 {% endblock %}
 
 {% block _emails_entry_row %}
-{% spaceless %}
-    <div class="form-row email">
-        <span class="type-select">{{ form_widget(form.type) }}</span>
-        <span class="input">{{ form_widget(form.email) }}</span>
-        <span class="comment">{{ form_widget(form.comment) }}</span>
-        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="email-__email__"><i class="fa fa-remove"></i></span>
-    </div>
-{% endspaceless %}
+    {% spaceless %}
+        <div class="form-row email">
+            <span class="type-select">{{ form_widget(form.type) }}</span>
+            <span class="input">{{ form_widget(form.email) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="email-__email__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>
+    {% endspaceless %}
 {% endblock %}
 
 {% block _phone_numbers_entry_row %}
-{% spaceless %}
-    <div class="form-row phone-number">
-        <span class="type-select">{{ form_widget(form.type) }}</span>
-        <span class="input">{{ form_widget(form.phone_number) }}</span>
-        <span class="comment">{{ form_widget(form.comment) }}</span>
-        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__phone__"><i class="fa fa-remove"></i></span>
-    </div>
-{% endspaceless %}
+    {% spaceless %}
+        <div class="form-row phone-number">
+            <span class="type-select">{{ form_widget(form.type) }}</span>
+            <span class="input">{{ form_widget(form.phone_number) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__phone__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>
+    {% endspaceless %}
 {% endblock %}
 
 {% block _manufacturer_person_entry_row %}
@@ -103,29 +111,29 @@
 {% endblock %}
 
 {% block _manufacturer_brands_entry_row %}
-{{ block('_brands_entry_row') }}
+    {{ block('_brands_entry_row') }}
 {% endblock %}
 
 {% block _manufacturer_person_entry_addresses_entry_row %}
-{{ block('_address_entry_row') }}
+    {{ block('_address_entry_row') }}
 {% endblock %}
 
 {% block _manufacturer_person_entry_emails_entry_row %}
-{{ block('_emails_entry_row') }}
+    {{ block('_emails_entry_row') }}
 {% endblock %}
 
 {% block _manufacturer_person_entry_phone_numbers_entry_row %}
-{{ block('_phone_numbers_entry_row') }}
+    {{ block('_phone_numbers_entry_row') }}
 {% endblock %}
 
 {% block _user_person_addresses_entry_row %}
-{{ block('_address_entry_row') }}
+    {{ block('_address_entry_row') }}
 {% endblock %}
 
 {% block _user_person_emails_entry_row %}
-{{ block('_emails_entry_row') }}
+    {{ block('_emails_entry_row') }}
 {% endblock %}
 
 {% block _user_person_phone_numbers_entry_row %}
-{{ block('_phone_numbers_entry_row') }}
+    {{ block('_phone_numbers_entry_row') }}
 {% endblock %}

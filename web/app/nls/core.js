@@ -1,12 +1,14 @@
 define({
     root: ({
         "active": "Active",
+        "address": "Address",
         "areyousure": "Are you sure?",
         "brands": "Brands",
         "cancel": "Cancel",
         "city": "City",
         "comment": "Comment",
         "confirm": "Confirm",
+        "contact": "Contact",
         "contacts": "Contacts",
         "country": "Country",
         "email": "Email",
@@ -20,6 +22,7 @@ define({
         "invite": "Invite",
         "lastname": "Last name",
         "locked": "Locked",
+        "manufacturer": "Manufacturer",
         "mi": "MI",
         "name": "Name",
         "new": "New",

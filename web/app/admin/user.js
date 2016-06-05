@@ -45,38 +45,44 @@ define([
             grid.clearSelection();
         });
 
-        var newBtn = new Button({
-            label: core["new"]
-        }, 'user-new-btn');
-        newBtn.startup();
-        newBtn.on("click", function (event) {
-            usernameInput.set("value", "");
-            usernameInput.set("readOnly", false);
-            emailInput.set("value", "");
-            enabledCheckBox.set("checked", true);
-            lockedCheckBox.set("checked", false);
-            userViewDialog.set("title", core["new"]).show();
-            action = "new";
-        });
+        var newBtn;
+        if( dom.byId('user-new-btn') !== null ) {
+            newBtn = new Button({
+                label: core["new"]
+            }, 'user-new-btn');
+            newBtn.startup();
+            newBtn.on("click", function (event) {
+                usernameInput.set("value", "");
+                usernameInput.set("readOnly", false);
+                emailInput.set("value", "");
+                enabledCheckBox.set("checked", true);
+                lockedCheckBox.set("checked", false);
+                userViewDialog.set("title", core["new"]).show();
+                action = "new";
+            });
+        }
 
-        var removeBtn = new Button({
-            label: core.remove
-        }, 'user-remove-btn');
-        removeBtn.startup();
-        removeBtn.on("click", function (event) {
-            var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "user-grid");
-            if( markedForDeletion.length > 0 ) {
-                lib.confirmAction(core.areyousure, function () {
-                    markedForDeletion.forEach(function (node) {
-                        var row = grid.row(node);
-                        store.remove(row.data.username);
+        var removeBtn;
+        if( dom.byId('user-remove-btn') !== null ) {
+            removeBtn = new Button({
+                label: core.remove
+            }, 'user-remove-btn');
+            removeBtn.startup();
+            removeBtn.on("click", function (event) {
+                var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "user-grid");
+                if( markedForDeletion.length > 0 ) {
+                    lib.confirmAction(core.areyousure, function () {
+                        markedForDeletion.forEach(function (node) {
+                            var row = grid.row(node);
+                            store.remove(row.data.username);
+                        });
                     });
-                });
-            }
-        });
+                }
+            });
+        }
 
         var emailInput = new ValidationTextBox({
-            required: true, 
+            required: true,
             pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$",
             trim: true
         }, "user_email");
@@ -87,11 +93,17 @@ define([
         }, "user_username");
         usernameInput.startup();
 
-        var enabledCheckBox = new CheckBox({}, "user_enabled");
-        enabledCheckBox.startup();
+        var enabledCheckBox;
+        if( dom.byId("user_enabled") !== null ) {
+            enabledCheckBox = new CheckBox({}, "user_enabled");
+            enabledCheckBox.startup();
+        }
 
-        var lockedCheckBox = new CheckBox({}, "user_locked");
-        lockedCheckBox.startup();
+        var lockedCheckBox;
+        if( dom.byId("user_locked") !== null ) {
+            lockedCheckBox = new CheckBox({}, "user_locked");
+            lockedCheckBox.startup();
+        }
 
         var userGroupsCheckBoxes = {};
         query('[data-type="user-group-cb"] input[type="checkbox"]').forEach(function (node) {
@@ -111,97 +123,100 @@ define([
             userRolesCheckBoxes[label] = cb;
         });
 
-        var userForm = new Form({}, '[name="user"]');
+        var userForm = new Form({"disabled": dom.byId("user-save-btn") === null}, '[name="user"]');
         userForm.startup();
 
-        var saveBtn = new Button({
-            label: core.save
-        }, 'user-save-btn');
-        saveBtn.startup();
-        saveBtn.on("click", function (event) {
-            var beforeId, beforeIdFilter, filter, g, groups, r, roles;
-            if( userForm.validate() ) {
-                groups = [];
-                for( g in userGroupsCheckBoxes ) {
-                    if( userGroupsCheckBoxes[g].get("checked") === true ) {
-                        groups.push(parseInt(g));
+        var saveBtn;
+        if( dom.byId('user-save-btn') !== null ) {
+            saveBtn = new Button({
+                label: core.save
+            }, 'user-save-btn');
+            saveBtn.startup();
+            saveBtn.on("click", function (event) {
+                var beforeId, beforeIdFilter, filter, g, groups, r, roles;
+                if( userForm.validate() ) {
+                    groups = [];
+                    for( g in userGroupsCheckBoxes ) {
+                        if( userGroupsCheckBoxes[g].get("checked") === true ) {
+                            groups.push(parseInt(g));
+                        }
                     }
-                }
-                roles = [];
-                for( r in userRolesCheckBoxes ) {
-                    if( userRolesCheckBoxes[r].get("checked") === true ) {
-                        roles.push(parseInt(userRolesCheckBoxes[r].get("id").replace(/.*(\d+)$/, "$1")));
-                        //roles.push(r);
+                    roles = [];
+                    for( r in userRolesCheckBoxes ) {
+                        if( userRolesCheckBoxes[r].get("checked") === true ) {
+                            roles.push(parseInt(userRolesCheckBoxes[r].get("id").replace(/.*(\d+)$/, "$1")));
+                            //roles.push(r);
+                        }
                     }
-                }
-                var data = {
-                    "username": usernameInput.get("value"),
-                    "email": emailInput.get("value"),
-                    "enabled": enabledCheckBox.get("checked"),
-                    "locked": lockedCheckBox.get("checked"),
-                    "groups": groups,
-                    "roles": roles,
-                    "person": person.getData()
-                };
-                data
-                if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
-                        userViewDialog.hide();
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeIdFilter = filter.gt('username', data.username);
-                    store.filter(beforeIdFilter).sort('username').fetchRange({start: 0, end: 1}).then(function (results) {
-                        beforeId = (results.length > 0) ? results[0].username : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
+                    var data = {
+                        "username": usernameInput.get("value"),
+                        "email": emailInput.get("value"),
+                        "enabled": enabledCheckBox.get("checked"),
+                        "locked": lockedCheckBox.get("checked"),
+                        "groups": groups,
+                        "roles": roles,
+                        "person": person.getData()
+                    };
+                    if( action === "view" ) {
+                        grid.collection.put(data).then(function (data) {
                             userViewDialog.hide();
                         }, lib.xhrError);
-                    });
+                    } else {
+                        filter = new store.Filter();
+                        beforeIdFilter = filter.gt('username', data.username);
+                        store.filter(beforeIdFilter).sort('username').fetchRange({start: 0, end: 1}).then(function (results) {
+                            beforeId = (results.length > 0) ? results[0].username : null;
+                            grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
+                                userViewDialog.hide();
+                            }, lib.xhrError);
+                        });
+                    }
+                } else {
+                    lib.textError(core.invalid_form)
                 }
-            } else {
-                lib.textError(core.invalid_form)
-            }
-            
-        });
 
+            });
+        }
 
-        var userInviteDialog = new Dialog({
-            title: core.invite
-        }, "user-invite-dialog");
-        userInviteDialog.startup();
+        var inviteBtn;
+        if( dom.byId('user-invite-btn') !== null ) {
+            var userInviteDialog = new Dialog({
+                title: core.invite
+            }, "user-invite-dialog");
+            userInviteDialog.startup();
+            inviteBtn = new Button({
+                label: core["invite"]
+            }, 'user-invite-btn');
+            inviteBtn.startup();
+            inviteBtn.on("click", function (event) {
+                inviteEmailInput.set("value", "");
+                userInviteDialog.set("title", core["invite"]).show();
+            })
 
-        var inviteBtn = new Button({
-            label: core["invite"]
-        }, 'user-invite-btn');
-        inviteBtn.startup();
-        inviteBtn.on("click", function (event) {
-            inviteEmailInput.set("value", "");
-            userInviteDialog.set("title", core["invite"]).show();
-        })
+            var inviteEmailInput = new ValidationTextBox({required: true, pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$"
+            }, "invitation_email");
+            inviteEmailInput.startup();
 
-        var inviteEmailInput = new ValidationTextBox({required: true, pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$"
-        }, "invitation_email");
-        inviteEmailInput.startup();
-
-        var inviteSendBtn = new Button({
-            label: core.send
-        }, 'user-invite-send-btn');
-        inviteSendBtn.startup();
-        inviteSendBtn.on("click", function (event) {
-            if( userInviteForm.validate() ) {
-                xhr("/admin/user/invite", {
-                    method: "POST",
-                    handleAs: "json",
-                    headers: {'Content-Type': 'application/json'},
-                    data: JSON.stringify({"email": inviteEmailInput.get("value")})}).then(function () {
-                    userInviteDialog.hide();
-                }, lib.xhrError);
-            } else {
-                lib.textError(core.invalid_form)
-            }
-        });
-        var userInviteForm = new Form({}, '[name="invitation"]');
-        userInviteForm.startup();
+            var inviteSendBtn = new Button({
+                label: core.send
+            }, 'user-invite-send-btn');
+            inviteSendBtn.startup();
+            inviteSendBtn.on("click", function (event) {
+                if( userInviteForm.validate() ) {
+                    xhr("/admin/user/invite", {
+                        method: "POST",
+                        handleAs: "json",
+                        headers: {'Content-Type': 'application/json'},
+                        data: JSON.stringify({"email": inviteEmailInput.get("value")})}).then(function () {
+                        userInviteDialog.hide();
+                    }, lib.xhrError);
+                } else {
+                    lib.textError(core.invalid_form)
+                }
+            });
+            var userInviteForm = new Form({}, '[name="invitation"]');
+            userInviteForm.startup();
+        }
 
         var filterInput = new TextBox({placeHolder: core.filter}, "user-filter-input");
         filterInput.startup();
@@ -271,20 +286,22 @@ define([
                     action = "view";
                     usernameInput.set("value", user.username);
                     emailInput.set("value", user.email);
-                    enabledCheckBox.set("checked", user.enabled === true);
-                    lockedCheckBox.set("checked", user.locked === true);
-                    for( g in userGroupsCheckBoxes ) {
-                        if( user.groups.indexOf(parseInt(g)) !== -1 ) {
-                            userGroupsCheckBoxes[g].set("checked", true);
-                        } else {
-                            userGroupsCheckBoxes[g].set("checked", false);
+                    if( typeof enabledCheckBox !== "undefined" ) {
+                        enabledCheckBox.set("checked", user.enabled === true);
+                        lockedCheckBox.set("checked", user.locked === true);
+                        for( g in userGroupsCheckBoxes ) {
+                            if( user.groups.indexOf(parseInt(g)) !== -1 ) {
+                                userGroupsCheckBoxes[g].set("checked", true);
+                            } else {
+                                userGroupsCheckBoxes[g].set("checked", false);
+                            }
                         }
-                    }
-                    for( r in userRolesCheckBoxes ) {
-                        if( user.roles.indexOf(r) !== -1 ) {
-                            userRolesCheckBoxes[r].set("checked", true);
-                        } else {
-                            userRolesCheckBoxes[r].set("checked", false);
+                        for( r in userRolesCheckBoxes ) {
+                            if( user.roles.indexOf(r) !== -1 ) {
+                                userRolesCheckBoxes[r].set("checked", true);
+                            } else {
+                                userRolesCheckBoxes[r].set("checked", false);
+                            }
                         }
                     }
                     person.setData(user.person);

@@ -50,7 +50,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 500px; width: 100%;"
+            style: "height: 600ox; width: 100%;"
         }, "manufacturer-view-tabs");
 
         var contactsContentPane = new ContentPane({
@@ -123,7 +123,8 @@ define([
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
-                    "person": person.getData()
+                    "person": [person.getData()], // TODO: Full multi-contact implementation
+                    "brands": brands.getData()
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -156,8 +157,36 @@ define([
             collection: store,
             className: "dgrid-autoheight",
             columns: {
-                name: {
-                    label: core.name
+                manufacturer: {
+                    label: core.manufacturer,
+                    renderCell: function (object, value, td) {
+                        var i, content, contactText = [object.name], address, address_lines, phone_number;
+                        // TODO: Add multi-contact support
+                        address_lines = ['street1','street2','city','state_province','postal_code','country'];
+                        if (typeof object.contacts !== "undefined") {
+                            if (typeof object.contacts[0] !== "undefined") {
+                                contactText.push("");
+                                contactText.push("\t"+object.contacts[0].fullname);
+                                if (typeof object.contacts[0].phone_numbers !== "undefined") {
+                                    phone_number = object.contacts[0].phone_numbers[0];
+                                    contactText.push("\t"+phone_number.phone_number);
+                                }
+                                if (typeof object.contacts[0].addresses !== "undefined") {
+                                    contactText.push("");
+                                    address = object.contacts[0].addresses[0];
+                                    for (i = 0; i< address_lines.length; i++ ) {
+                                        if (address[address_lines[i]] !== "") {
+                                            contactText.push("\t"+address[address_lines[i]]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if( contactText.length > 0 ) {
+                            content = contactText.join("\n");
+                            put(td, "pre", content);
+                        }
+                    }
                 },
                 brands: {
                     label: core.brands,
@@ -202,7 +231,7 @@ define([
         grid.startup();
         grid.collection.track();
 
-        grid.on(".dgrid-row:click", function (event) {
+        grid.on(".dgrid-row:click, .dgrid-row pre:click", function (event) {
             var checkBoxes = ["active", "remove"];
             var row = grid.row(event);
             var cell = grid.cell(event);
@@ -218,7 +247,8 @@ define([
                     action = "view";
                     nameInput.set("value", manufacturer.name);
                     activeCheckBox.set("checked", manufacturer.active === true);
-                    //person.setData(manfucaturer.person);
+                    // @TODO: Full multi-contact support
+                    person.setData(manufacturer.contacts[0]);
                     brands.setData(manufacturer.brands);
                     manufacturerViewDialog.show();
                 }, lib.xhrError);

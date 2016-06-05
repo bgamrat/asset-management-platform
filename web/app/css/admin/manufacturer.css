@@ -1,6 +1,6 @@
-#manufacturer-view-dialog {
-    width: 760px;
-    height: 850px;
+#manufacturer-view-dialog .dijitDialogPaneContent {
+    width: 760px !important;
+    height: 720px !important;
 }
 .manufacturer-name {
     font-size: 1.5em;

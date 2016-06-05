@@ -38,6 +38,7 @@ class Person
                 'firstname' => $person->getFirstname(),
                 'middleinitial' => $person->getMiddleinitial(),
                 'lastname' => $person->getLastname(),
+                'fullname' => $person->getFullName(),
                 'comment' => $person->getComment()
             ];
             $phoneNumbers = $person->getPhoneNumbers();

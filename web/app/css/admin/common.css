@@ -34,11 +34,6 @@
 .form-row > * {
     margin: 3px;
 }
-.form-row.comment .dijitTextBox.dijitTextArea {
-    height:50px;
-    width: 300px;
-}
-
 .grid-controls {
     display:flex;
     display: -webkit-flex;
@@ -48,7 +43,10 @@
     padding: 10px 0;
     border-bottom: 1px solid;
 }
-
+.field-active {
+    text-align: center;
+    width: 75px;
+}
 .dgrid-column-remove {
     width: 50px;
     text-align: center;
@@ -75,10 +73,12 @@
     background-color:  #7733ff;
     color: #fff;
 }
+.dgrid pre:hover,
 .tundra .dgrid-row:hover {
     background-color: #aa80ff;
 }
-.tundra .dgrid-selected {
+.tundra .dgrid-selected,
+.tundra .dgrid-selected pre {
     background-color: #ccb3ff;
 }
 .tundra .dijitDialogUnderlay._underlay {

@@ -3,6 +3,7 @@
 namespace AppBundle\Util;
 
 use AppBundle\Entity\Person As ContactEntity;
+use AppBundle\Model\Person As PersonModel;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -15,10 +16,10 @@ class Contact
 
     private $em;
 
-    public function __construct( EntityManager $em )
+    public function __construct( EntityManager $em, PersonModel $personModel  )
     {
         $this->em = $em;
-        $this->personModel = $this->get( 'app.model.person' );
+        $this->personModel = $personModel;
     }
 
     public function update( $entity, $data )
@@ -54,7 +55,7 @@ class Contact
                 {
                     $person = null;
                 }
-                $person = $this->personModel->update($person);
+                $person = $this->personModel->update($person,$contact);
                 if ($key === false) {
                     $entity->addContact($person);
                 }

@@ -62,10 +62,14 @@ class ManufacturersController extends FOSRestController
         $query = $queryBuilder->getQuery();
         $manufacturerCollection = $query->getResult();
         $data = [];
+        $personModel = $this->get( 'app.model.person' );
         foreach( $manufacturerCollection as $m )
         {
+            // TODO: Add full multi-contact support
+            $contacts = $m->getContacts();
             $item = [
                 'name' => $m->getName(),
+                'contacts' => [$personModel->get( $contacts[0] )],
                 'brands' => $m->getBrands(),
                 'active' => $m->isActive(),
             ];
@@ -112,8 +116,13 @@ class ManufacturersController extends FOSRestController
         $manufacturer = $repository->findOneBy( ['name' => $name] );
         if( $manufacturer !== null )
         {
+            $personModel = $this->get( 'app.model.person' );
+            // TODO: Add full multi-contact support
+            $contacts = $manufacturer->getContacts();
             $data = [
                 'name' => $manufacturer->getName(),
+                'brands' => $manufacturer->getBrands(),
+                'contacts' => [$personModel->get( $contacts[0] )],
                 'active' => $manufacturer->isActive()
             ];
 
@@ -154,7 +163,7 @@ class ManufacturersController extends FOSRestController
                 $manufacturer->setName( $data['name'] );
             }
             $contactUtil = $this->get( 'app.util.contact' );
-            $contactUtil->update( $manufacturer, $data['contacts'] );
+            $contactUtil->update( $manufacturer, $data['person'] );
             $brandUtil = $this->get( 'app.util.brand' );
             $brandUtil->update( $manufacturer, $data['brands'] );
             $em->persist( $manufacturer );

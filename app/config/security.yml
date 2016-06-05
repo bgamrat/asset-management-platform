@@ -10,8 +10,9 @@ security:
         ROLE_ADMIN:       ROLE_USER
         ROLE_API:         ROLE_ADMIN
         ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_ADMIN_USER:  ROLE_ADMIN
+        ROLE_ADMIN_USER_ADMIN: ROLE_ADMIN_USER
             
-
     providers:
         chain_provider:
             chain:

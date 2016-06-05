@@ -5,7 +5,6 @@
 .deleted {
     text-decoration: line-through;
 }
-
 fieldset > div {
     margin: 5px;
     padding: 3px;
@@ -68,7 +67,6 @@ fieldset .sub-form-legend {
 .form-row.address > * {
     display:block;
 }
-
 .form-row.comment .dijitTextBox.dijitTextArea {
     height:50px;
     width: 300px;
