@@ -84,7 +84,7 @@ class Person
     private $comment;
     /**
      * @var ArrayCollection $phoneNumbers
-     * @ORM\ManyToMany(targetEntity="PhoneNumber", inversedBy="person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="PhoneNumber", cascade={"persist"})
      * @ORM\JoinTable(name="person_phone_number",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="phone_number_id", referencedColumnName="id", unique=true, nullable=false)}
@@ -93,7 +93,7 @@ class Person
     private $phoneNumbers;
     /**
      * @var ArrayCollection $emails
-     * @ORM\ManyToMany(targetEntity="Email", inversedBy="person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Email", cascade={"persist"})
      * @ORM\JoinTable(name="person_email",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", unique=true, nullable=false)}
@@ -102,7 +102,7 @@ class Person
     protected $emails;
     /**
      * @var ArrayCollection $addresses
-     * @ORM\ManyToMany(targetEntity="Address", inversedBy="person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Address", cascade={"persist"})
      * @ORM\JoinTable(name="person_address",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true, nullable=false)}
@@ -237,6 +237,26 @@ class Person
     public function getMiddleinitial()
     {
         return $this->middleinitial;
+    }
+    
+    /**
+     * Get fullname
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        $name = '';
+        if (!empty($this->firstname)) {
+            $name .= ' '.$this->firstname;
+        }
+        if (!empty($this->middleinitial)) {
+            $name .= ' '.$this->middleinitial;
+        }
+        if (!empty($this->lastname)) {
+            $name .= ' '.$this->lastname;
+        }
+        return $name;
     }
 
     /**

@@ -38,7 +38,8 @@ class AddressType extends AbstractType
                     'choices_as_values' => true,
                     'preferred_choices' => ['US' => 'US', 'CA' => 'CA', 'MX' => 'MX']] )
                 ->add( 'comment', TextareaType::class , [
-                    'required' => false
+                    'required' => false,
+                    'label' => false
                 ] )
         ;
     }

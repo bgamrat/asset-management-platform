@@ -33,13 +33,18 @@ class Brand
      */
     private $name;
     /**
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $comment;
+    /**
      * @var boolean
      *
      * @ORM\Column(name="active", type="boolean")
      * 
      */
     private $active = true;
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
@@ -80,16 +85,40 @@ class Brand
         return $this->name;
     }
 
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return Email
+     */
+    public function setComment( $comment )
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
     public function setActive( $active )
     {
         $this->active = $active;
     }
 
-    public function isActive( )
+    public function isActive()
     {
         return $this->active;
     }
-    
+
     public function getDeletedAt()
     {
         return $this->deletedAt;
@@ -99,6 +128,15 @@ class Brand
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
+    }
+
+    public function toArray()
+    {
+        return [
+            'name' => $this->getName(),
+            'comment' => $this->getComment(),
+            'active' => $this->isActive()
+        ];
     }
 
 }

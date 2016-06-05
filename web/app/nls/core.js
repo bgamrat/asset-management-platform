@@ -2,6 +2,7 @@ define({
     root: ({
         "active": "Active",
         "areyousure": "Are you sure?",
+        "brands": "Brands",
         "cancel": "Cancel",
         "city": "City",
         "comment": "Comment",

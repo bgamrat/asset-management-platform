@@ -1,5 +1,5 @@
 #manufacturer-view-dialog {
-    width: 660px;
+    width: 760px;
 }
 .manufacturer-name {
     font-size: 1.5em;
@@ -7,4 +7,10 @@
 }
 .manufacturer-name .dijitTextBox {
     width: 225px;
+}
+.brand .name, .brand .comment, .brand .active {
+    display: inline-block;
+}
+.form-row.brand:nth-child(2) .remove-form-row {
+    display:none;
 }

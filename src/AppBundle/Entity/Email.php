@@ -43,11 +43,6 @@ class Email
     private $comment;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Person", mappedBy="emails")
-     */
-    private $person;
-
-    /**
      * Get id
      *
      * @return int
@@ -127,16 +122,6 @@ class Email
     public function getComment()
     {
         return $this->comment;
-    }
-        
-    public function setPerson( Person $person )
-    {  
-        $person->addEmail($this);
-    }
-
-    public function getPerson()
-    {
-        return $this->person;
     }
     
     public function toArray()

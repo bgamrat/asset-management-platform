@@ -3,7 +3,6 @@
 namespace AppBundle\Util;
 
 use AppBundle\Entity\PhoneNumber As PhoneNumberEntity;
-use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -51,9 +50,9 @@ class PhoneNumber
                 {
                     $phoneNumber = new PhoneNumberEntity();
                 }
-                $phoneNumber->setType( $phone['type'] );
-                $phoneNumber->setPhoneNumber( $phone['phone_number'] );
-                $phoneNumber->setComment( $phone['comment'] );
+                $phoneNumber->setType( $phone['type'] )
+                        ->setPhoneNumber( $phone['phone_number'] )
+                        ->setComment( $phone['comment'] );
                 $this->em->persist($phoneNumber);
                 if ($key === false) {
                     $entity->addPhoneNumber($phoneNumber);

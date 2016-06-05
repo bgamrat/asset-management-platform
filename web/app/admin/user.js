@@ -344,7 +344,7 @@ define([
             }));
         });
 
-        person.run('user_');
+        person.run('user');
         lib.pageReady();
     }
     return {

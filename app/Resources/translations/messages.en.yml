@@ -37,6 +37,8 @@ common:
         City
     comment:
         Comment
+    contact:
+        Contact
     contacts:
         Contacts
     country:

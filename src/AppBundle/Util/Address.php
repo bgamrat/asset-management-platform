@@ -2,9 +2,7 @@
 
 namespace AppBundle\Util;
 
-use AppBundle\Entity\Person As PersonEntity;
 use AppBundle\Entity\Address As AddressEntity;
-use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -51,17 +49,18 @@ class Address
                 {
                     $address = new AddressEntity();
                 }
-                $address->setType( $addressData['type'] );
-                $address->setStreet1( $addressData['street1'] );
-                $address->setStreet2( $addressData['street2'] );
-                $address->setCity( $addressData['city'] );
-                $address->setStateProvince( $addressData['state_province'] );
-                $address->setPostalCode( $addressData['postal_code'] );
-                $address->setCountry( $addressData['country'] );
-                $address->setComment( $addressData['comment'] );
-                $this->em->persist($address);
-                if ($key === false) {
-                    $entity->addAddress($address);
+                $address->setType( $addressData['type'] )
+                        ->setStreet1( $addressData['street1'] )
+                        ->setStreet2( $addressData['street2'] )
+                        ->setCity( $addressData['city'] )
+                        ->setStateProvince( $addressData['state_province'] )
+                        ->setPostalCode( $addressData['postal_code'] )
+                        ->setCountry( $addressData['country'] )
+                        ->setComment( $addressData['comment'] );
+                $this->em->persist( $address );
+                if( $key === false )
+                {
+                    $entity->addAddress( $address );
                 }
             }
         }

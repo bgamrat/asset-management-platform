@@ -81,11 +81,11 @@ class Person
         {
             $person = new PersonEntity();
         } 
-        $person->setType( $data['type'] );
-        $person->setFirstname( $data['firstname'] );
-        $person->setMiddleinitial( $data['middleinitial'] );
-        $person->setLastname( $data['lastname'] );
-        $person->setComment( $data['comment'] );
+        $person->setType( $data['type'] )
+                ->setFirstname( $data['firstname'] )
+                ->setMiddleinitial( $data['middleinitial'] )
+                ->setLastname( $data['lastname'] )
+                ->setComment( $data['comment'] );
         $this->em->persist($person);
         $this->phoneNumberUtil->update( $person, $data['phone_numbers'] );
         $this->emailUtil->update( $person, $data['emails'] );

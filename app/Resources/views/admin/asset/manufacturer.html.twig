@@ -35,13 +35,18 @@
                 </fieldset>
                 <fieldset class="contacts">
                     {{form_row(manufacturer_form.person)}}
-                    <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                 </fieldset>
             </div>
-
             {{ form_end(manufacturer_form) }}
             <div class="center">
                 <button id="manufacturer-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+        </div>
+
+        <div id="manufacturer-brand-view-dialog">
+            {% include 'admin/asset/brands.html.twig' with { 'form' : brand_form.brands } %}
+            <div class="center">
+                <button id="manufacturer-brand-save-btn" type="button">{{ 'common.save'|trans }}</button>
             </div>
         </div>
     </div>

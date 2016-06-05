@@ -77,11 +77,6 @@ class Address
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Person", mappedBy="addresses")
-     */
-    private $person;
     
     /**
      * Get id
@@ -282,16 +277,6 @@ class Address
     public function getComment()
     {
         return $this->comment;
-    }
-    
-    public function setPerson( Person $person )
-    {  
-        $person->addAddress($this);
-    }
-
-    public function getPerson()
-    {
-        return $this->person;
     }
     
     public function toArray()

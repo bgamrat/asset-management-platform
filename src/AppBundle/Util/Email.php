@@ -49,9 +49,9 @@ class Email
                 {
                     $email = new EmailEntity();
                 }
-                $email->setType( $emailData['type'] );
-                $email->setEmail( $emailData['email'] );
-                $email->setComment( $emailData['comment'] );
+                $email->setType( $emailData['type'] )
+                        ->setEmail( $emailData['email'] )
+                        ->setComment( $emailData['comment'] );
                 $this->em->persist($email);
                 if( $key === false )
                 {

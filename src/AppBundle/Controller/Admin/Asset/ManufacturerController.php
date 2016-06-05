@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin\Asset;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Form\Admin\Asset\BrandsType;
 use AppBundle\Form\Admin\Asset\ManufacturerType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -25,10 +26,12 @@ class ManufacturerController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $form = $this->createForm( ManufacturerType::class, null, [] );
+        $manufacturerForm = $this->createForm( ManufacturerType::class, null, [] );
+        $brandForm = $this->createForm( BrandsType::class, null, [] );
 
         return $this->render( 'admin/asset/manufacturer.html.twig', array(
-                    'manufacturer_form' => $form->createView(),
+                    'manufacturer_form' => $manufacturerForm->createView(),
+                    'brand_form' => $brandForm->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }

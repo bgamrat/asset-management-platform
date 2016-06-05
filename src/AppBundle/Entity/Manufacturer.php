@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Manufacturer
@@ -52,13 +53,28 @@ class Manufacturer
      *      )
      */
     private $contacts = null;
-
+    /**
+     * @var ArrayCollection $brands
+     * @ORM\ManyToMany(targetEntity="Brand", cascade={"persist"})
+     * @ORM\JoinTable(name="manufacturer_brand",
+     *      joinColumns={@ORM\JoinColumn(name="manufactuerer_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", unique=true, nullable=false)}
+     *      )
+     */
+    protected $brands = null;
+    
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
     private $deletedAt;
-
+    
+    public function __construct()
+    {
+        $this->contacts = new ArrayCollection();
+        $this->brands = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -126,6 +142,43 @@ class Manufacturer
     {
         return $this->comment;
     }
+    
+    public function getBrands()
+    {
+        return $this->brands->toArray();
+    }
+
+    public function addBrand( Brand $brand )
+    {
+        if( !$this->brands->contains( $brand ) )
+        {
+            $this->brands->add( $brand );
+        }
+    }
+
+    public function removeBrand( Brand $brand )
+    {
+        $this->brands->removeElement( $brand );
+    }
+    
+    public function getContacts()
+    {
+        return $this->contacts->toArray();
+    }
+
+    public function addContact( Contact $contact )
+    {
+        if( !$this->contacts->contains( $contact ) )
+        {
+            $this->contacts->add( $contact );
+        }
+    }
+
+    public function removeContact( Contact $contact )
+    {
+        $this->contacts->removeElement( $contact );
+    }
+    
     
     public function getDeletedAt()
     {

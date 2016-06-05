@@ -1,5 +1,6 @@
 <fieldset class="person inline-block">
-    <legend>{{'common.person'|trans}}</legend>
+    {% if legend is not defined %}{% set legend = 'common.person' %}{% endif %}
+    <legend>{{legend|trans}}</legend>
     <div class="name">
         {{form_widget(form.type)}}
         {{form_widget(form.firstname)}}

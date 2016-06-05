@@ -39,11 +39,6 @@ class PhoneNumber
      * @ORM\Column(type="string", length=24, nullable=true)
      */
     private $comment;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Person", mappedBy="phoneNumbers")
-     */
-    private $person;
     
     /**
      * Get id
@@ -125,16 +120,6 @@ class PhoneNumber
     public function getComment()
     {
         return $this->comment;
-    }
-    
-    public function setPerson( Person $person )
-    {  
-        $person->addPhoneNumber($this);
-    }
-
-    public function getPerson()
-    {
-        return $this->person;
     }
     
     public function toArray()

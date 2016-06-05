@@ -34,7 +34,7 @@ define([
     var personId = 0;
 
     function setDivId(divId) {
-        divIdInUse = divId + 'person';
+        divIdInUse = divId + '_person';
     }
 
     function getDivId() {

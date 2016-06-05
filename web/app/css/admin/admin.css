@@ -5,20 +5,7 @@
 .deleted {
     text-decoration: line-through;
 }
-.dgrid-column-remove {
-    width: 50px;
-    text-align: center;
-}
-/*
-.dgrid-row-table {
-    height: auto;
-}
-*/
-.field-enabled,
-.field-locked {
-    text-align: center;
-    width: 75px;
-}
+
 fieldset > div {
     margin: 5px;
     padding: 3px;
@@ -80,19 +67,8 @@ fieldset .sub-form-legend {
     display:block;
 }
 
-.tundra .dijitMenu, .tundra .dijitMenuBar, .tundra .dijitDialog {
-    border-color: #9966ff;
+.form-row.comment .dijitTextBox.dijitTextArea {
+    height:50px;
+    width: 300px;
 }
-.tundra .dijitMenuPassive .dijitMenuItemHover, .tundra .dijitComboBoxMenu .dijitMenuItemHover, .tundra .dijitMenuItemSelected {
-    background-color:  #7733ff;
-}
-.tundra .dgrid-row:hover {
-    background-color: #aa80ff;
-}
-.tundra .dgrid-selected {
-    background-color: #ccb3ff;
-}
-.tundra .dijitDialogUnderlay._underlay {
-    opacity: 0.75;
-    background-color: #000;
-}
+

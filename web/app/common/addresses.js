@@ -105,6 +105,8 @@ define([
     }
 
     function destroyRow(id, target) {
+        typeSelect[id].destroyRecursive();
+        typeSelect.splice(id, 1);
         street1Input[id].destroyRecursive();
         street1Input.splice(id, 1);
         street2Input[id].destroyRecursive();
@@ -223,7 +225,7 @@ define([
     }
 
 
-    function setData(address) {
+    function setData(addresses) {
         var i, p, obj;
 
         query(".form-row.address", prototypeNode.parentNode).forEach(function (node, index) {
@@ -240,7 +242,8 @@ define([
                     cloneNewNode();
                     createDijits();
                 }
-                obj = address[i];
+                obj = addresses[i];
+                typeSelect[i].set('value', obj.type);
                 street1Input[i].set('value', obj.street1);
                 street2Input[i].set('value', obj.street2);
                 cityInput[i].set('value', obj.city);
@@ -250,6 +253,7 @@ define([
                 commentInput[i].set('value', obj.comment);
             }
         } else {
+            typeSelect[0].set('value', '');
             street1Input[0].set('value', "");
             street2Input[0].set('value', "");
             cityInput[0].set('value', "");

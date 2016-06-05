@@ -1,12 +1,3 @@
-.grid-controls {
-    display:flex;
-    display: -webkit-flex;
-    justify-content: space-between;
-    -webkit-justify-content: space-between;
-    margin: 10px 0;
-    padding: 10px 0;
-    border-bottom: 1px solid;
-}
 [name="user"] > div {
     padding: 5px;
     margin: 0 auto;
@@ -29,4 +20,9 @@ ul#user_groups li {
 ul#user_roles li label,
 ul#user_groups li label {
     width: auto;
+}
+.field-enabled,
+.field-locked {
+    text-align: center;
+    width: 75px;
 }

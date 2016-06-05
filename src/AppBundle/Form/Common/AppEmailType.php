@@ -29,9 +29,11 @@ class AppEmailType extends AbstractType
                     'label' => false,
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'email', SymfonyEmailType::class, [ 
+                ->add( 'email', SymfonyEmailType::class, [
                 ] )
-                ->add( 'comment', TextType::class )
+                ->add( 'comment', TextType::class, [
+                    'label' => false
+                ] )
         ;
     }
 

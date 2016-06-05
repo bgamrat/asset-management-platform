@@ -2,8 +2,9 @@
 
 namespace AppBundle\Controller\Api\Admin\Asset;
 
-use AppBundle\Entity\Manufacturer;
 use AppBundle\Util\DStore;
+use AppBundle\Entity\Manufacturer;
+use AppBundle\Form\Admin\Asset\BrandsType;
 use AppBundle\Form\Admin\Asset\ManufacturerType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 class ManufacturersController extends FOSRestController
 {
 
-   /**
+    /**
      * @View()
      */
     public function getManufacturersAction( Request $request )
@@ -62,15 +63,16 @@ class ManufacturersController extends FOSRestController
         $query = $queryBuilder->getQuery();
         $manufacturerCollection = $query->getResult();
         $data = [];
-        foreach( $manufacturerCollection as $u )
+        foreach( $manufacturerCollection as $m )
         {
             $item = [
-                'name' => $u->getName(),
-                'active' => $u->isActive(),
+                'name' => $m->getName(),
+                'brands' => $m->getBrands(),
+                'active' => $m->isActive(),
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
-                $item['deleted_at'] = $u->getDeletedAt();
+                $item['deleted_at'] = $m->getDeletedAt();
             }
             $data[] = $item;
         }
@@ -84,7 +86,7 @@ class ManufacturersController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $repository = $this->getDoctrine()
-            ->getRepository('AppBundle:Manufacturer');
+                ->getRepository( 'AppBundle:Manufacturer' );
         $manufacturer = $repository->findOneBy( ['name' => $name] );
         if( $manufacturer !== null )
         {
@@ -117,18 +119,41 @@ class ManufacturersController extends FOSRestController
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( ManufacturerType::class, null, [] );
+        if( isset( $data['brands'] ) )
+        {
+            $form = $this->createForm( BrandsType::class, null, [] );
+            unset($data['name']);
+        }
+        else
+        {
+            $form = $this->createForm( ManufacturerType::class, null, [] );
+        }
         try
         {
             $formProcessor->validateFormData( $form, $data );
             $em = $this->getDoctrine()->getManager();
-            $manufacturer = $em->getRepository('AppBundle:Manufacturer')->findOneBy( ['name' => $name] );
-            if( $manufacturer === null )
+            $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->findOneBy( ['name' => $name] );
+
+            if( isset( $data['brands'] ) )
             {
-                $manufacturer = new Manufacturer();
-                $manufacturer->setName( $data['name'] );
+                if( $manufacturer === null )
+                {
+                    throw $this->createNotFoundException( 'Not found!' );
+                }
+                $brandUtil = $this->get( 'app.util.brand' );
+                $brandUtil->update( $manufacturer, $data['brands'] );
             }
-            $em->persist($manufacturer);
+            else
+            {
+                if( $manufacturer === null )
+                {
+                    $manufacturer = new Manufacturer();
+                    $manufacturer->setName( $data['name'] );
+                }
+                $contactUtil = $this->get( 'app.util.contact' );
+                $contactUtil->update( $manufacturer, $data['contacts'] );
+            }
+            $em->persist( $manufacturer );
             $em->flush();
 
             $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
@@ -154,8 +179,8 @@ class ManufacturersController extends FOSRestController
     {
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-                $repository = $this->getDoctrine()
-            ->getRepository('AppBundle:Manufacturer');
+        $repository = $this->getDoctrine()
+                ->getRepository( 'AppBundle:Manufacturer' );
         $manufacturer = $repository->findOneBy( ['name' => $name] );
         if( $manufacturer !== null )
         {
@@ -169,7 +194,7 @@ class ManufacturersController extends FOSRestController
                         break;
                 }
 
-                $em->persist($manufacturer);
+                $em->persist( $manufacturer );
                 $em->flush();
             }
         }
