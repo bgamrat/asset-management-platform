@@ -140,9 +140,14 @@ define([
         }, 'manufacturer-brand-save-btn');
         brandSaveBtn.startup();
         brandSaveBtn.on("click", function (event) {
+            var s, manufacturerName;
             if( manufacturerBrandForm.validate() ) {
+                for(s in grid.selection) {
+                    manufacturerName = s;
+                    break;
+                }
                 var data = {
-                    "name": nameInput.get("value"),
+                    "name": manufacturerName,
                     "brands": brands.getData()
                 };
                 grid.collection.put(data).then(function (data) {

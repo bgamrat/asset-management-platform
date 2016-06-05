@@ -12,9 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class ManufacturersController extends FOSRestController
 {
@@ -80,6 +79,29 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
+     * @Route("/manufacturers/{name}/brands")
+     * @Method("GET")
+     * @View()
+     */
+    public function getManufacturerBrandsAction( $name, Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $repository = $this->getDoctrine()
+                ->getRepository( 'AppBundle:Manufacturer' );
+        $manufacturer = $repository->findOneBy( ['name' => $name] );
+        if( $manufacturer !== null )
+        {
+            $data = [];
+            $data['brands'] = $manufacturer->getBrands();
+            return $data;
+        }
+        else
+        {
+            throw $this->createNotFoundException( 'Not found!' );
+        }
+    }
+
+    /**
      * @View()
      */
     public function getManufacturerAction( $name )
@@ -122,7 +144,7 @@ class ManufacturersController extends FOSRestController
         if( isset( $data['brands'] ) )
         {
             $form = $this->createForm( BrandsType::class, null, [] );
-            unset($data['name']);
+            unset( $data['name'] );
         }
         else
         {

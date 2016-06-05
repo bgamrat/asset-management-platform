@@ -110,17 +110,17 @@ define([
             cloneNewNode();
             createDijits();
             if( nameInput.length >= lib.constant.MAX_BRANDS ) {
-                addOneMoreControl.classList.add("hidden");
+                addOneMoreControl.addClass("hidden");
             }
         });
 
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
-            var id = parseInt(target.id.replace(/\D/g, ''));
-            destroyRow(id, targetParent);
+            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            destroyRow(id, targetParent.parentNode);
             if( nameInput.length <= lib.constant.MAX_BRANDS ) {
-                addOneMoreControl.classList.remove("hidden");
+                addOneMoreControl.removeClass("hidden");
             }
         });
     }
@@ -141,7 +141,7 @@ define([
     function setData(brands) {
         var i, p, obj;
 
-        query(".form-row.brand-number", prototypeNode.parentNode).forEach(function (node, index) {
+        query(".form-row.brand", prototypeNode.parentNode).forEach(function (node, index) {
             if( index !== 0 ) {
                 destroyRow(index, node);
             }
@@ -163,7 +163,7 @@ define([
         } else {
             nameInput[0].set('value', "");
             commentInput[0].set('value', "");
-            activeCheckBox[i].set('value', "");
+            activeCheckBox[0].set('value', "");
         }
     }
 

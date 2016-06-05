@@ -117,17 +117,17 @@ define([
             cloneNewNode();
             createDijits();
             if (typeSelect.length >= lib.constant.MAX_PHONE_NUMBERS) {
-                addOneMoreControl.classList.add("hidden");
+                addOneMoreControl.addClass("hidden");
             }
         });
 
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
-            var id = parseInt(target.id.replace(/\D/g, ''));
-            destroyRow(id, targetParent);
+            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            destroyRow(id, targetParent.parentNode);
             if (typeSelect.length <= lib.constant.MAX_PHONE_NUMBERS) {
-                addOneMoreControl.classList.remove("hidden");
+                addOneMoreControl.removeClass("hidden");
             }
         });
     }

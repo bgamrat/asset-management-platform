@@ -191,17 +191,17 @@ define([
             cloneNewNode();
             createDijits();
             if( countrySelect.length >= lib.constant.MAX_ADDRESSES ) {
-                addOneMoreControl.classList.add("hidden");
+                addOneMoreControl.addClass("hidden");
             }
         });
 
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
-            var id = parseInt(target.id.replace(/\D/g, ''));
-            destroyRow(id, targetParent);
+            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            destroyRow(id, targetParent.parentNode);
             if( countrySelect.length <= lib.constant.MAX_ADDRESSES ) {
-                addOneMoreControl.classList.remove("hidden");
+                addOneMoreControl.removeClass("hidden");
             }
         });
     }
