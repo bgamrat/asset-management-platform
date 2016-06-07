@@ -66,7 +66,7 @@ class UsersController extends FOSRestController
             }
             else
             {
-                $filterQuery = $queryBuilder->expr()->and( $filterQuery, $deletedQuery );
+                $filterQuery = $queryBuilder->expr()->andX( $filterQuery, $deletedQuery );
             }
         }
         if( $filterQuery !== null )

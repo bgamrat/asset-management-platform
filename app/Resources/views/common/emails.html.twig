@@ -1,7 +1,7 @@
 <div class="emails">
     <span class="sub-form-legend">{{'common.email'|trans}}</span>
     {{form_row(form)}}
-    {% if form.vars.allow_add and is_granted('ROLE_ADMIN_USER_ADMIN') %}
+    {% if form.vars.allow_add %}
     <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
     {% endif %}
 </div>

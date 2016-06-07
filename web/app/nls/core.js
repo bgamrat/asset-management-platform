@@ -26,6 +26,7 @@ define({
         "mi": "MI",
         "name": "Name",
         "new": "New",
+        "no": "No",
         "okay": "Okay",
         "phone_number": "Phone number",
         "postal_code": "Zip",
@@ -38,6 +39,7 @@ define({
         "street": "Street",
         "type": "Type",
         "username": "Username",
-        "view": "View"
+        "view": "View",
+        "yes": "Yes"
     })
 });

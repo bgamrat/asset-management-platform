@@ -162,21 +162,21 @@ define([
                     renderCell: function (object, value, td) {
                         var i, content, contactText = [object.name], address, address_lines, phone_number;
                         // TODO: Add multi-contact support
-                        address_lines = ['street1','street2','city','state_province','postal_code','country'];
-                        if (typeof object.contacts !== "undefined") {
-                            if (typeof object.contacts[0] !== "undefined") {
+                        address_lines = ['street1', 'street2', 'city', 'state_province', 'postal_code', 'country'];
+                        if( typeof object.contacts !== "undefined" ) {
+                            if( typeof object.contacts[0] !== "undefined" ) {
                                 contactText.push("");
-                                contactText.push("\t"+object.contacts[0].fullname);
-                                if (typeof object.contacts[0].phone_numbers !== "undefined") {
+                                contactText.push("\t" + object.contacts[0].fullname);
+                                if( typeof object.contacts[0].phone_numbers !== "undefined" ) {
                                     phone_number = object.contacts[0].phone_numbers[0];
-                                    contactText.push("\t"+phone_number.phone_number);
+                                    contactText.push("\t" + phone_number.phone_number);
                                 }
-                                if (typeof object.contacts[0].addresses !== "undefined") {
+                                if( typeof object.contacts[0].addresses !== "undefined" ) {
                                     contactText.push("");
                                     address = object.contacts[0].addresses[0];
-                                    for (i = 0; i< address_lines.length; i++ ) {
-                                        if (address[address_lines[i]] !== "") {
-                                            contactText.push("\t"+address[address_lines[i]]);
+                                    for( i = 0; i < address_lines.length; i++ ) {
+                                        if( address[address_lines[i]] !== "" ) {
+                                            contactText.push("\t" + address[address_lines[i]]);
                                         }
                                     }
                                 }
@@ -190,15 +190,17 @@ define([
                 },
                 brands: {
                     label: core.brands,
-                    renderCell: function (object, value, td) {
-                        var b, nameList = [], content;
-                        for( b in object.brands ) {
-                            nameList.push(object.brands[b].name);
+                    formatter: function (data,object) {
+                        var b, nameList = [], html = "";
+                        for( b in data ) {
+                            nameList.push(data[b].name);
                         }
                         if( nameList.length > 0 ) {
-                            content = nameList.join("\n");
-                            put(td, "pre", content);
+                            for( n = 0; n < nameList.length; n++ ) {
+                                html += '<span data-manufacturer="'+object.name+'" data-brand="' + nameList[n] + '">' + nameList[n] + '</span><br>';
+                            }
                         }
+                        return html;
                     }
                 },
                 active: {
@@ -237,7 +239,7 @@ define([
             var cell = grid.cell(event);
             var field = cell.column.field;
             var name = row.data.name;
-            if( checkBoxes.indexOf(field) === -1 ) {
+            if( checkBoxes.indexOf(field) === -1 && field !== 'brands') {
                 if( typeof grid.selection[0] !== "undefined" ) {
                     grid.clearSelection();
                 }

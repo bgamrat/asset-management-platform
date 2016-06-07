@@ -46,9 +46,7 @@
 {% block _address_entry_row %}
     {% spaceless %}
         <div class="justify">
-            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
-                <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__address__"><i class="fa fa-remove"></i></div>
-                {% endif %}
+            <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__address__"><i class="fa fa-remove"></i></div>
             <div class="form-row address">
                 <div>{{ form_widget(form.type) }}</div>
                 <div>{{ form_widget(form.street1) }}</div>
@@ -71,9 +69,7 @@
             <span class="name">{{ form_widget(form.name) }}</span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
             <span class="active">{{ form_widget(form.active) }}</span>
-            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="brand-__brand__"><i class="fa fa-remove"></i></span>
-                {% endif %}
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="brand-__brand__"><i class="fa fa-remove"></i></span>
         </div>
     {% endspaceless %}
 {% endblock %}
@@ -84,9 +80,7 @@
             <span class="type-select">{{ form_widget(form.type) }}</span>
             <span class="input">{{ form_widget(form.email) }}</span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
-            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="email-__email__"><i class="fa fa-remove"></i></span>
-                {% endif %}
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="email-__email__"><i class="fa fa-remove"></i></span>
         </div>
     {% endspaceless %}
 {% endblock %}
@@ -97,9 +91,7 @@
             <span class="type-select">{{ form_widget(form.type) }}</span>
             <span class="input">{{ form_widget(form.phone_number) }}</span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
-            {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__phone__"><i class="fa fa-remove"></i></span>
-                {% endif %}
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__phone__"><i class="fa fa-remove"></i></span>
         </div>
     {% endspaceless %}
 {% endblock %}

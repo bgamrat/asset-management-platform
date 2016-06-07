@@ -23,31 +23,44 @@
         <div id="user-grid">
         </div>
         <div id="user-view-dialog">
-            {{form_start(user_form)}}
             {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                {{form_start(user_form)}}
                 <div class="text-right">
                     <button id="user-save-btn" type="button">{{ 'common.save'|trans }}</button>
-                </div>
-            {% endif %}
-            <fieldset class="inline-block">
-                <legend>{{'common.user'|trans}}</legend>
-                <div class="justify">
-                    {{form_row(user_form.username)}}
-                </div>
-                <div class="justify">
-                    {{form_row(user_form.email)}}
-                </div>
-                <div class="user-admin">
-                    {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
+                </div>          
+                <fieldset class="inline-block">
+                    <legend>{{'common.user'|trans}}</legend>
+                    <div class="justify">
+                        {{form_row(user_form.username)}}
+                    </div>
+                    <div class="justify">
+                        {{form_row(user_form.email)}}
+                    </div>
+                    <div class="user-admin">
                         {{form_row(user_form.enabled)}}
                         {{form_row(user_form.locked)}}
                         {{form_row(user_form.groups)}}
                         {{form_row(user_form.roles)}}
-                    {% endif %}
-                </div>
-            </fieldset>
-            {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
-            {{ form_end(user_form) }}
+                    </div>
+                </fieldset> 
+                {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
+                {{ form_end(user_form) }}
+            {% else %}
+                <fieldset class="inline-block">
+                    <legend>{{'common.user'|trans}}</legend>
+                    <div class="justify">
+                        <span id="view-username"></span>
+                    </div>
+                    <div class="justify">
+                        <span id="view-email"></span>
+                    </div>
+                    <div class="user-admin">
+                        <span id="view-enabled"></span>
+                        <span id="view-locked"></span>
+                    </div>
+                </fieldset> 
+                {% include 'common/view/person.html.twig' %}
+            {% endif %}
         </div>
         {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
             <div id="user-invite-dialog">
@@ -59,7 +72,7 @@
                     <ul>
                         {% for invitation in outstanding_invitations %}
                             <li>{{ invitation.email }}</li>
-                        {% endfor %}
+                            {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -69,8 +82,9 @@
 
 {% block javascripts %}
     <script>
-        require(["app/admin/user"], function (user) {
-            user.run();
-        });
+        require(["{% if is_granted('ROLE_ADMIN_USER_ADMIN') %}app/admin/user{% else %}app/admin-view-only/user{%endif %}"],
+                function (user) {
+                    user.run();
+                });
     </script>
 {% endblock %}

@@ -1,0 +1,13 @@
+<fieldset class="person inline-block">
+    {% if legend is not defined %}{% set legend = 'common.person' %}{% endif %}
+    <legend>{{legend|trans}}</legend>
+    <div class="name">
+        Name and stuff
+    </div>
+    <div class="comment">
+        Comment
+    </div>
+    {% include 'common/view/emails.html.twig' %}
+    {% include 'common/view/phone_numbers.html.twig' %}
+    {% include 'common/view/addresses.html.twig' %}
+</fieldset>
