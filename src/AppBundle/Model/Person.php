@@ -41,6 +41,8 @@ class Person
                 'fullname' => $person->getFullName(),
                 'comment' => $person->getComment()
             ];
+            $personType = $this->em->find('AppBundle:PersonType',['id' => $data['type']]);
+            $data['typetext'] = $personType->getType();
             $phoneNumbers = $person->getPhoneNumbers();
             if( $phoneNumbers !== null )
             {

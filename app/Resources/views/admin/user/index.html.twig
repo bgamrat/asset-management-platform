@@ -48,18 +48,14 @@
             {% else %}
                 <fieldset class="inline-block">
                     <legend>{{'common.user'|trans}}</legend>
-                    <div class="justify">
+                    <div class="view-inline">
                         <span id="view-username"></span>
-                    </div>
-                    <div class="justify">
                         <span id="view-email"></span>
-                    </div>
-                    <div class="user-admin">
                         <span id="view-enabled"></span>
                         <span id="view-locked"></span>
                     </div>
                 </fieldset> 
-                {% include 'common/view/person.html.twig' %}
+                {% include 'common/view-only/person.html.twig' %}
             {% endif %}
         </div>
         {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
@@ -82,7 +78,7 @@
 
 {% block javascripts %}
     <script>
-        require(["{% if is_granted('ROLE_ADMIN_USER_ADMIN') %}app/admin/user{% else %}app/admin-view-only/user{%endif %}"],
+        require(["{% if is_granted('ROLE_ADMIN_USER_ADMIN') %}app/admin/user{% else %}app/admin/view-only/user{%endif %}"],
                 function (user) {
                     user.run();
                 });

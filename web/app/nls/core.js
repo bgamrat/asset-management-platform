@@ -11,6 +11,7 @@ define({
         "contact": "Contact",
         "contacts": "Contacts",
         "country": "Country",
+        "disabled": "Disabled",
         "email": "Email",
         "enabled": "Enabled",
         "error": "Error",

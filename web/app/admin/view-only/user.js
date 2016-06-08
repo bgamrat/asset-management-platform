@@ -16,7 +16,7 @@ define([
     'dstore/Trackable',
     'dgrid/OnDemandGrid',
     "dgrid/Selection",
-    //"app/admin-view-only/person",
+    "app/admin/view-only/person",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -25,7 +25,7 @@ define([
         on, xhr, json, query,
         TextBox, Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection,
-        //person,
+        person,
         lib, libGrid, core) {
     function run() {
 
@@ -36,7 +36,7 @@ define([
         userViewDialog.on("cancel", function (event) {
             grid.clearSelection();
         });
-        
+
         var viewUsername = dom.byId("view-username");
         var viewEmail = dom.byId("view-email");
         var viewEnabled = dom.byId("view-enabled");
@@ -85,11 +85,11 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(username).then(function (user) {
-                    html.set( viewUsername, user.username);
-                    html.set( viewEmail,user.email);
-                    html.set(viewEnabled,user.enabled ? core.yes : core.no );
-                    html.set(viewEnabled,user.locked ? core.yes : core.no );
-                    //person.setData(user.person);
+                    html.set(viewUsername, user.username);
+                    html.set(viewEmail, user.email);
+                    html.set(viewEnabled, user.enabled ? core.enabled : core.disabled);
+                    html.set(viewLocked, user.locked ? core.locked : '');
+                    person.setData(user.person);
                     userViewDialog.show();
                 }, lib.xhrError);
             }
@@ -105,7 +105,7 @@ define([
             }));
         });
 
-        //person.run('user');
+        person.run('user');
         lib.pageReady();
     }
     return {

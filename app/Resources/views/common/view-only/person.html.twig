@@ -1,0 +1,15 @@
+<fieldset class="person inline-block">
+{% if legend is not defined %}{% set legend = 'common.person' %}{% endif %}
+<legend>{{legend|trans}}</legend>
+    {% set prototype %}{% spaceless %}
+        <div class="view-inline">
+            <span id="user_person___person___type"></span>
+            <span id="user_person___person___fullname"></span>
+            <span id="user_person___person___comment"></span>
+        </div>{% endspaceless %}
+    {% endset %}
+    <div id="user_person" data-prototype="{{prototype|escape('html')}}"></div>
+    {% include 'common/view-only/emails.html.twig' %}
+    {% include 'common/view-only/phone_numbers.html.twig' %}
+    {% include 'common/view-only/addresses.html.twig' %}
+</fieldset>

@@ -109,15 +109,16 @@ class UsersController extends FOSRestController
             $data = [
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),
+                'enabled' => $user->isEnabled(),
+                'locked' => $user->isLocked()
             ];
             $person = $user->getPerson();
             $personModel = $this->get( 'app.model.person' );
             $data['person'] = $personModel->get( $person );
 
-            if( $this->isGranted( 'ROLE_ADMIN_USER' ) )
+            if( $this->isGranted( 'ROLE_ADMIN_USER_ADMIN' ) )
             {
-                $data['enabled'] = $user->isEnabled();
-                $data['locked'] = $user->isLocked();
+
                 $data['roles'] = $user->getRoles();
                 $data['groups'] = [];
                 foreach( $user->getGroups() as $group )

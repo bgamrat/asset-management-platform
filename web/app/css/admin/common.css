@@ -31,6 +31,9 @@
 .xshort {
     width: 1.2em;
 }
+.view-inline span {
+    padding-right: 15px;
+}
 .form-row > * {
     margin: 3px;
 }
