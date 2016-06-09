@@ -31,8 +31,16 @@
 .xshort {
     width: 1.2em;
 }
+.view-block span:nth-child(1n+2) {
+    padding-left: 7px;
+}
+.view-inline {
+    display: table-row;
+}
+
 .view-inline span {
     padding-right: 15px;
+    display:table-cell;
 }
 .form-row > * {
     margin: 3px;

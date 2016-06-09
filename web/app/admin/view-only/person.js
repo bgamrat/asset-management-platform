@@ -51,13 +51,14 @@ define([
         if( prototypeNode !== null ) {
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
             prototypeContent = dataPrototype.replace(/__person__/g, personId);
-            domConstruct.place(prototypeContent, prototypeNode.parentNode, "after");
+            domConstruct.place(prototypeContent, prototypeNode, "after");
         }
 
         createViewSpans();
-       // emails.run(getDivId());
-       // phoneNumbers.run(getDivId());
-       // addresses.run(getDivId());
+        
+        phoneNumbers.run(getDivId());
+        emails.run(getDivId());
+        addresses.run(getDivId());
     }
 
     function setData(person) {
@@ -70,7 +71,7 @@ define([
             html.set(viewType, person.typetext);
             html.set(viewFullName, person.fullname);
             html.set(viewComment, person.comment);
-/*
+
             if( typeof person.phone_numbers !== "undefined" ) {
                 phoneNumbers.setData(person.phone_numbers);
             } else {
@@ -86,7 +87,6 @@ define([
             } else {
                 addresses.setData(null);
             }
-            */
         } else {
             html.set(viewType, "");
             html.set(viewFullName, "");

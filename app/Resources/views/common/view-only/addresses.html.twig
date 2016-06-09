@@ -1,2 +1,21 @@
-{# empty Twig template #}
-Addresses
+<div class="addresses">
+    <span class="sub-form-legend">{{'common.address'|trans}}</span>
+    {% set prototype %}{% spaceless %}
+    <div class="view-block">
+        <div id="{{base}}_addresses___address___type"></div>
+        <div id="{{base}}_addresses___address___street1"></div>
+        <div id="{{base}}_addresses___address___street2"></div>
+        <div>
+        <span id="{{base}}_addresses___address___city"></span>&comma;
+        <span id="{{base}}_addresses___address___state_province"></span>
+        <span id="{{base}}_addresses___address___postal_code"></span>
+        <span id="{{base}}_addresses___address___country"></span>
+        </div>
+    </div>
+    <div class="view-block">
+        <div id="{{base}}_addresses___address___comment"></div>
+    </div>
+    {% endspaceless %}
+    {% endset %}
+    <div id="{{base}}_addresses" data-prototype="{{prototype|escape('html')}}"></div>
+</div>

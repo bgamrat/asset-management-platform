@@ -28,7 +28,8 @@ class Person
         $this->phoneNumberUtil = $phoneNumberUtil;
         $this->addressUtil = $addressUtil;
     }
-
+    
+    // TODO: check this for best practices
     public function get( $person )
     {
         if( $person !== null )
@@ -43,14 +44,25 @@ class Person
             ];
             $personType = $this->em->find('AppBundle:PersonType',['id' => $data['type']]);
             $data['typetext'] = $personType->getType();
+            
+            $phoneTypesData = $this->em->createQuery('SELECT pt FROM AppBundle\Entity\PhoneNumberType pt')->getResult();
+            $phoneTypes = [];
+            foreach ($phoneTypesData as $pt) {
+                $phoneTypes[$pt->getId()] = $pt->getType();
+            }
             $phoneNumbers = $person->getPhoneNumbers();
             if( $phoneNumbers !== null )
             {
                 $data['phone_numbers'] = [];
                 foreach( $phoneNumbers as $phone )
                 {
-                    $data['phone_numbers'][] = $phone->toArray();
+                    $data['phone_numbers'][] = $phone->toArray() + ['typetext' => $phoneTypes[$phone->getType()]];
                 }
+            }
+            $emailTypesData = $this->em->createQuery('SELECT e FROM AppBundle\Entity\EmailType e')->getResult();
+            $emailTypes = [];
+            foreach ($emailTypesData as $e) {
+                $emailTypes[$e->getId()] = $e->getType();
             }
             $emails = $person->getEmails();
             if( $emails !== null )
@@ -58,8 +70,13 @@ class Person
                 $data['emails'] = [];
                 foreach( $emails as $email )
                 {
-                    $data['emails'][] = $email->toArray();
+                    $data['emails'][] = $email->toArray()  + ['typetext' => $emailTypes[$email->getType()]];
                 }
+            }
+            $addressTypesData = $this->em->createQuery('SELECT e FROM AppBundle\Entity\EmailType e')->getResult();
+            $addressTypes = [];
+            foreach ($addressTypesData as $e) {
+                $addressTypes[$e->getId()] = $e->getType();
             }
             $addresses = $person->getAddresses();
             if( $addresses !== null )
@@ -67,7 +84,7 @@ class Person
                 $data['addresses'] = [];
                 foreach( $addresses as $address )
                 {
-                    $data['addresses'][] = $address->toArray();
+                    $data['addresses'][] = $address->toArray()  + ['typetext' => $addressTypes[$address->getType()]];
                 }
             }
         }

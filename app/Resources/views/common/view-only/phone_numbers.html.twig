@@ -1,2 +1,12 @@
-{# empty Twig template #}
-Phone numbers
+<div class="phone_numbers">
+    <span class="sub-form-legend">{{'common.phone_number'|trans}}</span>
+    {% set prototype %}{% spaceless %}
+    <div class="view-inline">
+        <span id="{{base}}_phone_numbers___phone_number___type"></span>
+        <span id="{{base}}_phone_numbers___phone_number___phone_number"></span>
+        <span id="{{base}}_phone_numbers___phone_number___comment"></span>
+    </div>
+    {% endspaceless %}
+    {% endset %}
+    <div id="{{base}}_phone_numbers" data-prototype="{{prototype|escape('html')}}"></div>
+</div>

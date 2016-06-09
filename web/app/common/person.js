@@ -124,8 +124,9 @@ define([
         store = new ObjectStore({objectStore: memoryStore});
 
         createDijits();
-        emails.run(getDivId());
+        
         phoneNumbers.run(getDivId());
+        emails.run(getDivId());
         addresses.run(getDivId());
     }
 

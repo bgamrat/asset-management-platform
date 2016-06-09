@@ -55,7 +55,7 @@
                         <span id="view-locked"></span>
                     </div>
                 </fieldset> 
-                {% include 'common/view-only/person.html.twig' %}
+                {% include 'common/view-only/person.html.twig' with { 'base': 'user'} %}
             {% endif %}
         </div>
         {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
