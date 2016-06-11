@@ -26,3 +26,8 @@ ul#user_groups li label {
     text-align: center;
     width: 75px;
 }
+#user-view-dialog .dijitDialogPaneContent {
+    width: 760px !important;
+    height: 720px !important;
+    overflow: auto;
+}

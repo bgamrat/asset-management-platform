@@ -13,7 +13,7 @@ app_admin_users_invitations:
 app_admin_asset_manufacturers:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\Asset\ManufacturersController
-    name_prefix:   app_admin_api_manufacturer_
+    name_prefix:   app_admin_api_manufacturers_
     prefix: /api
 
 app_admin_asset_vendors:

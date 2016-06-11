@@ -7,15 +7,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * Brand
+ * Model
  *
- * @ORM\Table(name="brand")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\BrandRepository")
+ * @ORM\Table(name="model")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 
  */
-class Brand
+class Model
 {
 
     /**
@@ -46,24 +46,10 @@ class Brand
      */
     private $active = true;
     /**
-     * @var ArrayCollection $brands
-     * @ORM\ManyToMany(targetEntity="Model", cascade={"persist"})
-     * @ORM\JoinTable(name="brand_model",
-     *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id", unique=true, nullable=false)}
-     *      )
-     */
-    protected $models = null;
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
     private $deletedAt;
-
-    public function __construct()
-    {
-        $this->models = new ArrayCollection();
-    }
 
     /**
      * Get id
@@ -80,7 +66,7 @@ class Brand
      *
      * @param string $name
      *
-     * @return Brand
+     * @return Model
      */
     public function setName( $name )
     {
@@ -121,24 +107,6 @@ class Brand
     public function getComment()
     {
         return $this->comment;
-    }
-
-    public function getModels()
-    {
-        return $this->models->toArray();
-    }
-
-    public function addModel( Model $model )
-    {
-        if( !$this->models->contains( $model ) )
-        {
-            $this->models->add( $model );
-        }
-    }
-
-    public function removeModel( Model $model )
-    {
-        $this->models->removeElement( $model );
     }
 
     public function setActive( $active )

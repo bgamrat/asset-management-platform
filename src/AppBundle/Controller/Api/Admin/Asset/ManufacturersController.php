@@ -83,29 +83,6 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/manufacturers/{name}/brands")
-     * @Method("GET")
-     * @View()
-     */
-    public function getManufacturerBrandsAction( $name, Request $request )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Manufacturer' );
-        $manufacturer = $repository->findOneBy( ['name' => $name] );
-        if( $manufacturer !== null )
-        {
-            $data = [];
-            $data['brands'] = $manufacturer->getBrands();
-            return $data;
-        }
-        else
-        {
-            throw $this->createNotFoundException( 'Not found!' );
-        }
-    }
-
-    /**
      * @View()
      */
     public function getManufacturerAction( $name )
@@ -226,6 +203,58 @@ class ManufacturersController extends FOSRestController
         {
             $em->remove( $manufacturer );
             $em->flush();
+        }
+        else
+        {
+            throw $this->createNotFoundException( 'Not found!' );
+        }
+    }
+
+    /**
+     * @Route("/api/manufacturers/{name}/brands")
+     * @Method("GET")
+     * @View()
+     */
+    public function getManufacturerBrandsAction( $name, Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $repository = $this->getDoctrine()
+                ->getRepository( 'AppBundle:Manufacturer' );
+        $manufacturer = $repository->findOneBy( ['name' => $name] );
+        if( $manufacturer !== null )
+        {
+            $data = [];
+            $data['brands'] = $manufacturer->getBrands();
+            return $data;
+        }
+        else
+        {
+            throw $this->createNotFoundException( 'Not found!' );
+        }
+    }
+
+    /**
+     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Method("GET")
+     * @View()
+     */
+    public function getManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $repository = $this->getDoctrine()
+                ->getRepository( 'AppBundle:Manufacturer' );
+        $manufacturer = $repository->findOneBy( ['name' => $mname] );
+        if( $manufacturer !== null )
+        {
+            $data = [];
+            $brands = $manufacturer->getBrands();
+            $key = array_search( $bname, $brands );
+            if( $key !== false )
+            {
+                //$models = $brands[$key]->getModels();
+                $data = 'stuff';
+            }
+            return json_encode( $data );
         }
         else
         {

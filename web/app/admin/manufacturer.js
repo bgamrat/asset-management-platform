@@ -3,6 +3,7 @@ define([
     "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
+    "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/on",
     "dojo/request/xhr",
@@ -29,17 +30,23 @@ define([
     'put-selector/put',
     "app/common/person",
     "app/admin/brands",
+    "app/admin/models",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
+], function (declare, lang, dom, domAttr, domClass, domConstruct, on, xhr, json, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, brands, lib, libGrid, core) {
+        person, brands, models, lib, libGrid, core) {
     function run() {
         var action = null;
+
+        var brandViewDialog = new Dialog({
+            title: core.view
+        }, "brand-view-dialog");
+        brandViewDialog.startup();
 
         var manufacturerViewDialog = new Dialog({
             title: core.view
@@ -50,7 +57,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 600ox; width: 100%;"
+            style: "height: 500px; width: 100%;"
         }, "manufacturer-view-tabs");
 
         var contactsContentPane = new ContentPane({
@@ -157,7 +164,7 @@ define([
             collection: store,
             className: "dgrid-autoheight",
             columns: {
-                manufacturer: {
+                name: {
                     label: core.manufacturer,
                     renderCell: function (object, value, td) {
                         var i, content, contactText = [object.name], address, address_lines, phone_number;
@@ -190,14 +197,14 @@ define([
                 },
                 brands: {
                     label: core.brands,
-                    formatter: function (data,object) {
+                    formatter: function (data, object) {
                         var b, nameList = [], html = "";
                         for( b in data ) {
                             nameList.push(data[b].name);
                         }
                         if( nameList.length > 0 ) {
                             for( n = 0; n < nameList.length; n++ ) {
-                                html += '<span data-manufacturer="'+object.name+'" data-brand="' + nameList[n] + '">' + nameList[n] + '</span><br>';
+                                html += '<span class="brand link" data-manufacturer="' + object.name + '" data-brand="' + nameList[n] + '">' + nameList[n] + '</span><br>';
                             }
                         }
                         return html;
@@ -239,21 +246,34 @@ define([
             var cell = grid.cell(event);
             var field = cell.column.field;
             var name = row.data.name;
-            if( checkBoxes.indexOf(field) === -1 && field !== 'brands') {
-                if( typeof grid.selection[0] !== "undefined" ) {
-                    grid.clearSelection();
+            if( field === 'brands' ) {
+                if( domClass.contains(event.target, "brand") ) {
+                    xhr("/api/manufacturers/" + domAttr.get(event.target, "data-manufacturer") + '/brands/' + domAttr.get(event.target, "data-brand") + '/models', {
+                        method: "GET",
+                        handleAs: "json",
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (data) {
+                        models.setData(data);
+                        brandViewDialog.show();
+                    });
                 }
-                grid.select(row);
-                grid.collection.get(name).then(function (manufacturer) {
-                    var r;
-                    action = "view";
-                    nameInput.set("value", manufacturer.name);
-                    activeCheckBox.set("checked", manufacturer.active === true);
-                    // @TODO: Full multi-contact support
-                    person.setData(manufacturer.contacts[0]);
-                    brands.setData(manufacturer.brands);
-                    manufacturerViewDialog.show();
-                }, lib.xhrError);
+            } else {
+                if( checkBoxes.indexOf(field) === -1 ) {
+                    if( typeof grid.selection[0] !== "undefined" ) {
+                        grid.clearSelection();
+                    }
+                    grid.select(row);
+                    grid.collection.get(name).then(function (manufacturer) {
+                        var r;
+                        action = "view";
+                        nameInput.set("value", manufacturer.name);
+                        activeCheckBox.set("checked", manufacturer.active === true);
+                        // @TODO: Full multi-contact support
+                        person.setData(manufacturer.contacts[0]);
+                        brands.setData(manufacturer.brands);
+                        manufacturerViewDialog.show();
+                    }, lib.xhrError);
+                }
             }
         });
 
@@ -309,6 +329,7 @@ define([
 
         person.run('manufacturer');
         brands.run('manufacturer');
+        models.run('brand');
 
         lib.pageReady();
     }

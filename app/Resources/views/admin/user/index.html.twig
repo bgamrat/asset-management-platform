@@ -27,23 +27,33 @@
                 {{form_start(user_form)}}
                 <div class="text-right">
                     <button id="user-save-btn" type="button">{{ 'common.save'|trans }}</button>
-                </div>          
+                </div>
                 <fieldset class="inline-block">
                     <legend>{{'common.user'|trans}}</legend>
                     <div class="justify">
                         {{form_row(user_form.username)}}
-                    </div>
-                    <div class="justify">
                         {{form_row(user_form.email)}}
-                    </div>
-                    <div class="user-admin">
                         {{form_row(user_form.enabled)}}
-                        {{form_row(user_form.locked)}}
-                        {{form_row(user_form.groups)}}
-                        {{form_row(user_form.roles)}}
+                        {{form_row(user_form.locked)}} 
                     </div>
-                </fieldset> 
-                {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
+                </fieldset>
+                <div id="user-view-tabs">
+                    <div id="user-view-user-tab">
+
+                    </div>
+                    <div id="user-view-roles-tab">
+                        <fieldset class="inline-block">
+                            <legend>{{'common.roles'|trans}}</legend>
+                            <div class="user-admin">
+                                {{form_row(user_form.groups)}}
+                                {{form_row(user_form.roles)}}
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div id="user-view-person-tab">
+                        {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
+                    </div>
+                </div>
                 {{ form_end(user_form) }}
             {% else %}
                 <fieldset class="inline-block">

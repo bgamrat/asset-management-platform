@@ -5,6 +5,10 @@ asset:
         Manufacturer
     manufacturers:
         Manufacturers
+    model:
+        Model
+    models:
+        Models
     vendor:
         Vendor
     vendors:

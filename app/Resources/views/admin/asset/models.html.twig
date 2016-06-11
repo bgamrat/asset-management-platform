@@ -1,0 +1,7 @@
+<fieldset class="models">
+    <legend>{{'asset.models'|trans}}</legend>
+    {{form_row(form)}}
+    {% if form.vars.allow_add %}
+    <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+    {% endif %}
+</fieldset>

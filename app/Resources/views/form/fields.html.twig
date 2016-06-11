@@ -63,7 +63,7 @@
     {% endspaceless %}
 {% endblock %}
 
-{% block _brands_entry_row %}
+{% block _name_comment_active_entry_row %}
     {% spaceless %}
         <div class="form-row brand">
             <span class="name">{{ form_widget(form.name) }}</span>
@@ -102,8 +102,12 @@
     </div>
 {% endblock %}
 
+{% block _brand_models_entry_row %}
+    {{ block('_name_comment_active_entry_row') }}
+{% endblock %}
+
 {% block _manufacturer_brands_entry_row %}
-    {{ block('_brands_entry_row') }}
+    {{ block('_name_comment_active_entry_row') }}
 {% endblock %}
 
 {% block _manufacturer_person_entry_addresses_entry_row %}

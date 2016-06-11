@@ -48,7 +48,12 @@
                 </div>
             </div>
             {{ form_end(manufacturer_form) }}
-
+        </div>
+        <div id="brand-view-dialog">
+            <div class="text-right">
+                <button id="brand-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+            {% include 'admin/asset/models.html.twig' with { 'form' : brand_form.models } %}
         </div>
     </div>
 {% endblock %}

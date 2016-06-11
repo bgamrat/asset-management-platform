@@ -29,6 +29,7 @@ define({
         "new": "New",
         "no": "No",
         "okay": "Okay",
+        "person": "Person",
         "phone_number": "Phone number",
         "postal_code": "Zip",
         "remove": "Remove",
@@ -39,6 +40,7 @@ define({
         "state_province": "State",
         "street": "Street",
         "type": "Type",
+        "user": "User",
         "username": "Username",
         "view": "View",
         "yes": "Yes"

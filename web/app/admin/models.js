@@ -22,7 +22,7 @@ define([
         lib, core) {
     "use strict";
 
-    var brandId = 0;
+    var modelId = 0;
     var dataPrototype, prototypeNode, prototypeContent;
     var nameInput = [], commentInput = [], activeCheckBox = [];
     var divIdInUse = null;
@@ -33,32 +33,32 @@ define([
     }
 
     function setDivId(divId) {
-        divIdInUse = divId + '_brands';
+        divIdInUse = divId + '_models';
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__brand__/g, brandId);
+        prototypeContent = dataPrototype.replace(/__model__/g, modelId);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
-        var base = getDivId() + '_' + brandId + '_';
-        nameInput[brandId] = new ValidationTextBox({
+        var base = getDivId() + '_' + modelId + '_';
+        nameInput[modelId] = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
             pattern: "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}$",
             required: true
         }, base + "name");
-        nameInput[brandId].startup();
-        commentInput[brandId] = new ValidationTextBox({
+        nameInput[modelId].startup();
+        commentInput[modelId] = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
             required: false
         }, base + "comment");
-        commentInput[brandId].startup();
-        activeCheckBox[brandId] = new CheckBox({}, base + "active");
-        activeCheckBox[brandId].startup();
-        brandId++;
+        commentInput[modelId].startup();
+        activeCheckBox[modelId] = new CheckBox({}, base + "active");
+        activeCheckBox[modelId].startup();
+        modelId++;
     }
 
     function destroyRow(id, target) {
@@ -69,7 +69,7 @@ define([
         activeCheckBox[id].destroyRecursive();
         activeCheckBox.splice(id, 1);
         domConstruct.destroy(target);
-        brandId--;
+        modelId--;
     }
 
     function run() {
@@ -90,12 +90,12 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__brand__/g, brandId);
+        prototypeContent = dataPrototype.replace(/__model__/g, modelId);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
         createDijits();
 
-        addOneMoreControl = query('.brands .add-one-more-row');
+        addOneMoreControl = query('.models .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -118,7 +118,7 @@ define([
 
     function getData() {
         var i, returnData = [];
-        for( i = 0; i < brandId; i++ ) {
+        for( i = 0; i < modelId; i++ ) {
             returnData.push(
                     {
                         "name": nameInput[i].get('value'),
@@ -129,24 +129,24 @@ define([
         return returnData;
     }
 
-    function setData(brands) {
+    function setData(models) {
         var i, p, obj;
 
-        query(".form-row.brand", prototypeNode.parentNode).forEach(function (node, index) {
+        query(".form-row.model", prototypeNode.parentNode).forEach(function (node, index) {
             if( index !== 0 ) {
                 destroyRow(index, node);
             }
         });
 
-        if( typeof brands === "object" && brands !== null && brands.length > 0 ) {
+        if( typeof models === "object" && models !== null && models.length > 0 ) {
 
-            brandId = 1;
-            for( i = 0; i < brands.length; i++ ) {
+            modelId = 1;
+            for( i = 0; i < models.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();
                 }
-                obj = brands[i];
+                obj = models[i];
                 nameInput[i].set('value', obj.name);
                 commentInput[i].set('value', obj.comment);
                 activeCheckBox[i].set('value', obj.active);

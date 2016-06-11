@@ -4,6 +4,7 @@ define([
     "dojo/dom",
     "dojo/dom-attr",
     "dojo/dom-construct",
+    "dojo/html",
     "dojo/on",
     "dojo/request/xhr",
     "dojo/json",
@@ -17,6 +18,8 @@ define([
     "dijit/form/Select",
     "dijit/form/Button",
     "dijit/Dialog",
+    "dijit/layout/TabContainer",
+    "dijit/layout/ContentPane",
     'dstore/Rest',
     'dstore/SimpleQuery',
     'dstore/Trackable',
@@ -29,13 +32,15 @@ define([
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button, Dialog,
+], function (declare, lang, dom, domAttr, domConstruct, html, on, xhr, json, aspect, query,
+        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button,
+        Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         person,
         lib, libGrid, core) {
     function run() {
         var action = null;
+        var viewUsername = dom.byId("user_username");
 
         var userViewDialog = new Dialog({
             title: core.view
@@ -44,6 +49,22 @@ define([
         userViewDialog.on("cancel", function (event) {
             grid.clearSelection();
         });
+
+        var tabContainer = new TabContainer({
+            style: "height: 600px; width: 100%;"
+        }, "user-view-tabs");
+
+        var rolesContentPane = new ContentPane({
+            title: core.roles},
+        "user-view-roles-tab"
+                );
+        tabContainer.addChild(rolesContentPane);
+        var personContentPane = new ContentPane({
+            title: core.person},
+        "user-view-person-tab"
+                );
+        tabContainer.addChild(personContentPane);
+        tabContainer.startup();
 
         var newBtn;
         if( dom.byId('user-new-btn') !== null ) {
@@ -284,6 +305,7 @@ define([
                 grid.collection.get(username).then(function (user) {
                     var r;
                     action = "view";
+                    html.set(viewUsername, user.username);
                     usernameInput.set("value", user.username);
                     emailInput.set("value", user.email);
                     if( typeof enabledCheckBox !== "undefined" ) {
