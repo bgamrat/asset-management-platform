@@ -70,12 +70,9 @@ define([
     }
     
     function destroyRow(id, target) {
-        typeSelect[id].destroyRecursive();
-        typeSelect.splice(id, 1);
-        emailInput[id].destroyRecursive();
-        emailInput.splice(id, 1);
-        commentInput[id].destroyRecursive();
-        commentInput.splice(id, 1);
+        typeSelect.pop().destroyRecursive();
+        emailInput.pop().destroyRecursive();
+        commentInput.pop().destroyRecursive();
         domConstruct.destroy(target);
         emailId--;
     }

@@ -130,7 +130,7 @@ define([
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
-                    "person": [person.getData()], // TODO: Full multi-contact implementation
+                    "contacts": [person.getData()], // TODO: Full multi-contact implementation
                     "brands": brands.getData()
                 };
                 if( action === "view" ) {
@@ -154,6 +154,26 @@ define([
 
         var manufacturerBrandForm = new Form({}, '[name="brands"]');
         manufacturerBrandForm.startup();
+
+        var saveBrandBtn = new Button({
+            label: core.save
+        }, 'brand-save-btn');
+        saveBrandBtn.startup();
+        saveBrandBtn.on("click", function (event) {
+            var beforeId, beforeIdFilter, filter;
+            if( manufacturerBrandForm.validate() ) {
+                var data = {
+                    "models": models.getData()
+                };
+                xhr("/api/manufacturers/" + domAttr.get(event.target, "data-manufacturer") + '/brands/' + domAttr.get(event.target, "data-brand") + '/models', {
+                    method: "POST",
+                    handleAs: "json",
+                    headers: {'Content-Type': 'application/json'}
+                }).then(function (data) {
+                    brandViewDialog.hide();
+                }, lib.xhrError);
+            }
+        });
 
         var filterInput = new TextBox({placeHolder: core.filter}, "manufacturer-filter-input");
         filterInput.startup();
@@ -240,7 +260,7 @@ define([
         grid.startup();
         grid.collection.track();
 
-        grid.on(".dgrid-row:click, .dgrid-row pre:click", function (event) {
+        grid.on(".dgrid-row:click", function (event) {
             var checkBoxes = ["active", "remove"];
             var row = grid.row(event);
             var cell = grid.cell(event);
@@ -255,7 +275,7 @@ define([
                     }).then(function (data) {
                         models.setData(data);
                         brandViewDialog.show();
-                    });
+                    }, lib.xhrError);
                 }
             } else {
                 if( checkBoxes.indexOf(field) === -1 ) {
@@ -291,7 +311,8 @@ define([
                         headers: {'Content-Type': 'application/json'},
                         data: JSON.stringify({"field": field,
                             "value": value})
-                    });
+                    }).done(function (data) {
+                    }, lib.xhrError);
                     break;
             }
         });

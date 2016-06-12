@@ -42,12 +42,9 @@ define([
     }
 
     function destroyRow(id, target) {
-        viewType[id].destroyRecursive();
-        viewType.splice(id, 1);
-        viewPhoneNumber[id].destroyRecursive();
-        viewPhoneNumber.splice(id, 1);
-        viewComment[id].destroyRecursive();
-        viewComment.splice(id, 1);
+        viewType.pop().destroyRecursive();
+        viewPhoneNumber.pop().destroyRecursive();
+        viewComment.pop().destroyRecursive();
         domConstruct.destroy(target);
         phoneNumberId--;
     }

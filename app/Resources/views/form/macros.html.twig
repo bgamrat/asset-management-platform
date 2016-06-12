@@ -1,0 +1,8 @@
+{% macro name_comment_active_entry_row(type) %}{% spaceless %}
+    {% if type is not defined %}{% set type = '' %}{% endif %}
+    <div class="form-row {{ type }}">
+        <span class="name">{{ form_widget(form.name) }}</span>
+        <span class="comment">{{ form_widget(form.comment) }}</span>
+        <span class="active">{{ form_widget(form.active) }}</span>
+        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__{{type}}__"><i class="fa fa-remove"></i></span>
+    </div>{% endspaceless %}{% endmacro %}

@@ -50,22 +50,14 @@ define([
     }
 
     function destroyRow(id, target) {
-        viewType[id].destroyRecursive();
-        viewType.splice(id, 1);
-        viewStreet1[id].destroyRecursive();
-        viewStreet1.splice(id, 1);
-        viewStreet2[id].destroyRecursive();
-        viewStreet2.splice(id, 1);
-        viewCity[id].destroyRecursive();
-        viewCity.splice(id, 1);
-        viewStateProvince[id].destroyRecursive();
-        viewStateProvince.splice(id, 1);
-        viewPostalCode[id].destroyRecursive();
-        viewPostalCode.splice(id, 1);
-        viewCountry[id].destroyRecursive();
-        viewCountry.splice(id, 1);
-        viewComment[id].destroyRecursive();
-        viewComment.splice(id, 1);
+        viewType.pop().destroyRecursive();
+        viewStreet1.pop().destroyRecursive();
+        viewStreet2.pop().destroyRecursive();
+        viewCity.pop().destroyRecursive();
+        viewStateProvince.pop().destroyRecursive();
+        viewPostalCode.pop().destroyRecursive();
+        viewCountry.pop().destroyRecursive();
+        viewComment.pop().destroyRecursive();
         domConstruct.destroy(target);
         addressId--;
     }

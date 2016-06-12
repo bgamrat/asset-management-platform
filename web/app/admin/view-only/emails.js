@@ -45,12 +45,9 @@ define([
     }
 
     function destroyRow(id, target) {
-        viewType[id].destroyRecursive();
-        viewType.splice(id, 1);
-        viewEmail[id].destroyRecursive();
-        viewEmail.splice(id, 1);
-        viewComment[id].destroyRecursive();
-        viewComment.splice(id, 1);
+        viewType.pop().destroyRecursive();
+        viewEmail.pop().destroyRecursive();
+        viewComment.pop().destroyRecursive();
         domConstruct.destroy(target);
         emailId--;
     }

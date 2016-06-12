@@ -105,22 +105,14 @@ define([
     }
 
     function destroyRow(id, target) {
-        typeSelect[id].destroyRecursive();
-        typeSelect.splice(id, 1);
-        street1Input[id].destroyRecursive();
-        street1Input.splice(id, 1);
-        street2Input[id].destroyRecursive();
-        street2Input.splice(id, 1);
-        cityInput[id].destroyRecursive();
-        cityInput.splice(id, 1);
-        stateProvinceInput[id].destroyRecursive();
-        stateProvinceInput.splice(id, 1);
-        postalCodeInput[id].destroyRecursive();
-        postalCodeInput.splice(id, 1);
-        countrySelect[id].destroyRecursive();
-        countrySelect.splice(id, 1);
-        commentInput[id].destroyRecursive();
-        commentInput.splice(id, 1);
+        typeSelect.pop().destroyRecursive();
+        street1Input.pop().destroyRecursive();
+        street2Input.pop().destroyRecursive();
+        cityInput.pop().destroyRecursive();
+        stateProvinceInput.pop().destroyRecursive();
+        postalCodeInput.pop().destroyRecursive();
+        countrySelect.pop().destroyRecursive();
+        commentInput.pop().destroyRecursive();
         domConstruct.destroy(target);
         addressId--;
     }

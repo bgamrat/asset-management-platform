@@ -78,12 +78,9 @@ define([
     }
 
     function destroyRow(id, target) {
-        typeSelect[id].destroyRecursive();
-        typeSelect.splice(id, 1);
-        numberInput[id].destroyRecursive();
-        numberInput.splice(id, 1);
-        commentInput[id].destroyRecursive();
-        commentInput.splice(id, 1);
+        typeSelect.pop().destroyRecursive();
+        numberInput.pop().destroyRecursive();
+        commentInput.pop().destroyRecursive();
         domConstruct.destroy(target);
         phoneNumberId--;
     }

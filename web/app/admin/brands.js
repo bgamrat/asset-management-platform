@@ -62,12 +62,9 @@ define([
     }
 
     function destroyRow(id, target) {
-        nameInput[id].destroyRecursive();
-        nameInput.splice(id, 1);
-        commentInput[id].destroyRecursive();
-        commentInput.splice(id, 1);
-        activeCheckBox[id].destroyRecursive();
-        activeCheckBox.splice(id, 1);
+        nameInput.pop().destroyRecursive();
+        commentInput.pop().destroyRecursive();
+        activeCheckBox.pop().destroyRecursive();
         domConstruct.destroy(target);
         brandId--;
     }

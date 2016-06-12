@@ -25,6 +25,7 @@ class ManufacturerType extends AbstractType
                 ->add( 'name', TextType::class, ['label' => 'common.name'] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'comment', TextareaType::class, [
+                    'label' => false,
                     'required' => false
                 ]  )
                 ->add( 'person', CollectionType::class, [
