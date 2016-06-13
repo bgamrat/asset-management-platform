@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Api\Admin;
+namespace AppBundle\Controller\Api\Admin\User;
 
 use AppBundle\Entity\Invitation;
 use AppBundle\Util\DStore;

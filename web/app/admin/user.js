@@ -53,17 +53,19 @@ define([
         var tabContainer = new TabContainer({
             style: "height: 600px; width: 100%;"
         }, "user-view-tabs");
-
-        var rolesContentPane = new ContentPane({
-            title: core.roles},
-        "user-view-roles-tab"
-                );
-        tabContainer.addChild(rolesContentPane);
+        
         var personContentPane = new ContentPane({
             title: core.person},
         "user-view-person-tab"
                 );
         tabContainer.addChild(personContentPane);
+        
+        var rolesContentPane = new ContentPane({
+            title: core.roles},
+        "user-view-roles-tab"
+                );
+        tabContainer.addChild(rolesContentPane);
+
         tabContainer.startup();
 
         var newBtn;

@@ -33,7 +33,7 @@ class MenuBuilder implements ContainerAwareInterface
         $menu->addChild( 'admin', ['route' => 'root', 'label' => 'common.home'] )
                 ->setExtra( 'translation_domain', 'AppBundle' );
         $menu->addChild( 'assets', ['label' => 'common.assets'] );
-        $menu['assets']->addChild( 'assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_index'] );
+        $menu['assets']->addChild( 'assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_default_index'] );
         $menu['assets']->addChild( 'manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index'] );
         $menu['assets']->addChild( 'vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index'] );
 
@@ -41,7 +41,7 @@ class MenuBuilder implements ContainerAwareInterface
         {
             $menu->addChild( 'user', ['label' => 'common.users'] );
 
-            $menu['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'app_admin_user_index'] );
+            $menu['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'app_admin_user_default_index'] );
             $menu['user']->addChild( 'invitations', ['label' => 'user.invitation', 'route' => 'app_admin_user_invitation_index'] );
         }
         $menu->addChild( 'logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );

@@ -24,7 +24,6 @@ define([
         lib, core) {
     "use strict";
 
-    var phoneNumberId = 0;
     var dataPrototype, prototypeNode, prototypeContent;
     var store;
     var typeSelect = [], numberInput = [], commentInput = [];
@@ -32,16 +31,7 @@ define([
     var addOneMoreControl = null;
 
     function getDivId() {
-        var q;
-        if( divIdInUse !== null ) {
-            q = divIdInUse;
-        } else {
-            q = query('[id$="phone_numbers"]');
-            if( q.length > 0 ) {
-                q = q[0];
-            }
-        }
-        return q;
+        return divIdInUse;
     }
 
     function setDivId(divId) {
@@ -49,32 +39,35 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__phone__/g, phoneNumberId);
+        prototypeContent = dataPrototype.replace(/__phone__/g, numberInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
-        var base = getDivId() + '_' + phoneNumberId + '_';
-        typeSelect[phoneNumberId] = new Select({
+        var dijit;
+        var base = getDivId() + '_' + numberInput.length + '_';
+        dijit = new Select({
             store: store,
             placeholder: core.type,
             required: true
         }, base + "type");
-        typeSelect[phoneNumberId].startup();
-        numberInput[phoneNumberId] = new ValidationTextBox({
+        typeSelect.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             placeholder: core.phone_number,
             trim: true,
             pattern: "^[0-9x\.\,\ \+\(\)-]{2,24}$",
             required: true
         }, base + "phone_number");
-        numberInput[phoneNumberId].startup();
-        commentInput[phoneNumberId] = new ValidationTextBox({
+        numberInput.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
             required: false
         }, base + "comment");
-        commentInput[phoneNumberId].startup();
-        phoneNumberId++;
+        commentInput.push(dijit);
+        dijit.startup();
     }
 
     function destroyRow(id, target) {
@@ -82,7 +75,6 @@ define([
         numberInput.pop().destroyRecursive();
         commentInput.pop().destroyRecursive();
         domConstruct.destroy(target);
-        phoneNumberId--;
     }
 
     function run() {
@@ -104,10 +96,10 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__phone__/g, phoneNumberId);
+        prototypeContent = dataPrototype.replace(/__phone__/g, numberInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
-        base = prototypeNode.id + "_" + phoneNumberId;
+        base = prototypeNode.id + "_" + numberInput.length;
         select = base + "_type";
 
         if( dom.byId(select) === null ) {
@@ -118,7 +110,7 @@ define([
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         storeData = [];
-        storeData.push({value:"",label:core.type.toLowerCase()});
+        storeData.push({value: "", label: core.type.toLowerCase()});
         for( d in data ) {
             storeData.push(data[d]);
         }
@@ -134,7 +126,7 @@ define([
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
             createDijits();
-            if( typeSelect.length >= lib.constant.MAX_PHONE_NUMBERS ) {
+            if( numberInput.length >= lib.constant.MAX_PHONE_NUMBERS ) {
                 addOneMoreControl.addClass("hidden");
             }
         });
@@ -144,7 +136,7 @@ define([
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
             destroyRow(id, targetParent.parentNode);
-            if( typeSelect.length <= lib.constant.MAX_PHONE_NUMBERS ) {
+            if( numberInput.length <= lib.constant.MAX_PHONE_NUMBERS ) {
                 addOneMoreControl.removeClass("hidden");
             }
         });
@@ -152,7 +144,7 @@ define([
 
     function getData() {
         var i, returnData = [];
-        for(i = 0; i < phoneNumberId; i++ ) {
+        for( i = 0; i < numberInput.length; i++ ) {
             returnData.push(
                     {
                         "type": typeSelect[i].get('value'),
@@ -174,8 +166,7 @@ define([
 
         if( typeof phoneNumbers === "object" && phoneNumbers !== null && phoneNumbers.length > 0 ) {
 
-            phoneNumberId = 1;
-            for( i = 0; i < phoneNumbers.length; i++ ) {
+            for( i = 0; i < numberInput.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();

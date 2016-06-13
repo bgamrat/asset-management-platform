@@ -25,7 +25,6 @@ define([
         lib, core) {
     "use strict";
 
-    var addressId = 0;
     var dataPrototype, prototypeNode, prototypeContent;
     var countryStore, typeStore;
     var typeSelect = [];
@@ -44,64 +43,71 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__address__/g, addressId);
+        prototypeContent = dataPrototype.replace(/__address__/g, stateProvinceInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
-        var base = getDivId() + '_' + addressId + '_';
-        typeSelect[addressId] = new Select({
+        var base = getDivId() + '_' + stateProvinceInput.length + '_';
+        dijit = new Select({
             store: typeStore,
             required: true
         }, base + "type");
-        typeSelect[addressId].startup();
-        street1Input[addressId] = new ValidationTextBox({
+        typeSelect.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             trim: true,
             required: false,
             placeholder: core.street
         }, base + "street1");
-        street1Input[addressId].startup();
-        street2Input[addressId] = new ValidationTextBox({
+        street1Input.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             trim: true,
             required: false
         }, base + "street2");
-        street2Input[addressId].startup();
-        cityInput[addressId] = new ValidationTextBox({
+        street2Input.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             trim: true,
             required: true,
             placeholder: core.city
         }, base + "city");
-        cityInput[addressId].startup();
-        stateProvinceInput[addressId] = new ValidationTextBox({
+        cityInput.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             trim: true,
             required: true,
             uppercase: true,
             maxLength: 2,
             placeholder: core.state_province
         }, base + "state_province");
-        stateProvinceInput[addressId].startup();
-        postalCodeInput[addressId] = new ValidationTextBox({
+        stateProvinceInput.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             trim: true,
             pattern: "^[0-9A-Z-]{2,12}$",
             required: false,
             uppercase: true,
             placeholder: core.postal_code
         }, base + "postal_code");
-        postalCodeInput[addressId].startup();
-        countrySelect[addressId] = new Select({
+        postalCodeInput.push(dijit);
+        dijit.startup();
+        dijit = new Select({
             store: countryStore,
             required: true
         }, base + "country");
-        countrySelect[addressId].set('value', 'US');
-        countrySelect[addressId].set('displayedValue', 'United States');
-        countrySelect[addressId].startup();
-        commentInput[addressId] = new SimpleTextarea({
+        dijit.set('value', 'US');
+        dijit.set('displayedValue', 'United States');
+        countrySelect.push(dijit);
+        dijit.startup();
+        dijit = new SimpleTextarea({
             placeholder: core.comment,
             trim: true,
             required: false
         }, base + "comment");
-        commentInput[addressId].startup();
-        addressId++;
+        commentInput.push(dijit);
+        dijit.startup();
     }
 
     function destroyRow(id, target) {
@@ -114,7 +120,7 @@ define([
         countrySelect.pop().destroyRecursive();
         commentInput.pop().destroyRecursive();
         domConstruct.destroy(target);
-        addressId--;
+        stateProvinceInput.length--;
     }
 
     function run() {
@@ -139,10 +145,10 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__address__/g, addressId);
+        prototypeContent = dataPrototype.replace(/__address__/g, stateProvinceInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
-        base = prototypeNode.id + "_" + addressId;
+        base = prototypeNode.id + "_" + stateProvinceInput.length;
         select = base + "_type";
 
         if( dom.byId(select) === null ) {
@@ -200,7 +206,7 @@ define([
 
     function getData() {
         var i, returnData = [];
-        for( i = 0; i < addressId; i++ ) {
+        for( i = 0; i < stateProvinceInput.length; i++ ) {
             returnData.push(
                     {
                         "type": typeSelect[i].get('value'),
@@ -228,7 +234,6 @@ define([
 
         if( typeof addresses === "object" && addresses !== null && addresses.length > 0 ) {
 
-            addressId = 1;
             for( i = 0; i < addresses.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\Admin\User;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,11 +12,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Entity\Invitation;
 
 /**
- * Description of UserController
+ * Description of DefaultController
  *
  * @author bgamrat
  */
-class UserController extends Controller
+class DefaultController extends Controller
 {
     /**
      * @Route("/admin/user/")

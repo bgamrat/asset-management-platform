@@ -22,7 +22,6 @@ define([
         lib, core) {
     "use strict";
 
-    var modelId = 0;
     var dataPrototype, prototypeNode, prototypeContent;
     var nameInput = [], commentInput = [], activeCheckBox = [];
     var divIdInUse = null;
@@ -37,28 +36,31 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__model__/g, modelId);
+        prototypeContent = dataPrototype.replace(/__model__/g, nameInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
-        var base = getDivId() + '_' + modelId + '_';
-        nameInput[modelId] = new ValidationTextBox({
+        var dijit;
+        var base = getDivId() + '_' + nameInput.length + '_';
+        dijit = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
             pattern: "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}$",
             required: true
         }, base + "name");
-        nameInput[modelId].startup();
-        commentInput[modelId] = new ValidationTextBox({
+        nameInput.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
             required: false
         }, base + "comment");
-        commentInput[modelId].startup();
-        activeCheckBox[modelId] = new CheckBox({}, base + "active");
-        activeCheckBox[modelId].startup();
-        modelId++;
+        commentInput.push(dijit);
+        dijit.startup();
+        dijit = new CheckBox({}, base + "active");
+        activeCheckBox.push(dijit);
+        dijit.startup();
     }
 
     function destroyRow(id, target) {
@@ -66,7 +68,6 @@ define([
         commentInput.pop().destroyRecursive();
         activeCheckBox.pop().destroyRecursive();
         domConstruct.destroy(target);
-        modelId--;
     }
 
     function run() {
@@ -87,7 +88,7 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__model__/g, modelId);
+        prototypeContent = dataPrototype.replace(/__model__/g, nameInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
         createDijits();
@@ -115,7 +116,7 @@ define([
 
     function getData() {
         var i, returnData = [];
-        for( i = 0; i < modelId; i++ ) {
+        for( i = 0; i < nameInput.length; i++ ) {
             returnData.push(
                     {
                         "name": nameInput[i].get('value'),
@@ -137,7 +138,6 @@ define([
 
         if( typeof models === "object" && models !== null && models.length > 0 ) {
 
-            modelId = 1;
             for( i = 0; i < models.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();

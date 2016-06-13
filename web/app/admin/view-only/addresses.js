@@ -15,7 +15,6 @@ define([
 
     "use strict";
 
-    var addressId = 0;
     var dataPrototype, prototypeNode, prototypeContent;
     var viewType = [];
     var viewStreet1 = [], viewStreet2 = [], viewCity = [];
@@ -32,21 +31,20 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__address__/g, addressId);
+        prototypeContent = dataPrototype.replace(/__address__/g, viewStateProvince.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createViewSpans() {
-        var base = getDivId() + '_' + addressId + '_';
-        viewType[addressId] = dom.byId(base + "type");
-        viewStreet1[addressId] = dom.byId(base + "street1");
-        viewStreet2[addressId] = dom.byId(base + "street2");
-        viewCity[addressId] = dom.byId(base + "city");
-        viewStateProvince[addressId] = dom.byId(base + "state_province");
-        viewPostalCode[addressId] = dom.byId(base + "postal_code");
-        viewCountry[addressId] = dom.byId(base + "country");
-        viewComment[addressId] = dom.byId(base + "comment");
-        addressId++;
+        var base = getDivId() + '_' + viewStateProvince.length + '_';
+        viewType.push(dom.byId(base + "type"));
+        viewStreet1.push(dom.byId(base + "street1"));
+        viewStreet2.push(dom.byId(base + "street2"));
+        viewCity.push(dom.byId(base + "city"));
+        viewStateProvince.push(dom.byId(base + "state_province"));
+        viewPostalCode.push(dom.byId(base + "postal_code"));
+        viewCountry.push(dom.byId(base + "country"));
+        viewComment.push(dom.byId(base + "comment"));
     }
 
     function destroyRow(id, target) {
@@ -59,7 +57,6 @@ define([
         viewCountry.pop().destroyRecursive();
         viewComment.pop().destroyRecursive();
         domConstruct.destroy(target);
-        addressId--;
     }
 
     function run() {
@@ -80,7 +77,7 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__address__/g, addressId);
+        prototypeContent = dataPrototype.replace(/__address__/g, viewStateProvince.length);
         domConstruct.place(prototypeContent, prototypeNode, "after");
 
         createViewSpans();
@@ -98,7 +95,6 @@ define([
 
         if( typeof addresses === "object" && addresses !== null && addresses.length > 0 ) {
 
-            addressId = 1;
             for( i = 0; i < addresses.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();

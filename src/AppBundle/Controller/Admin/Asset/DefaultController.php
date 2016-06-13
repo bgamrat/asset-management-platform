@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\Admin\Asset;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,11 +11,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Entity\Invitation;
 
 /**
- * Description of AssetController
+ * Description of DefaultController
  *
  * @author bgamrat
  */
-class AssetController extends Controller
+class DefaultController extends Controller
 {
     /**
      * @Route("/admin/asset")

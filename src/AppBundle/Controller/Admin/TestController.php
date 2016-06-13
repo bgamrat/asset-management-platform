@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Form\Common\PersonType;
+use AppBundle\Form\TestType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -25,7 +25,7 @@ class TestController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $form = $this->createForm( PersonType::class, null, [] );
+        $form = $this->createForm( TestType::class, null, [] );
         
         return $this->render( 'admin/user/test.html.twig', array(
                     'form' => $form->createView(),

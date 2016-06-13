@@ -24,7 +24,6 @@ define([
         lib, core) {
     "use strict";
 
-    var emailId = 0;
     var dataPrototype;
     var prototypeNode, prototypeContent;
     var store;
@@ -41,32 +40,35 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__email__/g, emailId);
+        prototypeContent = dataPrototype.replace(/__email__/g, emailInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
-        var base = prototypeNode.id + "_" + emailId + "_";
-        typeSelect[emailId] = new Select({
+        var dijit;
+        var base = prototypeNode.id + "_" + emailInput.length + "_";
+        dijit = new Select({
             store: store,
             placeholder: core.type,
             required: true
         }, base + "type");
-        typeSelect[emailId].startup();
-        emailInput[emailId] = new ValidationTextBox({
+        typeSelect.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             placeholder: core.email,
             required: false,
             pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$",
             trim: true
         }, base + "email");
-        emailInput[emailId].startup();
-        commentInput[emailId] = new ValidationTextBox({
+        emailInput.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
             required: false
         }, base + "comment");
-        commentInput[emailId].startup();
-        emailId++;
+        commentInput.push(dijit);
+        dijit.startup();
     }
     
     function destroyRow(id, target) {
@@ -74,7 +76,6 @@ define([
         emailInput.pop().destroyRecursive();
         commentInput.pop().destroyRecursive();
         domConstruct.destroy(target);
-        emailId--;
     }
 
     function run() {
@@ -90,8 +91,8 @@ define([
             prototypeNode = dom.byId(getDivId());
         }
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__email__/g, emailId);
-        base = prototypeNode.id + "_" + emailId;
+        prototypeContent = dataPrototype.replace(/__email__/g, emailInput.length);
+        base = prototypeNode.id + "_" + emailInput.length;
         select = base + "_type";
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
         data = JSON.parse(domAttr.get(select, "data-options"));
@@ -113,7 +114,7 @@ define([
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
             createDijits();
-            if (typeSelect.length >= lib.constant.MAX_PHONE_NUMBERS) {
+            if (emailInput.length >= lib.constant.MAX_PHONE_NUMBERS) {
                 addOneMoreControl.addClass("hidden");
             }
         });
@@ -123,7 +124,7 @@ define([
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
             destroyRow(id, targetParent.parentNode);
-            if (typeSelect.length <= lib.constant.MAX_PHONE_NUMBERS) {
+            if (emailInput.length <= lib.constant.MAX_PHONE_NUMBERS) {
                 addOneMoreControl.removeClass("hidden");
             }
         });
@@ -131,7 +132,7 @@ define([
 
     function getData() {
         var i, returnData = [];
-        for( i = 0; i < emailId; i++ ) {
+        for( i = 0; i < emailInput.length; i++ ) {
             returnData.push(
                     {
                         "type": typeSelect[i].get('value'),
@@ -153,7 +154,6 @@ define([
 
         if( typeof emails === "object" && emails !== null && emails.length > 0 ) {
 
-            emailId = 1;
             for( i = 0; i < emails.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();

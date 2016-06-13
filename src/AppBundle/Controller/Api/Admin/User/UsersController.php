@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Api\Admin;
+namespace AppBundle\Controller\Api\Admin\User;
 
 use AppBundle\Entity\Person;
 use AppBundle\Entity\User;

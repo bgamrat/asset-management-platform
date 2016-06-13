@@ -15,7 +15,6 @@ define([
 
     "use strict";
 
-    var phoneNumberId = 0;
     var dataPrototype, prototypeNode, prototypeContent;
     var viewType = [], viewPhoneNumber = [], viewComment = [];
     var divIdInUse = null;
@@ -29,16 +28,15 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__phone_number__/g, phoneNumberId);
+        prototypeContent = dataPrototype.replace(/__phone_number__/g, viewPhoneNumber.length);
         domConstruct.place(prototypeContent, prototypeNode, "after");
     }
 
     function createViewSpans() {
-        var base = getDivId() + '_' + phoneNumberId + '_';
-        viewType[phoneNumberId] = dom.byId(base + "type");
-        viewPhoneNumber[phoneNumberId] = dom.byId(base + "phone_number");
-        viewComment[phoneNumberId] = dom.byId(base + "comment");
-        phoneNumberId++;
+        var base = getDivId() + '_' + viewPhoneNumber.length + '_';
+        viewType.push(dom.byId(base + "type"));
+        viewPhoneNumber.push(dom.byId(base + "phone_number"));
+        viewComment.push(dom.byId(base + "comment"));
     }
 
     function destroyRow(id, target) {
@@ -46,7 +44,6 @@ define([
         viewPhoneNumber.pop().destroyRecursive();
         viewComment.pop().destroyRecursive();
         domConstruct.destroy(target);
-        phoneNumberId--;
     }
 
     function run() {
@@ -67,7 +64,7 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__phone_number__/g, phoneNumberId);
+        prototypeContent = dataPrototype.replace(/__phone_number__/g, viewPhoneNumber.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
         createViewSpans();
@@ -84,7 +81,6 @@ define([
 
         if( typeof phoneNumbers === "object" && phoneNumbers !== null && phoneNumbers.length > 0 ) {
 
-            phoneNumberId = 1;
             for( i = 0; i < phoneNumbers.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();

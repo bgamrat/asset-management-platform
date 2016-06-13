@@ -15,7 +15,6 @@ define([
 
     "use strict";
 
-    var emailId = 0;
     var dataPrototype, prototypeNode, prototypeContent;
     var countryStore, typeStore;
     var viewType = [], viewEmail = [], viewComment = [];
@@ -32,16 +31,15 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__email__/g, emailId);
+        prototypeContent = dataPrototype.replace(/__email__/g, viewEmail.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createViewSpans() {
-        var base = getDivId() + '_' + emailId + '_';
-        viewType[emailId] = dom.byId(base + "type");
-        viewEmail[emailId] = dom.byId(base + "email");
-        viewComment[emailId] = dom.byId(base + "comment");
-        emailId++;
+        var base = getDivId() + '_' + viewEmail.length + '_';
+        viewType.push(dom.byId(base + "type"));
+        viewEmail.push(dom.byId(base + "email"));
+        viewComment.push(dom.byId(base + "comment"));
     }
 
     function destroyRow(id, target) {
@@ -49,7 +47,6 @@ define([
         viewEmail.pop().destroyRecursive();
         viewComment.pop().destroyRecursive();
         domConstruct.destroy(target);
-        emailId--;
     }
 
     function run() {
@@ -70,7 +67,7 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__email__/g, emailId);
+        prototypeContent = dataPrototype.replace(/__email__/g, viewEmail.length);
         domConstruct.place(prototypeContent, prototypeNode, "after");
 
         createViewSpans();
@@ -87,7 +84,6 @@ define([
 
         if( typeof emails === "object" && emails !== null && emails.length > 0 ) {
 
-            emailId = 1;
             for( i = 0; i < emails.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();

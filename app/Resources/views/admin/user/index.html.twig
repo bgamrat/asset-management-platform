@@ -38,8 +38,8 @@
                     </div>
                 </fieldset>
                 <div id="user-view-tabs">
-                    <div id="user-view-user-tab">
-
+                    <div id="user-view-person-tab">
+                        {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
                     </div>
                     <div id="user-view-roles-tab">
                         <fieldset class="inline-block">
@@ -50,9 +50,7 @@
                             </div>
                         </fieldset>
                     </div>
-                    <div id="user-view-person-tab">
-                        {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
-                    </div>
+
                 </div>
                 {{ form_end(user_form) }}
             {% else %}

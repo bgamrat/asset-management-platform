@@ -35,7 +35,15 @@ class Form
         $form->submit( $data );
         if( !$form->isValid() )
         {
-            throw new \Exception($form->getErrors(true,true).PHP_EOL.'('.$form->getName().')');
+            $errorMessages = [];
+            $formData = $form->all();
+            foreach ($formData as $name => $item) {
+                if (!$item->isValid()) {
+                    $errorMessages[] = $name.' - '.$item->getErrors();
+                }
+            }
+            throw new \Exception(implode('\n',$errorMessages));
+            //throw new \Exception($form->getErrors(true,true).PHP_EOL.'('.$form->getName().')');
         }
         return true;
     }

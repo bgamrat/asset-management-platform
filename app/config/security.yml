@@ -5,14 +5,14 @@ security:
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
+    # Be sure to update the role validation for the User entity!
     role_hierarchy:
+        ROLE_API:
         ROLE_USER:
         ROLE_ADMIN:       ROLE_USER
-        ROLE_API:         ROLE_ADMIN
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
         ROLE_ADMIN_USER:  ROLE_ADMIN
-        ROLE_ADMIN_USER_ADMIN: ROLE_ADMIN_USER
-            
+        ROLE_ADMIN_USER_ADMIN: [ROLE_API,ROLE_ADMIN,ROLE_ADMIN_USER]      
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
     providers:
         chain_provider:
             chain:

@@ -63,7 +63,14 @@ class User extends BaseUser
      */
     private $deletedAt;
     /**
-     * @Assert\Choice(multiple=true, min=0, choices = {"ROLE_USER","ROLE_ADMIN","ROLE_SUPER_ADMIN","ROLE_API"}, message = "Invalid role")
+     * @Assert\Choice(multiple=true, 
+     *  min=0, 
+     *  choices = {"ROLE_API",
+     *             "ROLE_USER",
+     *             "ROLE_ADMIN",
+     *             "ROLE_ADMIN_USER",
+     *             "ROLE_ADMIN_USER_ADMIN",
+     *             "ROLE_SUPER_ADMIN"}, message = "Invalid role")
      * @Gedmo\Versioned
     */
     protected $roles;
