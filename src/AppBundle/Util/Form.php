@@ -42,8 +42,8 @@ class Form
                     $errorMessages[] = $name.' - '.$item->getErrors();
                 }
             }
-            throw new \Exception(implode('\n',$errorMessages));
-            //throw new \Exception($form->getErrors(true,true).PHP_EOL.'('.$form->getName().')');
+            //throw new \Exception(implode('\n',$errorMessages));
+            throw new \Exception($form->getErrors(true,true).PHP_EOL.'('.$form->getName().')');
         }
         return true;
     }

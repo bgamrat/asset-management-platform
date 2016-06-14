@@ -53,7 +53,9 @@
             <div class="text-right">
                 <button id="brand-save-btn" type="button">{{ 'common.save'|trans }}</button>
             </div>
-            {% include 'admin/asset/models.html.twig' with { 'form' : brand_form.models } %}
+            <div class="brand-models">
+                {% include 'admin/asset/models.html.twig' with { 'form' : models_form.models } %}
+            </div>
         </div>
     </div>
 {% endblock %}

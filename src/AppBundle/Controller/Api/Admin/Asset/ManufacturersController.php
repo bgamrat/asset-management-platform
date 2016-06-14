@@ -6,6 +6,7 @@ use AppBundle\Util\DStore;
 use AppBundle\Entity\Manufacturer;
 use AppBundle\Form\Admin\Asset\BrandsType;
 use AppBundle\Form\Admin\Asset\ManufacturerType;
+use AppBundle\Form\Admin\Asset\ModelsType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use AppBundle\Util\Model As ModelUtil;
 
 class ManufacturersController extends FOSRestController
 {
@@ -241,25 +243,80 @@ class ManufacturersController extends FOSRestController
     public function getManufacturerBrandModelsAction( $mname, $bname, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Manufacturer' );
-        $manufacturer = $repository->findOneBy( ['name' => $mname] );
-        if( $manufacturer !== null )
-        {
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery( 'SELECT m, b, d FROM AppBundle\Entity\Manufacturer m JOIN m.brands b JOIN b.models d WHERE m.name = :mname AND b.name = :bname' );
+        $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
+        $manufacturer = $query->getResult();
+        if( $manufacturer !== null ){
             $data = [];
-            $brands = $manufacturer->getBrands();
-            $key = array_search( $bname, $brands );
-            if( $key !== false )
-            {
-                //$models = $brands[$key]->getModels();
-                $data = 'stuff';
+            $brands = $manufacturer[0]->getBrands();
+            if (count($brands) > 0) {
+                $data['models'] = $brands[0]->getModels();
             }
-            return json_encode( $data );
+            return $data;
         }
         else
         {
             throw $this->createNotFoundException( 'Not found!' );
         }
+    }
+
+    /**
+     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Method("POST")
+     * @View()
+     */
+    public function postManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    {
+        return $this->putManufacturerBrandModelsAction( $mname, $bname, $request );
+    }
+
+    /**
+     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Method("PUT")
+     * @View()
+     */
+    public function putManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $response = new Response();
+        $formProcessor = $this->get( 'app.util.form' );
+        $data = $formProcessor->getJsonData( $request );
+        $form = $this->createForm( ModelsType::class, null, [] );
+        try
+        {
+            $formProcessor->validateFormData( $form, $data );
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery( 'SELECT m, b FROM AppBundle\Entity\Manufacturer m JOIN m.brands b WHERE m.name = :mname AND b.name = :bname' );
+            $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
+            $manufacturer = $query->getResult();
+            $brand = $manufacturer[0]->getBrands()[0];
+            if( $brand !== null )
+            {
+                $modelUtil = $this->get( 'app.util.model' );
+                $modelUtil->update( $brand, $data['models'] );
+                $em->persist( $brand );
+                $em->flush();
+                $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
+                $response->headers->set( 'Location', $this->generateUrl(
+                                'app_admin_api_manufacturers_get_manufacturer_brand_models', array('mname' => $mname, 'bname' => $bname), true // absolute
+                        )
+                );
+                return json_encode( $data );
+            }
+            else
+            {
+                throw $this->createNotFoundException( 'Not found!' );
+            }
+        }
+        catch( Exception $e )
+        {
+            $response->setStatusCode( 400 );
+            $response->setContent( json_encode(
+                            ['message' => 'errors', 'errors' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()]
+            ) );
+        }
+        return $response;
     }
 
 }

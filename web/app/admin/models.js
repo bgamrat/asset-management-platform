@@ -128,7 +128,7 @@ define([
     }
 
     function setData(models) {
-        var i, p, obj;
+        var i, obj;
 
         query(".form-row.model", prototypeNode.parentNode).forEach(function (node, index) {
             if( index !== 0 ) {

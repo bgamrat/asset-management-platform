@@ -3,7 +3,7 @@
 namespace AppBundle\Util;
 
 use AppBundle\Entity\Brand As BrandEntity;
-use AppBundle\Util\Model As ModelUtil;
+
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -15,12 +15,10 @@ class Brand
 {
 
     private $em;
-    private $modelUtil;
 
-    public function __construct( EntityManager $em, ModelUtil $modelUtil )
+    public function __construct( EntityManager $em )
     {
         $this->em = $em;
-        $this->modelUtil = $modelUtil;
     }
 
     public function update( $entity, $data )
@@ -55,7 +53,7 @@ class Brand
                 $brand->setName( $brandData['name'] )
                         ->setComment( $brandData['comment'] )
                         ->setActive( $brandData['active'] );
-                $this->modelUtil->update($brand, $brandData['models']);
+
                 $this->em->persist($brand);
                 if( $key === false )
                 {

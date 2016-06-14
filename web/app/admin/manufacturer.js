@@ -35,13 +35,16 @@ define([
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domClass, domConstruct, on, xhr, json, aspect, query,
+], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
+        xhr, json, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         person, brands, models, lib, libGrid, core) {
     function run() {
         var action = null;
+        var brandName = null;
+        var manufacturerName = null;
 
         var brandViewDialog = new Dialog({
             title: core.view
@@ -160,14 +163,13 @@ define([
         }, 'brand-save-btn');
         saveBrandBtn.startup();
         saveBrandBtn.on("click", function (event) {
-            var beforeId, beforeIdFilter, filter;
             if( manufacturerBrandForm.validate() ) {
-                var data = {
-                    "models": models.getData()
-                };
-                xhr("/api/manufacturers/" + domAttr.get(event.target, "data-manufacturer") + '/brands/' + domAttr.get(event.target, "data-brand") + '/models', {
+                xhr("/api/manufacturers/" + manufacturerName + '/brands/' + brandName + '/models', {
                     method: "POST",
                     handleAs: "json",
+                    data: JSON.stringify({
+                        "models": models.getData()
+                    }),
                     headers: {'Content-Type': 'application/json'}
                 }).then(function (data) {
                     brandViewDialog.hide();
@@ -268,12 +270,15 @@ define([
             var name = row.data.name;
             if( field === 'brands' ) {
                 if( domClass.contains(event.target, "brand") ) {
-                    xhr("/api/manufacturers/" + domAttr.get(event.target, "data-manufacturer") + '/brands/' + domAttr.get(event.target, "data-brand") + '/models', {
+                    manufacturerName = domAttr.get(event.target, "data-manufacturer");
+                    brandName = domAttr.get(event.target, "data-brand");
+                    xhr("/api/manufacturers/" + manufacturerName + '/brands/' + brandName + '/models', {
                         method: "GET",
                         handleAs: "json",
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (data) {
-                        models.setData(data);
+                        models.setData(data['models']);
+                        brandViewDialog.set('title',manufacturerName+' - '+brandName);
                         brandViewDialog.show();
                     }, lib.xhrError);
                 }
@@ -350,7 +355,7 @@ define([
 
         person.run('manufacturer');
         brands.run('manufacturer');
-        models.run('brand');
+        models.run('models');
 
         lib.pageReady();
     }

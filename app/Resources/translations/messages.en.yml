@@ -1,4 +1,6 @@
 asset:
+    brand:
+        Brand
     brands:
         Brands
     manufacturer:
@@ -69,6 +71,8 @@ common:
         Log in
     log_out:
         Log out
+    logo:
+        Logo
     map:
         Map
     name:
