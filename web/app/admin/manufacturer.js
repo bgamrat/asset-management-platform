@@ -7,7 +7,7 @@ define([
     "dojo/dom-construct",
     "dojo/on",
     "dojo/request/xhr",
-    "dojo/json",
+    "dojo/dom-form",
     "dojo/aspect",
     "dojo/query",
     "dijit/registry",
@@ -36,7 +36,7 @@ define([
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
-        xhr, json, aspect, query,
+        xhr, domForm, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
@@ -163,13 +163,12 @@ define([
         }, 'brand-save-btn');
         saveBrandBtn.startup();
         saveBrandBtn.on("click", function (event) {
+            var m = models.getData();
             if( manufacturerBrandForm.validate() ) {
                 xhr("/api/manufacturers/" + manufacturerName + '/brands/' + brandName + '/models', {
                     method: "POST",
                     handleAs: "json",
-                    data: JSON.stringify({
-                        "models": models.getData()
-                    }),
+                    data: JSON.stringify({models: m}),
                     headers: {'Content-Type': 'application/json'}
                 }).then(function (data) {
                     brandViewDialog.hide();
@@ -302,7 +301,7 @@ define([
             }
         });
 
-        grid.on('.field-active:dgrid-datachange, .field-locked:dgrid-datachange', function (event) {
+        grid.on('.field-active:dgrid-datachange', function (event) {
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
@@ -316,7 +315,7 @@ define([
                         headers: {'Content-Type': 'application/json'},
                         data: JSON.stringify({"field": field,
                             "value": value})
-                    }).done(function (data) {
+                    }).then(function (data) {
                     }, lib.xhrError);
                     break;
             }

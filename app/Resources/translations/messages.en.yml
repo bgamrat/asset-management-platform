@@ -1,4 +1,6 @@
 asset:
+    asset:
+        Asset
     brand:
         Brand
     brands:
@@ -11,6 +13,8 @@ asset:
         Model
     models:
         Models
+    requirements:
+        Requirements
     vendor:
         Vendor
     vendors:

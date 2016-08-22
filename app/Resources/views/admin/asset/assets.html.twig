@@ -1,0 +1,62 @@
+{% block title %}{{ 'asset.asset'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="asset-wrapper">
+        <h1>{{ 'asset.asset'|trans }} {{'common.admin'|trans }}</h1>
+        <div class="grid-controls">
+            <div>
+                <button id="asset-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            </div>
+            <div>
+                <form id="asset-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="asset-filter-input">
+                </form>
+            </div>
+            <button id="asset-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+        </div>
+        <div id="asset-grid">
+        </div>
+        <div id="asset-view-dialog">
+            {{form_start(asset_form)}} 
+            <div class="text-right">
+                <button id="asset-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="asset">
+                <fieldset class="name-active">
+                    <legend>{{'asset.asset'|trans}}</legend>
+                    <div class="justify">
+                        <span class="asset-model">
+                            {{form_widget(asset_form.model)}}
+                        </span>
+                        <span class="asset-serial-number">
+                            {{form_widget(asset_form.serial_number)}}
+                        </span>
+                        <span class="asset-active">
+                            {{form_widget(asset_form.active)}}
+                            {{form_label(asset_form.active)}}
+                        </span>
+                    </div>
+                    {{form_row(asset_form.comment)}}
+                </fieldset>
+                <div id="asset-view-tabs">
+                    <div id="asset-view-history-tab">
+                        History
+                    </div>
+                    <div id="asset-view-barcodes-tab">
+                        Barcodes
+                    </div>
+                </div>
+            </div>
+            {{ form_end(asset_form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset"], function (asset) {
+            asset.run();
+        });
+    </script>
+{% endblock %}

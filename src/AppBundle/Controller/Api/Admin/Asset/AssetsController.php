@@ -3,10 +3,8 @@
 namespace AppBundle\Controller\Api\Admin\Asset;
 
 use AppBundle\Util\DStore;
-use AppBundle\Entity\Manufacturer;
-use AppBundle\Form\Admin\Asset\BrandsType;
-use AppBundle\Form\Admin\Asset\ManufacturerType;
-use AppBundle\Form\Admin\Asset\ModelsType;
+use AppBundle\Entity\Asset;
+use AppBundle\Form\Admin\Asset\AssetType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,15 +13,14 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use AppBundle\Util\Model As ModelUtil;
 
-class ManufacturersController extends FOSRestController
+class AssetsController extends FOSRestController
 {
 
     /**
      * @View()
      */
-    public function getManufacturersAction( Request $request )
+    public function getAssetsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
@@ -33,9 +30,9 @@ class ManufacturersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['m'] )
-                ->from( 'AppBundle:Manufacturer', 'm' )
-                ->orderBy( 'm.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $queryBuilder = $em->createQueryBuilder()->select( ['a'] )
+                ->from( 'AppBundle:Asset', 'a' )
+                ->orderBy( 'a.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -51,33 +48,30 @@ class ManufacturersController extends FOSRestController
                 case DStore::LIKE:
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
-                                    $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'u.email', '?1' ) )
+                                    $queryBuilder->expr()->like( 'a.model', '?1' ), $queryBuilder->expr()->like( 'a.serial_number', '?1' ) )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'm.name', '?1' )
+                            $queryBuilder->expr()->gt( 'a.model', '?1' )
                     );
             }
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
         $query = $queryBuilder->getQuery();
-        $manufacturerCollection = $query->getResult();
+        $assetCollection = $query->getResult();
         $data = [];
-        $personModel = $this->get( 'app.model.person' );
-        foreach( $manufacturerCollection as $m )
+        foreach( $assetCollection as $a )
         {
-            // TODO: Add full multi-contact support
-            $contacts = $m->getContacts();
             $item = [
-                'name' => $m->getName(),
-                'contacts' => [$personModel->get( $contacts[0] )],
-                'brands' => $m->getBrands(),
-                'active' => $m->isActive(),
+                'model' => $a->getModel(),
+                'serial_number' => $a->getSerialNumber(),
+                'comment' => $a->getComment(),
+                'active' => $a->isActive(),
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
-                $item['deleted_at'] = $m->getDeletedAt();
+                $item['deleted_at'] = $a->getDeletedAt();
             }
             $data[] = $item;
         }
@@ -87,22 +81,22 @@ class ManufacturersController extends FOSRestController
     /**
      * @View()
      */
-    public function getManufacturerAction( $name )
+    public function getAssetAction( $name )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Manufacturer' );
-        $manufacturer = $repository->findOneBy( ['name' => $name] );
-        if( $manufacturer !== null )
+                ->getRepository( 'AppBundle:Asset' );
+        $asset = $repository->findOneBy( ['name' => $name] );
+        if( $asset !== null )
         {
             $personModel = $this->get( 'app.model.person' );
             // TODO: Add full multi-contact support
-            $contacts = $manufacturer->getContacts();
+            $contacts = $asset->getContacts();
             $data = [
-                'name' => $manufacturer->getName(),
-                'brands' => $manufacturer->getBrands(),
+                'name' => $asset->getName(),
+                'brands' => $asset->getBrands(),
                 'contacts' => [$personModel->get( $contacts[0] )],
-                'active' => $manufacturer->isActive()
+                'active' => $asset->isActive()
             ];
 
             return $data;
@@ -115,42 +109,42 @@ class ManufacturersController extends FOSRestController
 
     /**
      */
-    public function postManufacturerAction( $name, Request $request )
+    public function postAssetAction( $name, Request $request )
     {
-        return $this->putManufacturerAction( $name, $request );
+        return $this->putAssetAction( $name, $request );
     }
 
     /**
      * @View()
      */
-    public function putManufacturerAction( $name, Request $request )
+    public function putAssetAction( $name, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( ManufacturerType::class, null, [] );
+        $form = $this->createForm( AssetType::class, null, [] );
         try
         {
             $formProcessor->validateFormData( $form, $data );
             $em = $this->getDoctrine()->getManager();
-            $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->findOneBy( ['name' => $name] );
+            $asset = $em->getRepository( 'AppBundle:Asset' )->findOneBy( ['name' => $name] );
 
-            if( $manufacturer === null )
+            if( $asset === null )
             {
-                $manufacturer = new Manufacturer();
-                $manufacturer->setName( $data['name'] );
+                $asset = new Asset();
+                $asset->setName( $data['name'] );
             }
             $contactUtil = $this->get( 'app.util.contact' );
-            $contactUtil->update( $manufacturer, $data['person'] );
+            $contactUtil->update( $asset, $data['person'] );
             $brandUtil = $this->get( 'app.util.brand' );
-            $brandUtil->update( $manufacturer, $data['brands'] );
-            $em->persist( $manufacturer );
+            $brandUtil->update( $asset, $data['brands'] );
+            $em->persist( $asset );
             $em->flush();
 
             $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
             $response->headers->set( 'Location', $this->generateUrl(
-                            'app_admin_api_manufacturer_get_manufacturer', array('name' => $manufacturer->getName()), true // absolute
+                            'app_admin_api_asset_get_asset', array('name' => $asset->getName()), true // absolute
                     )
             );
         }
@@ -167,14 +161,14 @@ class ManufacturersController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function patchManufacturerAction( $name, Request $request )
+    public function patchAssetAction( $name, Request $request )
     {
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'AppBundle:Manufacturer' );
-        $manufacturer = $repository->findOneBy( ['name' => $name] );
-        if( $manufacturer !== null )
+        $repository = $em->getRepository( 'AppBundle:Asset' );
+        $asset = $repository->findOneBy( ['name' => $name] );
+        if( $asset !== null )
         {
             if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
             {
@@ -182,11 +176,11 @@ class ManufacturersController extends FOSRestController
                 switch( $data['field'] )
                 {
                     case 'active':
-                        $manufacturer->setActive( $value );
+                        $asset->setActive( $value );
                         break;
                 }
 
-                $em->persist( $manufacturer );
+                $em->persist( $asset );
                 $em->flush();
             }
         }
@@ -195,15 +189,15 @@ class ManufacturersController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function deleteManufacturerAction( $name )
+    public function deleteAssetAction( $name )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->findOneBy( ['name' => $name] );
-        if( $manufacturer !== null )
+        $asset = $em->getRepository( 'AppBundle:Asset' )->findOneBy( ['name' => $name] );
+        if( $asset !== null )
         {
-            $em->remove( $manufacturer );
+            $em->remove( $asset );
             $em->flush();
         }
         else
@@ -213,20 +207,20 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{name}/brands")
+     * @Route("/api/assets/{name}/brands")
      * @Method("GET")
      * @View()
      */
-    public function getManufacturerBrandsAction( $name, Request $request )
+    public function getAssetBrandsAction( $name, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Manufacturer' );
-        $manufacturer = $repository->findOneBy( ['name' => $name] );
-        if( $manufacturer !== null )
+                ->getRepository( 'AppBundle:Asset' );
+        $asset = $repository->findOneBy( ['name' => $name] );
+        if( $asset !== null )
         {
             $data = [];
-            $data['brands'] = $manufacturer->getBrands();
+            $data['brands'] = $asset->getBrands();
             return $data;
         }
         else
@@ -236,23 +230,23 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Route("/api/assets/{mname}/brand/{bname}/models")
      * @Method("GET")
      * @View()
      */
-    public function getManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    public function getAssetBrandModelsAction( $mname, $bname, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery( 'SELECT m, b, d FROM AppBundle\Entity\Manufacturer m JOIN m.brands b JOIN b.models d WHERE m.name = :mname AND b.name = :bname' );
+        $query = $em->createQuery( 'SELECT m, b, d FROM AppBundle\Entity\Asset m JOIN m.brands b JOIN b.models d WHERE m.name = :mname AND b.name = :bname' );
         $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
-        $manufacturer = $query->getResult();
-        if( $manufacturer !== null )
+        $asset = $query->getResult();
+        if( $asset !== null )
         {
             $data = [];
-            if( count( $manufacturer ) > 0 )
+            if( count( $asset ) > 0 )
             {
-                $brands = $manufacturer[0]->getBrands();
+                $brands = $asset[0]->getBrands();
                 if( count( $brands ) > 0 )
                 {
                     $data['models'] = $brands[0]->getModels();
@@ -267,21 +261,21 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Route("/api/assets/{mname}/brand/{bname}/models")
      * @Method("POST")
      * @View()
      */
-    public function postManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    public function postAssetBrandModelsAction( $mname, $bname, Request $request )
     {
-        return $this->putManufacturerBrandModelsAction( $mname, $bname, $request );
+        return $this->putAssetBrandModelsAction( $mname, $bname, $request );
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Route("/api/assets/{mname}/brand/{bname}/models")
      * @Method("PUT")
      * @View()
      */
-    public function putManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    public function putAssetBrandModelsAction( $mname, $bname, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
@@ -292,10 +286,10 @@ class ManufacturersController extends FOSRestController
         {
             $formProcessor->validateFormData( $form, $data );
             $em = $this->getDoctrine()->getManager();
-            $query = $em->createQuery( 'SELECT m, b FROM AppBundle\Entity\Manufacturer m JOIN m.brands b WHERE m.name = :mname AND b.name = :bname' );
+            $query = $em->createQuery( 'SELECT m, b FROM AppBundle\Entity\Asset m JOIN m.brands b WHERE m.name = :mname AND b.name = :bname' );
             $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
-            $manufacturer = $query->getResult();
-            $brand = $manufacturer[0]->getBrands()[0];
+            $asset = $query->getResult();
+            $brand = $asset[0]->getBrands()[0];
             if( $brand !== null )
             {
                 $modelUtil = $this->get( 'app.util.model' );
@@ -304,7 +298,7 @@ class ManufacturersController extends FOSRestController
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_manufacturers_get_manufacturer_brand_models', array('mname' => $mname, 'bname' => $bname), true // absolute
+                                'app_admin_api_assets_get_asset_brand_models', array('mname' => $mname, 'bname' => $bname), true // absolute
                         )
                 );
             }
