@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Model
  *
@@ -45,6 +47,10 @@ class Model
      * 
      */
     private $active = true;
+    /**
+     * @ORM\ManyToMany(targetEntity="Brand", mappedBy="models")
+     */
+    private $brand;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned

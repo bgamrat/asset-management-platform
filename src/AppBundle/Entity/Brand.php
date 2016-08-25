@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Brand
@@ -46,7 +47,7 @@ class Brand
      */
     private $active = true;
     /**
-     * @var ArrayCollection $brands
+     * @var ArrayCollection $models
      * @ORM\ManyToMany(targetEntity="Model", cascade={"persist"})
      * @ORM\JoinTable(name="brand_model",
      *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", onDelete="CASCADE")},

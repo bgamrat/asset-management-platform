@@ -20,14 +20,8 @@ class AssetType extends AbstractType
     {
         $builder
                 ->add( 'serial_number', TextType::class, ['label' => false] )
-                ->add( 'model', EntityType::class, [
-                    'class' => 'AppBundle:Model',
-                    'choice_label' => 'name',
-                    'multiple' => false,
-                    'expanded' => false,
-                    'required' => true,
-                    'label' => 'common.model',
-                    'choice_translation_domain' => false
+                ->add( 'model', TextType::class, [
+                    'label' => 'common.model'
                 ] )
                 ->add( 'comment', TextType::class, [
                     'label' => false

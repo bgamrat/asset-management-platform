@@ -23,7 +23,7 @@ class AssetsController extends FOSRestController
     public function getAssetsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
+        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
 
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )

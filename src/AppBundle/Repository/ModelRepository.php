@@ -10,4 +10,16 @@ namespace AppBundle\Repository;
  */
 class ModelRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findOrderedByBrandModelName( $name )
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT m FROM AppBundle:Model m '
+                    . 'JOIN brand_model AS bm ON m.id = bm.model_id'
+                    . 'JOIN brand AS b ON bm.brand_id = b.id'
+                    . 'WHERE CONCAT_WS(\' \',b.name,m.name) LIKE ?1'
+                    . 'ORDER BY b.name,m.name ASC'
+            )
+            ->getResult();
+    }
 }

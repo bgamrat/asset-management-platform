@@ -1,3 +1,28 @@
+
+app_admin_asset_assets:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Asset\AssetsController
+    name_prefix:   app_admin_api_assets_
+    prefix: /api
+    
+app_admin_asset_manufacturers:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Asset\ManufacturersController
+    name_prefix:   app_admin_api_manufacturers_
+    prefix: /api
+
+app_admin_asset_models:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Asset\ModelsController
+    name_prefix:   app_admin_api_models_
+    prefix: /api
+
+app_admin_asset_vendors:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Asset\VendorsController
+    name_prefix:   app_admin_api_vendor_
+    prefix: /api
+    
 app_admin_users:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\User\UsersController
@@ -8,16 +33,4 @@ app_admin_users_invitations:
     type: rest
     resource: AppBundle\Controller\Api\Admin\User\InvitationsController
     name_prefix: app_admin_api_user_invitation_
-    prefix: /api
-
-app_admin_asset_manufacturers:
-    type:     rest
-    resource: AppBundle\Controller\Api\Admin\Asset\ManufacturersController
-    name_prefix:   app_admin_api_manufacturers_
-    prefix: /api
-
-app_admin_asset_vendors:
-    type:     rest
-    resource: AppBundle\Controller\Api\Admin\Asset\VendorsController
-    name_prefix:   app_admin_api_vendor_
     prefix: /api

@@ -16,11 +16,13 @@ define([
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
     "dijit/form/Select",
+    "dijit/form/FilteringSelect",
     "dijit/form/SimpleTextarea",
     "dijit/form/Button",
     "dijit/Dialog",
     "dijit/layout/TabContainer",
     "dijit/layout/ContentPane",
+    'dojo/store/JsonRest',
     'dstore/Rest',
     'dstore/SimpleQuery',
     'dstore/Trackable',
@@ -35,8 +37,9 @@ define([
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
         xhr, domForm, aspect, query,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button,
+        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
+        JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         lib, libGrid, core, asset) {
     function run() {
@@ -72,7 +75,7 @@ define([
         }, 'asset-new-btn');
         newBtn.startup();
         newBtn.on("click", function (event) {
-            modelInput.set("value", "");
+            modelFilteringSelect.set("value", "");
             activeCheckBox.set("checked", true);
             assetViewDialog.set("title", core["new"]).show();
             action = "new";
@@ -94,12 +97,18 @@ define([
             }
         });
 
-        var modelInput = new ValidationTextBox({
-            trim: true,
-            pattern: "^[A-Za-z\.\,\ \'-]{2,64}$"
+        var modelStore = new JsonRest({
+            target: '/api/models', 
+            useRangeHeaders: false, 
+            idProperty: 'id'});
+        var modelFilteringSelect = new FilteringSelect({
+            store: modelStore,
+            labelAttr: "name",
+            searchAttr: "name",
+            pageSize: 25
         }, "asset_model");
-        modelInput.startup();
-        
+        modelFilteringSelect.startup();
+
         var serialNumberInput = new ValidationTextBox({
             trim: true,
             pattern: "^[A-Za-z\.\,\ \'-]{2,64}$"
@@ -127,7 +136,7 @@ define([
             var beforeId, beforeIdFilter, filter;
             if( assetForm.validate() ) {
                 var data = {
-                    "model": modelInput.get("value"),
+                    "model": modelFilteringSelect.get("value"),
                     "serial_number": serialNumberInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
@@ -155,13 +164,12 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/assets', useRangeHeaders: true, idProperty: 'name'});
+        var store = new TrackableRest({target: '/api/assets', useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
             columns: {
                 id: {
-                    
                 },
                 model: {
                     label: asset.model,
