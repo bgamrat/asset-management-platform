@@ -27,7 +27,7 @@ class ModelsController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
-        $queryBuilder = $em->createQueryBuilder()->select( "m.id, CONCAT(CONCAT(b.name, ' '), m.name) AS name" )
+        $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
                 ->from( 'AppBundle:Model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
                 ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )

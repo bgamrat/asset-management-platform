@@ -54,7 +54,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 500px; width: 100%;"
+            style: "height: 300px; width: 100%;"
         }, "asset-view-tabs");
 
         var historyContentPane = new ContentPane({
@@ -111,6 +111,7 @@ define([
 
         var serialNumberInput = new ValidationTextBox({
             trim: true,
+            placeholder: asset.serial_number,
             pattern: "^[A-Za-z\.\,\ \'-]{2,64}$"
         }, "asset_serial_number");
         serialNumberInput.startup();

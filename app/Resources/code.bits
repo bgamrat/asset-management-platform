@@ -83,6 +83,9 @@ Install assets
 
  php bin/console assets:install --symlink --relative
 
+ php bin/console assetic:dump
+
+
 Symfony Environment variables
 
 more /etc/profile.d/bash.sh

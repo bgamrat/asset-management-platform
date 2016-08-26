@@ -30,7 +30,7 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['a'] )
+        $queryBuilder = $em->createQueryBuilder()->select( ['a.model', 'a.serial_number', 'a.comment', 'a.active'] )
                 ->from( 'AppBundle:Asset', 'a' )
                 ->orderBy( 'a.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
