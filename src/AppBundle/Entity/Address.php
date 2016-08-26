@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Address
@@ -13,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Address
 {
+
     /**
      * @var int
      *
@@ -21,7 +23,6 @@ class Address
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="AddressType")
@@ -29,42 +30,36 @@ class Address
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      */
     private $type;
-    
     /**
      * @var string
      *
      * @ORM\Column(name="street1", type="string", length=64, nullable=true, unique=false)
      */
     private $street1;
-
     /**
      * @var string
      *
      * @ORM\Column(name="street2", type="string", length=64, nullable=true, unique=false)
      */
     private $street2;
-
     /**
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=64, nullable=false, unique=false)
      */
     private $city;
-
     /**
      * @var string
      *
      * @ORM\Column(name="state_province", type="string", length=32, nullable=false, unique=false)
      */
     private $state_province;
-
     /**
      * @var string
      *
      * @ORM\Column(name="postal_code", type="string", length=16, nullable=true, unique=false)
      */
     private $postal_code;
-
     /**
      * @var string
      *
@@ -77,7 +72,17 @@ class Address
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
-    
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
+
     /**
      * Get id
      *
@@ -87,7 +92,7 @@ class Address
     {
         return $this->id;
     }
-    
+
     /**
      * Set type
      *
@@ -95,10 +100,10 @@ class Address
      *
      * @return Address
      */
-    public function setType($type)
+    public function setType( $type )
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
@@ -119,10 +124,10 @@ class Address
      *
      * @return Address
      */
-    public function setStreet1($street1)
+    public function setStreet1( $street1 )
     {
         $this->street1 = $street1;
-    
+
         return $this;
     }
 
@@ -143,10 +148,10 @@ class Address
      *
      * @return Address
      */
-    public function setStreet2($street2)
+    public function setStreet2( $street2 )
     {
         $this->street2 = $street2;
-    
+
         return $this;
     }
 
@@ -167,10 +172,10 @@ class Address
      *
      * @return Address
      */
-    public function setCity($city)
+    public function setCity( $city )
     {
         $this->city = $city;
-    
+
         return $this;
     }
 
@@ -191,10 +196,10 @@ class Address
      *
      * @return Address
      */
-    public function setStateProvince($state_province)
+    public function setStateProvince( $state_province )
     {
         $this->state_province = $state_province;
-    
+
         return $this;
     }
 
@@ -215,10 +220,10 @@ class Address
      *
      * @return Address
      */
-    public function setPostalCode($postalCode)
+    public function setPostalCode( $postalCode )
     {
         $this->postal_code = $postalCode;
-    
+
         return $this;
     }
 
@@ -239,10 +244,10 @@ class Address
      *
      * @return Address
      */
-    public function setCountry($country)
+    public function setCountry( $country )
     {
         $this->country = $country;
-    
+
         return $this;
     }
 
@@ -255,6 +260,7 @@ class Address
     {
         return $this->country;
     }
+
     /**
      * Set comment
      *
@@ -262,10 +268,10 @@ class Address
      *
      * @return Email
      */
-    public function setComment($comment)
+    public function setComment( $comment )
     {
         $this->comment = $comment;
-    
+
         return $this;
     }
 
@@ -278,7 +284,7 @@ class Address
     {
         return $this->comment;
     }
-    
+
     public function toArray()
     {
         return [
@@ -291,4 +297,5 @@ class Address
             'country' => $this->getCountry()
         ];
     }
+
 }

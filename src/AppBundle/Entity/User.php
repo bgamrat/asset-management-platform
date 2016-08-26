@@ -58,6 +58,16 @@ class User extends BaseUser
      */
     protected $groups;
     /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
@@ -72,7 +82,7 @@ class User extends BaseUser
      *             "ROLE_ADMIN_USER_ADMIN",
      *             "ROLE_SUPER_ADMIN"}, message = "Invalid role")
      * @Gedmo\Versioned
-    */
+     */
     protected $roles;
     /**
      * @ORM\OneToOne(targetEntity="Invitation")
@@ -95,15 +105,19 @@ class User extends BaseUser
     /*
      * This supports the form validation code
      */
-    public function addRole($role) {
-        if (is_object($role)) {
-            if (isset($role->name)) {
+
+    public function addRole( $role )
+    {
+        if( is_object( $role ) )
+        {
+            if( isset( $role->name ) )
+            {
                 $role = $role->name;
             }
         }
-        parent::addRole($role);
+        parent::addRole( $role );
     }
-    
+
     public function setInvitation( Invitation $invitation )
     {
         $this->invitation = $invitation;
@@ -115,10 +129,11 @@ class User extends BaseUser
     }
 
     public function setPerson( Person $person )
-    {  
+    {
         $this->person = $person;
-        if ($person->getUser() === null) {
-            $person->setUser($this);
+        if( $person->getUser() === null )
+        {
+            $person->setUser( $this );
         }
     }
 
@@ -126,6 +141,7 @@ class User extends BaseUser
     {
         return $this->person;
     }
+
     public function getDeletedAt()
     {
         return $this->deletedAt;

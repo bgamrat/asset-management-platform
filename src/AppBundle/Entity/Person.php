@@ -121,6 +121,16 @@ class Person
      */
     private $user = null;
     /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
@@ -238,7 +248,7 @@ class Person
     {
         return $this->middleinitial;
     }
-    
+
     /**
      * Get fullname
      *
@@ -247,16 +257,19 @@ class Person
     public function getFullName()
     {
         $name = [];
-        if (!empty($this->firstname)) {
+        if( !empty( $this->firstname ) )
+        {
             $name[] = $this->firstname;
         }
-        if (!empty($this->middleinitial)) {
+        if( !empty( $this->middleinitial ) )
+        {
             $name[] = $this->middleinitial;
         }
-        if (!empty($this->lastname)) {
+        if( !empty( $this->lastname ) )
+        {
             $name[] = $this->lastname;
         }
-        return implode(' ',$name);
+        return implode( ' ', $name );
     }
 
     /**
