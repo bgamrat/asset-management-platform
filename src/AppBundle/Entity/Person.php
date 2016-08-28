@@ -11,13 +11,14 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\Email;
 use AppBundle\Entity\PhoneNumber;
 use AppBundle\Entity\Address;
+use AppBundle\Entity\PersonLog;
 
 /**
  * Person
  *
  * @ORM\Table(name="person")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
- * @Gedmo\Loggable
+ * @Gedmo\Loggable(logEntryClass="PersonLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("fos_user_id")
  */
