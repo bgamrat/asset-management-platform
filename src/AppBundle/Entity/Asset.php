@@ -33,9 +33,10 @@ class Asset
      */
     private $serialNumber;
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="Model")
+     * @var int
+     * 
      * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\ManyToOne(targetEntity="Model")
      * @ORM\JoinColumn(name="model_id", referencedColumnName="id")
      */
     protected $model = null;
@@ -78,13 +79,23 @@ class Asset
     {
         return $this->id;
     }
+    
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * Set model
      *
      * @param int $model
      *
-     * @return Person
+     * @return Asset
      */
     public function setModel( $model )
     {
@@ -108,7 +119,7 @@ class Asset
      *
      * @param string $serialNumber
      *
-     * @return Model
+     * @return Asset
      */
     public function setSerialNumber( $serialNumber )
     {
@@ -132,7 +143,7 @@ class Asset
      *
      * @param string $comment
      *
-     * @return Email
+     * @return Asset
      */
     public function setComment( $comment )
     {

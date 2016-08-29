@@ -4,6 +4,7 @@ namespace AppBundle\Form\Admin\Asset;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,6 +20,7 @@ class AssetType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
+                ->add( 'id', HiddenType::class, ['label' => false])
                 ->add( 'serial_number', TextType::class, ['label' => false] )
                 ->add( 'model', TextType::class, [
                     'label' => 'common.model'

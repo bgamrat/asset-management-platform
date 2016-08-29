@@ -91,7 +91,7 @@ define([
                 lib.confirmAction(core.areyousure, function () {
                     markedForDeletion.forEach(function (node) {
                         var row = grid.row(node);
-                        store.remove(row.data.name);
+                        store.remove(row.data.id);
                     });
                 });
             }
@@ -112,7 +112,7 @@ define([
         var serialNumberInput = new ValidationTextBox({
             trim: true,
             placeholder: asset.serial_number,
-            pattern: "^[A-Za-z\.\,\ \'-]{2,64}$"
+            pattern: "^[A-Za-z0-9\.\,\ \'-]{2,64}$"
         }, "asset_serial_number");
         serialNumberInput.startup();
 
@@ -137,6 +137,7 @@ define([
             var beforeId, beforeIdFilter, filter;
             if( assetForm.validate() ) {
                 var data = {
+                    "id": 0,
                     "model": modelFilteringSelect.get("value"),
                     "serial_number": serialNumberInput.get("value"),
                     "active": activeCheckBox.get("checked"),
@@ -148,9 +149,9 @@ define([
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();
-                    beforeIdFilter = filter.gt('name', data.name);
-                    store.filter(beforeIdFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        beforeId = (results.length > 0) ? results[0].name : null;
+                    beforeIdFilter = filter.gt('model', data.model);
+                    store.filter(beforeIdFilter).sort('model').fetchRange({start: 0, end: 1}).then(function (results) {
+                        beforeId = (results.length > 0) ? results[0].model : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
                             assetViewDialog.hide();
                         }, lib.xhrError);

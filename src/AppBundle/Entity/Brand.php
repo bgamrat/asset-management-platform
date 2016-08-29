@@ -48,7 +48,7 @@ class Brand
     private $active = true;
     /**
      * @var ArrayCollection $models
-     * @ORM\ManyToMany(targetEntity="Model", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="brand", cascade={"persist"})
      * @ORM\JoinTable(name="brand_model",
      *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id", unique=true, nullable=false)}

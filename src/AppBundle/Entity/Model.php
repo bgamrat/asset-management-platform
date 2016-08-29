@@ -5,7 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -26,6 +25,7 @@ class Model
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
      */
     private $id;
     /**
@@ -41,16 +41,16 @@ class Model
      */
     private $comment;
     /**
+     * @ORM\ManyToMany(targetEntity="Brand", mappedBy="models")
+     */
+    private $brand;
+    /**
      * @var boolean
      *
      * @ORM\Column(name="active", type="boolean")
      * 
      */
     private $active = true;
-    /**
-     * @ORM\ManyToMany(targetEntity="Brand", mappedBy="models")
-     */
-    private $brand;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
@@ -114,7 +114,15 @@ class Model
     {
         return $this->comment;
     }
-
+    /**
+     * Get brand
+     *
+     * @return Brand
+     */
+    public function getBrand()
+    {
+        return $this->brand->toArray()[0];
+    }
     public function setActive( $active )
     {
         $this->active = $active;

@@ -30,8 +30,15 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['a.model', 'a.serial_number', 'a.comment', 'a.active'] )
+        $columns = ['a.id', "CONCAT(CONCAT(b.name,' '),m.name) AS model", 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $columns[] = 'a.deletedAt AS deleted_at';
+        }
+        $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle:Asset', 'a' )
+                ->innerJoin( 'a.model', 'm' )
+                ->innerJoin( 'm.brand', 'b')
                 ->orderBy( 'a.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -58,44 +65,27 @@ class AssetsController extends FOSRestController
             }
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
-        $query = $queryBuilder->getQuery();
-        $assetCollection = $query->getResult();
-        $data = [];
-        foreach( $assetCollection as $a )
-        {
-            $item = [
-                'model' => $a->getModel(),
-                'serial_number' => $a->getSerialNumber(),
-                'comment' => $a->getComment(),
-                'active' => $a->isActive(),
-            ];
-            if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
-            {
-                $item['deleted_at'] = $a->getDeletedAt();
-            }
-            $data[] = $item;
-        }
+        $data = $queryBuilder->getQuery()->getResult();
         return $data;
     }
 
     /**
      * @View()
      */
-    public function getAssetAction( $name )
+    public function getAssetAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $repository = $this->getDoctrine()
                 ->getRepository( 'AppBundle:Asset' );
-        $asset = $repository->findOneBy( ['name' => $name] );
+        $asset = $repository->find( $id );
         if( $asset !== null )
         {
-            $personModel = $this->get( 'app.model.person' );
-            // TODO: Add full multi-contact support
-            $contacts = $asset->getContacts();
+            $model = $asset->getModel();
+            $brand = $model->getBrand();
             $data = [
-                'name' => $asset->getName(),
-                'brands' => $asset->getBrands(),
-                'contacts' => [$personModel->get( $contacts[0] )],
+                'model' => $model->getName().' '.$brand->getName(),
+                'serial_number' => $asset->getSerialNumber(),
+                'comments' => $asset->getComment(),
                 'active' => $asset->isActive()
             ];
 
@@ -108,16 +98,17 @@ class AssetsController extends FOSRestController
     }
 
     /**
+     * @View()
      */
-    public function postAssetAction( $name, Request $request )
+    public function postAssetAction( $id, Request $request )
     {
-        return $this->putAssetAction( $name, $request );
+        return $this->putAssetAction( $id, $request );
     }
 
     /**
      * @View()
      */
-    public function putAssetAction( $name, Request $request )
+    public function putAssetAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
@@ -128,23 +119,22 @@ class AssetsController extends FOSRestController
         {
             $formProcessor->validateFormData( $form, $data );
             $em = $this->getDoctrine()->getManager();
-            $asset = $em->getRepository( 'AppBundle:Asset' )->findOneBy( ['name' => $name] );
+            $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
 
             if( $asset === null )
             {
                 $asset = new Asset();
-                $asset->setName( $data['name'] );
             }
-            $contactUtil = $this->get( 'app.util.contact' );
-            $contactUtil->update( $asset, $data['person'] );
-            $brandUtil = $this->get( 'app.util.brand' );
-            $brandUtil->update( $asset, $data['brands'] );
+            $asset->setModel( $data['model'] );
+            $asset->setSerialNumber( $data['serial_number'] );
+            $asset->setComment( $data['comment'] );
+            $asset->setActive( $data['active'] );
             $em->persist( $asset );
             $em->flush();
 
             $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
             $response->headers->set( 'Location', $this->generateUrl(
-                            'app_admin_api_asset_get_asset', array('name' => $asset->getName()), true // absolute
+                            'app_admin_api_assets_get_asset', array('id' => $asset->getId()), true // absolute
                     )
             );
         }
@@ -161,13 +151,13 @@ class AssetsController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function patchAssetAction( $name, Request $request )
+    public function patchAssetAction( $id, Request $request )
     {
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository( 'AppBundle:Asset' );
-        $asset = $repository->findOneBy( ['name' => $name] );
+        $asset = $repository->find( $id );
         if( $asset !== null )
         {
             if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
@@ -189,12 +179,12 @@ class AssetsController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function deleteAssetAction( $name )
+    public function deleteAssetAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $asset = $em->getRepository( 'AppBundle:Asset' )->findOneBy( ['name' => $name] );
+        $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
         if( $asset !== null )
         {
             $em->remove( $asset );
@@ -316,4 +306,5 @@ class AssetsController extends FOSRestController
         }
         return $response;
     }
+
 }

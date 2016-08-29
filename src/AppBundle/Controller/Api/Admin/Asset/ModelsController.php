@@ -23,17 +23,22 @@ class ModelsController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $brandModel = '%'. str_replace( '*', '%', $request->get( 'name' ) );
+        $name = $request->get( 'name' );
+        if (!empty($name)) {
+            $brandModel = '%'. str_replace( '*', '%', $name  );
 
-        $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
 
-        $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
+            $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
                 ->from( 'AppBundle:Model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
                 ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
                 ->setParameter( 'brand_model', $brandModel );
 
-        $data = $queryBuilder->getQuery()->getResult();
+            $data = $queryBuilder->getQuery()->getResult();
+        } else {
+            $data = null;
+        }
         return $data;
     }
 

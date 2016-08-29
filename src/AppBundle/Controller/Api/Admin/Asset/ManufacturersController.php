@@ -16,6 +16,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Util\Model As ModelUtil;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class ManufacturersController extends FOSRestController
 {
@@ -81,7 +84,17 @@ class ManufacturersController extends FOSRestController
             }
             $data[] = $item;
         }
-        return $data;
+        $encoder = new JsonEncoder();
+        $normalizer = new ObjectNormalizer();
+
+        $normalizer->setCircularReferenceHandler( function ($object)
+        {
+            return $object->getName();
+        } );
+
+        $serializer = new Serializer( array($normalizer), array($encoder) );
+
+        return $serializer->normalize( $data );
     }
 
     /**
@@ -244,9 +257,15 @@ class ManufacturersController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery( 'SELECT m, b, d FROM AppBundle\Entity\Manufacturer m JOIN m.brands b JOIN b.models d WHERE m.name = :mname AND b.name = :bname' );
-        $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
-        $manufacturer = $query->getResult();
+
+        $queryBuilder = $em->createQueryBuilder()->select( 'm, b, d' )
+                ->from( 'AppBundle:Manufacturer', 'm' )
+                ->innerJoin( 'm.brands', 'b' )
+                ->innerJoin( 'b.models', 'd' )
+                ->where( "m.name = :mname AND b.name = :bname" )
+                ->setParameters( ['mname' => $mname, 'bname' => $bname] );
+        $manufacturer = $queryBuilder->getQuery()->getResult();
+
         if( $manufacturer !== null )
         {
             $data = [];
@@ -257,6 +276,17 @@ class ManufacturersController extends FOSRestController
                 {
                     $data['models'] = $brands[0]->getModels();
                 }
+                $encoder = new JsonEncoder();
+                $normalizer = new ObjectNormalizer();
+
+                $normalizer->setCircularReferenceHandler( function ($object)
+                {
+                    return $object->getName();
+                } );
+
+                $serializer = new Serializer( array($normalizer), array($encoder) );
+
+                return $serializer->normalize( $data );
             }
             return $data;
         }
@@ -322,4 +352,5 @@ class ManufacturersController extends FOSRestController
         }
         return $response;
     }
+
 }
