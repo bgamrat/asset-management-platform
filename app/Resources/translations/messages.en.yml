@@ -1,10 +1,14 @@
 asset:
     asset:
         Asset
+    barcode:
+        Barcode
     brand:
         Brand
     brands:
         Brands
+    location:
+        Location
     manufacturer:
         Manufacturer
     manufacturers:

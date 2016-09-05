@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -25,6 +26,28 @@ class AssetType extends AbstractType
                 ->add( 'model', TextType::class, [
                     'label' => 'common.model'
                 ] )
+                ->add( 'location', EntityType::class, [
+                    'class' => 'AppBundle:Location',
+                    'choice_label' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => true,
+                    'label' => 'asset.location',
+                    'choice_translation_domain' => false
+                ] )
+                ->add( 'barcodes', CollectionType::class, [
+                    'label' => 'asset.barcode',
+                    'entry_type' => BarcodeType::class,
+                    'by_reference' => true,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'mapped' => false,
+                    'prototype_name' => '__barcode__'
+                    ] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )

@@ -37,6 +37,7 @@
                             {{form_label(asset_form.active)}}
                         </span>
                     </div>
+                    {{form_row(asset_form.location)}}
                     {{form_row(asset_form.comment)}}
                 </fieldset>
                 <div id="asset-view-tabs">
@@ -44,7 +45,7 @@
                         History
                     </div>
                     <div id="asset-view-barcodes-tab">
-                        Barcodes
+                        {% include 'admin/asset/barcodes.html.twig' with {'form': asset_form.barcodes } %}
                     </div>
                 </div>
             </div>

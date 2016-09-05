@@ -16,9 +16,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Util\Model As ModelUtil;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class ManufacturersController extends FOSRestController
 {
@@ -84,17 +81,7 @@ class ManufacturersController extends FOSRestController
             }
             $data[] = $item;
         }
-        $encoder = new JsonEncoder();
-        $normalizer = new ObjectNormalizer();
-
-        $normalizer->setCircularReferenceHandler( function ($object)
-        {
-            return $object->getName();
-        } );
-
-        $serializer = new Serializer( array($normalizer), array($encoder) );
-
-        return $serializer->normalize( $data );
+        return $data;
     }
 
     /**
@@ -276,17 +263,7 @@ class ManufacturersController extends FOSRestController
                 {
                     $data['models'] = $brands[0]->getModels();
                 }
-                $encoder = new JsonEncoder();
-                $normalizer = new ObjectNormalizer();
-
-                $normalizer->setCircularReferenceHandler( function ($object)
-                {
-                    return $object->getName();
-                } );
-
-                $serializer = new Serializer( array($normalizer), array($encoder) );
-
-                return $serializer->normalize( $data );
+                return $data;
             }
             return $data;
         }

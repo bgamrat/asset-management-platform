@@ -5,9 +5,10 @@ Namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Model
+ * Asset
  *
  * @ORM\Table(name="asset")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AssetRepository")
@@ -27,6 +28,14 @@ class Asset
      */
     private $id;
     /**
+     * @var int
+     * 
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\ManyToOne(targetEntity="Model")
+     * @ORM\JoinColumn(name="model_id", referencedColumnName="id")
+     */
+    protected $model = null;
+    /**
      * @var string
      *
      * @ORM\Column(name="serial_number", type="string", length=64, nullable=true, unique=false)
@@ -36,10 +45,19 @@ class Asset
      * @var int
      * 
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Model")
-     * @ORM\JoinColumn(name="model_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
-    protected $model = null;
+    protected $location = null;
+    /**
+     * @var ArrayCollection $barcodes
+     * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
+     * @ORM\JoinTable(name="asset_barcode",
+     *      joinColumns={@ORM\JoinColumn(name="barcode_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="asset_id", referencedColumnName="id", unique=true, nullable=false)}
+     *      )
+     */
+    protected $barcodes;
     /**
      * @var string
      * 
@@ -58,7 +76,6 @@ class Asset
      * @Gedmo\Timestampable(on="create")
      */
     private $created;
-
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
@@ -70,6 +87,11 @@ class Asset
      */
     private $deletedAt;
 
+    public function __construct()
+    {
+        $this->barcodes = new ArrayCollection();
+    }
+
     /**
      * Get id
      *
@@ -79,13 +101,13 @@ class Asset
     {
         return $this->id;
     }
-    
+
     /**
      * Set id
      *
      * @return integer
      */
-    public function setId($id)
+    public function setId( $id )
     {
         $this->id = $id;
     }
@@ -136,6 +158,48 @@ class Asset
     public function getSerialNumber()
     {
         return $this->serialNumber;
+    }
+
+    /**
+     * Set location
+     *
+     * @param int $location
+     *
+     * @return Asset
+     */
+    public function setLocation( $location )
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return int
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    public function getBarcodes()
+    {
+        return $this->barcodes->toArray();
+    }
+
+    public function addBarcode( Barcode $barcode )
+    {
+        if( !$this->barcodes->contains( $barcode ) )
+        {
+            $this->barcodes->add( $barcode );
+        }
+    }
+
+    public function removeBarcode( Barcode $barcode )
+    {
+        $this->barcodes->removeElement( $barcode );
     }
 
     /**

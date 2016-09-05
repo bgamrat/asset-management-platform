@@ -10,6 +10,25 @@ services:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
 
+services:
+    # JSON Encoder
+    app.encoder.json:
+        class: 'Symfony\Component\Serializer\Encoder\JsonEncoder'
+
+    app.normalizer.object:
+        class: 'AppBundle\Serializer\Normalizer\Normalizer'
+        public: false
+        tags:
+            - { name: serializer.normalizer }
+
+    app.serializer.default:
+        class: 'Symfony\Component\Serializer\Serializer'
+        arguments:
+            0:
+                - '@app.normalizer.object'
+            1:
+                - '@app.encoder.json'
+
     app.admin.form.type.test:
         class: AppBundle\Form\TestType
         arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']

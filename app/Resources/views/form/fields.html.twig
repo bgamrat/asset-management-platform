@@ -12,6 +12,16 @@
         <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__{{type}}__"><i class="fa fa-remove"></i></span>
     </div>{% endspaceless %}{% endmacro %}
 
+{% block _barcodes_entry_row %}
+    {% spaceless %}
+        <div class="form-row barcode">
+            <span class="input">{{ form_widget(form.barcode) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="email-__email__"><i class="fa fa-remove"></i></span>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+    
 {% block choice_widget_expanded %}
     {% spaceless %}
         <ul {{ block('widget_container_attributes') }}>
@@ -104,6 +114,10 @@
 {% block _models_models_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('model',form) }}{% endblock %}
 
 {% block _manufacturer_brands_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('brand',form) }}{% endblock %}
+
+{% block _asset_barcodes_entry_row %}
+    {{ block('_barcodes_entry_row') }}
+{% endblock %}
 
 {% block _manufacturer_person_entry_addresses_entry_row %}
     {{ block('_address_entry_row') }}

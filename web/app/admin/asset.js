@@ -10,6 +10,8 @@ define([
     "dojo/dom-form",
     "dojo/aspect",
     "dojo/query",
+    "dojo/data/ObjectStore",
+    "dojo/store/Memory",
     "dijit/registry",
     "dijit/form/Form",
     "dijit/form/TextBox",
@@ -30,19 +32,21 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
+    "app/admin/barcodes",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/asset",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
-        xhr, domForm, aspect, query,
+        xhr, domForm, aspect, query, ObjectStore, Memory,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        lib, libGrid, core, asset) {
+        barcodes, lib, libGrid, core, asset) {
     function run() {
+     
         var action = null;
 
         var assetViewDialog = new Dialog({
@@ -98,8 +102,8 @@ define([
         });
 
         var modelStore = new JsonRest({
-            target: '/api/models', 
-            useRangeHeaders: false, 
+            target: '/api/models',
+            useRangeHeaders: false,
             idProperty: 'id'});
         var modelFilteringSelect = new FilteringSelect({
             store: modelStore,
@@ -118,6 +122,31 @@ define([
 
         var activeCheckBox = new CheckBox({}, "asset_active");
         activeCheckBox.startup();
+
+        var select = "asset_location";
+
+        if( dom.byId(select) === null ) {
+            lib.textError(select + " not found");
+            return;
+        }
+
+        var data = JSON.parse(domAttr.get(select, "data-options"));
+        // Convert the data to an array of objects
+        var storeData = [], d;
+        for( d in data ) {
+            storeData.push(data[d]);
+        }
+        var memoryStore = new Memory({
+            idProperty: "value",
+            data: storeData});
+        var store = new ObjectStore({objectStore: memoryStore});
+
+        var locationSelect = new Select({
+            store: store,
+            placeholder: asset.location,
+            required: true
+        }, select);
+        locationSelect.startup();
 
         var commentInput = new SimpleTextarea({
             placeholder: core.comment,
@@ -172,6 +201,13 @@ define([
             className: "dgrid-autoheight",
             columns: {
                 id: {
+                    label: core.id
+                },
+                barcode: {
+                    label: asset.barcode
+                },
+                location: {
+                    label: asset.location
                 },
                 model: {
                     label: asset.model,
@@ -224,6 +260,11 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (asset) {
+                    if( typeof asset.barcodes !== "undefined" ) {
+                        barcodes.setData(asset.barcodes);
+                    } else {
+                        barcodes.setData(null);
+                    }
                     assetViewDialog.show();
                 }, lib.xhrError);
             }
@@ -280,6 +321,7 @@ define([
             }));
         });
         lib.pageReady();
+        barcodes.run('asset');
     }
     return {
         run: run

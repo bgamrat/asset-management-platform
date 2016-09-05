@@ -38,7 +38,7 @@ class AssetsController extends FOSRestController
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle:Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
-                ->innerJoin( 'm.brand', 'b')
+                ->innerJoin( 'm.brand', 'b' )
                 ->orderBy( 'a.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -75,6 +75,11 @@ class AssetsController extends FOSRestController
     public function getAssetAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $em = $this->getDoctrine()->getManager();
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $em->getFilters()->disable( 'softdeleteable' );
+        }
         $repository = $this->getDoctrine()
                 ->getRepository( 'AppBundle:Asset' );
         $asset = $repository->find( $id );
@@ -83,11 +88,22 @@ class AssetsController extends FOSRestController
             $model = $asset->getModel();
             $brand = $model->getBrand();
             $data = [
-                'model' => $model->getName().' '.$brand->getName(),
+                'model' => $model->getName() . ' ' . $brand->getName(),
                 'serial_number' => $asset->getSerialNumber(),
+                'location' => $asset->getLocation(),
+                'barcodes' => $asset->getBarcodes(),
                 'comments' => $asset->getComment(),
                 'active' => $asset->isActive()
             ];
+
+            $columns = ['al.version AS version','al.loggedAt AS timestamp','al.username AS username','al.data AS data'];
+            $queryBuilder = $em->createQueryBuilder();
+            $queryBuilder->select( $columns )
+                    ->from( 'AppBundle:AssetLog', 'al' )
+                    ->where($queryBuilder->expr()->eq( 'al.objectId', '?1' ));
+            $queryBuilder->setParameter( 1, $id );
+            $history = $queryBuilder->getQuery()->getResult();
+            $data['history'] = $history;
 
             return $data;
         }

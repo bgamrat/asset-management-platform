@@ -18,6 +18,7 @@ define({
         "filter": "Filter",
         "firstname": "First name",
         "groups": "Groups",
+	"id": "Id",
         "invalid": "Invalid",
         "invalid_form": "Invalid data",
         "invite": "Invite",

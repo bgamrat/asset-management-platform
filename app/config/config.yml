@@ -20,7 +20,9 @@ framework:
     form:            ~
     csrf_protection: ~
     validation:      { enable_annotations: true }
-    serializer:      { enable_annotations: true }
+    serializer:
+        enabled: true
+        enable_annotations: true
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
@@ -188,6 +190,7 @@ fos_user:
 
 fos_rest:
     disable_csrf_role: ROLE_API
+    
     view:
         view_response_listener: true
         force_redirects:
