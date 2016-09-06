@@ -18,3 +18,6 @@
 .asset .justify span {
     padding-right: 10px;
 }
+#asset-view-history-tab ul {
+    list-style-type: none;
+}

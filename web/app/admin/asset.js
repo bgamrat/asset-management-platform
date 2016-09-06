@@ -260,10 +260,28 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (asset) {
+                    var i, history, historyHtml, date, dateText;
                     if( typeof asset.barcodes !== "undefined" ) {
                         barcodes.setData(asset.barcodes);
                     } else {
                         barcodes.setData(null);
+                    }
+                    date = new Date();
+                    historyHtml = "<ul>";
+                    for (i = 0; i < asset.history.length; i++) {
+                        history = asset.history[i];
+                        if (history.username === null) {
+                            history.username = '';
+                        }
+                        date.setTime(history.timestamp.timestamp * 1000);
+                        dateText = (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes();
+                        historyHtml += "<li>"+dateText+" "+history.username+" "+history.action+"</li>";
+                    }
+                    historyHtml += "</ul>";
+                    if (asset.history.length > 0) {
+                        historyContentPane.setContent(historyHtml);
+                    } else {
+                        historyContentPane.setContent("");
                     }
                     assetViewDialog.show();
                 }, lib.xhrError);

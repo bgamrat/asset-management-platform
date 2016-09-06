@@ -96,12 +96,12 @@ class AssetsController extends FOSRestController
                 'active' => $asset->isActive()
             ];
 
-            $columns = ['al.version AS version','al.loggedAt AS timestamp','al.username AS username','al.data AS data'];
+            $columns = ['al.version AS version','al.action AS action','al.loggedAt AS timestamp','al.username AS username','al.data AS data'];
             $queryBuilder = $em->createQueryBuilder();
             $queryBuilder->select( $columns )
                     ->from( 'AppBundle:AssetLog', 'al' )
                     ->where($queryBuilder->expr()->eq( 'al.objectId', '?1' ));
-            $queryBuilder->setParameter( 1, $id );
+            $queryBuilder->setParameter( 1, $id )->orderBy('al.loggedAt', 'desc');
             $history = $queryBuilder->getQuery()->getResult();
             $data['history'] = $history;
 
@@ -199,10 +199,14 @@ class AssetsController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-        $em->getFilters()->enable( 'softdeleteable' );
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $em->getFilters()->disable( 'softdeleteable' );
+        }
         $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
         if( $asset !== null )
-        {
+        { 
+            $em->getFilters()->enable( 'softdeleteable' );
             $em->remove( $asset );
             $em->flush();
         }
