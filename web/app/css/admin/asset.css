@@ -21,3 +21,6 @@
 #asset-view-history-tab ul {
     list-style-type: none;
 }
+.field-id {
+    display: none;
+}

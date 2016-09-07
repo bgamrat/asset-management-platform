@@ -261,11 +261,15 @@ define([
                 grid.select(row);
                 grid.collection.get(id).then(function (asset) {
                     var i, history, historyHtml, date, dateText;
+                    modelFilteringSelect.set('displayedValue', asset.model);
+                    serialNumberInput.set('value',asset.serial_number);
+                    commentInput.set('value',asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {
                         barcodes.setData(asset.barcodes);
                     } else {
                         barcodes.setData(null);
                     }
+                    activeCheckBox.set('checked',asset.active);
                     date = new Date();
                     historyHtml = "<ul>";
                     for (i = 0; i < asset.history.length; i++) {
@@ -283,6 +287,12 @@ define([
                     } else {
                         historyContentPane.setContent("");
                     }
+                    if (typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined") {
+                        titleBarcode = asset.barcodes[0].barcode;
+                    } else {
+                        titleBarcode = asset.no_barcode;
+                    }
+                    assetViewDialog.set('title',core.view+" "+titleBarcode);
                     assetViewDialog.show();
                 }, lib.xhrError);
             }

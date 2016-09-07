@@ -30,6 +30,13 @@ class Barcode
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
+     * @ORM\ManyToMany(targetEntity="Asset", mappedBy="barcodes")
+     */
+    private $barcode;
+    /**
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
     /**
@@ -44,7 +51,6 @@ class Barcode
      * @Gedmo\Timestampable(on="create")
      */
     private $created;
-
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
@@ -65,15 +71,39 @@ class Barcode
     {
         return $this->id;
     }
-    
+
     /**
      * Set id
      *
      * @return integer
      */
-    public function setId($id)
+    public function setId( $id )
     {
         $this->id = $id;
+    }
+
+    /**
+     * Set barcode
+     *
+     * @param string $barcode
+     *
+     * @return Barcode
+     */
+    public function setBarcode( $barcode )
+    {
+        $this->barcode = $barcode;
+
+        return $this;
+    }
+
+    /**
+     * Get barcode
+     *
+     * @return string
+     */
+    public function getBarcode()
+    {
+        return $this->barcode;
     }
 
     /**

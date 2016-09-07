@@ -45,16 +45,17 @@ class Asset
      * @var int
      * 
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     protected $location = null;
     /**
      * @var ArrayCollection $barcodes
      * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
+     * @ORM\OrderBy({"created" = "DESC"})
      * @ORM\JoinTable(name="asset_barcode",
-     *      joinColumns={@ORM\JoinColumn(name="barcode_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="asset_id", referencedColumnName="id", unique=true, nullable=false)}
+     *      joinColumns={@ORM\JoinColumn(name="asset_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="barcode_id", referencedColumnName="id", unique=true, nullable=false)}
      *      )
      */
     protected $barcodes;

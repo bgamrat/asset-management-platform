@@ -25,12 +25,29 @@ class AssetsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
 
+        switch($dstore['sort-field']) {
+            case 'barcode': 
+                $sortField = 'c.barcode';
+                break;
+            case 'location':
+                $sortField = 'l.name';
+                break;
+            case 'brand':
+                $sortField = 'b.name';
+                break;
+            case 'model':
+                $sortField = 'm.name';
+                break;
+            default:
+                $sortField = 'a.'.$dstore['sort-field'];
+        }
+        
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['a.id', "CONCAT(CONCAT(b.name,' '),m.name) AS model", 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
+        $columns = ['a.id', 'l.name', 'c.barcode', "CONCAT(CONCAT(b.name,' '),m.name) AS model", 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'a.deletedAt AS deleted_at';
@@ -39,7 +56,9 @@ class AssetsController extends FOSRestController
                 ->from( 'AppBundle:Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
-                ->orderBy( 'a.' . $dstore['sort-field'], $dstore['sort-direction'] );
+                ->leftJoin( 'a.barcodes', 'c')
+                ->leftJoin('a.location', 'l')
+                ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );

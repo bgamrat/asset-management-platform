@@ -51,7 +51,7 @@ define([
         dijit = new ValidationTextBox({
             placeholder: asset.barcode,
             required: false,
-            pattern: "^\w{1,15}$",
+            pattern: "^[a-zA-Z0-9]{1,15}$",
             trim: true
         }, base + "barcode");
         barcodeInput.push(dijit);
