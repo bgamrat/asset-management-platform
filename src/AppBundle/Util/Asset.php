@@ -6,11 +6,11 @@ use AppBundle\Entity\Model As ModelEntity;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Description of Model
+ * Description of Asset
  *
  * @author bgamrat
  */
-class Model
+class Asset
 {
 
     private $em;

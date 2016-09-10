@@ -25,8 +25,9 @@ class AssetsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
 
-        switch($dstore['sort-field']) {
-            case 'barcode': 
+        switch( $dstore['sort-field'] )
+        {
+            case 'barcode':
                 $sortField = 'c.barcode';
                 break;
             case 'location':
@@ -39,15 +40,15 @@ class AssetsController extends FOSRestController
                 $sortField = 'm.name';
                 break;
             default:
-                $sortField = 'a.'.$dstore['sort-field'];
+                $sortField = 'a.' . $dstore['sort-field'];
         }
-        
+
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['a.id', 'l.name', 'c.barcode', "CONCAT(CONCAT(b.name,' '),m.name) AS model", 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
+        $columns = ['a.id', 'l.name', 'bc.barcode', 'bc.updated AS barcode_updated', "CONCAT(CONCAT(b.name,' '),m.name) AS model", 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'a.deletedAt AS deleted_at';
@@ -56,8 +57,8 @@ class AssetsController extends FOSRestController
                 ->from( 'AppBundle:Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
-                ->leftJoin( 'a.barcodes', 'c')
-                ->leftJoin('a.location', 'l')
+                ->leftJoin( 'a.barcodes', 'bc' )
+                ->leftJoin( 'a.location', 'l' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -85,7 +86,32 @@ class AssetsController extends FOSRestController
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        return $data;
+        
+        $barcodeUpdated = [];
+        foreach( $data as $i => $asset )
+        {
+            $set = false;
+            $id = $asset['id'];
+            if( !isset( $barcodeUpdated[$id] ) )
+            {
+                $set = true;
+            }
+            else
+            {
+                if( $asset['barcode_updated'] > $barcodeUpdated[$id]['updated'] )
+                {
+                    unset( $data[$barcodeUpdated[$id]['index']] );
+                    $set = true;
+                }
+            }
+            if( $set === true )
+            {
+                $barcodeUpdated[$id] = ['updated' => $asset['barcode_updated'], 'index' => $i];
+            }
+            unset($data[$i]['barcode_updated']);
+        }
+
+        return array_values($data);
     }
 
     /**
@@ -107,6 +133,7 @@ class AssetsController extends FOSRestController
             $model = $asset->getModel();
             $brand = $model->getBrand();
             $data = [
+                'id' => $asset->getId(),
                 'model' => $model->getName() . ' ' . $brand->getName(),
                 'serial_number' => $asset->getSerialNumber(),
                 'location' => $asset->getLocation(),
@@ -115,12 +142,12 @@ class AssetsController extends FOSRestController
                 'active' => $asset->isActive()
             ];
 
-            $columns = ['al.version AS version','al.action AS action','al.loggedAt AS timestamp','al.username AS username','al.data AS data'];
+            $columns = ['al.version AS version', 'al.action AS action', 'al.loggedAt AS timestamp', 'al.username AS username', 'al.data AS data'];
             $queryBuilder = $em->createQueryBuilder();
             $queryBuilder->select( $columns )
                     ->from( 'AppBundle:AssetLog', 'al' )
-                    ->where($queryBuilder->expr()->eq( 'al.objectId', '?1' ));
-            $queryBuilder->setParameter( 1, $id )->orderBy('al.loggedAt', 'desc');
+                    ->where( $queryBuilder->expr()->eq( 'al.objectId', '?1' ) );
+            $queryBuilder->setParameter( 1, $id )->orderBy( 'al.loggedAt', 'desc' );
             $history = $queryBuilder->getQuery()->getResult();
             $data['history'] = $history;
 
@@ -146,32 +173,31 @@ class AssetsController extends FOSRestController
     public function putAssetAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( AssetType::class, null, [] );
+        $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
+        $form = $this->createForm( AssetType::class, $asset );
         try
         {
             $formProcessor->validateFormData( $form, $data );
-            $em = $this->getDoctrine()->getManager();
-            $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
-
-            if( $asset === null )
+            $form->handleRequest( $request );
+            if( $form->isValid() )
             {
-                $asset = new Asset();
+                $asset = $form->getData();
+                $em->persist( $asset );
+                $em->flush();
+                $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
+                $response->headers->set( 'Location', $this->generateUrl(
+                                'app_admin_api_assets_get_asset', array('id' => $asset->getId()), true // absolute
+                        )
+                );
             }
-            $asset->setModel( $data['model'] );
-            $asset->setSerialNumber( $data['serial_number'] );
-            $asset->setComment( $data['comment'] );
-            $asset->setActive( $data['active'] );
-            $em->persist( $asset );
-            $em->flush();
-
-            $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
-            $response->headers->set( 'Location', $this->generateUrl(
-                            'app_admin_api_assets_get_asset', array('id' => $asset->getId()), true // absolute
-                    )
-            );
+            else
+            {
+                dump( $form->getErrors( true ) );
+            }
         }
         catch( Exception $e )
         {
@@ -224,7 +250,7 @@ class AssetsController extends FOSRestController
         }
         $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
         if( $asset !== null )
-        { 
+        {
             $em->getFilters()->enable( 'softdeleteable' );
             $em->remove( $asset );
             $em->flush();

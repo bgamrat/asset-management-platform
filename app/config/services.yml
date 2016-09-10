@@ -46,11 +46,22 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
+            
+    app.admin.form.type.asset:
+        class: AppBundle\Form\Admin\Asset\AssetType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_asset_type' }
 
     app.form.data_transformer.invitation:
         class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false
+        
+    app.form.data_transformer.model:
+        class: AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false    
         
     app.form.invitation:
         class: AppBundle\Form\User\InvitationFormType

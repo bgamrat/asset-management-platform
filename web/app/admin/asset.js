@@ -47,6 +47,8 @@ define([
         barcodes, lib, libGrid, core, asset) {
     function run() {
      
+        var assetId = null;
+     
         var action = null;
 
         var assetViewDialog = new Dialog({
@@ -166,8 +168,10 @@ define([
             var beforeId, beforeIdFilter, filter;
             if( assetForm.validate() ) {
                 var data = {
-                    "id": 0,
+                    "id": assetId,
                     "model": modelFilteringSelect.get("value"),
+                    "location": locationSelect.get("value"),
+                    "barcodes": barcodes.getData(),
                     "serial_number": serialNumberInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
@@ -178,8 +182,8 @@ define([
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();
-                    beforeIdFilter = filter.gt('model', data.model);
-                    store.filter(beforeIdFilter).sort('model').fetchRange({start: 0, end: 1}).then(function (results) {
+                    beforeIdFilter = filter.gt('id', data.id);
+                    store.filter(beforeIdFilter).sort('id').fetchRange({start: 0, end: 1}).then(function (results) {
                         beforeId = (results.length > 0) ? results[0].model : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
                             assetViewDialog.hide();
@@ -261,6 +265,7 @@ define([
                 grid.select(row);
                 grid.collection.get(id).then(function (asset) {
                     var i, history, historyHtml, date, dateText;
+                    assetId = asset.id;
                     modelFilteringSelect.set('displayedValue', asset.model);
                     serialNumberInput.set('value',asset.serial_number);
                     commentInput.set('value',asset.comment);

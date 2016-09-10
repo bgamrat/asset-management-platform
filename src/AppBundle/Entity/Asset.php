@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Asset
@@ -29,7 +31,6 @@ class Asset
     private $id;
     /**
      * @var int
-     * 
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\ManyToOne(targetEntity="Model")
      * @ORM\JoinColumn(name="model_id", referencedColumnName="id")
@@ -52,7 +53,7 @@ class Asset
     /**
      * @var ArrayCollection $barcodes
      * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
-     * @ORM\OrderBy({"created" = "DESC"})
+     * @ORM\OrderBy({"updated" = "DESC"})
      * @ORM\JoinTable(name="asset_barcode",
      *      joinColumns={@ORM\JoinColumn(name="asset_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="barcode_id", referencedColumnName="id", unique=true, nullable=false)}
@@ -251,6 +252,8 @@ class Asset
     public function toArray()
     {
         return [
+            'model' => $this->getModel(),
+            'location' => $this->getLocation(),
             'serialNumber' => $this->getSerialNumber(),
             'comment' => $this->getComment(),
             'active' => $this->isActive()

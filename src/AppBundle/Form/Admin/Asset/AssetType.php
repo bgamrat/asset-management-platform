@@ -10,9 +10,18 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
 
 class AssetType extends AbstractType
 {
+    private $em;
+
+    public function __construct( EntityManager $em ) {
+        $this->em = $em;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -53,6 +62,8 @@ class AssetType extends AbstractType
                 ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
         ;
+        $builder->get('model')
+            ->addModelTransformer(new ModelToIdTransformer($this->em));
     }
 
     /**
