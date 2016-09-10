@@ -169,8 +169,10 @@ define([
             if( assetForm.validate() ) {
                 var data = {
                     "id": assetId,
-                    "model": modelFilteringSelect.get("value"),
-                    "location": locationSelect.get("value"),
+                    "model_text": modelFilteringSelect.get("displayedValue"),
+                    "location_text": locationSelect.get("displayedValue"),
+                    "model": parseInt(modelFilteringSelect.get("value")),
+                    "location": parseInt(locationSelect.get("value")),
                     "barcodes": barcodes.getData(),
                     "serial_number": serialNumberInput.get("value"),
                     "active": activeCheckBox.get("checked"),
@@ -210,10 +212,10 @@ define([
                 barcode: {
                     label: asset.barcode
                 },
-                location: {
+                location_text: {
                     label: asset.location
                 },
-                model: {
+                model_text: {
                     label: asset.model,
                 },
                 serial_number: {
@@ -265,8 +267,10 @@ define([
                 grid.select(row);
                 grid.collection.get(id).then(function (asset) {
                     var i, history, historyHtml, date, dateText;
+                    action = "view";
                     assetId = asset.id;
-                    modelFilteringSelect.set('displayedValue', asset.model);
+                    modelFilteringSelect.set('displayedValue', asset.model_text);
+                    locationSelect.set('displayedValue', asset.location_text);
                     serialNumberInput.set('value',asset.serial_number);
                     commentInput.set('value',asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {

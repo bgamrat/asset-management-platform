@@ -48,7 +48,7 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['a.id', 'l.name', 'bc.barcode', 'bc.updated AS barcode_updated', "CONCAT(CONCAT(b.name,' '),m.name) AS model", 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
+        $columns = ['a.id', 'l.name AS location_text', 'l.id AS location', 'bc.barcode', 'bc.updated AS barcode_updated', "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'a.deletedAt AS deleted_at';
@@ -132,11 +132,14 @@ class AssetsController extends FOSRestController
         {
             $model = $asset->getModel();
             $brand = $model->getBrand();
+            $location = $asset->getLocation();
             $data = [
                 'id' => $asset->getId(),
-                'model' => $model->getName() . ' ' . $brand->getName(),
+                'model_text' =>  $brand->getName().' '.$model->getName(),
+                'model' => $model->getId(),
                 'serial_number' => $asset->getSerialNumber(),
-                'location' => $asset->getLocation(),
+                'location_text' => $location->getName(),
+                'location' => $location->getId(),
                 'barcodes' => $asset->getBarcodes(),
                 'comments' => $asset->getComment(),
                 'active' => $asset->isActive()
@@ -178,7 +181,7 @@ class AssetsController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
-        $form = $this->createForm( AssetType::class, $asset );
+        $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
         try
         {
             $formProcessor->validateFormData( $form, $data );
@@ -193,10 +196,6 @@ class AssetsController extends FOSRestController
                                 'app_admin_api_assets_get_asset', array('id' => $asset->getId()), true // absolute
                         )
                 );
-            }
-            else
-            {
-                dump( $form->getErrors( true ) );
             }
         }
         catch( Exception $e )
