@@ -59,7 +59,8 @@ class AssetsController extends FOSRestController
                 ->innerJoin( 'm.brand', 'b' )
                 ->leftJoin( 'a.barcodes', 'bc' )
                 ->leftJoin( 'a.location', 'l' )
-                ->orderBy( $sortField, $dstore['sort-direction'] );
+                ->orderBy( $sortField, $dstore['sort-direction'] )
+                ->addOrderBy( 'bc.updated');
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -86,7 +87,7 @@ class AssetsController extends FOSRestController
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        
+       
         $barcodeUpdated = [];
         foreach( $data as $i => $asset )
         {
@@ -110,7 +111,6 @@ class AssetsController extends FOSRestController
             }
             unset($data[$i]['barcode_updated']);
         }
-
         return array_values($data);
     }
 

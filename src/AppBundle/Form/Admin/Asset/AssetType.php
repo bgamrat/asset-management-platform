@@ -11,15 +11,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+use AppBundle\Form\Admin\Asset\DataTransformer\BarcodeToEntityTransformer;
 use AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
 
 class AssetType extends AbstractType
 {
+
     private $em;
 
-    public function __construct( EntityManager $em ) {
+    public function __construct( EntityManager $em )
+    {
         $this->em = $em;
     }
 
@@ -30,7 +31,7 @@ class AssetType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false])
+                ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'serial_number', TextType::class, ['label' => false] )
                 ->add( 'model', TextType::class, [
                     'label' => 'common.model'
@@ -47,23 +48,27 @@ class AssetType extends AbstractType
                 ->add( 'barcodes', CollectionType::class, [
                     'label' => 'asset.barcode',
                     'entry_type' => BarcodeType::class,
-                    'by_reference' => true,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'mapped' => false,
                     'prototype_name' => '__barcode__'
-                    ] )
+                ] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
         ;
-        $builder->get('model')
-            ->addModelTransformer(new ModelToIdTransformer($this->em));
+        $builder->get( 'model' )
+                ->addModelTransformer( new ModelToIdTransformer( $this->em ) );
+        /*
+        $builder->get( 'barcodes' )
+          ->addModelTransformer( new BarcodeToEntityTransformer( $this->em ) );
+         * 
+         */
     }
 
     /**

@@ -6,7 +6,7 @@ use AppBundle\Entity\Email As EmailEntity;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Description of Person
+ * Description of Email
  *
  * @author bgamrat
  */

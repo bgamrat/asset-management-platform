@@ -7,7 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class BarcodeType extends AbstractType
 {
@@ -19,6 +19,8 @@ class BarcodeType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
+                ->add( 'id', HiddenType::class, ['label' => false] )
+                ->add( 'updated', HiddenType::class, ['label' => false, 'disabled' => true] )
                 ->add( 'barcode', TextType::class, [
                 ] )
                 ->add( 'comment', TextType::class, [

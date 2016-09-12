@@ -63,17 +63,17 @@ define([
             style: "height: 300px; width: 100%;"
         }, "asset-view-tabs");
 
+        var barcodesContentPane = new ContentPane({
+            title: asset.barcodes},
+        "asset-view-barcodes-tab"
+                );
+        tabContainer.addChild(barcodesContentPane);
         var historyContentPane = new ContentPane({
             title: asset.history},
         "asset-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);
 
-        var barcodesContentPane = new ContentPane({
-            title: asset.barcodes},
-        "asset-view-barcodes-tab"
-                );
-        tabContainer.addChild(barcodesContentPane);
         tabContainer.startup();
 
         var newBtn = new Button({
@@ -173,6 +173,7 @@ define([
                     "location_text": locationSelect.get("displayedValue"),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "location": parseInt(locationSelect.get("value")),
+                    "barcode": barcodes.getMostRecent(),
                     "barcodes": barcodes.getData(),
                     "serial_number": serialNumberInput.get("value"),
                     "active": activeCheckBox.get("checked"),

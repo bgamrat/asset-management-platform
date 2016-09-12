@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BarcodeRepository")
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\BarcodeLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * 
+ * @UniqueEntity("barcode")
  */
 class Barcode
 {
@@ -29,7 +29,7 @@ class Barcode
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
-     * @ORM\ManyToMany(targetEntity="Asset", mappedBy="barcodes")
+     * @ORM\ManyToMany(targetEntity="Asset", mappedBy="barcodes", cascade={"persist", "remove"})
      */
     private $barcode;
     /**
@@ -138,6 +138,16 @@ class Barcode
     {
         return $this->active;
     }
+    
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated( $updated )
+    {
+        $this->updated = $updated;
+    }
 
     public function getDeletedAt()
     {
@@ -155,7 +165,8 @@ class Barcode
         return [
             'barcode' => $this->getBarcode(),
             'comment' => $this->getComment(),
-            'active' => $this->isActive()
+            'active' => $this->isActive(),
+            'updated' => $this->getUpdated()
         ];
     }
 

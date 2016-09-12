@@ -28,7 +28,7 @@ define([
     var dataPrototype;
     var prototypeNode, prototypeContent;
     var store;
-    var barcodeInput = [], commentInput = [];
+    var barcodeId = [], barcodeInput = [], commentInput = [], barcodeUpdated = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
 
@@ -42,7 +42,9 @@ define([
 
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__barcode__/g, barcodeInput.length);
-        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+        domConstruct.place(prototypeContent, prototypeNode.parentNode, "first");
+        barcodeId.push(null);
+        barcodeUpdated.push(null);
     }
 
     function createDijits() {
@@ -66,6 +68,8 @@ define([
     }
     
     function destroyRow(id, target) {
+        barcodeId.pop();
+        barcodeUpdated.pop();
         barcodeInput.pop().destroyRecursive();
         commentInput.pop().destroyRecursive();
         domConstruct.destroy(target);
@@ -96,9 +100,6 @@ define([
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
             createDijits();
-            if (barcodeInput.length >= lib.constant.MAX_PHONE_NUMBERS) {
-                addOneMoreControl.addClass("hidden");
-            }
         });
 
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
@@ -106,9 +107,6 @@ define([
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
             destroyRow(id, targetParent.parentNode);
-            if (barcodeInput.length <= lib.constant.MAX_PHONE_NUMBERS) {
-                addOneMoreControl.removeClass("hidden");
-            }
         });
     }
 
@@ -117,6 +115,7 @@ define([
         for( i = 0; i < barcodeInput.length; i++ ) {
             returnData.push(
                     {
+                        "id": barcodeId[i],
                         "barcode": barcodeInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
@@ -141,19 +140,38 @@ define([
                     createDijits();
                 }
                 obj = barcodes[i];
+                barcodeId[i] = obj.id;
                 barcodeInput[i].set('value', obj.barcode);
                 commentInput[i].set('value', obj.comment);
+                barcodeUpdated[i] = obj.updated.timestamp;
             }
         } else {
+            barcodeId[0] = null;
             barcodeInput[0].set('value', "");
             commentInput[0].set('value', "");
+            barcodeUpdated[0] = null;
         }
+    }
+    
+    function getMostRecent() {
+        var i, mostRecent;
+        i = barcodeUpdated.indexOf(null);
+        if (i === -1) {
+            mostRecent = Math.max(...barcodeUpdated);
+            for (i = 0; i < barcodeUpdated.length; i++) {
+                if (barcodeUpdated[i] === mostRecent) {
+                    break;
+                }
+            }
+        }
+        return barcodeInput[i].get("value");
     }
     
     return {
         run: run,
         getData: getData,
-        setData: setData
+        setData: setData,
+        getMostRecent: getMostRecent
     }
 }
 );

@@ -29,6 +29,17 @@ services:
             1:
                 - '@app.encoder.json'
 
+    app.admin.form.type.asset:
+        class: AppBundle\Form\Admin\Asset\AssetType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_asset_type' }
+
+    app.admin.form.type.barcode:
+        class: AppBundle\Form\Admin\Asset\BarcodeType
+        tags:
+            - { name: form.type, alias: 'app_barcode_type' }
+
     app.admin.form.type.test:
         class: AppBundle\Form\TestType
         arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']
@@ -46,12 +57,11 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
-            
-    app.admin.form.type.asset:
-        class: AppBundle\Form\Admin\Asset\AssetType
+
+    app.form.data_transformer.barcode:
+        class: AppBundle\Form\Admin\Asset\DataTransformer\BarcodeToEntityTransformer
         arguments: ['@doctrine.orm.entity_manager']
-        tags:
-            - { name: form.type, alias: 'app_asset_type' }
+        public: false    
 
     app.form.data_transformer.invitation:
         class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
