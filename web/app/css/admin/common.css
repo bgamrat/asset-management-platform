@@ -35,6 +35,10 @@
     text-decoration: underline;
     cursor: pointer;
 }
+.date {
+    width: 65px;
+    display: inline-block;
+}
 .view-block span:nth-child(1n+2) {
     padding-left: 7px;
 }

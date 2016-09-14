@@ -63,10 +63,20 @@ define([
         }
         
     }
+    
+    function formatDate(value) {
+        var date = new Date(),year,month,day;
+        date.setTime(value*1000);
+        year = date.getFullYear();
+        month = date.getMonth()+1,
+        day = date.getDate();
+        return year + '-' + month + '-' + day;
+    }
 
     return {
-        pageReady: pageReady,
         confirmAction: confirmAction,
+        formatDate: formatDate,
+        pageReady: pageReady,
         isEmpty: isEmpty,
         textError: textError,
         xhrError: xhrError,

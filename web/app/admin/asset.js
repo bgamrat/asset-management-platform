@@ -293,9 +293,9 @@ define([
                     }
                     historyHtml += "</ul>";
                     if (asset.history.length > 0) {
-                        historyContentPane.setContent(historyHtml);
+                        historyContentPane.set("content",historyHtml);
                     } else {
-                        historyContentPane.setContent("");
+                        historyContentPane.set("content","");
                     }
                     if (typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined") {
                         titleBarcode = asset.barcodes[0].barcode;

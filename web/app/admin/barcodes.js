@@ -6,6 +6,7 @@ define([
     "dojo/dom-construct",
     "dojo/on",
     "dojo/query",
+    "dojo/html",
     "dojo/data/ObjectStore",
     "dojo/store/Memory",
     "dijit/registry",
@@ -20,7 +21,7 @@ define([
     "dojo/NodeList-traverse",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domConstruct, on,
-        query, ObjectStore, Memory,
+        query, html, ObjectStore, Memory,
         registry, TextBox, ValidationTextBox, Select, Button,
         lib, core, asset) {
     "use strict";
@@ -124,7 +125,7 @@ define([
     }
 
     function setData(barcodes) {
-        var i, p, obj;
+        var i, p, obj, dateSpan, reversed;
 
         query(".form-row.barcode", prototypeNode.parentNode).forEach(function (node, index) {
             if( index !== 0 ) {
@@ -134,15 +135,18 @@ define([
 
         if( typeof barcodes === "object" && barcodes !== null && barcodes.length > 0 ) {
 
-            for( i = 0; i < barcodes.length; i++ ) {
+            reversed = barcodes.reverse();
+            for( i = 0; i < reversed.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();
                 }
-                obj = barcodes[i];
+                obj = reversed[i];
                 barcodeId[i] = obj.id;
                 barcodeInput[i].set('value', obj.barcode);
                 commentInput[i].set('value', obj.comment);
+                dateSpan = document.querySelector(".barcodes .form-row.barcode .date");
+                html.set(dateSpan,lib.formatDate(obj.updated.timestamp));
                 barcodeUpdated[i] = obj.updated.timestamp;
             }
         } else {
