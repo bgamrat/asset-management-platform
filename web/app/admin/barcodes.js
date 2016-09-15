@@ -43,7 +43,7 @@ define([
 
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__barcode__/g, barcodeInput.length);
-        domConstruct.place(prototypeContent, prototypeNode.parentNode, "first");
+        domConstruct.place(prototypeContent, prototypeNode, "after");
         barcodeId.push(null);
         barcodeUpdated.push(null);
     }
@@ -67,7 +67,7 @@ define([
         commentInput.push(dijit);
         dijit.startup();
     }
-    
+
     function destroyRow(id, target) {
         barcodeId.pop();
         barcodeUpdated.pop();
@@ -84,20 +84,20 @@ define([
         }
 
         prototypeNode = dom.byId(getDivId());
-        if (prototypeNode === null) {
-            setDivId(arguments[0]+'_0');
+        if( prototypeNode === null ) {
+            setDivId(arguments[0] + '_0');
             prototypeNode = dom.byId(getDivId());
         }
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__barcode__/g, barcodeInput.length);
         base = prototypeNode.id + "_" + barcodeInput.length;
-        
-        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-        
+
+        domConstruct.place(prototypeContent, prototypeNode, "after");
+
         createDijits();
 
         addOneMoreControl = query('.barcodes .add-one-more-row');
-                
+
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
             createDijits();
@@ -125,28 +125,23 @@ define([
     }
 
     function setData(barcodes) {
-        var i, p, obj, dateSpan, reversed;
+        var i, p, obj, dateSpan, nodes;
 
-        query(".form-row.barcode", prototypeNode.parentNode).forEach(function (node, index) {
-            if( index !== 0 ) {
-                destroyRow(index, node);
-            }
+        nodes = query(".form-row.barcode", "barcodes");
+        nodes.forEach(function (node, index) {
+            destroyRow(index, node);
         });
 
         if( typeof barcodes === "object" && barcodes !== null && barcodes.length > 0 ) {
-
-            reversed = barcodes.reverse();
-            for( i = 0; i < reversed.length; i++ ) {
-                if( i !== 0 ) {
-                    cloneNewNode();
-                    createDijits();
-                }
-                obj = reversed[i];
+            for( i = 0; i < barcodes.length; i++ ) {
+                cloneNewNode();
+                createDijits();
+                obj = barcodes[i];
                 barcodeId[i] = obj.id;
                 barcodeInput[i].set('value', obj.barcode);
                 commentInput[i].set('value', obj.comment);
                 dateSpan = document.querySelector(".barcodes .form-row.barcode .date");
-                html.set(dateSpan,lib.formatDate(obj.updated.timestamp));
+                html.set(dateSpan, lib.formatDate(obj.updated.timestamp));
                 barcodeUpdated[i] = obj.updated.timestamp;
             }
         } else {
@@ -156,21 +151,21 @@ define([
             barcodeUpdated[0] = null;
         }
     }
-    
+
     function getMostRecent() {
         var i, mostRecent;
         i = barcodeUpdated.indexOf(null);
-        if (i === -1) {
+        if( i === -1 ) {
             mostRecent = Math.max(...barcodeUpdated);
-            for (i = 0; i < barcodeUpdated.length; i++) {
-                if (barcodeUpdated[i] === mostRecent) {
+                    for( i = 0; i < barcodeUpdated.length; i++ ) {
+                if( barcodeUpdated[i] === mostRecent ) {
                     break;
                 }
             }
         }
         return barcodeInput[i].get("value");
     }
-    
+
     return {
         run: run,
         getData: getData,

@@ -53,7 +53,7 @@ class Asset
     /**
      * @var ArrayCollection $barcodes
      * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
-     * @ORM\OrderBy({"updated" = "DESC"})
+     * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\JoinTable(name="asset_barcode",
      *      joinColumns={@ORM\JoinColumn(name="asset_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="barcode_id", referencedColumnName="id", unique=true, nullable=false)}
