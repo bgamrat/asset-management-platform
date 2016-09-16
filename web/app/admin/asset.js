@@ -46,9 +46,9 @@ define([
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         barcodes, lib, libGrid, core, asset) {
     function run() {
-     
+
         var assetId = null;
-     
+
         var action = null;
 
         var assetViewDialog = new Dialog({
@@ -166,6 +166,7 @@ define([
         saveBtn.startup();
         saveBtn.on("click", function (event) {
             var beforeId, beforeIdFilter, filter;
+            grid.clearSelection();
             if( assetForm.validate() ) {
                 var data = {
                     "id": assetId,
@@ -173,7 +174,7 @@ define([
                     "location_text": locationSelect.get("displayedValue"),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "location": parseInt(locationSelect.get("value")),
-                    "barcode": barcodes.getMostRecent(),
+                    "barcode": barcodes.getActive(),
                     "barcodes": barcodes.getData(),
                     "serial_number": serialNumberInput.get("value"),
                     "active": activeCheckBox.get("checked"),
@@ -267,42 +268,47 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (asset) {
-                    var i, history, historyHtml, date, dateText;
+                    var i, history, historyHtml, date, dateText, dataText, d;
                     action = "view";
                     assetId = asset.id;
                     modelFilteringSelect.set('displayedValue', asset.model_text);
                     locationSelect.set('displayedValue', asset.location_text);
-                    serialNumberInput.set('value',asset.serial_number);
-                    commentInput.set('value',asset.comment);
+                    serialNumberInput.set('value', asset.serial_number);
+                    commentInput.set('value', asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {
                         barcodes.setData(asset.barcodes);
                     } else {
                         barcodes.setData(null);
                     }
-                    activeCheckBox.set('checked',asset.active);
+                    activeCheckBox.set('checked', asset.active);
                     date = new Date();
                     historyHtml = "<ul>";
-                    for (i = 0; i < asset.history.length; i++) {
+                    for( i = 0; i < asset.history.length; i++ ) {
                         history = asset.history[i];
-                        if (history.username === null) {
+                        if( history.username === null ) {
                             history.username = '';
                         }
                         date.setTime(history.timestamp.timestamp * 1000);
-                        dateText = (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes();
-                        historyHtml += "<li>"+dateText+" "+history.username+" "+history.action+"</li>";
+                        dateText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+                        dataText = [];
+                        for (d in history.data) {
+                            dataText.push(d + ' set to ' + history.data[d]);
+                        }
+                        historyHtml += "<li>" + dateText + " " + history.username + " " + history.action + " " + dataText.join(', ') +
+                                "</li>";
                     }
                     historyHtml += "</ul>";
-                    if (asset.history.length > 0) {
-                        historyContentPane.set("content",historyHtml);
+                    if( asset.history.length > 0 ) {
+                        historyContentPane.set("content", historyHtml);
                     } else {
-                        historyContentPane.set("content","");
+                        historyContentPane.set("content", "");
                     }
-                    if (typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined") {
+                    if( typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined" ) {
                         titleBarcode = asset.barcodes[0].barcode;
                     } else {
                         titleBarcode = asset.no_barcode;
                     }
-                    assetViewDialog.set('title',core.view+" "+titleBarcode);
+                    assetViewDialog.set('title', core.view + " " + titleBarcode);
                     assetViewDialog.show();
                 }, lib.xhrError);
             }

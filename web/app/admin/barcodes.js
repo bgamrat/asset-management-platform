@@ -12,6 +12,7 @@ define([
     "dijit/registry",
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
+    "dijit/form/RadioButton",
     "dijit/form/Select",
     "dijit/form/Button",
     "app/lib/common",
@@ -22,14 +23,14 @@ define([
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domConstruct, on,
         query, html, ObjectStore, Memory,
-        registry, TextBox, ValidationTextBox, Select, Button,
+        registry, TextBox, ValidationTextBox, RadioButton, Select, Button,
         lib, core, asset) {
     "use strict";
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
     var store;
-    var barcodeId = [], barcodeInput = [], commentInput = [], barcodeUpdated = [];
+    var barcodeId = [], barcodeInput = [], commentInput = [], activeRadioButton = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
 
@@ -45,7 +46,6 @@ define([
         prototypeContent = dataPrototype.replace(/__barcode__/g, barcodeInput.length);
         domConstruct.place(prototypeContent, prototypeNode, "after");
         barcodeId.push(null);
-        barcodeUpdated.push(null);
     }
 
     function createDijits() {
@@ -66,13 +66,27 @@ define([
         }, base + "comment");
         commentInput.push(dijit);
         dijit.startup();
+        dijit = new RadioButton({}, base + "active");
+        activeRadioButton.push(dijit);
+        dijit.startup();
     }
 
     function destroyRow(id, target) {
-        barcodeId.pop();
-        barcodeUpdated.pop();
-        barcodeInput.pop().destroyRecursive();
-        commentInput.pop().destroyRecursive();
+        var i, item;
+
+        for( i = 0; i < barcodeInput.length; i++ ) {
+            if( barcodeInput[i].get("id").indexOf(id) !== -1 ) {
+                id = i;
+                break;
+            }
+        }
+        barcodeId.splice(id, 1);
+        item = barcodeInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = commentInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = activeRadioButton.splice(id, 1);
+        item[0].destroyRecursive();
         domConstruct.destroy(target);
     }
 
@@ -118,14 +132,15 @@ define([
                     {
                         "id": barcodeId[i],
                         "barcode": barcodeInput[i].get('value'),
-                        "comment": commentInput[i].get('value')
+                        "comment": commentInput[i].get('value'),
+                        "active": activeRadioButton[i].get("checked"),
                     });
         }
         return returnData;
     }
 
     function setData(barcodes) {
-        var i, p, obj, dateSpan, nodes;
+        var i, p, obj, nodes;
 
         nodes = query(".form-row.barcode", "barcodes");
         nodes.forEach(function (node, index) {
@@ -140,37 +155,31 @@ define([
                 barcodeId[i] = obj.id;
                 barcodeInput[i].set('value', obj.barcode);
                 commentInput[i].set('value', obj.comment);
-                dateSpan = document.querySelector(".barcodes .form-row.barcode .date");
-                html.set(dateSpan, lib.formatDate(obj.updated.timestamp));
-                barcodeUpdated[i] = obj.updated.timestamp;
+                activeRadioButton[i].set('checked', obj.active);
             }
         } else {
             barcodeId[0] = null;
             barcodeInput[0].set('value', "");
             commentInput[0].set('value', "");
-            barcodeUpdated[0] = null;
         }
     }
 
-    function getMostRecent() {
-        var i, mostRecent;
-        i = barcodeUpdated.indexOf(null);
-        if( i === -1 ) {
-            mostRecent = Math.max(...barcodeUpdated);
-                    for( i = 0; i < barcodeUpdated.length; i++ ) {
-                if( barcodeUpdated[i] === mostRecent ) {
-                    break;
-                }
+    function getActive() {
+        var i, activeSet = false;
+        for( i = 0; i < activeRadioButton.length; i++ ) {
+            if( activeRadioButton[i].get("checked") === true ) {
+                activeSet = true;
+                break;
             }
         }
-        return barcodeInput[i].get("value");
+        return activeSet ? barcodeInput[i].get("value") : null;
     }
 
     return {
         run: run,
         getData: getData,
         setData: setData,
-        getMostRecent: getMostRecent
+        getActive: getActive
     }
 }
 );

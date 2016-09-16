@@ -15,9 +15,9 @@
 {% block _barcodes_entry_row %}
     {% spaceless %}
         <div class="form-row barcode">
-            <span class="date"></span>
             <span class="input">{{ form_widget(form.barcode) }}</span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
             <span class="remove-form-row" title="{{'common.remove'|trans}}" id="barcode-__barcode__"><i class="fa fa-remove"></i></span>
         </div>
     {% endspaceless %}

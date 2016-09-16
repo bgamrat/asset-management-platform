@@ -31,6 +31,7 @@ class Asset
     private $id;
     /**
      * @var int
+     * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\ManyToOne(targetEntity="Model")
      * @ORM\JoinColumn(name="model_id", referencedColumnName="id")
@@ -38,13 +39,13 @@ class Asset
     protected $model = null;
     /**
      * @var string
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="serial_number", type="string", length=64, nullable=true, unique=false)
      */
     private $serialNumber;
     /**
      * @var int
-     * 
+     * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
@@ -62,13 +63,13 @@ class Asset
     protected $barcodes;
     /**
      * @var string
-     * 
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
     /**
      * @var boolean
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="active", type="boolean")
      * 
      */

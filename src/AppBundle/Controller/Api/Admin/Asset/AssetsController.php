@@ -59,8 +59,7 @@ class AssetsController extends FOSRestController
                 ->innerJoin( 'm.brand', 'b' )
                 ->leftJoin( 'a.barcodes', 'bc' )
                 ->leftJoin( 'a.location', 'l' )
-                ->orderBy( $sortField, $dstore['sort-direction'] )
-                ->addOrderBy( 'bc.updated');
+                ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -86,32 +85,9 @@ class AssetsController extends FOSRestController
             }
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
+        $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
         $data = $queryBuilder->getQuery()->getResult();
-       
-        $barcodeUpdated = [];
-        foreach( $data as $i => $asset )
-        {
-            $set = false;
-            $id = $asset['id'];
-            if( !isset( $barcodeUpdated[$id] ) )
-            {
-                $set = true;
-            }
-            else
-            {
-                if( $asset['barcode_updated'] > $barcodeUpdated[$id]['updated'] )
-                {
-                    unset( $data[$barcodeUpdated[$id]['index']] );
-                    $set = true;
-                }
-            }
-            if( $set === true )
-            {
-                $barcodeUpdated[$id] = ['updated' => $asset['barcode_updated'], 'index' => $i];
-            }
-            unset($data[$i]['barcode_updated']);
-        }
-        return array_values($data);
+        return array_values( $data );
     }
 
     /**
@@ -135,7 +111,7 @@ class AssetsController extends FOSRestController
             $location = $asset->getLocation();
             $data = [
                 'id' => $asset->getId(),
-                'model_text' =>  $brand->getName().' '.$model->getName(),
+                'model_text' => $brand->getName() . ' ' . $model->getName(),
                 'model' => $model->getId(),
                 'serial_number' => $asset->getSerialNumber(),
                 'location_text' => $location->getName(),
@@ -152,6 +128,34 @@ class AssetsController extends FOSRestController
                     ->where( $queryBuilder->expr()->eq( 'al.objectId', '?1' ) );
             $queryBuilder->setParameter( 1, $id )->orderBy( 'al.loggedAt', 'desc' );
             $history = $queryBuilder->getQuery()->getResult();
+
+            // TODO: Fix this and move it
+            $modelIds = [];
+
+            foreach( $history as $i => $h )
+            {
+                if( isset( $h['data']['model'] ) && isset( $h['data']['model']['id'] ) )
+                {
+                    $modelIds[] = $h['data']['model']['id'];
+                }
+            }
+            $repository = $this->getDoctrine()
+                    ->getRepository( 'AppBundle:Model' );
+            $models = $repository->findBy( ['id' => $modelIds] );
+
+            $modelNames = [];
+            foreach( $models as $m )
+            {
+                $modelNames[$m->getId()] = $m->getBrand()->getName().' '.$m->getName();
+            }
+            foreach( $history as $i => $h )
+            {
+                if( isset( $h['data']['model'] ) && isset( $h['data']['model']['id'] ) )
+                {
+                    $history[$i]['data']['model'] = $modelNames[$h['data']['model']['id']];
+                }
+            }
+
             $data['history'] = $history;
 
             return $data;

@@ -225,3 +225,6 @@ The class - often called an "entity", meaning a basic class that holds data - is
 requirement of needing products in your application. 
 
 You can think of a repository as a PHP class whose only job is to help you fetch entities of a certain class. 
+
+[root@ami symfony-dev]# setfacl -R -m u:apache:rwX -m u:bgamrat:rwX var
+[root@ami symfony-dev]# setfacl -dR -m u:apache:rwX -m u:bgamrat:rwX var

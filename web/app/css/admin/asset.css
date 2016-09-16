@@ -20,6 +20,7 @@
 }
 #asset-view-history-tab ul {
     list-style-type: none;
+    padding: 0;
 }
 .field-id {
     display: none;

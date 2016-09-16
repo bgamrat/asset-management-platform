@@ -48,7 +48,7 @@ class AssetType extends AbstractType
                 ->add( 'barcodes', CollectionType::class, [
                     'label' => 'asset.barcode',
                     'entry_type' => BarcodeType::class,
-                    'by_reference' => false,
+                    'by_reference' => true,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,

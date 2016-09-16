@@ -29,7 +29,7 @@ class Barcode
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
-     * @ORM\ManyToMany(targetEntity="Asset", mappedBy="barcodes", cascade={"persist", "remove"})
+     * @ORM\ManyToMany(targetEntity="Asset", mappedBy="barcodes", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $barcode;
     /**
