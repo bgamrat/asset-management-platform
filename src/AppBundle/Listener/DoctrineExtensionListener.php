@@ -5,6 +5,7 @@ namespace AppBundle\Listener;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
 class DoctrineExtensionListener implements ContainerAwareInterface
 {
@@ -34,7 +35,7 @@ class DoctrineExtensionListener implements ContainerAwareInterface
     public function onKernelRequest( GetResponseEvent $event )
     {
         $tokenStorage = $this->container->get( 'security.token_storage', ContainerInterface::NULL_ON_INVALID_REFERENCE );
-        if( null !== $tokenStorage && null !== $tokenStorage->getToken() && null !== $tokenStorage->getToken()->getUser() )
+        if( null !== $tokenStorage && null !== $tokenStorage->getToken() && !($tokenStorage->getToken() instanceof AnonymousToken ) )
         {           
             $loggable = $this->container->get( 'gedmo.listener.loggable' );
             $user = $tokenStorage->getToken()->getUser();

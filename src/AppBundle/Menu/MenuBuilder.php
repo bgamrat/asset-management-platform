@@ -98,7 +98,7 @@ class MenuBuilder implements ContainerAwareInterface
 
             if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN' ) )
             {
-                $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'app_admin_default_index') )
+                $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'app_admin_asset_asset_index') )
                         ->setAttribute( 'icon', 'fa fa-star-o' );
             }
             $menu['user']->addChild( 'edit_profile', array('label' => 'user.profile', 'route' => 'fos_user_profile_edit') )
