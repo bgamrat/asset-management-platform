@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Address
  *
  * @ORM\Table(name="address")
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\AssetLog")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AddressRepository")
  */
 class Address
@@ -28,47 +29,48 @@ class Address
      * @ORM\ManyToOne(targetEntity="AddressType")
      * @ORM\OrderBy({"type" = "ASC"})
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     * @Gedmo\Versioned
      */
     private $type;
     /**
      * @var string
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="street1", type="string", length=64, nullable=true, unique=false)
      */
     private $street1;
     /**
      * @var string
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="street2", type="string", length=64, nullable=true, unique=false)
      */
     private $street2;
     /**
      * @var string
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="city", type="string", length=64, nullable=false, unique=false)
      */
     private $city;
     /**
      * @var string
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="state_province", type="string", length=32, nullable=false, unique=false)
      */
     private $state_province;
     /**
      * @var string
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="postal_code", type="string", length=16, nullable=true, unique=false)
      */
     private $postal_code;
     /**
      * @var string
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="country", type="string", length=2, nullable=true)
      */
     private $country;
     /**
      * @var string
-     * 
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;

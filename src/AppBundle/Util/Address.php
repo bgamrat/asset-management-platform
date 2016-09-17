@@ -6,7 +6,7 @@ use AppBundle\Entity\Address As AddressEntity;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Description of Person
+ * Description of Address
  *
  * @author bgamrat
  */

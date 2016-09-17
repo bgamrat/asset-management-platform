@@ -117,7 +117,7 @@ class AssetsController extends FOSRestController
                 'location_text' => $location->getName(),
                 'location' => $location->getId(),
                 'barcodes' => $asset->getBarcodes(),
-                'comments' => $asset->getComment(),
+                'comment' => $asset->getComment(),
                 'active' => $asset->isActive()
             ];
 
@@ -128,35 +128,9 @@ class AssetsController extends FOSRestController
                     ->where( $queryBuilder->expr()->eq( 'al.objectId', '?1' ) );
             $queryBuilder->setParameter( 1, $id )->orderBy( 'al.loggedAt', 'desc' );
             $history = $queryBuilder->getQuery()->getResult();
-
-            // TODO: Fix this and move it
-            $modelIds = [];
-
-            foreach( $history as $i => $h )
-            {
-                if( isset( $h['data']['model'] ) && isset( $h['data']['model']['id'] ) )
-                {
-                    $modelIds[] = $h['data']['model']['id'];
-                }
-            }
-            $repository = $this->getDoctrine()
-                    ->getRepository( 'AppBundle:Model' );
-            $models = $repository->findBy( ['id' => $modelIds] );
-
-            $modelNames = [];
-            foreach( $models as $m )
-            {
-                $modelNames[$m->getId()] = $m->getBrand()->getName().' '.$m->getName();
-            }
-            foreach( $history as $i => $h )
-            {
-                if( isset( $h['data']['model'] ) && isset( $h['data']['model']['id'] ) )
-                {
-                    $history[$i]['data']['model'] = $modelNames[$h['data']['model']['id']];
-                }
-            }
-
-            $data['history'] = $history;
+            $logUtil = $this->get( 'app.util.log' );
+            $logUtil->init( $history );
+            $data['history'] = $logUtil->translateIdsToText();
 
             return $data;
         }

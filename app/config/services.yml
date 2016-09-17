@@ -142,6 +142,10 @@ services:
     app.util.form:
         class: AppBundle\Util\Form
         
+    app.util.log:
+        class: AppBundle\Util\Log
+        arguments: ['@doctrine.orm.entity_manager']
+        
     app.util.model:
         class: AppBundle\Util\Model
         arguments: ['@doctrine.orm.entity_manager']
