@@ -1,0 +1,28 @@
+{% block title %}{{ 'asset.category'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="category-wrapper">
+        <h1>{{ 'asset.category'|trans }} {{'common.admin'|trans }}</h1>
+        <div class="categories">
+            {{form_start(categories_form)}}
+            {{form_errors(categories_form)}}
+            <div class="text-right">
+                <button id="categories-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+            </div>
+            {{form_row(categories_form)}}
+            {% if categories_form.categories.vars.allow_add %}
+                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+            {% endif %}
+            {{form_end(categories_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/category"], function (category) {
+            category.run();
+        });
+    </script>
+{% endblock %}

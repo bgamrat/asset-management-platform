@@ -6,11 +6,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ModelType extends AbstractType
+class CategoryType extends AbstractType
 {
 
     /**
@@ -21,15 +20,6 @@ class ModelType extends AbstractType
     {
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'category', EntityType::class, [
-                    'class' => 'AppBundle:Category',
-                    'choice_label' => 'type',
-                    'multiple' => false,
-                    'expanded' => false,
-                    'required' => true,
-                    'label' => 'asset.category',
-                    'choice_translation_domain' => false
-                ] )
                 ->add( 'name', TextType::class, ['label' => false] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
@@ -44,13 +34,13 @@ class ModelType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Model'
+            'data_class' => 'AppBundle\Entity\Category'
         ) );
     }
 
     public function getName()
     {
-        return 'model';
+        return 'category';
     }
 
 }

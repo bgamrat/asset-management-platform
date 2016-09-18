@@ -8,15 +8,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Model
+ * Category
  *
- * @ORM\Table(name="model")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelRepository")
- * @Gedmo\Loggable
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\Table(name="category")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  * 
  */
-class Model
+class Category
 {
 
     /**
@@ -28,13 +26,6 @@ class Model
      * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
      */
     private $id;
-    /**
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     * @ORM\OrderBy({"name" = "ASC"})
-     */
-    private $category;
     /**
      * @var string
      *
@@ -48,21 +39,12 @@ class Model
      */
     private $comment;
     /**
-     * @ORM\ManyToMany(targetEntity="Brand", mappedBy="models")
-     */
-    private $brand;
-    /**
      * @var boolean
      *
      * @ORM\Column(name="active", type="boolean")
      * 
      */
     private $active = true;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
 
     /**
      * Get id
@@ -75,35 +57,11 @@ class Model
     }
 
     /**
-     * Set category
-     *
-     * @param string $category
-     *
-     * @return Category
-     */
-    public function setCategory( $category )
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return string
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
      * Set name
      *
      * @param string $name
      *
-     * @return Model
+     * @return Category
      */
     public function setName( $name )
     {
@@ -127,7 +85,7 @@ class Model
      *
      * @param string $comment
      *
-     * @return Comment
+     * @return Email
      */
     public function setComment( $comment )
     {
@@ -146,16 +104,6 @@ class Model
         return $this->comment;
     }
 
-    /**
-     * Get brand
-     *
-     * @return Brand
-     */
-    public function getBrand()
-    {
-        return $this->brand->toArray()[0];
-    }
-
     public function setActive( $active )
     {
         $this->active = $active;
@@ -164,17 +112,6 @@ class Model
     public function isActive()
     {
         return $this->active;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
-    public function setDeletedAt( $deletedAt )
-    {
-        $this->deletedAt = $deletedAt;
-        $this->setActive( false );
     }
 
     public function toArray()

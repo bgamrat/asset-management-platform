@@ -6,6 +6,7 @@ use AppBundle\Form\Common\PersonType;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -26,7 +27,8 @@ class UserType extends AbstractType
         $role = null;
         foreach( $roles as $n => $r )
         {
-            if ($n === 'ROLE_API') {
+            if( $n === 'ROLE_API' )
+            {
                 continue;
             }
             $role = new \stdClass();
@@ -39,6 +41,7 @@ class UserType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
+                ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'email', TextType::class, ['label' => 'common.email'] )
                 ->add( 'username', TextType::class, ['label' => 'common.username', 'validation_groups' => array('registration')] )
                 ->add( 'person', PersonType::class, array(
@@ -61,7 +64,7 @@ class UserType extends AbstractType
                         'expanded' => true,
                         'choice_translation_domain' => false,
                         //'translation_domain' => false,
-                        'attr' => [ 'data-type' => 'user-group-cb' ]
+                        'attr' => [ 'data-type' => 'user-group-cb']
                     ] )
                     ->add( 'roles', ChoiceType::class, ['choices' => $this->roles,
                         'multiple' => true,

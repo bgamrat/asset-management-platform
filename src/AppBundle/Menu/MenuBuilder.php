@@ -34,8 +34,10 @@ class MenuBuilder implements ContainerAwareInterface
                 ->setExtra( 'translation_domain', 'AppBundle' );
         $menu->addChild( 'assets', ['label' => 'common.assets'] );
         $menu['assets']->addChild( 'assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_asset_index'] );
+        $menu['assets']->addChild( 'brands', ['label' => 'asset.brand', 'route' => 'app_admin_asset_brand_index'] );
+        $menu['assets']->addChild( 'categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index'] );
         $menu['assets']->addChild( 'manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index'] );
-                $menu['assets']->addChild( 'requirements', ['label' => 'asset.requirements', 'route' => 'app_admin_asset_requirements_index'] );
+        $menu['assets']->addChild( 'requirements', ['label' => 'asset.requirements', 'route' => 'app_admin_asset_requirements_index'] );
         $menu['assets']->addChild( 'vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index'] );
 
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN_USER' ) )

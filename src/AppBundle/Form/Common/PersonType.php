@@ -5,6 +5,7 @@ namespace AppBundle\Form\Common;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -23,6 +24,7 @@ class PersonType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
+                ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
                     'class' => 'AppBundle:PersonType',
                     'choice_label' => 'type',
@@ -59,7 +61,7 @@ class PersonType extends AbstractType
                     'delete_empty' => true,
                     'mapped' => false,
                     'prototype_name' => '__email__'
-                    ] )
+                ] )
                 ->add( 'addresses', CollectionType::class, [
                     'entry_type' => AddressType::class,
                     'by_reference' => true,

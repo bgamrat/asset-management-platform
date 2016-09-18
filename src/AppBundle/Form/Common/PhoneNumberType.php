@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Common;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,6 +21,7 @@ class PhoneNumberType extends AbstractType
     {
 
         $builder
+                ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
                     'class' => 'AppBundle:PhoneNumberType',
                     'choice_label' => 'type',

@@ -3,6 +3,7 @@ define({
         "asset": "Asset",
         "barcode": "Barcode",
         "barcodes": "Barcodes",
+        "category": "Category",
         "history": "History",
         "location": "Location",
         "model": "Model",

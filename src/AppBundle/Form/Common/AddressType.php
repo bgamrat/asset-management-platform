@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -20,6 +21,7 @@ class AddressType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
+                                ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
                     'class' => 'AppBundle:AddressType',
                     'choice_label' => 'type',

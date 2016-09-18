@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Common;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType As SymfonyEmailType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +21,7 @@ class AppEmailType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
+                ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
                     'class' => 'AppBundle:EmailType',
                     'choice_label' => 'type',

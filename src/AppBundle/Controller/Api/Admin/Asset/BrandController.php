@@ -1,12 +1,10 @@
 <?php
 
-namespace AppBundle\Controller\Api\Admin\Asset;
+namespace AppBundle\Controller\Api\Admin\Brand;
 
 use AppBundle\Util\DStore;
-use AppBundle\Entity\Manufacturer;
-use AppBundle\Form\Admin\Asset\BrandsType;
-use AppBundle\Form\Admin\Asset\ManufacturerType;
-use AppBundle\Form\Admin\Asset\ModelsType;
+use AppBundle\Entity\Brand;
+use AppBundle\Form\Admin\Brand\BrandType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,27 +13,53 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use AppBundle\Util\Model As ModelUtil;
 
-class ManufacturersController extends FOSRestController
+class BrandsController extends FOSRestController
 {
 
     /**
      * @View()
      */
-    public function getManufacturersAction( Request $request )
+    public function getBrandsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
+        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+
+        switch( $dstore['sort-field'] )
+        {
+            case 'barcode':
+                $sortField = 'c.barcode';
+                break;
+            case 'location':
+                $sortField = 'l.name';
+                break;
+            case 'brand':
+                $sortField = 'b.name';
+                break;
+            case 'model':
+                $sortField = 'm.name';
+                break;
+            default:
+                $sortField = 'a.' . $dstore['sort-field'];
+        }
 
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['m'] )
-                ->from( 'AppBundle:Manufacturer', 'm' )
-                ->orderBy( 'm.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $columns = ['a.id', 'l.name AS location_text', 'l.id AS location', 'bc.barcode', 'bc.updated AS barcode_updated', "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $columns[] = 'a.deletedAt AS deleted_at';
+        }
+        $queryBuilder = $em->createQueryBuilder()->select( $columns )
+                ->from( 'AppBundle:Brand', 'a' )
+                ->innerJoin( 'a.model', 'm' )
+                ->innerJoin( 'm.brand', 'b' )
+                ->leftJoin( 'a.barcodes', 'bc' )
+                ->leftJoin( 'a.location', 'l' )
+                ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -51,59 +75,62 @@ class ManufacturersController extends FOSRestController
                 case DStore::LIKE:
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
-                                    $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'u.email', '?1' ) )
+                                    $queryBuilder->expr()->like( 'a.model', '?1' ), $queryBuilder->expr()->like( 'a.serial_number', '?1' ) )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'm.name', '?1' )
+                            $queryBuilder->expr()->gt( 'a.model', '?1' )
                     );
             }
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
-        $query = $queryBuilder->getQuery();
-        $manufacturerCollection = $query->getResult();
-        $data = [];
-        $personModel = $this->get( 'app.model.person' );
-        foreach( $manufacturerCollection as $m )
-        {
-            // TODO: Add full multi-contact support
-            $contacts = $m->getContacts();
-            $item = [
-                'name' => $m->getName(),
-                'contacts' => [$personModel->get( $contacts[0] )],
-                'brands' => $m->getBrands(),
-                'active' => $m->isActive(),
-            ];
-            if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
-            {
-                $item['deleted_at'] = $m->getDeletedAt();
-            }
-            $data[] = $item;
-        }
-        return $data;
+        $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
+        $data = $queryBuilder->getQuery()->getResult();
+        return array_values( $data );
     }
 
     /**
      * @View()
      */
-    public function getManufacturerAction( $name )
+    public function getBrandAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Manufacturer' );
-        $manufacturer = $repository->findOneBy( ['name' => $name] );
-        if( $manufacturer !== null )
+        $em = $this->getDoctrine()->getManager();
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
-            $personModel = $this->get( 'app.model.person' );
-            // TODO: Add full multi-contact support
-            $contacts = $manufacturer->getContacts();
+            $em->getFilters()->disable( 'softdeleteable' );
+        }
+        $repository = $this->getDoctrine()
+                ->getRepository( 'AppBundle:Brand' );
+        $brand = $repository->find( $id );
+        if( $brand !== null )
+        {
+            $model = $brand->getModel();
+            $brand = $model->getBrand();
+            $location = $brand->getLocation();
             $data = [
-                'name' => $manufacturer->getName(),
-                'brands' => $manufacturer->getBrands(),
-                'contacts' => [$personModel->get( $contacts[0] )],
-                'active' => $manufacturer->isActive()
+                'id' => $brand->getId(),
+                'model_text' => $brand->getName() . ' ' . $model->getName(),
+                'model' => $model->getId(),
+                'serial_number' => $brand->getSerialNumber(),
+                'location_text' => $location->getName(),
+                'location' => $location->getId(),
+                'barcodes' => $brand->getBarcodes(),
+                'comment' => $brand->getComment(),
+                'active' => $brand->isActive()
             ];
+
+            $columns = ['al.version AS version', 'al.action AS action', 'al.loggedAt AS timestamp', 'al.username AS username', 'al.data AS data'];
+            $queryBuilder = $em->createQueryBuilder();
+            $queryBuilder->select( $columns )
+                    ->from( 'AppBundle:BrandLog', 'al' )
+                    ->where( $queryBuilder->expr()->eq( 'al.objectId', '?1' ) );
+            $queryBuilder->setParameter( 1, $id )->orderBy( 'al.loggedAt', 'desc' );
+            $history = $queryBuilder->getQuery()->getResult();
+            $logUtil = $this->get( 'app.util.log' );
+            $logUtil->init( $history );
+            $data['history'] = $logUtil->translateIdsToText();
 
             return $data;
         }
@@ -114,37 +141,37 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
+     * @View()
      */
-    public function postManufacturerAction( $name, Request $request )
+    public function postBrandAction( $id, Request $request )
     {
-        return $this->putManufacturerAction( $name, $request );
+        return $this->putBrandAction( $id, $request );
     }
 
     /**
      * @View()
      */
-    public function putManufacturerAction( $name, Request $request )
+    public function putBrandAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( ManufacturerType::class, null, [] );
-        $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->find([ 'name' => $name ]);
-        $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
+        $brand = $em->getRepository( 'AppBundle:Brand' )->find( $id );
+        $form = $this->createForm( BrandType::class, $brand, ['allow_extra_fields' => true] );
         try
         {
             $formProcessor->validateFormData( $form, $data );
             $form->handleRequest( $request );
             if( $form->isValid() )
             {
-                $manufacturer = $form->getData();
-                $em->persist( $manufacturer );
+                $brand = $form->getData();
+                $em->persist( $brand );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_manufacturer_get_manufacturer', array('name' => $manufacturer->getName()), true // absolute
+                                'app_admin_api_brands_get_brand', array('id' => $brand->getId()), true // absolute
                         )
                 );
             }
@@ -162,14 +189,14 @@ class ManufacturersController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function patchManufacturerAction( $name, Request $request )
+    public function patchBrandAction( $id, Request $request )
     {
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'AppBundle:Manufacturer' );
-        $manufacturer = $repository->findOneBy( ['name' => $name] );
-        if( $manufacturer !== null )
+        $repository = $em->getRepository( 'AppBundle:Brand' );
+        $brand = $repository->find( $id );
+        if( $brand !== null )
         {
             if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
             {
@@ -177,11 +204,11 @@ class ManufacturersController extends FOSRestController
                 switch( $data['field'] )
                 {
                     case 'active':
-                        $manufacturer->setActive( $value );
+                        $brand->setActive( $value );
                         break;
                 }
 
-                $em->persist( $manufacturer );
+                $em->persist( $brand );
                 $em->flush();
             }
         }
@@ -190,15 +217,19 @@ class ManufacturersController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function deleteManufacturerAction( $name )
+    public function deleteBrandAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-        $em->getFilters()->enable( 'softdeleteable' );
-        $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->findOneBy( ['name' => $name] );
-        if( $manufacturer !== null )
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
-            $em->remove( $manufacturer );
+            $em->getFilters()->disable( 'softdeleteable' );
+        }
+        $brand = $em->getRepository( 'AppBundle:Brand' )->find( $id );
+        if( $brand !== null )
+        {
+            $em->getFilters()->enable( 'softdeleteable' );
+            $em->remove( $brand );
             $em->flush();
         }
         else
@@ -208,20 +239,20 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{name}/brands")
+     * @Route("/api/brands/{name}/brands")
      * @Method("GET")
      * @View()
      */
-    public function getManufacturerBrandsAction( $name, Request $request )
+    public function getBrandBrandsAction( $name, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Manufacturer' );
-        $manufacturer = $repository->findOneBy( ['name' => $name] );
-        if( $manufacturer !== null )
+                ->getRepository( 'AppBundle:Brand' );
+        $brand = $repository->findOneBy( ['name' => $name] );
+        if( $brand !== null )
         {
             $data = [];
-            $data['brands'] = $manufacturer->getBrands();
+            $data['brands'] = $brand->getBrands();
             return $data;
         }
         else
@@ -231,34 +262,27 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Route("/api/brands/{mname}/brand/{bname}/models")
      * @Method("GET")
      * @View()
      */
-    public function getManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    public function getBrandBrandModelsAction( $mname, $bname, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-
-        $queryBuilder = $em->createQueryBuilder()->select( 'm, b, d' )
-                ->from( 'AppBundle:Manufacturer', 'm' )
-                ->innerJoin( 'm.brands', 'b' )
-                ->innerJoin( 'b.models', 'd' )
-                ->where( "m.name = :mname AND b.name = :bname" )
-                ->setParameters( ['mname' => $mname, 'bname' => $bname] );
-        $manufacturer = $queryBuilder->getQuery()->getResult();
-
-        if( $manufacturer !== null )
+        $query = $em->createQuery( 'SELECT m, b, d FROM AppBundle\Entity\Brand m JOIN m.brands b JOIN b.models d WHERE m.name = :mname AND b.name = :bname' );
+        $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
+        $brand = $query->getResult();
+        if( $brand !== null )
         {
             $data = [];
-            if( count( $manufacturer ) > 0 )
+            if( count( $brand ) > 0 )
             {
-                $brands = $manufacturer[0]->getBrands();
+                $brands = $brand[0]->getBrands();
                 if( count( $brands ) > 0 )
                 {
                     $data['models'] = $brands[0]->getModels();
                 }
-                return $data;
             }
             return $data;
         }
@@ -269,21 +293,21 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Route("/api/brands/{mname}/brand/{bname}/models")
      * @Method("POST")
      * @View()
      */
-    public function postManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    public function postBrandBrandModelsAction( $mname, $bname, Request $request )
     {
-        return $this->putManufacturerBrandModelsAction( $mname, $bname, $request );
+        return $this->putBrandBrandModelsAction( $mname, $bname, $request );
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Route("/api/brands/{mname}/brand/{bname}/models")
      * @Method("PUT")
      * @View()
      */
-    public function putManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    public function putBrandBrandModelsAction( $mname, $bname, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
@@ -294,10 +318,10 @@ class ManufacturersController extends FOSRestController
         {
             $formProcessor->validateFormData( $form, $data );
             $em = $this->getDoctrine()->getManager();
-            $query = $em->createQuery( 'SELECT m, b FROM AppBundle\Entity\Manufacturer m JOIN m.brands b WHERE m.name = :mname AND b.name = :bname' );
+            $query = $em->createQuery( 'SELECT m, b FROM AppBundle\Entity\Brand m JOIN m.brands b WHERE m.name = :mname AND b.name = :bname' );
             $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
-            $manufacturer = $query->getResult();
-            $brand = $manufacturer[0]->getBrands()[0];
+            $brand = $query->getResult();
+            $brand = $brand[0]->getBrands()[0];
             if( $brand !== null )
             {
                 $modelUtil = $this->get( 'app.util.model' );
@@ -306,7 +330,7 @@ class ManufacturersController extends FOSRestController
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_manufacturers_get_manufacturer_brand_models', array('mname' => $mname, 'bname' => $bname), true // absolute
+                                'app_admin_api_brands_get_brand_brand_models', array('mname' => $mname, 'bname' => $bname), true // absolute
                         )
                 );
             }
