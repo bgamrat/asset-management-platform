@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -12,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
+ * @UniqueEntity("name")
  * 
  */
 class Category
@@ -30,6 +32,11 @@ class Category
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$/",
+     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$",
+     *     message = "invalid.name {{ value }}",
+     *     match=true)
      */
     private $name;
     /**
@@ -45,6 +52,16 @@ class Category
      * 
      */
     private $active = true;
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
 
     /**
      * Get id
@@ -117,6 +134,7 @@ class Category
     public function toArray()
     {
         return [
+            'id' => $this->getId(),
             'name' => $this->getName(),
             'comment' => $this->getComment(),
             'active' => $this->isActive()

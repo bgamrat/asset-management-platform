@@ -2,11 +2,12 @@
 
 namespace AppBundle\Form\Admin\Asset;
 
+use AppBundle\Form\Admin\Asset\CategoryType;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AppBundle\Form\Admin\Asset\CategoryType;
 
 class CategoriesType extends AbstractType
 {
@@ -20,14 +21,13 @@ class CategoriesType extends AbstractType
         $builder
                 ->add( 'categories', CollectionType::class, [
                     'entry_type' => CategoryType::class,
-                    'by_reference' => true,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
                     'allow_add' => true,
-                    'allow_delete' => true,
+                    'allow_delete' => false,
                     'delete_empty' => true,
-                    'mapped' => false,
                     'prototype_name' => '__category__'
                 ] )
         ;
@@ -38,6 +38,7 @@ class CategoriesType extends AbstractType
      */
     public function configureOptions( OptionsResolver $resolver )
     {
+        return;
         $resolver->setDefaults( array(
             'csrf_protection' => true,
             'csrf_field_name' => '_token',

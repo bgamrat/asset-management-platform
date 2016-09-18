@@ -28,13 +28,22 @@ class ModelType extends AbstractType
                     'expanded' => false,
                     'required' => true,
                     'label' => 'asset.category',
+                    'preferred_choices' => function ($value, $key)
+                    {
+                    dump($value);
+                        if( $value == true )
+                        {
+                            return 'Definitely!';
+                        }
+                        return strtoupper($key);
+                    },
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'name', TextType::class, ['label' => false] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
-                ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
+                ->add( 'active', CheckboxType::class, ['label' => 'common.active' ] )
         ;
     }
 

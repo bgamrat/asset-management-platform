@@ -5,12 +5,34 @@
     <div id="category-wrapper">
         <h1>{{ 'asset.category'|trans }} {{'common.admin'|trans }}</h1>
         <div class="categories">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
+            {% if not categories_form.vars.valid %}
+                <div class="form-errors categories">
+                    {% for category in categories_form.categories %}
+                        {% if not category.vars.valid %}
+                            {{form_errors(category.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
             {{form_start(categories_form)}}
-            {{form_errors(categories_form)}}
             <div class="text-right">
                 <button id="categories-save-btn" type="submit">{{ 'common.save'|trans }}</button>
             </div>
+            <div class="form-row header">
+                <span class="name">{{ 'common.name'|trans }}</span>
+                <span class="comment">{{ 'common.comment'|trans }}</span>
+                <span class="active">{{ 'common.active'|trans }}</span>
+            </div>
             {{form_row(categories_form)}}
+            {% for category in categories_form.categories %}
+                {{form_row(category)}}
+            {% endfor %}
+
             {% if categories_form.categories.vars.allow_add %}
                 <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
             {% endif %}

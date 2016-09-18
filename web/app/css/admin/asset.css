@@ -25,3 +25,7 @@
 .field-id {
     display: none;
 }
+#category-wrapper {
+    margin: 0 auto;
+    width: 500px;
+}

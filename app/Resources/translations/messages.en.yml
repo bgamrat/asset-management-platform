@@ -73,6 +73,8 @@ common:
         Groups
     home:
         Home
+    invalid:
+        invalid
     invite:
         Invite
     locations:

@@ -3,10 +3,11 @@
 namespace AppBundle\Form\Admin\Asset;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CategoryType extends AbstractType
@@ -19,12 +20,10 @@ class CategoryType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'name', TextType::class, ['label' => false] )
-                ->add( 'comment', TextType::class, [
-                    'label' => false
-                ] )
-                ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
+                ->add( 'id', HiddenType::class )
+                ->add( 'name', TextType::class )
+                ->add( 'comment', TextType::class )
+                ->add( 'active', CheckboxType::class )
         ;
     }
 
@@ -33,9 +32,9 @@ class CategoryType extends AbstractType
      */
     public function configureOptions( OptionsResolver $resolver )
     {
-        $resolver->setDefaults( array(
+        $resolver->setDefaults( ['label' => false,
             'data_class' => 'AppBundle\Entity\Category'
-        ) );
+        ] );
     }
 
     public function getName()

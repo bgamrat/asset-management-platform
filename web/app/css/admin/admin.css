@@ -42,8 +42,33 @@ fieldset .sub-form-legend {
 .form-row {
     margin: 5px 0;
 }
+.form-row.header {
+    font-weight: 700;
+}
+.form-row.header .name,
+.form-row.header .comment {
+    width: 15em;
+    display: inline-block;
+}
+.form-row.header .active,
+.form-row .active {
+    display: inline-block;
+    text-align: center;
+    width: 65px;
+}
 .form-row .phone-numbers .type-select {
     width: 100px;
+}
+.form-errors {
+    background-color: lightpink;
+    border: 1px solid pink;
+    color: maroon;
+    margin: 25px 0;
+    padding: 5px;
+}
+.form-errors ul {
+    list-style-type: none;
+    padding: 0 27px;
 }
 .addresses {
     width: 300px;
@@ -71,4 +96,3 @@ fieldset .sub-form-legend {
     height:50px;
     width: 300px;
 }
-
