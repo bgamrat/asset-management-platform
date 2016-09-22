@@ -14,24 +14,25 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  * @UniqueEntity("name")
- * 
+ * @UniqueEntity("id")
  */
 class Category
 {
 
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
+     * @ORM\OneToMany(targetEntity="Model", mappedBy="id")
      */
     private $id;
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
+     * @Assert\NotBlank(
+     *     message = "blank.name")
      * @Assert\Regex(
      *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$/",
      *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$",

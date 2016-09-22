@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Model
@@ -14,7 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * 
  */
 class Model
 {
@@ -29,15 +29,19 @@ class Model
      */
     private $id;
     /**
-     * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $category;
     /**
      * @var string
-     *
+     * @Assert\NotBlank(
+     *     message = "blank.name")
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$/",
+     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$",
+     *     message = "invalid.name {{ value }}",
+     *     match=true)
      * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
      */
     private $name;
@@ -48,7 +52,7 @@ class Model
      */
     private $comment;
     /**
-     * @ORM\ManyToMany(targetEntity="Brand", mappedBy="models")
+     * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models")
      */
     private $brand;
     /**
@@ -63,6 +67,15 @@ class Model
      * @Gedmo\Versioned
      */
     private $deletedAt;
+
+    /**
+     * Set id
+     * 
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
 
     /**
      * Get id
@@ -153,7 +166,12 @@ class Model
      */
     public function getBrand()
     {
-        return $this->brand->toArray()[0];
+        return $this->brand;
+    }
+
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
     }
 
     public function setActive( $active )
@@ -180,10 +198,21 @@ class Model
     public function toArray()
     {
         return [
+            'id' => $this->getId(),
+            'category' => $this->getCategory(),
             'name' => $this->getName(),
             'comment' => $this->getComment(),
             'active' => $this->isActive()
         ];
+    }
+
+    public function fromArray( $arr )
+    {
+        $this->setId( $arr['id'] );
+        $this->setCategory( $arr['category'] );
+        $this->getName( $arr['name'] );
+        $this->getComment( $arr['comment'] );
+        $this->setActive( $arr['active'] );
     }
 
 }

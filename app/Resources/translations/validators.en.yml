@@ -1,2 +1,4 @@
+blank.name:
+    "Name cannot be blank"
 "invalid.name {{ value }}":
     "Invalid name {{ value }}"

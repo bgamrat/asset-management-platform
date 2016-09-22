@@ -56,7 +56,7 @@ define([
         dijit = new ValidationTextBox({
             placeholder: core.phone_number,
             trim: true,
-            pattern: "^[0-9x\.\,\ \+\(\)-]{2,24}$",
+            pattern: "[0-9x\.\,\ \+\(\)-]{2,24}",
             required: true
         }, base + "phone_number");
         numberInput.push(dijit);

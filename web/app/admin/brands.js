@@ -46,7 +46,7 @@ define([
         dijit = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
-            pattern: "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}$",
+            pattern: "[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}",
             required: true
         }, base + "name");
         nameInput.push(dijit);

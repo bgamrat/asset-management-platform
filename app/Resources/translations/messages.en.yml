@@ -55,6 +55,8 @@ common:
         City
     comment:
         Comment
+    configuration:
+        Configuration
     contact:
         Contact
     contacts:
@@ -117,6 +119,8 @@ common:
         Street
     street2:
         ' '
+    success:
+        Success
     type:
         Type
     user:

@@ -57,7 +57,7 @@ class Manufacturer
      * @var ArrayCollection $brands
      * @ORM\ManyToMany(targetEntity="Brand", cascade={"persist"})
      * @ORM\JoinTable(name="manufacturer_brand",
-     *      joinColumns={@ORM\JoinColumn(name="manufactuerer_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", unique=true, nullable=false)}
      *      )
      */

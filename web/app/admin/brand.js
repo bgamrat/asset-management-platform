@@ -46,31 +46,42 @@ define([
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         barcodes, lib, libGrid, core, asset) {
     function run() {
+        var apiUrl = location.href.replace(/admin\/asset\/manufacturer\/([^\/]+)\/brand\/(.*)/, 'api/manufacturers/$1/brands/$2/models');
 
-        var assetId = null;
+        var modelId = null;
 
         var action = null;
 
-        var assetViewDialog = new Dialog({
+        var modelViewDialog = new Dialog({
             title: core.view
-        }, "asset-view-dialog");
-        assetViewDialog.startup();
-        assetViewDialog.on("cancel", function (event) {
+        }, "model-view-dialog");
+        modelViewDialog.startup();
+        modelViewDialog.on("cancel", function (event) {
             grid.clearSelection();
         });
 
         var tabContainer = new TabContainer({
             style: "height: 300px; width: 100%;"
-        }, "asset-view-tabs");
+        }, "model-view-tabs");
 
-        var barcodesContentPane = new ContentPane({
-            title: asset.barcodes},
-        "asset-view-barcodes-tab"
+        var requiresContentPane = new ContentPane({
+            title: asset.requires},
+        "model-view-requires-tab"
                 );
-        tabContainer.addChild(barcodesContentPane);
+        tabContainer.addChild(requiresContentPane);
+        var supportsContentPane = new ContentPane({
+            title: asset.supports},
+        "model-view-supports-tab"
+                );
+        tabContainer.addChild(supportsContentPane);
+        var extendsContentPane = new ContentPane({
+            title: asset.extends},
+        "model-view-extends-tab"
+                );
+        tabContainer.addChild(extendsContentPane);
         var historyContentPane = new ContentPane({
             title: asset.history},
-        "asset-view-history-tab"
+        "model-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);
 
@@ -78,21 +89,22 @@ define([
 
         var newBtn = new Button({
             label: core["new"]
-        }, 'asset-new-btn');
+        }, 'model-new-btn');
         newBtn.startup();
         newBtn.on("click", function (event) {
-            modelFilteringSelect.set("value", "");
+            categorySelect.set("value", "");
+            nameInput.set("value", "");
             activeCheckBox.set("checked", true);
-            assetViewDialog.set("title", core["new"]).show();
             action = "new";
+            modelViewDialog.set("title", core["new"]).show();
         });
 
         var removeBtn = new Button({
             label: core.remove
-        }, 'asset-remove-btn');
+        }, 'model-remove-btn');
         removeBtn.startup();
         removeBtn.on("click", function (event) {
-            var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "asset-grid");
+            var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "model-grid");
             if( markedForDeletion.length > 0 ) {
                 lib.confirmAction(core.areyousure, function () {
                     markedForDeletion.forEach(function (node) {
@@ -103,29 +115,7 @@ define([
             }
         });
 
-        var modelStore = new JsonRest({
-            target: '/api/model/select',
-            useRangeHeaders: false,
-            idProperty: 'id'});
-        var modelFilteringSelect = new FilteringSelect({
-            store: modelStore,
-            labelAttr: "name",
-            searchAttr: "name",
-            pageSize: 25
-        }, "asset_model");
-        modelFilteringSelect.startup();
-
-        var serialNumberInput = new ValidationTextBox({
-            trim: true,
-            placeholder: asset.serial_number,
-            pattern: "[A-Za-z0-9\.\,\ \'-]{2,64}"
-        }, "asset_serial_number");
-        serialNumberInput.startup();
-
-        var activeCheckBox = new CheckBox({}, "asset_active");
-        activeCheckBox.startup();
-
-        var select = "asset_location";
+        var select = "model_category";
 
         if( dom.byId(select) === null ) {
             lib.textError(select + " not found");
@@ -143,54 +133,66 @@ define([
             data: storeData});
         var store = new ObjectStore({objectStore: memoryStore});
 
-        var locationSelect = new Select({
+        var categorySelect = new Select({
             store: store,
-            placeholder: asset.location,
+            placeholder: asset.category,
             required: true
-        }, select);
-        locationSelect.startup();
+        }, "model_category");
+        categorySelect.startup();
+
+        var nameInput = new ValidationTextBox({
+            placeholder: core.name,
+            trim: true,
+            pattern: "[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}",
+            required: true,
+        }, "model_name");
+        nameInput.startup();
+
+        var activeCheckBox = new CheckBox({}, "model_active");
+        activeCheckBox.startup();
 
         var commentInput = new SimpleTextarea({
             placeholder: core.comment,
             trim: true,
             required: false
-        }, "asset_comment");
+        }, "model_comment");
         commentInput.startup();
 
-        var assetForm = new Form({}, '[name="asset"]');
-        assetForm.startup();
+        var modelForm = new Form({}, '[name="model"]');
+        modelForm.startup();
 
         var saveBtn = new Button({
             label: core.save
-        }, 'asset-save-btn');
+        }, 'model-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeId, beforeIdFilter, filter;
+            var beforeName, beforeNameFilter, objParm, filter;
             grid.clearSelection();
-            if( assetForm.validate() ) {
+            if( modelForm.validate() ) {
                 var data = {
-                    "id": assetId,
-                    "model_text": modelFilteringSelect.get("displayedValue"),
-                    "location_text": locationSelect.get("displayedValue"),
-                    "model": parseInt(modelFilteringSelect.get("value")),
-                    "location": parseInt(locationSelect.get("value")),
-                    "barcode": barcodes.getActive(),
-                    "barcodes": barcodes.getData(),
-                    "serial_number": serialNumberInput.get("value"),
+                    "id": modelId,
+                    "category_text": categorySelect.get("displayedValue"),
+                    "category": parseInt(categorySelect.get("value")),
+                    "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
-                        assetViewDialog.hide();
+                        modelViewDialog.hide();
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();
-                    beforeIdFilter = filter.gt('id', data.id);
-                    store.filter(beforeIdFilter).sort('id').fetchRange({start: 0, end: 1}).then(function (results) {
-                        beforeId = (results.length > 0) ? results[0].model : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            assetViewDialog.hide();
+                    beforeNameFilter = filter.gt('name', data.name);
+                    store.filter(beforeNameFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
+                        beforeName = (results.length > 0) ? results[0].name : null;
+                        if( beforeName !== null ) {
+                            objParm = {"beforeName": beforeName};
+                        } else {
+                            objParm = null;
+                        }
+                        grid.collection.add(data, objParm).then(function (data) {
+                            modelViewDialog.hide();
                         }, lib.xhrError);
                     });
                 }
@@ -199,11 +201,11 @@ define([
             }
         });
 
-        var filterInput = new TextBox({placeHolder: core.filter}, "asset-filter-input");
+        var filterInput = new TextBox({placeHolder: core.filter}, "model-filter-input");
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/assets', useRangeHeaders: true, idProperty: 'id'});
+        var store = new TrackableRest({target: apiUrl, useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
@@ -211,17 +213,11 @@ define([
                 id: {
                     label: core.id
                 },
-                barcode: {
-                    label: asset.barcode
+                category_text: {
+                    label: asset.category
                 },
-                location_text: {
-                    label: asset.location
-                },
-                model_text: {
+                model: {
                     label: asset.model,
-                },
-                serial_number: {
-                    label: asset.serial_number,
                 },
                 comment: {
                     label: core.comment
@@ -252,7 +248,7 @@ define([
                 return rowElement;
             },
             selectionMode: "none"
-        }, 'asset-grid');
+        }, 'model-grid');
         grid.startup();
         grid.collection.track();
 
@@ -261,55 +257,45 @@ define([
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var id = row.data.id;
+            var model = row.data.model;
             if( checkBoxes.indexOf(field) === -1 ) {
                 if( typeof grid.selection[0] !== "undefined" ) {
                     grid.clearSelection();
                 }
+            } else {
                 grid.select(row);
-                grid.collection.get(id).then(function (asset) {
-                    var i, history, historyHtml, date, dateText, dataText, d, titleBarcode;
+                grid.collection.get(model).then(function (model) {
+                    var i, history, historyHtml, date, dateText, dataText, d;
                     action = "view";
-                    assetId = asset.id;
-                    modelFilteringSelect.set('displayedValue', asset.model_text);
-                    locationSelect.set('displayedValue', asset.location_text);
-                    serialNumberInput.set('value', asset.serial_number);
-                    commentInput.set('value', asset.comment);
-                    if( typeof asset.barcodes !== "undefined" ) {
-                        barcodes.setData(asset.barcodes);
-                    } else {
-                        barcodes.setData(null);
-                    }
-                    activeCheckBox.set('checked', asset.active);
+                    modelId = model.id;
+                    categorySelect.set('displayedValue', model.category_text);
+                    nameInput.set('value', model.name);
+                    commentInput.set('value', model.comment);
+                    activeCheckBox.set('checked', model.active);
                     date = new Date();
                     historyHtml = "<ul>";
-                    for( i = 0; i < asset.history.length; i++ ) {
-                        history = asset.history[i];
+                    for( i = 0; i < model.history.length; i++ ) {
+                        history = model.history[i];
                         if( history.username === null ) {
                             history.username = '';
                         }
                         date.setTime(history.timestamp.timestamp * 1000);
                         dateText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
                         dataText = [];
-                        for (d in history.data) {
+                        for( d in history.data ) {
                             dataText.push(d + ' set to ' + history.data[d]);
                         }
                         historyHtml += "<li>" + dateText + " " + history.username + " " + history.action + " " + dataText.join(', ') +
                                 "</li>";
                     }
                     historyHtml += "</ul>";
-                    if( asset.history.length > 0 ) {
+                    if( model.history.length > 0 ) {
                         historyContentPane.set("content", historyHtml);
                     } else {
                         historyContentPane.set("content", "");
                     }
-                    if( typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined" ) {
-                        titleBarcode = asset.barcodes[0].barcode;
-                    } else {
-                        titleBarcode = asset.no_barcode;
-                    }
-                    assetViewDialog.set('title', core.view + " " + titleBarcode);
-                    assetViewDialog.show();
+                    modelViewDialog.set('title', core.view + " " + model.name);
+                    modelViewDialog.show();
                 }, lib.xhrError);
             }
         });
@@ -318,11 +304,11 @@ define([
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var name = row.data.name;
+            var name = row.data.model;
             var value = event.value;
             switch( field ) {
                 case "active":
-                    xhr("/api/assets/" + name, {
+                    xhr(apiUrl + '/' + name, {
                         method: "PATCH",
                         handleAs: "json",
                         headers: {'Content-Type': 'application/json'},
@@ -338,7 +324,7 @@ define([
         cbAll.startup();
         cbAll.on("click", function (event) {
             var state = this.checked;
-            query(".dgrid-row .remove-cb", "asset-grid").forEach(function (node) {
+            query(".dgrid-row .remove-cb", "model-grid").forEach(function (node) {
                 registry.findWidgets(node)[0].set("checked", state);
             });
         });
@@ -355,7 +341,7 @@ define([
             }
         });
 
-        on(dom.byId('asset-grid-filter-form'), 'submit', function (event) {
+        on(dom.byId('model-grid-filter-form'), 'submit', function (event) {
             event.preventDefault();
             grid.set('collection', store.filter({
                 // Pass a RegExp to Memory's filter method
@@ -365,7 +351,6 @@ define([
             }));
         });
         lib.pageReady();
-        barcodes.run('asset');
     }
     return {
         run: run

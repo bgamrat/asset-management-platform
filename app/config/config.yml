@@ -227,6 +227,7 @@ fos_rest:
                 priorities: ['json', 'html', 'xml','form']
                 fallback_format: ~
                 methods: [ 'get', 'post', 'put', 'delete']
+            - { path: '^/api', priorities: ['json'], fallback_format: json, prefer_extension: false }
             - { path: '^/', stop: true }
             
 knp_menu:

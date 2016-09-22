@@ -4,9 +4,10 @@ namespace AppBundle\Controller\Api\Admin\Asset;
 
 use AppBundle\Util\DStore;
 use AppBundle\Entity\Manufacturer;
+use AppBundle\Entity\Model;
 use AppBundle\Form\Admin\Asset\BrandsType;
 use AppBundle\Form\Admin\Asset\ManufacturerType;
-use AppBundle\Form\Admin\Asset\ModelsType;
+use AppBundle\Form\Admin\Asset\ModelType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,9 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use AppBundle\Util\Model As ModelUtil;
+use AppBundle\Repository\BrandRepository;
 
 class ManufacturersController extends FOSRestController
 {
@@ -131,7 +134,7 @@ class ManufacturersController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $form = $this->createForm( ManufacturerType::class, null, [] );
-        $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->find([ 'name' => $name ]);
+        $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->find( [ 'name' => $name] );
         $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
         try
         {
@@ -231,36 +234,110 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Route("/api/manufacturers/{mname}/brands/{bname}/models")
      * @Method("GET")
      * @View()
      */
-    public function getManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    public function getManufacturersBrandsModelsAction( $mname, $bname, Request $request )
+    {
+
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+
+        switch( $dstore['sort-field'] )
+        {
+            case 'category':
+                $sortField = 'c.name';
+                break;
+            case 'model':
+                $sortField = 'm.name';
+                break;
+            default:
+                $sortField = 'm.' . $dstore['sort-field'];
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $em->getFilters()->disable( 'softdeleteable' );
+        }
+        $columns = ['m.id', 'c.name AS category_text', 'm.name AS model', 'm.comment', 'm.active'];
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $columns[] = 'm.deletedAt AS deleted_at';
+        }
+        $queryBuilder = $em->createQueryBuilder()->select( $columns )
+                ->from( 'AppBundle:Model', 'm' )
+                ->innerJoin( 'm.category', 'c' )
+                ->innerJoin( 'm.brand', 'b' )
+                ->orderBy( $sortField, $dstore['sort-direction'] );
+        if( $dstore['limit'] !== null )
+        {
+            $queryBuilder->setMaxResults( $dstore['limit'] );
+        }
+        if( $dstore['offset'] !== null )
+        {
+            $queryBuilder->setFirstResult( $dstore['offset'] );
+        }
+        if( $dstore['filter'] !== null )
+        {
+            switch( $dstore['filter'][DStore::OP] )
+            {
+                case DStore::LIKE:
+                    $queryBuilder->where(
+                            $queryBuilder->expr()->orX(
+                                    $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'c.name', '?1' ) )
+                    );
+                    break;
+                case DStore::GT:
+                    $queryBuilder->where(
+                            $queryBuilder->expr()->gt( 'm.name', '?1' )
+                    );
+            }
+            $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
+        }
+        $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'b.name', '?2' ) );
+        $queryBuilder->setParameter( 2, $bname );
+        $data = $queryBuilder->getQuery()->getResult();
+        return array_values( $data );
+    }
+
+    /**
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/model/{mname}")
+     * @Method("GET")
+     * @View()
+     */
+    public function getManufacturersBrandsModelAction( Request $request, $mnname, $bname, $mname )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $response = new Response();
         $em = $this->getDoctrine()->getManager();
-
-        $queryBuilder = $em->createQueryBuilder()->select( 'm, b, d' )
-                ->from( 'AppBundle:Manufacturer', 'm' )
-                ->innerJoin( 'm.brands', 'b' )
-                ->innerJoin( 'b.models', 'd' )
-                ->where( "m.name = :mname AND b.name = :bname" )
-                ->setParameters( ['mname' => $mname, 'bname' => $bname] );
-        $manufacturer = $queryBuilder->getQuery()->getResult();
-
-        if( $manufacturer !== null )
+        $columns = ['m', 'mn', 'b', 'c'];
+        $queryBuilder = $em->createQueryBuilder()->select( $columns )
+                ->from( 'AppBundle:Manufacturer', 'mn' )
+                ->innerJoin( 'mn.brands', 'b' )
+                ->innerJoin( 'b.models', 'm' )
+                ->innerJoin( 'm.category', 'c' );
+        $queryBuilder->where(
+                        $queryBuilder->expr()->andX(
+                                $queryBuilder->expr()->eq( 'mn.name', '?1' ), $queryBuilder->expr()->eq( 'b.name', '?2' ) ) )
+                ->andWhere( $queryBuilder->expr()->eq( 'm.name', '?3' ) );
+        $queryBuilder->setParameters( [1 => $mnname, 2 => $bname, 3 => $mname] );
+        $data = $queryBuilder->getQuery()->getResult();
+        if( !empty( $data ) )
         {
-            $data = [];
-            if( count( $manufacturer ) > 0 )
-            {
-                $brands = $manufacturer[0]->getBrands();
-                if( count( $brands ) > 0 )
-                {
-                    $data['models'] = $brands[0]->getModels();
-                }
-                return $data;
-            }
-            return $data;
+            $manufacturer = $data[0];
+            $brand = $manufacturer->getBrands();
+            $models = $brand[0]->getModels();
+            $model = $models[0];
+            $modelData = $model->toArray();
+            $modelData['category'] = $model->getCategory()->getId();
+            $modelData['category_text'] = $model->getCategory()->getName();
+            $logUtil = $this->get( 'app.util.log' );
+            $logUtil->getLog( 'AppBundle:ModelLog', $model->getId() );
+            $modelData['history'] = $logUtil->translateIdsToText();
+
+            return $modelData;
         }
         else
         {
@@ -269,50 +346,69 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Route("/api/manufacturers/{mname}/brands/{bname}/models/{dname}")
      * @Method("POST")
      * @View()
      */
-    public function postManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    public function postManufacturerBrandModelsAction( $mname, $bname, $dname, Request $request )
     {
-        return $this->putManufacturerBrandModelsAction( $mname, $bname, $request );
+        return $this->putManufacturerBrandModelsAction( $mname, $bname, $dname, $request );
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brand/{bname}/models")
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}")
      * @Method("PUT")
      * @View()
      */
-    public function putManufacturerBrandModelsAction( $mname, $bname, Request $request )
+    public function putManufacturerBrandModelsAction( Request $request, $mnname, $bname, $mname )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
+        $em = $this->getDoctrine()->getManager();
+
+        $columns = ['m', 'mn', 'b', 'c'];
+        $queryBuilder = $em->createQueryBuilder()->select( $columns )
+                ->from( 'AppBundle:Manufacturer', 'mn' )
+                ->innerJoin( 'mn.brands', 'b' )
+                ->innerJoin( 'b.models', 'm' )
+                ->innerJoin( 'm.category', 'c' );
+        $queryBuilder->where(
+                        $queryBuilder->expr()->andX(
+                                $queryBuilder->expr()->eq( 'mn.name', '?1' ), $queryBuilder->expr()->eq( 'b.name', '?2' ) ) )
+                ->andWhere( $queryBuilder->expr()->eq( 'm.name', '?3' ) );
+        $queryBuilder->setParameters( [1 => $mnname, 2 => $bname, 3 => $mname] );
+        $data = $queryBuilder->getQuery()->getResult();
+
+        if( !empty( $data ) )
+        {
+            $manufacturer = $data[0];
+            $brand = $manufacturer->getBrands();
+            $models = $brand[0]->getModels();
+            $model = $models[0];
+        }
+        else
+        {
+            $model = new Model();
+        }
+        $form = $this->createForm( ModelType::class, $model, ['allow_extra_fields' => true] );
         $formProcessor = $this->get( 'app.util.form' );
-        $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( ModelsType::class, null, [] );
         try
         {
-            $formProcessor->validateFormData( $form, $data );
-            $em = $this->getDoctrine()->getManager();
-            $query = $em->createQuery( 'SELECT m, b FROM AppBundle\Entity\Manufacturer m JOIN m.brands b WHERE m.name = :mname AND b.name = :bname' );
-            $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
-            $manufacturer = $query->getResult();
-            $brand = $manufacturer[0]->getBrands()[0];
-            if( $brand !== null )
+            $formProcessor->validateFormData( $form, $request->request->all() );
+            $form->handleRequest( $request );
+            if( $form->isValid() )
             {
-                $modelUtil = $this->get( 'app.util.model' );
-                $modelUtil->update( $brand, $data['models'] );
+                $brand = $em->getRepository( 'AppBundle:Brand' )->findOneBy( ['name' => $bname] );
+                $model = $form->getData();
+                $brand->addModel( $model );
+                $em->persist( $model );
                 $em->persist( $brand );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_manufacturers_get_manufacturer_brand_models', array('mname' => $mname, 'bname' => $bname), true // absolute
+                                'app_admin_api_manufacturers_get_manufacturers_brands_model', ['mnname' => $mnname, 'bname' => $bname, 'mname' => $mname], true // absolute
                         )
                 );
-            }
-            else
-            {
-                throw $this->createNotFoundException( 'Not found!' );
             }
         }
         catch( Exception $e )
@@ -323,6 +419,47 @@ class ManufacturersController extends FOSRestController
             ) );
         }
         return $response;
+    }
+
+    /**
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}")
+     * @Method("PATCH")
+     * @View(statusCode=204)
+     */
+    public function patchManufacturersBrandsModelsAction( $mnname, $bname, $mname, Request $request )
+    {
+        $formProcessor = $this->get( 'app.util.form' );
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $columns = ['m.id AS model_id'];
+        $queryBuilder = $em->createQueryBuilder()->select( $columns )
+                ->from( 'AppBundle:Manufacturer', 'mn' )
+                ->innerJoin( 'mn.brands', 'b' )
+                ->innerJoin( 'b.models', 'm' );
+        $queryBuilder->where(
+                        $queryBuilder->expr()->andX(
+                                $queryBuilder->expr()->eq( 'mn.name', '?1' ), $queryBuilder->expr()->eq( 'b.name', '?2' ) ) )
+                ->andWhere( $queryBuilder->expr()->eq( 'm.name', '?3' ) );
+        $queryBuilder->setParameters( [1 => $mnname, 2 => $bname, 3 => $mname] );
+        $modelData = $queryBuilder->getQuery()->getResult();
+
+        if( !empty( $modelData ) )
+        {
+            $model = $em->getRepository( 'AppBundle:Model' )->find( $modelData[0]['model_id'] );
+            if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
+            {
+                $value = $formProcessor->strToBool( $data['value'] );
+                switch( $data['field'] )
+                {
+                    case 'active':
+                        $model->setActive( $value );
+                        break;
+                }
+
+                $em->persist( $model );
+                $em->flush();
+            }
+        }
     }
 
 }

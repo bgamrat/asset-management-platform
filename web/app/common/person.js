@@ -55,14 +55,14 @@ define([
         firstnameInput = new ValidationTextBox({
             trim: true,
             properCase: true,
-            pattern: "^[A-Za-z\.\,\ \'-]{2,64}$",
+            pattern: "[A-Za-z\.\,\ \'-]{2,64}",
             "class": "name",
             placeholder: core.firstname
         }, base + "firstname");
         middleInitialInput = new ValidationTextBox({
             trim: true,
             uppercase: true,
-            pattern: "^[A-Z]$",
+            pattern: "[A-Z]",
             maxLength: 1,
             required: false,
             placeholder: core.mi,
@@ -71,7 +71,7 @@ define([
         lastnameInput = new ValidationTextBox({
             required: true,
             trim: true,
-            pattern: "^[A-Za-z\.\,\ \'-]{2,64}$",
+            pattern: "[A-Za-z\.\,\ \'-]{2,64}",
             "class": "name",
             placeholder: core.lastname
         }, base + "lastname");

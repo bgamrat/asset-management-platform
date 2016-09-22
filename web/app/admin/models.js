@@ -58,7 +58,7 @@ define([
         dijit = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
-            pattern: "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}$",
+            pattern: "[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}",
             required: true
         }, base + "name");
         nameInput.push(dijit);
@@ -76,6 +76,7 @@ define([
     }
 
     function destroyRow(id, target) {
+        categorySelect.pop().destroyRecursive();
         nameInput.pop().destroyRecursive();
         commentInput.pop().destroyRecursive();
         activeCheckBox.pop().destroyRecursive();
@@ -83,7 +84,7 @@ define([
     }
 
     function run() {
-        var base, select, data, storeData, memoryStore;
+        var base, select, d, data, storeData, memoryStore;
 
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
@@ -152,6 +153,7 @@ define([
         for( i = 0; i < nameInput.length; i++ ) {
             returnData.push(
                     {
+                        "category": categorySelect[i].get('value'),
                         "name": nameInput[i].get('value'),
                         "comment": commentInput[i].get('value'),
                         "active": activeCheckBox[i].get('value')
@@ -177,11 +179,13 @@ define([
                     createDijits();
                 }
                 obj = models[i];
+                categorySelect[i].set('value', obj.category);
                 nameInput[i].set('value', obj.name);
                 commentInput[i].set('value', obj.comment);
                 activeCheckBox[i].set('value', obj.active);
             }
         } else {
+            categorySelect[i].set('value', '');
             nameInput[0].set('value', "");
             commentInput[0].set('value', "");
             activeCheckBox[0].set('value', "");

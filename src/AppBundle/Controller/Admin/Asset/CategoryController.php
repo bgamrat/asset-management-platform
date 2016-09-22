@@ -69,11 +69,14 @@ class CategoryController extends Controller
             return $response->send();
         }
         else
-        {            $errorMessages = [];
+        {
+            $errorMessages = [];
             $formData = $form->all();
-            foreach ($formData as $name => $item) {
-                if (!$item->isValid()) {
-                    $errorMessages[] = $name.' - '.$item->getErrors(true);
+            foreach( $formData as $name => $item )
+            {
+                if( !$item->isValid() )
+                {
+                    $errorMessages[] = $name . ' - ' . $item->getErrors( true );
                 }
             }
             return $this->render( 'admin/asset/categories.html.twig', array(

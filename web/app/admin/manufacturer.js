@@ -46,11 +46,6 @@ define([
         var brandName = null;
         var manufacturerName = null;
 
-        var brandViewDialog = new Dialog({
-            title: core.view
-        }, "brand-view-dialog");
-        brandViewDialog.startup();
-
         var manufacturerViewDialog = new Dialog({
             title: core.view
         }, "manufacturer-view-dialog");
@@ -105,7 +100,7 @@ define([
 
         var nameInput = new ValidationTextBox({
             trim: true,
-            pattern: "^[A-Za-z\.\,\ \'-]{2,64}$"
+            pattern: "[A-Za-z\.\,\ \'-]{2,64}"
         }, "manufacturer_name");
         nameInput.startup();
 
@@ -158,24 +153,6 @@ define([
         var manufacturerBrandForm = new Form({}, '[name="brands"]');
         manufacturerBrandForm.startup();
 
-        var saveBrandBtn = new Button({
-            label: core.save
-        }, 'brand-save-btn');
-        saveBrandBtn.startup();
-        saveBrandBtn.on("click", function (event) {
-            var m = models.getData();
-            if( manufacturerBrandForm.validate() ) {
-                xhr("/api/manufacturers/" + manufacturerName + '/brands/' + brandName + '/models', {
-                    method: "POST",
-                    handleAs: "json",
-                    data: JSON.stringify({models: m}),
-                    headers: {'Content-Type': 'application/json'}
-                }).then(function (data) {
-                    brandViewDialog.hide();
-                }, lib.xhrError);
-            }
-        });
-
         var filterInput = new TextBox({placeHolder: core.filter}, "manufacturer-filter-input");
         filterInput.startup();
 
@@ -225,7 +202,7 @@ define([
                         }
                         if( nameList.length > 0 ) {
                             for( n = 0; n < nameList.length; n++ ) {
-                                html += '<span class="brand link" data-manufacturer="' + object.name + '" data-brand="' + nameList[n] + '">' + nameList[n] + '</span><br>';
+                                html += '<a class="brand link" href="/admin/asset/manufacturer/' + object.name + '/brand/' + nameList[n] + '">' + nameList[n] + '</a><br>';
                             }
                         }
                         return html;
@@ -267,21 +244,7 @@ define([
             var cell = grid.cell(event);
             var field = cell.column.field;
             var name = row.data.name;
-            if( field === 'brands' ) {
-                if( domClass.contains(event.target, "brand") ) {
-                    manufacturerName = domAttr.get(event.target, "data-manufacturer");
-                    brandName = domAttr.get(event.target, "data-brand");
-                    xhr("/api/manufacturers/" + manufacturerName + '/brands/' + brandName + '/models', {
-                        method: "GET",
-                        handleAs: "json",
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(function (data) {
-                        models.setData(data['models']);
-                        brandViewDialog.set('title',manufacturerName+' - '+brandName);
-                        brandViewDialog.show();
-                    }, lib.xhrError);
-                }
-            } else {
+            if( field !== 'brands' ) {
                 if( checkBoxes.indexOf(field) === -1 ) {
                     if( typeof grid.selection[0] !== "undefined" ) {
                         grid.clearSelection();
@@ -354,7 +317,6 @@ define([
 
         person.run('manufacturer');
         brands.run('manufacturer');
-        models.run('models');
 
         lib.pageReady();
     }

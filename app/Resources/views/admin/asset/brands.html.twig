@@ -1,7 +1,7 @@
-<fieldset class="brands">
-    <legend>{{'asset.brands'|trans}}</legend>
-    {{form_row(form)}}
-    {% if form.vars.allow_add %}
-    <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
-    {% endif %}
-</fieldset>
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="asset-wrapper">
+        {{text}}
+    </div>
+{% endblock %}

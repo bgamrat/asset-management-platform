@@ -15,7 +15,8 @@
 .form-row.brand:nth-child(2) .remove-form-row {
     display:none;
 }
-.asset .justify span {
+.asset .justify span,
+.model .justify span {
     padding-right: 10px;
 }
 #asset-view-history-tab ul {

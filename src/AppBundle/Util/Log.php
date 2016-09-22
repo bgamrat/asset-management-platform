@@ -15,9 +15,15 @@ Class Log
         $this->em = $em;
     }
 
-    function init( $history )
+    function getLog( $entityType, $entityId )
     {
-        $this->history = $history;
+        $columns = ['l.version AS version', 'l.action AS action', 'l.loggedAt AS timestamp', 'l.username AS username', 'l.data AS data'];
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select( $columns )
+                ->from( $entityType, 'l' )
+                ->where( $queryBuilder->expr()->eq( 'l.objectId', '?1' ) );
+        $queryBuilder->setParameter( 1, $entityId )->orderBy( 'l.loggedAt', 'desc' );
+        $this->history = $queryBuilder->getQuery()->getResult();
     }
 
     function translateLocations()

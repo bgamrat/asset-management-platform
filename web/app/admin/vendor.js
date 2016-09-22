@@ -72,7 +72,7 @@ define([
 
         var nameInput = new ValidationTextBox({
             trim: true,
-            pattern: "^[A-Za-z\.\,\ \'-]{2,64}$"
+            pattern: "[A-Za-z\.\,\ \'-]{2,64}"
         }, "vendor_name");
         nameInput.startup();
 

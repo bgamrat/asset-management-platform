@@ -60,15 +60,14 @@ fieldset .sub-form-legend {
     width: 100px;
 }
 .form-errors {
-    background-color: lightpink;
-    border: 1px solid pink;
-    color: maroon;
+    background-color: #ffe6ee;
     margin: 25px 0;
     padding: 5px;
+    border-radius: 5px 5px 5px;
 }
 .form-errors ul {
     list-style-type: none;
-    padding: 0 27px;
+    padding: 0 17px;
 }
 .addresses {
     width: 300px;
@@ -88,6 +87,12 @@ fieldset .sub-form-legend {
 .contacts .person,
 .contacts .comment {
     vertical-align: top
+}
+.flash-notice {
+    background-color: lightcyan;
+    padding: 17px;
+    margin: 17px 0;
+    border-radius: 5px 5px 5px;
 }
 .form-row.address > * {
     display:block;

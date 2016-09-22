@@ -7,7 +7,7 @@
         <div class="categories">
             {% for flash_message in app.session.flashBag.get('notice') %}
                 <div class="flash-notice">
-                    {{ flash_message }}
+                    {{ flash_message|trans }}
                 </div>
             {% endfor %}
             {% if not categories_form.vars.valid %}

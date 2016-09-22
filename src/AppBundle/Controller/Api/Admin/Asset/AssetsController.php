@@ -157,7 +157,7 @@ class AssetsController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
-        $data = $formProcessor->getJsonData( $request );
+        $data = $request->request->all();
         $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
         $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
         try
@@ -237,116 +237,4 @@ class AssetsController extends FOSRestController
             throw $this->createNotFoundException( 'Not found!' );
         }
     }
-
-    /**
-     * @Route("/api/assets/{name}/brands")
-     * @Method("GET")
-     * @View()
-     */
-    public function getAssetBrandsAction( $name, Request $request )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Asset' );
-        $asset = $repository->findOneBy( ['name' => $name] );
-        if( $asset !== null )
-        {
-            $data = [];
-            $data['brands'] = $asset->getBrands();
-            return $data;
-        }
-        else
-        {
-            throw $this->createNotFoundException( 'Not found!' );
-        }
-    }
-
-    /**
-     * @Route("/api/assets/{mname}/brand/{bname}/models")
-     * @Method("GET")
-     * @View()
-     */
-    public function getAssetBrandModelsAction( $mname, $bname, Request $request )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery( 'SELECT m, b, d FROM AppBundle\Entity\Asset m JOIN m.brands b JOIN b.models d WHERE m.name = :mname AND b.name = :bname' );
-        $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
-        $asset = $query->getResult();
-        if( $asset !== null )
-        {
-            $data = [];
-            if( count( $asset ) > 0 )
-            {
-                $brands = $asset[0]->getBrands();
-                if( count( $brands ) > 0 )
-                {
-                    $data['models'] = $brands[0]->getModels();
-                }
-            }
-            return $data;
-        }
-        else
-        {
-            throw $this->createNotFoundException( 'Not found!' );
-        }
-    }
-
-    /**
-     * @Route("/api/assets/{mname}/brand/{bname}/models")
-     * @Method("POST")
-     * @View()
-     */
-    public function postAssetBrandModelsAction( $mname, $bname, Request $request )
-    {
-        return $this->putAssetBrandModelsAction( $mname, $bname, $request );
-    }
-
-    /**
-     * @Route("/api/assets/{mname}/brand/{bname}/models")
-     * @Method("PUT")
-     * @View()
-     */
-    public function putAssetBrandModelsAction( $mname, $bname, Request $request )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $response = new Response();
-        $formProcessor = $this->get( 'app.util.form' );
-        $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( ModelsType::class, null, [] );
-        try
-        {
-            $formProcessor->validateFormData( $form, $data );
-            $em = $this->getDoctrine()->getManager();
-            $query = $em->createQuery( 'SELECT m, b FROM AppBundle\Entity\Asset m JOIN m.brands b WHERE m.name = :mname AND b.name = :bname' );
-            $query->setParameters( ['mname' => $mname, 'bname' => $bname] );
-            $asset = $query->getResult();
-            $brand = $asset[0]->getBrands()[0];
-            if( $brand !== null )
-            {
-                $modelUtil = $this->get( 'app.util.model' );
-                $modelUtil->update( $brand, $data['models'] );
-                $em->persist( $brand );
-                $em->flush();
-                $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
-                $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_assets_get_asset_brand_models', array('mname' => $mname, 'bname' => $bname), true // absolute
-                        )
-                );
-            }
-            else
-            {
-                throw $this->createNotFoundException( 'Not found!' );
-            }
-        }
-        catch( Exception $e )
-        {
-            $response->setStatusCode( 400 );
-            $response->setContent( json_encode(
-                            ['message' => 'errors', 'errors' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()]
-            ) );
-        }
-        return $response;
-    }
-
 }

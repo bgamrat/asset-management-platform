@@ -20,22 +20,17 @@ class ModelType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
+                ->add( 'id', HiddenType::class)
                 ->add( 'category', EntityType::class, [
                     'class' => 'AppBundle:Category',
-                    'choice_label' => 'type',
+                    'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
                     'label' => 'asset.category',
-                    'preferred_choices' => function ($value, $key)
+                    'preferred_choices' => function($category, $key, $index)
                     {
-                    dump($value);
-                        if( $value == true )
-                        {
-                            return 'Definitely!';
-                        }
-                        return strtoupper($key);
+                        return $category->isActive();
                     },
                     'choice_translation_domain' => false
                 ] )
@@ -43,7 +38,7 @@ class ModelType extends AbstractType
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
-                ->add( 'active', CheckboxType::class, ['label' => 'common.active' ] )
+                ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
         ;
     }
 

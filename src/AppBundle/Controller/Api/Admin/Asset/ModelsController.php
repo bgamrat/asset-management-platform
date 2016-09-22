@@ -19,24 +19,27 @@ class ModelsController extends FOSRestController
     /**
      * @View()
      */
-    public function getModelsAction( Request $request )
+    public function getModelSelectAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $name = $request->get( 'name' );
-        if (!empty($name)) {
-            $brandModel = '%'. str_replace( '*', '%', $name  );
+        if( !empty( $name ) )
+        {
+            $brandModel = '%' . str_replace( '*', '%', $name );
 
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
-                ->from( 'AppBundle:Model', 'm' )
-                ->innerJoin( 'm.brand', 'b' )
-                ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
-                ->setParameter( 'brand_model', $brandModel );
+                    ->from( 'AppBundle:Model', 'm' )
+                    ->innerJoin( 'm.brand', 'b' )
+                    ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
+                    ->setParameter( 'brand_model', $brandModel );
 
             $data = $queryBuilder->getQuery()->getResult();
-        } else {
+        }
+        else
+        {
             $data = null;
         }
         return $data;

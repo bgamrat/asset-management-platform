@@ -51,7 +51,7 @@
                                                           {%- if preferred_choices|length > 0 -%}
                                                           {% set choices = preferred_choices|merge(choices) %}
                                                           {%- if choices|length > 0 and separator is not none -%}
-                                                          {% set choices = choices|merge([{'label':'{{separator}}','disabled':true}]) %}
+                                                          {% set choices = choices|merge([{'label':'-------','disabled':true}]) %}
                                                           {%- endif -%}
                                                           {%- endif -%}
                                                           {%- set options = choices -%}

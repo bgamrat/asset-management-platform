@@ -86,7 +86,7 @@ define([
         dijit.startup();
         dijit = new ValidationTextBox({
             trim: true,
-            pattern: "^[0-9A-Z-]{2,12}$",
+            pattern: "[0-9A-Z-]{2,12}",
             required: false,
             uppercase: true,
             placeholder: core.postal_code
