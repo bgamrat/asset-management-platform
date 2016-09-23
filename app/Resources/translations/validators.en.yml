@@ -2,3 +2,5 @@ blank.name:
     "Name cannot be blank"
 "invalid.name {{ value }}":
     "Invalid name {{ value }}"
+name.must-be-unique:
+    "Name must be unique"

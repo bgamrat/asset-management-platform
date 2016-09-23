@@ -2,12 +2,12 @@
 
 namespace AppBundle\Util;
 
-use AppBundle\Form\Admin\User\UserType;
 use Symfony\Component\Form\Form as BaseForm;
 use Symfony\Component\HttpFoundation\Request;
 
 class Form
 {
+
     public function strToBool( $string )
     {
         if( in_array( $string, [true, 'true', 'on', 1, '1', 'enabled'] ) )
@@ -23,7 +23,7 @@ class Form
         }
         return null;
     }
-    
+
     public function getJsonData( Request $request )
     {
         $data = json_decode( $request->getContent(), true );
@@ -31,20 +31,26 @@ class Form
     }
 
     public function validateFormData( BaseForm $form, $data )
-    {       
+    {
         $form->submit( $data );
+        return $form->isValid();
+    }
+
+    public function getErrorMessages( BaseForm $form )
+    {
+        $errorMessages = [];
         if( !$form->isValid() )
         {
-            $errorMessages = [];
             $formData = $form->all();
-            foreach ($formData as $name => $item) {
-                if (!$item->isValid()) {
-                    $errorMessages[] = $name.' - '.$item->getErrors();
+            foreach( $formData as $name => $item )
+            {
+                if( !$item->isValid() )
+                {
+                    $errorMessages[] = $name . ' - ' . $item->getErrors();
                 }
             }
-            //throw new \Exception(implode('\n',$errorMessages));
-            throw new \Exception($form->getErrors(true,true).PHP_EOL.'('.$form->getName().')');
         }
-        return true;
+        return implode(PHP_EOL,$errorMessages);
     }
+
 }

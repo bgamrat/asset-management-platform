@@ -133,8 +133,8 @@ class Brand
     {
         if( !$this->models->contains( $model ) )
         {
-            if ($this->model->getBrand() !== $this) {
-                $this->model->setBrand = $this;
+            if ($model->getBrand() !== $this) {
+                $model->setBrand = $this;
             }
             $this->models->add( $model );
         }

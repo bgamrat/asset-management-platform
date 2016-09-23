@@ -215,7 +215,7 @@ fos_rest:
         validate: true
         # validation_errors_argument: validationErrors # This is the default value
     exception:
-        enabled: true
+        enabled: false
     routing_loader:
         default_format: json
         include_format: false

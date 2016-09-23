@@ -15,6 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+  @UniqueEntity(
+ *     fields={"brand", "name"},
+ *     message="name.must-be-unique")
  */
 class Model
 {
@@ -169,9 +172,13 @@ class Model
         return $this->brand;
     }
 
-    public function setBrand($brand)
+    public function setBrand( $brand )
     {
         $this->brand = $brand;
+
+        $brand->addModel( $this );
+
+        return $this;
     }
 
     public function setActive( $active )

@@ -11,7 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use AppBundle\Form\Admin\Asset\DataTransformer\BarcodeToEntityTransformer;
 use AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
 
 class AssetType extends AbstractType
@@ -64,11 +63,6 @@ class AssetType extends AbstractType
         ;
         $builder->get( 'model' )
                 ->addModelTransformer( new ModelToIdTransformer( $this->em ) );
-        /*
-        $builder->get( 'barcodes' )
-          ->addModelTransformer( new BarcodeToEntityTransformer( $this->em ) );
-         * 
-         */
     }
 
     /**

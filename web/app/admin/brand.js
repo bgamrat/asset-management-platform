@@ -205,7 +205,7 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: apiUrl, useRangeHeaders: true, idProperty: 'id'});
+        var store = new TrackableRest({target: apiUrl, useRangeHeaders: true, idProperty: 'name'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
@@ -262,7 +262,6 @@ define([
                 if( typeof grid.selection[0] !== "undefined" ) {
                     grid.clearSelection();
                 }
-            } else {
                 grid.select(row);
                 grid.collection.get(model).then(function (model) {
                     var i, history, historyHtml, date, dateText, dataText, d;

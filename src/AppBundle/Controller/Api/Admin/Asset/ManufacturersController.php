@@ -246,7 +246,7 @@ class ManufacturersController extends FOSRestController
 
         switch( $dstore['sort-field'] )
         {
-            case 'category':
+            case 'category_text':
                 $sortField = 'c.name';
                 break;
             case 'model':
@@ -261,7 +261,7 @@ class ManufacturersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['m.id', 'c.name AS category_text', 'm.name AS model', 'm.comment', 'm.active'];
+        $columns = ['m.id', 'c.name AS category_text', 'c.name', 'm.name AS model', 'm.comment', 'm.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'm.deletedAt AS deleted_at';
@@ -346,13 +346,13 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brands/{bname}/models/{dname}")
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}")
      * @Method("POST")
      * @View()
      */
-    public function postManufacturerBrandModelsAction( $mname, $bname, $dname, Request $request )
+    public function postManufacturerBrandModelsAction( $mnname, $bname, $mname, Request $request )
     {
-        return $this->putManufacturerBrandModelsAction( $mname, $bname, $dname, $request );
+        return $this->putManufacturerBrandModelsAction( $mnname, $bname, $mname, $request );
     }
 
     /**
@@ -366,40 +366,52 @@ class ManufacturersController extends FOSRestController
         $response = new Response();
         $em = $this->getDoctrine()->getManager();
 
-        $columns = ['m', 'mn', 'b', 'c'];
+        $columns = [ 'b.id AS brand_id', 'mn.id AS manufacturer_id'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle:Manufacturer', 'mn' )
-                ->innerJoin( 'mn.brands', 'b' )
-                ->innerJoin( 'b.models', 'm' )
-                ->innerJoin( 'm.category', 'c' );
+                ->innerJoin( 'mn.brands', 'b' );
         $queryBuilder->where(
-                        $queryBuilder->expr()->andX(
-                                $queryBuilder->expr()->eq( 'mn.name', '?1' ), $queryBuilder->expr()->eq( 'b.name', '?2' ) ) )
-                ->andWhere( $queryBuilder->expr()->eq( 'm.name', '?3' ) );
-        $queryBuilder->setParameters( [1 => $mnname, 2 => $bname, 3 => $mname] );
-        $data = $queryBuilder->getQuery()->getResult();
-
-        if( !empty( $data ) )
+                $queryBuilder->expr()->andX(
+                        $queryBuilder->expr()->eq( 'mn.name', '?1' ), $queryBuilder->expr()->eq( 'b.name', '?2' ) ) );
+        $queryBuilder->setParameters( [1 => $mnname, 2 => $bname] );
+        if( $mname !== "null" )
         {
-            $manufacturer = $data[0];
-            $brand = $manufacturer->getBrands();
-            $models = $brand[0]->getModels();
-            $model = $models[0];
+            $queryBuilder->addSelect( 'm.id AS model_id' )
+                    ->join( 'b.models', 'm' )
+                    ->andWhere( $queryBuilder->expr()->orX( $queryBuilder->expr()->eq( 'm.name', '?3' ), $queryBuilder->expr()->eq( 'm.id', '?4' ) ) )
+                    ->setParameter( 3, $mname )
+                    ->setParameter( 4, $request->get( 'id' ) );
+        }
+
+        $modelData = $queryBuilder->getQuery()->getResult();
+
+        if( !empty( $modelData ) )
+        {
+            if( isset( $modelData[0]['model_id'] ) )
+            {
+                $model = $em->getRepository( 'AppBundle:Model' )->find( $modelData[0]['model_id'] );
+            }
+            else
+            {
+                $model = new Model();
+            }
+            $brand = $em->getRepository( 'AppBundle:Brand' )->find( $modelData[0]['brand_id'] );
         }
         else
         {
-            $model = new Model();
+            throw $this->createNotFoundException( 'Not found!' );
         }
+
         $form = $this->createForm( ModelType::class, $model, ['allow_extra_fields' => true] );
-        $formProcessor = $this->get( 'app.util.form' );
-        try
+
+        $form->submit( $request->request->all() );
+        if( $form->isSubmitted() && $form->isValid() )
         {
-            $formProcessor->validateFormData( $form, $request->request->all() );
             $form->handleRequest( $request );
             if( $form->isValid() )
             {
-                $brand = $em->getRepository( 'AppBundle:Brand' )->findOneBy( ['name' => $bname] );
                 $model = $form->getData();
+                $model->setBrand( $brand );
                 $brand->addModel( $model );
                 $em->persist( $model );
                 $em->persist( $brand );
@@ -409,16 +421,13 @@ class ManufacturersController extends FOSRestController
                                 'app_admin_api_manufacturers_get_manufacturers_brands_model', ['mnname' => $mnname, 'bname' => $bname, 'mname' => $mname], true // absolute
                         )
                 );
+                return $response;
             }
-        }
-        catch( Exception $e )
-        {
+            $errors = $this->get( 'validator' )->validate( $model );
             $response->setStatusCode( 400 );
-            $response->setContent( json_encode(
-                            ['message' => 'errors', 'errors' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()]
-            ) );
+
+            return $form;
         }
-        return $response;
     }
 
     /**
