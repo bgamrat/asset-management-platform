@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
-  @UniqueEntity(
+ * @UniqueEntity(
  *     fields={"brand", "name"},
  *     message="name.must-be-unique")
  */
@@ -34,6 +34,7 @@ class Model
     /**
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @Gedmo\Versioned
      */
     private $category;
     /**
@@ -46,23 +47,25 @@ class Model
      *     message = "invalid.name {{ value }}",
      *     match=true)
      * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
+     * @Gedmo\Versioned
      */
     private $name;
     /**
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
+     * @Gedmo\Versioned
      */
     private $comment;
     /**
      * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models")
+     * @Gedmo\Versioned
      */
     private $brand;
     /**
      * @var boolean
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="active", type="boolean")
-     * 
      */
     private $active = true;
     /**

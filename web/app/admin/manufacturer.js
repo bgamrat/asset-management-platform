@@ -41,10 +41,12 @@ define([
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         person, brands, models, lib, libGrid, core) {
+    //"use strict";
     function run() {
         var action = null;
         var brandName = null;
         var manufacturerName = null;
+        var manufacturerId = null;
 
         var manufacturerViewDialog = new Dialog({
             title: core.view
@@ -80,6 +82,7 @@ define([
             activeCheckBox.set("checked", true);
             manufacturerViewDialog.set("title", core["new"]).show();
             action = "new";
+            manufacturerId = null;
         });
 
         var removeBtn = new Button({
@@ -125,6 +128,7 @@ define([
             var beforeId, beforeIdFilter, filter;
             if( manufacturerForm.validate() ) {
                 var data = {
+                    "id": manufacturerId,
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
@@ -162,26 +166,34 @@ define([
             collection: store,
             className: "dgrid-autoheight",
             columns: {
+                id: {
+                    label: core.id
+                },
                 name: {
                     label: core.manufacturer,
                     renderCell: function (object, value, td) {
-                        var i, content, contactText = [object.name], address, address_lines, phone_number;
-                        // TODO: Add multi-contact support
-                        address_lines = ['street1', 'street2', 'city', 'state_province', 'postal_code', 'country'];
+                        var i, j, k, content, contactText = [object.name], addresses, address_lines, phoneNumber;
+                        address_lines = ['street1', 'street2', 'city', 'stateProvince', 'postalCode', 'country'];
                         if( typeof object.contacts !== "undefined" ) {
-                            if( typeof object.contacts[0] !== "undefined" ) {
+                            for( i = 0; i < object.contacts.length; i++ ) {
+                                contact = object.contacts[i];
                                 contactText.push("");
-                                contactText.push("\t" + object.contacts[0].fullname);
-                                if( typeof object.contacts[0].phone_numbers !== "undefined" ) {
-                                    phone_number = object.contacts[0].phone_numbers[0];
-                                    contactText.push("\t" + phone_number.phone_number);
+                                contactText.push("\t" + contact.fullName);
+                                if( typeof contact.phoneNumbers !== "undefined" ) {
+                                    for( j = 0; j < contact.phoneNumbers.length; j++ ) {
+                                        phoneNumber = contact.phoneNumbers[j];
+                                        contactText.push("\t" + phoneNumber.phoneNumber);
+                                    }
                                 }
-                                if( typeof object.contacts[0].addresses !== "undefined" ) {
-                                    contactText.push("");
-                                    address = object.contacts[0].addresses[0];
-                                    for( i = 0; i < address_lines.length; i++ ) {
-                                        if( address[address_lines[i]] !== "" ) {
-                                            contactText.push("\t" + address[address_lines[i]]);
+                                if( typeof object.contacts[i].addresses !== "undefined" ) {
+                                    addresses = contact.addresses;
+                                    for( j = 0; j < addresses; j++ ) {
+                                        contactText.push("");
+                                        address = contact.addresses[j];
+                                        for( k = 0; k < address_lines.length; k++ ) {
+                                            if( address[address_lines[k]] !== "" ) {
+                                                contactText.push("\t" + address[address_lines[k]]);
+                                            }
                                         }
                                     }
                                 }
@@ -251,7 +263,7 @@ define([
                     }
                     grid.select(row);
                     grid.collection.get(name).then(function (manufacturer) {
-                        var r;
+                        manufacturerId = manufacturer.id;
                         action = "view";
                         nameInput.set("value", manufacturer.name);
                         activeCheckBox.set("checked", manufacturer.active === true);

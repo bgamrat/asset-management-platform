@@ -24,11 +24,10 @@ class AssetsController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
-
         switch( $dstore['sort-field'] )
         {
             case 'barcode':
-                $sortField = 'c.barcode';
+                $sortField = 'bc.barcode';
                 break;
             case 'location':
                 $sortField = 'l.name';
@@ -37,18 +36,19 @@ class AssetsController extends FOSRestController
                 $sortField = 'b.name';
                 break;
             case 'model':
+            case 'model_text':
                 $sortField = 'm.name';
                 break;
             default:
                 $sortField = 'a.' . $dstore['sort-field'];
         }
-
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['a.id', 'l.name AS location_text', 'l.id AS location', 'bc.barcode', 'bc.updated AS barcode_updated', "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
+        $columns = ['a.id', 'l.name AS location_text', 'l.id AS location', 'bc.barcode', 'bc.updated AS barcode_updated', 
+            "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'a.deletedAt AS deleted_at';
@@ -75,12 +75,12 @@ class AssetsController extends FOSRestController
                 case DStore::LIKE:
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
-                                    $queryBuilder->expr()->like( 'a.model', '?1' ), $queryBuilder->expr()->like( 'a.serial_number', '?1' ) )
+                                    $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'a.serial_number', '?1' ) )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'a.model', '?1' )
+                            $queryBuilder->expr()->gt( 'm.name', '?1' )
                     );
             }
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
@@ -110,7 +110,7 @@ class AssetsController extends FOSRestController
             $brand = $model->getBrand();
             $location = $asset->getLocation();
             $data = [
-                'id' => $asset->getId(),
+                'id' => $id,
                 'model_text' => $brand->getName() . ' ' . $model->getName(),
                 'model' => $model->getId(),
                 'serial_number' => $asset->getSerialNumber(),
@@ -120,18 +120,9 @@ class AssetsController extends FOSRestController
                 'comment' => $asset->getComment(),
                 'active' => $asset->isActive()
             ];
-
-            $columns = ['al.version AS version', 'al.action AS action', 'al.loggedAt AS timestamp', 'al.username AS username', 'al.data AS data'];
-            $queryBuilder = $em->createQueryBuilder();
-            $queryBuilder->select( $columns )
-                    ->from( 'AppBundle:AssetLog', 'al' )
-                    ->where( $queryBuilder->expr()->eq( 'al.objectId', '?1' ) );
-            $queryBuilder->setParameter( 1, $id )->orderBy( 'al.loggedAt', 'desc' );
-            $history = $queryBuilder->getQuery()->getResult();
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->init( $history );
+            $logUtil->getLog( 'AppBundle:AssetLog', $id );
             $data['history'] = $logUtil->translateIdsToText();
-
             return $data;
         }
         else
@@ -158,7 +149,11 @@ class AssetsController extends FOSRestController
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $request->request->all();
-        $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
+        if ($id === "null") {
+            $asset = new Asset();
+        } else {
+            $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
+        }
         $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
         try
         {
@@ -237,4 +232,5 @@ class AssetsController extends FOSRestController
             throw $this->createNotFoundException( 'Not found!' );
         }
     }
+
 }

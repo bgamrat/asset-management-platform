@@ -32,6 +32,7 @@ define([
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button, Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         lib, libGrid, core) {
+    //"use strict";
     function run() {
         var action = null;
 

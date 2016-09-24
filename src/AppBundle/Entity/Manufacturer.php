@@ -30,24 +30,25 @@ class Manufacturer
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=true)
+     * @Gedmo\Versioned
      */
     private $name;
     /**
      * @var boolean
-     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="active", type="boolean")
      * 
      */
     private $active = true;
     /**
      * @var string
-     * 
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
     /**
      * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
-     * @ORM\JoinTable(name="manufacturer_person",
+     * @ORM\JoinTable(name="manufacturer_contacts",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", unique=true)}
      *      )
@@ -62,19 +63,28 @@ class Manufacturer
      *      )
      */
     protected $brands = null;
-    
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
     private $deletedAt;
-    
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->brands = new ArrayCollection();
     }
-    
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+
     /**
      * Get id
      *
@@ -114,11 +124,11 @@ class Manufacturer
         $this->active = $active;
     }
 
-    public function isActive( )
+    public function isActive()
     {
         return $this->active;
     }
-    
+
     /**
      * Set comment
      *
@@ -126,10 +136,10 @@ class Manufacturer
      *
      * @return Email
      */
-    public function setComment($comment)
+    public function setComment( $comment )
     {
         $this->comment = $comment;
-    
+
         return $this;
     }
 
@@ -142,7 +152,7 @@ class Manufacturer
     {
         return $this->comment;
     }
-    
+
     public function getBrands()
     {
         return $this->brands->toArray();
@@ -160,7 +170,7 @@ class Manufacturer
     {
         $this->brands->removeElement( $brand );
     }
-    
+
     public function getContacts()
     {
         return $this->contacts->toArray();
@@ -178,8 +188,7 @@ class Manufacturer
     {
         $this->contacts->removeElement( $contact );
     }
-    
-    
+
     public function getDeletedAt()
     {
         return $this->deletedAt;

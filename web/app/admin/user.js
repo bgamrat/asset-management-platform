@@ -38,6 +38,7 @@ define([
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         person,
         lib, libGrid, core) {
+    //"use strict";
     function run() {
         var action = null;
         var viewUsername = dom.byId("user_username");

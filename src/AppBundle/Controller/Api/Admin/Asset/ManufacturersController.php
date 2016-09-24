@@ -36,8 +36,10 @@ class ManufacturersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['m'] )
+        $queryBuilder = $em->createQueryBuilder()->select( 'm' )
                 ->from( 'AppBundle:Manufacturer', 'm' )
+                ->leftJoin( 'm.brands', 'b' )
+                ->leftJoin( 'm.contacts', 'c' )
                 ->orderBy( 'm.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -64,27 +66,8 @@ class ManufacturersController extends FOSRestController
             }
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
-        $query = $queryBuilder->getQuery();
-        $manufacturerCollection = $query->getResult();
-        $data = [];
-        $personModel = $this->get( 'app.model.person' );
-        foreach( $manufacturerCollection as $m )
-        {
-            // TODO: Add full multi-contact support
-            $contacts = $m->getContacts();
-            $item = [
-                'name' => $m->getName(),
-                'contacts' => [$personModel->get( $contacts[0] )],
-                'brands' => $m->getBrands(),
-                'active' => $m->isActive(),
-            ];
-            if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
-            {
-                $item['deleted_at'] = $m->getDeletedAt();
-            }
-            $data[] = $item;
-        }
-        return $data;
+        $manufacturers = $queryBuilder->getQuery()->getResult();
+        return $manufacturers;
     }
 
     /**
@@ -102,7 +85,9 @@ class ManufacturersController extends FOSRestController
             // TODO: Add full multi-contact support
             $contacts = $manufacturer->getContacts();
             $data = [
+                'id' => $manufacturer->getId(),
                 'name' => $manufacturer->getName(),
+                'comment' => $manufacturer->getComment(),
                 'brands' => $manufacturer->getBrands(),
                 'contacts' => [$personModel->get( $contacts[0] )],
                 'active' => $manufacturer->isActive()
@@ -131,35 +116,35 @@ class ManufacturersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
-        $formProcessor = $this->get( 'app.util.form' );
-        $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( ManufacturerType::class, null, [] );
-        $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->find( [ 'name' => $name] );
+        $manufacturer = $em->getRepository( 'AppBundle:Manufacturer' )->findBy( [ 'name' => $name] );
+        if( $manufacturer === null )
+        {
+            $manufacturer = new Manufacturer();
+        }
+        else
+        {
+            $manufacturer = $manufacturer[0];
+        }
+
         $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
-        try
+        $form->submit( $request->request->all() );
+        if( $form->isValid() )
         {
-            $formProcessor->validateFormData( $form, $data );
             $form->handleRequest( $request );
-            if( $form->isValid() )
-            {
-                $manufacturer = $form->getData();
-                $em->persist( $manufacturer );
-                $em->flush();
-                $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
-                $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_manufacturer_get_manufacturer', array('name' => $manufacturer->getName()), true // absolute
-                        )
-                );
-            }
-        }
-        catch( Exception $e )
-        {
-            $response->setStatusCode( 400 );
-            $response->setContent( json_encode(
-                            ['message' => 'errors', 'errors' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()]
+            $manufacturer = $form->getData();
+            $em->persist( $manufacturer );
+            $em->flush();
+            $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
+            $response->headers->set( 'Location', $this->generateUrl(
+                            'app_admin_api_manufacturers_get_manufacturer', array('name' => $manufacturer->getName()), true // absolute
             ) );
+
+            return $response;
         }
-        return $response;
+        $errors = $this->get( 'validator' )->validate( $manufacturer );
+        $response->setStatusCode( 400 );
+
+        return $form;
     }
 
     /**
@@ -261,7 +246,7 @@ class ManufacturersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['m.id', 'c.name AS category_text', 'c.name', 'm.name AS model', 'm.comment', 'm.active'];
+        $columns = ['m.id', 'c.name AS category_text', 'c.name', 'm.name AS name', 'm.comment', 'm.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'm.deletedAt AS deleted_at';
@@ -374,6 +359,7 @@ class ManufacturersController extends FOSRestController
                 $queryBuilder->expr()->andX(
                         $queryBuilder->expr()->eq( 'mn.name', '?1' ), $queryBuilder->expr()->eq( 'b.name', '?2' ) ) );
         $queryBuilder->setParameters( [1 => $mnname, 2 => $bname] );
+        $manufacturerAndBrandData = $queryBuilder->getQuery()->getResult();
         if( $mname !== "null" )
         {
             $queryBuilder->addSelect( 'm.id AS model_id' )
@@ -385,7 +371,7 @@ class ManufacturersController extends FOSRestController
 
         $modelData = $queryBuilder->getQuery()->getResult();
 
-        if( !empty( $modelData ) )
+        if( !empty( $manufacturerAndBrandData ) )
         {
             if( isset( $modelData[0]['model_id'] ) )
             {
@@ -395,7 +381,7 @@ class ManufacturersController extends FOSRestController
             {
                 $model = new Model();
             }
-            $brand = $em->getRepository( 'AppBundle:Brand' )->find( $modelData[0]['brand_id'] );
+            $brand = $em->getRepository( 'AppBundle:Brand' )->find( $manufacturerAndBrandData[0]['brand_id'] );
         }
         else
         {
@@ -405,29 +391,26 @@ class ManufacturersController extends FOSRestController
         $form = $this->createForm( ModelType::class, $model, ['allow_extra_fields' => true] );
 
         $form->submit( $request->request->all() );
-        if( $form->isSubmitted() && $form->isValid() )
+        if( $form->isValid() )
         {
             $form->handleRequest( $request );
-            if( $form->isValid() )
-            {
-                $model = $form->getData();
-                $model->setBrand( $brand );
-                $brand->addModel( $model );
-                $em->persist( $model );
-                $em->persist( $brand );
-                $em->flush();
-                $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
-                $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_manufacturers_get_manufacturers_brands_model', ['mnname' => $mnname, 'bname' => $bname, 'mname' => $mname], true // absolute
-                        )
-                );
-                return $response;
-            }
-            $errors = $this->get( 'validator' )->validate( $model );
-            $response->setStatusCode( 400 );
-
-            return $form;
+            $model = $form->getData();
+            $model->setBrand( $brand );
+            $brand->addModel( $model );
+            $em->persist( $model );
+            $em->persist( $brand );
+            $em->flush();
+            $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
+            $response->headers->set( 'Location', $this->generateUrl(
+                            'app_admin_api_manufacturers_get_manufacturers_brands_model', ['mnname' => $mnname, 'bname' => $bname, 'mname' => $mname], true // absolute
+                    )
+            );
+            return $response;
         }
+        $errors = $this->get( 'validator' )->validate( $model );
+        $response->setStatusCode( 400 );
+
+        return $form;
     }
 
     /**

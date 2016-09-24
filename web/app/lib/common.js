@@ -61,16 +61,42 @@ define([
         for( i = 0; i < nodes.length; i++ ) {
             nodes[i].classList.remove("hide-on-load");
         }
-        
+
     }
-    
+
     function formatDate(value) {
-        var date = new Date(),year,month,day;
-        date.setTime(value*1000);
+        var date = new Date(), year, month, day;
+        date.setTime(value * 1000);
         year = date.getFullYear();
-        month = date.getMonth()+1,
-        day = date.getDate();
+        month = date.getMonth() + 1,
+                day = date.getDate();
         return year + '-' + month + '-' + day;
+    }
+
+    function showHistory(historyContentPane, historyLog) {
+        var i, date, dateText, d, dataText, h, historyHtml;
+        date = new Date();
+        historyHtml = "<ul>";
+        for( i = 0; i < historyLog.length; i++ ) {
+            h = historyLog[i];
+            if( h.username === null ) {
+                h.username = '';
+            }
+            date.setTime(h.timestamp.timestamp * 1000);
+            dateText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+            dataText = [];
+            for( d in h.data ) {
+                dataText.push(d + ' set to ' + h.data[d]);
+            }
+            historyHtml += "<li>" + dateText + " " + h.username + " " + h.action + " " + dataText.join(', ') +
+                    "</li>";
+        }
+        historyHtml += "</ul>";
+        if( history.length > 0 ) {
+            historyContentPane.set("content", historyHtml);
+        } else {
+            historyContentPane.set("content", "");
+        }
     }
 
     return {
@@ -80,6 +106,7 @@ define([
         isEmpty: isEmpty,
         textError: textError,
         xhrError: xhrError,
+        showHistory: showHistory,
         constant: {
             MAX_PHONE_NUMBERS: 5,
             MAX_ADDRESSES: 3,

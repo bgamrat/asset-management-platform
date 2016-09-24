@@ -45,7 +45,9 @@ define([
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         barcodes, lib, libGrid, core, asset) {
+    //"use strict";
     function run() {
+
         var apiUrl = location.href.replace(/admin\/asset\/manufacturer\/([^\/]+)\/brand\/(.*)/, 'api/manufacturers/$1/brands/$2/models');
 
         var modelId = null;
@@ -96,6 +98,7 @@ define([
             nameInput.set("value", "");
             activeCheckBox.set("checked", true);
             action = "new";
+            modelId = null;
             modelViewDialog.set("title", core["new"]).show();
         });
 
@@ -166,7 +169,7 @@ define([
         }, 'model-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeName, beforeNameFilter, objParm, filter;
+            var beforeNameFilter, objParm, filter;
             grid.clearSelection();
             if( modelForm.validate() ) {
                 var data = {
@@ -185,9 +188,10 @@ define([
                     filter = new store.Filter();
                     beforeNameFilter = filter.gt('name', data.name);
                     store.filter(beforeNameFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        beforeName = (results.length > 0) ? results[0].name : null;
-                        if( beforeName !== null ) {
-                            objParm = {"beforeName": beforeName};
+                        var beforeId;
+                        beforeId = (results.length > 0) ? results[0].name : null;
+                        if( beforeId !== null ) {
+                            objParm = {"beforeId": beforeId};
                         } else {
                             objParm = null;
                         }
@@ -216,7 +220,7 @@ define([
                 category_text: {
                     label: asset.category
                 },
-                model: {
+                name: {
                     label: asset.model,
                 },
                 comment: {
@@ -253,17 +257,17 @@ define([
         grid.collection.track();
 
         grid.on(".dgrid-row:click", function (event) {
-            var checkBoxes = ["enabled", "locked", "remove"];
+            var checkBoxes = ["active", "remove"];
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var model = row.data.model;
+            var name = row.data.name;
             if( checkBoxes.indexOf(field) === -1 ) {
                 if( typeof grid.selection[0] !== "undefined" ) {
                     grid.clearSelection();
                 }
                 grid.select(row);
-                grid.collection.get(model).then(function (model) {
+                grid.collection.get(name).then(function (model) {
                     var i, history, historyHtml, date, dateText, dataText, d;
                     action = "view";
                     modelId = model.id;
@@ -271,28 +275,7 @@ define([
                     nameInput.set('value', model.name);
                     commentInput.set('value', model.comment);
                     activeCheckBox.set('checked', model.active);
-                    date = new Date();
-                    historyHtml = "<ul>";
-                    for( i = 0; i < model.history.length; i++ ) {
-                        history = model.history[i];
-                        if( history.username === null ) {
-                            history.username = '';
-                        }
-                        date.setTime(history.timestamp.timestamp * 1000);
-                        dateText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
-                        dataText = [];
-                        for( d in history.data ) {
-                            dataText.push(d + ' set to ' + history.data[d]);
-                        }
-                        historyHtml += "<li>" + dateText + " " + history.username + " " + history.action + " " + dataText.join(', ') +
-                                "</li>";
-                    }
-                    historyHtml += "</ul>";
-                    if( model.history.length > 0 ) {
-                        historyContentPane.set("content", historyHtml);
-                    } else {
-                        historyContentPane.set("content", "");
-                    }
+                    lib.showHistory(historyContentPane, model.history);
                     modelViewDialog.set('title', core.view + " " + model.name);
                     modelViewDialog.show();
                 }, lib.xhrError);
@@ -303,7 +286,7 @@ define([
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var name = row.data.model;
+            var name = row.data.name;
             var value = event.value;
             switch( field ) {
                 case "active":

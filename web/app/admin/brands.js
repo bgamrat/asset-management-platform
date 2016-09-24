@@ -20,7 +20,7 @@ define([
         query,
         registry, TextBox, ValidationTextBox, CheckBox, Button,
         lib, core) {
-    "use strict";
+    //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
     var nameInput = [], commentInput = [], activeCheckBox = [];

@@ -6,14 +6,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DStore
 {
+
     const ASC = 'asc';
     const DESC = 'desc';
 
-    static $DIRMAP = ['-' => 'desc', '+' => 'asc'];
-    
+    static $DIRMAP = ['-' => 'desc', '+' => 'asc', ' ' => 'asc'];
+
     const OP = 'op';
     const FIELD = 'field';
-    const VALUE = 'value';  
+    const VALUE = 'value';
     const LIKE = 'LIKE';
     const GT = '>';
 
@@ -27,18 +28,21 @@ class DStore
             $range = $request->headers->get( 'X-Range' );
             $values = explode( '-', explode( '=', $range )[1] );
             $offset = $values[0];
-            if ($values[0] === $values[1]) {
+            if( $values[0] === $values[1] )
+            {
                 $limit = 1;
-            } else {
+            }
+            else
+            {
                 $limit = $values[1] - $offset;
             }
         }
-        $queryString = urldecode($request->getQueryString());
+        $queryString = urldecode( $request->getQueryString() );
         $field = $default;
         $direction = self::ASC;
         if( strpos( $queryString, 'sort' ) !== false )
         {
-            preg_match( '/sort\(([-+])(\w+)\)/', $queryString, $matches );
+            preg_match( '/sort\(([-+ ])(\w+)\)/i', $queryString, $matches );
             if( count( $matches ) >= 3 )
             {
                 $direction = (array_key_exists( $matches[1], self::$DIRMAP ) !== false) ? self::$DIRMAP[$matches[1]] : self::ASC;
@@ -50,11 +54,11 @@ class DStore
         if( $query->has( 'match' ) )
         {
             preg_match( '#match=/(\w+)/#i', $query->get( 'match' ), $matches );
-            $filter = [self::OP => 'LIKE', self::VALUE => '%'.$matches[1].'%'];
+            $filter = [self::OP => 'LIKE', self::VALUE => '%' . $matches[1] . '%'];
         }
-        if( strpos($queryString, '=gt=') !== false )
+        if( strpos( $queryString, '=gt=' ) !== false )
         {
-            preg_match( '#(\w+)=gt=(\w+)#i', $queryString, $matches );
+            preg_match( '#(\w+)=gt=([a-z0-9\-\(\)\[\]\.\,\% ]+)#i', $queryString, $matches );
             $filter = [self::OP => self::GT, self::FIELD => $matches[1], self::VALUE => $matches[2]];
         }
 

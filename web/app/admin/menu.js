@@ -21,7 +21,7 @@ define([
 ], function (declare, dom, domAttr, domConstruct, on, query, registry,
         MenuBar, MenuBarItem, PopupMenuItem, PopupMenuBarItem, MenuItem, DropDownMenu, Dialog,
         lib, libGrid, core) {
-    "use strict";
+    //"use strict";
     function run() {
         var menuBar = new MenuBar({}, "admin-top-menu");
 

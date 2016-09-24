@@ -38,6 +38,7 @@ class Person
      * @ORM\ManyToOne(targetEntity="PersonType")
      * @ORM\OrderBy({"type" = "ASC"})
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+      * @Gedmo\Versioned
      */
     private $type;
     /**
@@ -81,6 +82,7 @@ class Person
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
+     * @Gedmo\Versioned
      */
     private $comment;
     /**
@@ -114,11 +116,13 @@ class Person
      * @var boolean
      *
      * @ORM\Column(name="active", type="boolean")
+     * @Gedmo\Versioned
      */
     private $active = true;
     /**
      * @ORM\OneToOne(targetEntity="User", inversedBy="person")
      * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
+     * @Gedmo\Versioned
      */
     private $user = null;
     /**
@@ -250,6 +254,10 @@ class Person
         return $this->middleinitial;
     }
 
+    public function getName() {
+        return $this->getFullName();
+    }
+    
     /**
      * Get fullname
      *

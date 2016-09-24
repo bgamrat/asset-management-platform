@@ -45,6 +45,7 @@ define([
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         barcodes, lib, libGrid, core, asset) {
+    //"use strict";
     function run() {
 
         var assetId = null;
@@ -186,9 +187,10 @@ define([
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();
-                    beforeIdFilter = filter.gt('id', data.id);
-                    store.filter(beforeIdFilter).sort('id').fetchRange({start: 0, end: 1}).then(function (results) {
-                        beforeId = (results.length > 0) ? results[0].model : null;
+                    beforeModelTextFilter = filter.gt('model_text', data.model_text);
+                    store.filter(beforeModelTextFilter).sort('model_text').fetchRange({start: 0, end: 1}).then(function (results) {
+                        var beforeId;
+                        beforeId = (results.length > 0) ? results[0].id : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
                             assetViewDialog.hide();
                         }, lib.xhrError);
@@ -281,28 +283,7 @@ define([
                         barcodes.setData(null);
                     }
                     activeCheckBox.set('checked', asset.active);
-                    date = new Date();
-                    historyHtml = "<ul>";
-                    for( i = 0; i < asset.history.length; i++ ) {
-                        history = asset.history[i];
-                        if( history.username === null ) {
-                            history.username = '';
-                        }
-                        date.setTime(history.timestamp.timestamp * 1000);
-                        dateText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
-                        dataText = [];
-                        for (d in history.data) {
-                            dataText.push(d + ' set to ' + history.data[d]);
-                        }
-                        historyHtml += "<li>" + dateText + " " + history.username + " " + history.action + " " + dataText.join(', ') +
-                                "</li>";
-                    }
-                    historyHtml += "</ul>";
-                    if( asset.history.length > 0 ) {
-                        historyContentPane.set("content", historyHtml);
-                    } else {
-                        historyContentPane.set("content", "");
-                    }
+                    lib.showHistory(historyContentPane, asset.history);
                     if( typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined" ) {
                         titleBarcode = asset.barcodes[0].barcode;
                     } else {

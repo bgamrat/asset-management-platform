@@ -136,6 +136,7 @@ define([
             "firstname": firstnameInput.get('value'),
             "middleinitial": middleInitialInput.get('value'),
             "lastname": lastnameInput.get('value'),
+            "fullname": firstnameInput.get('value')+" "+middleInitialInput.get('value')+" "+lastnameInput.get('value'),
             "comment": commentInput.get('value'),
             "emails": emails.getData(),
             "phone_numbers": phoneNumbers.getData(),

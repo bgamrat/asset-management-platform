@@ -25,7 +25,7 @@ define([
         query, html, ObjectStore, Memory,
         registry, TextBox, ValidationTextBox, RadioButton, Select, Button,
         lib, core, asset) {
-    "use strict";
+    //"use strict";
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
@@ -161,6 +161,7 @@ define([
             barcodeId[0] = null;
             barcodeInput[0].set('value', "");
             commentInput[0].set('value', "");
+            activeRadioButton[0].set('checked', true);
         }
     }
 

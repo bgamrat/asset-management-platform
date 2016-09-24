@@ -23,7 +23,7 @@ class ManufacturerType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
+                ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class, ['label' => 'common.name'] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'comment', TextareaType::class, [
@@ -67,4 +67,8 @@ class ManufacturerType extends AbstractType
         ) );
     }
 
+    public function getName()
+    {
+        return 'manufacturer';
+    }
 }
