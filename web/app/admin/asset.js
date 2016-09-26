@@ -83,6 +83,11 @@ define([
         newBtn.startup();
         newBtn.on("click", function (event) {
             modelFilteringSelect.set("value", "");
+            statusSelect.set("value","");
+            locationSelect.set("value", "");
+            barcodes.setData(null);
+            serialNumberInput.set("value", "");
+            commentInput.set("value", "");
             activeCheckBox.set("checked", true);
             assetViewDialog.set("title", core["new"]).show();
             action = "new";
@@ -126,7 +131,7 @@ define([
         var activeCheckBox = new CheckBox({}, "asset_active");
         activeCheckBox.startup();
 
-        var select = "asset_location";
+        var select = "asset_status";
 
         if( dom.byId(select) === null ) {
             lib.textError(select + " not found");
@@ -135,14 +140,39 @@ define([
 
         var data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
-        var storeData = [], d;
+        var statusStoreData = [], d;
         for( d in data ) {
-            storeData.push(data[d]);
+            statusStoreData.push(data[d]);
         }
-        var memoryStore = new Memory({
+        var statusMemoryStore = new Memory({
             idProperty: "value",
-            data: storeData});
-        var store = new ObjectStore({objectStore: memoryStore});
+            data: statusStoreData});
+        var store = new ObjectStore({objectStore: statusMemoryStore});
+
+        var statusSelect = new Select({
+            store: store,
+            placeholder: asset.status,
+            required: true
+        }, select);
+        statusSelect.startup();
+
+        select = "asset_location";
+
+        if( dom.byId(select) === null ) {
+            lib.textError(select + " not found");
+            return;
+        }
+
+        var data = JSON.parse(domAttr.get(select, "data-options"));
+        // Convert the data to an array of objects
+        var locationStoreData = [], d;
+        for( d in data ) {
+            locationStoreData.push(data[d]);
+        }
+        var locationMemoryStore = new Memory({
+            idProperty: "value",
+            data: locationStoreData});
+        var store = new ObjectStore({objectStore: locationMemoryStore});
 
         var locationSelect = new Select({
             store: store,
@@ -172,6 +202,8 @@ define([
                 var data = {
                     "id": assetId,
                     "model_text": modelFilteringSelect.get("displayedValue"),
+                    "status_text": statusSelect.get("displayedValue"),
+                    "status": parseInt(statusSelect.get("value")),
                     "location_text": locationSelect.get("displayedValue"),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "location": parseInt(locationSelect.get("value")),
@@ -216,14 +248,17 @@ define([
                 barcode: {
                     label: asset.barcode
                 },
-                location_text: {
-                    label: asset.location
-                },
                 model_text: {
                     label: asset.model,
                 },
                 serial_number: {
                     label: asset.serial_number,
+                },
+                status_text: {
+                    label: core.status
+                },
+                location_text: {
+                    label: asset.location
                 },
                 comment: {
                     label: core.comment
@@ -274,6 +309,7 @@ define([
                     action = "view";
                     assetId = asset.id;
                     modelFilteringSelect.set('displayedValue', asset.model_text);
+                    statusSelect.set("displayedValue", asset.status_text);
                     locationSelect.set('displayedValue', asset.location_text);
                     serialNumberInput.set('value', asset.serial_number);
                     commentInput.set('value', asset.comment);

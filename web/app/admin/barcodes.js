@@ -67,8 +67,11 @@ define([
         commentInput.push(dijit);
         dijit.startup();
         dijit = new RadioButton({}, base + "active");
-        activeRadioButton.push(dijit);
         dijit.startup();
+        if (barcodeInput.length === 1) {
+            dijit.set('checked',true);
+        }
+        activeRadioButton.push(dijit);
     }
 
     function destroyRow(id, target) {
@@ -92,7 +95,7 @@ define([
 
     function run() {
 
-        var base, data, d;
+        var data, d;
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
@@ -104,7 +107,6 @@ define([
         }
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__barcode__/g, barcodeInput.length);
-        base = prototypeNode.id + "_" + barcodeInput.length;
 
         domConstruct.place(prototypeContent, prototypeNode, "after");
 
@@ -157,11 +159,6 @@ define([
                 commentInput[i].set('value', obj.comment);
                 activeRadioButton[i].set('checked', obj.active);
             }
-        } else {
-            barcodeId[0] = null;
-            barcodeInput[0].set('value', "");
-            commentInput[0].set('value', "");
-            activeRadioButton[0].set('checked', true);
         }
     }
 

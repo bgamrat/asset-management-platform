@@ -47,8 +47,10 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['a.id', 'l.name AS location_text', 'l.id AS location', 'bc.barcode', 'bc.updated AS barcode_updated', 
-            "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serialNumber AS serial_number', 'a.comment', 'a.active'];
+        $columns = ['a.id', 'l.name AS location_text', 'l.id AS location', 'bc.barcode', 'bc.updated AS barcode_updated',
+            "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serialNumber AS serial_number',
+            's.name AS status_text', 's.id AS status',
+            'a.comment', 'a.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'a.deletedAt AS deleted_at';
@@ -57,8 +59,9 @@ class AssetsController extends FOSRestController
                 ->from( 'AppBundle:Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
-                ->leftJoin( 'a.barcodes', 'bc' )
+                ->leftJoin( 'a.barcodes', 'bc', 'WITH', 'bc.active = true')
                 ->leftJoin( 'a.location', 'l' )
+                ->leftJoin( 'a.status', 's' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -85,7 +88,7 @@ class AssetsController extends FOSRestController
             }
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
-        $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
+        //$queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
         $data = $queryBuilder->getQuery()->getResult();
         return array_values( $data );
     }
@@ -109,6 +112,7 @@ class AssetsController extends FOSRestController
             $model = $asset->getModel();
             $brand = $model->getBrand();
             $location = $asset->getLocation();
+            $status = $asset->getStatus();
             $data = [
                 'id' => $id,
                 'model_text' => $brand->getName() . ' ' . $model->getName(),
@@ -116,6 +120,8 @@ class AssetsController extends FOSRestController
                 'serial_number' => $asset->getSerialNumber(),
                 'location_text' => $location->getName(),
                 'location' => $location->getId(),
+                'status_text' => $status->getName(),
+                'status' => $status->getId(),
                 'barcodes' => $asset->getBarcodes(),
                 'comment' => $asset->getComment(),
                 'active' => $asset->isActive()
@@ -149,9 +155,12 @@ class AssetsController extends FOSRestController
         $response = new Response();
         $formProcessor = $this->get( 'app.util.form' );
         $data = $request->request->all();
-        if ($id === "null") {
+        if( $id === "null" )
+        {
             $asset = new Asset();
-        } else {
+        }
+        else
+        {
             $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
         }
         $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );

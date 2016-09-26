@@ -39,6 +39,7 @@ define({
         "send": "Send",
         "sent": "Sent",
         "state_province": "State",
+        "status": "Status",
         "street": "Street",
         "type": "Type",
         "user": "User",

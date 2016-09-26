@@ -23,6 +23,10 @@ asset:
         Models
     requirements:
         Requirements
+    status:
+        Status
+    statuses:
+        Statuses
     vendor:
         Vendor
     vendors:

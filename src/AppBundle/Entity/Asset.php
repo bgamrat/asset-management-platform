@@ -47,6 +47,14 @@ class Asset
      * @var int
      * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\ManyToOne(targetEntity="AssetStatus")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+     */
+    protected $status = null;
+    /**
+     * @var int
+     * @Gedmo\Versioned
+     * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
@@ -113,7 +121,7 @@ class Asset
     public function setId( $id )
     {
         $this->id = $id;
-        
+
         return $this;
     }
 
@@ -165,6 +173,29 @@ class Asset
         return $this->serialNumber;
     }
 
+    /**
+     * Set status
+     *
+     * @param int $status
+     *
+     * @return Asset
+     */
+    public function setStatus( $status )
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
     /**
      * Set location
      *

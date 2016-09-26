@@ -1,6 +1,15 @@
 {% block title %}{{ 'asset.model'|trans }} {{'common.admin'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
+{%macro relation(type,form) %}{%spaceless%}
+    <div id="{{type}}" class="{{type}}">
+        {{form_row(form)}}
+        {% if form.vars.allow_add %}
+            <div data-type="{{type}}" class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+        {% endif %}
+    </div>
+{%endspaceless%}{%endmacro %}
+
 {% block admin_content %}
     <div id="model-wrapper">
         <h1>{{ brand_name }} {{'common.admin'|trans }}</h1>
@@ -41,13 +50,13 @@
                 </fieldset>
                 <div id="model-view-tabs">
                     <div id="model-view-requires-tab">
-                        Requires
+                        {% block requires_models %}{% import _self as page_macros %}{{ page_macros.relation('requires',model_form.requires) }}{% endblock %}
                     </div>
                     <div id="model-view-supports-tab">
-                        Supports
+                        {% block supports_models %}{% import _self as page_macros %}{{ page_macros.relation('supports',model_form.supports) }}{% endblock %}
                     </div>
                     <div id="model-view-extends-tab">
-                        Extends
+                        {% block extends_models %}{% import _self as page_macros %}{{ page_macros.relation('extends',model_form.extends) }}{% endblock %}
                     </div>
                     <div id="model-view-history-tab">
                         History

@@ -26,7 +26,8 @@
 .field-id {
     display: none;
 }
-#category-wrapper {
+#category-wrapper, 
+#status-wrapper {
     margin: 0 auto;
     width: 500px;
 }

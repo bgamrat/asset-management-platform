@@ -47,6 +47,7 @@ class MenuBuilder implements ContainerAwareInterface
         }
         $menu['assets']->addChild( 'configuration', [ 'label' => 'common.configuration'] );
         $menu['assets']['configuration']->addChild( 'categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index'] );
+        $menu['assets']['configuration']->addChild( 'statuses', ['label' => 'asset.statuses', 'route' => 'app_admin_asset_status_index'] );
         
         // $menu->addChild( 'logout', ['class' => 'right', 'label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
 

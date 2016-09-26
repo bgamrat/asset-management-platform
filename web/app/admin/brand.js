@@ -33,6 +33,7 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/admin/barcodes",
+    "app/admin/model_relationships",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -44,7 +45,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        barcodes, lib, libGrid, core, asset) {
+        barcodes, modelRelationships, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -160,6 +161,11 @@ define([
             required: false
         }, "model_comment");
         commentInput.startup();
+
+        var modelStore = new JsonRest({
+            target: '/api/model/select',
+            useRangeHeaders: false,
+            idProperty: 'id'});
 
         var modelForm = new Form({}, '[name="model"]');
         modelForm.startup();
@@ -332,6 +338,7 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
+        modelRelationships.run();
         lib.pageReady();
     }
     return {

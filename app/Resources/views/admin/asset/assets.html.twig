@@ -37,12 +37,20 @@
                             {{form_label(asset_form.active)}}
                         </span>
                     </div>
-                    {{form_row(asset_form.location)}}
+                    <div class="justify">
+                        {{form_row(asset_form.location)}}
+                        {{form_row(asset_form.status)}}
+                    </div>
                     {{form_row(asset_form.comment)}}
                 </fieldset>
                 <div id="asset-view-tabs">
                     <div id="asset-view-barcodes-tab">
-                        {% include 'admin/asset/barcodes.html.twig' with {'form': asset_form.barcodes } %}
+                        <div id="barcodes" class="barcodes">
+                            {{form_row(asset_form.barcodes)}}
+                            {% if asset_form.barcodes.vars.allow_add %}
+                                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                            {% endif %}
+                        </div>
                     </div>
                     <div id="asset-view-history-tab">
                     </div>

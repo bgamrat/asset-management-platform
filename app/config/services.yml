@@ -40,6 +40,12 @@ services:
         tags:
             - { name: form.type, alias: 'app_barcode_type' }
 
+    app.admin.form.type.model:
+        class: AppBundle\Form\Admin\Asset\ModelType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_model_type' }
+
     app.admin.form.type.test:
         class: AppBundle\Form\TestType
         arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']

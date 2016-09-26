@@ -69,10 +69,56 @@ class Model
      */
     private $active = true;
     /**
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends")
+     */
+    private $extendedBy;
+    /**
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="extendedBy")
+     * @ORM\JoinTable(name="model_extend",
+     *      joinColumns={@ORM\JoinColumn(name="extends_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="extended_by_id", referencedColumnName="id")}
+     *      )
+     */
+    private $extends;
+    /**
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="requires")
+     */
+    private $requiredBy;
+    /**
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="requiredBy")
+     * @ORM\JoinTable(name="model_require",
+     *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="required_by_id", referencedColumnName="id")}
+     *      )
+     */
+    private $requires;
+    /**
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="supports")
+     */
+    private $supportedBy;
+    /**
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="supportedBy")
+     * @ORM\JoinTable(name="model_support",
+     *      joinColumns={@ORM\JoinColumn(name="supports_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="supported_by_id", referencedColumnName="id")}
+     *      )
+     */
+    private $supports;
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
     private $deletedAt;
+
+    public function __construct()
+    {
+        $this->extends = new ArrayCollection();
+        $this->requires = new ArrayCollection();
+        $this->supports = new ArrayCollection();
+        $this->extendedBy = new ArrayCollection();
+        $this->requiredBy = new ArrayCollection();
+        $this->supportedBy = new ArrayCollection();
+    }
 
     /**
      * Set id
@@ -192,6 +238,66 @@ class Model
     public function isActive()
     {
         return $this->active;
+    }
+
+    public function getExtends()
+    {
+        return $this->extends->toArray();
+    }
+
+    public function addExtends( Model $extends )
+    {
+        if( !$this->extends->contains( $extends ) )
+        {
+            $this->extends->add( $extends );
+            $extends->extendedBy->add( $this );
+        }
+    }
+
+    public function removeExtends( Model $extends )
+    {
+        $extends->extendedBy->removeElement( $this );
+        $this->extends->removeElement( $extends );
+    }
+
+    public function getRequires()
+    {
+        return $this->requires->toArray();
+    }
+
+    public function addRequires( Model $requires )
+    {
+        if( !$this->requires->contains( $requires ) )
+        {
+            $this->requires->add( $requires );
+            $requires->requiredBy->add( $this );
+        }
+    }
+
+    public function removeRequires( Model $requires )
+    {
+        $requires->requiredBy->removeElement( $this );
+        $this->requires->removeElement( $requires );
+    }
+
+    public function getSupports()
+    {
+        return $this->supports->toArray();
+    }
+
+    public function addSupports( Model $supports )
+    {
+        if( !$this->supports->contains( $supports ) )
+        {
+            $this->supports->add( $supports );
+            $supports->supportedBy->add( $this );
+        }
+    }
+
+    public function removeSupports( Model $supports )
+    {
+        $supports->supportedBy->removeElement( $this );
+        $this->supports->removeElement( $supports );
     }
 
     public function getDeletedAt()

@@ -35,6 +35,19 @@ class AssetType extends AbstractType
                 ->add( 'model', TextType::class, [
                     'label' => 'common.model'
                 ] )
+                ->add( 'status', EntityType::class, [
+                    'class' => 'AppBundle:AssetStatus',
+                    'choice_label' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => true,
+                    'label' => 'asset.status',
+                    'preferred_choices' => function($status, $key, $index)
+                    {
+                        return $status->isActive();
+                    },
+                    'choice_translation_domain' => false
+                ] )
                 ->add( 'location', EntityType::class, [
                     'class' => 'AppBundle:Location',
                     'choice_label' => 'name',
