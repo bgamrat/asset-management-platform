@@ -1,13 +1,14 @@
 {% block title %}{{ 'asset.model'|trans }} {{'common.admin'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
-{%macro relation(type,form) %}{%spaceless%}
-    <div id="{{type}}" class="{{type}}">
-        {{form_row(form)}}
-        {% if form.vars.allow_add %}
-            <div data-type="{{type}}" class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
-        {% endif %}
-    </div>
+{%macro relation(title,type,form) %}{%spaceless%}
+        <div id="{{type}}" class="{{type}}">
+            <h3>{{title}}</h3>
+            {{form_row(form)}}
+            {% if form.vars.allow_add %}
+                <div data-type="{{type}}" class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+            {% endif %}
+        </div>
 {%endspaceless%}{%endmacro %}
 
 {% block admin_content %}
@@ -50,13 +51,12 @@
                 </fieldset>
                 <div id="model-view-tabs">
                     <div id="model-view-requires-tab">
-                        {% block requires_models %}{% import _self as page_macros %}{{ page_macros.relation('requires',model_form.requires) }}{% endblock %}
-                    </div>
-                    <div id="model-view-supports-tab">
-                        {% block supports_models %}{% import _self as page_macros %}{{ page_macros.relation('supports',model_form.supports) }}{% endblock %}
+                        {% block requires_models %}{% import _self as page_macros %}{{ page_macros.relation('asset.requires'|trans,'requires',model_form.requires) }}{% endblock %}
+                        {% block required_by_models %}{% import _self as page_macros %}{{ page_macros.relation('asset.required_by'|trans,'required_by',model_form.required_by) }}{% endblock %}
                     </div>
                     <div id="model-view-extends-tab">
-                        {% block extends_models %}{% import _self as page_macros %}{{ page_macros.relation('extends',model_form.extends) }}{% endblock %}
+                        {% block extends_models %}{% import _self as page_macros %}{{ page_macros.relation('asset.extends'|trans,'extends',model_form.extends) }}{% endblock %}
+                        {% block extended_by_models %}{% import _self as page_macros %}{{ page_macros.relation('asset.extended_by'|trans,'extended_by',model_form.extended_by) }}{% endblock %}
                     </div>
                     <div id="model-view-history-tab">
                         History

@@ -69,11 +69,11 @@ class Model
      */
     private $active = true;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends")
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends", fetch="LAZY")
      */
     private $extendedBy;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", inversedBy="extendedBy")
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="extendedBy", fetch="LAZY")
      * @ORM\JoinTable(name="model_extend",
      *      joinColumns={@ORM\JoinColumn(name="extends_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="extended_by_id", referencedColumnName="id")}
@@ -81,29 +81,17 @@ class Model
      */
     private $extends;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", mappedBy="requires")
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="requires", fetch="LAZY")
      */
     private $requiredBy;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", inversedBy="requiredBy")
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="requiredBy", fetch="LAZY")
      * @ORM\JoinTable(name="model_require",
      *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="required_by_id", referencedColumnName="id")}
      *      )
      */
     private $requires;
-    /**
-     * @ORM\ManyToMany(targetEntity="Model", mappedBy="supports")
-     */
-    private $supportedBy;
-    /**
-     * @ORM\ManyToMany(targetEntity="Model", inversedBy="supportedBy")
-     * @ORM\JoinTable(name="model_support",
-     *      joinColumns={@ORM\JoinColumn(name="supports_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="supported_by_id", referencedColumnName="id")}
-     *      )
-     */
-    private $supports;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
@@ -114,10 +102,8 @@ class Model
     {
         $this->extends = new ArrayCollection();
         $this->requires = new ArrayCollection();
-        $this->supports = new ArrayCollection();
         $this->extendedBy = new ArrayCollection();
         $this->requiredBy = new ArrayCollection();
-        $this->supportedBy = new ArrayCollection();
     }
 
     /**
@@ -240,64 +226,125 @@ class Model
         return $this->active;
     }
 
-    public function getExtends()
+    public function getRelationships( $relationship )
     {
-        return $this->extends->toArray();
+        $relationships = [];
+        foreach( $this->{$relationship} as $r )
+        {
+            $relationships[] = ['id' => $r->getId(),
+                'name' => $r->getBrandModelName()];
+        }
+        return $relationships;
     }
 
-    public function addExtends( Model $extends )
+    public function setExtends( $models )
     {
-        if( !$this->extends->contains( $extends ) )
+        foreach( $models as $m )
         {
-            $this->extends->add( $extends );
-            $extends->extendedBy->add( $this );
+            $this->addExtends( $m );
+        }
+        return $this;
+    }
+
+    public function getExtends()
+    {
+        return $this->getRelationships( 'extends' );
+    }
+
+    public function addExtends( Model $model )
+    {
+        if( !$this->extends->contains( $model ) )
+        {
+            $this->extends->add( $model );
         }
     }
 
-    public function removeExtends( Model $extends )
+    public function removeExtends( Model $model )
     {
-        $extends->extendedBy->removeElement( $this );
-        $this->extends->removeElement( $extends );
+        $this->extends->removeElement( $model );
+    }
+
+    public function setExtendedBy( $models )
+    {
+        foreach( $models as $m )
+        {
+            $this->addExtendedBy( $m );
+        }
+        return $this;
+    }
+
+    public function getExtendedBy()
+    {
+        return $this->getRelationships( 'extendedBy' );
+    }
+
+    public function addExtendedBy( Model $model )
+    {
+        if( !$this->extendedBy->contains( $model ) )
+        {
+            $this->extendedBy->add( $model );
+        }
+        return $this;
+    }
+
+    public function removeExtendedBy( Model $model )
+    {
+        $this->extends->removeElement( $model );
+        return $this;
+    }
+
+    public function setRequires( $models )
+    {
+        foreach( $models as $m )
+        {
+            $this->addRequires( $m );
+        }
+        return $this;
     }
 
     public function getRequires()
     {
-        return $this->requires->toArray();
+        return $this->getRelationships( 'requires' );
     }
 
-    public function addRequires( Model $requires )
+    public function addRequires( Model $model )
     {
-        if( !$this->requires->contains( $requires ) )
+        if( !$this->requires->contains( $model ) )
         {
-            $this->requires->add( $requires );
-            $requires->requiredBy->add( $this );
+            $this->requires->add( $model );
         }
     }
 
-    public function removeRequires( Model $requires )
+    public function removeRequires( Model $model )
     {
-        $requires->requiredBy->removeElement( $this );
-        $this->requires->removeElement( $requires );
+        $this->requires->removeElement( $model );
     }
 
-    public function getSupports()
+    public function setRequiredBy( $models )
     {
-        return $this->supports->toArray();
-    }
-
-    public function addSupports( Model $supports )
-    {
-        if( !$this->supports->contains( $supports ) )
+        foreach( $models as $m )
         {
-            $this->supports->add( $supports );
-            $supports->supportedBy->add( $this );
+            $this->addRequiredBy( $m );
+        }
+        return $this;
+    }
+
+    public function getRequiredBy()
+    {
+        return $this->getRelationships( 'requiredBy' );
+    }
+
+    public function addRequiredBy( Model $model )
+    {
+        if( !$this->requiredBy->contains( $model ) )
+        {
+            $this->requiredBy->add( $model );
         }
     }
 
-    public function removeSupports( Model $supports )
+    public function removeRequiredBy( Model $model )
     {
-        $supports->supportedBy->removeElement( $this );
-        $this->supports->removeElement( $supports );
+        $this->requires->removeElement( $model );
     }
 
     public function getDeletedAt()
@@ -311,6 +358,11 @@ class Model
         $this->setActive( false );
     }
 
+    public function getBrandModelName()
+    {
+        return $this->getBrand()->getName() . ' ' . $this->getName();
+    }
+
     public function toArray()
     {
         return [
@@ -318,7 +370,11 @@ class Model
             'category' => $this->getCategory(),
             'name' => $this->getName(),
             'comment' => $this->getComment(),
-            'active' => $this->isActive()
+            'active' => $this->isActive(),
+            'extends' => $this->getExtends(),
+            'extendedBy' => $this->getExtendedBy(),
+            'requires' => $this->getRequires(),
+            'requiredBy' => $this->getRequiredBy()
         ];
     }
 

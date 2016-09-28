@@ -159,8 +159,9 @@
 {% endblock %}
 
 {% block _model_extends_entry_row %}{% import _self as form_macros %}{{ form_macros.model_relationship_entry_row('extends',form) }}{% endblock %}
+{% block _model_extended_by_entry_row %}{% import _self as form_macros %}{{ form_macros.model_relationship_entry_row('extended_by',form) }}{% endblock %}
 {% block _model_requires_entry_row %}{% import _self as form_macros %}{{ form_macros.model_relationship_entry_row('requires',form) }}{% endblock %}
-{% block _model_supports_entry_row %}{% import _self as form_macros %}{{ form_macros.model_relationship_entry_row('supports',form) }}{% endblock %}
+{% block _model_required_by_entry_row %}{% import _self as form_macros %}{{ form_macros.model_relationship_entry_row('required_by',form) }}{% endblock %}
 
 {% block _user_person_addresses_entry_row %}
     {{ block('_address_entry_row') }}

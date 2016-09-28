@@ -32,7 +32,6 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/admin/barcodes",
     "app/admin/model_relationships",
     "app/lib/common",
     "app/lib/grid",
@@ -45,7 +44,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        barcodes, modelRelationships, lib, libGrid, core, asset) {
+        modelRelationships, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -72,11 +71,6 @@ define([
         "model-view-requires-tab"
                 );
         tabContainer.addChild(requiresContentPane);
-        var supportsContentPane = new ContentPane({
-            title: asset.supports},
-        "model-view-supports-tab"
-                );
-        tabContainer.addChild(supportsContentPane);
         var extendsContentPane = new ContentPane({
             title: asset.extends},
         "model-view-extends-tab"
@@ -185,6 +179,10 @@ define([
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
+                    "extends": modelRelationships.getData("extends"),
+                    "requires": modelRelationships.getData("requires"),
+                    "extended_by": modelRelationships.getData("extended_by"),
+                    "required_by": modelRelationships.getData("required_by")
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -281,6 +279,10 @@ define([
                     nameInput.set('value', model.name);
                     commentInput.set('value', model.comment);
                     activeCheckBox.set('checked', model.active);
+                    modelRelationships.setData("extends", model['extends']);
+                    modelRelationships.setData("requires", model['requires']);
+                    modelRelationships.setData("extended_by", model.extendedBy);
+                    modelRelationships.setData("required_by", model.requiredBy);
                     lib.showHistory(historyContentPane, model.history);
                     modelViewDialog.set('title', core.view + " " + model.name);
                     modelViewDialog.show();

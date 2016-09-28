@@ -60,7 +60,7 @@ class ModelType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true
                 ] )
-                ->add( 'supports', CollectionType::class, [
+                ->add( 'required_by', CollectionType::class, [
                     'entry_type' => TextType::class,
                     'by_reference' => false,
                     'required' => false,
@@ -79,13 +79,27 @@ class ModelType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true
+                ] )
+                ->add( 'extended_by', CollectionType::class, [
+                    'entry_type' => TextType::class,
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true
                 ] );
+                    
         $builder->get( 'requires' )
                 ->addModelTransformer( new ModelsToIdsTransformer( $this->em ) );
-        $builder->get( 'supports' )
+        $builder->get( 'required_by' )
                 ->addModelTransformer( new ModelsToIdsTransformer( $this->em ) );
         $builder->get( 'extends' )
                 ->addModelTransformer( new ModelsToIdsTransformer( $this->em ) );
+        $builder->get( 'extended_by' )
+                ->addModelTransformer( new ModelsToIdsTransformer( $this->em ) );
+                              
         ;
     }
 

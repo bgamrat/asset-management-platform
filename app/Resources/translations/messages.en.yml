@@ -11,6 +11,10 @@ asset:
         Categories
     category:
         Category
+    extended_by:
+        Extended By
+    extends:
+        Extends
     location:
         Location
     manufacturer:
@@ -23,6 +27,10 @@ asset:
         Models
     requirements:
         Requirements
+    required_by:
+            Required By
+    requires:
+        Requires
     status:
         Status
     statuses:

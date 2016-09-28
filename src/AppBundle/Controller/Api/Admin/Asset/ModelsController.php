@@ -19,7 +19,7 @@ class ModelsController extends FOSRestController
     /**
      * @View()
      */
-    public function getModelSelectAction( Request $request )
+    public function getModelsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
@@ -42,6 +42,23 @@ class ModelsController extends FOSRestController
         {
             $data = null;
         }
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
+    public function getModelAction( $brandModel )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $em = $this->getDoctrine()->getManager();
+        $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
+                ->from( 'AppBundle:Model', 'm' )
+                ->innerJoin( 'm.brand', 'b' )
+                ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
+                ->setParameter( 'brand_model', $brandModel );
+
+        $data = $queryBuilder->getQuery()->getResult();
         return $data;
     }
 

@@ -25,15 +25,17 @@ class ModelsToIdsTransformer implements DataTransformerInterface
      */
     public function transform( $models )
     {
-
-        if( empty( $models ) )
+        if( !is_array( $models ) )
         {
             return [];
         }
         $ids = [];
-        foreach( $models as $m )
+        if( count( $models ) > 0 )
         {
-            $ids[] = $m->getId();
+            foreach( $models as $m )
+            {
+                $ids[] = $m['id'];
+            }
         }
         return $ids;
     }
@@ -48,16 +50,27 @@ class ModelsToIdsTransformer implements DataTransformerInterface
     public function reverseTransform( $modelIds )
     {
         // no model id? It's optional, so that's ok
-        if( !$modelIds )
+        if( empty( $modelIds ) )
         {
-            return;
+            return [];
         }
 
-        $query = $repository->createQueryBuilder( 'm' )
-                ->where( $qb->expr()->in( 'm.id', $modelIds ) )
-                ->orderBy( 'm.name', 'ASC' );
+        $ids = [];
+        foreach( $modelIds as $m )
+        {
+            if( !empty( $m['model'] ) )
+            {
+                $ids[] = $m['model'];
+            }
+        }
 
-        $models = $query->getQuery()->getResult();
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select( 'm' )
+                ->from( 'AppBundle:Model', 'm' )
+                ->where( $queryBuilder->expr()->in( 'm.id', ':modelIds' ) )
+                ->setParameter( 'modelIds', $ids )
+                ->orderBy( 'm.name', 'ASC' );
+        $models = $queryBuilder->getQuery()->getResult();
         if( null === $models )
         {
             throw new TransformationFailedException( sprintf(

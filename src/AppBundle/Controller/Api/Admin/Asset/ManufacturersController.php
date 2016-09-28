@@ -284,6 +284,7 @@ class ManufacturersController extends FOSRestController
         $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'b.name', '?2' ) );
         $queryBuilder->setParameter( 2, $bname );
         $data = $queryBuilder->getQuery()->getResult();
+
         return array_values( $data );
     }
 
@@ -297,24 +298,21 @@ class ManufacturersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
         $em = $this->getDoctrine()->getManager();
-        $columns = ['m', 'mn', 'b', 'c'];
+        $columns = ['m.id AS model_id','mn.id','b.id'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle:Manufacturer', 'mn' )
                 ->innerJoin( 'mn.brands', 'b' )
-                ->innerJoin( 'b.models', 'm' )
-                ->innerJoin( 'm.category', 'c' );
+                ->innerJoin( 'b.models', 'm' );
         $queryBuilder->where(
                         $queryBuilder->expr()->andX(
                                 $queryBuilder->expr()->eq( 'mn.name', '?1' ), $queryBuilder->expr()->eq( 'b.name', '?2' ) ) )
                 ->andWhere( $queryBuilder->expr()->eq( 'm.name', '?3' ) );
         $queryBuilder->setParameters( [1 => $mnname, 2 => $bname, 3 => $mname] );
         $data = $queryBuilder->getQuery()->getResult();
+        
         if( !empty( $data ) )
         {
-            $manufacturer = $data[0];
-            $brand = $manufacturer->getBrands();
-            $models = $brand[0]->getModels();
-            $model = $models[0];
+            $model = $em->getRepository('AppBundle:Model')->find($data[0]['model_id']);
             $modelData = $model->toArray();
             $modelData['category'] = $model->getCategory()->getId();
             $modelData['category_text'] = $model->getCategory()->getName();

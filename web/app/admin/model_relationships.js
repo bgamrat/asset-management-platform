@@ -21,18 +21,18 @@ define([
         lib, core, asset) {
     "use strict";
 
-    function RelationshipObj(relationship,dataPrototype, prototypeNode, prototypeContent, modelFilteringSelect) {
+    function RelationshipObj(relationship, dataPrototype, prototypeNode, modelFilteringSelect) {
         this.relationship = relationship;
         this.dataPrototype = dataPrototype;
         this.prototypeNode = prototypeNode;
-        this.prototypeContent = prototypeContent;
-        this.modelFilteringSelect = modelFilteringSelect;
+        this.modelFilteringSelect = [];
     }
 
     var relationshipObjs = {
         "extends": null,
         "requires": null,
-        "supports": null
+        "extended_by": null,
+        "required_by": null
     };
 
     var modelStore;
@@ -46,8 +46,8 @@ define([
     }
 
     function cloneNewNode() {
-        this.prototypeContent = this.dataPrototype.replace(/__name__/g, this.modelFilteringSelect.length);
-        domConstruct.place(this.prototypeContent, this.prototypeNode, "after");
+        var prototypeContent = this.dataPrototype.replace(/__name__/g, this.modelFilteringSelect.length);
+        domConstruct.place(prototypeContent, this.prototypeNode.parentNode, "last");
     }
 
     function createDijit() {
@@ -62,35 +62,25 @@ define([
         this.modelFilteringSelect.push(dijit);
     }
 
-    function destroyRow(id, target) {
-        var i;
-
-        for( i = 0; i < this.modelFilteringSelect.length; i++ ) {
-            if( this.modelFilteringSelect[i].get("id").indexOf(id) !== -1 ) {
-                id = i;
-                break;
-            }
-        }
-        this.modelFilteringSelect.splice(id, 1);
+    function destroyRow(target) {
+        this.modelFilteringSelect.pop().destroyRecursive();
         domConstruct.destroy(target);
     }
 
     function run() {
         var r, addOneMoreControl = null;
         modelStore = new JsonRest({
-            target: '/api/model/select',
+            target: '/api/models',
             useRangeHeaders: false,
             idProperty: 'id'});
-        var prototypeNode, dataPrototype, prototypeContent, modelFilteringSelect = [];
+        var prototypeNode, dataPrototype;
         for( r in relationshipObjs ) {
             prototypeNode = dom.byId("model_" + r);
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-            prototypeContent = dataPrototype.replace(/__name__/g, 0);
-            //domConstruct.place(prototypeContent, prototypeNode, "after");
 
             addOneMoreControl = query('#' + r + ' .add-one-more-row');
 
-            relationshipObjs[r] = new RelationshipObj(r,dataPrototype, prototypeNode, prototypeContent, modelFilteringSelect);
+            relationshipObjs[r] = new RelationshipObj(r, dataPrototype, prototypeNode);
             addOneMoreControl.on("click", function (event) {
                 var dataType = domAttr.get(event.target, "data-type");
                 cloneNewNode.call(relationshipObjs[dataType]);
@@ -100,7 +90,6 @@ define([
                 var target = event.target;
                 var targetParent = target.parentNode;
                 var idPieces = targetParent.id.split('-');
-                var id;
                 destroyRow.call(relationshipObjs[idPieces[0]], parseInt(idPieces[1]), targetParent.parentNode);
             });
 
@@ -108,8 +97,8 @@ define([
     }
 
     function getData(relationship) {
-        var i, returnData = [];
-        modelFilteringSelect = relationshipObjs[relationship];
+        var i, returnData = [], modelFilteringSelect;
+        modelFilteringSelect = relationshipObjs[relationship].modelFilteringSelect;
         for( i = 0; i < modelFilteringSelect.length; i++ ) {
             returnData.push(
                     {
@@ -120,20 +109,20 @@ define([
         return returnData;
     }
 
-    function setData(models) {
-        var i, p, obj, nodes;
+    function setData(relationship, models) {
+        var i, rObj = relationshipObjs[relationship];
 
-        nodes = query(".form-row." + relationship, relationship);
-        nodes.forEach(function (node, index) {
-            destroyRow.call(relationshipObjs[r],index, node);
+        query(".form-row." + relationship, rObj.prototypeNode.parentNode).forEach(function (node, index) {
+            destroyRow.call(rObj, node);
         });
 
         if( typeof models === "object" && models !== null && models.length > 0 ) {
             for( i = 0; i < models.length; i++ ) {
-                cloneNewNode();
-                createDijit();
-                modelFilteringSelect.set("displayedValue", models[i].model);
-                modelFilteringSelect.set("value", models[i].model_id)
+                cloneNewNode.call(rObj);
+                createDijit.call(rObj);
+                modelStore.get(models[i].id);
+                rObj.modelFilteringSelect[i].set("value", models[i].id);
+                rObj.modelFilteringSelect[i].set("displayedValue", models[i].name);
             }
         }
     }

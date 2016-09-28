@@ -11,7 +11,7 @@ app_admin_asset_manufacturers:
     name_prefix:   app_admin_api_manufacturers_
     prefix: /api
 
-app_admin_asset_models:
+app_admin_asset_model:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\Asset\ModelsController
     name_prefix:   app_admin_api_models_
