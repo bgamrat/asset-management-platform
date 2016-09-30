@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class ModelsToIdsTransformer implements DataTransformerInterface
+class ModelRelationshipsToIdsTransformer implements DataTransformerInterface
 {
 
     private $em;
@@ -23,21 +23,17 @@ class ModelsToIdsTransformer implements DataTransformerInterface
      * @param  Issue|null $model
      * @return string
      */
-    public function transform( $models )
+    public function transform( $model )
     {
-        if( !is_array( $models ) )
+        if( empty($model) )
         {
-            return [];
+            return null;
         }
-        $ids = [];
-        if( count( $models ) > 0 )
-        {
-            foreach( $models as $m )
-            {
-                $ids[] = $m['id'];
-            }
+        $ret = [];
+        foreach ($model as $m) {
+            $ret[] = $m->getId();
         }
-        return $ids;
+        return $ret;
     }
 
     /**
@@ -55,29 +51,21 @@ class ModelsToIdsTransformer implements DataTransformerInterface
             return [];
         }
 
-        $ids = [];
-        foreach( $modelIds as $m )
-        {
-            if( !empty( $m['model'] ) )
-            {
-                $ids[] = $m['model'];
-            }
-        }
-
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder->select( 'm' )
                 ->from( 'AppBundle:Model', 'm' )
                 ->where( $queryBuilder->expr()->in( 'm.id', ':modelIds' ) )
-                ->setParameter( 'modelIds', $ids )
+                ->setParameter( 'modelIds', $modelIds )
                 ->orderBy( 'm.name', 'ASC' );
-        $models = $queryBuilder->getQuery()->getResult();
-        if( null === $models )
+        $model = $queryBuilder->getQuery()->getResult();
+
+        if( null === $model )
         {
             throw new TransformationFailedException( sprintf(
-                    'An model with id "%s" does not exist!', $modelIds
+                    'An model with id "%s" does not exist!', implode(',',$modelIds)
             ) );
         }
-        return $models;
+        return $model;
     }
 
 }

@@ -94,18 +94,20 @@ define([
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
-
+        base = getDivId();
         prototypeNode = dom.byId(getDivId());
         if( prototypeNode !== null ) {
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-            prototypeContent = dataPrototype.replace(/__person__/g, personId);
-            domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-            base = prototypeNode.id + "_0_";
-        } else {
-            base = getDivId() + '_';
+            if( dataPrototype !== null ) {
+                prototypeContent = dataPrototype.replace(/__person__/g, personId);
+                domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+                base = prototypeNode.id + "_0";
+            } else {
+                prototypeNode = null;
+            }
         }
 
-        select = base + "type";
+        select = base + "_type";
 
         if( dom.byId(select) === null ) {
             lib.textError(select + " not found");
@@ -124,7 +126,7 @@ define([
         store = new ObjectStore({objectStore: memoryStore});
 
         createDijits();
-        
+
         phoneNumbers.run(getDivId());
         emails.run(getDivId());
         addresses.run(getDivId());
@@ -136,7 +138,7 @@ define([
             "firstname": firstnameInput.get('value'),
             "middleinitial": middleInitialInput.get('value'),
             "lastname": lastnameInput.get('value'),
-            "fullname": firstnameInput.get('value')+" "+middleInitialInput.get('value')+" "+lastnameInput.get('value'),
+            "fullname": firstnameInput.get('value') + " " + middleInitialInput.get('value') + " " + lastnameInput.get('value'),
             "comment": commentInput.get('value'),
             "emails": emails.getData(),
             "phone_numbers": phoneNumbers.getData(),

@@ -49,7 +49,7 @@ define([
                             } else {
                                 item = new PopupMenuItem(popupMenuObj);
                             }
-                            createMenuItem(popup, nextNode);
+                            createMenuItem(popup, nextNode, depth + 1);
                         } else {
                             labelObj = {label: label};
                             if( depth <= 1 ) {
@@ -83,3 +83,4 @@ define([
         run: run
     };
 });
+//# sourceURL=menu.js

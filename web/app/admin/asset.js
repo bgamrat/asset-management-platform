@@ -305,7 +305,7 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (asset) {
-                    var i, history, historyHtml, date, dateText, dataText, d, titleBarcode;
+                    var titleBarcode;
                     action = "view";
                     assetId = asset.id;
                     modelFilteringSelect.set('displayedValue', asset.model_text);

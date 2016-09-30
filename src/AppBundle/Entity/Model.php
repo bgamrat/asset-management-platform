@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="model")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelRepository")
- * @Gedmo\Loggable
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\ModelLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity(
  *     fields={"brand", "name"},
@@ -226,13 +226,26 @@ class Model
         return $this->active;
     }
 
-    public function getRelationships( $relationship )
+    public function getRelationships( $relationship, $full )
     {
         $relationships = [];
-        foreach( $this->{$relationship} as $r )
+        if( count($this->{$relationship}) > 0 )
         {
-            $relationships[] = ['id' => $r->getId(),
-                'name' => $r->getBrandModelName()];
+            if( $full === false )
+            {
+                foreach( $this->{$relationship} as $r )
+                {
+                    $relationships[] = ['id' => $r->getId(),
+                        'name' => $r->getBrandModelName()];
+                }
+            }
+            else
+            {
+                foreach( $this->{$relationship} as $r )
+                {
+                    $relationships[] = $r;
+                }
+            }
         }
         return $relationships;
     }
@@ -246,12 +259,12 @@ class Model
         return $this;
     }
 
-    public function getExtends()
+    public function getExtends( $full = true )
     {
-        return $this->getRelationships( 'extends' );
+        return $this->getRelationships( 'extends', $full );
     }
 
-    public function addExtends( Model $model )
+    public function addExtend( Model $model )
     {
         if( !$this->extends->contains( $model ) )
         {
@@ -259,7 +272,7 @@ class Model
         }
     }
 
-    public function removeExtends( Model $model )
+    public function removeExtend( Model $model )
     {
         $this->extends->removeElement( $model );
     }
@@ -273,9 +286,9 @@ class Model
         return $this;
     }
 
-    public function getExtendedBy()
+    public function getExtendedBy( $full = true )
     {
-        return $this->getRelationships( 'extendedBy' );
+        return $this->getRelationships( 'extendedBy', $full );
     }
 
     public function addExtendedBy( Model $model )
@@ -295,6 +308,7 @@ class Model
 
     public function setRequires( $models )
     {
+        $this->requires->clear();
         foreach( $models as $m )
         {
             $this->addRequires( $m );
@@ -302,12 +316,12 @@ class Model
         return $this;
     }
 
-    public function getRequires()
+    public function getRequires( $full = true )
     {
-        return $this->getRelationships( 'requires' );
+        return $this->getRelationships( 'requires', $full );
     }
 
-    public function addRequires( Model $model )
+    public function addRequire( Model $model )
     {
         if( !$this->requires->contains( $model ) )
         {
@@ -315,7 +329,7 @@ class Model
         }
     }
 
-    public function removeRequires( Model $model )
+    public function removeRequire( Model $model )
     {
         $this->requires->removeElement( $model );
     }
@@ -329,9 +343,9 @@ class Model
         return $this;
     }
 
-    public function getRequiredBy()
+    public function getRequiredBy( $full = true )
     {
-        return $this->getRelationships( 'requiredBy' );
+        return $this->getRelationships( 'requiredBy', $full );
     }
 
     public function addRequiredBy( Model $model )
@@ -371,10 +385,10 @@ class Model
             'name' => $this->getName(),
             'comment' => $this->getComment(),
             'active' => $this->isActive(),
-            'extends' => $this->getExtends(),
-            'extendedBy' => $this->getExtendedBy(),
-            'requires' => $this->getRequires(),
-            'requiredBy' => $this->getRequiredBy()
+            'extends' => $this->getExtends( false ),
+            'extendedBy' => $this->getExtendedBy( false ),
+            'requires' => $this->getRequires( false ),
+            'requiredBy' => $this->getRequiredBy( false )
         ];
     }
 

@@ -18,7 +18,6 @@ define([
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
     "dijit/form/Select",
-    "dijit/form/FilteringSelect",
     "dijit/form/SimpleTextarea",
     "dijit/form/Button",
     "dijit/Dialog",
@@ -40,7 +39,7 @@ define([
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
         xhr, domForm, aspect, query, ObjectStore, Memory,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, FilteringSelect, SimpleTextarea, Button,
+        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
@@ -185,7 +184,7 @@ define([
                     "required_by": modelRelationships.getData("required_by")
                 };
                 if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
+                    grid.collection.put(data,{"overwrite": true}).then(function (data) {
                         modelViewDialog.hide();
                     }, lib.xhrError);
                 } else {
@@ -193,7 +192,7 @@ define([
                     beforeNameFilter = filter.gt('name', data.name);
                     store.filter(beforeNameFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
                         var beforeId;
-                        beforeId = (results.length > 0) ? results[0].name : null;
+                        beforeId = (results.length > 0) ? results[0].id : null;
                         if( beforeId !== null ) {
                             objParm = {"beforeId": beforeId};
                         } else {
@@ -213,7 +212,7 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: apiUrl, useRangeHeaders: true, idProperty: 'name'});
+        var store = new TrackableRest({target: apiUrl, useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
@@ -248,13 +247,14 @@ define([
                     }
                 }
             },
+            /*
             renderRow: function (object) {
                 var rowElement = this.inherited(arguments);
                 if( typeof object.deleted_at !== "undefined" && object.deleted_at !== null ) {
                     rowElement.className += ' deleted';
                 }
                 return rowElement;
-            },
+            },*/
             selectionMode: "none"
         }, 'model-grid');
         grid.startup();
@@ -272,7 +272,6 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(name).then(function (model) {
-                    var i, history, historyHtml, date, dateText, dataText, d;
                     action = "view";
                     modelId = model.id;
                     categorySelect.set('displayedValue', model.category_text);
@@ -283,7 +282,7 @@ define([
                     modelRelationships.setData("requires", model['requires']);
                     modelRelationships.setData("extended_by", model.extendedBy);
                     modelRelationships.setData("required_by", model.requiredBy);
-                    lib.showHistory(historyContentPane, model.history);
+                    lib.showHistory(historyContentPane, model["history"]);
                     modelViewDialog.set('title', core.view + " " + model.name);
                     modelViewDialog.show();
                 }, lib.xhrError);
@@ -347,3 +346,4 @@ define([
         run: run
     }
 });
+//# sourceURL=brand.js

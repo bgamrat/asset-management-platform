@@ -62,8 +62,14 @@ define([
         this.modelFilteringSelect.push(dijit);
     }
 
-    function destroyRow(target) {
-        this.modelFilteringSelect.pop().destroyRecursive();
+    function destroyRow(id, target) {
+        var item;
+        if (id !== null) {
+            item = this.modelFilteringSelect.splice(id, 1);
+            item[0].destroyRecursive();
+        } else {
+            this.modelFilteringSelect.pop().destroyRecursive();
+        }
         domConstruct.destroy(target);
     }
 
@@ -86,11 +92,12 @@ define([
                 cloneNewNode.call(relationshipObjs[dataType]);
                 createDijit.call(relationshipObjs[dataType]);
             });
+
             on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
                 var target = event.target;
                 var targetParent = target.parentNode;
                 var idPieces = targetParent.id.split('-');
-                destroyRow.call(relationshipObjs[idPieces[0]], parseInt(idPieces[1]), targetParent.parentNode);
+                destroyRow.call(relationshipObjs[idPieces[0]], idPieces[1], targetParent.parentNode);
             });
 
         }
@@ -101,11 +108,8 @@ define([
         modelFilteringSelect = relationshipObjs[relationship].modelFilteringSelect;
         for( i = 0; i < modelFilteringSelect.length; i++ ) {
             returnData.push(
-                    {
-                        "model": modelFilteringSelect[i].get("value")
-                    });
+                    parseInt(modelFilteringSelect[i].get("value")));
         }
-
         return returnData;
     }
 
@@ -113,14 +117,13 @@ define([
         var i, rObj = relationshipObjs[relationship];
 
         query(".form-row." + relationship, rObj.prototypeNode.parentNode).forEach(function (node, index) {
-            destroyRow.call(rObj, node);
+            destroyRow.call(rObj, null, node);
         });
 
         if( typeof models === "object" && models !== null && models.length > 0 ) {
             for( i = 0; i < models.length; i++ ) {
                 cloneNewNode.call(rObj);
                 createDijit.call(rObj);
-                modelStore.get(models[i].id);
                 rObj.modelFilteringSelect[i].set("value", models[i].id);
                 rObj.modelFilteringSelect[i].set("displayedValue", models[i].name);
             }
@@ -134,3 +137,4 @@ define([
     }
 }
 );
+//# sourceURL=model_relationships.js

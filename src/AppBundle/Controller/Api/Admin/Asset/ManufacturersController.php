@@ -298,7 +298,7 @@ class ManufacturersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
         $em = $this->getDoctrine()->getManager();
-        $columns = ['m.id AS model_id','mn.id','b.id'];
+        $columns = ['m.id AS model_id', 'mn.id', 'b.id'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle:Manufacturer', 'mn' )
                 ->innerJoin( 'mn.brands', 'b' )
@@ -309,10 +309,10 @@ class ManufacturersController extends FOSRestController
                 ->andWhere( $queryBuilder->expr()->eq( 'm.name', '?3' ) );
         $queryBuilder->setParameters( [1 => $mnname, 2 => $bname, 3 => $mname] );
         $data = $queryBuilder->getQuery()->getResult();
-        
+
         if( !empty( $data ) )
         {
-            $model = $em->getRepository('AppBundle:Model')->find($data[0]['model_id']);
+            $model = $em->getRepository( 'AppBundle:Model' )->find( $data[0]['model_id'] );
             $modelData = $model->toArray();
             $modelData['category'] = $model->getCategory()->getId();
             $modelData['category_text'] = $model->getCategory()->getName();
@@ -387,26 +387,25 @@ class ManufacturersController extends FOSRestController
         }
 
         $form = $this->createForm( ModelType::class, $model, ['allow_extra_fields' => true] );
+        $data = $request->request->all();
+        $form->submit( $data );
 
-        $form->submit( $request->request->all() );
         if( $form->isValid() )
         {
-            $form->handleRequest( $request );
             $model = $form->getData();
             $model->setBrand( $brand );
             $brand->addModel( $model );
             $em->persist( $model );
             $em->persist( $brand );
             $em->flush();
-            $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
+            $response->setStatusCode( $mname === 'null' ? 201 : 204  );
             $response->headers->set( 'Location', $this->generateUrl(
-                            'app_admin_api_manufacturers_get_manufacturers_brands_model', ['mnname' => $mnname, 'bname' => $bname, 'mname' => $mname], true // absolute
+                            'app_admin_api_manufacturers_get_manufacturers_brands_model', ['mnname' => $mnname, 'bname' => $bname, 'mname' => $model->getId()], true // absolute
                     )
             );
+            die;
             return $response;
         }
-        $errors = $this->get( 'validator' )->validate( $model );
-        $response->setStatusCode( 400 );
 
         return $form;
     }

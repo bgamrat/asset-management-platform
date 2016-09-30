@@ -40,10 +40,12 @@ define([
     }
     function xhrError(err) {
         var errObj = JSON.parse(err.response.text);
-        if( typeof errObj.errors !== "undefined" && errObj.errors !== null ) {
-            errorDialog.set("content", errObj.errors.replace("\n", "<br>"));
-            if( typeof errObj.message !== "undefined" ) {
-                errorDialog.set("title", errObj.message);
+        if( typeof errObj.error !== "undefined" && errObj.error !== null ) {
+            if( typeof errObj.error.message !== "undefined" ) {
+                errorDialog.set("title", errObj.error.message);
+            }
+            if (typeof errObj.error.exception !== "undefined") {
+                errorDialog.set("content", errObj.error.exception[0].message.replace("\n", "<br>"));
             }
         } else {
             if( typeof errObj.message !== "undefined" ) {
@@ -92,7 +94,7 @@ define([
                     "</li>";
         }
         historyHtml += "</ul>";
-        if( history.length > 0 ) {
+        if( historyHtml.length > 0 ) {
             historyContentPane.set("content", historyHtml);
         } else {
             historyContentPane.set("content", "");
@@ -115,3 +117,4 @@ define([
         }
     };
 });
+//# sourceURL=common.js
