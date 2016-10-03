@@ -1,13 +1,9 @@
 define([
     "dojo/_base/declare",
-    "dojo/_base/lang",
     "dojo/dom",
-    "dojo/dom-attr",
-    "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/on",
     "dojo/request/xhr",
-    "dojo/dom-form",
     "dojo/aspect",
     "dojo/query",
     "dijit/registry",
@@ -15,7 +11,6 @@ define([
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
-    "dijit/form/Select",
     "dijit/form/SimpleTextarea",
     "dijit/form/Button",
     "dijit/Dialog",
@@ -29,15 +24,15 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/common/person",
-    "app/admin/brands",
-    "app/admin/models",
+    "app/admin/asset/brands",
+    "app/admin/asset/models",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
-        xhr, domForm, aspect, query,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button,
+], function (declare, dom, domConstruct, on,
+        xhr, aspect, query,
+        registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         person, brands, models, lib, libGrid, core) {
@@ -49,7 +44,8 @@ define([
         var manufacturerId = null;
 
         var manufacturerViewDialog = new Dialog({
-            title: core.view
+            title: core.view,
+            style: "width:800px"
         }, "manufacturer-view-dialog");
         manufacturerViewDialog.startup();
         manufacturerViewDialog.on("cancel", function (event) {

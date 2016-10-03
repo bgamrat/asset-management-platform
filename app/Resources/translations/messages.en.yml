@@ -17,6 +17,8 @@ asset:
         Extends
     location:
         Location
+    location_type:
+        Location Type
     manufacturer:
         Manufacturer
     manufacturers:

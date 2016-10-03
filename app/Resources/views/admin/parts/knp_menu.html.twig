@@ -1,2 +1,1 @@
-{% extends 'knp_menu.html.twig' %}
-{% block label %}{{ item.label|trans }}{% endblock %}
+var menuTreeStoreData = [{% for item in items%}{{item|json_encode()|raw}}{% if item.lastItem is not defined %},{%endif%}{% endfor %}];

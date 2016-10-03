@@ -1,12 +1,9 @@
 define([
-    "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
     "dojo/dom-construct",
     "dojo/on",
-    "dijit/registry",
-    "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/Textarea",
     "dijit/form/Select",
@@ -18,8 +15,8 @@ define([
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domConstruct, on,
-        registry, TextBox, ValidationTextBox, Textarea, Select,
+], function (lang, dom, domAttr, domConstruct, on,
+        ValidationTextBox, Textarea, Select,
         ObjectStore, Memory,
         emails, phoneNumbers, addresses,
         lib, core) {

@@ -116,12 +116,20 @@ services:
             - { name: knp_menu.menu_builder, method: createMainMenu, alias: main }
             - { name: knp_menu.menu_builder, method: createUserMenu, alias: user }
 
+    app.menu_renderer:
+        # The class implements Knp\Menu\Renderer\RendererInterface
+        class: AppBundle\Menu\JsonRenderer
+        arguments: [ "@twig",  "knp_menu.html.twig", "@knp_menu.matcher", {"translator": "@translator" }]
+        tags:
+            # The alias is what is used to retrieve the menu
+            - { name: knp_menu.renderer, alias: json }
+            
     app.menu_voter_request:
         class: AppBundle\Menu\RequestVoter
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
-
+            
     app.model.person:
         class: AppBundle\Model\Person
         arguments: ["@doctrine.orm.entity_manager","@app.util.phone_number","@app.util.email","@app.util.address"]

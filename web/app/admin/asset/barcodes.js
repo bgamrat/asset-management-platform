@@ -1,30 +1,21 @@
 define([
-    "dojo/_base/declare",
-    "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
     "dojo/dom-construct",
     "dojo/on",
     "dojo/query",
-    "dojo/html",
-    "dojo/data/ObjectStore",
-    "dojo/store/Memory",
-    "dijit/registry",
-    "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/RadioButton",
-    "dijit/form/Select",
     "dijit/form/Button",
-    "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/asset",
     "dojo/NodeList-dom",
     "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domConstruct, on,
-        query, html, ObjectStore, Memory,
-        registry, TextBox, ValidationTextBox, RadioButton, Select, Button,
-        lib, core, asset) {
+], function (dom, domAttr, domConstruct, on,
+        query,
+        ValidationTextBox, RadioButton,
+        core, asset) {
     //"use strict";
 
     var dataPrototype;

@@ -1,0 +1,50 @@
+{% block title %}{{ 'asset.location_type'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="location-types-wrapper">
+        <h1>{{ 'asset.location'|trans }} {{'common.admin'|trans }}</h1>
+        <div class="location-types">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
+                </div>
+            {% endfor %}
+            {% if not location_types_form.vars.valid %}
+                <div class="form-errors location_types">
+                    {% for location_type in location_types_form.types %}
+                        {% if not location_type.vars.valid %}
+                            {{form_errors(location_type.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form_start(location_types_form)}}
+            <div class="text-right">
+                <button id="location-types-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="form-row header">
+                <span class="name">{{ 'common.name'|trans }}</span>
+                <span class="comment">{{ 'common.comment'|trans }}</span>
+                <span class="active">{{ 'common.active'|trans }}</span>
+            </div>
+            {{form_row(location_types_form)}}
+            {% for location_type in location_types_form.types %}
+                {{form_row(location_type)}}
+            {% endfor %}
+
+            {% if location_types_form.types.vars.allow_add %}
+                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+            {% endif %}
+            {{form_end(location_types_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/location_type"], function (location_type) {
+            location_type.run();
+        });
+    </script>
+{% endblock %}

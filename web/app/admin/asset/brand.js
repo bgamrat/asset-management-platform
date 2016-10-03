@@ -1,13 +1,10 @@
 define([
     "dojo/_base/declare",
-    "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
-    "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/on",
     "dojo/request/xhr",
-    "dojo/dom-form",
     "dojo/aspect",
     "dojo/query",
     "dojo/data/ObjectStore",
@@ -31,14 +28,14 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/admin/model_relationships",
+    "app/admin/asset/model_relationships",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/asset",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
-        xhr, domForm, aspect, query, ObjectStore, Memory,
+], function (declare, dom, domAttr, domConstruct, on,
+        xhr, aspect, query, ObjectStore, Memory,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
@@ -54,7 +51,8 @@ define([
         var action = null;
 
         var modelViewDialog = new Dialog({
-            title: core.view
+            title: core.view,
+            style: "width:500px"
         }, "model-view-dialog");
         modelViewDialog.startup();
         modelViewDialog.on("cancel", function (event) {
@@ -75,6 +73,7 @@ define([
         "model-view-extends-tab"
                 );
         tabContainer.addChild(extendsContentPane);
+        
         var historyContentPane = new ContentPane({
             title: asset.history},
         "model-view-history-tab"
@@ -247,14 +246,13 @@ define([
                     }
                 }
             },
-            /*
             renderRow: function (object) {
                 var rowElement = this.inherited(arguments);
                 if( typeof object.deleted_at !== "undefined" && object.deleted_at !== null ) {
                     rowElement.className += ' deleted';
                 }
                 return rowElement;
-            },*/
+            },
             selectionMode: "none"
         }, 'model-grid');
         grid.startup();

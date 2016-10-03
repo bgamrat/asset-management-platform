@@ -1,12 +1,9 @@
 define([
     "dojo/_base/declare",
-    "dojo/_base/lang",
     "dojo/dom",
-    "dojo/dom-attr",
     "dojo/dom-construct",
     "dojo/on",
     "dojo/request/xhr",
-    "dojo/json",
     "dojo/aspect",
     "dojo/query",
     "dijit/registry",
@@ -14,7 +11,6 @@ define([
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
-    "dijit/form/Select",
     "dijit/form/Button",
     "dijit/Dialog",
     'dstore/Rest',
@@ -28,8 +24,8 @@ define([
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domConstruct, on, xhr, json, aspect, query,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, Button, Dialog,
+], function (declare, dom, domConstruct, on, xhr, aspect, query,
+        registry, Form, TextBox, ValidationTextBox, CheckBox, Button, Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         lib, libGrid, core) {
     //"use strict";

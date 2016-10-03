@@ -1,10 +1,9 @@
 define([
     "dijit/Dialog",
     "dijit/ConfirmDialog",
-    "dijit/form/Button",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (Dialog, ConfirmDialog, Button, core) {
+], function (Dialog, ConfirmDialog, core) {
     "use strict";
 
     var confirmDialog = new ConfirmDialog({

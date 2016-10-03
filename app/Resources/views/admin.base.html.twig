@@ -15,32 +15,37 @@
 </head>
 <body class="tundra">
     <div class="loading"></div>
-    <header class="header justify hide-on-load">
-        <a href="/"><img src="{{asset('images/logo.png')}}" width="75" height="auto" alt="{{ 'common.logo'|trans }}"></a>
+    <header class="header right hide-on-load">
         <div class="header-user">
             {{ app.user.username }}
             <a href="{{ path('fos_user_security_logout') }}">{{ 'common.log_out'|trans }}</a>
         </div>
     </header>
-    <nav id="admin-top-menu" class="hide-on-load">
-        {{ knp_menu_render('admin',{'template': 'admin/parts/knp_menu.html.twig'}) }}
-    </nav>
+    <div class="admin-menu-block">
+        <a href="/"><img src="{{asset('images/logo.png')}}" width="75" height="auto" alt="{{ 'common.logo'|trans }}"></a>
+        <nav id="admin-left-menu" class="admin-left-menu" class="hide-on-load">
+            
+        </nav>
+    </div>
     <div class="admin-body-wrapper hide-on-load">
-    {% block body %}
+        {% block body %}
         {% block admin_content %}{% endblock %}
     {% endblock %}
-    </div>
+</div>
 
 {% include 'admin/parts/page_footer_script.html.twig' %}
 
 {% block javascripts %}
     {% javascripts '@admin_js' %}
     <script src="{{ asset_url }}"></script>
-    {% endjavascripts %} 
+    {% endjavascripts %}
 {% endblock %}
-
 <script>
-    require(["app/admin/menu"], function (menu) {
+    require([
+        "app/admin/menu",
+        "dojo/domReady!"
+    ], function (menu) {
+        //"use strict";
         menu.run();
     });
 </script>

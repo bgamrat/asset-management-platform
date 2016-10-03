@@ -1,6 +1,15 @@
+.admin-menu-block {
+    width: 15%;
+    margin: 0;
+    padding: 5px;
+    display: inline-block;
+}
 .admin-body-wrapper {
     margin: 0 auto;
+    width: 80%;
     padding: 15px;
+    display: inline-block;
+    vertical-align: top;
 }
 .deleted {
     text-decoration: line-through;
@@ -68,6 +77,9 @@ fieldset .sub-form-legend {
 .form-errors ul {
     list-style-type: none;
     padding: 0 17px;
+}
+.header {
+    padding: 15px;
 }
 .addresses {
     width: 300px;

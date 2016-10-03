@@ -11,14 +11,11 @@
         // Register the packages we are going to be using. These same packages should be defined in the
         // build profile in `app.profile.js`.
         packages: [
-            // Using a string as a package is shorthand for `{ name: 'app', location: 'app' }`
-            //'lib',
-            //'nls',
             {"name": 'app', "location": '/app'},
-            'dgrid',
-            'dijit',
             'dojo',
+            'dijit',
             'dojox',
+            'dgrid',
             'dstore',
             'put-selector',
             'xstyle'
@@ -33,6 +30,7 @@
             "dojo-debug-messages": true
         }
     };
+    {{ knp_menu_render('admin',{'template': 'admin/parts/knp_menu.html.twig'}, 'json') }}
     //# sourceURL=admin-twig
 </script>
 {% javascripts
@@ -41,4 +39,3 @@
 %}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
-

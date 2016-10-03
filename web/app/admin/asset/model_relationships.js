@@ -1,24 +1,16 @@
 define([
-    "dojo/_base/declare",
-    "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
-    "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/on",
-    "dojo/request/xhr",
     "dojo/query",
     "dijit/form/FilteringSelect",
     'dojo/store/JsonRest',
-    "app/lib/common",
-    "dojo/i18n!app/nls/core",
-    "dojo/i18n!app/nls/asset",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
-        xhr, query,
+], function (dom, domAttr, domConstruct, on,
+        query,
         FilteringSelect,
-        JsonRest,
-        lib, core, asset) {
+        JsonRest) {
     "use strict";
 
     function RelationshipObj(relationship, dataPrototype, prototypeNode, modelFilteringSelect) {

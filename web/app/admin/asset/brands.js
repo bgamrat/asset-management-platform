@@ -1,24 +1,19 @@
 define([
-    "dojo/_base/declare",
-    "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
     "dojo/dom-construct",
     "dojo/on",
     "dojo/query",
-    "dijit/registry",
-    "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
-    "dijit/form/Button",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/NodeList-dom",
     "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domConstruct, on,
+], function (dom, domAttr, domConstruct, on,
         query,
-        registry, TextBox, ValidationTextBox, CheckBox, Button,
+        ValidationTextBox, CheckBox,
         lib, core) {
     //"use strict";
 

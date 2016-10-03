@@ -1,6 +1,4 @@
 define([
-    "dojo/_base/declare",
-    "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
     "dojo/dom-construct",
@@ -8,8 +6,6 @@ define([
     "dojo/query",
     "dojo/data/ObjectStore",
     "dojo/store/Memory",
-    "dijit/registry",
-    "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/Select",
     "dijit/form/Button",
@@ -18,9 +14,9 @@ define([
     "dojo/NodeList-dom",
     "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domConstruct, on,
+], function (dom, domAttr, domConstruct, on,
         query, ObjectStore, Memory,
-        registry, TextBox, ValidationTextBox, Select, Button,
+        ValidationTextBox, Select, Button,
         lib, core) {
     "use strict";
 

@@ -14,6 +14,7 @@ web/js
 web/vendor
 !web/vendor
 web/vendor/dojo-release-1.10.4-src
+web/vendor/dojo-release-1.11.2-src
 web/vendor/release
 !web/vendor/profiles
 !web/vendor/profiles/app.profile.js

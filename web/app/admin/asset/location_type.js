@@ -1,39 +1,30 @@
 define([
-    "dojo/_base/declare",
-    "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
     "dojo/dom-construct",
     "dojo/on",
     "dojo/query",
-    "dijit/registry",
-    "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
-    "dijit/form/Select",
-    "dojo/data/ObjectStore",
-    "dojo/store/Memory",
     "dijit/form/Button",
-    "app/lib/common",
+    "lib/common",
     "dojo/i18n!app/nls/core",
-    "dojo/i18n!app/nls/asset",
     "dojo/NodeList-dom",
     "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, domConstruct, on,
+], function (dom, domAttr, domConstruct, on,
         query,
-        registry, TextBox, ValidationTextBox, CheckBox, Select, ObjectStore, Memory, Button,
-        lib, core, asset) {
+        ValidationTextBox, CheckBox, Button,
+        lib, core) {
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var idInput = [], nameInput = [], commentInput = [], activeCheckBox = [];
-    var divIdInUse = null;
+    var nameInput = [], commentInput = [], activeCheckBox = [];
     var addOneMoreControl = null;
-    var divId = "asset_statuses_statuses";
+    var divId = "location_types_types";
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__status__/g, nameInput.length);
+        prototypeContent = dataPrototype.replace(/__type__/g, nameInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
@@ -46,7 +37,7 @@ define([
             trim: true,
             pattern: "[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}",
             required: true,
-            name: "asset_statuses[statuses][" + index + "][name]",
+            name: "location_types[types][" + index + "][name]",
             value: document.getElementById(base + "name").value
         }, base + "name");
         nameInput.push(dijit);
@@ -55,19 +46,19 @@ define([
             placeholder: core.comment,
             trim: true,
             required: false,
-            name: "asset_statuses[statuses][" + index + "][comment]",
+            name: "location_types[types][" + index + "][comment]",
             value: document.getElementById(base + "comment").value
         }, base + "comment");
         commentInput.push(dijit);
         dijit.startup();
         dijit = new CheckBox({'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
-            name: "asset_statuses[statuses][" + index + "][active]"}, base + "active");
+            name: "location_types[types][" + index + "][active]"}, base + "active");
         activeCheckBox.push(dijit);
         dijit.startup();
     }
 
     function run() {
-        var base, i, existingStatusRows;
+        var base, i, existingLocationRows;
 
         prototypeNode = dom.byId(divId);
 
@@ -76,18 +67,17 @@ define([
             return;
         }
 
-        existingStatusRows = query('.statuses .form-row.status');
-        existingStatusRows = existingStatusRows.length;
+        existingLocationRows = query('.location_types .form-row.type');
+        existingLocationRows = existingLocationRows.length;
 
-        for( i = 0; i < existingStatusRows; i++ ) {
+        for( i = 0; i < existingLocationRows; i++ ) {
             createDijits(false);
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__status__/g, nameInput.length);
-        //domConstruct.place(prototypeContent, "statuses_statuses", "last");
+        prototypeContent = dataPrototype.replace(/__type__/g, nameInput.length);
 
-        addOneMoreControl = query('.statuses .add-one-more-row');
+        addOneMoreControl = query('.location-types .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -97,7 +87,7 @@ define([
         var saveBtn = new Button({
             label: core.save,
             type: "submit"
-        }, 'statuses-save-btn');
+        }, 'location-types-save-btn');
         saveBtn.startup();
 
         lib.pageReady();

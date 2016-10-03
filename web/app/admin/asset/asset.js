@@ -7,7 +7,6 @@ define([
     "dojo/dom-construct",
     "dojo/on",
     "dojo/request/xhr",
-    "dojo/dom-form",
     "dojo/aspect",
     "dojo/query",
     "dojo/data/ObjectStore",
@@ -32,14 +31,14 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/admin/barcodes",
+    "app/admin/asset/barcodes",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/asset",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
-        xhr, domForm, aspect, query, ObjectStore, Memory,
+        xhr, aspect, query, ObjectStore, Memory,
         registry, Form, TextBox, ValidationTextBox, CheckBox, Select, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
@@ -53,7 +52,8 @@ define([
         var action = null;
 
         var assetViewDialog = new Dialog({
-            title: core.view
+            title: core.view,
+            style: "width:500px"
         }, "asset-view-dialog");
         assetViewDialog.startup();
         assetViewDialog.on("cancel", function (event) {
