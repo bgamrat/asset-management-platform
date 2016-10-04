@@ -20,6 +20,7 @@ define([
         // Create the Tree.
         var tree = new Tree({
             model: model,
+            persist: true,
             onClick: function (item) {
                 if( typeof item.uri !== "undefined" && item.uri !== null ) {
                     location.href = item.uri;

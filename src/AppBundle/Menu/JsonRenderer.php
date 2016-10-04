@@ -76,10 +76,6 @@ class JsonRenderer implements RendererInterface
         {
             $this->matcher->clear();
         }
-
-
-
-
         return $html;
     }
 

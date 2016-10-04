@@ -46,7 +46,7 @@ Class Log
             $locationNames = [];
             foreach( $locations as $l )
             {
-                $locationNames[$l->getId()] = $l->getName();
+                $locationNames[$l->getId()] = 'TODO';//$l->getName();
             }
             foreach( $this->history as $i => $h )
             {

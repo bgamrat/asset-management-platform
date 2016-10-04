@@ -16,6 +16,7 @@ define([
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
+    "dijit/form/RadioButton",
     "dijit/form/Select",
     "dijit/form/FilteringSelect",
     "dijit/form/SimpleTextarea",
@@ -39,7 +40,7 @@ define([
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
         xhr, aspect, query, ObjectStore, Memory,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, FilteringSelect, SimpleTextarea, Button,
+        registry, Form, TextBox, ValidationTextBox, CheckBox, RadioButton, Select, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
@@ -64,17 +65,24 @@ define([
             style: "height: 300px; width: 100%;"
         }, "asset-view-tabs");
 
+
         var barcodesContentPane = new ContentPane({
             title: asset.barcodes},
         "asset-view-barcodes-tab"
                 );
         tabContainer.addChild(barcodesContentPane);
+
+        var locationContentPane = new ContentPane({
+            title: asset.location},
+        "asset-view-location-tab"
+                );
+        tabContainer.addChild(locationContentPane);
+        
         var historyContentPane = new ContentPane({
             title: asset.history},
         "asset-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);
-
         tabContainer.startup();
 
         var newBtn = new Button({
@@ -83,7 +91,7 @@ define([
         newBtn.startup();
         newBtn.on("click", function (event) {
             modelFilteringSelect.set("value", "");
-            statusSelect.set("value","");
+            statusSelect.set("value", "");
             locationSelect.set("value", "");
             barcodes.setData(null);
             serialNumberInput.set("value", "");
@@ -138,6 +146,24 @@ define([
             return;
         }
 
+        var locationTypeRadioButton = new RadioButton({}, "name='asset[location_type]'");
+        locationTypeRadioButton.startup();
+        locationTypeRadioButton.on("click", function (event) {
+            locationStore.set("target", "/api/" + event.target.value + "/select");
+        });
+
+        var locationStore = new JsonRest({
+            target: '/api/location/select',
+            useRangeHeaders: false,
+            idProperty: 'id'});
+        var locationFilteringSelect = new FilteringSelect({
+            store: locationStore,
+            labelAttr: "name",
+            searchAttr: "name",
+            pageSize: 25
+        }, "asset_location");
+        locationFilteringSelect.startup();
+
         var data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         var statusStoreData = [], d;
@@ -155,31 +181,6 @@ define([
             required: true
         }, select);
         statusSelect.startup();
-
-        select = "asset_location";
-
-        if( dom.byId(select) === null ) {
-            lib.textError(select + " not found");
-            return;
-        }
-
-        var data = JSON.parse(domAttr.get(select, "data-options"));
-        // Convert the data to an array of objects
-        var locationStoreData = [], d;
-        for( d in data ) {
-            locationStoreData.push(data[d]);
-        }
-        var locationMemoryStore = new Memory({
-            idProperty: "value",
-            data: locationStoreData});
-        var store = new ObjectStore({objectStore: locationMemoryStore});
-
-        var locationSelect = new Select({
-            store: store,
-            placeholder: asset.location,
-            required: true
-        }, select);
-        locationSelect.startup();
 
         var commentInput = new SimpleTextarea({
             placeholder: core.comment,
@@ -204,7 +205,7 @@ define([
                     "model_text": modelFilteringSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
                     "status": parseInt(statusSelect.get("value")),
-                    "location_text": locationSelect.get("displayedValue"),
+                    "location_text": locationFilteringSelect.get("displayedValue"),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "location": parseInt(locationSelect.get("value")),
                     "barcode": barcodes.getActive(),
@@ -257,9 +258,6 @@ define([
                 status_text: {
                     label: core.status
                 },
-                location_text: {
-                    label: asset.location
-                },
                 comment: {
                     label: core.comment
                 },
@@ -310,7 +308,8 @@ define([
                     assetId = asset.id;
                     modelFilteringSelect.set('displayedValue', asset.model_text);
                     statusSelect.set("displayedValue", asset.status_text);
-                    locationSelect.set('displayedValue', asset.location_text);
+                    locationTypeRadioButton.set('value', asset.location_type);
+                    locationFilteringSelect.set('displayedValue', asset.location_text);
                     serialNumberInput.set('value', asset.serial_number);
                     commentInput.set('value', asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {

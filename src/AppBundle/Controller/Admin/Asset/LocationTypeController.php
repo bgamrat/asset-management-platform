@@ -29,7 +29,7 @@ class LocationTypeController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $em = $this->getDoctrine()->getManager();
-        $locations = [];
+        $location_types = [];
         $locationTypes['types'] = $em->getRepository( 'AppBundle:LocationType' )->findAll();
 
         $locationTypesForm = $this->createForm( LocationTypesType::class, $locationTypes, [ 'action' => $this->generateUrl( 'app_admin_asset_locationtype_save' )] );
@@ -41,7 +41,7 @@ class LocationTypeController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/location/save")
+     * @Route("/admin/asset/location-type/save")
      * @Method("POST")
      */
     public function saveAction( Request $request )
@@ -49,21 +49,21 @@ class LocationTypeController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
-        $locations = [];
-        $locations['locations'] = $em->getRepository( 'AppBundle:Location' )->findAll();
-        $form = $this->createForm( LocationsType::class, $locations, ['allow_extra_fields' => true] );
+        $locationTypes = [];
+        $locationTypes['types'] = $em->getRepository( 'AppBundle:LocationType' )->findAll();
+        $form = $this->createForm( LocationTypesType::class, $locationTypes, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )
         {
-            $locations = $form->getData();
-            foreach( $locations['locations'] as $location )
+            $locationTypes = $form->getData();
+            foreach( $locationTypes['types'] as $type )
             {
-                $em->persist( $location );
+                $em->persist( $type );
             }
             $em->flush();
             $this->addFlash(
                     'notice', 'common.success' );
-            $response = new RedirectResponse( $this->generateUrl( 'app_admin_asset_location_index', [], UrlGeneratorInterface::ABSOLUTE_URL ) );
+            $response = new RedirectResponse( $this->generateUrl( 'app_admin_asset_locationtype_index', [], UrlGeneratorInterface::ABSOLUTE_URL ) );
             $response->prepare( $request );
 
             return $response->send();
@@ -79,8 +79,8 @@ class LocationTypeController extends Controller
                     $errorMessages[] = $name . ' - ' . $item->getErrors( true );
                 }
             }
-            return $this->render( 'admin/asset/locations.html.twig', array(
-                        'locations_form' => $form->createView(),
+            return $this->render( 'admin/asset/location_types.html.twig', array(
+                        'location_types_form' => $form->createView(),
                         'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                     ) );
         }

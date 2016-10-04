@@ -51,6 +51,14 @@ class Asset
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected $status = null;
+     /**
+     * @var int
+     * @Gedmo\Versioned
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\ManyToOne(targetEntity="LocationType", inversedBy="assets")
+     * @ORM\JoinColumn(name="location_type_id", referencedColumnName="id")
+     */
+    protected $locationType = null;
     /**
      * @var int
      * @Gedmo\Versioned

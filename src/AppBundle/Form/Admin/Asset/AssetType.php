@@ -5,6 +5,7 @@ namespace AppBundle\Form\Admin\Asset;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,14 +49,17 @@ class AssetType extends AbstractType
                     },
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'location', EntityType::class, [
-                    'class' => 'AppBundle:Location',
+                ->add( 'location_type', EntityType::class, [
+                    'class' => 'AppBundle:LocationType',
                     'choice_label' => 'name',
                     'multiple' => false,
-                    'expanded' => false,
+                    'expanded' => true,
                     'required' => true,
-                    'label' => 'asset.location',
+                    'label' => 'asset.location_type',
                     'choice_translation_domain' => false
+                ] )
+                ->add( 'location', TextType::class, [
+                    'label' => 'asset.location'
                 ] )
                 ->add( 'barcodes', CollectionType::class, [
                     'label' => 'asset.barcode',

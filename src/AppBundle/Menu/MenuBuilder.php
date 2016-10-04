@@ -38,7 +38,9 @@ class MenuBuilder implements ContainerAwareInterface
         $menu['admin-assets']->addChild( 'vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index'] );
         $menu['admin-assets']->addChild( 'configuration', [ 'label' => 'common.configuration'] );
         $menu['admin-assets']['configuration']->addChild( 'categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index'] );
-        $menu['admin-assets']['configuration']->addChild( 'locations', ['label' => 'common.locations', 'route' => 'app_admin_asset_locationtype_index'] );
+        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) ) {
+            $menu['admin-assets']['configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
+        }
         $menu['admin-assets']['configuration']->addChild( 'statuses', ['label' => 'asset.statuses', 'route' => 'app_admin_asset_status_index'] );
         
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN_USER' ) )

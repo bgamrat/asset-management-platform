@@ -18,7 +18,7 @@ fieldset > div {
     margin: 5px;
     padding: 3px;
 }
-fieldset label {
+fieldset label, label {
     font-weight: bold;
     margin: 0 5px;
 }

@@ -9,7 +9,8 @@
 .manufacturer-name .dijitTextBox {
     width: 225px;
 }
-.brand .name, .brand .comment, .brand .active {
+.brand .name, .brand .comment, .brand .active,
+.location_type .name, .location_type .comment, .location_type .active {
     display: inline-block;
 }
 .form-row.brand:nth-child(2) .remove-form-row {
@@ -31,4 +32,11 @@
 #status-wrapper {
     margin: 0 auto;
     width: 500px;
+}
+#asset_location_type {
+    list-style-type: none;
+    padding: 0;
+}
+#asset_location_type li {
+
 }

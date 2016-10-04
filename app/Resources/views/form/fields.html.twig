@@ -146,7 +146,7 @@
 
 {% block _categories_categories_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('category',form) }}{% endblock %}
 
-{% block _location_types_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('location_type',form) }}{% endblock %}
+{% block _location_types_types_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('type',form) }}{% endblock %}
 
 {% block _manufacturer_person_entry_addresses_entry_row %}
     {{ block('_address_entry_row') }}

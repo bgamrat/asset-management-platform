@@ -67,7 +67,7 @@ define([
             return;
         }
 
-        existingLocationRows = query('.location_types .form-row.type');
+        existingLocationRows = query('.location-types .form-row.type');
         existingLocationRows = existingLocationRows.length;
 
         for( i = 0; i < existingLocationRows; i++ ) {

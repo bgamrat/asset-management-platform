@@ -19,6 +19,8 @@ asset:
         Location
     location_type:
         Location Type
+    location_types:
+        Location Types
     manufacturer:
         Manufacturer
     manufacturers:

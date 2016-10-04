@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Location
  *
  * @ORM\Table(name="location_type")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\LocationRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\LocationTypeRepository")
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  */

@@ -11,11 +11,11 @@ app_admin_asset_manufacturers:
     name_prefix:   app_admin_api_manufacturers_
     prefix: /api
 
-app_admin_asset_model:
+app_admin_asset_store:
     type:     rest
-    resource: AppBundle\Controller\Api\Admin\Asset\ModelsController
-    name_prefix:   app_admin_api_models_
-    prefix: /api
+    resource: AppBundle\Controller\Api\Admin\Asset\StoreController
+    name_prefix:   app_admin_api_store_
+    prefix: /api/store
 
 app_admin_asset_vendors:
     type:     rest

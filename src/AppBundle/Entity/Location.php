@@ -29,17 +29,16 @@ class Location
      */
     private $id;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="LocationType")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     * @ORM\OrderBy({"type" = "ASC"})
      */
-    private $name;
+    private $type;
     /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
+     * @ORM\Column(type="integer", name="location_id")
      */
-    private $comment;
+    private $locationId;
     /**
      * @ORM\OneToMany(targetEntity="Asset", mappedBy="location")
      */
@@ -71,27 +70,51 @@ class Location
     }
 
     /**
-     * Set name
+     * Set locationid
      *
-     * @param string $name
+     * @param int $location_id
      *
      * @return Location
      */
-    public function setName( $name )
+    public function setLocationId( $locationId )
     {
-        $this->name = $name;
+        $this->locationId = $locationId;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get locationId
      *
-     * @return string
+     * @return int
      */
-    public function getName()
+    public function getLocationId()
     {
-        return $this->name;
+        return $this->locationId;
+    }
+
+    /**
+     * Set type
+     *
+     * @param int $type
+     *
+     * @return Location
+     */
+    public function setType( $type )
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
