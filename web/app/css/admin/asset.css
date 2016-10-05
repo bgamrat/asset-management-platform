@@ -28,11 +28,6 @@
 .field-id {
     display: none;
 }
-#category-wrapper, 
-#status-wrapper {
-    margin: 0 auto;
-    width: 500px;
-}
 #asset_location_type {
     list-style-type: none;
     padding: 0;

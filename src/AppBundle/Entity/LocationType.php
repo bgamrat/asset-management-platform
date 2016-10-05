@@ -42,10 +42,14 @@ class LocationType
     private $name;
     /**
      * @var string
-     * 
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-\/]{2,32}$/",
+     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-/]{2,32}$",
+     *     message = "invalid.url {{ value }}",
+     *     match=true)
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $comment;
+    private $url;
     /**
      * @var boolean
      *
@@ -99,27 +103,27 @@ class LocationType
     }
 
     /**
-     * Set comment
+     * Set url
      *
-     * @param string $comment
+     * @param string $url
      *
      * @return Email
      */
-    public function setComment( $comment )
+    public function setUrl( $url )
     {
-        $this->comment = $comment;
+        $this->url = $url;
 
         return $this;
     }
 
     /**
-     * Get comment
+     * Get url
      *
      * @return string
      */
-    public function getComment()
+    public function getUrl()
     {
-        return $this->comment;
+        return $this->url;
     }
 
     public function setActive( $active )
@@ -137,7 +141,7 @@ class LocationType
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'comment' => $this->getComment(),
+            'url' => $this->getUrl(),
             'active' => $this->isActive()
         ];
     }

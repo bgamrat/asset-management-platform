@@ -19,6 +19,34 @@ class StoreController extends FOSRestController
     /**
      * @View()
      */
+    public function getManufacturersAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $name = $request->get( 'name' );
+        if( !empty( $name ) )
+        {
+            $name = '%' . str_replace( '*', '%', $name );
+
+            $em = $this->getDoctrine()->getManager();
+
+            $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "m.name"] )
+                    ->from( 'AppBundle:Manufacturer', 'm' )
+                    ->where( "m.name LIKE :manufacturer_name" )
+                    ->setParameter( 'manufacturer_name', $name );
+
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
     public function getModelsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
@@ -59,6 +87,62 @@ class StoreController extends FOSRestController
                 ->setParameter( 'brand_model', $brandModel );
 
         $data = $queryBuilder->getQuery()->getResult();
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
+    public function getVendorsAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $name = $request->get( 'name' );
+        if( !empty( $name ) )
+        {
+            $name = '%' . str_replace( '*', '%', $name );
+
+            $em = $this->getDoctrine()->getManager();
+
+            $queryBuilder = $em->createQueryBuilder()->select( ['v.id', "v.name"] )
+                    ->from( 'AppBundle:Vendor', 'v' )
+                    ->where( "v.name LIKE :vendor_name" )
+                    ->setParameter( 'vendor_name', $name );
+
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
+    public function getTrailersAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $name = $request->get( 'name' );
+        if( !empty( $name ) )
+        {
+            $name = '%' . str_replace( '*', '%', $name );
+
+            $em = $this->getDoctrine()->getManager();
+
+            $queryBuilder = $em->createQueryBuilder()->select( ['t.id', "t.name"] )
+                    ->from( 'AppBundle:Trailer', 't' )
+                    ->where( "t.name LIKE :trailer_name" )
+                    ->setParameter( 'trailer_name', $name );
+
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
         return $data;
     }
 

@@ -22,7 +22,7 @@ class LocationType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
-                ->add( 'comment', TextType::class )
+                ->add( 'url', TextType::class )
                 ->add( 'active', CheckboxType::class )
         ;
     }

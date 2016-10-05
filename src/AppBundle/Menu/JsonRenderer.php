@@ -65,6 +65,7 @@ class JsonRenderer implements RendererInterface
             if ($parentId !== $id) {
                 $itemData['parent'] =strtolower($parentId);
             }
+            $itemData['has_children'] = $item->hasChildren();
             $items[] = $itemData;
         }
         $lastItem = count( $items ) - 1;

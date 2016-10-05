@@ -43,18 +43,18 @@
                     {{form_row(asset_form.comment)}}
                 </fieldset>
                 <div id="asset-view-tabs">
+                    <div id="asset-view-location-tab">
+                        <div class="justify">
+                            {{form_row(asset_form.location_type)}}
+                            {{form_row(asset_form.location)}}
+                        </div>
+                    </div>
                     <div id="asset-view-barcodes-tab">
                         <div id="barcodes" class="barcodes">
                             {{form_row(asset_form.barcodes)}}
                             {% if asset_form.barcodes.vars.allow_add %}
                                 <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                             {% endif %}
-                        </div>
-                    </div>
-                    <div id="asset-view-location-tab">
-                        <div class="justify">
-                            {{form_row(asset_form.location_type)}}
-                            {{form_row(asset_form.location)}}
                         </div>
                     </div>
                     <div id="asset-view-history-tab">

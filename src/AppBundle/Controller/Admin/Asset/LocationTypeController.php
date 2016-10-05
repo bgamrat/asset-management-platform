@@ -26,7 +26,7 @@ class LocationTypeController extends Controller
      */
     public function indexAction( Request $request )
     {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
 
         $em = $this->getDoctrine()->getManager();
         $location_types = [];
@@ -46,7 +46,7 @@ class LocationTypeController extends Controller
      */
     public function saveAction( Request $request )
     {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $locationTypes = [];

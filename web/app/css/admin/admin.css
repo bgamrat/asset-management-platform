@@ -54,6 +54,7 @@ fieldset .sub-form-legend {
 .form-row.header {
     font-weight: 700;
 }
+.form-row.header .url,
 .form-row.header .name,
 .form-row.header .comment {
     width: 15em;

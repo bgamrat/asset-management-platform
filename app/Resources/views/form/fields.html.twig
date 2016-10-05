@@ -24,17 +24,6 @@
     </div>
 {%endspaceless%}{%endmacro%}
 
-{% block _barcodes_entry_row %}
-    {% spaceless %}
-        <div class="form-row barcode">
-            <span class="input">{{ form_widget(form.barcode) }}</span>
-            <span class="comment">{{ form_widget(form.comment) }}</span>
-            <span class="active">{{ form_widget(form.active) }}</span>
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="barcode-__barcode__"><i class="fa fa-remove"></i></span>
-        </div>
-    {% endspaceless %}
-{% endblock %}
-
 {% block choice_widget_expanded %}
     {% spaceless %}
         <ul {{ block('widget_container_attributes') }}>
@@ -98,6 +87,25 @@
     {% endspaceless %}
 {% endblock %}
 
+{% block _asset_barcodes_entry_row %}
+    {{ block('_barcodes_entry_row') }}
+{% endblock %}
+
+{% block _asset_statuses_statuses_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('status',form) }}{% endblock %}
+
+{% block _barcodes_entry_row %}
+    {% spaceless %}
+        <div class="form-row barcode">
+            <span class="input">{{ form_widget(form.barcode) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="barcode-__barcode__"><i class="fa fa-remove"></i></span>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
+{% block _categories_categories_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('category',form) }}{% endblock %}
+
 {% block _emails_entry_row %}
     {% spaceless %}
         <div class="form-row email">
@@ -109,44 +117,24 @@
     {% endspaceless %}
 {% endblock %}
 
-{% block _phone_numbers_entry_row %}
+{% block _location_types_types_entry_row %}
     {% spaceless %}
-        <div class="form-row phone-number">
-            <span class="type-select">{{ form_widget(form.type) }}</span>
-            <span class="input">{{ form_widget(form.phone_number) }}</span>
-            <span class="comment">{{ form_widget(form.comment) }}</span>
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__phone__"><i class="fa fa-remove"></i></span>
+        <div class="form-row type">
+            <span class="id">{{ form_widget(form.id) }}</span>
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="url">{{ form_widget(form.url) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
         </div>
     {% endspaceless %}
 {% endblock %}
+
+{% block _manufacturer_brands_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('brand',form) }}{% endblock %}
 
 {% block _manufacturer_person_entry_row %}
     <div class="form-row contacts">
         {% include 'common/person.html.twig' with {'legend': 'common.contact'} %}
     </div>
 {% endblock %}
-
-{% block _models_models_entry_row %}{% spaceless %}
-    <div class="form-row model">
-        <span class="category">{{ form_widget(form.category) }}</span>
-        <span class="name">{{ form_widget(form.name) }}</span>
-        <span class="comment">{{ form_widget(form.comment) }}</span>
-        <span class="active">{{ form_widget(form.active) }}</span>
-        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="model-__model__"><i class="fa fa-remove"></i></span>
-    </div>
-{% endspaceless %}{% endblock %}
-
-{% block _manufacturer_brands_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('brand',form) }}{% endblock %}
-
-{% block _asset_barcodes_entry_row %}
-    {{ block('_barcodes_entry_row') }}
-{% endblock %}
-
-{% block _asset_statuses_statuses_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('status',form) }}{% endblock %}
-
-{% block _categories_categories_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('category',form) }}{% endblock %}
-
-{% block _location_types_types_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('type',form) }}{% endblock %}
 
 {% block _manufacturer_person_entry_addresses_entry_row %}
     {{ block('_address_entry_row') }}
@@ -165,6 +153,27 @@
 {% block _model_requires_entry_row %}{% import _self as form_macros %}{{ form_macros.model_relationship_entry_row('requires',form) }}{% endblock %}
 {% block _model_required_by_entry_row %}{% import _self as form_macros %}{{ form_macros.model_relationship_entry_row('required_by',form) }}{% endblock %}
 
+{% block _models_models_entry_row %}{% spaceless %}
+    <div class="form-row model">
+        <span class="category">{{ form_widget(form.category) }}</span>
+        <span class="name">{{ form_widget(form.name) }}</span>
+        <span class="comment">{{ form_widget(form.comment) }}</span>
+        <span class="active">{{ form_widget(form.active) }}</span>
+        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="model-__model__"><i class="fa fa-remove"></i></span>
+    </div>
+{% endspaceless %}{% endblock %}
+
+{% block _phone_numbers_entry_row %}
+    {% spaceless %}
+        <div class="form-row phone-number">
+            <span class="type-select">{{ form_widget(form.type) }}</span>
+            <span class="input">{{ form_widget(form.phone_number) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__phone__"><i class="fa fa-remove"></i></span>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
 {% block _user_person_addresses_entry_row %}
     {{ block('_address_entry_row') }}
 {% endblock %}
@@ -175,4 +184,4 @@
 
 {% block _user_person_phone_numbers_entry_row %}
     {{ block('_phone_numbers_entry_row') }}
-                {% endblock %}
+{% endblock %}

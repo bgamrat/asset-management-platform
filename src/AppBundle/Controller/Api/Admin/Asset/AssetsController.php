@@ -47,7 +47,7 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['a.id', 'bc.barcode', 'bc.updated AS barcode_updated',
+        $columns = ['a.id', 'a.locationText AS location_text', 'bc.barcode', 'bc.updated AS barcode_updated',
             "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serialNumber AS serial_number',
             's.name AS status_text', 's.id AS status',
             'a.comment', 'a.active'];
@@ -117,7 +117,7 @@ class AssetsController extends FOSRestController
                 'model_text' => $brand->getName() . ' ' . $model->getName(),
                 'model' => $model->getId(),
                 'serial_number' => $asset->getSerialNumber(),
-                //'location_text' => $location->getName(),
+                'location_text' => $asset->getLocationText(),
                 'location_type' => $location->getType(),
                 'location' => $location->getId(),
                 'status_text' => $status->getName(),

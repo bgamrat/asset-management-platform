@@ -3,7 +3,7 @@
 
 {% block admin_content %}
     <div id="location-types-wrapper">
-        <h1>{{ 'asset.location'|trans }} {{'common.admin'|trans }}</h1>
+        <h1>{{ 'asset.asset'|trans }} {{ 'asset.location_type'|trans }} {{'common.admin'|trans }}</h1>
         <div class="location-types">
             {% for flash_message in app.session.flashBag.get('notice') %}
                 <div class="flash-notice">
@@ -15,6 +15,7 @@
                     {% for location_type in location_types_form.types %}
                         {% if not location_type.vars.valid %}
                             {{form_errors(location_type.name)}}
+                            {{form_errors(location_type.url)}}
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -25,7 +26,7 @@
             </div>
             <div class="form-row header">
                 <span class="name">{{ 'common.name'|trans }}</span>
-                <span class="comment">{{ 'common.comment'|trans }}</span>
+                <span class="url">{{ 'common.url'|trans }}</span>
                 <span class="active">{{ 'common.active'|trans }}</span>
             </div>
             {{form_row(location_types_form)}}

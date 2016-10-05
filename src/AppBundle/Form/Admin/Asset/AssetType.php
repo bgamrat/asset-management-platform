@@ -52,11 +52,22 @@ class AssetType extends AbstractType
                 ->add( 'location_type', EntityType::class, [
                     'class' => 'AppBundle:LocationType',
                     'choice_label' => 'name',
+                    'choice_attr' => function($val, $key, $index)
+                    {
+                        if( $val->getUrl() !== '' )
+                        {
+
+                            return ['data-url' => $val->getUrl()];
+                        }
+                    },
                     'multiple' => false,
                     'expanded' => true,
                     'required' => true,
                     'label' => 'asset.location_type',
                     'choice_translation_domain' => false
+                ] )
+                ->add( 'location_text', HiddenType::class, [
+                    'property_path' => 'locationText'
                 ] )
                 ->add( 'location', TextType::class, [
                     'label' => 'asset.location'
@@ -77,24 +88,25 @@ class AssetType extends AbstractType
                     'label' => false
                 ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
-        ;
-        $builder->get( 'model' )
-                ->addModelTransformer( new ModelToIdTransformer( $this->em ) );
-    }
+                ;
+                $builder->get( 'model' )
+                        ->addModelTransformer( new ModelToIdTransformer( $this->em ) );
+            }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions( OptionsResolver $resolver )
-    {
-        $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Asset'
-        ) );
-    }
+            /**
+             * @param OptionsResolver $resolver
+             */
+            public function configureOptions( OptionsResolver $resolver )
+            {
+                $resolver->setDefaults( array(
+                    'data_class' => 'AppBundle\Entity\Asset'
+                ) );
+            }
 
-    public function getName()
-    {
-        return 'asset';
-    }
+            public function getName()
+            {
+                return 'asset';
+            }
 
-}
+        }
+        

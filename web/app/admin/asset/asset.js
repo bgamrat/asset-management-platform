@@ -66,18 +66,18 @@ define([
         }, "asset-view-tabs");
 
 
+        var locationContentPane = new ContentPane({
+            title: asset.location},
+        "asset-view-location-tab"
+                );
+        tabContainer.addChild(locationContentPane);
+
         var barcodesContentPane = new ContentPane({
             title: asset.barcodes},
         "asset-view-barcodes-tab"
                 );
         tabContainer.addChild(barcodesContentPane);
 
-        var locationContentPane = new ContentPane({
-            title: asset.location},
-        "asset-view-location-tab"
-                );
-        tabContainer.addChild(locationContentPane);
-        
         var historyContentPane = new ContentPane({
             title: asset.history},
         "asset-view-history-tab"
@@ -118,7 +118,7 @@ define([
         });
 
         var modelStore = new JsonRest({
-            target: '/api/model/select',
+            target: '/api/store/models',
             useRangeHeaders: false,
             idProperty: 'id'});
         var modelFilteringSelect = new FilteringSelect({
@@ -148,12 +148,18 @@ define([
 
         var locationTypeRadioButton = new RadioButton({}, "name='asset[location_type]'");
         locationTypeRadioButton.startup();
-        locationTypeRadioButton.on("click", function (event) {
-            locationStore.set("target", "/api/" + event.target.value + "/select");
+        on(dom.byId('asset_location_type'), "click", function (event) {
+            var target = event.target;
+            if( target.tagName === 'LABEL' ) {
+                target = dom.byId(domAttr.get(target, "for"));
+            }
+            var dataUrl = domAttr.get(target, "data-url");
+            if( dataUrl !== null ) {
+                locationStore.target = dataUrl;
+            }
         });
 
         var locationStore = new JsonRest({
-            target: '/api/location/select',
             useRangeHeaders: false,
             idProperty: 'id'});
         var locationFilteringSelect = new FilteringSelect({
@@ -205,9 +211,9 @@ define([
                     "model_text": modelFilteringSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
                     "status": parseInt(statusSelect.get("value")),
-                    "location_text": locationFilteringSelect.get("displayedValue"),
                     "model": parseInt(modelFilteringSelect.get("value")),
-                    "location": parseInt(locationSelect.get("value")),
+                    "location": parseInt(locationFilteringSelect.get("value")),
+                    "location_text": locationFilteringSelect.get("displayedValue"),
                     "barcode": barcodes.getActive(),
                     "barcodes": barcodes.getData(),
                     "serial_number": serialNumberInput.get("value"),
@@ -257,6 +263,9 @@ define([
                 },
                 status_text: {
                     label: core.status
+                },
+                location_text: {
+                    label: asset.location
                 },
                 comment: {
                     label: core.comment

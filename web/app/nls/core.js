@@ -42,6 +42,7 @@ define({
         "status": "Status",
         "street": "Street",
         "type": "Type",
+        "url": "URL",
         "user": "User",
         "username": "Username",
         "view": "View",

@@ -51,7 +51,7 @@ class Asset
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected $status = null;
-     /**
+    /**
      * @var int
      * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
@@ -67,6 +67,12 @@ class Asset
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     protected $location = null;
+    /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ORM\Column(name="location_text", type="string", length=64, nullable=true, unique=false)
+     */
+    protected $locationText = null;
     /**
      * @var ArrayCollection $barcodes
      * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
@@ -204,6 +210,7 @@ class Asset
     {
         return $this->status;
     }
+
     /**
      * Set location
      *
@@ -226,6 +233,30 @@ class Asset
     public function getLocation()
     {
         return $this->location;
+    }
+
+    /**
+     * Set LocationText
+     *
+     * @param string $locationText
+     *
+     * @return Asset
+     */
+    public function setLocationText( $locationText )
+    {
+        $this->locationText = $locationText;
+
+        return $this;
+    }
+
+    /**
+     * Get LocationText
+     *
+     * @return string
+     */
+    public function getLocationText()
+    {
+        return $this->locationText;
     }
 
     public function getBarcodes()

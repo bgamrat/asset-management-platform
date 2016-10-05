@@ -19,7 +19,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var nameInput = [], commentInput = [], activeCheckBox = [];
+    var nameInput = [], urlInput = [], activeCheckBox = [];
     var addOneMoreControl = null;
     var divId = "location_types_types";
 
@@ -43,13 +43,13 @@ define([
         nameInput.push(dijit);
         dijit.startup();
         dijit = new ValidationTextBox({
-            placeholder: core.comment,
+            placeholder: core.url,
             trim: true,
             required: false,
-            name: "location_types[types][" + index + "][comment]",
-            value: document.getElementById(base + "comment").value
-        }, base + "comment");
-        commentInput.push(dijit);
+            name: "location_types[types][" + index + "][url]",
+            value: document.getElementById(base + "url").value
+        }, base + "url");
+        urlInput.push(dijit);
         dijit.startup();
         dijit = new CheckBox({'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
             name: "location_types[types][" + index + "][active]"}, base + "active");

@@ -18,9 +18,9 @@ asset:
     location:
         Location
     location_type:
-        Location Type
+        "Location Type"
     location_types:
-        Location Types
+        "Location Types"
     manufacturer:
         Manufacturer
     manufacturers:
@@ -32,7 +32,7 @@ asset:
     requirements:
         Requirements
     required_by:
-            Required By
+        Required By
     requires:
         Requires
     status:
@@ -139,6 +139,8 @@ common:
         Success
     type:
         Type
+    url:
+        URL
     user:
         User
     users:
