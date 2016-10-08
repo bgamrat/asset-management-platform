@@ -8,6 +8,7 @@ define({
         "history": "History",
         "location": "Location",
         "model": "Model",
+        "model_relationships": "Model Relationships",
         "no_barcode": "No barcode",
         "requires": "Requires",
         "serial_number": "Serial Number",

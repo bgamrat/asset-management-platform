@@ -31,14 +31,14 @@ class Location
     /**
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="LocationType")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="type", referencedColumnName="id")
      * @ORM\OrderBy({"type" = "ASC"})
      */
     private $type;
     /**
-     * @ORM\Column(type="integer", name="location_id")
+     * @ORM\Column(type="integer", name="entity_id")
      */
-    private $locationId;
+    private $entity;
     /**
      * @ORM\OneToMany(targetEntity="Asset", mappedBy="location")
      */
@@ -55,10 +55,22 @@ class Location
      * @Gedmo\Versioned
      */
     private $deletedAt;
+
     public function __construct()
     {
         $this->assets = new ArrayCollection();
     }
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+
     /**
      * Get id
      *
@@ -70,27 +82,27 @@ class Location
     }
 
     /**
-     * Set locationid
+     * Set entity
      *
-     * @param int $location_id
+     * @param int $entity_id
      *
      * @return Location
      */
-    public function setLocationId( $locationId )
+    public function setEntity( $entity )
     {
-        $this->locationId = $locationId;
+        $this->entity = $entity;
 
         return $this;
     }
 
     /**
-     * Get locationId
+     * Get entity
      *
      * @return int
      */
-    public function getLocationId()
+    public function getEntity()
     {
-        return $this->locationId;
+        return $this->entity;
     }
 
     /**
@@ -118,29 +130,6 @@ class Location
     }
 
     /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-    /**
      * Get assets
      *
      * @return ArrayCollection
@@ -149,6 +138,27 @@ class Location
     {
         return $this->assets->toArray();
     }
+
+    public function setAssets( $assets )
+    {
+        foreach( $assets as $a )
+        {
+            $this->addAssets( $a );
+            $a->setLocation($this);
+        }
+        return $this;
+    }
+
+ 
+    public function addAsset( Model $asset )
+    {
+        if( !$this->extends->contains( $asset ) )
+        {
+            $this->extends->add( $asset );
+            $a->setLocation($this);
+        }
+    }
+    
     public function setActive( $active )
     {
         $this->active = $active;
@@ -173,8 +183,9 @@ class Location
     public function toArray()
     {
         return [
-            'name' => $this->getName(),
-            'comment' => $this->getComment(),
+            'id' => $this->getId(),
+            'type' => $this->getType(),
+            'entity' => $this->getEntity(),
             'assets' => $this->getAssets(),
             'active' => $this->isActive()
         ];

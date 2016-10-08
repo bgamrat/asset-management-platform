@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Api\Admin\Asset;
 
 use AppBundle\Util\DStore;
 use AppBundle\Entity\Asset;
+use AppBundle\Entity\Location;
 use AppBundle\Form\Admin\Asset\AssetType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,7 +60,7 @@ class AssetsController extends FOSRestController
                 ->from( 'AppBundle:Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
-                ->leftJoin( 'a.barcodes', 'bc', 'WITH', 'bc.active = true')
+                ->leftJoin( 'a.barcodes', 'bc', 'WITH', 'bc.active = true' )
                 ->leftJoin( 'a.status', 's' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
@@ -103,29 +104,48 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Asset' );
-        $asset = $repository->find( $id );
+        $asset = $this->getDoctrine()
+                        ->getRepository( 'AppBundle:Asset' )->find( $id );
         if( $asset !== null )
         {
             $model = $asset->getModel();
             $brand = $model->getBrand();
             $location = $asset->getLocation();
+            if( $location === null )
+            {
+                $location = new Location();
+                $locationId = $locationType = null;
+            }
+            else
+            {
+                $locationId = $location->getId();
+                $locationTypeId = $location->getType();
+                $locationType = $this->getDoctrine()
+                                ->getRepository( 'AppBundle:LocationType' )->find( $locationTypeId );
+                ;
+            }
+            $relationships = [
+                'extends' => $model->getExtends(false),
+                'requires' => $model->getRequires(false),
+                'extendedBy' => $model->getExtendedBy(false),
+                'requiredBy' => $model->getRequiredBy(false)
+            ];
             $status = $asset->getStatus();
             $data = [
                 'id' => $id,
                 'model_text' => $brand->getName() . ' ' . $model->getName(),
                 'model' => $model->getId(),
+                'model_relationships' => $relationships,
                 'serial_number' => $asset->getSerialNumber(),
                 'location_text' => $asset->getLocationText(),
-                'location_type' => $location->getType(),
-                'location' => $location->getId(),
+                'location' => [ 'id' => $locationId, 'entity' => $location->getEntity(), 'type' => $locationType],
                 'status_text' => $status->getName(),
                 'status' => $status->getId(),
                 'barcodes' => $asset->getBarcodes(),
                 'comment' => $asset->getComment(),
                 'active' => $asset->isActive()
             ];
+
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle:AssetLog', $id );
             $data['history'] = $logUtil->translateIdsToText();
@@ -153,7 +173,6 @@ class AssetsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
-        $formProcessor = $this->get( 'app.util.form' );
         $data = $request->request->all();
         if( $id === "null" )
         {
@@ -163,11 +182,14 @@ class AssetsController extends FOSRestController
         {
             $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
         }
+        if( $asset->getLocation() === null )
+        {
+            $asset->setLocation( new Location() );
+        }
         $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
         try
         {
-            $formProcessor->validateFormData( $form, $data );
-            $form->handleRequest( $request );
+            $form->submit( $data );
             if( $form->isValid() )
             {
                 $asset = $form->getData();
@@ -178,6 +200,10 @@ class AssetsController extends FOSRestController
                                 'app_admin_api_assets_get_asset', array('id' => $asset->getId()), true // absolute
                         )
                 );
+            }
+            else
+            {
+                return $form;
             }
         }
         catch( Exception $e )

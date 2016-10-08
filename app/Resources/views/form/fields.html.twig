@@ -53,7 +53,7 @@
                                                           {%- endif -%}
                                                           {%- endif -%}
                                                           {%- set options = choices -%}
-                                                          data-options="{{options|json_encode()}}" data-selected="{% if required and value is empty %}{else}-1{% endif %}">
+                                                          data-options="{{options|json_encode()}}" data-selected="{% if required and value is empty %}-1{%else%}{{value}}{% endif %}">
 </select>
 {%- endblock choice_widget_collapsed -%}
 
@@ -122,6 +122,7 @@
         <div class="form-row type">
             <span class="id">{{ form_widget(form.id) }}</span>
             <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="entity">{{ form_widget(form.entity) }}</span>
             <span class="url">{{ form_widget(form.url) }}</span>
             <span class="active">{{ form_widget(form.active) }}</span>
         </div>

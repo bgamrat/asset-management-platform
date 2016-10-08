@@ -2,7 +2,7 @@
 
 namespace AppBundle\Form\Admin\Asset;
 
-use AppBundle\Form\Admin\Asset\LocationType;
+use AppBundle\Form\Admin\Asset\LocationTypeType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -20,7 +20,7 @@ class LocationTypesType extends AbstractType
     {
         $builder
                 ->add( 'types', CollectionType::class, [
-                    'entry_type' => LocationType::class,
+                    'entry_type' => LocationTypeType::class,
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,

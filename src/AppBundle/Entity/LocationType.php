@@ -24,7 +24,7 @@ class LocationType
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Model", mappedBy="id")
+     * @ORM\OneToMany(targetEntity="Location", mappedBy="id")
      */
     private $id;
     /**
@@ -42,11 +42,14 @@ class LocationType
     private $name;
     /**
      * @var string
-     * @Assert\Regex(
-     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-\/]{2,32}$/",
-     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-/]{2,32}$",
-     *     message = "invalid.url {{ value }}",
-     *     match=true)
+     *
+     * @Assert\Choice({"shop", "manufacturer", "vendor", "venue"})
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $entity;
+    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $url;
@@ -103,6 +106,30 @@ class LocationType
     }
 
     /**
+     * Set entity
+     *
+     * @param string $entity
+     *
+     * @return Email
+     */
+    public function setEntity( $entity )
+    {
+        $this->entity = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Get entity
+     *
+     * @return string
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+    /**
      * Set url
      *
      * @param string $url
@@ -142,6 +169,7 @@ class LocationType
             'id' => $this->getId(),
             'name' => $this->getName(),
             'url' => $this->getUrl(),
+            'entity' => $this->getEntity(),
             'active' => $this->isActive()
         ];
     }

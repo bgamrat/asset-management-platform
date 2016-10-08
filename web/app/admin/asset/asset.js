@@ -78,6 +78,12 @@ define([
                 );
         tabContainer.addChild(barcodesContentPane);
 
+        var modelRelationshipsContentPane = new ContentPane({
+            title: asset.model_relationships},
+        "asset-view-model-relationships-tab"
+                );
+        tabContainer.addChild(modelRelationshipsContentPane);
+
         var historyContentPane = new ContentPane({
             title: asset.history},
         "asset-view-history-tab"
@@ -146,16 +152,27 @@ define([
             return;
         }
 
-        var locationTypeRadioButton = new RadioButton({}, "name='asset[location_type]'");
-        locationTypeRadioButton.startup();
-        on(dom.byId('asset_location_type'), "click", function (event) {
+        var locationTypeRadioButton = [];
+        query('[name="asset[location][ctype]"]').forEach(function (node) {
+            var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
+            dijit.set("data-url", domAttr.get(node, "data-url"));
+            dijit.set("data-location-type-id", node.value);
+            dijit.startup();
+            locationTypeRadioButton.push(dijit);
+        });
+
+        on(dom.byId('asset_location_ctype'), "click", function (event) {
             var target = event.target;
             if( target.tagName === 'LABEL' ) {
                 target = dom.byId(domAttr.get(target, "for"));
             }
             var dataUrl = domAttr.get(target, "data-url");
-            if( dataUrl !== null ) {
+            if( dataUrl !== null && dataUrl !== "" ) {
                 locationStore.target = dataUrl;
+                locationFilteringSelect.set("store", locationStore);
+                locationFilteringSelect.set("disabled", false);
+            } else {
+                locationFilteringSelect.set("disabled", true);
             }
         });
 
@@ -163,11 +180,12 @@ define([
             useRangeHeaders: false,
             idProperty: 'id'});
         var locationFilteringSelect = new FilteringSelect({
-            store: locationStore,
+            store: null,
             labelAttr: "name",
             searchAttr: "name",
-            pageSize: 25
-        }, "asset_location");
+            pageSize: 25,
+            disabled: true
+        }, "asset_location_entity");
         locationFilteringSelect.startup();
 
         var data = JSON.parse(domAttr.get(select, "data-options"));
@@ -203,16 +221,22 @@ define([
         }, 'asset-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeId, beforeIdFilter, filter;
+            var beforeModelTextFilter, filter, data, locationId, locationData;
             grid.clearSelection();
             if( assetForm.validate() ) {
-                var data = {
+                locationId = parseInt(dom.byId("asset_location_id").value);
+                locationData = {
+                    "id": isNaN(locationId) ? null : locationId,
+                    "type": parseInt(getLocationType()),
+                    "entity": parseInt(locationFilteringSelect.get("value"))
+                };
+                data = {
                     "id": assetId,
                     "model_text": modelFilteringSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
                     "status": parseInt(statusSelect.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
-                    "location": parseInt(locationFilteringSelect.get("value")),
+                    "location": locationData,
                     "location_text": locationFilteringSelect.get("displayedValue"),
                     "barcode": barcodes.getActive(),
                     "barcodes": barcodes.getData(),
@@ -313,12 +337,28 @@ define([
                 grid.select(row);
                 grid.collection.get(id).then(function (asset) {
                     var titleBarcode;
+                    if( typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined" ) {
+                        titleBarcode = asset.barcodes[0].barcode;
+                    } else {
+                        titleBarcode = asset.no_barcode;
+                    }
+                    assetViewDialog.set('title', core.view + " " + titleBarcode);
+                    assetViewDialog.show();
                     action = "view";
                     assetId = asset.id;
                     modelFilteringSelect.set('displayedValue', asset.model_text);
                     statusSelect.set("displayedValue", asset.status_text);
-                    locationTypeRadioButton.set('value', asset.location_type);
-                    locationFilteringSelect.set('displayedValue', asset.location_text);
+                    dom.byId("asset_location_id").value = asset.location.id;
+                    setLocationType(asset.location.type.id);
+                    if( asset.location.type.url !== null ) {
+                        locationStore.target = asset.location.type.url;
+                        locationFilteringSelect.set("store", locationStore);
+                        locationFilteringSelect.set("disabled", false);
+                        locationFilteringSelect.set('displayedValue', asset.location_text);
+                    } else {
+                        locationFilteringSelect.set('displayedValue', '');
+                        locationFilteringSelect.set("disabled", true);
+                    }
                     serialNumberInput.set('value', asset.serial_number);
                     commentInput.set('value', asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {
@@ -328,13 +368,6 @@ define([
                     }
                     activeCheckBox.set('checked', asset.active);
                     lib.showHistory(historyContentPane, asset.history);
-                    if( typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined" ) {
-                        titleBarcode = asset.barcodes[0].barcode;
-                    } else {
-                        titleBarcode = asset.no_barcode;
-                    }
-                    assetViewDialog.set('title', core.view + " " + titleBarcode);
-                    assetViewDialog.show();
                 }, lib.xhrError);
             }
         });
@@ -389,6 +422,28 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
+
+        function getLocationType() {
+            var i, locationTypeSet = false;
+            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
+                if( locationTypeRadioButton[i].get("checked") === true ) {
+                    locationTypeSet = true;
+                    break;
+                }
+            }
+            return locationTypeSet ? locationTypeRadioButton[i].get("value") : null;
+        }
+
+        function setLocationType(locationType) {
+            var i;
+            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
+                if( parseInt(locationTypeRadioButton[i].get("data-location-type-id")) === locationType ) {
+                    locationTypeRadioButton[i].set("checked", true);
+                    break;
+                }
+            }
+        }
+
         lib.pageReady();
         barcodes.run('asset');
     }

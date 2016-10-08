@@ -154,11 +154,6 @@ define([
         }, "model_comment");
         commentInput.startup();
 
-        var modelStore = new JsonRest({
-            target: '/api/model/select',
-            useRangeHeaders: false,
-            idProperty: 'id'});
-
         var modelForm = new Form({}, '[name="model"]');
         modelForm.startup();
 

@@ -68,7 +68,7 @@ define([
     function run() {
         var r, addOneMoreControl = null;
         modelStore = new JsonRest({
-            target: '/api/models',
+            target: '/api/store/models',
             useRangeHeaders: false,
             idProperty: 'id'});
         var prototypeNode, dataPrototype;

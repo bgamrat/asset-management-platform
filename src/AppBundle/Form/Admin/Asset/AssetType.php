@@ -13,6 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
+use AppBundle\Form\Admin\Asset\DataTransformer\LocationToIdTransformer;
+use AppBundle\Form\Admin\Asset\LocationType;
 
 class AssetType extends AbstractType
 {
@@ -49,33 +51,14 @@ class AssetType extends AbstractType
                     },
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'location_type', EntityType::class, [
-                    'class' => 'AppBundle:LocationType',
-                    'choice_label' => 'name',
-                    'choice_attr' => function($val, $key, $index)
-                    {
-                        if( $val->getUrl() !== '' )
-                        {
-
-                            return ['data-url' => $val->getUrl()];
-                        }
-                    },
-                    'multiple' => false,
-                    'expanded' => true,
-                    'required' => true,
-                    'label' => 'asset.location_type',
-                    'choice_translation_domain' => false
-                ] )
+                ->add( 'location', LocationType::class )
                 ->add( 'location_text', HiddenType::class, [
                     'property_path' => 'locationText'
-                ] )
-                ->add( 'location', TextType::class, [
-                    'label' => 'asset.location'
                 ] )
                 ->add( 'barcodes', CollectionType::class, [
                     'label' => 'asset.barcode',
                     'entry_type' => BarcodeType::class,
-                    'by_reference' => true,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,

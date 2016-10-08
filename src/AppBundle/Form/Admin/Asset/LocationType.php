@@ -3,15 +3,26 @@
 namespace AppBundle\Form\Admin\Asset;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Form\Admin\Asset\DataTransformer\LocationTypeToIdTransformer;
+use Doctrine\ORM\EntityManager;
 
 class LocationType extends AbstractType
 {
+
+    private $em;
+
+    public function __construct( EntityManager $em )
+    {
+        $this->em = $em;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -21,9 +32,26 @@ class LocationType extends AbstractType
     {
         $builder
                 ->add( 'id', HiddenType::class )
-                ->add( 'name', TextType::class )
-                ->add( 'url', TextType::class )
-                ->add( 'active', CheckboxType::class )
+                ->add( 'ctype', EntityType::class, [
+                    'class' => 'AppBundle:LocationType',
+                    'choice_label' => 'name',
+                    'choice_attr' => function($val, $key, $index)
+                    {
+                        if( $val->getUrl() !== '' )
+                        {
+                            return ['data-url' => $val->getUrl()];
+                        }
+                    },
+                    'multiple' => false,
+                    'expanded' => true,
+                    'required' => true,
+                    'label' => 'asset.location_type',
+                    'property_path' => 'type',
+                    'choice_translation_domain' => false,
+                    'mapped' => false
+                ] )
+                ->add( 'type', HiddenType::class )
+                ->add( 'entity', IntegerType::class )
         ;
     }
 
@@ -33,13 +61,13 @@ class LocationType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'AppBundle\Entity\LocationType'
+            'data_class' => 'AppBundle\Entity\Location'
         ] );
     }
 
     public function getName()
     {
-        return 'location_type';
+        return 'location';
     }
 
 }

@@ -14,7 +14,7 @@ define([
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on,
         query,
-        ValidationTextBox, RadioButton,
+        ValidationTextBox, RadioButton, Button,
         core, asset) {
     //"use strict";
 

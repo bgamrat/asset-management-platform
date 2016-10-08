@@ -31,7 +31,6 @@ class LocationTypeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $location_types = [];
         $locationTypes['types'] = $em->getRepository( 'AppBundle:LocationType' )->findAll();
-
         $locationTypesForm = $this->createForm( LocationTypesType::class, $locationTypes, [ 'action' => $this->generateUrl( 'app_admin_asset_locationtype_save' )] );
 
         return $this->render( 'admin/asset/location_types.html.twig', array(

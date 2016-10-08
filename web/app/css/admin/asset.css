@@ -28,10 +28,7 @@
 .field-id {
     display: none;
 }
-#asset_location_type {
+#asset_location_ctype {
     list-style-type: none;
     padding: 0;
-}
-#asset_location_type li {
-
 }

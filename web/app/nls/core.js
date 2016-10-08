@@ -14,6 +14,7 @@ define({
         "disabled": "Disabled",
         "email": "Email",
         "enabled": "Enabled",
+        "entity": "Entity",
         "error": "Error",
         "filter": "Filter",
         "firstname": "First name",
