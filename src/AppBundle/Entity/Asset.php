@@ -42,7 +42,7 @@ class Asset
      * @Gedmo\Versioned
      * @ORM\Column(name="serial_number", type="string", length=64, nullable=true, unique=false)
      */
-    private $serialNumber;
+    private $serial_number;
     /**
      * @var int
      * @Gedmo\Versioned
@@ -64,7 +64,7 @@ class Asset
      * @Gedmo\Versioned
      * @ORM\Column(name="location_text", type="string", length=64, nullable=true, unique=false)
      */
-    protected $locationText = null;
+    protected $location_text = null;
     /**
      * @var ArrayCollection $barcodes
      * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
@@ -156,27 +156,27 @@ class Asset
     }
 
     /**
-     * Set serialNumber
+     * Set serial_number
      *
-     * @param string $serialNumber
+     * @param string $serial_number
      *
      * @return Asset
      */
-    public function setSerialNumber( $serialNumber )
+    public function setSerialNumber( $serial_number )
     {
-        $this->serialNumber = $serialNumber;
+        $this->serial_number = $serial_number;
 
         return $this;
     }
 
     /**
-     * Get serialNumber
+     * Get serial_number
      *
      * @return string
      */
     public function getSerialNumber()
     {
-        return $this->serialNumber;
+        return $this->serial_number;
     }
 
     /**
@@ -230,13 +230,13 @@ class Asset
     /**
      * Set LocationText
      *
-     * @param string $locationText
+     * @param string $location_text
      *
      * @return Asset
      */
-    public function setLocationText( $locationText )
+    public function setLocationText( $location_text )
     {
-        $this->locationText = $locationText;
+        $this->location_text = $location_text;
 
         return $this;
     }
@@ -248,7 +248,7 @@ class Asset
      */
     public function getLocationText()
     {
-        return $this->locationText;
+        return $this->location_text;
     }
 
     public function getBarcodes()
@@ -320,7 +320,7 @@ class Asset
             'id' => $this->getId(),
             'model' => $this->getModel(),
             'location' => $this->getLocation(),
-            'serialNumber' => $this->getSerialNumber(),
+            'serial_number' => $this->getSerialNumber(),
             'comment' => $this->getComment(),
             'active' => $this->isActive()
         ];

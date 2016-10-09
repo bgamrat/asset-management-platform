@@ -36,9 +36,9 @@ class Location
      */
     private $type;
     /**
-     * @ORM\Column(type="integer", name="entity_id")
+     * @ORM\Column(type="integer", name="entity_id", nullable=true)
      */
-    private $entity;
+    private $entity = null;
     /**
      * @ORM\OneToMany(targetEntity="Asset", mappedBy="location")
      */

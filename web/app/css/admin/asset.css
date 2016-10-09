@@ -21,7 +21,8 @@
     padding-right: 10px;
 }
 #asset-view-history-tab ul,
-#model-view-history-tab ul {
+#model-view-history-tab ul,
+#asset-view-model-relationships-tab ul {
     list-style-type: none;
     padding: 0;
 }

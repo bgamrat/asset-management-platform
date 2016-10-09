@@ -30,8 +30,8 @@ class AssetsController extends FOSRestController
             case 'barcode':
                 $sortField = 'bc.barcode';
                 break;
-            case 'location':
-                $sortField = 'l.name';
+            case 'location_text':
+                $sortField = 'a.location_text';
                 break;
             case 'brand':
                 $sortField = 'b.name';
@@ -48,8 +48,8 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['a.id', 'a.locationText AS location_text', 'bc.barcode', 'bc.updated AS barcode_updated',
-            "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serialNumber AS serial_number',
+        $columns = ['a.id', 'a.location_text', 'bc.barcode', 'bc.updated AS barcode_updated',
+            "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serial_number',
             's.name AS status_text', 's.id AS status',
             'a.comment', 'a.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -78,7 +78,10 @@ class AssetsController extends FOSRestController
                 case DStore::LIKE:
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
-                                    $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'a.serial_number', '?1' ) )
+                            $queryBuilder->expr()->orX(
+                                    $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'a.serial_number', '?1' ) ),
+                                    $queryBuilder->expr()->like( 'a.location_text', '?1' )
+                                    )
                     );
                     break;
                 case DStore::GT:
@@ -127,8 +130,8 @@ class AssetsController extends FOSRestController
             $relationships = [
                 'extends' => $model->getExtends(false),
                 'requires' => $model->getRequires(false),
-                'extendedBy' => $model->getExtendedBy(false),
-                'requiredBy' => $model->getRequiredBy(false)
+                'extended_by' => $model->getExtendedBy(false),
+                'required_by' => $model->getRequiredBy(false)
             ];
             $status = $asset->getStatus();
             $data = [

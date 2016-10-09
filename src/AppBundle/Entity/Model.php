@@ -71,9 +71,9 @@ class Model
     /**
      * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends", fetch="LAZY")
      */
-    private $extendedBy;
+    private $extended_by;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", inversedBy="extendedBy", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="extended_by", fetch="LAZY")
      * @ORM\JoinTable(name="model_extend",
      *      joinColumns={@ORM\JoinColumn(name="extends_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="extended_by_id", referencedColumnName="id")}
@@ -83,9 +83,9 @@ class Model
     /**
      * @ORM\ManyToMany(targetEntity="Model", mappedBy="requires", fetch="LAZY")
      */
-    private $requiredBy;
+    private $required_by;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", inversedBy="requiredBy", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="required_by", fetch="LAZY")
      * @ORM\JoinTable(name="model_require",
      *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="required_by_id", referencedColumnName="id")}
@@ -102,8 +102,8 @@ class Model
     {
         $this->extends = new ArrayCollection();
         $this->requires = new ArrayCollection();
-        $this->extendedBy = new ArrayCollection();
-        $this->requiredBy = new ArrayCollection();
+        $this->extended_by = new ArrayCollection();
+        $this->required_by = new ArrayCollection();
     }
 
     /**
@@ -288,14 +288,14 @@ class Model
 
     public function getExtendedBy( $full = true )
     {
-        return $this->getRelationships( 'extendedBy', $full );
+        return $this->getRelationships( 'extended_by', $full );
     }
 
     public function addExtendedBy( Model $model )
     {
-        if( !$this->extendedBy->contains( $model ) )
+        if( !$this->extended_by->contains( $model ) )
         {
-            $this->extendedBy->add( $model );
+            $this->extended_by->add( $model );
         }
         return $this;
     }
@@ -345,14 +345,14 @@ class Model
 
     public function getRequiredBy( $full = true )
     {
-        return $this->getRelationships( 'requiredBy', $full );
+        return $this->getRelationships( 'required_by', $full );
     }
 
     public function addRequiredBy( Model $model )
     {
-        if( !$this->requiredBy->contains( $model ) )
+        if( !$this->required_by->contains( $model ) )
         {
-            $this->requiredBy->add( $model );
+            $this->required_by->add( $model );
         }
     }
 
@@ -386,9 +386,9 @@ class Model
             'comment' => $this->getComment(),
             'active' => $this->isActive(),
             'extends' => $this->getExtends( false ),
-            'extendedBy' => $this->getExtendedBy( false ),
+            'extended_by' => $this->getExtendedBy( false ),
             'requires' => $this->getRequires( false ),
-            'requiredBy' => $this->getRequiredBy( false )
+            'required_by' => $this->getRequiredBy( false )
         ];
     }
 

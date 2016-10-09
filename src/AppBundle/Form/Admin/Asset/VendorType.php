@@ -5,12 +5,13 @@ namespace AppBundle\Form\Admin\Asset;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use AppBundle\Form\Common\ContactType;
+use AppBundle\Form\Common\PersonType;
+use AppBundle\Form\Admin\Asset\BrandType;
 
 class VendorType extends AbstractType
 {
@@ -22,11 +23,15 @@ class VendorType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
+                ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class, ['label' => 'common.name'] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
-                ->add( 'contacts', CollectionType::class, [
-                    'entry_type' => ContactType::class,
+                ->add( 'comment', TextareaType::class, [
+                    'label' => false,
+                    'required' => false
+                ]  )
+                ->add( 'person', CollectionType::class, [
+                    'entry_type' => PersonType::class,
                     'by_reference' => true,
                     'required' => false,
                     'label' => false,
@@ -35,7 +40,19 @@ class VendorType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true,
                     'mapped' => false,
-                    'prototype_name' => '__contact__'
+                    'prototype_name' => '__person__'
+                ] )
+                ->add( 'brands', CollectionType::class, [
+                    'entry_type' => BrandType::class,
+                    'by_reference' => true,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'mapped' => false,
+                    'prototype_name' => '__brand__'
                 ] )
         ;
     }
@@ -50,4 +67,8 @@ class VendorType extends AbstractType
         ) );
     }
 
+    public function getName()
+    {
+        return 'vendor';
+    }
 }

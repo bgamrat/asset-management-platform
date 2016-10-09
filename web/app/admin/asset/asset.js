@@ -33,6 +33,7 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/admin/asset/barcodes",
+    "app/admin/asset/common",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -44,7 +45,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        barcodes, lib, libGrid, core, asset) {
+        barcodes, assetCommon, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -153,6 +154,7 @@ define([
         }
 
         var locationTypeRadioButton = [];
+        var locationTypeLabels = {};
         query('[name="asset[location][ctype]"]').forEach(function (node) {
             var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
             dijit.set("data-url", domAttr.get(node, "data-url"));
@@ -160,21 +162,34 @@ define([
             dijit.startup();
             locationTypeRadioButton.push(dijit);
         });
+        query('label[for^="asset_location_ctype_"]').forEach(function(node){
+            locationTypeLabels[domAttr.get(node,"for").replace(/\D/g,'')] = node.textContent;
+        });
 
         on(dom.byId('asset_location_ctype'), "click", function (event) {
-            var target = event.target;
+            var target = event.target, targetId;
             if( target.tagName === 'LABEL' ) {
                 target = dom.byId(domAttr.get(target, "for"));
             }
             var dataUrl = domAttr.get(target, "data-url");
             if( dataUrl !== null && dataUrl !== "" ) {
+                locationFilteringSelect.set("readOnly", false);
                 locationStore.target = dataUrl;
                 locationFilteringSelect.set("store", locationStore);
-                locationFilteringSelect.set("disabled", false);
             } else {
-                locationFilteringSelect.set("disabled", true);
+                targetId = target.id.replace(/\D/g,'');
+                textLocationMemoryStore.data = [{name:locationTypeLabels[targetId], id:0}];
+                locationFilteringSelect.set("store", textLocationStore);
+                locationFilteringSelect.set("displayedValue",locationTypeLabels[targetId]);
+                locationFilteringSelect.set("readOnly", true);
             }
         });
+        
+        
+        var textLocationMemoryStore = new Memory({
+            idProperty: "id",
+            data: []});
+        var textLocationStore = new ObjectStore({objectStore: textLocationMemoryStore});
 
         var locationStore = new JsonRest({
             useRangeHeaders: false,
@@ -184,7 +199,7 @@ define([
             labelAttr: "name",
             searchAttr: "name",
             pageSize: 25,
-            disabled: true
+            readOnly: true
         }, "asset_location_entity");
         locationFilteringSelect.startup();
 
@@ -353,11 +368,13 @@ define([
                     if( asset.location.type.url !== null ) {
                         locationStore.target = asset.location.type.url;
                         locationFilteringSelect.set("store", locationStore);
-                        locationFilteringSelect.set("disabled", false);
+                        locationFilteringSelect.set("readOnly", false);
                         locationFilteringSelect.set('displayedValue', asset.location_text);
                     } else {
-                        locationFilteringSelect.set('displayedValue', '');
-                        locationFilteringSelect.set("disabled", true);
+                        textLocationMemoryStore.data = [{name:locationTypeLabels[asset.location.type.id], id:0}];
+                        locationFilteringSelect.set("store", textLocationStore);
+                        locationFilteringSelect.set('displayedValue', asset.location_text);
+                        locationFilteringSelect.set("readOnly", true);
                     }
                     serialNumberInput.set('value', asset.serial_number);
                     commentInput.set('value', asset.comment);
@@ -367,6 +384,7 @@ define([
                         barcodes.setData(null);
                     }
                     activeCheckBox.set('checked', asset.active);
+                    assetCommon.relationshipLists(modelRelationshipsContentPane, asset.model_relationships);
                     lib.showHistory(historyContentPane, asset.history);
                 }, lib.xhrError);
             }

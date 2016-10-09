@@ -42,6 +42,7 @@ class LocationType extends AbstractType
                             return ['data-url' => $val->getUrl()];
                         }
                     },
+                    'empty_data' => '5',
                     'multiple' => false,
                     'expanded' => true,
                     'required' => true,

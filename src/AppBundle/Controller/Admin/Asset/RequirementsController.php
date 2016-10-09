@@ -18,7 +18,7 @@ class RequirementsController extends Controller
 {
 
     /**
-     * @Route("/admin/asset/vendor")
+     * @Route("/admin/asset/requirement")
      * @Method("GET")
      */
     public function indexAction( Request $request )

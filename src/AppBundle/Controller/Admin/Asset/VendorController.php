@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Admin\Asset;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Form\Admin\Asset\ManufacturerType;
+use AppBundle\Form\Admin\Asset\VendorType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -25,7 +25,7 @@ class VendorController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $form = $this->createForm( ManufacturerType::class, null, [] );
+        $form = $this->createForm( VendorType::class, null, [] );
 
         return $this->render( 'admin/asset/vendor.html.twig', array(
                     'vendor_form' => $form->createView(),

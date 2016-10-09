@@ -403,7 +403,6 @@ class ManufacturersController extends FOSRestController
                             'app_admin_api_manufacturers_get_manufacturers_brands_model', ['mnname' => $mnname, 'bname' => $bname, 'mname' => $model->getId()], true // absolute
                     )
             );
-            die;
             return $response;
         }
 

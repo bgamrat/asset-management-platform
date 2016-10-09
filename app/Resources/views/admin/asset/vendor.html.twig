@@ -18,25 +18,51 @@
         <div id="vendor-grid">
         </div>
         <div id="vendor-view-dialog">
-            {{form_start(vendor_form)}}
-                <fieldset class="inline-block">
-                    <legend>{{'asset.vendor'|trans}}</legend>
-                    <div class="justify">
-                        {{form_row(vendor_form.name)}}
-                        {{form_row(vendor_form.active,{'attr': {'class': 'single-cb'}})}}
-                    </div>
-                </fieldset>
-            {{ form_end(vendor_form) }}
-            <div class="center">
+            {{form_start(vendor_form)}} 
+            <div class="text-right">
                 <button id="vendor-save-btn" type="button">{{ 'common.save'|trans }}</button>
             </div>
+            <div class="vendor">
+                <fieldset class="name-active">
+                    <legend>{{'asset.vendor'|trans}}</legend>
+                    <div class="justify">
+                        <span class="vendor-name">
+                            {{form_widget(vendor_form.name)}}
+                        </span>
+                        <span class="vendor-active">
+                            {{form_widget(vendor_form.active)}}
+                            {{form_label(vendor_form.active)}}
+                        </span>
+                    </div>
+                    {{form_row(vendor_form.comment)}}
+                </fieldset>
+                <div id="vendor-view-tabs">
+                    <div id="vendor-view-contacts-tab">
+                        <fieldset class="contacts">
+                            {{form_row(vendor_form.person)}}
+                        </fieldset>
+                    </div>
+                    <div id="vendor-view-brands-tab">
+                        <fieldset class="brands">
+                            <legend>{{'asset.brands'|trans}}</legend>
+                            {{form_row(vendor_form.brands)}}
+                            {% if vendor_form.brands.vars.allow_add %}
+                                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div id="vendor-view-history-tab">
+                    </div>
+                </div>
+            </div>
+            {{ form_end(vendor_form) }}
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        require(["app/admin/vendor"], function (vendor) {
+        require(["app/admin/asset/vendor"], function (vendor) {
             vendor.run();
         });
     </script>
