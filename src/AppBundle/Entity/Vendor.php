@@ -58,8 +58,8 @@ class Vendor
      * @var ArrayCollection $brands
      * @ORM\ManyToMany(targetEntity="Brand", cascade={"persist"})
      * @ORM\JoinTable(name="vendor_brand",
-     *      joinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", unique=true, nullable=false)}
+     *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", nullable=false)},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id", nullable=false)}
      *      )
      */
     protected $brands = null;
@@ -152,6 +152,14 @@ class Vendor
     {
         return $this->comment;
     }
+    
+    public function getBrandData() {
+        $data = [];
+        foreach ($this->brands as $b) {
+            $data[] = ['id' => $b->getId(), 'name' => $b->getName()];
+        }
+        return $data;
+    }
 
     public function getBrands()
     {
@@ -163,11 +171,13 @@ class Vendor
         if( !$this->brands->contains( $brand ) )
         {
             $this->brands->add( $brand );
+            $brand->addVendor( $this );
         }
     }
 
     public function removeBrand( Brand $brand )
     {
+        $brand->removeVendor( $this );
         $this->brands->removeElement( $brand );
     }
 

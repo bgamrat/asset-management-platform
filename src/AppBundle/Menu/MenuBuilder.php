@@ -114,5 +114,18 @@ class MenuBuilder implements ContainerAwareInterface
 
         return $menu;
     }
+    
+    public function createVendorMenu( array $options )
+    {
+        $menu = $this->factory->createItem( 'vendor' );
+
+        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
+        {
+            $menu->setChildrenAttribute( 'class', 'nav navbar-nav' );
+            $menu->addChild( 'vendor', ['label' => 'asset.vendors', 'route' => 'vendor'] )
+                    ->setAttribute( 'icon', 'fa fa-th-large' );
+        }
+        return $menu;
+    }
 
 }

@@ -1,23 +1,28 @@
-#manufacturer-view-dialog .dijitDialogPaneContent {
+#manufacturer-view-dialog .dijitDialogPaneContent,
+#vendor-view-dialog .dijitDialogPaneContent {
     width: 760px !important;
-    height: 720px !important;
+    height: 740px !important;
 }
-.manufacturer-name {
+.manufacturer-name,
+.vendor-name {
     font-size: 1.5em;
     display: inline-block;
 }
-.manufacturer-name .dijitTextBox {
+.manufacturer-name .dijitTextBox,
+.vendor-name .dijitTextBox {
     width: 225px;
 }
 .brand .name, .brand .comment, .brand .active,
-.location_type .name, .location_type .comment, .location_type .active {
+.location_type .name, .location_type .comment, .location_type .active,
+.vendor .name, .vendor .comment, .vendor .active {
     display: inline-block;
 }
 .form-row.brand:nth-child(2) .remove-form-row {
     display:none;
 }
 .asset .justify span,
-.model .justify span {
+.model .justify span,
+.vendor .justify span {
     padding-right: 10px;
 }
 #asset-view-history-tab ul,

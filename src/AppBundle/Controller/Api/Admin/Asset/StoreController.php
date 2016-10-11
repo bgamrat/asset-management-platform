@@ -19,6 +19,35 @@ class StoreController extends FOSRestController
     /**
      * @View()
      */
+    public function getBrandsAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $name = $request->get( 'name' );
+        if( !empty( $name ) )
+        {
+            $manufacturerBrand = '%' . str_replace( '*', '%', $name );
+
+            $em = $this->getDoctrine()->getManager();
+
+            $queryBuilder = $em->createQueryBuilder()->select( ['b.id', "CONCAT(CONCAT(m.name, ' '), b.name) AS name"] )
+                    ->from( 'AppBundle:Manufacturer', 'm' )
+                    ->innerJoin( 'm.brands', 'b' )
+                    ->where( "CONCAT(CONCAT(m.name, ' '), b.name) LIKE :manufacturer_brand" )
+                    ->setParameter( 'manufacturer_brand', $manufacturerBrand );
+
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
     public function getManufacturersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );

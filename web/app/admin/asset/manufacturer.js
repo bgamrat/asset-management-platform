@@ -25,7 +25,6 @@ define([
     'put-selector/put',
     "app/common/person",
     "app/admin/asset/brands",
-    "app/admin/asset/models",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -35,7 +34,7 @@ define([
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, brands, models, lib, libGrid, core) {
+        person, brands, lib, libGrid, core) {
     //"use strict";
     function run() {
         var action = null;
@@ -53,7 +52,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 500px; width: 100%;"
+            style: "height: 525px; width: 100%;"
         }, "manufacturer-view-tabs");
 
         var contactsContentPane = new ContentPane({

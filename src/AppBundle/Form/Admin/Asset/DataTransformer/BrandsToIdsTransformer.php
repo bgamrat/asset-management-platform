@@ -2,12 +2,12 @@
 
 namespace AppBundle\Form\Admin\Asset\DataTransformer;
 
-use AppBundle\Entity\Model;
+use AppBundle\Entity\Brand;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class ModelRelationshipsToIdsTransformer implements DataTransformerInterface
+class BrandsToIdsTransformer implements DataTransformerInterface
 {
 
     private $em;
@@ -23,16 +23,18 @@ class ModelRelationshipsToIdsTransformer implements DataTransformerInterface
      * @param  Issue|null $model
      * @return string
      */
-    public function transform( $models )
+    public function transform( $brands )
     {
-        if( empty($models) )
+     //   dump($brands);die;
+        if( $brands === null )
         {
             return null;
         }
         $ret = [];
-        foreach ($models as $m) {
-            $ret[] = $m->getId();
+        foreach ($brands as $b) {
+            $ret[] = $b->getId();
         }
+
         return $ret;
     }
 
@@ -43,29 +45,29 @@ class ModelRelationshipsToIdsTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (model) is not found.
      */
-    public function reverseTransform( $modelIds )
+    public function reverseTransform( $brandIds )
     {
         // no model id? It's optional, so that's ok
-        if( empty( $modelIds ) )
+        if( !$brandIds )
         {
             return [];
         }
 
         $queryBuilder = $this->em->createQueryBuilder();
-        $queryBuilder->select( 'm' )
-                ->from( 'AppBundle:Model', 'm' )
-                ->where( $queryBuilder->expr()->in( 'm.id', ':modelIds' ) )
-                ->setParameter( 'modelIds', $modelIds )
-                ->orderBy( 'm.name', 'ASC' );
-        $models = $queryBuilder->getQuery()->getResult();
+        $queryBuilder->select( 'b' )
+                ->from( 'AppBundle:Brand', 'b' )
+                ->where( $queryBuilder->expr()->in( 'b.id', ':brand_ids' ) )
+                ->setParameter( 'brand_ids', $brandIds )
+                ->orderBy( 'b.name', 'ASC' );
+        $brands = $queryBuilder->getQuery()->getResult();
 
-        if( null === $models )
+        if( null === $brands )
         {
             throw new TransformationFailedException( sprintf(
-                    'An model with id "%s" does not exist!', implode(',',$modelIds)
+                    'An brand with id "%s" does not exist!', implode(',',$brandIds)
             ) );
         }
-        return $models;
+        return $brands;
     }
 
 }

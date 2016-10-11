@@ -99,7 +99,7 @@ define([
         newBtn.on("click", function (event) {
             modelFilteringSelect.set("value", "");
             statusSelect.set("value", "");
-            locationSelect.set("value", "");
+            locationFilteringSelect.set("value", "");
             barcodes.setData(null);
             serialNumberInput.set("value", "");
             commentInput.set("value", "");

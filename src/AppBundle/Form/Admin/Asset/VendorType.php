@@ -11,10 +11,18 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use AppBundle\Form\Common\PersonType;
-use AppBundle\Form\Admin\Asset\BrandType;
+use Doctrine\ORM\EntityManager;
+use AppBundle\Form\Admin\Asset\DataTransformer\BrandsToIdsTransformer;
 
 class VendorType extends AbstractType
 {
+
+    private $em;
+
+    public function __construct( EntityManager $em )
+    {
+        $this->em = $em;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -29,7 +37,7 @@ class VendorType extends AbstractType
                 ->add( 'comment', TextareaType::class, [
                     'label' => false,
                     'required' => false
-                ]  )
+                ] )
                 ->add( 'person', CollectionType::class, [
                     'entry_type' => PersonType::class,
                     'by_reference' => true,
@@ -43,18 +51,19 @@ class VendorType extends AbstractType
                     'prototype_name' => '__person__'
                 ] )
                 ->add( 'brands', CollectionType::class, [
-                    'entry_type' => BrandType::class,
-                    'by_reference' => true,
+                    'entry_type' => TextType::class,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'mapped' => false,
                     'prototype_name' => '__brand__'
                 ] )
         ;
+        $builder->get( 'brands' )
+                ->addModelTransformer( new BrandsToIdsTransformer( $this->em ) );
     }
 
     /**
@@ -71,4 +80,5 @@ class VendorType extends AbstractType
     {
         return 'vendor';
     }
+
 }

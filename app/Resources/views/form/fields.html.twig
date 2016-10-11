@@ -186,3 +186,26 @@
 {% block _user_person_phone_numbers_entry_row %}
     {{ block('_phone_numbers_entry_row') }}
 {% endblock %}
+
+{% block _vendor_brands_entry_row %}
+    <div class="form-row brand">
+    <span class="brand">{{ form_widget(form) }}</span>
+{% endblock %}
+
+{% block _vendor_person_entry_row %}
+    <div class="form-row contacts">
+        {% include 'common/person.html.twig' with {'legend': 'common.contact'} %}
+    </div>
+{% endblock %}
+
+{% block _vendor_person_entry_addresses_entry_row %}
+    {{ block('_address_entry_row') }}
+{% endblock %}
+
+{% block _vendor_person_entry_emails_entry_row %}
+    {{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _vendor_person_entry_phone_numbers_entry_row %}
+    {{ block('_phone_numbers_entry_row') }}
+{% endblock %}

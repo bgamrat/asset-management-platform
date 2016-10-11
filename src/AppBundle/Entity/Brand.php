@@ -48,13 +48,22 @@ class Brand
     private $active = true;
     /**
      * @var ArrayCollection $models
-     * @ORM\OneToMany(targetEntity="Model", mappedBy="brand", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Model", mappedBy="brand", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="brand_model",
      *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id", unique=true, nullable=false)}
      *      )
      */
     protected $models = null;
+    /**
+     * @var ArrayCollection $vendors
+     * @ORM\ManyToMany(targetEntity="Vendor", fetch="LAZY")
+     * @ORM\JoinTable(name="vendor_brands",
+     *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id", nullable=false)}
+     *      )
+     */
+    protected $vendors = null;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
@@ -64,6 +73,7 @@ class Brand
     public function __construct()
     {
         $this->models = new ArrayCollection();
+        $this->vendors = new ArrayCollection();
     }
 
     /**
@@ -133,7 +143,8 @@ class Brand
     {
         if( !$this->models->contains( $model ) )
         {
-            if ($model->getBrand() !== $this) {
+            if( $model->getBrand() !== $this )
+            {
                 $model->setBrand = $this;
             }
             $this->models->add( $model );
@@ -143,6 +154,26 @@ class Brand
     public function removeModel( Model $model )
     {
         $this->models->removeElement( $model );
+    }
+
+    public function getVendors()
+    {
+        return $this->vendors->toArray();
+    }
+
+    public function addVendor( Vendor $vendor )
+    {
+        if( !$this->vendors->contains( $vendor ) )
+        {
+            $this->vendors->add( $vendor );
+            $vendor->addBrand( $this );
+        }
+    }
+
+    public function removeVendor( Vendor $vendor )
+    {
+        $vendor->removeBrand( $this );
+        $this->vendors->removeElement( $vendor );
     }
 
     public function setActive( $active )

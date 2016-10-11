@@ -39,14 +39,12 @@ services:
         class: AppBundle\Form\Admin\Asset\BarcodeType
         tags:
             - { name: form.type, alias: 'app_barcode_type' }
-            
-    
+
     app.admin.form.type.location_type_type:
         class: AppBundle\Form\Admin\Asset\LocationType
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_location_type' }
-
 
     app.admin.form.type.model:
         class: AppBundle\Form\Admin\Asset\ModelType
@@ -65,6 +63,12 @@ services:
         arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']
         tags:
         - { name: form.type, alias: user }
+
+    app.admin.form.type.vendor:
+        class: AppBundle\Form\Admin\Asset\VendorType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_vendor_type' }
 
     app.admin.menu_voter_request:
         class: AppBundle\Menu\RequestVoter
@@ -123,6 +127,7 @@ services:
             - { name: knp_menu.menu_builder, method: createCalendarMenu, alias: calendar }
             - { name: knp_menu.menu_builder, method: createMainMenu, alias: main }
             - { name: knp_menu.menu_builder, method: createUserMenu, alias: user }
+            - { name: knp_menu.menu_builder, method: createVendorMenu, alias: vendor }
 
     app.menu_renderer:
         # The class implements Knp\Menu\Renderer\RendererInterface

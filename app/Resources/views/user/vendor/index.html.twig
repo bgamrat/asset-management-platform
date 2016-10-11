@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'common.vendor'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {% stylesheets
+            '@bootstrap_css'
+            '@main_css'
+            filter='cssrewrite' output='css/compiled/vendor.css' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">  
+    {% endstylesheets %}  
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>{{ 'asset.vendors'|trans }}
+                <small data-toggle="modal" data-target="#calendar-controls"><i class="fa fa-gears"></i></small>
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <ul class="list-group">
+        {% for vendor in vendors %}
+            <li class="list-group-item">{{ vendor.name }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    {% include 'user/calendar/page_footer_script.html.twig' %}
+{% endblock %}

@@ -13,7 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
-use AppBundle\Form\Admin\Asset\DataTransformer\LocationToIdTransformer;
 use AppBundle\Form\Admin\Asset\LocationType;
 
 class AssetType extends AbstractType

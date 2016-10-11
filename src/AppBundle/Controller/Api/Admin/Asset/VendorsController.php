@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 class VendorsController extends FOSRestController
 {
 
-   /**
+    /**
      * @View()
      */
     public function getVendorsAction( Request $request )
@@ -62,15 +62,17 @@ class VendorsController extends FOSRestController
         $query = $queryBuilder->getQuery();
         $vendorCollection = $query->getResult();
         $data = [];
-        foreach( $vendorCollection as $u )
+        foreach( $vendorCollection as $v )
         {
             $item = [
-                'name' => $u->getName(),
-                'active' => $u->isActive(),
+                'id' => $v->getId(),
+                'name' => $v->getName(),
+                'brand_data' => $v->getBrands(),
+                'active' => $v->isActive(),
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
-                $item['deleted_at'] = $u->getDeletedAt();
+                $item['deleted_at'] = $v->getDeletedAt();
             }
             $data[] = $item;
         }
@@ -80,19 +82,24 @@ class VendorsController extends FOSRestController
     /**
      * @View()
      */
-    public function getVendorAction( $name )
+    public function getVendorAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $repository = $this->getDoctrine()
-            ->getRepository('AppBundle:Vendor');
-        $vendor = $repository->findOneBy( ['name' => $name] );
+        $em = $this->getDoctrine()->getManager();
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $em->getFilters()->disable( 'softdeleteable' );
+        }
+        $vendor = $this->getDoctrine()
+                        ->getRepository( 'AppBundle:Vendor' )->find( $id );
         if( $vendor !== null )
         {
             $data = [
+                'id' => $vendor->getId(),
                 'name' => $vendor->getName(),
+                'brand_data' => $vendor->getBrandData(),
                 'active' => $vendor->isActive()
             ];
-
             return $data;
         }
         else
@@ -102,40 +109,49 @@ class VendorsController extends FOSRestController
     }
 
     /**
+     * @View()
      */
-    public function postVendorAction( $name, Request $request )
+    public function postVendorAction( $id, Request $request )
     {
-        return $this->putVendorAction( $name, $request );
+        return $this->putVendorAction( $id, $request );
     }
 
     /**
      * @View()
      */
-    public function putVendorAction( $name, Request $request )
+    public function putVendorAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $em = $this->getDoctrine()->getManager();
         $response = new Response();
-        $formProcessor = $this->get( 'app.util.form' );
-        $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( VendorType::class, null, [] );
+        $data = $request->request->all();
+        if( $id === "null" )
+        {
+            $vendor = new Vendor();
+        }
+        else
+        {
+            $vendor = $em->getRepository( 'AppBundle:Vendor' )->find( $id );
+        }
+        $form = $this->createForm( VendorType::class, $vendor, ['allow_extra_fields' => true] );
         try
         {
-            $formProcessor->validateFormData( $form, $data );
-            $em = $this->getDoctrine()->getManager();
-            $vendor = $em->getRepository('AppBundle:Vendor')->findOneBy( ['name' => $name] );
-            if( $vendor === null )
+            $form->submit( $data );
+            if( $form->isValid() )
             {
-                $vendor = new Vendor();
-                $vendor->setName( $data['name'] );
+                $vendor = $form->getData();
+                $em->persist( $vendor );
+                $em->flush();
+                $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
+                $response->headers->set( 'Location', $this->generateUrl(
+                                'app_admin_api_vendor_get_vendor', array('id' => $vendor->getId()), true // absolute
+                        )
+                );
             }
-            $em->persist($vendor);
-            $em->flush();
-
-            $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
-            $response->headers->set( 'Location', $this->generateUrl(
-                            'app_admin_api_vendor_get_vendor', array('name' => $vendor->getName()), true // absolute
-                    )
-            );
+            else
+            {
+                return $form;
+            }
         }
         catch( Exception $e )
         {
@@ -150,13 +166,13 @@ class VendorsController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function patchVendorAction( $name, Request $request )
+    public function patchVendorAction( $id, Request $request )
     {
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
-                $repository = $this->getDoctrine()
-            ->getRepository('AppBundle:Vendor');
-        $vendor = $repository->findOneBy( ['name' => $name] );
+        $repository = $this->getDoctrine()
+                ->getRepository( 'AppBundle:Vendor' );
+        $vendor = $repository->find( $id );
         if( $vendor !== null )
         {
             if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
@@ -169,7 +185,7 @@ class VendorsController extends FOSRestController
                         break;
                 }
 
-                $em->persist($vendor);
+                $em->persist( $vendor );
                 $em->flush();
             }
         }
@@ -178,12 +194,12 @@ class VendorsController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function deleteVendorAction( $name )
+    public function deleteVendorAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $vendor = $em->getRepository( 'AppBundle:Vendor' )->findOneBy( ['name' => $name] );
+        $vendor = $em->getRepository( 'AppBundle:Vendor' )->find( $id );
         if( $vendor !== null )
         {
             $em->remove( $vendor );

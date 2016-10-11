@@ -11,8 +11,11 @@ define([
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
+    "dijit/form/SimpleTextarea",
     "dijit/form/Button",
     "dijit/Dialog",
+    "dijit/layout/TabContainer",
+    "dijit/layout/ContentPane",
     'dstore/Rest',
     'dstore/SimpleQuery',
     'dstore/Trackable',
@@ -20,17 +23,22 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
+    "app/common/person",
+    "app/admin/asset/brand_select",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
+    "dojo/i18n!app/nls/asset",
     "dojo/domReady!"
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Button, Dialog,
+        registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        lib, libGrid, core) {
+        person, brandSelect, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
         var action = null;
+
+        var vendorId;
 
         var vendorViewDialog = new Dialog({
             title: core.view
@@ -40,11 +48,29 @@ define([
             grid.clearSelection();
         });
 
+        var tabContainer = new TabContainer({
+            style: "height: 525px; width: 100%;"
+        }, "vendor-view-tabs");
+
+        var contactsContentPane = new ContentPane({
+            title: core.contacts},
+        "vendor-view-contacts-tab"
+                );
+        tabContainer.addChild(contactsContentPane);
+
+        var brandsContentPane = new ContentPane({
+            title: core.brands},
+        "vendor-view-brands-tab"
+                );
+        tabContainer.addChild(brandsContentPane);
+        tabContainer.startup();
+
         var newBtn = new Button({
             label: core["new"]
         }, 'vendor-new-btn');
         newBtn.startup();
         newBtn.on("click", function (event) {
+            vendorId = null;
             nameInput.set("value", "");
             activeCheckBox.set("checked", true);
             vendorViewDialog.set("title", core["new"]).show();
@@ -76,6 +102,13 @@ define([
         var activeCheckBox = new CheckBox({}, "vendor_active");
         activeCheckBox.startup();
 
+        var commentInput = new SimpleTextarea({
+            placeholder: core.comment,
+            trim: true,
+            required: false
+        }, "vendor_comment");
+        commentInput.startup();
+
         var vendorForm = new Form({}, '[name="vendor"]');
         vendorForm.startup();
 
@@ -84,22 +117,29 @@ define([
         }, 'vendor-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeId, beforeIdFilter, filter, g, groups, r, roles;
+            var beforeNameFilter, filter;
             if( vendorForm.validate() ) {
+                var i,brandData = brandSelect.getData(), brandIds = [];
+                for (i = 0; i < brandData.length; i++) {
+                    brandIds.push(brandData[i].id);
+                }
                 var data = {
+                    "id": vendorId,
                     "name": nameInput.get("value"),
+                    "brand_data": brandData,
+                    "brands": brandIds,
                     "active": activeCheckBox.get("checked"),
                 };
-                data
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
                         vendorViewDialog.hide();
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();
-                    beforeIdFilter = filter.gt('name', data.name);
-                    store.filter(beforeIdFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        beforeId = (results.length > 0) ? results[0].name : null;
+                    beforeNameFilter = filter.gt('name', data.name);
+                    store.filter(beforeNameFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
+                        var beforeId;
+                        beforeId = (results.length > 0) ? results[0].id : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
                             vendorViewDialog.hide();
                         }, lib.xhrError);
@@ -114,13 +154,31 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/vendors', useRangeHeaders: true, idProperty: 'name'});
+        var store = new TrackableRest({target: '/api/vendors', useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
             columns: {
+                id: {
+                    label: core.id
+                },
                 name: {
                     label: core.name
+                },
+                brand_data: {
+                    label: core.brands,
+                    formatter: function (data, object) {
+                        var b, nameList = [], html = "";
+                        for( b in data ) {
+                            nameList.push(data[b].name);
+                        }
+                        if( nameList.length > 0 ) {
+                            for( n = 0; n < nameList.length; n++ ) {
+                                html += '<a class="brand link" href="/admin/asset/manufacturer/' + object.name + '/brand/' + nameList[n] + '">' + nameList[n] + '</a><br>';
+                            }
+                        }
+                        return html;
+                    }
                 },
                 active: {
                     label: core.active,
@@ -157,16 +215,18 @@ define([
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var name = row.data.name;
+            var id = row.data.id;
             if( checkBoxes.indexOf(field) === -1 ) {
                 if( typeof grid.selection[0] !== "undefined" ) {
                     grid.clearSelection();
                 }
                 grid.select(row);
-                grid.collection.get(name).then(function (vendor) {
+                grid.collection.get(id).then(function (vendor) {
                     var r;
                     action = "view";
+                    vendorId = vendor.id;
                     nameInput.set("value", vendor.name);
+                    brandSelect.setData(vendor.brand_data);
                     activeCheckBox.set("checked", vendor.active === true);
                     vendorViewDialog.show();
                 }, lib.xhrError);
@@ -223,6 +283,9 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
+
+        person.run('vendor');
+        brandSelect.run('vendor');
 
         lib.pageReady();
     }

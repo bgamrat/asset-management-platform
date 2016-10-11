@@ -5,9 +5,9 @@
 
 {% block stylesheets %}
     {% stylesheets
-            '@calendar_css'
             '@main_css'
-            filter='cssrewrite' output='css/compiled/calendar.css' %}
+            '@calendar_css'
+            filter='cssrewrite' output='css/compiled/cal.css' %}
     <link href="{{ asset_url }}" type="text/css" rel="stylesheet">  
     {% endstylesheets %}  
 {% endblock %}

@@ -10,8 +10,9 @@
             <a class="navbar-brand" href="#">Brand</a>
         </div>
         <div class="collapse navbar-collapse" id="admin-navbar-collapse-1">
-            {{ knp_menu_render('main', {'currentClass': 'active', 'template': 'user/parts/knp_menu.html.twig'}) }}
+            {{ knp_menu_render('main', {'template': 'user/parts/knp_menu.html.twig'}) }}
             {{ knp_menu_render('calendar', {'template': 'user/parts/knp_menu.html.twig'}) }}
+            {{ knp_menu_render('vendor', {'template': 'user/parts/knp_menu.html.twig'}) }}
             {{ knp_menu_render('user', {'template': 'user/parts/knp_menu.html.twig'}) }}
         </div>
     </div>
