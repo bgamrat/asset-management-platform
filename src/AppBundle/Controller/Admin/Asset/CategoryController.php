@@ -30,7 +30,7 @@ class CategoryController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $categories = [];
-        $categories['categories'] = $em->getRepository( 'AppBundle:Category' )->findAll();
+        $categories['categories'] = $em->getRepository( 'AppBundle:Category' )->findChildren();
 
         $categoriesForm = $this->createForm( CategoriesType::class, $categories, [ 'action' => $this->generateUrl( 'app_admin_asset_category_save' )] );
 
@@ -50,7 +50,7 @@ class CategoryController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $categories = [];
-        $categories['categories'] = $em->getRepository( 'AppBundle:Category' )->findAll();
+        $categories['categories'] = $em->getRepository( 'AppBundle:Category' )->findChildren();
         $form = $this->createForm( CategoriesType::class, $categories, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )

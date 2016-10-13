@@ -119,6 +119,8 @@ common:
         Phone Number
     phone_numbers:
         Phone Numbers
+    position:
+        Position
     postal_code:
         Zip
     remove:

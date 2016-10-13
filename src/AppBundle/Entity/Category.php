@@ -25,6 +25,7 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\OneToMany(targetEntity="Model", mappedBy="id")
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="id")
      */
     private $id;
     /**
@@ -40,6 +41,18 @@ class Category
      *     match=true)
      */
     private $name;
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $position = 0;
+    /**
+     * @ORM\Column(name="parent_id", type="integer", nullable=true, unique=false)
+     * @ORM\ManyToOne(targetEntity="Category", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent = 10;
     /**
      * @var string
      * 
@@ -99,6 +112,54 @@ class Category
     }
 
     /**
+     * Set position
+     *
+     * @param string $position
+     *
+     * @return Email
+     */
+    public function setPosition( $position )
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position
+     *
+     * @return string
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param string $parent
+     *
+     * @return Email
+     */
+    public function setParent( $parent )
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return string
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
      * Set comment
      *
      * @param string $comment
@@ -137,6 +198,7 @@ class Category
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
+            'parent' => $this->getParent(),
             'comment' => $this->getComment(),
             'active' => $this->isActive()
         ];

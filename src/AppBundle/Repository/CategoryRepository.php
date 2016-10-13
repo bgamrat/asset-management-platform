@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Category;
+
 /**
  * ManufacturerRepository
  *
@@ -10,5 +12,14 @@ namespace AppBundle\Repository;
  */
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function findChildren()
+    {
+        return $this->getEntityManager()
+                        ->createQuery(
+                                "SELECT c FROM AppBundle:Category c WHERE c.name != 'top' ORDER BY c.position ASC"
+                        )
+                        ->getResult();
+    }
 
 }

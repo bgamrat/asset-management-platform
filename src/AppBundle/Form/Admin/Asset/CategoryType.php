@@ -4,6 +4,7 @@ namespace AppBundle\Form\Admin\Asset;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,6 +23,8 @@ class CategoryType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
+                ->add( 'position', IntegerType::class )
+                ->add( 'parent_id', HiddenType::class, ['property_path' => 'parent', 'data' => 10] )
                 ->add( 'comment', TextType::class )
                 ->add( 'active', CheckboxType::class )
         ;

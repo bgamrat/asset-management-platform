@@ -19,31 +19,40 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            {{form_start(categories_form)}}
-            <div class="text-right">
-                <button id="categories-save-btn" type="submit">{{ 'common.save'|trans }}</button>
-            </div>
-            <div class="form-row header">
-                <span class="name">{{ 'common.name'|trans }}</span>
-                <span class="comment">{{ 'common.comment'|trans }}</span>
-                <span class="active">{{ 'common.active'|trans }}</span>
-            </div>
-            {{form_row(categories_form)}}
-            {% for category in categories_form.categories %}
-                {{form_row(category)}}
-            {% endfor %}
+            <div class="justify">
+                <div class="category-form">
+                    {{form_start(categories_form)}}
+                    <div class="text-right">
+                        <button id="categories-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+                    </div>
+                    <div class="form-row header">
+                        <span class="position">{{ 'common.position'|trans }}</span>
+                        <span class="name">{{ 'common.name'|trans }}</span>
+                        <span class="comment">{{ 'common.comment'|trans }}</span>
+                        <span class="active">{{ 'common.active'|trans }}</span>
+                    </div>
 
-            {% if categories_form.categories.vars.allow_add %}
-                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
-            {% endif %}
-            {{form_end(categories_form)}}
-        </div>
+                    {{form_row(categories_form)}}
+
+                    {% for category in categories_form.categories %}
+                        {{form_row(category)}}
+                    {% endfor %}
+
+                    {% if categories_form.categories.vars.allow_add %}
+                        <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                    {% endif %}
+                    {{form_end(categories_form)}}
+                </div>
+                <div id="category-tree"></div>
+            </div>
+        </div>  
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        require(["app/admin/asset/category"], function (category) {
+        require(["app/admin/asset/categories", "app/admin/asset/category"], function (categories, category) {
+            categories.run();
             category.run();
         });
     </script>

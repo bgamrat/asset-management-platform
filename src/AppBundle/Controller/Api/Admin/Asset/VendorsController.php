@@ -31,9 +31,9 @@ class VendorsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['m'] )
-                ->from( 'AppBundle:Vendor', 'm' )
-                ->orderBy( 'm.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $queryBuilder = $em->createQueryBuilder()->select( ['v'] )
+                ->from( 'AppBundle:Vendor', 'v' )
+                ->orderBy( 'v.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -48,13 +48,12 @@ class VendorsController extends FOSRestController
             {
                 case DStore::LIKE:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->orX(
-                                    $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'u.email', '?1' ) )
+                            $queryBuilder->expr()->like( 'v.name', '?1' )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'm.name', '?1' )
+                            $queryBuilder->expr()->gt( 'v.name', '?1' )
                     );
             }
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );

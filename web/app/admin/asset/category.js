@@ -12,14 +12,14 @@ define([
     "dojo/NodeList-dom",
     "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (dom, domAttr, domConstruct, on,
+], function (declare, dom, domAttr, domConstruct, on,
         query,
         ValidationTextBox, CheckBox, Button,
         lib, core) {
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var idInput = [], nameInput = [], commentInput = [], activeCheckBox = [];
+    var idInput = [], positionInput = [], nameInput = [], commentInput = [], activeCheckBox = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
     var divId = "categories_categories";
@@ -33,6 +33,15 @@ define([
         var dijit, index = nameInput.length;
         var base = divId + '_' + index + '_';
 
+        dijit = new ValidationTextBox({
+            trim: true,
+            pattern: "[0-9]+",
+            required: true,
+            name: "categories[categories][" + index + "][position]",
+            value: index * 10
+        }, base + "position");
+        positionInput.push(dijit);
+        dijit.startup();
         dijit = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
@@ -77,11 +86,10 @@ define([
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__category__/g, nameInput.length);
-        //domConstruct.place(prototypeContent, "categories_categories", "last");
-
+        
         addOneMoreControl = query('.categories .add-one-more-row');
 
-        addOneMoreControl.on("click", function (event) {
+        addOneMoreControl.on("click", function () {
             cloneNewNode();
             createDijits(true);
         });
@@ -91,7 +99,7 @@ define([
             type: "submit"
         }, 'categories-save-btn');
         saveBtn.startup();
-
+        
         lib.pageReady();
     }
 

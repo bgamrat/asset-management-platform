@@ -38,3 +38,16 @@
     list-style-type: none;
     padding: 0;
 }
+.categories .justify {
+    justify-content: space-around;
+    -webkit-justify-content: space-around;
+}
+#category-tree {
+    padding-top: 75px;
+}
+.category .position .dijitTextBox {
+    width: 50px;
+}
+.category .position .dijitInputContainer input {
+    text-align: right;
+}
