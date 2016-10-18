@@ -29,6 +29,8 @@ asset:
         Model
     models:
         Models
+    parent:
+        Parent
     requirements:
         Requirements
     required_by:

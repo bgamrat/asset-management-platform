@@ -6,7 +6,6 @@ define([
     "dojo/store/Observable",
     "dijit/Tree",
     "dijit/tree/ObjectStoreModel",
-    "dijit/tree/dndSource",
     "dojo/domReady!"
 ], function (request, arrayUtil, aspect, Memory, Observable, Tree, ObjectStoreModel, dndSource
         ) {
@@ -47,9 +46,7 @@ define([
 
             (new Tree({
                 model: model,
-                dndController: dndSource,
                 showRoot: false,
-                id: "cat-tree",
                 persist: true,
             })).placeAt("category-tree").startup();
 

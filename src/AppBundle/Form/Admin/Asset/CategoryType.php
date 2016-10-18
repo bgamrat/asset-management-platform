@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class CategoryType extends AbstractType
 {
@@ -24,7 +25,15 @@ class CategoryType extends AbstractType
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
                 ->add( 'position', IntegerType::class )
-                ->add( 'parent_id', HiddenType::class, ['property_path' => 'parent', 'data' => 10] )
+                ->add( 'parent', EntityType::class, [
+                    'class' => 'AppBundle:Category',
+                    'choice_label' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => true,
+                    'label' => 'common.parent',
+                    'choice_translation_domain' => false
+                ] )
                 ->add( 'comment', TextType::class )
                 ->add( 'active', CheckboxType::class )
         ;

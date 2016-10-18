@@ -17,7 +17,7 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT c FROM AppBundle:Category c WHERE c.name != 'top' ORDER BY c.position ASC"
+                                "SELECT c, p FROM AppBundle:Category c LEFT JOIN c.parent p WHERE c.name != 'top' ORDER BY c.position ASC"
                         )
                         ->getResult();
     }

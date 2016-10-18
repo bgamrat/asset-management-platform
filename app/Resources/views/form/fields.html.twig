@@ -106,7 +106,7 @@
 {% block _categories_categories_entry_row %}{% spaceless %}
     <div class="form-row category" data-category-id="{{form.id.vars.value}}">
         <span class="id">{{ form_widget(form.id) }}</span>
-        <span class="parent-id">{{ form_widget(form.parent_id) }}</span>
+        <span class="parent">{{ form_widget(form.parent) }}</span>
         <span class="position">{{ form_widget(form.position) }}</span>
         <span class="name">{{ form_widget(form.name) }}</span>
         <span class="comment">{{ form_widget(form.comment) }}</span>

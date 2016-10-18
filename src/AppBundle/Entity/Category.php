@@ -25,7 +25,6 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\OneToMany(targetEntity="Model", mappedBy="id")
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="id")
      */
     private $id;
     /**
@@ -48,11 +47,11 @@ class Category
      */
     private $position = 0;
     /**
-     * @ORM\Column(name="parent_id", type="integer", nullable=true, unique=false)
-     * @ORM\ManyToOne(targetEntity="Category", fetch="EXTRA_LAZY")
+     * @Assert\Expression(expression="this !== this.getParent()", message="No self-referencing please")
+     * @ORM\ManyToOne(targetEntity="Category", fetch="EAGER",  cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    private $parent = 10;
+    private $parent;
     /**
      * @var string
      * 

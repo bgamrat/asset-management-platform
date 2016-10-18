@@ -7,20 +7,21 @@ define([
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
     "dijit/form/Button",
+    "dijit/form/Select",
+    "dojo/data/ObjectStore",
+    "dojo/store/Memory",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/NodeList-dom",
     "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (declare, dom, domAttr, domConstruct, on,
-        query,
-        ValidationTextBox, CheckBox, Button,
+], function (dom, domAttr, domConstruct, on, query,
+        ValidationTextBox, CheckBox, Button, Select, ObjectStore, Memory,
         lib, core) {
     //"use strict";
 
-    var dataPrototype, prototypeNode, prototypeContent;
-    var idInput = [], positionInput = [], nameInput = [], commentInput = [], activeCheckBox = [];
-    var divIdInUse = null;
+    var dataPrototype, prototypeNode, prototypeContent, store;
+    var positionInput = [], parentSelect = [], nameInput = [], commentInput = [], activeCheckBox = [];
     var addOneMoreControl = null;
     var divId = "categories_categories";
 
@@ -42,6 +43,14 @@ define([
         }, base + "position");
         positionInput.push(dijit);
         dijit.startup();
+        parentSelect = new Select({
+            store: store,
+            placeholder: core.parent,
+            name: "categories[categories][" + index + "][parent]",
+            value: document.getElementById(base + "parent").getAttribute("data-selected"),
+            required: true
+        }, base + "parent");
+        parentSelect.startup();
         dijit = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
@@ -77,16 +86,34 @@ define([
             return;
         }
 
+        dataPrototype = domAttr.get(prototypeNode, "data-prototype");
+        prototypeContent = dataPrototype.replace(/__category__/g, nameInput.length);
+
+        base = prototypeNode.id + "_" + nameInput.length;
+        select = base + "_parent";
+
+        if( dom.byId(select) === null ) {
+            lib.textError(select + " not found");
+            return;
+        }
+
+        data = JSON.parse(domAttr.get(select, "data-options"));
+        // Convert the data to an array of objects
+        storeData = [];
+        for( d in data ) {
+            storeData.push(data[d]);
+        }
+        memoryStore = new Memory({
+            idProperty: "value",
+            data: storeData});
+        
+        store = new ObjectStore({objectStore: memoryStore});
         existingCategoryRows = query('.categories .form-row.category');
         existingCategoryRows = existingCategoryRows.length;
 
         for( i = 0; i < existingCategoryRows; i++ ) {
             createDijits(false);
         }
-
-        dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__category__/g, nameInput.length);
-        
         addOneMoreControl = query('.categories .add-one-more-row');
 
         addOneMoreControl.on("click", function () {
@@ -99,7 +126,7 @@ define([
             type: "submit"
         }, 'categories-save-btn');
         saveBtn.startup();
-        
+
         lib.pageReady();
     }
 

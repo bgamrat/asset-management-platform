@@ -27,8 +27,9 @@ class CategoriesController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
-        $queryBuilder = $em->createQueryBuilder()->select( ['c.id', 'c.position', 'c.name', 'c.parent'] )
+        $queryBuilder = $em->createQueryBuilder()->select( ['c.id', 'c.position', 'c.name', 'p.id AS parent'] )
                 ->from( 'AppBundle:Category', 'c' )
+                ->leftJoin('c.parent', 'p')
                 ->orderBy( 'c.position' );
 
         $data = $queryBuilder->getQuery()->getResult();

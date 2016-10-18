@@ -39,7 +39,7 @@ services:
         class: AppBundle\Form\Admin\Asset\BarcodeType
         tags:
             - { name: form.type, alias: 'app_barcode_type' }
-
+            
     app.admin.form.type.location_type_type:
         class: AppBundle\Form\Admin\Asset\LocationType
         arguments: ['@doctrine.orm.entity_manager']

@@ -1,6 +1,5 @@
 {% block title %}{{ 'asset.category'|trans }} {{'common.admin'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
-
 {% block admin_content %}
     <div id="category-wrapper">
         <h1>{{ 'asset.category'|trans }} {{'common.admin'|trans }}</h1>
@@ -20,12 +19,14 @@
                 </div>
             {% endif %}
             <div class="justify">
+                <div id="category-tree"></div>
                 <div class="category-form">
                     {{form_start(categories_form)}}
                     <div class="text-right">
                         <button id="categories-save-btn" type="submit">{{ 'common.save'|trans }}</button>
                     </div>
                     <div class="form-row header">
+                        <span class="parent">{{ 'asset.parent'|trans }}</span>
                         <span class="position">{{ 'common.position'|trans }}</span>
                         <span class="name">{{ 'common.name'|trans }}</span>
                         <span class="comment">{{ 'common.comment'|trans }}</span>
@@ -42,18 +43,16 @@
                         <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                     {% endif %}
                     {{form_end(categories_form)}}
-                </div>
-                <div id="category-tree"></div>
-            </div>
-        </div>  
-    </div>
-{% endblock %}
+                </div>   
+            </div>  
+        </div>
+    {% endblock %}
 
-{% block javascripts %}
-    <script>
-        require(["app/admin/asset/categories", "app/admin/asset/category"], function (categories, category) {
-            categories.run();
-            category.run();
-        });
-    </script>
-{% endblock %}
+    {% block javascripts %}
+        <script>
+            require(["app/admin/asset/categories", "app/admin/asset/category"], function (categories, category) {
+                categories.run();
+                category.run();
+            });
+        </script>
+    {% endblock %}

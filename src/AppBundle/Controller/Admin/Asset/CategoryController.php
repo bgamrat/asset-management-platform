@@ -30,10 +30,8 @@ class CategoryController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $categories = [];
-        $categories['categories'] = $em->getRepository( 'AppBundle:Category' )->findChildren();
-
+        $categories['categories'] = $em->getRepository( 'AppBundle:Category' )->findAll();
         $categoriesForm = $this->createForm( CategoriesType::class, $categories, [ 'action' => $this->generateUrl( 'app_admin_asset_category_save' )] );
-
         return $this->render( 'admin/asset/categories.html.twig', array(
                     'categories_form' => $categoriesForm->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
@@ -50,14 +48,14 @@ class CategoryController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $categories = [];
-        $categories['categories'] = $em->getRepository( 'AppBundle:Category' )->findChildren();
+        $categories['categories'] = $em->getRepository( 'AppBundle:Category' )->findAll();
         $form = $this->createForm( CategoriesType::class, $categories, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )
         {
             $categories = $form->getData();
             foreach( $categories['categories'] as $category )
-            {
+            {  
                 $em->persist( $category );
             }
             $em->flush();

@@ -21,7 +21,6 @@ class CategoriesType extends AbstractType
         $builder
                 ->add( 'categories', CollectionType::class, [
                     'entry_type' => CategoryType::class,
-                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
