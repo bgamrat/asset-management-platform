@@ -33,7 +33,7 @@ class LocationType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'ctype', EntityType::class, [
-                    'class' => 'AppBundle:LocationType',
+                    'class' => 'AppBundle\Entity\Asset\LocationType',
                     'choice_label' => 'name',
                     'choice_attr' => function($val, $key, $index)
                     {
@@ -62,7 +62,7 @@ class LocationType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'AppBundle\Entity\Location'
+            'data_class' => 'AppBundle\Entity\Asset\Location'
         ] );
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-Namespace AppBundle\Entity;
+Namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *
  * @ORM\Table(name="asset")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AssetRepository")
- * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\AssetLog")
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\AssetLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 
  */

@@ -25,23 +25,25 @@
                     <div class="text-right">
                         <button id="categories-save-btn" type="submit">{{ 'common.save'|trans }}</button>
                     </div>
-                    <div class="form-row header">
-                        <span class="parent">{{ 'asset.parent'|trans }}</span>
-                        <span class="position">{{ 'common.position'|trans }}</span>
-                        <span class="name">{{ 'common.name'|trans }}</span>
-                        <span class="comment">{{ 'common.comment'|trans }}</span>
-                        <span class="active">{{ 'common.active'|trans }}</span>
+                    <div class="category-form-inputs">
+                        <div class="form-row header">
+                            <span class="parent">{{ 'asset.parent'|trans }}</span>
+                            <span class="position">{{ 'common.position'|trans }}</span>
+                            <span class="name">{{ 'common.name'|trans }}</span>
+                            <span class="comment">{{ 'common.comment'|trans }}</span>
+                            <span class="active">{{ 'common.active'|trans }}</span>
+                        </div>
+
+                        {{form_row(categories_form)}}
+
+                        {% for category in categories_form.categories %}
+                            {{form_row(category)}}
+                        {% endfor %}
+
+                        {% if categories_form.categories.vars.allow_add %}
+                            <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                        {% endif %}
                     </div>
-
-                    {{form_row(categories_form)}}
-
-                    {% for category in categories_form.categories %}
-                        {{form_row(category)}}
-                    {% endfor %}
-
-                    {% if categories_form.categories.vars.allow_add %}
-                        <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
-                    {% endif %}
                     {{form_end(categories_form)}}
                 </div>   
             </div>  

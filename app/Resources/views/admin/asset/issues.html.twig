@@ -1,0 +1,50 @@
+{% block title %}{{ 'issue.issue'|trans }} {{ 'issue.status'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="status-wrapper">
+        <h1>{{ 'issue.issue'|trans }} {{ 'issue.status'|trans }} {{'common.admin'|trans }}</h1>
+        <div class="statuses">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
+                </div>
+            {% endfor %}
+            {% if not statuses_form.vars.valid %}
+                <div class="form-errors statuses">
+                    {% for status in statuses_form.statuses %}
+                        {% if not status.vars.valid %}
+                            {{form_errors(status.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form_start(statuses_form)}}
+            <div class="text-right">
+                <button id="statuses-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="form-row header">
+                <span class="name">{{ 'common.name'|trans }}</span>
+                <span class="comment">{{ 'common.comment'|trans }}</span>
+                <span class="active">{{ 'common.active'|trans }}</span>
+            </div>
+            {{form_row(statuses_form)}}
+            {% for status in statuses_form.statuses %}
+                {{form_row(status)}}
+            {% endfor %}
+
+            {% if statuses_form.statuses.vars.allow_add %}
+                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+            {% endif %}
+            {{form_end(statuses_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/issue/issue_status"], function (status) {
+            status.run();
+        });
+    </script>
+{% endblock %}

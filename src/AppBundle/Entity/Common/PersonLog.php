@@ -1,17 +1,17 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Common;
 
 use Gedmo\Loggable\Entity\LogEntry;
-use AppBundle\Entity\Barcode;
+use AppBundle\Entity\Common\Person;
 use Doctrine\ORM\Mapping as ORM;
 /**
- * BarcodeLog
+ * AssetLog
  *
- * @ORM\Table(name="barcode_log")
+ * @ORM\Table(name="person_log")
  * @ORM\Entity(repositoryClass="Gedmo\Loggable\Entity\Repository\LogEntryRepository")
  */
-class BarcodeLog Extends LogEntry
+class PersonLog Extends LogEntry
 {
     //put your code here
 

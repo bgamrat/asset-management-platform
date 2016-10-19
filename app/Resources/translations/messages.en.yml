@@ -1,6 +1,8 @@
 asset:
     asset:
         Asset
+    asset-statuses:
+        Asset Statuses
     barcode:
         Barcode
     brand:
@@ -97,6 +99,8 @@ common:
         invalid
     invite:
         Invite
+    issues:
+        Issues
     locations:
         Locations
     locked:

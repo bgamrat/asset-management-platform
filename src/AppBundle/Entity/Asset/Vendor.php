@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -8,14 +8,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Manufacturer
+ * Vendor
  *
- * @ORM\Table(name="manufacturer")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ManufacturerRepository")
+ * @ORM\Table(name="vendor")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\VendorRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Manufacturer
+class Vendor
 {
 
     /**
@@ -47,19 +47,19 @@ class Manufacturer
      */
     private $comment;
     /**
-     * @ORM\ManyToMany(targetEntity="Person", cascade={"persist"})
-     * @ORM\JoinTable(name="manufacturer_contacts",
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
+     * @ORM\JoinTable(name="vendor_contacts",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id", unique=true)}
      *      )
      */
     private $contacts = null;
     /**
      * @var ArrayCollection $brands
      * @ORM\ManyToMany(targetEntity="Brand", cascade={"persist"})
-     * @ORM\JoinTable(name="manufacturer_brand",
-     *      joinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", unique=true, nullable=false)}
+     * @ORM\JoinTable(name="vendor_brand",
+     *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", nullable=false)},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id", nullable=false)}
      *      )
      */
     protected $brands = null;
@@ -100,7 +100,7 @@ class Manufacturer
      *
      * @param string $name
      *
-     * @return Manufacturer
+     * @return Vendor
      */
     public function setName( $name )
     {
@@ -152,6 +152,14 @@ class Manufacturer
     {
         return $this->comment;
     }
+    
+    public function getBrandData() {
+        $data = [];
+        foreach ($this->brands as $b) {
+            $data[] = ['id' => $b->getId(), 'name' => $b->getName()];
+        }
+        return $data;
+    }
 
     public function getBrands()
     {
@@ -163,11 +171,13 @@ class Manufacturer
         if( !$this->brands->contains( $brand ) )
         {
             $this->brands->add( $brand );
+            $brand->addVendor( $this );
         }
     }
 
     public function removeBrand( Brand $brand )
     {
+        $brand->removeVendor( $this );
         $this->brands->removeElement( $brand );
     }
 

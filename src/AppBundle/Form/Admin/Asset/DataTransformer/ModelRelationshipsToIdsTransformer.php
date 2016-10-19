@@ -2,7 +2,7 @@
 
 namespace AppBundle\Form\Admin\Asset\DataTransformer;
 
-use AppBundle\Entity\Model;
+use AppBundle\Entity\Asset\Model;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;

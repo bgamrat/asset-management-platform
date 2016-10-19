@@ -33,7 +33,7 @@ class AssetStatusType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'AppBundle\Entity\AssetStatus'
+            'data_class' => 'AppBundle\Entity\Asset\AssetStatus'
         ] );
     }
 

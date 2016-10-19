@@ -72,7 +72,7 @@ class VendorType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Vendor'
+            'data_class' => 'AppBundle\Entity\Asset\Vendor'
         ) );
     }
 

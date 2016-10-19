@@ -45,9 +45,20 @@
 #category-tree {
     padding-top: 75px;
 }
-.category .position .dijitTextBox {
-    width: 50px;
+.categories .header {
+    padding: 2px;
+}
+.category-form .parent {
+    width: 110px;
+    display: inline-block;
+}
+.category-form .position,
+.category-form .position .dijitTextBox {
+    width: 45px;
 }
 .category .position .dijitInputContainer input {
     text-align: right;
+}
+.category-form-inputs {
+    margin-right: 35px;
 }

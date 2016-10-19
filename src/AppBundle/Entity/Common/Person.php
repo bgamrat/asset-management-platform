@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -8,10 +8,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\User;
-use AppBundle\Entity\Email;
-use AppBundle\Entity\PhoneNumber;
-use AppBundle\Entity\Address;
-use AppBundle\Entity\PersonLog;
+use AppBundle\Entity\Common\Email;
+use AppBundle\Entity\Common\PhoneNumber;
+use AppBundle\Entity\Common\Address;
+use AppBundle\Entity\Common\PersonLog;
 
 /**
  * Person
@@ -120,7 +120,7 @@ class Person
      */
     private $active = true;
     /**
-     * @ORM\OneToOne(targetEntity="User", inversedBy="person")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="person")
      * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */

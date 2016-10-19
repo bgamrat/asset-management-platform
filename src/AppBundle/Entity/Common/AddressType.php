@@ -1,14 +1,14 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="email_type")
+ * @ORM\Table(name="address_type")
  */
-class EmailType
+class AddressType
 {
     /**
      * @ORM\Column(type="integer")
@@ -37,7 +37,7 @@ class EmailType
      *
      * @param string $type
      *
-     * @return EmailType
+     * @return AddressType
      */
     public function setType($type)
     {

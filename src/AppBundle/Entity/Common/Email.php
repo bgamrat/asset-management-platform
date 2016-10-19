@@ -1,45 +1,50 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Common;
 
-use AppBundle\Entity\PhoneNumberType;
+use AppBundle\Entity\Common\EmailType;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="phone_number")
+ * @ORM\Table(name="email")
+ * @UniqueEntity("email")
  * @Gedmo\Loggable
  */
-class PhoneNumber
+class Email
 {
-
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
     /**
      * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="PhoneNumberType")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="EmailType")
      * @ORM\OrderBy({"type" = "ASC"})
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      */
     private $type;
+
     /**
      * @Assert\NotBlank()
-     * @Assert\Regex(pattern="/^[0-9x\.\,\ \+\(\)-]{2,24}$/", message="error.invalid_phone_number")
-     * @ORM\Column(type="string", length=24, name="phone_number", nullable=false)
+     * @Assert\Regex(pattern="/^[0-9x\.\,\ \+\(\)-]{2,24}$/", message="error.invalid_email")
+     * @ORM\Column(type="string", length=24, name="email", nullable=false)
      */
-    private $phone_number;
+    private $email;
+
     /**
      * @ORM\Column(type="string", length=24, nullable=true)
      */
     private $comment;
-    
+
     /**
      * Get id
      *
@@ -55,12 +60,12 @@ class PhoneNumber
      *
      * @param int $type
      *
-     * @return PhoneNumber
+     * @return Email
      */
-    public function setType( $type )
+    public function setType($type)
     {
         $this->type = $type;
-
+    
         return $this;
     }
 
@@ -75,27 +80,27 @@ class PhoneNumber
     }
 
     /**
-     * Set phoneNumber
+     * Set email
      *
-     * @param string $phoneNumber
+     * @param string $email
      *
-     * @return PhoneNumber
+     * @return Email
      */
-    public function setPhoneNumber( $phoneNumber )
+    public function setEmail($email)
     {
-        $this->phone_number = $phoneNumber;
-
+        $this->email = $email;
+    
         return $this;
     }
 
     /**
-     * Get phoneNumber
+     * Get email
      *
      * @return string
      */
-    public function getPhoneNumber()
+    public function getEmail()
     {
-        return $this->phone_number;
+        return $this->email;
     }
 
     /**
@@ -103,12 +108,12 @@ class PhoneNumber
      *
      * @param string $comment
      *
-     * @return PhoneNumber
+     * @return Email
      */
-    public function setComment( $comment )
+    public function setComment($comment)
     {
         $this->comment = $comment;
-
+    
         return $this;
     }
 
@@ -126,9 +131,8 @@ class PhoneNumber
     {
         return [
             'type' => $this->getType(),
-            'phone_number' => $this->getPhoneNumber(),
+            'email' => $this->getEmail(),
             'comment' => $this->getComment()
         ];
     }
-
 }

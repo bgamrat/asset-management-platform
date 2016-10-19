@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="model")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelRepository")
- * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\ModelLog")
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\ModelLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity(
  *     fields={"brand", "name"},

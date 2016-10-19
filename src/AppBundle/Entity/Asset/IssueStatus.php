@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -11,12 +11,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Status
  *
- * @ORM\Table(name="asset_status")
+ * @ORM\Table(name="issue_status")
  * @ORM\Entity()
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  */
-class AssetStatus
+class IssueStatus
 {
 
     /**
@@ -24,7 +24,7 @@ class AssetStatus
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
+     * @ORM\OneToMany(targetEntity="Issue", mappedBy="id")
      */
     private $id;
     /**

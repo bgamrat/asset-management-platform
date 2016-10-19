@@ -2,7 +2,7 @@
 
 namespace AppBundle\Form\Admin\Asset\DataTransformer;
 
-use AppBundle\Entity\Barcode;
+use AppBundle\Entity\Asset\Barcode;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;

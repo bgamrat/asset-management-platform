@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Api\Admin\Asset;
 
 use AppBundle\Util\DStore;
-use AppBundle\Entity\Model;
+use AppBundle\Entity\Asset\Model;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +35,33 @@ class StoreController extends FOSRestController
                     ->innerJoin( 'm.brands', 'b' )
                     ->where( "CONCAT(CONCAT(m.name, ' '), b.name) LIKE :manufacturer_brand" )
                     ->setParameter( 'manufacturer_brand', $manufacturerBrand );
+
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
+    public function getCategoriesAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $name = $request->get( 'name' );
+        if( !empty( $name ) )
+        {
+            $name = '%' . str_replace( '*', '%', $name );
+
+            $em = $this->getDoctrine()->getManager();
+
+            $queryBuilder = $em->createQueryBuilder()->select( ['c.id', "c.name"] )
+                    ->from( 'AppBundle:Category', 'c' )
+                    ->where( "c.name LIKE :category_name" )
+                    ->setParameter( 'category_name', $name );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -88,7 +115,7 @@ class StoreController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
-                    ->from( 'AppBundle:Model', 'm' )
+                    ->from( 'AppBundle\Entity\Asset\Model', 'm' )
                     ->innerJoin( 'm.brand', 'b' )
                     ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
                     ->setParameter( 'brand_model', $brandModel );
@@ -110,7 +137,7 @@ class StoreController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
-                ->from( 'AppBundle:Model', 'm' )
+                ->from( 'AppBundle\Entity\Asset\Model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
                 ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
                 ->setParameter( 'brand_model', $brandModel );

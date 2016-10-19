@@ -33,15 +33,16 @@ class MenuBuilder implements ContainerAwareInterface
         $menu->addChild( 'admin', ['route' => 'root', 'label' => 'common.home'] );
         $menu->addChild( 'admin-assets', ['label' => 'common.assets'] );
         $menu['admin-assets']->addChild( 'assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_asset_index'] );
+        $menu['admin-assets']->addChild( 'issues', ['label' => 'common.issues', 'route' => 'app_admin_asset_issue_index'] );
         $menu['admin-assets']->addChild( 'manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index'] );
         $menu['admin-assets']->addChild( 'requirements', ['label' => 'asset.requirements', 'route' => 'app_admin_asset_requirements_index'] );
         $menu['admin-assets']->addChild( 'vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index'] );
         $menu['admin-assets']->addChild( 'configuration', [ 'label' => 'common.configuration'] );
+        $menu['admin-assets']['configuration']->addChild( 'statuses', ['label' => 'asset.asset-statuses', 'route' => 'app_admin_asset_assetstatus_index'] );
         $menu['admin-assets']['configuration']->addChild( 'categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index'] );
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) ) {
             $menu['admin-assets']['configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
         }
-        $menu['admin-assets']['configuration']->addChild( 'statuses', ['label' => 'asset.statuses', 'route' => 'app_admin_asset_status_index'] );
         
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN_USER' ) )
         {

@@ -3,8 +3,8 @@
 namespace AppBundle\Controller\Api\Admin\Asset;
 
 use AppBundle\Util\DStore;
-use AppBundle\Entity\Asset;
-use AppBundle\Entity\Location;
+use AppBundle\Entity\Asset\Asset;
+use AppBundle\Entity\Asset\Location;
 use AppBundle\Form\Admin\Asset\AssetType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,7 +57,7 @@ class AssetsController extends FOSRestController
             $columns[] = 'a.deletedAt AS deleted_at';
         }
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'AppBundle:Asset', 'a' )
+                ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
                 ->leftJoin( 'a.barcodes', 'bc', 'WITH', 'bc.active = true' )
@@ -108,7 +108,7 @@ class AssetsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $asset = $this->getDoctrine()
-                        ->getRepository( 'AppBundle:Asset' )->find( $id );
+                        ->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
         if( $asset !== null )
         {
             $model = $asset->getModel();
@@ -124,7 +124,7 @@ class AssetsController extends FOSRestController
                 $locationId = $location->getId();
                 $locationTypeId = $location->getType();
                 $locationType = $this->getDoctrine()
-                                ->getRepository( 'AppBundle:LocationType' )->find( $locationTypeId );
+                                ->getRepository( 'AppBundle\Entity\Asset\LocationType' )->find( $locationTypeId );
                 ;
             }
             $relationships = [
@@ -150,7 +150,7 @@ class AssetsController extends FOSRestController
             ];
 
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'AppBundle:AssetLog', $id );
+            $logUtil->getLog( 'AppBundle\Entity\Asset\AssetLog', $id );
             $data['history'] = $logUtil->translateIdsToText();
             return $data;
         }
@@ -183,7 +183,7 @@ class AssetsController extends FOSRestController
         }
         else
         {
-            $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
+            $asset = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
         }
         if( $asset->getLocation() === null )
         {
@@ -227,7 +227,7 @@ class AssetsController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'AppBundle:Asset' );
+        $repository = $em->getRepository( 'AppBundle\Entity\Asset\Asset' );
         $asset = $repository->find( $id );
         if( $asset !== null )
         {
@@ -258,7 +258,7 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $asset = $em->getRepository( 'AppBundle:Asset' )->find( $id );
+        $asset = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
         if( $asset !== null )
         {
             $em->getFilters()->enable( 'softdeleteable' );

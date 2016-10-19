@@ -1,17 +1,16 @@
 <?php
 
-namespace AppBundle\Form\Admin\Asset;
+namespace AppBundle\Form\Admin\Issue;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LocationTypeType extends AbstractType
+class IssueStatusType extends AbstractType
 {
 
     /**
@@ -23,9 +22,7 @@ class LocationTypeType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
-                ->add( 'entity', ChoiceType::class , ['choices' => ["Shop" => 'shop', "Manufacturer" => 'manufacturer', "Vendor" => 'vendor',
-                    "Venue" => 'venue']])
-                ->add( 'url', TextType::class )
+                ->add( 'comment', TextType::class )
                 ->add( 'active', CheckboxType::class )
         ;
     }
@@ -36,13 +33,13 @@ class LocationTypeType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'AppBundle\Entity\Asset\LocationType'
+            'data_class' => 'AppBundle\Entity\Asset\IssueStatus'
         ] );
     }
 
     public function getName()
     {
-        return 'location_type';
+        return 'issue_status';
     }
 
 }

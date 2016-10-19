@@ -40,7 +40,7 @@ Class Log
                 }
             }
             $repository = $this->em
-                    ->getRepository( 'AppBundle:Location' );
+                    ->getRepository( 'AppBundle\Entity\Asset\Location' );
             $locations = $repository->findBy( ['id' => $locationIds] );
 
             $locationNames = [];
@@ -73,7 +73,7 @@ Class Log
                 }
             }
             $repository = $this->em
-                    ->getRepository( 'AppBundle:Model' );
+                    ->getRepository( 'AppBundle\Entity\Asset\Model' );
             $models = $repository->findBy( ['id' => $modelIds] );
 
             $modelNames = [];

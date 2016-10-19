@@ -63,7 +63,7 @@ class ManufacturerType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Manufacturer'
+            'data_class' => 'AppBundle\Entity\Asset\Manufacturer'
         ) );
     }
 

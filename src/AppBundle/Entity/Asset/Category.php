@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -9,14 +9,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Location
+ * Category
  *
- * @ORM\Table(name="location_type")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\LocationTypeRepository")
+ * @ORM\Table(name="category")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  */
-class LocationType
+class Category
 {
 
     /**
@@ -24,7 +24,7 @@ class LocationType
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Location", mappedBy="id")
+     * @ORM\OneToMany(targetEntity="Model", mappedBy="id")
      */
     private $id;
     /**
@@ -41,18 +41,23 @@ class LocationType
      */
     private $name;
     /**
-     * @var string
-     *
-     * @Assert\Choice({"shop", "manufacturer", "vendor", "venue"})
-     * @ORM\Column(type="string", length=64, nullable=true)
+     * @var integer
+     * 
+     * @ORM\Column(type="integer", nullable=false)
      */
-    private $entity;
+    private $position = 0;
+    /**
+     * @Assert\Expression(expression="this !== this.getParent()", message="No self-referencing please")
+     * @ORM\ManyToOne(targetEntity="Category", fetch="EAGER",  cascade={"persist"})
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent;
     /**
      * @var string
-     *
+     * 
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $url;
+    private $comment;
     /**
      * @var boolean
      *
@@ -86,7 +91,7 @@ class LocationType
      *
      * @param string $name
      *
-     * @return Location
+     * @return Category
      */
     public function setName( $name )
     {
@@ -106,51 +111,75 @@ class LocationType
     }
 
     /**
-     * Set entity
+     * Set position
      *
-     * @param string $entity
+     * @param string $position
      *
      * @return Email
      */
-    public function setEntity( $entity )
+    public function setPosition( $position )
     {
-        $this->entity = $entity;
+        $this->position = $position;
 
         return $this;
     }
 
     /**
-     * Get entity
+     * Get position
      *
      * @return string
      */
-    public function getEntity()
+    public function getPosition()
     {
-        return $this->entity;
+        return $this->position;
     }
 
     /**
-     * Set url
+     * Set parent
      *
-     * @param string $url
+     * @param string $parent
      *
      * @return Email
      */
-    public function setUrl( $url )
+    public function setParent( $parent )
     {
-        $this->url = $url;
+        $this->parent = $parent;
 
         return $this;
     }
 
     /**
-     * Get url
+     * Get parent
      *
      * @return string
      */
-    public function getUrl()
+    public function getParent()
     {
-        return $this->url;
+        return $this->parent;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return Email
+     */
+    public function setComment( $comment )
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 
     public function setActive( $active )
@@ -168,8 +197,8 @@ class LocationType
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'url' => $this->getUrl(),
-            'entity' => $this->getEntity(),
+            'parent' => $this->getParent(),
+            'comment' => $this->getComment(),
             'active' => $this->isActive()
         ];
     }

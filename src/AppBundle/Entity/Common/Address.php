@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Address
  *
  * @ORM\Table(name="address")
- * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\AssetLog")
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Common\AddressLog")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AddressRepository")
  */
 class Address

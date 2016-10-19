@@ -49,7 +49,7 @@ class BrandSelectType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Brand'
+            'data_class' => 'AppBundle\Entity\Asset\Brand'
         ) );
     }
 

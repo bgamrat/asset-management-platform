@@ -2,7 +2,7 @@
 
 namespace AppBundle\Form\Admin\Asset\DataTransformer;
 
-use AppBundle\Entity\Brand;
+use AppBundle\Entity\Asset\Brand;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;

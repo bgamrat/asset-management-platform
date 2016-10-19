@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Admin\Asset;
 
-use AppBundle\Entity\AssetStatus;
+use AppBundle\Entity\Asset\AssetStatus;
 use AppBundle\Form\Admin\Asset\AssetStatusesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,11 +17,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class StatusController extends Controller
+class AssetStatusController extends Controller
 {
 
     /**
-     * @Route("/admin/asset/status")
+     * @Route("/admin/asset/asset-status")
      * @Method("GET")
      */
     public function indexAction( Request $request )
@@ -32,16 +32,16 @@ class StatusController extends Controller
         $statuses = [];
         $statuses['statuses'] = $em->getRepository( 'AppBundle:AssetStatus' )->findAll();
 
-        $statusesForm = $this->createForm( AssetStatusesType::class, $statuses, [ 'action' => $this->generateUrl( 'app_admin_asset_status_save' )] );
+        $statusesForm = $this->createForm( AssetStatusesType::class, $statuses, [ 'action' => $this->generateUrl( 'app_admin_asset_assetstatus_save' )] );
 
-        return $this->render( 'admin/asset/statuses.html.twig', array(
+        return $this->render( 'admin/asset/asset-statuses.html.twig', array(
                     'statuses_form' => $statusesForm->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
 
     /**
-     * @Route("/admin/asset/status/save")
+     * @Route("/admin/asset/asset-status/save")
      * @Method("POST")
      */
     public function saveAction( Request $request )
@@ -63,14 +63,14 @@ class StatusController extends Controller
             $em->flush();
             $this->addFlash(
                     'notice', 'common.success' );
-            $response = new RedirectResponse( $this->generateUrl( 'app_admin_asset_status_index', [], UrlGeneratorInterface::ABSOLUTE_URL ) );
+            $response = new RedirectResponse( $this->generateUrl( 'app_admin_asset_assetstatus_index', [], UrlGeneratorInterface::ABSOLUTE_URL ) );
             $response->prepare( $request );
 
             return $response->send();
         }
         else
         {
-            return $this->render( 'admin/asset/statuses.html.twig', array(
+            return $this->render( 'admin/asset/asset-statuses.html.twig', array(
                         'statuses_form' => $form->createView(),
                         'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                     ) );

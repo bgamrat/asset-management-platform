@@ -45,7 +45,7 @@ class CategoryType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'AppBundle\Entity\Category'
+            'data_class' => 'AppBundle\Entity\Asset\Category'
         ] );
     }
 

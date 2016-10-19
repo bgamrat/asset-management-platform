@@ -14,7 +14,7 @@ define([
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
-    "dijit/form/Select",
+    "dijit/form/FilteringSelect",
     "dijit/form/SimpleTextarea",
     "dijit/form/Button",
     "dijit/Dialog",
@@ -36,7 +36,7 @@ define([
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on,
         xhr, aspect, query, ObjectStore, Memory,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Select, SimpleTextarea, Button,
+        registry, Form, TextBox, ValidationTextBox, CheckBox, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
@@ -118,23 +118,17 @@ define([
             return;
         }
 
-        var data = JSON.parse(domAttr.get(select, "data-options"));
-        // Convert the data to an array of objects
-        var storeData = [], d;
-        for( d in data ) {
-            storeData.push(data[d]);
-        }
-        var memoryStore = new Memory({
-            idProperty: "value",
-            data: storeData});
-        var store = new ObjectStore({objectStore: memoryStore});
-
-        var categorySelect = new Select({
-            store: store,
-            placeholder: asset.category,
-            required: true
-        }, "model_category");
-        categorySelect.startup();
+        var categoryStore = new JsonRest({
+            target: '/api/store/categories',
+            useRangeHeaders: false,
+            idProperty: 'id'});
+        var categoryFilteringSelect = new FilteringSelect({
+            store: categoryStore,
+            labelAttr: "name",
+            searchAttr: "name",
+            pageSize: 25
+        }, select);
+        categoryFilteringSelect.startup();
 
         var nameInput = new ValidationTextBox({
             placeholder: core.name,
@@ -167,8 +161,8 @@ define([
             if( modelForm.validate() ) {
                 var data = {
                     "id": modelId,
-                    "category_text": categorySelect.get("displayedValue"),
-                    "category": parseInt(categorySelect.get("value")),
+                    "category_text": categoryFilteringSelect.get("displayedValue"),
+                    "category": parseInt(categoryFilteringSelect.get("value")),
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
@@ -267,7 +261,7 @@ define([
                 grid.collection.get(name).then(function (model) {
                     action = "view";
                     modelId = model.id;
-                    categorySelect.set('displayedValue', model.category_text);
+                    categoryFilteringSelect.set('displayedValue', model.category_text);
                     nameInput.set('value', model.name);
                     commentInput.set('value', model.comment);
                     activeCheckBox.set('checked', model.active);

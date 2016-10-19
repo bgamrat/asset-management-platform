@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Asset;
 
 use Gedmo\Loggable\Entity\LogEntry;
 use Doctrine\ORM\Mapping as ORM;
 /**
- * AssetLog
+ * ModelLog
  *
  * @ORM\Table(name="model_log")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelLogEntryRepository")

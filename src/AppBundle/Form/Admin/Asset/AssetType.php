@@ -38,7 +38,7 @@ class AssetType extends AbstractType
                     'label' => 'common.model'
                 ] )
                 ->add( 'status', EntityType::class, [
-                    'class' => 'AppBundle:AssetStatus',
+                    'class' => 'AppBundle\Entity\Asset\AssetStatus',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
@@ -79,7 +79,7 @@ class AssetType extends AbstractType
             public function configureOptions( OptionsResolver $resolver )
             {
                 $resolver->setDefaults( array(
-                    'data_class' => 'AppBundle\Entity\Asset'
+                    'data_class' => 'AppBundle\Entity\Asset\Asset'
                 ) );
             }
 

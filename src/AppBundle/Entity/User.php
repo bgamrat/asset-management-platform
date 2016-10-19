@@ -5,7 +5,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Group;
-use AppBundle\Entity\Person;
+use AppBundle\Entity\Common\Person;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -91,7 +91,7 @@ class User extends BaseUser
      */
     protected $invitation;
     /**
-     * @ORM\OneToOne(targetEntity="Person", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Common\Person", mappedBy="user", cascade={"persist"})
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     protected $person = null;

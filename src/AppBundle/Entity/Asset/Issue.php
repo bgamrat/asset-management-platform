@@ -1,21 +1,20 @@
 <?php
 
-Namespace AppBundle\Entity;
+Namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * Barcode
+ * Issue
  *
- * @ORM\Table(name="barcode")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\BarcodeRepository")
- * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\BarcodeLog")
+ * @ORM\Table(name="issue")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\IssueRepository")
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\IssueLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @UniqueEntity("barcode")
  */
-class Barcode
+class Issue
 {
     /**
      * @var int
@@ -26,18 +25,21 @@ class Barcode
      */
     private $id;
     /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     * @ORM\ManyToMany(targetEntity="Asset", mappedBy="barcodes", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @var ArrayCollection $barcodes
+     * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
+     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\JoinTable(name="issue_barcode",
+     *      joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="barcode_id", referencedColumnName="id", unique=true, nullable=false)}
+     *      )
      */
-    private $barcode;
+    protected $barcodes;
     /**
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $comment;
+    private $title;
     /**
      * @var boolean
      *

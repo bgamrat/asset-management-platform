@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -9,14 +9,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Category
+ * Status
  *
- * @ORM\Table(name="category")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
+ * @ORM\Table(name="asset_status")
+ * @ORM\Entity()
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  */
-class Category
+class AssetStatus
 {
 
     /**
@@ -24,7 +24,7 @@ class Category
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Model", mappedBy="id")
+     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
      */
     private $id;
     /**
@@ -40,18 +40,6 @@ class Category
      *     match=true)
      */
     private $name;
-    /**
-     * @var integer
-     * 
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    private $position = 0;
-    /**
-     * @Assert\Expression(expression="this !== this.getParent()", message="No self-referencing please")
-     * @ORM\ManyToOne(targetEntity="Category", fetch="EAGER",  cascade={"persist"})
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     */
-    private $parent;
     /**
      * @var string
      * 
@@ -91,7 +79,7 @@ class Category
      *
      * @param string $name
      *
-     * @return Category
+     * @return Status
      */
     public function setName( $name )
     {
@@ -108,54 +96,6 @@ class Category
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set position
-     *
-     * @param string $position
-     *
-     * @return Email
-     */
-    public function setPosition( $position )
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
-    /**
-     * Get position
-     *
-     * @return string
-     */
-    public function getPosition()
-    {
-        return $this->position;
-    }
-
-    /**
-     * Set parent
-     *
-     * @param string $parent
-     *
-     * @return Email
-     */
-    public function setParent( $parent )
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return string
-     */
-    public function getParent()
-    {
-        return $this->parent;
     }
 
     /**
@@ -197,7 +137,6 @@ class Category
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'parent' => $this->getParent(),
             'comment' => $this->getComment(),
             'active' => $this->isActive()
         ];

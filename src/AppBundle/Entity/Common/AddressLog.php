@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Common;
 
 use Gedmo\Loggable\Entity\LogEntry;
 use Doctrine\ORM\Mapping as ORM;

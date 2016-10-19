@@ -3,8 +3,8 @@
 namespace AppBundle\Controller\Api\Admin\Asset;
 
 use AppBundle\Util\DStore;
-use AppBundle\Entity\Manufacturer;
-use AppBundle\Entity\Model;
+use AppBundle\Entity\Asset\Manufacturer;
+use AppBundle\Entity\Asset\Model;
 use AppBundle\Form\Admin\Asset\BrandsType;
 use AppBundle\Form\Admin\Asset\ManufacturerType;
 use AppBundle\Form\Admin\Asset\ModelType;
@@ -252,7 +252,7 @@ class ManufacturersController extends FOSRestController
             $columns[] = 'm.deletedAt AS deleted_at';
         }
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'AppBundle:Model', 'm' )
+                ->from( 'AppBundle\Entity\Asset\Model', 'm' )
                 ->innerJoin( 'm.category', 'c' )
                 ->innerJoin( 'm.brand', 'b' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
@@ -312,12 +312,12 @@ class ManufacturersController extends FOSRestController
 
         if( !empty( $data ) )
         {
-            $model = $em->getRepository( 'AppBundle:Model' )->find( $data[0]['model_id'] );
+            $model = $em->getRepository( 'AppBundle\Entity\Asset\Model' )->find( $data[0]['model_id'] );
             $modelData = $model->toArray();
             $modelData['category'] = $model->getCategory()->getId();
             $modelData['category_text'] = $model->getCategory()->getName();
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'AppBundle:ModelLog', $model->getId() );
+            $logUtil->getLog( 'AppBundle\Entity\Asset\ModelLog', $model->getId() );
             $modelData['history'] = $logUtil->translateIdsToText();
 
             return $modelData;

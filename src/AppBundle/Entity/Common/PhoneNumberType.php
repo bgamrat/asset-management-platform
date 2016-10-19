@@ -1,14 +1,14 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="address_type")
+ * @ORM\Table(name="phone_number_type")
  */
-class AddressType
+class PhoneNumberType
 {
     /**
      * @ORM\Column(type="integer")
@@ -21,6 +21,7 @@ class AddressType
      * @ORM\Column(type="string", length=16)
      */
     private $type;
+
 
     /**
      * Get id
@@ -37,7 +38,7 @@ class AddressType
      *
      * @param string $type
      *
-     * @return AddressType
+     * @return PhoneNumberType
      */
     public function setType($type)
     {
