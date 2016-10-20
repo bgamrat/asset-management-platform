@@ -45,7 +45,7 @@ class UserType extends AbstractType
                 ->add( 'email', TextType::class, ['label' => 'common.email'] )
                 ->add( 'username', TextType::class, ['label' => 'common.username', 'validation_groups' => array('registration')] )
                 ->add( 'person', PersonType::class, array(
-                    'data_class' => 'AppBundle\Entity\Person',
+                    'data_class' => 'AppBundle\Entity\Common\Person',
                     'by_reference' => true,
                     'required' => false,
                     'label' => false,

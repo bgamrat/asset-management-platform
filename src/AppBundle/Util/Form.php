@@ -24,18 +24,6 @@ class Form
         return null;
     }
 
-    public function getJsonData( Request $request )
-    {
-        $data = json_decode( $request->getContent(), true );
-        return $data;
-    }
-
-    public function validateFormData( BaseForm $form, $data )
-    {
-        $form->submit( $data );
-        return $form->isValid();
-    }
-
     public function getErrorMessages( BaseForm $form )
     {
         $errorMessages = [];

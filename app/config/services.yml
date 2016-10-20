@@ -144,7 +144,7 @@ services:
             - { name: knp_menu.voter }
             
     app.model.person:
-        class: AppBundle\Model\Person
+        class: AppBundle\Model\Common\Person
         arguments: ["@doctrine.orm.entity_manager","@app.util.phone_number","@app.util.email","@app.util.address"]
         
     app.util.dstore:

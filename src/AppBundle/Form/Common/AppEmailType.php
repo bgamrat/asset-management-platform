@@ -23,7 +23,7 @@ class AppEmailType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
-                    'class' => 'AppBundle:EmailType',
+                    'class' => 'AppBundle\Entity\Common\EmailType',
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
@@ -45,7 +45,7 @@ class AppEmailType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Email'
+            'data_class' => 'AppBundle\Entity\Common\Email'
         ) );
     }
 

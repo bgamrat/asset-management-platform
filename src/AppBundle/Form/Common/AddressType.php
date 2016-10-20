@@ -23,7 +23,7 @@ class AddressType extends AbstractType
         $builder
                                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
-                    'class' => 'AppBundle:AddressType',
+                    'class' => 'AppBundle\Entity\Common\AddressType',
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
@@ -52,7 +52,7 @@ class AddressType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Address'
+            'data_class' => 'AppBundle\Entity\Common\Address'
         ) );
     }
 

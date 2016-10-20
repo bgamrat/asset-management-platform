@@ -2,14 +2,12 @@
 
 namespace AppBundle\Controller\Api\Admin\User;
 
-use AppBundle\Entity\Person;
+use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\User;
 use AppBundle\Util\DStore;
-use AppBundle\Util\Group;
 use AppBundle\Form\Admin\User\UserType;
 use AppBundle\Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -112,9 +110,7 @@ class UsersController extends FOSRestController
                 'enabled' => $user->isEnabled(),
                 'locked' => $user->isLocked()
             ];
-            $person = $user->getPerson();
-            $personModel = $this->get( 'app.model.person' );
-            $data['person'] = $personModel->get( $person );
+            $data['person'] = $user->getPerson();
 
             if( $this->isGranted( 'ROLE_ADMIN_USER_ADMIN' ) )
             {
@@ -148,34 +144,37 @@ class UsersController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
-        $formProcessor = $this->get( 'app.util.form' );
-        $data = $formProcessor->getJsonData( $request );
-        $form = $this->createForm( UserType::class, null, [] );
-        try
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        if( $id === "null" )
         {
-            $formProcessor->validateFormData( $form, $data );
-            $em = $this->getDoctrine()->getManager();
-            $user = $em->getRepository( 'AppBundle:User' )->findOneBy( ['username' => $username] );
-            if( $user === null )
-            {
-                $user = $userManager->createUser();
+                           $user = $userManager->createUser();
                 $user->setUsername( $data['username'] );
                 $user->setPassword( md5( 'junk' ) );
+        }
+        else
+        {
+            $user = $em->getRepository( 'AppBundle\Entity\User' )->findOneBy( ['username' => $username] );
+        }
+        $form = $this->createForm( UserType::class, $user, [] );
+        try
+        {
+            $form->submit( $data );
+            if( $form->isValid() )
+            {
+                $user = $form->getData();
+                $em->persist( $user );
+                $em->flush();
+                $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
+                $response->headers->set( 'Location', $this->generateUrl(
+                                'app_admin_api_user_get_user', array('id' => $user->getId()), true // absolute
+                        )
+                );
             }
-            $userUtil = $this->get( 'app.util.user' );
-            $userUtil->processRoleUpdates( $user, $form->get( 'roles' )->getData() );
-            $userUtil->processGroupUpdates( $user, $data );
-            $personModel = $this->get( 'app.model.person' );
-            $person = $personModel->update( $user->getPerson(), $data['person'] );
-            $user->setPerson( $person );
-            $em->persist( $user );
-            $em->flush();
-
-            $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
-            $response->headers->set( 'Location', $this->generateUrl(
-                            'app_admin_api_user_get_user', array('username' => $user->getUsernameCanonical()), true // absolute
-                    )
-            );
+            else
+            {
+                return $form;
+            }
         }
         catch( Exception $e )
         {
@@ -193,8 +192,7 @@ class UsersController extends FOSRestController
     public function patchUserAction( $username, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER_ADMIN', null, 'Unable to access this page!' );
-        $formProcessor = $this->get( 'app.util.form' );
-        $data = $formProcessor->getJsonData( $request );
+        $data = $request->request->all();
         $userManager = $this->get( 'fos_user.user_manager' );
         $user = $userManager->findUserBy( ['username' => $username] );
         if( $user !== null )

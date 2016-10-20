@@ -34,7 +34,7 @@ class ModelType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['required' => false, 'mapped' => false] )
                 ->add( 'category', EntityType::class, [
-                    'class' => 'AppBundle:Category',
+                    'class' => 'AppBundle\Entity\Asset\Category',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
@@ -54,7 +54,7 @@ class ModelType extends AbstractType
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'requires', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle:Model',
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
                     'choice_label' =>false],
                     'by_reference' => false,
                     'required' => false,
@@ -66,7 +66,7 @@ class ModelType extends AbstractType
                 ] )
                 ->add( 'required_by', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle:Model',
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
                     'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
@@ -79,7 +79,7 @@ class ModelType extends AbstractType
                 ] )
                 ->add( 'extends', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle:Model',
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
                     'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
@@ -91,7 +91,7 @@ class ModelType extends AbstractType
                 ] )
                 ->add( 'extended_by', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle:Model',
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
                     'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,

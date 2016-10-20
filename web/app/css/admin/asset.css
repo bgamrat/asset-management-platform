@@ -62,3 +62,7 @@
 .category-form-inputs {
     margin-right: 35px;
 }
+.location-types .header .entity {
+    width: 110px;
+    display:inline-block;
+}

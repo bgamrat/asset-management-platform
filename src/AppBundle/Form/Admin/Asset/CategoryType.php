@@ -26,7 +26,7 @@ class CategoryType extends AbstractType
                 ->add( 'name', TextType::class )
                 ->add( 'position', IntegerType::class )
                 ->add( 'parent', EntityType::class, [
-                    'class' => 'AppBundle:Category',
+                    'class' => 'AppBundle\Entity\Asset\Category',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,

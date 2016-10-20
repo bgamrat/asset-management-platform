@@ -31,7 +31,7 @@ class StoreController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['b.id', "CONCAT(CONCAT(m.name, ' '), b.name) AS name"] )
-                    ->from( 'AppBundle:Manufacturer', 'm' )
+                    ->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
                     ->innerJoin( 'm.brands', 'b' )
                     ->where( "CONCAT(CONCAT(m.name, ' '), b.name) LIKE :manufacturer_brand" )
                     ->setParameter( 'manufacturer_brand', $manufacturerBrand );
@@ -59,7 +59,7 @@ class StoreController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['c.id', "c.name"] )
-                    ->from( 'AppBundle:Category', 'c' )
+                    ->from( 'AppBundle\Entity\Asset\Category', 'c' )
                     ->where( "c.name LIKE :category_name" )
                     ->setParameter( 'category_name', $name );
 
@@ -87,7 +87,7 @@ class StoreController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "m.name"] )
-                    ->from( 'AppBundle:Manufacturer', 'm' )
+                    ->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
                     ->where( "m.name LIKE :manufacturer_name" )
                     ->setParameter( 'manufacturer_name', $name );
 
@@ -161,7 +161,7 @@ class StoreController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['v.id', "v.name"] )
-                    ->from( 'AppBundle:Vendor', 'v' )
+                    ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
                     ->where( "v.name LIKE :vendor_name" )
                     ->setParameter( 'vendor_name', $name );
 
@@ -189,7 +189,7 @@ class StoreController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['t.id', "t.name"] )
-                    ->from( 'AppBundle:Trailer', 't' )
+                    ->from( 'AppBundle\Entity\Asset\Trailer', 't' )
                     ->where( "t.name LIKE :trailer_name" )
                     ->setParameter( 'trailer_name', $name );
 

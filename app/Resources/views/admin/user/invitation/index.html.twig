@@ -3,11 +3,11 @@
 
 {% block admin_content %}
     <div id="invitation-wrapper">
-        <h1>{{ 'invitation.user.admin'|trans }}</h1>
+        <h1>{{ 'user.invitation'|trans }}</h1>
         <div id="invitation-controls">
             <div>
             <form id="invitation-grid-filter-form">
-                <label for="filter-input">{{ 'filter'|trans }}<input type="text" id="invitation-filter-input">
+                <label for="filter-input">{{ 'common.filter'|trans }}<input type="text" id="invitation-filter-input">
             </form>
             </div>
             <button id="invitation-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
@@ -19,7 +19,7 @@
 
 {% block javascripts %}
     <script>
-        require(["app/admin/invitation"], function(invitation){
+        require(["app/admin/user/invitation"], function(invitation){
             invitation.run();
         });
     </script>

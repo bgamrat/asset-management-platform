@@ -86,7 +86,7 @@
 
 {% block javascripts %}
     <script>
-        require(["{% if is_granted('ROLE_ADMIN_USER_ADMIN') %}app/admin/user{% else %}app/admin/view-only/user{%endif %}"],
+        require(["{% if is_granted('ROLE_ADMIN_USER_ADMIN') %}app/admin/user/user{% else %}app/admin/view-only/user{%endif %}"],
                 function (user) {
                     user.run();
                 });

@@ -23,7 +23,7 @@ class PhoneNumberType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
-                    'class' => 'AppBundle:PhoneNumberType',
+                    'class' => 'AppBundle\Entity\Common\PhoneNumberType',
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
@@ -44,7 +44,7 @@ class PhoneNumberType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\PhoneNumber'
+            'data_class' => 'AppBundle\Entity\Common\PhoneNumber'
         ) );
     }
 

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Form\Admin\Asset\DataTransformer;
 
-use AppBundle\Entity\Asset\Model;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -53,7 +52,7 @@ class ModelRelationshipsToIdsTransformer implements DataTransformerInterface
 
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder->select( 'm' )
-                ->from( 'AppBundle:Model', 'm' )
+                ->from( 'AppBundle\Entity\Asset\Model', 'm' )
                 ->where( $queryBuilder->expr()->in( 'm.id', ':modelIds' ) )
                 ->setParameter( 'modelIds', $modelIds )
                 ->orderBy( 'm.name', 'ASC' );

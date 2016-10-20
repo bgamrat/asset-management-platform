@@ -26,7 +26,7 @@ class PersonType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
-                    'class' => 'AppBundle:PersonType',
+                    'class' => 'AppBundle\Entity\Common\PersonType',
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
@@ -86,7 +86,7 @@ class PersonType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Person'
+            'data_class' => 'AppBundle\Entity\Common\Person'
         ) );
     }
 

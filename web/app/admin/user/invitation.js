@@ -105,6 +105,7 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/[a-z@\.0-9\+_#-]/i, ''), 'i')
             }));
         });
+        lib.pageReady();
     }
     return {
         run: run
