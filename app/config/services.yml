@@ -143,31 +143,12 @@ services:
         tags:
             - { name: knp_menu.voter }
             
-    app.model.person:
-        class: AppBundle\Model\Common\Person
-        arguments: ["@doctrine.orm.entity_manager","@app.util.phone_number","@app.util.email","@app.util.address"]
-        
     app.util.dstore:
         class: AppBundle\Util\DStore
                    
-    app.util.address:
-        class: AppBundle\Util\Address
-        arguments: ['@doctrine.orm.entity_manager']
-
-    app.util.brand:
-        class: AppBundle\Util\Brand
-        arguments: ['@doctrine.orm.entity_manager']
-        
-    app.util.contact:
-        class: AppBundle\Util\Contact
-        arguments: ['@doctrine.orm.entity_manager', '@app.model.person']
-        
-    app.util.email:
-        class: AppBundle\Util\Email 
-        arguments: ['@doctrine.orm.entity_manager']
-
     app.util.form:
         class: AppBundle\Util\Form
+        arguments: ['@session.handler.memcached']
         
     app.util.log:
         class: AppBundle\Util\Log
@@ -177,13 +158,20 @@ services:
         class: AppBundle\Util\Model
         arguments: ['@doctrine.orm.entity_manager']
         
-    app.util.phone_number:
-        class: AppBundle\Util\PhoneNumber
-        arguments: ['@doctrine.orm.entity_manager']
-        
     app.util.user:
         class: AppBundle\Util\User
         arguments: ["@fos_user.group_manager"]
 
     fos_user.doctrine_registry:
         alias: doctrine
+        
+    session.memcached:
+        class: Memcached
+        arguments:
+            persistent_id: %session_memcached_prefix%
+        calls:
+            - [ addServer, [ '%session_memcached_host%', '%session_memcached_port%' ]]
+
+    session.handler.memcached:
+        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
+        arguments: ['@session.memcached', { prefix: '%session_memcached_prefix%', expiretime: '%session_memcached_expire%' }]

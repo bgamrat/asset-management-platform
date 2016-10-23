@@ -13,3 +13,8 @@ parameters:
     legacy_database_name: legacy
     legacy_database_user: dev
     legacy_database_password: dev
+    
+    session_memcached_host:     localhost
+    session_memcached_port:     11211
+    session_memcached_prefix:   sess
+    session_memcached_expire:   3600

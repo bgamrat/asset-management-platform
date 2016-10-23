@@ -78,10 +78,9 @@ class AssetsController extends FOSRestController
                 case DStore::LIKE:
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
-                            $queryBuilder->expr()->orX(
-                                    $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'a.serial_number', '?1' ) ),
-                                    $queryBuilder->expr()->like( 'a.location_text', '?1' )
-                                    )
+                                    $queryBuilder->expr()->orX(
+                                            $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'a.serial_number', '?1' ) ), $queryBuilder->expr()->like( 'a.location_text', '?1' )
+                            )
                     );
                     break;
                 case DStore::GT:
@@ -128,10 +127,10 @@ class AssetsController extends FOSRestController
                 ;
             }
             $relationships = [
-                'extends' => $model->getExtends(false),
-                'requires' => $model->getRequires(false),
-                'extended_by' => $model->getExtendedBy(false),
-                'required_by' => $model->getRequiredBy(false)
+                'extends' => $model->getExtends( false ),
+                'requires' => $model->getRequires( false ),
+                'extended_by' => $model->getExtendedBy( false ),
+                'required_by' => $model->getRequiredBy( false )
             ];
             $status = $asset->getStatus();
             $data = [
@@ -152,6 +151,8 @@ class AssetsController extends FOSRestController
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle\Entity\Asset\AssetLog', $id );
             $data['history'] = $logUtil->translateIdsToText();
+            $formUtil = $this->get( 'app.util.form' );
+            $formUtil->saveDataTimestamp( 'asset'.$asset->getId(), $asset->getUpdated() );
             return $data;
         }
         else
@@ -177,21 +178,27 @@ class AssetsController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $data = $request->request->all();
-        if( $id === "null" )
-        {
-            $asset = new Asset();
-        }
-        else
-        {
-            $asset = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
-        }
-        if( $asset->getLocation() === null )
-        {
-            $asset->setLocation( new Location() );
-        }
-        $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
         try
         {
+            if( $id === "null" )
+            {
+                $asset = new Asset();
+            }
+            else
+            {
+                $asset = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
+                $formUtil = $this->get( 'app.util.form' );
+                if ($formUtil->checkDataTimestamp( 'asset'.$asset->getId(), $asset->getUpdated() ) === false) {
+                    throw new Exception("data.outdated",400);
+                }
+            }
+            if( $asset->getLocation() === null )
+            {
+                $asset->setLocation( new Location() );
+            }
+            $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
+
+
             $form->submit( $data );
             if( $form->isValid() )
             {

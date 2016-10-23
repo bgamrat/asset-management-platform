@@ -302,6 +302,10 @@ class Asset
     {
         return $this->active;
     }
+    
+    public function getUpdated() {
+        return $this->updated;
+    }
 
     public function getDeletedAt()
     {
