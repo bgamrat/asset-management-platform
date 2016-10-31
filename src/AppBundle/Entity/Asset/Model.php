@@ -93,6 +93,16 @@ class Model
      */
     private $requires;
     /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
@@ -360,7 +370,11 @@ class Model
     {
         $this->requires->removeElement( $model );
     }
-
+    
+    public function getUpdated() {
+        return $this->updated;
+    }
+    
     public function getDeletedAt()
     {
         return $this->deletedAt;

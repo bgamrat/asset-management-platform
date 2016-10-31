@@ -168,6 +168,10 @@ class Location
     {
         return $this->active;
     }
+        
+    public function getUpdated() {
+        return $this->updated;
+    }
 
     public function getDeletedAt()
     {

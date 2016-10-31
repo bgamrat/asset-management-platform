@@ -4,6 +4,7 @@ define([
     "dojo/dom-attr",
     "dojo/dom-construct",
     "dojo/on",
+    "dojo/query",
     "dijit/form/ValidationTextBox",
     "dijit/form/Textarea",
     "dijit/form/Select",
@@ -15,7 +16,7 @@ define([
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (lang, dom, domAttr, domConstruct, on,
+], function (lang, dom, domAttr, domConstruct, on, query,
         ValidationTextBox, Textarea, Select,
         ObjectStore, Memory,
         emails, phoneNumbers, addresses,
@@ -23,12 +24,12 @@ define([
 
     "use strict";
     var divIdInUse = "user_person";
-    var firstnameInput, middleInitialInput, lastnameInput;
-    var typeSelect, commentInput;
+    var firstnameInput = [], middleInitialInput = [], lastnameInput = [];
+    var typeSelect = [], commentInput = [];
     var dataPrototype;
     var prototypeNode, prototypeContent;
     var store;
-    var personId = 0;
+    var personId = [];
 
     function setDivId(divId) {
         divIdInUse = divId + '_person';
@@ -38,25 +39,34 @@ define([
         return divIdInUse;
     }
 
+    function cloneNewNode() {
+        prototypeContent = dataPrototype.replace(/__person__/g, personId.length);
+        domConstruct.place(prototypeContent, prototypeNode, "after");
+    }
+
     function createDijits() {
-        var base = getDivId() + '_';
+        var dijit, base = getDivId() + '_';
         if( prototypeNode !== null ) {
-            base += personId + '_';
+            base += personId.length + '_';
         }
-        typeSelect = new Select({
+        personId.push(null);
+        dijit = new Select({
             store: store,
             placeholder: core.type,
             required: true
         }, base + "type");
-        typeSelect.startup();
-        firstnameInput = new ValidationTextBox({
+        dijit.startup();
+        typeSelect.push(dijit);
+        dijit = new ValidationTextBox({
             trim: true,
             properCase: true,
             pattern: "[A-Za-z\.\,\ \'-]{2,64}",
             "class": "name",
             placeholder: core.firstname
         }, base + "firstname");
-        middleInitialInput = new ValidationTextBox({
+        dijit.startup();
+        firstnameInput.push(dijit);
+        dijit = new ValidationTextBox({
             trim: true,
             uppercase: true,
             pattern: "[A-Z]",
@@ -65,23 +75,40 @@ define([
             placeholder: core.mi,
             "class": "xshort"
         }, base + "middleinitial");
-        lastnameInput = new ValidationTextBox({
+        dijit.startup();
+        middleInitialInput.push(dijit);
+        dijit = new ValidationTextBox({
             required: true,
             trim: true,
             pattern: "[A-Za-z\.\,\ \'-]{2,64}",
             "class": "name",
             placeholder: core.lastname
         }, base + "lastname");
-        firstnameInput.startup();
-        middleInitialInput.startup();
-        lastnameInput.startup();
-        commentInput = new Textarea({
+        dijit.startup();
+        lastnameInput.push(dijit);
+        dijit = new Textarea({
             placeholder: core.comment,
             trim: true,
             required: false
         }, base + "comment");
-        commentInput.startup();
+        dijit.startup();
+        commentInput.push(dijit);
+    }
 
+    function destroyRow(id, target) {
+        var item;
+        personId.splice(id, 1);
+        item = typeSelect.splice(id, 1);
+        item[0].destroyRecursive();
+        item = firstnameInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = middleInitialInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = lastnameInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = commentInput.splice(id, 1);
+        item[0].destroyRecursive();
+        domConstruct.destroy(target);
     }
 
     function run() {
@@ -96,9 +123,8 @@ define([
         if( prototypeNode !== null ) {
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
             if( dataPrototype !== null ) {
-                prototypeContent = dataPrototype.replace(/__person__/g, personId);
-                domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-                base = prototypeNode.id + "_0";
+                cloneNewNode();
+                base += "_0";
             } else {
                 prototypeNode = null;
             }
@@ -130,51 +156,68 @@ define([
     }
 
     function getData() {
-        return {
-            "type": typeSelect.get('value'),
-            "firstname": firstnameInput.get('value'),
-            "middleinitial": middleInitialInput.get('value'),
-            "lastname": lastnameInput.get('value'),
-            "fullname": firstnameInput.get('value') + " " + middleInitialInput.get('value') + " " + lastnameInput.get('value'),
-            "comment": commentInput.get('value'),
-            "emails": emails.getData(),
-            "phone_numbers": phoneNumbers.getData(),
-            "addresses": addresses.getData()
+        var i, returnData = [];
+        for( i = 0; i < firstnameInput.length; i++ ) {
+            returnData.push({
+                "id": personId[i],
+                "type": typeSelect[i].get('value'),
+                "firstname": firstnameInput[i].get('value'),
+                "middleinitial": middleInitialInput[i].get('value'),
+                "lastname": lastnameInput[i].get('value'),
+                "fullname": firstnameInput[i].get('value') + " " + middleInitialInput[i].get('value') + " " + lastnameInput[i].get('value'),
+                "comment": commentInput[i].get('value'),
+                "emails": emails.getData(),
+                "phone_numbers": phoneNumbers.getData(),
+                "addresses": addresses.getData()
+            }
+            );
         }
+        return returnData;
+        return
     }
 
     function setData(person) {
-        if( typeof person === "object" ) {
-            if( person === null ) {
-                person = {};
-            }
-            person = lang.mixin({firstname: '', middleinitial: '', lastname: ''}, person);
-            typeSelect.set('value', person.type);
-            firstnameInput.set('value', person.firstname);
-            middleInitialInput.set('value', person.middleinitial);
-            lastnameInput.set('value', person.lastname);
-            commentInput.set('value', person.comment);
-            if( typeof person.phone_numbers !== "undefined" ) {
-                phoneNumbers.setData(person.phone_numbers);
-            } else {
-                phoneNumbers.setData(null);
-            }
-            if( typeof person.emails !== "undefined" ) {
-                emails.setData(person.emails);
-            } else {
-                emails.setData(null);
-            }
-            if( typeof person.addresses !== "undefined" ) {
-                addresses.setData(person.addresses);
-            } else {
-                addresses.setData(null);
+        var i, p, obj, nodes;
+
+        nodes = query(".form-row.person,.form-row.contacts");
+        nodes.forEach(function (node, index) {
+            destroyRow(index, node);
+        });
+
+        if( typeof person === "object" && person !== null && person.length > 0 ) {
+            for( i = 0; i < person.length; i++ ) {
+                cloneNewNode();
+                createDijits();
+                obj = person[i];
+                typeSelect[i].set('value', obj.type);
+                firstnameInput[i].set('value', obj.firstname);
+                middleInitialInput[i].set('value', obj.middleinitial);
+                lastnameInput[i].set('value', obj.lastname);
+                commentInput[i].set('value', obj.comment);
+                if( typeof obj.phone_numbers !== "undefined" ) {
+                    phoneNumbers.setData(obj.phone_numbers);
+                } else {
+                    phoneNumbers.setData(null);
+                }
+                if( typeof person.emails !== "undefined" ) {
+                    emails.setData(obj.emails);
+                } else {
+                    emails.setData(null);
+                }
+                if( typeof person.addresses !== "undefined" ) {
+                    addresses.setData(obj.addresses);
+                } else {
+                    addresses.setData(null);
+                }
             }
         } else {
-            typeSelect.set('value', '');
-            firstnameInput.set('value', '');
-            middleInitialInput.set('value', '');
-            lastnameInput.set('value', '');
-            commentInput.set('value', '');
+            cloneNewNode();
+            createDijits();
+            typeSelect[0].set('value', '');
+            firstnameInput[0].set('value', '');
+            middleInitialInput[0].set('value', '');
+            lastnameInput[0].set('value', '');
+            commentInput[0].set('value', '');
             phoneNumbers.setData(null);
             emails.setData(null);
             addresses.setData(null);

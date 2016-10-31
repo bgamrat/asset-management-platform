@@ -127,7 +127,7 @@ define([
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
-                    "contacts": [person.getData()], // TODO: Full multi-contact implementation
+                    "contacts": person.getData(),
                     "brands": brands.getData()
                 };
                 if( action === "view" ) {
@@ -262,8 +262,7 @@ define([
                         action = "view";
                         nameInput.set("value", manufacturer.name);
                         activeCheckBox.set("checked", manufacturer.active === true);
-                        // @TODO: Full multi-contact support
-                        person.setData(manufacturer.contacts[0]);
+                        person.setData(manufacturer.contacts);
                         brands.setData(manufacturer.brands);
                         manufacturerViewDialog.show();
                     }, lib.xhrError);

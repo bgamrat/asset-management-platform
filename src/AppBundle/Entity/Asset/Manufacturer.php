@@ -57,13 +57,23 @@ class Manufacturer
     private $contacts = null;
     /**
      * @var ArrayCollection $brands
-     * @ORM\ManyToMany(targetEntity="Brand", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Asset\Brand", cascade={"persist"})
      * @ORM\JoinTable(name="manufacturer_brand",
      *      joinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", unique=true, nullable=false)}
      *      )
      */
     protected $brands = null;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
@@ -188,6 +198,10 @@ class Manufacturer
     public function removeContact( Person $contact )
     {
         $this->contacts->removeElement( $contact );
+    }
+
+    public function getUpdated() {
+        return $this->updated;
     }
 
     public function getDeletedAt()

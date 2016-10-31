@@ -64,6 +64,16 @@ class Vendor
      */
     protected $brands = null;
     /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
@@ -197,6 +207,10 @@ class Vendor
     public function removeContact( Person $contact )
     {
         $this->contacts->removeElement( $contact );
+    }
+        
+    public function getUpdated() {
+        return $this->updated;
     }
 
     public function getDeletedAt()

@@ -87,7 +87,8 @@ class ManufacturersController extends FOSRestController
                 'contacts' => $manufacturer->getContacts(),
                 'active' => $manufacturer->isActive()
             ];
-
+            $formUtil = $this->get( 'app.util.form' );
+            $formUtil->saveDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdated() );
             return $data;
         }
         else
@@ -112,13 +113,18 @@ class ManufacturersController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $manufacturer = $em->getRepository( 'AppBundle\Entity\Asset\Manufacturer' )->findBy( [ 'name' => $name] );
-        if( $manufacturer === null )
+        if( empty($manufacturer) )
         {
             $manufacturer = new Manufacturer();
         }
         else
         {
             $manufacturer = $manufacturer[0];
+            $formUtil = $this->get( 'app.util.form' );
+            if( $formUtil->checkDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdated() ) === false )
+            {
+                throw new Exception( "data.outdated", 400 );
+            }
         }
 
         $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
@@ -314,7 +320,8 @@ class ManufacturersController extends FOSRestController
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle\Entity\Asset\ModelLog', $model->getId() );
             $modelData['history'] = $logUtil->translateIdsToText();
-
+            $formUtil = $this->get( 'app.util.form' );
+            $formUtil->saveDataTimestamp( 'model' . $model->getId(), $model->getUpdated() );
             return $modelData;
         }
         else
@@ -373,6 +380,11 @@ class ManufacturersController extends FOSRestController
             else
             {
                 $model = new Model();
+                $formUtil = $this->get( 'app.util.form' );
+                if( $formUtil->checkDataTimestamp( 'model' . $model->getId(), $model->getUpdated() ) === false )
+                {
+                    throw new Exception( "data.outdated", 400 );
+                }
             }
             $brand = $em->getRepository( 'AppBundle\Entity\Asset\Brand' )->find( $manufacturerAndBrandData[0]['brand_id'] );
         }

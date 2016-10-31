@@ -99,6 +99,8 @@ class VendorsController extends FOSRestController
                 'brand_data' => $vendor->getBrandData(),
                 'active' => $vendor->isActive()
             ];
+            $formUtil = $this->get( 'app.util.form' );
+            $formUtil->saveDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdated() );
             return $data;
         }
         else
@@ -131,6 +133,11 @@ class VendorsController extends FOSRestController
         else
         {
             $vendor = $em->getRepository( 'AppBundle:Vendor' )->find( $id );
+            $formUtil = $this->get( 'app.util.form' );
+            if( $formUtil->checkDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdated() ) === false )
+            {
+                throw new Exception( "data.outdated", 400 );
+            }
         }
         $form = $this->createForm( VendorType::class, $vendor, ['allow_extra_fields' => true] );
         try

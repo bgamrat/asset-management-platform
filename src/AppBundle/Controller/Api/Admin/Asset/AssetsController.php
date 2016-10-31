@@ -152,7 +152,7 @@ class AssetsController extends FOSRestController
             $logUtil->getLog( 'AppBundle\Entity\Asset\AssetLog', $id );
             $data['history'] = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'asset'.$asset->getId(), $asset->getUpdated() );
+            $formUtil->saveDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdated() );
             return $data;
         }
         else
@@ -178,27 +178,26 @@ class AssetsController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $data = $request->request->all();
+        if( $id === "null" )
+        {
+            $asset = new Asset();
+        }
+        else
+        {
+            $asset = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
+            $formUtil = $this->get( 'app.util.form' );
+            if( $formUtil->checkDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdated() ) === false )
+            {
+                throw new Exception( "data.outdated", 400 );
+            }
+        }
+        if( $asset->getLocation() === null )
+        {
+            $asset->setLocation( new Location() );
+        }
+        $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
         try
         {
-            if( $id === "null" )
-            {
-                $asset = new Asset();
-            }
-            else
-            {
-                $asset = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
-                $formUtil = $this->get( 'app.util.form' );
-                if ($formUtil->checkDataTimestamp( 'asset'.$asset->getId(), $asset->getUpdated() ) === false) {
-                    throw new Exception("data.outdated",400);
-                }
-            }
-            if( $asset->getLocation() === null )
-            {
-                $asset->setLocation( new Location() );
-            }
-            $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
-
-
             $form->submit( $data );
             if( $form->isValid() )
             {

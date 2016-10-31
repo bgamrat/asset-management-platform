@@ -5,7 +5,7 @@ namespace AppBundle\Form\Common;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -21,7 +21,7 @@ class AddressType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                                ->add( 'id', HiddenType::class, ['label' => false] )
+                ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
                     'class' => 'AppBundle\Entity\Common\AddressType',
                     'choice_label' => 'type',
@@ -36,9 +36,8 @@ class AddressType extends AbstractType
                 ->add( 'city', TextType::class, ['label' => 'common.city'] )
                 ->add( 'state_province', TextType::class, ['label' => 'common.state_province'] )
                 ->add( 'postal_code', TextType::class, ['label' => 'common.postal_code'] )
-                ->add( 'country', CountryType::class, ['label' => 'common.country',
-                    'choices_as_values' => true,
-                    'preferred_choices' => ['US' => 'US', 'CA' => 'CA', 'MX' => 'MX']] )
+                ->add( 'country', ChoiceType::class, ['label' => 'common.country',
+                    'choices' => ['US' => 'US', 'CA' => 'CA', 'MX' => 'MX']] )
                 ->add( 'comment', TextareaType::class , [
                     'required' => false,
                     'label' => false
