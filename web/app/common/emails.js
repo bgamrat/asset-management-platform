@@ -140,7 +140,7 @@ define([
     }
 
     function setData(emails) {
-        var i, p, obj;
+        var i, obj;
 
         query(".form-row.email", prototypeNode.parentNode).forEach(function (node, index) {
             if( index !== 0 ) {

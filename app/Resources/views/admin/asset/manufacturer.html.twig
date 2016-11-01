@@ -40,6 +40,9 @@
                     <div id="manufacturer-view-contacts-tab">
                         <fieldset class="contacts">
                             {{form_row(manufacturer_form.person)}}
+                            {% if manufacturer_form.person.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
                         </fieldset>
                     </div>
                     <div id="manufacturer-view-brands-tab">

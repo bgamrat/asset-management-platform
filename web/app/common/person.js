@@ -108,7 +108,7 @@ define([
         item[0].destroyRecursive();
         item = commentInput.splice(id, 1);
         item[0].destroyRecursive();
-        domConstruct.destroy(target);
+        //domConstruct.destroy(target);
     }
 
     function run() {
@@ -199,12 +199,12 @@ define([
                 } else {
                     phoneNumbers.setData(null);
                 }
-                if( typeof person.emails !== "undefined" ) {
+                if( typeof obj.emails !== "undefined" ) {
                     emails.setData(obj.emails);
                 } else {
                     emails.setData(null);
                 }
-                if( typeof person.addresses !== "undefined" ) {
+                if( typeof obj.addresses !== "undefined" ) {
                     addresses.setData(obj.addresses);
                 } else {
                     addresses.setData(null);

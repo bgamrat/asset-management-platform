@@ -166,7 +166,12 @@ class Manufacturer
 
     public function getBrands()
     {
-        return $this->brands->toArray();
+        
+        $return = [];
+        foreach ($this->brands as $b) {
+            $return[] = $b->toArray();
+        }
+        return $return;
     }
 
     public function addBrand( Brand $brand )
