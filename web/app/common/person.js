@@ -181,13 +181,17 @@ define([
 
         nodes = query(".form-row.person,.form-row.contacts");
         nodes.forEach(function (node, index) {
-            destroyRow(index, node);
+            if (index !== 0) {
+                destroyRow(index, node);
+            }
         });
 
         if( typeof person === "object" && person !== null && person.length > 0 ) {
             for( i = 0; i < person.length; i++ ) {
-                cloneNewNode();
-                createDijits();
+                if (i !== 0) {
+                    cloneNewNode();
+                    createDijits();
+                }
                 obj = person[i];
                 typeSelect[i].set('value', obj.type);
                 firstnameInput[i].set('value', obj.firstname);

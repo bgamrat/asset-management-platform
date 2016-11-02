@@ -166,9 +166,10 @@ class Manufacturer
 
     public function getBrands()
     {
-        
+
         $return = [];
-        foreach ($this->brands as $b) {
+        foreach( $this->brands as $b )
+        {
             $return[] = $b->toArray();
         }
         return $return;
@@ -189,7 +190,12 @@ class Manufacturer
 
     public function getContacts()
     {
-        return $this->contacts->toArray();
+        $return = [];
+        foreach( $this->contacts as $c )
+        {
+            $return[] = $c->toArray();
+        }
+        return $return;
     }
 
     public function addContact( Person $contact )
@@ -205,7 +211,8 @@ class Manufacturer
         $this->contacts->removeElement( $contact );
     }
 
-    public function getUpdated() {
+    public function getUpdated()
+    {
         return $this->updated;
     }
 

@@ -120,7 +120,7 @@ class Person
      */
     private $active = true;
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="person")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="person", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
@@ -337,7 +337,7 @@ class Person
         $this->active = $active;
     }
 
-    public function isActive( $active )
+    public function isActive()
     {
         return $this->active;
     }
@@ -409,6 +409,21 @@ class Person
             $this->user->setEnabled( false );
             $this->user->setLocked( true );
         }
+    }
+    
+    public function toArray() {
+        return [
+            'id' => $this->getId(),
+            'firstname' => $this->getFirstname(),
+            'middleinitial' => $this->getMiddleinitial(),
+            'lastname' => $this->getLastname(),
+            'fullName' => $this->getFullName(),
+            'comment' => $this->getComment(),
+            'active' => $this->isActive(),
+            'addresses' => $this->getAddresses(),
+            'phones' => $this->getPhoneNumbers(),
+            'emails' => $this->getEmails(),
+        ];
     }
 
 }

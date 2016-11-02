@@ -142,7 +142,7 @@ define([
     function setData(emails) {
         var i, obj;
 
-        query(".form-row.email", prototypeNode.parentNode).forEach(function (node, index) {
+        query(".form-row.email").forEach(function (node, index) {
             if( index !== 0 ) {
                 destroyRow(index, node);
             }

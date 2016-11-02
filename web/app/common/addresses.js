@@ -221,7 +221,7 @@ define([
     function setData(addresses) {
         var i, p, obj;
 
-        query(".form-row.address", prototypeNode.parentNode).forEach(function (node, index) {
+        query(".form-row.address").forEach(function (node, index) {
             if( index !== 0 ) {
                 destroyRow(index, node);
             }

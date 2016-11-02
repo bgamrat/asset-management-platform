@@ -151,9 +151,9 @@ define([
     }
 
     function setData(phoneNumbers) {
-        var i, p, obj;
+        var i, obj;
 
-        query(".form-row.phone-number", prototypeNode.parentNode).forEach(function (node, index) {
+        query(".form-row.phone-number").forEach(function (node, index) {
             if( index !== 0 ) {
                 destroyRow(index, node);
             }

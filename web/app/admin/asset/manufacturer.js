@@ -168,21 +168,22 @@ define([
                     label: core.manufacturer,
                     renderCell: function (object, value, td) {
                         var i, j, k, content, contactText = [object.name], addresses, address_lines, phoneNumber;
+                        var contact, address;
                         address_lines = ['street1', 'street2', 'city', 'stateProvince', 'postalCode', 'country'];
                         if( typeof object.contacts !== "undefined" ) {
                             for( i = 0; i < object.contacts.length; i++ ) {
                                 contact = object.contacts[i];
                                 contactText.push("");
                                 contactText.push("\t" + contact.fullName);
-                                if( typeof contact.phoneNumbers !== "undefined" ) {
-                                    for( j = 0; j < contact.phoneNumbers.length; j++ ) {
-                                        phoneNumber = contact.phoneNumbers[j];
+                                if( typeof contact.phones !== "undefined" ) {
+                                    for( j = 0; j < contact.phones.length; j++ ) {
+                                        phoneNumber = contact.phones[j];
                                         contactText.push("\t" + phoneNumber.phoneNumber);
                                     }
                                 }
-                                if( typeof object.contacts[i].addresses !== "undefined" ) {
+                                if( typeof contact.addresses !== "undefined" ) {
                                     addresses = contact.addresses;
-                                    for( j = 0; j < addresses; j++ ) {
+                                    for( j = 0; j < addresses.length; j++ ) {
                                         contactText.push("");
                                         address = contact.addresses[j];
                                         for( k = 0; k < address_lines.length; k++ ) {
