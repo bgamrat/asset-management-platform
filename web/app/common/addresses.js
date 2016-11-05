@@ -208,8 +208,8 @@ define([
                         "street1": street1Input[i].get('value'),
                         "street2": street2Input[i].get('value'),
                         "city": cityInput[i].get('value'),
-                        "state_province": stateProvinceInput[i].get('value'),
-                        "postal_code": postalCodeInput[i].get('value'),
+                        "stateProvince": stateProvinceInput[i].get('value'),
+                        "postalCode": postalCodeInput[i].get('value'),
                         "country": countrySelect[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
@@ -239,8 +239,8 @@ define([
                 street1Input[i].set('value', obj.street1);
                 street2Input[i].set('value', obj.street2);
                 cityInput[i].set('value', obj.city);
-                stateProvinceInput[i].set('value', obj.state_province);
-                postalCodeInput[i].set('value', obj.postal_code);
+                stateProvinceInput[i].set('value', obj.stateProvince);
+                postalCodeInput[i].set('value', obj.postalCode);
                 countrySelect[i].set('value', obj.country);
                 commentInput[i].set('value', obj.comment);
             }

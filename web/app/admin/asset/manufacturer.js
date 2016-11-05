@@ -322,7 +322,7 @@ define([
             }));
         });
 
-        person.run('manufacturer');
+        person.run('manufacturer_contacts');
         brands.run('manufacturer');
 
         lib.pageReady();

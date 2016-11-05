@@ -38,7 +38,7 @@ class Person
      * @ORM\ManyToOne(targetEntity="PersonType")
      * @ORM\OrderBy({"type" = "ASC"})
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
-      * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     private $type;
     /**
@@ -149,6 +149,15 @@ class Person
     }
 
     /**
+     * Set id
+     * 
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -254,10 +263,11 @@ class Person
         return $this->middleinitial;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->getFullName();
     }
-    
+
     /**
      * Get fullname
      *
@@ -342,12 +352,12 @@ class Person
         return $this->active;
     }
 
-    public function getPhoneNumbers()
+    public function getPhones()
     {
         return $this->phoneNumbers->toArray();
     }
 
-    public function addPhoneNumber( PhoneNumber $phoneNumber )
+    public function addPhone( PhoneNumber $phoneNumber )
     {
         if( !$this->phoneNumbers->contains( $phoneNumber ) )
         {
@@ -355,7 +365,7 @@ class Person
         }
     }
 
-    public function removePhoneNumber( PhoneNumber $phoneNumber )
+    public function removePhone( PhoneNumber $phoneNumber )
     {
         $this->phoneNumbers->removeElement( $phoneNumber );
     }
@@ -410,8 +420,9 @@ class Person
             $this->user->setLocked( true );
         }
     }
-    
-    public function toArray() {
+
+    public function toArray()
+    {
         return [
             'id' => $this->getId(),
             'firstname' => $this->getFirstname(),
@@ -421,9 +432,22 @@ class Person
             'comment' => $this->getComment(),
             'active' => $this->isActive(),
             'addresses' => $this->getAddresses(),
-            'phones' => $this->getPhoneNumbers(),
+            'phones' => $this->getPhones(),
             'emails' => $this->getEmails(),
         ];
+    }
+
+    public function fromArray( $data )
+    {
+        $this->setId( $data['id'] );
+        $this->setFirstname( $data['firstname'] );
+        $this->setMiddleinitial( $data['middleinitial'] );
+        $this->setLastname($data['lastname']);
+        $this->setComment( $data['comment'] );
+        $this->isActive( $data['active'] );
+        $this->setAddresses( $data['addresses'] );
+        $this->setPhones( $data['phones'] );
+        $this->setEmails( $data['emails'] );
     }
 
 }

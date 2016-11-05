@@ -30,7 +30,7 @@ class ManufacturerType extends AbstractType
                     'label' => false,
                     'required' => false
                 ]  )
-                ->add( 'person', CollectionType::class, [
+                ->add( 'contacts', CollectionType::class, [
                     'entry_type' => PersonType::class,
                     'by_reference' => true,
                     'required' => false,
@@ -39,7 +39,6 @@ class ManufacturerType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'mapped' => false,
                     'prototype_name' => '__person__'
                 ] )
                 ->add( 'brands', CollectionType::class, [
@@ -51,7 +50,6 @@ class ManufacturerType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'mapped' => false,
                     'prototype_name' => '__brand__'
                 ] )
         ;

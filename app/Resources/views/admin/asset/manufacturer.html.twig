@@ -39,8 +39,8 @@
                 <div id="manufacturer-view-tabs">
                     <div id="manufacturer-view-contacts-tab">
                         <fieldset class="contacts">
-                            {{form_row(manufacturer_form.person)}}
-                            {% if manufacturer_form.person.vars.allow_add %}
+                            {{form_row(manufacturer_form.contacts)}}
+                            {% if manufacturer_form.contacts.vars.allow_add %}
                                 <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
                             {% endif %}
                         </fieldset>

@@ -25,7 +25,6 @@ class BrandsToIdsTransformer implements DataTransformerInterface
      */
     public function transform( $brands )
     {
-     //   dump($brands);die;
         if( $brands === null )
         {
             return null;

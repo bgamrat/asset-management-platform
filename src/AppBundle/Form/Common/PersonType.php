@@ -37,7 +37,7 @@ class PersonType extends AbstractType
                 ->add( 'firstname', TextType::class, ['label' => 'person.firstname'] )
                 ->add( 'middleinitial', TextType::class, ['label' => 'person.middleinitial'] )
                 ->add( 'lastname', TextType::class, ['label' => 'person.lastname'] )
-                ->add( 'phone_numbers', CollectionType::class, [
+                ->add( 'phones', CollectionType::class, [
                     'entry_type' => PhoneNumberType::class,
                     'by_reference' => true,
                     'required' => false,
@@ -46,7 +46,6 @@ class PersonType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'mapped' => false,
                     'prototype_name' => '__phone__'
                 ] )
                 ->add( 'emails', CollectionType::class, [
@@ -59,7 +58,6 @@ class PersonType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'mapped' => false,
                     'prototype_name' => '__email__'
                 ] )
                 ->add( 'addresses', CollectionType::class, [
@@ -71,7 +69,6 @@ class PersonType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => false,
                     'delete_empty' => true,
-                    'mapped' => false,
                     'prototype_name' => '__address__'
                 ] )
                 ->add( 'comment', TextareaType::class, [
@@ -86,7 +83,8 @@ class PersonType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Common\Person'
+            'data_class' => 'AppBundle\Entity\Common\Person',
+            'allow_extra_fields' => true
         ) );
     }
 

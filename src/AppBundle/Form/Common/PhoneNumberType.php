@@ -30,7 +30,7 @@ class PhoneNumberType extends AbstractType
                     'required' => true,
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'phone_number', TextType::class, [
+                ->add( 'phoneNumber', TextType::class, [
                 ] )
                 ->add( 'comment', TextType::class, [
                     'label' => false

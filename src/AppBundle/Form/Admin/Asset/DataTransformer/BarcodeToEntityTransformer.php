@@ -24,7 +24,6 @@ class BarcodeToEntityTransformer implements DataTransformerInterface
      */
     public function transform($barcodes)
     {
-        //dump($barcodes);die;  
         return null;
     }
 
@@ -42,23 +41,6 @@ class BarcodeToEntityTransformer implements DataTransformerInterface
             return;
         }
 
-//dump($barcodes);die;       
-        /*
-        
-        $barcode = $this->em
-            ->getRepository('AppBundle:Barcode')
-            ->findBy(['barcode' => $barcodeBarcode])
-        ;
-
-        if (null === $barcode) {
-            throw new TransformationFailedException(sprintf(
-                'Barcode "%s" does not exist!',
-                $barcodeBarcode
-            ));
-        }
-        return $barcode;
-         * 
-         */
         return false;
     }
 }

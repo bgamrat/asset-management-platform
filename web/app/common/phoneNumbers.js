@@ -30,7 +30,7 @@ define([
     }
 
     function setDivId(divId) {
-        divIdInUse = divId + '_phone_numbers';
+        divIdInUse = divId + '_phones';
     }
 
     function cloneNewNode() {
@@ -53,7 +53,7 @@ define([
             trim: true,
             pattern: "[0-9x\.\,\ \+\(\)-]{2,24}",
             required: true
-        }, base + "phone_number");
+        }, base + "phoneNumber");
         numberInput.push(dijit);
         dijit.startup();
         dijit = new ValidationTextBox({
@@ -143,14 +143,14 @@ define([
             returnData.push(
                     {
                         "type": typeSelect[i].get('value'),
-                        "phone_number": numberInput[i].get('value'),
+                        "phoneNumber": numberInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
         return returnData;
     }
 
-    function setData(phoneNumbers) {
+    function setData(phones) {
         var i, obj;
 
         query(".form-row.phone-number").forEach(function (node, index) {
@@ -159,16 +159,16 @@ define([
             }
         });
 
-        if( typeof phoneNumbers === "object" && phoneNumbers !== null && phoneNumbers.length > 0 ) {
+        if( typeof phones === "object" && phones !== null && phones.length > 0 ) {
 
             for( i = 0; i < numberInput.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();
                 }
-                obj = phoneNumbers[i];
+                obj = phones[i];
                 typeSelect[i].set('value', obj.type);
-                numberInput[i].set('value', obj.phone_number);
+                numberInput[i].set('value', obj.phoneNumber);
                 commentInput[i].set('value', obj.comment);
             }
         } else {

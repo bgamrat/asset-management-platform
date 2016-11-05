@@ -86,6 +86,15 @@ class Address
     private $updated;
 
     /**
+     * Set id
+     * 
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Get id
      *
      * @return integer

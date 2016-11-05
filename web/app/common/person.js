@@ -32,7 +32,7 @@ define([
     var personId = [];
 
     function setDivId(divId) {
-        divIdInUse = divId + '_person';
+        divIdInUse = divId;
     }
 
     function getDivId() {
@@ -164,16 +164,14 @@ define([
                 "firstname": firstnameInput[i].get('value'),
                 "middleinitial": middleInitialInput[i].get('value'),
                 "lastname": lastnameInput[i].get('value'),
-                "fullname": firstnameInput[i].get('value') + " " + middleInitialInput[i].get('value') + " " + lastnameInput[i].get('value'),
+                "fullName": firstnameInput[i].get('value') + " " + middleInitialInput[i].get('value') + " " + lastnameInput[i].get('value'),
                 "comment": commentInput[i].get('value'),
                 "emails": emails.getData(),
-                "phone_numbers": phoneNumbers.getData(),
+                "phones": phoneNumbers.getData(),
                 "addresses": addresses.getData()
-            }
-            );
+            });
         }
         return returnData;
-        return
     }
 
     function setData(person) {
@@ -193,13 +191,14 @@ define([
                     createDijits();
                 }
                 obj = person[i];
+                personId[i] = obj.id;
                 typeSelect[i].set('value', obj.type);
                 firstnameInput[i].set('value', obj.firstname);
                 middleInitialInput[i].set('value', obj.middleinitial);
                 lastnameInput[i].set('value', obj.lastname);
                 commentInput[i].set('value', obj.comment);
-                if( typeof obj.phone_numbers !== "undefined" ) {
-                    phoneNumbers.setData(obj.phone_numbers);
+                if( typeof obj.phones !== "undefined" ) {
+                    phoneNumbers.setData(obj.phones);
                 } else {
                     phoneNumbers.setData(null);
                 }
