@@ -18,7 +18,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var nameInput = [], commentInput = [], activeCheckBox = [];
+    var brandId = [], nameInput = [], commentInput = [], activeCheckBox = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
 
@@ -33,6 +33,7 @@ define([
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__brand__/g, nameInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+        brandId.push(null);
     }
 
     function createDijits() {
@@ -59,12 +60,24 @@ define([
     }
 
     function destroyRow(id, target) {
-        nameInput.pop().destroyRecursive();
-        commentInput.pop().destroyRecursive();
-        activeCheckBox.pop().destroyRecursive();
+        var i, item;
+
+        for( i = 0; i < brandId.length; i++ ) {
+            if( brandId[i] === id ) {
+                id = i;
+                break;
+            }
+        }
+        brandId.splice(id, 1);
+        item = nameInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = commentInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = activeCheckBox.splice(id, 1);
+        item[0].destroyRecursive();
         domConstruct.destroy(target);
     }
-
+    
     function run() {
 
         if( arguments.length > 0 ) {
@@ -114,6 +127,7 @@ define([
         for( i = 0; i < nameInput.length; i++ ) {
             returnData.push(
                     {
+                        "id": brandId[i],
                         "name": nameInput[i].get('value'),
                         "comment": commentInput[i].get('value'),
                         "active": activeCheckBox[i].get('value')
@@ -139,11 +153,13 @@ define([
                     createDijits();
                 }
                 obj = brands[i];
+                brandId[i] = obj.id;
                 nameInput[i].set('value', obj.name);
                 commentInput[i].set('value', obj.comment);
                 activeCheckBox[i].set('value', obj.active);
             }
         } else {
+            brandId[0] = null;
             nameInput[0].set('value', "");
             commentInput[0].set('value', "");
             activeCheckBox[0].set('value', "");

@@ -295,18 +295,4 @@ class Address
     {
         return $this->comment;
     }
-
-    public function toArray()
-    {
-        return [
-            'type' => $this->getType(),
-            'street1' => $this->getStreet1(),
-            'street2' => $this->getStreet2(),
-            'city' => $this->getCity(),
-            'state_province' => $this->getStateProvince(),
-            'postal_code' => $this->getPostalCode(),
-            'country' => $this->getCountry()
-        ];
-    }
-
 }

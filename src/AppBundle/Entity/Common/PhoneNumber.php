@@ -39,7 +39,17 @@ class PhoneNumber
      * @ORM\Column(type="string", length=24, nullable=true)
      */
     private $comment;
-    
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+
     /**
      * Get id
      *
@@ -120,15 +130,6 @@ class PhoneNumber
     public function getComment()
     {
         return $this->comment;
-    }
-    
-    public function toArray()
-    {
-        return [
-            'type' => $this->getType(),
-            'phone_number' => $this->getPhoneNumber(),
-            'comment' => $this->getComment()
-        ];
     }
 
 }

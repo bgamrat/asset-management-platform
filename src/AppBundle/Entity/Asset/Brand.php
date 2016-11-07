@@ -87,6 +87,16 @@ class Brand
     }
 
     /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -195,8 +205,9 @@ class Brand
     {
         return $this->active;
     }
-     
-    public function getUpdated() {
+
+    public function getUpdated()
+    {
         return $this->updated;
     }
 
@@ -210,14 +221,4 @@ class Brand
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
     }
-
-    public function toArray()
-    {
-        return [
-            'name' => $this->getName(),
-            'comment' => $this->getComment(),
-            'active' => $this->isActive()
-        ];
-    }
-
 }

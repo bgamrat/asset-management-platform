@@ -22,6 +22,7 @@ define([
 
     var dataPrototype, prototypeNode, prototypeContent;
     var countryStore, typeStore;
+    var addressId = [];
     var typeSelect = [];
     var street1Input = [], street2Input = [], cityInput = [];
     var stateProvinceInput = [], postalCodeInput = [], countrySelect = [];
@@ -40,6 +41,7 @@ define([
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__address__/g, stateProvinceInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+        addressId.push(null);
     }
 
     function createDijits() {
@@ -106,16 +108,33 @@ define([
     }
 
     function destroyRow(id, target) {
-        typeSelect.pop().destroyRecursive();
-        street1Input.pop().destroyRecursive();
-        street2Input.pop().destroyRecursive();
-        cityInput.pop().destroyRecursive();
-        stateProvinceInput.pop().destroyRecursive();
-        postalCodeInput.pop().destroyRecursive();
-        countrySelect.pop().destroyRecursive();
-        commentInput.pop().destroyRecursive();
+
+        var i, item;
+
+        for( i = 0; i < addressId.length; i++ ) {
+            if( addressId[i] === id ) {
+                id = i;
+                break;
+            }
+        }
+        addressId.splice(id, 1);
+        item = typeSelect.splice(id, 1);
+        item[0].destroyRecursive();
+        item = street1Input.splice(id, 1);
+        item[0].destroyRecursive();
+        item = street2Input.splice(id, 1);
+        item[0].destroyRecursive();
+        item = cityInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = stateProvinceInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = postalCodeInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = countrySelect.splice(id, 1);
+        item[0].destroyRecursive();
+        item = commentInput.splice(id, 1);
+        item[0].destroyRecursive();
         domConstruct.destroy(target);
-        stateProvinceInput.length--;
     }
 
     function run() {
@@ -204,7 +223,8 @@ define([
         for( i = 0; i < stateProvinceInput.length; i++ ) {
             returnData.push(
                     {
-                        "type": typeSelect[i].get('value'),
+                        "id": addressId[i],
+                        "type": typeSelect[i].get('displayedValue'),
                         "street1": street1Input[i].get('value'),
                         "street2": street2Input[i].get('value'),
                         "city": cityInput[i].get('value'),
@@ -235,6 +255,7 @@ define([
                     createDijits();
                 }
                 obj = addresses[i];
+                addressId[i] = obj.id;
                 typeSelect[i].set('value', obj.type);
                 street1Input[i].set('value', obj.street1);
                 street2Input[i].set('value', obj.street2);
@@ -245,6 +266,7 @@ define([
                 commentInput[i].set('value', obj.comment);
             }
         } else {
+            addressId[0] = null;
             typeSelect[0].set('value', '');
             street1Input[0].set('value', "");
             street2Input[0].set('value', "");

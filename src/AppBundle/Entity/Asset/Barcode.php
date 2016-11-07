@@ -160,14 +160,4 @@ class Barcode
         $this->setActive( false );
     }
 
-    public function toArray()
-    {
-        return [
-            'barcode' => $this->getBarcode(),
-            'comment' => $this->getComment(),
-            'active' => $this->isActive(),
-            'updated' => $this->getUpdated()
-        ];
-    }
-
 }

@@ -170,7 +170,7 @@ class Manufacturer
         $return = [];
         foreach( $this->brands as $b )
         {
-            $return[] = $b->toArray();
+            $return[] = $b;
         }
         return $return;
     }
@@ -188,12 +188,21 @@ class Manufacturer
         $this->brands->removeElement( $brand );
     }
 
+    public function setContacts( $contacts )
+    {
+        foreach( $contacts as $m )
+        {
+            $this->addContacts( $m );
+        }
+        return $this;
+    }
+
     public function getContacts()
     {
         $return = [];
         foreach( $this->contacts as $c )
         {
-            $return[] = $c->toArray();
+            $return[] = $c;
         }
         return $return;
     }

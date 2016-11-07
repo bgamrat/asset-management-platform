@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="email")
@@ -18,13 +17,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Email
 {
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="EmailType")
@@ -32,18 +31,26 @@ class Email
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      */
     private $type;
-
     /**
      * @Assert\NotBlank()
      * @Assert\Regex(pattern="/^[0-9x\.\,\ \+\(\)-]{2,24}$/", message="error.invalid_email")
      * @ORM\Column(type="string", length=24, name="email", nullable=false)
      */
     private $email;
-
     /**
      * @ORM\Column(type="string", length=24, nullable=true)
      */
     private $comment;
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
 
     /**
      * Get id
@@ -62,10 +69,10 @@ class Email
      *
      * @return Email
      */
-    public function setType($type)
+    public function setType( $type )
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
@@ -86,10 +93,10 @@ class Email
      *
      * @return Email
      */
-    public function setEmail($email)
+    public function setEmail( $email )
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
@@ -110,10 +117,10 @@ class Email
      *
      * @return Email
      */
-    public function setComment($comment)
+    public function setComment( $comment )
     {
         $this->comment = $comment;
-    
+
         return $this;
     }
 
@@ -126,13 +133,5 @@ class Email
     {
         return $this->comment;
     }
-    
-    public function toArray()
-    {
-        return [
-            'type' => $this->getType(),
-            'email' => $this->getEmail(),
-            'comment' => $this->getComment()
-        ];
-    }
+
 }

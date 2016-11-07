@@ -23,7 +23,7 @@ define([
     var dataPrototype;
     var prototypeNode, prototypeContent;
     var store;
-    var typeSelect = [], emailInput = [], commentInput = [];
+    var emailId = [], typeSelect = [], emailInput = [], commentInput = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
 
@@ -38,6 +38,7 @@ define([
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__email__/g, emailInput.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+        emailId.push(null);
     }
 
     function createDijits() {
@@ -68,9 +69,19 @@ define([
     }
     
     function destroyRow(id, target) {
-        typeSelect.pop().destroyRecursive();
-        emailInput.pop().destroyRecursive();
-        commentInput.pop().destroyRecursive();
+        var i, item;
+
+        for( i = 0; i < emailId.length; i++ ) {
+            if( emailId[i] === id ) {
+                id = i;
+                break;
+            }
+        }
+        emailId.splice(id, 1);
+        item = emailInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = commentInput.splice(id, 1);
+        item[0].destroyRecursive();
         domConstruct.destroy(target);
     }
 
@@ -131,6 +142,7 @@ define([
         for( i = 0; i < emailInput.length; i++ ) {
             returnData.push(
                     {
+                        "id": emailId[i],
                         "type": typeSelect[i].get('value'),
                         "email": emailInput[i].get('value'),
                         "comment": commentInput[i].get('value')
@@ -156,11 +168,13 @@ define([
                     createDijits();
                 }
                 obj = emails[i];
+                emailId[i] = obj.id;
                 typeSelect[i].set('value', obj.type);
                 emailInput[i].set('value', obj.email);
                 commentInput[i].set('value', obj.comment);
             }
         } else {
+            emailId[0] = null;
             typeSelect[0].set('value', "");
             emailInput[0].set('value', "");
             commentInput[0].set('value', "");

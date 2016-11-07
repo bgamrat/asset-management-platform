@@ -184,15 +184,4 @@ class Location
         $this->setActive( false );
     }
 
-    public function toArray()
-    {
-        return [
-            'id' => $this->getId(),
-            'type' => $this->getType(),
-            'entity' => $this->getEntity(),
-            'assets' => $this->getAssets(),
-            'active' => $this->isActive()
-        ];
-    }
-
 }

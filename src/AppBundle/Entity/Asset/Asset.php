@@ -318,16 +318,4 @@ class Asset
         $this->setActive( false );
     }
 
-    public function toArray()
-    {
-        return [
-            'id' => $this->getId(),
-            'model' => $this->getModel(),
-            'location' => $this->getLocation(),
-            'serial_number' => $this->getSerialNumber(),
-            'comment' => $this->getComment(),
-            'active' => $this->isActive()
-        ];
-    }
-
 }

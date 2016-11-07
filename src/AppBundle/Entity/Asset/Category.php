@@ -192,15 +192,4 @@ class Category
         return $this->active;
     }
 
-    public function toArray()
-    {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'parent' => $this->getParent(),
-            'comment' => $this->getComment(),
-            'active' => $this->isActive()
-        ];
-    }
-
 }

@@ -337,9 +337,9 @@ class Person
      *
      * @return int
      */
-    public function getUser()
+    public function getUser( $deliver = false )
     {
-        return $this->user;
+        return ($deliver === false) ? null : $this->user;
     }
 
     public function setActive( $active )
@@ -420,34 +420,4 @@ class Person
             $this->user->setLocked( true );
         }
     }
-
-    public function toArray()
-    {
-        return [
-            'id' => $this->getId(),
-            'firstname' => $this->getFirstname(),
-            'middleinitial' => $this->getMiddleinitial(),
-            'lastname' => $this->getLastname(),
-            'fullName' => $this->getFullName(),
-            'comment' => $this->getComment(),
-            'active' => $this->isActive(),
-            'addresses' => $this->getAddresses(),
-            'phones' => $this->getPhones(),
-            'emails' => $this->getEmails(),
-        ];
-    }
-
-    public function fromArray( $data )
-    {
-        $this->setId( $data['id'] );
-        $this->setFirstname( $data['firstname'] );
-        $this->setMiddleinitial( $data['middleinitial'] );
-        $this->setLastname($data['lastname']);
-        $this->setComment( $data['comment'] );
-        $this->isActive( $data['active'] );
-        $this->setAddresses( $data['addresses'] );
-        $this->setPhones( $data['phones'] );
-        $this->setEmails( $data['emails'] );
-    }
-
 }

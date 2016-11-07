@@ -131,7 +131,6 @@ class ManufacturersController extends FOSRestController
         $form->submit( $request->request->all() );
         if( $form->isValid() )
         {
-            dump($request);die;
             $form->handleRequest( $request );
             $manufacturer = $form->getData();
             $em->persist( $manufacturer );
@@ -143,7 +142,6 @@ class ManufacturersController extends FOSRestController
 
             return $response;
         }
-        $errors = $this->get( 'validator' )->validate( $manufacturer );
         $response->setStatusCode( 400 );
 
         return $form;
