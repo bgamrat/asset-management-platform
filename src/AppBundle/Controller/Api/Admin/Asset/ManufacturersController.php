@@ -83,8 +83,8 @@ class ManufacturersController extends FOSRestController
                 'id' => $manufacturer->getId(),
                 'name' => $manufacturer->getName(),
                 'comment' => $manufacturer->getComment(),
-                'brands' => $manufacturer->getBrands(),
-                'contacts' => $manufacturer->getContacts(),
+                'brands' => $manufacturer->getBrands(false),
+                'contacts' => $manufacturer->getContacts(false),
                 'active' => $manufacturer->isActive()
             ];
             $formUtil = $this->get( 'app.util.form' );
@@ -129,6 +129,7 @@ class ManufacturersController extends FOSRestController
 
         $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
         $form->submit( $request->request->all() );
+
         if( $form->isValid() )
         {
             $form->handleRequest( $request );

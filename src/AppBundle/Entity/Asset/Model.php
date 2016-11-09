@@ -390,4 +390,19 @@ class Model
     {
         return $this->getBrand()->getName() . ' ' . $this->getName();
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'category' => $this->getCategory(),
+            'name' => $this->getName(),
+            'comment' => $this->getComment(),
+            'active' => $this->isActive(),
+            'extends' => $this->getExtends( false ),
+            'extended_by' => $this->getExtendedBy( false ),
+            'requires' => $this->getRequires( false ),
+            'required_by' => $this->getRequiredBy( false )
+        ];
+    }
 }

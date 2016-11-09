@@ -13,9 +13,18 @@ use AppBundle\Form\Common\PhoneNumberType;
 use AppBundle\Form\Common\AppEmailType; // Named to avoid conflicts with Symfony EmailType
 use AppBundle\Form\Common\AddressType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer;
+use Doctrine\ORM\EntityManager;
 
 class PersonType extends AbstractType
 {
+
+    private $em;
+
+    public function __construct( EntityManager $em )
+    {
+        $this->em = $em;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -39,7 +48,7 @@ class PersonType extends AbstractType
                 ->add( 'lastname', TextType::class, ['label' => 'person.lastname'] )
                 ->add( 'phones', CollectionType::class, [
                     'entry_type' => PhoneNumberType::class,
-                    'by_reference' => true,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -51,7 +60,7 @@ class PersonType extends AbstractType
                 ->add( 'emails', CollectionType::class, [
                     'label' => 'common.email',
                     'entry_type' => AppEmailType::class,
-                    'by_reference' => true,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -62,12 +71,12 @@ class PersonType extends AbstractType
                 ] )
                 ->add( 'addresses', CollectionType::class, [
                     'entry_type' => AddressType::class,
-                    'by_reference' => true,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
                     'allow_add' => true,
-                    'allow_delete' => false,
+                    'allow_delete' => true,
                     'delete_empty' => true,
                     'prototype_name' => '__address__'
                 ] )
@@ -75,6 +84,8 @@ class PersonType extends AbstractType
                     'required' => false,
                     'label' => false
                 ] );
+                $builder->get( 'type' )
+                ->addModelTransformer( new PersonTypeToIdTransformer( $this->em ) );
     }
 
     /**

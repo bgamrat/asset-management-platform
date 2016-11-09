@@ -45,7 +45,7 @@ class Form
             {
                 if( !$item->isValid() )
                 {
-                    $errorMessages[] = $name . ' - ' . $item->getErrors();
+                    $errorMessages[] = $name . ' - ' . $item->getErrors(true);
                 }
             }
         }

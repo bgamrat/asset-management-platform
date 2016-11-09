@@ -214,8 +214,7 @@ define([
                 }
             }
         } else {
-            cloneNewNode();
-            createDijits();
+            personId[0] = null;
             typeSelect[0].set('value', '');
             firstnameInput[0].set('value', '');
             middleInitialInput[0].set('value', '');

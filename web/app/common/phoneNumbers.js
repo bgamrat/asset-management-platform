@@ -142,7 +142,7 @@ define([
         for( i = 0; i < numberInput.length; i++ ) {
             returnData.push(
                     {
-                        "type": typeSelect[i].get('value'),
+                        "type": typeSelect[i].get('displayedValue'),
                         "phoneNumber": numberInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });

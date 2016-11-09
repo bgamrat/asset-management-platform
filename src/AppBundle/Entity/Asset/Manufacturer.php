@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Person;
+use AppBundle\Entity\Common\Person;
 
 /**
  * Manufacturer
@@ -164,13 +164,25 @@ class Manufacturer
         return $this->comment;
     }
 
-    public function getBrands()
+    public function getBrands($deep = true)
     {
 
         $return = [];
-        foreach( $this->brands as $b )
-        {
-            $return[] = $b;
+        if ($deep === true) {
+            foreach( $this->brands as $b )
+            {
+                $return[] = $b;
+            }
+        } else {
+            foreach( $this->brands as $b )
+            {
+                $br = [];
+                $br['id'] = $b->getId();
+                $br['name'] = $b->getName();
+                $br['comment'] = $b->getComment();
+                $br['active'] = $b->isActive();
+                $return[] = $br;
+            }
         }
         return $return;
     }

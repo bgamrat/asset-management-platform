@@ -52,6 +52,12 @@ services:
         tags:
             - { name: form.type, alias: 'app_model_type' }
 
+    app.admin.form.type.person:
+        class: AppBundle\Form\Common\PersonType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_person_type' }
+
     app.admin.form.type.test:
         class: AppBundle\Form\TestType
         arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']
@@ -89,7 +95,12 @@ services:
     app.form.data_transformer.model:
         class: AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
-        public: false    
+        public: false
+        
+    app.form.data_transformer.person_type:
+        class: AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
         
     app.form.invitation:
         class: AppBundle\Form\User\InvitationFormType

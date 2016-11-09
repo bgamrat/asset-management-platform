@@ -143,7 +143,7 @@ define([
             returnData.push(
                     {
                         "id": emailId[i],
-                        "type": typeSelect[i].get('value'),
+                        "type": typeSelect[i].get('displayedValue'),
                         "email": emailInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
