@@ -157,21 +157,23 @@ define([
 
     function getData() {
         var i, returnData = [];
-        for( i = 0; i < firstnameInput.length; i++ ) {
-            returnData.push({
-                "id": personId[i],
-                "type": typeSelect[i].get('value'),
-                "firstname": firstnameInput[i].get('value'),
-                "middleinitial": middleInitialInput[i].get('value'),
-                "lastname": lastnameInput[i].get('value'),
-                "fullName": firstnameInput[i].get('value') + " " + middleInitialInput[i].get('value') + " " + lastnameInput[i].get('value'),
-                "comment": commentInput[i].get('value'),
-                "emails": emails.getData(),
-                "phones": phoneNumbers.getData(),
-                "addresses": addresses.getData()
-            });
+        for( i = 0; i < personId.length; i++ ) {
+            if (lastnameInput[i].get('value') !== "") {
+                returnData.push({
+                    "id": personId[i],
+                    "type": typeSelect[i].get('value'),
+                    "firstname": firstnameInput[i].get('value'),
+                    "middleinitial": middleInitialInput[i].get('value'),
+                    "lastname": lastnameInput[i].get('value'),
+                    "fullName": firstnameInput[i].get('value') + " " + middleInitialInput[i].get('value') + " " + lastnameInput[i].get('value'),
+                    "comment": commentInput[i].get('value'),
+                    "emails": emails.getData(),
+                    "phones": phoneNumbers.getData(),
+                    "addresses": addresses.getData()
+                });
+            }
         }
-        return returnData;
+        return returnData.length > 0 ? returnData : null;
     }
 
     function setData(person) {

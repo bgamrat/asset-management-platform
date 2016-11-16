@@ -125,15 +125,17 @@ define([
     function getData() {
         var i, returnData = [];
         for( i = 0; i < nameInput.length; i++ ) {
-            returnData.push(
-                    {
-                        "id": brandId[i],
-                        "name": nameInput[i].get('value'),
-                        "comment": commentInput[i].get('value'),
-                        "active": activeCheckBox[i].get('value')
-                    });
+            if (nameInput[i].get('value') !== "") {
+                returnData.push(
+                        {
+                            "id": brandId[i],
+                            "name": nameInput[i].get('value'),
+                            "comment": commentInput[i].get('value'),
+                            "active": activeCheckBox[i].get('value')
+                        });
+            }
         }
-        return returnData;
+        return returnData.length > 0 ? returnData : null;
     }
 
     function setData(brands) {

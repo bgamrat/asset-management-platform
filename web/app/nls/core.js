@@ -33,6 +33,7 @@ define({
         "okay": "Okay",
         "person": "Person",
         "phone_number": "Phone number",
+        "phone_number": "Phone numbers",
         "postal_code": "Zip",
         "remove": "Remove",
         "roles": "Roles",

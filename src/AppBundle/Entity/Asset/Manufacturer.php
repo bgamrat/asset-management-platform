@@ -81,7 +81,7 @@ class Manufacturer
     private $deletedAt;
 
     public function __construct()
-    {
+    {  
         $this->contacts = new ArrayCollection();
         $this->brands = new ArrayCollection();
     }
@@ -169,10 +169,7 @@ class Manufacturer
 
         $return = [];
         if ($deep === true) {
-            foreach( $this->brands as $b )
-            {
-                $return[] = $b;
-            }
+            $return = $this->brands->toArray();
         } else {
             foreach( $this->brands as $b )
             {
@@ -211,11 +208,7 @@ class Manufacturer
 
     public function getContacts()
     {
-        $return = [];
-        foreach( $this->contacts as $c )
-        {
-            $return[] = $c;
-        }
+        $return = $this->contacts->toArray();
         return $return;
     }
 

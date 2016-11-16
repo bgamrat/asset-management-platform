@@ -70,12 +70,12 @@ class ManufacturersController extends FOSRestController
     /**
      * @View()
      */
-    public function getManufacturerAction( $name )
+    public function getManufacturerAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $repository = $this->getDoctrine()
                 ->getRepository( 'AppBundle\Entity\Asset\Manufacturer' );
-        $manufacturer = $repository->findOneBy( ['name' => $name] );
+        $manufacturer = $repository->find( $id );
         if( $manufacturer !== null )
         {
             $contacts = $manufacturer->getContacts();
@@ -99,20 +99,20 @@ class ManufacturersController extends FOSRestController
 
     /**
      */
-    public function postManufacturerAction( $name, Request $request )
+    public function postManufacturerAction( $id, Request $request )
     {
-        return $this->putManufacturerAction( $name, $request );
+        return $this->putManufacturerAction( $id, $request );
     }
 
     /**
      * @View()
      */
-    public function putManufacturerAction( $name, Request $request )
+    public function putManufacturerAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
-        $manufacturer = $em->getRepository( 'AppBundle\Entity\Asset\Manufacturer' )->findBy( [ 'name' => $name] );
+        $manufacturer = $em->getRepository( 'AppBundle\Entity\Asset\Manufacturer' )->findById( $id );
         if( empty($manufacturer) )
         {
             $manufacturer = new Manufacturer();
@@ -128,11 +128,10 @@ class ManufacturersController extends FOSRestController
         }
 
         $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
-        $form->submit( $request->request->all() );
+        $form->submit( $request );
 
         if( $form->isValid() )
         {
-            $form->handleRequest( $request );
             $manufacturer = $form->getData();
             $em->persist( $manufacturer );
             $em->flush();
@@ -143,6 +142,7 @@ class ManufacturersController extends FOSRestController
 
             return $response;
         }
+        
         $response->setStatusCode( 400 );
 
         return $form;

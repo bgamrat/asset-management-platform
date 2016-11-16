@@ -53,7 +53,6 @@ class AssetType extends AbstractType
                 ->add( 'location', LocationType::class )
                 ->add( 'location_text', HiddenType::class )
                 ->add( 'barcodes', CollectionType::class, [
-                    'label' => 'asset.barcode',
                     'entry_type' => BarcodeType::class,
                     'by_reference' => false,
                     'required' => false,

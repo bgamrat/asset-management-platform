@@ -220,8 +220,9 @@ define([
 
     function getData() {
         var i, returnData = [];
-        for( i = 0; i < stateProvinceInput.length; i++ ) {
-            returnData.push(
+        for( i = 0; i < addressId.length; i++ ) {
+            if (cityInput[i].get("value") !== "") {
+                returnData.push(
                     {
                         "id": addressId[i],
                         "type": typeSelect[i].get('displayedValue'),
@@ -233,8 +234,9 @@ define([
                         "country": countrySelect[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
+            }
         }
-        return returnData;
+        return returnData.length > 0 ? returnData : null;
     }
 
 

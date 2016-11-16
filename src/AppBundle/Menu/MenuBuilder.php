@@ -44,6 +44,9 @@ class MenuBuilder implements ContainerAwareInterface
             $menu['admin-assets']['configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
         }
         
+        $menu->addChild( 'admin-common', ['label' => 'common.common'] );
+        $menu['admin-common']->addChild( 'people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index'] );
+        
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN_USER' ) )
         {
             $menu->addChild( 'user', ['label' => 'common.users'] );

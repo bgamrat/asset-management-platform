@@ -84,8 +84,8 @@ class PersonType extends AbstractType
                     'required' => false,
                     'label' => false
                 ] );
-                $builder->get( 'type' )
-                ->addModelTransformer( new PersonTypeToIdTransformer( $this->em ) );
+                /*$builder->get( 'type' )
+                ->addModelTransformer( new PersonTypeToIdTransformer( $this->em ) );*/
     }
 
     /**

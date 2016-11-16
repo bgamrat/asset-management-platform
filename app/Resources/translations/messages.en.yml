@@ -75,6 +75,8 @@ common:
         City
     comment:
         Comment
+    common:
+        Common
     configuration:
         Configuration
     contact:
@@ -119,6 +121,8 @@ common:
         New
     password:
         Password
+    people:
+        People
     person:
         Person
     phone_number:

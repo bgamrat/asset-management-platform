@@ -16,7 +16,7 @@ app_admin_asset_manufacturers:
     resource: AppBundle\Controller\Api\Admin\Asset\ManufacturersController
     name_prefix:   app_admin_api_manufacturers_
     prefix: /api
-
+    
 app_admin_asset_store:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\Asset\StoreController
@@ -29,6 +29,12 @@ app_admin_asset_vendors:
     name_prefix:   app_admin_api_vendor_
     prefix: /api
     
+app_admin_common_people:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Common\PeopleController
+    name_prefix:   app_admin_api_people_
+    prefix: /api
+
 app_admin_users:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\User\UsersController

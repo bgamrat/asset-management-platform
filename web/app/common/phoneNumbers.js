@@ -21,7 +21,7 @@ define([
 
     var dataPrototype, prototypeNode, prototypeContent;
     var store;
-    var typeSelect = [], numberInput = [], commentInput = [];
+    var phoneNumberId = [], typeSelect = [], numberInput = [], commentInput = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
 
@@ -41,6 +41,7 @@ define([
     function createDijits() {
         var dijit;
         var base = getDivId() + '_' + numberInput.length + '_';
+        phoneNumberId.push(null);
         dijit = new Select({
             store: store,
             placeholder: core.type,
@@ -66,6 +67,13 @@ define([
     }
 
     function destroyRow(id, target) {
+        for( i = 0; i < phoneNumberId.length; i++ ) {
+            if( phoneNumberId[i] === id ) {
+                id = i;
+                break;
+            }
+        }
+        phoneNumberId.splice(id, 1);
         typeSelect.pop().destroyRecursive();
         numberInput.pop().destroyRecursive();
         commentInput.pop().destroyRecursive();
@@ -142,12 +150,13 @@ define([
         for( i = 0; i < numberInput.length; i++ ) {
             returnData.push(
                     {
+                        "id": phoneNumberId[i],
                         "type": typeSelect[i].get('displayedValue'),
                         "phoneNumber": numberInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
-        return returnData;
+        return returnData.length > 0 ? returnData : null;
     }
 
     function setData(phones) {
@@ -167,11 +176,13 @@ define([
                     createDijits();
                 }
                 obj = phones[i];
+                phoneNumberId[i] = obj.id;
                 typeSelect[i].set('value', obj.type);
                 numberInput[i].set('value', obj.phoneNumber);
                 commentInput[i].set('value', obj.comment);
             }
         } else {
+            phoneNumberId[0] = null;
             typeSelect[0].set('value', "");
             numberInput[0].set('value', "");
             commentInput[0].set('value', "");

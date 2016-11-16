@@ -127,8 +127,16 @@ define([
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
-                    "contacts": person.getData(),
-                    "brands": brands.getData()
+                    "manufacturer": {
+                        "id": manufacturerId,
+                        "name": nameInput.get("value"),
+                        "active": activeCheckBox.get("checked"),
+                        "comment": commentInput.get("value"),
+                        "contacts": person.getData(),
+                        "brands": brands.getData(),
+                    },
+                    contacts: [], brands: []
+
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -156,7 +164,7 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/manufacturers', useRangeHeaders: true, idProperty: 'name'});
+        var store = new TrackableRest({target: '/api/manufacturers', useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
@@ -170,7 +178,7 @@ define([
                         var i, j, k, content, contactText = [object.name], addresses, address_lines, phoneNumber;
                         var contact, address;
                         address_lines = ['street1', 'street2', 'city', 'stateProvince', 'postalCode', 'country'];
-                        if( typeof object.contacts !== "undefined" ) {
+                        if( typeof object.contacts !== "undefined" && object.contacts !== null ) {
                             for( i = 0; i < object.contacts.length; i++ ) {
                                 contact = object.contacts[i];
                                 contactText.push("");
@@ -205,12 +213,14 @@ define([
                     label: core.brands,
                     formatter: function (data, object) {
                         var b, nameList = [], html = "";
-                        for( b in data ) {
-                            nameList.push(data[b].name);
-                        }
-                        if( nameList.length > 0 ) {
-                            for( n = 0; n < nameList.length; n++ ) {
-                                html += '<a class="brand link" href="/admin/asset/manufacturer/' + object.name + '/brand/' + nameList[n] + '">' + nameList[n] + '</a><br>';
+                        if( data !== "" ) {
+                            for( b in data ) {
+                                nameList.push(data[b].name);
+                            }
+                            if( nameList.length > 0 ) {
+                                for( n = 0; n < nameList.length; n++ ) {
+                                    html += '<a class="brand link" href="/admin/asset/manufacturer/' + object.name + '/brand/' + nameList[n] + '">' + nameList[n] + '</a><br>';
+                                }
                             }
                         }
                         return html;
@@ -251,17 +261,18 @@ define([
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var name = row.data.name;
+            var id = row.data.id;
             if( field !== 'brands' ) {
                 if( checkBoxes.indexOf(field) === -1 ) {
                     if( typeof grid.selection[0] !== "undefined" ) {
                         grid.clearSelection();
                     }
                     grid.select(row);
-                    grid.collection.get(name).then(function (manufacturer) {
+                    grid.collection.get(id).then(function (manufacturer) {
                         manufacturerId = manufacturer.id;
                         action = "view";
                         nameInput.set("value", manufacturer.name);
+                        commentInput.set("value", manufacturer.comment);
                         activeCheckBox.set("checked", manufacturer.active === true);
                         person.setData(manufacturer.contacts);
                         brands.setData(manufacturer.brands);

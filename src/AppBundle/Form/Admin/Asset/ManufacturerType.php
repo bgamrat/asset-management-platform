@@ -32,7 +32,7 @@ class ManufacturerType extends AbstractType
                 ]  )
                 ->add( 'contacts', CollectionType::class, [
                     'entry_type' => PersonType::class,
-                    'by_reference' => true,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
