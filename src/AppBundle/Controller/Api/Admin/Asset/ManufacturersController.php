@@ -78,7 +78,6 @@ class ManufacturersController extends FOSRestController
         $manufacturer = $repository->find( $id );
         if( $manufacturer !== null )
         {
-            $contacts = $manufacturer->getContacts();
             $data = [
                 'id' => $manufacturer->getId(),
                 'name' => $manufacturer->getName(),

@@ -406,6 +406,11 @@ class Person
         $this->addresses->removeElement( $address );
     }
 
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
     public function getDeletedAt()
     {
         return $this->deletedAt;

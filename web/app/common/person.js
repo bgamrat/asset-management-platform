@@ -186,7 +186,10 @@ define([
             }
         });
 
-        if( typeof person === "object" && person !== null && person.length > 0 ) {
+        if( typeof person === "object" && person !== null ) {    
+            if (!person.hasOwnProperty('length')) {
+                person = [person];
+            }
             for( i = 0; i < person.length; i++ ) {
                 if (i !== 0) {
                     cloneNewNode();

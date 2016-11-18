@@ -38,14 +38,13 @@ class PeopleController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['p.id',"CONCAT(p.firstname,' ',p.middleinitial,' ',p.lastname) AS name", 'p.active' ];
+        $columns = ['p.id'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'p.deletedAt AS deleted_at';
         }
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Common\Person', 'p' )
-                ->innerJoin( 'p.address', 'a' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -72,7 +71,18 @@ class PeopleController extends FOSRestController
             $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
         }
 
-        $data = $queryBuilder->getQuery()->getResult();
+        $ids = $queryBuilder->getQuery()->getResult();
+        
+        $data = [];
+        foreach ($ids as $i => $row) {
+            $person = $em->getRepository( 'AppBundle\Entity\Common\Person' )->find( $row['id'] );
+            $p = ['id' => $row['id'],
+                'name' => $person->getFullName(), 
+                'addresses' => $person->getAddresses(),
+                'phones' => $person->getPhones(),
+                'active' => $person->isActive()];
+            $data[] = $p;
+        }
         return array_values( $data );
     }
 
@@ -88,49 +98,21 @@ class PeopleController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $person = $this->getDoctrine()
-                        ->getRepository( 'AppBundle\Entity\Person\Person' )->find( $id );
+                        ->getRepository( 'AppBundle\Entity\Common\Person' )->find( $id );
         if( $person !== null )
         {
-            $model = $person->getModel();
-            $brand = $model->getBrand();
-            $location = $person->getLocation();
-            if( $location === null )
-            {
-                $location = new Location();
-                $locationId = $locationType = null;
-            }
-            else
-            {
-                $locationId = $location->getId();
-                $locationTypeId = $location->getType();
-                $locationType = $this->getDoctrine()
-                                ->getRepository( 'AppBundle\Entity\Person\LocationType' )->find( $locationTypeId );
-                ;
-            }
-            $relationships = [
-                'extends' => $model->getExtends( false ),
-                'requires' => $model->getRequires( false ),
-                'extended_by' => $model->getExtendedBy( false ),
-                'required_by' => $model->getRequiredBy( false )
-            ];
-            $status = $person->getStatus();
             $data = [
-                'id' => $id,
-                'model_text' => $brand->getName() . ' ' . $model->getName(),
-                'model' => $model->getId(),
-                'model_relationships' => $relationships,
-                'serial_number' => $person->getSerialNumber(),
-                'location_text' => $person->getLocationText(),
-                'location' => [ 'id' => $locationId, 'entity' => $location->getEntity(), 'type' => $locationType],
-                'status_text' => $status->getName(),
-                'status' => $status->getId(),
-                'barcodes' => $person->getBarcodes(),
-                'comment' => $person->getComment(),
+                'id' => $person->getId(),
+                'firstname' => $person->getFirstname(),
+                'middleinitial' => $person->getMiddleinitial(),
+                'lastname' => $person->getLastname(),
+                'addresses' => $person->getAddresses(),
+                'phones' => $person->getPhones(),
                 'active' => $person->isActive()
             ];
 
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'AppBundle\Entity\Person\PersonLog', $id );
+            $logUtil->getLog( 'AppBundle\Entity\Common\PersonLog', $id );
             $data['history'] = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'person' . $person->getId(), $person->getUpdated() );
@@ -165,7 +147,7 @@ class PeopleController extends FOSRestController
         }
         else
         {
-            $person = $em->getRepository( 'AppBundle\Entity\Person\Person' )->find( $id );
+            $person = $em->getRepository( 'AppBundle\Entity\Common\Person' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'person' . $person->getId(), $person->getUpdated() ) === false )
             {
@@ -214,7 +196,7 @@ class PeopleController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'AppBundle\Entity\Person\Person' );
+        $repository = $em->getRepository( 'AppBundle\Entity\Common\Person' );
         $person = $repository->find( $id );
         if( $person !== null )
         {
@@ -245,7 +227,7 @@ class PeopleController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $person = $em->getRepository( 'AppBundle\Entity\Person\Person' )->find( $id );
+        $person = $em->getRepository( 'AppBundle\Entity\Common\Person' )->find( $id );
         if( $person !== null )
         {
             $em->getFilters()->enable( 'softdeleteable' );

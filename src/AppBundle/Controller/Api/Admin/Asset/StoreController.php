@@ -15,7 +15,24 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class StoreController extends FOSRestController
 {
+    /**
+     * @View()
+     */
+    public function getAddresstypesAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
+        $em = $this->getDoctrine()->getManager();
+
+        $queryBuilder = $em->createQueryBuilder()->select( ['at.id', 'at.type'] )
+                ->from( 'AppBundle\Entity\Common\AddressType', 'at' )
+                ->orderBy( 'at.type' );
+        $data = $queryBuilder->getQuery()->getResult();
+        
+        return $data;
+    }
+
+    
     /**
      * @View()
      */
@@ -126,6 +143,23 @@ class StoreController extends FOSRestController
         {
             $data = null;
         }
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
+    public function getPhonetypesAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $em = $this->getDoctrine()->getManager();
+
+        $queryBuilder = $em->createQueryBuilder()->select( ['pt.id', 'pt.type'] )
+                ->from( 'AppBundle\Entity\Common\PhoneNumberType', 'pt' )
+                ->orderBy( 'pt.type' );
+        $data = $queryBuilder->getQuery()->getResult();
+        
         return $data;
     }
 

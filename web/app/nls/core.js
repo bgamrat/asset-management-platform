@@ -2,6 +2,7 @@ define({
     root: ({
         "active": "Active",
         "address": "Address",
+        "addresses": "Addresses",
         "areyousure": "Are you sure?",
         "brands": "Brands",
         "cancel": "Cancel",
@@ -33,7 +34,7 @@ define({
         "okay": "Okay",
         "person": "Person",
         "phone_number": "Phone number",
-        "phone_number": "Phone numbers",
+        "phone_numbers": "Phone numbers",
         "postal_code": "Zip",
         "remove": "Remove",
         "roles": "Roles",
