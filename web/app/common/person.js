@@ -161,7 +161,7 @@ define([
             if (lastnameInput[i].get('value') !== "") {
                 returnData.push({
                     "id": personId[i],
-                    "type": typeSelect[i].get('value'),
+                    "type": parseInt(typeSelect[i].get('value')),
                     "firstname": firstnameInput[i].get('value'),
                     "middleinitial": middleInitialInput[i].get('value'),
                     "lastname": lastnameInput[i].get('value'),

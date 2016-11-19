@@ -1,7 +1,7 @@
 app:
     resource: "@AppBundle/Controller/Admin"
     type:     annotation
-  
+
 app_user:
     resource: "@AppBundle/Controller/User"
     type:     annotation

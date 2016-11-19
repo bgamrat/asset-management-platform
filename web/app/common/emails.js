@@ -140,13 +140,15 @@ define([
     function getData() {
         var i, returnData = [];
         for( i = 0; i < emailInput.length; i++ ) {
-            returnData.push(
+            if (emailId[i] !== null) {
+                returnData.push(
                     {
                         "id": emailId[i],
-                        "type": typeSelect[i].get('displayedValue'),
+                        "type": parseInt(typeSelect[i].get('value')),
                         "email": emailInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
+                }
         }
         return returnData;
     }

@@ -20,7 +20,6 @@ use AppBundle\Entity\Common\PersonLog;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
  * @Gedmo\Loggable(logEntryClass="PersonLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @UniqueEntity("fos_user_id")
  */
 class Person
 {
@@ -34,7 +33,6 @@ class Person
      */
     private $id;
     /**
-     * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="PersonType")
      * @ORM\OrderBy({"type" = "ASC"})
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
@@ -121,7 +119,7 @@ class Person
     private $active = true;
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="person", fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="fos_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=true, nullable=true)
      * @Gedmo\Versioned
      */
     private $user = null;

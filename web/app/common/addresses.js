@@ -225,7 +225,7 @@ define([
                 returnData.push(
                     {
                         "id": addressId[i],
-                        "type": typeSelect[i].get('displayedValue'),
+                        "type": parseInt(typeSelect[i].get('value')),
                         "street1": street1Input[i].get('value'),
                         "street2": street2Input[i].get('value'),
                         "city": cityInput[i].get('value'),

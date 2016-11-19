@@ -5,7 +5,7 @@ namespace AppBundle\Controller\Api\Admin\Common;
 use AppBundle\Util\DStore;
 use AppBundle\Entity\Person\Person;
 use AppBundle\Entity\Person\Location;
-use AppBundle\Form\Admin\Person\PersonType;
+use AppBundle\Form\Common\PersonType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,7 +127,7 @@ class PeopleController extends FOSRestController
     /**
      * @View()
      */
-    public function postPersonAction( $id, Request $request )
+    public function postPeopleAction( $id, Request $request )
     {
         return $this->putPersonAction( $id, $request );
     }
@@ -135,7 +135,7 @@ class PeopleController extends FOSRestController
     /**
      * @View()
      */
-    public function putPersonAction( $id, Request $request )
+    public function putPeopleAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
@@ -154,14 +154,10 @@ class PeopleController extends FOSRestController
                 throw new Exception( "data.outdated", 400 );
             }
         }
-        if( $person->getLocation() === null )
-        {
-            $person->setLocation( new Location() );
-        }
         $form = $this->createForm( PersonType::class, $person, ['allow_extra_fields' => true] );
         try
         {
-            $form->submit( $data );
+            $form->submit($data);
             if( $form->isValid() )
             {
                 $person = $form->getData();
@@ -169,7 +165,7 @@ class PeopleController extends FOSRestController
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_persons_get_person', array('id' => $person->getId()), true // absolute
+                                'app_admin_api_people_get_person', array('id' => $person->getId()), true // absolute
                         )
                 );
             }
@@ -191,7 +187,7 @@ class PeopleController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function patchPersonAction( $id, Request $request )
+    public function patchPeopleAction( $id, Request $request )
     {
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
@@ -219,7 +215,7 @@ class PeopleController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function deletePersonAction( $id )
+    public function deletePeopleAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();

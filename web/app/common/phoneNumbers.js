@@ -151,7 +151,7 @@ define([
             returnData.push(
                     {
                         "id": phoneNumberId[i],
-                        "type": typeSelect[i].get('displayedValue'),
+                        "type": parseInt(typeSelect[i].get('value')),
                         "phoneNumber": numberInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });

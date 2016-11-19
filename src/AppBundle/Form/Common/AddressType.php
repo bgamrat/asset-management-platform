@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class AddressType extends AbstractType
 {
-
+    
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -25,6 +25,7 @@ class AddressType extends AbstractType
                 ->add( 'type', EntityType::class, [
                     'class' => 'AppBundle\Entity\Common\AddressType',
                     'choice_label' => 'type',
+                    'by_reference' => true,
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,

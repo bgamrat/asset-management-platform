@@ -23,7 +23,6 @@ class PhoneNumber
      */
     private $id;
     /**
-     * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="PhoneNumberType")
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      * @ORM\OrderBy({"type" = "ASC"})

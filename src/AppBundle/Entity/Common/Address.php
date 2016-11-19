@@ -25,8 +25,7 @@ class Address
      */
     private $id;
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="AddressType")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\AddressType")
      * @ORM\OrderBy({"type" = "ASC"})
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      * @Gedmo\Versioned
@@ -53,7 +52,7 @@ class Address
     /**
      * @var string
      * @Gedmo\Versioned
-     * @ORM\Column(name="state_province", type="string", length=32, nullable=false, unique=false)
+     * @ORM\Column(name="state_province", type="string", length=32, nullable=true, unique=false)
      */
     private $state_province;
     /**

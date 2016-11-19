@@ -94,9 +94,10 @@ define([
         saveBtn.startup();
         saveBtn.on("click", function (event) {
             var beforeId, beforeIdFilter, filter;
+            grid.clearSelection();
             var data = person.getData();
             if( action === "view" ) {
-                grid.collection.put(data).then(function (data) {
+                grid.collection.put(data[0]).then(function (data) {
                     personViewDialog.hide();
                 }, lib.xhrError);
             } else {

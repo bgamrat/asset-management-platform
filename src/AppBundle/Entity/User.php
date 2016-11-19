@@ -92,7 +92,7 @@ class User extends BaseUser
     protected $invitation;
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Common\Person", mappedBy="user", cascade={"persist"})
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", unique=true, nullable=true)
      */
     protected $person = null;
 
