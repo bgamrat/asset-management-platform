@@ -3,7 +3,7 @@
 namespace AppBundle\Entity\Asset;
 
 use Gedmo\Loggable\Entity\LogEntry;
-use AppBundle\Entity\Barcode;
+use AppBundle\Entity\Asset\Barcode;
 use Doctrine\ORM\Mapping as ORM;
 /**
  * BarcodeLog
