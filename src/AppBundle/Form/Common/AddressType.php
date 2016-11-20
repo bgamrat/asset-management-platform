@@ -35,7 +35,8 @@ class AddressType extends AbstractType
                 ->add( 'street1', TextType::class, ['label' => 'common.street'] )
                 ->add( 'street2', TextType::class, ['label' => 'common.street2'] )
                 ->add( 'city', TextType::class, ['label' => 'common.city'] )
-                ->add( 'state_province', TextType::class, ['label' => 'common.state_province'] )
+                ->add( 'state_province', TextType::class, 
+                    ['label' => 'common.state_province'] )
                 ->add( 'postal_code', TextType::class, ['label' => 'common.postal_code'] )
                 ->add( 'country', ChoiceType::class, ['label' => 'common.country',
                     'choices' => ['US' => 'US', 'CA' => 'CA', 'MX' => 'MX']] )

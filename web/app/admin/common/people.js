@@ -93,29 +93,43 @@ define([
         }, 'person-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeId, beforeIdFilter, filter;
+            var beforeId, beforeIdFilter, filter, data;
             grid.clearSelection();
-            var data = person.getData();
-            if( action === "view" ) {
-                grid.collection.put(data[0]).then(function (data) {
-                    personViewDialog.hide();
-                }, lib.xhrError);
-            } else {
-                filter = new store.Filter();
-                beforeIdFilter = filter.gt('name', data.name);
-                store.filter(beforeIdFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                    beforeId = (results.length > 0) ? results[0].name : null;
-                    grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
+            if( personForm.validate() ) {
+                data = person.getData();
+                if( action === "view" ) {
+                    grid.collection.put(data[0]).then(function (data) {
                         personViewDialog.hide();
                     }, lib.xhrError);
-                });
+                } else {
+                    filter = new store.Filter();
+                    beforeIdFilter = filter.gt('name', data.name);
+                    store.filter(beforeIdFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
+                        beforeId = (results.length > 0) ? results[0].name : null;
+                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
+                            personViewDialog.hide();
+                        }, lib.xhrError);
+                    });
+                }
+            } else {
+                lib.textError(core.invalid_form)
             }
 
         });
 
         var filterInput = new TextBox({placeHolder: core.filter}, "person-filter-input");
         filterInput.startup();
-
+        
+        var personTypes = {};
+        var getPersonTypes = xhr.get("/api/store/persontypes", {
+            handleAs: "json"
+        }).then(function (res) {
+            var i, l;
+            l = res.length;
+            for (i = 0; i < l; i++) {
+                personTypes[res[i].id] = res[i]['type'];
+            }
+        });
 
         var addressTypes = {};
         var getAddressTypes = xhr.get("/api/store/addresstypes", {
@@ -139,11 +153,14 @@ define([
             }
         });
 
+        var personForm = new Form({}, '[name="person"]');
+        personForm.startup();
+
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
         var store = new TrackableRest({target: '/api/people', useRangeHeaders: true, idProperty: 'id'});
         var grid;
         
-        all([getAddressTypes, getPhoneTypes]).then(function(results){
+        all([getAddressTypes, getPersonTypes, getPhoneTypes]).then(function(results){
             grid = new (declare([OnDemandGrid, Selection, Editor]))({
                 collection: store,
                 className: "dgrid-autoheight",
@@ -152,25 +169,40 @@ define([
                         label: core.id
                     },
                     name: {
-                        label: core.person
+                        label: core.person,
+                        renderCell: function (object, value, td) {
+                            put(td, "span", value + " (" + object.type_text+")");
+                        }
                     },
                     addresses: {
                         label: core.address,
                         renderCell: function (object, value, td) {
-                            var a, i, l, content = [], address_lines;
+                            var a, i, l, segments, content = [], address_lines, address_segments;
                             var address;
                             if (typeof value === "object" && value.length !== 0) {
-                                address_lines = ['street1', 'street2', 'city', 'stateProvince', 'postalCode', 'country'];
-                                l = address_lines.length;
+                                address_lines = ['street1', 'street2'];
+                                address_segments = ['city', 'stateProvince', 'postalCode', 'country'];
                                 for (a in value) {
                                     address = value[a];
-                                    content.push(addressTypes[address['type']]);
+                                    if (isNaN(address['type'])) {
+                                        content.push(address['type']['type']);
+                                    } else {
+                                        content.push(addressTypes[address['type']]);
+                                    }
+                                    l = address_lines.length;
                                     for( i = 0; i < l; i++ ) {
-                                        if( address[address_lines[i]] !== "" ) {
+                                        if( address[address_lines[i]] !== null && address[address_lines[i]] !== "" ) {
                                             content.push(address[address_lines[i]]);
                                         }
                                     }
-                                    content.push("\n");
+                                    segments = [];
+                                    l = address_segments.length;
+                                    for( i = 0; i < l; i++ ) {
+                                        if( address[address_segments[i]] !== null && address[address_segments[i]] !== "" ) {
+                                            segments.push(address[address_segments[i]]);
+                                        }
+                                    }
+                                    content.push(segments.join(" "));
                                 }
                             }
                             if( content.length > 0 ) {
@@ -189,7 +221,12 @@ define([
                                 l = phone_lines.length;
                                 for (p in value) {
                                     phone = value[p];
-                                    row = phoneTypes[phone['type']]+" ";
+                                    if (isNaN(phone['type'])) {
+                                        row = phone['type']['type'];
+                                    } else {
+                                        row = phoneTypes[phone['type']];
+                                    }
+                                    row += " ";
                                     for( i = 0; i < l; i++ ) {
                                         if( phone[phone_lines[i]] !== "" ) {
                                             row += phone[phone_lines[i]] + " ";

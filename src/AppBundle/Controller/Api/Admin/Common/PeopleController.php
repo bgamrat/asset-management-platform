@@ -77,7 +77,8 @@ class PeopleController extends FOSRestController
         foreach ($ids as $i => $row) {
             $person = $em->getRepository( 'AppBundle\Entity\Common\Person' )->find( $row['id'] );
             $p = ['id' => $row['id'],
-                'name' => $person->getFullName(), 
+                'name' => $person->getFullName(),
+                'type_text' => $person->getType()->getType(),
                 'addresses' => $person->getAddresses(),
                 'phones' => $person->getPhones(),
                 'active' => $person->isActive()];
@@ -104,7 +105,7 @@ class PeopleController extends FOSRestController
             $data = [
                 'id' => $person->getId(),
                 'firstname' => $person->getFirstname(),
-                'middleinitial' => $person->getMiddleinitial(),
+                'middlename' => $person->getMiddlename(),
                 'lastname' => $person->getLastname(),
                 'addresses' => $person->getAddresses(),
                 'phones' => $person->getPhones(),

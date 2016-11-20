@@ -13,19 +13,9 @@ use AppBundle\Form\Common\PhoneNumberType;
 use AppBundle\Form\Common\AppEmailType; // Named to avoid conflicts with Symfony EmailType
 use AppBundle\Form\Common\AddressType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer;
-use Doctrine\ORM\EntityManager;
 
 class PersonType extends AbstractType
 {
-
-    private $em;
-
-    public function __construct( EntityManager $em )
-    {
-        $this->em = $em;
-    }
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -44,7 +34,7 @@ class PersonType extends AbstractType
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'firstname', TextType::class, ['label' => 'person.firstname'] )
-                ->add( 'middleinitial', TextType::class, ['label' => 'person.middleinitial'] )
+                ->add( 'middlename', TextType::class, ['label' => 'person.middlename'] )
                 ->add( 'lastname', TextType::class, ['label' => 'person.lastname'] )
                 ->add( 'phones', CollectionType::class, [
                     'entry_type' => PhoneNumberType::class,
@@ -84,8 +74,6 @@ class PersonType extends AbstractType
                     'required' => false,
                     'label' => false
                 ] );
-                /*$builder->get( 'type' )
-                ->addModelTransformer( new PersonTypeToIdTransformer( $this->em ) );*/
     }
 
     /**

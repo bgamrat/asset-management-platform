@@ -145,6 +145,23 @@ class StoreController extends FOSRestController
         }
         return $data;
     }
+    
+    /**
+     * @View()
+     */
+    public function getPersontypesAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $em = $this->getDoctrine()->getManager();
+
+        $queryBuilder = $em->createQueryBuilder()->select( ['pt.id', 'pt.type'] )
+                ->from( 'AppBundle\Entity\Common\PersonType', 'pt' )
+                ->orderBy( 'pt.type' );
+        $data = $queryBuilder->getQuery()->getResult();
+        
+        return $data;
+    }
 
     /**
      * @View()

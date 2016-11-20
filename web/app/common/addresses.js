@@ -77,6 +77,7 @@ define([
             required: true,
             uppercase: true,
             maxLength: 2,
+            pattern: "(A[BKLRZ]|BC|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ABDEINOST]|N[BCDEHJLMSTUVY]|O[HKNR]|P[AE]|QC|RI|S[CDK]|T[NX]|UT|V[AT]|W[AIVY|YT])",
             placeholder: core.state_province
         }, base + "state_province");
         stateProvinceInput.push(dijit);

@@ -20,6 +20,7 @@ use AppBundle\Entity\Common\PersonLog;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
  * @Gedmo\Loggable(logEntryClass="PersonLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @UniqueEntity("user")
  */
 class Person
 {
@@ -55,14 +56,15 @@ class Person
      * @var string
      *
      * @Assert\Length(
-     *      min = 1,
-     *      max = 1,
-     *      exactMessage = "person.middleinitial error.must_be_exactly {{ limit }} common.character"
+     *      min = 2,
+     *      max = 64,
+     *      minMessage = "person.middlename error.must_be_at_least {{ limit }} common.characters",
+     *      maxMessage = "person.middlename error.must_be_less_than_or_equal_to {{ limit }} common.characters",
      * )
-     * @ORM\Column(name="middleinitial", type="string", length=1, nullable=true, unique=false)
+     * @ORM\Column(name="middlename", type="string", length=64, nullable=true, unique=false)
      * @Gedmo\Versioned
      */
-    private $middleinitial;
+    private $middlename;
     /**
      * @var string
      *
@@ -238,27 +240,27 @@ class Person
     }
 
     /**
-     * Set middleinitial
+     * Set middlename
      *
-     * @param string $middleinitial
+     * @param string $middlename
      *
      * @return Person
      */
-    public function setMiddleinitial( $middleinitial )
+    public function setMiddlename( $middlename )
     {
-        $this->middleinitial = $middleinitial;
+        $this->middlename = $middlename;
 
         return $this;
     }
 
     /**
-     * Get middleinitial
+     * Get middlename
      *
      * @return string
      */
-    public function getMiddleinitial()
+    public function getMiddlename()
     {
-        return $this->middleinitial;
+        return $this->middlename;
     }
 
     public function getName()
@@ -278,9 +280,9 @@ class Person
         {
             $name[] = $this->firstname;
         }
-        if( !empty( $this->middleinitial ) )
+        if( !empty( $this->middlename ) )
         {
-            $name[] = $this->middleinitial;
+            $name[] = $this->middlename;
         }
         if( !empty( $this->lastname ) )
         {

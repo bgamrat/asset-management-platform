@@ -24,7 +24,7 @@ define([
 
     "use strict";
     var divIdInUse = "user_person";
-    var firstnameInput = [], middleInitialInput = [], lastnameInput = [];
+    var firstnameInput = [], middlenameInput = [], lastnameInput = [];
     var typeSelect = [], commentInput = [];
     var dataPrototype;
     var prototypeNode, prototypeContent;
@@ -68,15 +68,15 @@ define([
         firstnameInput.push(dijit);
         dijit = new ValidationTextBox({
             trim: true,
-            uppercase: true,
-            pattern: "[A-Z]",
-            maxLength: 1,
+            properCase: true,
+            pattern: "[A-Za-z\.\,\ \'-]{2,64}",
+            maxLength: 64,
             required: false,
-            placeholder: core.mi,
-            "class": "xshort"
-        }, base + "middleinitial");
+            "class": "name",
+            placeholder: core.middlename,
+        }, base + "middlename");
         dijit.startup();
-        middleInitialInput.push(dijit);
+        middlenameInput.push(dijit);
         dijit = new ValidationTextBox({
             required: true,
             trim: true,
@@ -102,7 +102,7 @@ define([
         item[0].destroyRecursive();
         item = firstnameInput.splice(id, 1);
         item[0].destroyRecursive();
-        item = middleInitialInput.splice(id, 1);
+        item = middlenameInput.splice(id, 1);
         item[0].destroyRecursive();
         item = lastnameInput.splice(id, 1);
         item[0].destroyRecursive();
@@ -162,10 +162,11 @@ define([
                 returnData.push({
                     "id": personId[i],
                     "type": parseInt(typeSelect[i].get('value')),
+                    "type_text": typeSelect[i].get('displayedValue'),
                     "firstname": firstnameInput[i].get('value'),
-                    "middleinitial": middleInitialInput[i].get('value'),
+                    "middlename": middlenameInput[i].get('value'),
                     "lastname": lastnameInput[i].get('value'),
-                    "fullName": firstnameInput[i].get('value') + " " + middleInitialInput[i].get('value') + " " + lastnameInput[i].get('value'),
+                    "name": firstnameInput[i].get('value') + " " + middlenameInput[i].get('value') + " " + lastnameInput[i].get('value'),
                     "comment": commentInput[i].get('value'),
                     "emails": emails.getData(),
                     "phones": phoneNumbers.getData(),
@@ -199,7 +200,7 @@ define([
                 personId[i] = obj.id;
                 typeSelect[i].set('value', obj.type);
                 firstnameInput[i].set('value', obj.firstname);
-                middleInitialInput[i].set('value', obj.middleinitial);
+                middlenameInput[i].set('value', obj.middlename);
                 lastnameInput[i].set('value', obj.lastname);
                 commentInput[i].set('value', obj.comment);
                 if( typeof obj.phones !== "undefined" ) {
@@ -222,7 +223,7 @@ define([
             personId[0] = null;
             typeSelect[0].set('value', '');
             firstnameInput[0].set('value', '');
-            middleInitialInput[0].set('value', '');
+            middlenameInput[0].set('value', '');
             lastnameInput[0].set('value', '');
             commentInput[0].set('value', '');
             phoneNumbers.setData(null);

@@ -187,6 +187,8 @@ person:
         Last name
     middleinitial:
         Middle initial
+    middlename:
+        Middle name
                 
 user:
     admin:

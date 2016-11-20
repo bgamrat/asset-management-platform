@@ -5,6 +5,7 @@ namespace AppBundle\Entity\Common;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Address
@@ -53,6 +54,7 @@ class Address
      * @var string
      * @Gedmo\Versioned
      * @ORM\Column(name="state_province", type="string", length=32, nullable=true, unique=false)
+     * @Assert\Regex("/^(A[BKLRZ]|BC|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ABDEINOST]|N[BCDEHJLMSTUVY]|O[HKNR]|P[AE]|QC|RI|S[CDK]|T[NX]|UT|V[AT]|W[AIVY|YT]$/")
      */
     private $state_province;
     /**
