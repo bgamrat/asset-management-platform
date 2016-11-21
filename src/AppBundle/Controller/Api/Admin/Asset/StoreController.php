@@ -92,6 +92,23 @@ class StoreController extends FOSRestController
     /**
      * @View()
      */
+    public function getEmailtypesAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $em = $this->getDoctrine()->getManager();
+
+        $queryBuilder = $em->createQueryBuilder()->select( ['e.id', 'e.type'] )
+                ->from( 'AppBundle\Entity\Common\EmailType', 'e' )
+                ->orderBy( 'e.type' );
+        $data = $queryBuilder->getQuery()->getResult();
+        
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
     public function getManufacturersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );

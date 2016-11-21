@@ -1,9 +1,10 @@
 define([
+    "dojo/request/xhr",
     "dijit/Dialog",
     "dijit/ConfirmDialog",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (Dialog, ConfirmDialog, core) {
+], function (xhr, Dialog, ConfirmDialog, core) {
     "use strict";
 
     var confirmDialog = new ConfirmDialog({
@@ -43,7 +44,7 @@ define([
             if( typeof errObj.error.message !== "undefined" ) {
                 errorDialog.set("title", errObj.error.message);
             }
-            if (typeof errObj.error.exception !== "undefined") {
+            if( typeof errObj.error.exception !== "undefined" ) {
                 errorDialog.set("content", errObj.error.exception[0].message.replace("\n", "<br>"));
             }
         } else {
@@ -100,14 +101,74 @@ define([
         }
     }
 
+    var addressTypes = [];
+    function getAddressTypes() {
+        return xhr.get('/api/store/addresstypes', {
+            handleAs: "json"
+        }).then(function (res) {
+            var i, l;
+            l = res.length;
+            for( i = 0; i < l; i++ ) {
+                addressTypes[res[i].id] = res[i]['type'];
+            }
+        })
+    }
+
+    var emailTypes = [];
+    function getEmailTypes() {
+        return xhr.get('/api/store/emailtypes', {
+            handleAs: "json"
+        }).then(function (res) {
+            var i, l;
+            l = res.length;
+            for( i = 0; i < l; i++ ) {
+                emailTypes[res[i].id] = res[i]['type'];
+            }
+        })
+    }
+
+    var personTypes = [];
+    function  getPersonTypes() {
+        return xhr.get('/api/store/persontypes', {
+            handleAs: "json"
+        }).then(function (res) {
+            var i, l;
+            l = res.length;
+            for( i = 0; i < l; i++ ) {
+                personTypes[res[i].id] = res[i]['type'];
+            }
+        })
+    }
+
+    var phoneTypes = [];
+    function getPhoneTypes() {
+        return xhr.get('/api/store/phonetypes', {
+            handleAs: "json"
+        }).then(function (res) {
+            var i, l;
+            l = res.length;
+            for( i = 0; i < l; i++ ) {
+                phoneTypes[res[i].id] = res[i]['type'];
+            }
+        })
+    }
+
     return {
+        addressTypes: addressTypes,
         confirmAction: confirmAction,
+        emailTypes: emailTypes,
         formatDate: formatDate,
-        pageReady: pageReady,
+        getAddressTypes: getAddressTypes,
+        getEmailTypes: getEmailTypes,
+        getPersonTypes: getPersonTypes,
+        getPhoneTypes: getPhoneTypes,
         isEmpty: isEmpty,
+        pageReady: pageReady,
+        personTypes: personTypes,
+        phoneTypes: phoneTypes,
+        showHistory: showHistory,
         textError: textError,
         xhrError: xhrError,
-        showHistory: showHistory,
         constant: {
             MAX_PHONE_NUMBERS: 5,
             MAX_ADDRESSES: 3,

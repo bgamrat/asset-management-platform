@@ -119,39 +119,6 @@ define([
 
         var filterInput = new TextBox({placeHolder: core.filter}, "person-filter-input");
         filterInput.startup();
-        
-        var personTypes = {};
-        var getPersonTypes = xhr.get("/api/store/persontypes", {
-            handleAs: "json"
-        }).then(function (res) {
-            var i, l;
-            l = res.length;
-            for (i = 0; i < l; i++) {
-                personTypes[res[i].id] = res[i]['type'];
-            }
-        });
-
-        var addressTypes = {};
-        var getAddressTypes = xhr.get("/api/store/addresstypes", {
-            handleAs: "json"
-        }).then(function (res) {
-            var i, l;
-            l = res.length;
-            for (i = 0; i < l; i++) {
-                addressTypes[res[i].id] = res[i]['type'];
-            }
-        });
-        
-        var phoneTypes = {};
-        var getPhoneTypes = xhr.get("/api/store/phonetypes", {
-            handleAs: "json"
-        }).then(function (res) {
-            var i, l;
-            l = res.length;
-            for (i = 0; i < l; i++) {
-                phoneTypes[res[i].id] = res[i]['type'];
-            }
-        });
 
         var personForm = new Form({}, '[name="person"]');
         personForm.startup();
@@ -159,8 +126,8 @@ define([
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
         var store = new TrackableRest({target: '/api/people', useRangeHeaders: true, idProperty: 'id'});
         var grid;
-        
-        all([getAddressTypes, getPersonTypes, getPhoneTypes]).then(function(results){
+
+        all([lib.getAddressTypes, lib.getEmailTypes, lib.getPersonTypes, lib.getPhoneTypes]).then(function (results) {
             grid = new (declare([OnDemandGrid, Selection, Editor]))({
                 collection: store,
                 className: "dgrid-autoheight",
@@ -170,77 +137,19 @@ define([
                     },
                     name: {
                         label: core.person,
-                        renderCell: function (object, value, td) {
-                            put(td, "span", value + " (" + object.type_text+")");
-                        }
+                        renderCell: libGrid.renderPerson
+                    },
+                    phones: {
+                        label: core.phone_number,
+                        renderCell: libGrid.renderPhone
+                    },
+                    emails: {
+                        label: core.email,
+                        renderCell: libGrid.renderEmail
                     },
                     addresses: {
                         label: core.address,
-                        renderCell: function (object, value, td) {
-                            var a, i, l, segments, content = [], address_lines, address_segments;
-                            var address;
-                            if (typeof value === "object" && value.length !== 0) {
-                                address_lines = ['street1', 'street2'];
-                                address_segments = ['city', 'stateProvince', 'postalCode', 'country'];
-                                for (a in value) {
-                                    address = value[a];
-                                    if (isNaN(address['type'])) {
-                                        content.push(address['type']['type']);
-                                    } else {
-                                        content.push(addressTypes[address['type']]);
-                                    }
-                                    l = address_lines.length;
-                                    for( i = 0; i < l; i++ ) {
-                                        if( address[address_lines[i]] !== null && address[address_lines[i]] !== "" ) {
-                                            content.push(address[address_lines[i]]);
-                                        }
-                                    }
-                                    segments = [];
-                                    l = address_segments.length;
-                                    for( i = 0; i < l; i++ ) {
-                                        if( address[address_segments[i]] !== null && address[address_segments[i]] !== "" ) {
-                                            segments.push(address[address_segments[i]]);
-                                        }
-                                    }
-                                    content.push(segments.join(" "));
-                                }
-                            }
-                            if( content.length > 0 ) {
-                                content = content.join("\n");
-                                put(td, "pre", content);
-                            }
-                        }
-                    },
-                    phones: {
-                        label: core.phone_numbers,
-                        renderCell: function (object, value, td) {
-                            var p, content = [], phone_lines;
-                            var phone, row;
-                            if (typeof value === "object" && value.length !== 0) {
-                                phone_lines = ['phoneNumber','comment'];
-                                l = phone_lines.length;
-                                for (p in value) {
-                                    phone = value[p];
-                                    if (isNaN(phone['type'])) {
-                                        row = phone['type']['type'];
-                                    } else {
-                                        row = phoneTypes[phone['type']];
-                                    }
-                                    row += " ";
-                                    for( i = 0; i < l; i++ ) {
-                                        if( phone[phone_lines[i]] !== "" ) {
-                                            row += phone[phone_lines[i]] + " ";
-                                        }
-                                    }
-                                    content.push(row);
-                                    content.push("\n");
-                                }
-                            }
-                            if( content.length > 0 ) {
-                                content = content.join("\n");
-                                put(td, "pre", content);
-                            }
-                        }
+                        renderCell: libGrid.renderAddress
                     },
                     active: {
                         label: core.active,
@@ -332,7 +241,7 @@ define([
                     // characters that have special meaning in RegExps
                     match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
                 }));
-            });         
+            });
 
             var cbAll = new CheckBox({}, "cb-all");
             cbAll.startup();

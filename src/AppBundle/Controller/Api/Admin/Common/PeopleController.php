@@ -79,6 +79,7 @@ class PeopleController extends FOSRestController
             $p = ['id' => $row['id'],
                 'name' => $person->getFullName(),
                 'type_text' => $person->getType()->getType(),
+                'emails' => $person->getEmails(),
                 'addresses' => $person->getAddresses(),
                 'phones' => $person->getPhones(),
                 'active' => $person->isActive()];
@@ -107,6 +108,7 @@ class PeopleController extends FOSRestController
                 'firstname' => $person->getFirstname(),
                 'middlename' => $person->getMiddlename(),
                 'lastname' => $person->getLastname(),
+                'emails' => $person->getEmails(),
                 'addresses' => $person->getAddresses(),
                 'phones' => $person->getPhones(),
                 'active' => $person->isActive()

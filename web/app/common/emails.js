@@ -138,14 +138,15 @@ define([
     }
 
     function getData() {
-        var i, returnData = [];
+        var i, returnData = [], email;
         for( i = 0; i < emailInput.length; i++ ) {
-            if (emailId[i] !== null) {
+            email = emailInput[i].get('value').trim();
+            if (email !== "") {
                 returnData.push(
                     {
                         "id": emailId[i],
                         "type": parseInt(typeSelect[i].get('value')),
-                        "email": emailInput[i].get('value'),
+                        "email": email,
                         "comment": commentInput[i].get('value')
                     });
                 }

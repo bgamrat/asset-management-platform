@@ -230,7 +230,10 @@ define([
                         "street1": street1Input[i].get('value'),
                         "street2": street2Input[i].get('value'),
                         "city": cityInput[i].get('value'),
+                        // Address the duality of names between the forms and objects with two properties
+                        "state_province": stateProvinceInput[i].get('value'),
                         "stateProvince": stateProvinceInput[i].get('value'),
+                        "postal_code": postalCodeInput[i].get('value'),
                         "postalCode": postalCodeInput[i].get('value'),
                         "country": countrySelect[i].get('value'),
                         "comment": commentInput[i].get('value')
