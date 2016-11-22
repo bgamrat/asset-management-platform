@@ -127,7 +127,7 @@ define([
         var store = new TrackableRest({target: '/api/people', useRangeHeaders: true, idProperty: 'id'});
         var grid;
 
-        all([lib.getAddressTypes, lib.getEmailTypes, lib.getPersonTypes, lib.getPhoneTypes]).then(function (results) {
+        all([lib.getAddressTypes(), lib.getEmailTypes(), lib.getPersonTypes(), lib.getPhoneTypes()]).then(function (results) {
             grid = new (declare([OnDemandGrid, Selection, Editor]))({
                 collection: store,
                 className: "dgrid-autoheight",

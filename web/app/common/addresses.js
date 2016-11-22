@@ -198,7 +198,7 @@ define([
 
         createDijits();
 
-        addOneMoreControl = query('.addresses .add-one-more-row', getDivId());
+        addOneMoreControl = query('.addresses .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -262,7 +262,7 @@ define([
                 }
                 obj = addresses[i];
                 addressId[i] = obj.id;
-                typeSelect[i].set('value', obj.type);
+                typeSelect[i].set('value', obj.type.id);
                 street1Input[i].set('value', obj.street1);
                 street2Input[i].set('value', obj.street2);
                 cityInput[i].set('value', obj.city);

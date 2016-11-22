@@ -172,7 +172,7 @@ define([
                 }
                 obj = emails[i];
                 emailId[i] = obj.id;
-                typeSelect[i].set('value', obj.type);
+                typeSelect[i].set('value', obj.type.id);
                 emailInput[i].set('value', obj.email);
                 commentInput[i].set('value', obj.comment);
             }

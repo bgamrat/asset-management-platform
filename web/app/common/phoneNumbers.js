@@ -177,7 +177,7 @@ define([
                 }
                 obj = phones[i];
                 phoneNumberId[i] = obj.id;
-                typeSelect[i].set('value', obj.type);
+                typeSelect[i].set('value', obj.type.id);
                 numberInput[i].set('value', obj.phoneNumber);
                 commentInput[i].set('value', obj.comment);
             }

@@ -52,31 +52,34 @@ define([
     }
     ;
     function renderEmail(object, value, td) {
-        var i, l, e, content = [], email_lines;
-        var email, row;
+        var e;
+        var email, ul = null, li, t, link, c;
         if( typeof value === "object" && value.length !== 0 ) {
-            email_lines = ['email', 'comment'];
-            l = email_lines.length;
+            ul = document.createElement("ul");
             for( e in value ) {
+                li = document.createElement("li");
                 email = value[e];
                 if( isNaN(email['type']) ) {
-                    row = email['type']['type'];
+                    t = document.createTextNode(email['type']['type'] + " ");
                 } else {
-                    row = lib.emailTypes[email['type']];
+                    t = document.createTextNode(lib.emailTypes[email['type']] + " ");
                 }
-                row += " ";
-                for( i = 0; i < l; i++ ) {
-                    if( email[email_lines[i]] !== null && email[email_lines[i]] !== "" ) {
-                        row += email[email_lines[i]] + " ";
+                if( email['email'] !== null && email['email'] !== "" ) {
+                    link=document.createElement("a");
+                    link.href="mailto:"+email['email'];
+                    link.textContent=email['email'];
+                    li.appendChild(t);
+                    li.appendChild(link);
+                    if( email['comment'] !== null && email['comment'] !== "" ) {
+                        c = document.createTextNode(email['comment']);
+                        li.appendChild(c);
                     }
                 }
-                content.push(row);
-                content.push("\n");
+                ul.appendChild(li);
             }
         }
-        if( content.length > 0 ) {
-            content = content.join("\n");
-            put(td, "pre", content);
+        if( ul !== null ) {
+            put(td, "div", ul);
         }
 
     }
