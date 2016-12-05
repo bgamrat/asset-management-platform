@@ -1,5 +1,5 @@
 {
-    "name": "bgamrat/upg",
+    "name": "bgamrat/dev",
     "license": "proprietary",
     "type": "project",
     "autoload": {
@@ -73,6 +73,9 @@
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
+        },       
+        "installer-paths": {
+            "web/vendor/{$name}": ["dojo"]
         }
     }
 }
