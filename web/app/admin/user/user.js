@@ -382,7 +382,7 @@ define([
             }));
         });
 
-        person.run('user');
+        person.run('user_person');
         lib.pageReady();
     }
     return {

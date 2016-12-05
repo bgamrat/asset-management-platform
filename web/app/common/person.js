@@ -53,7 +53,8 @@ define([
         dijit = new Select({
             store: store,
             placeholder: core.type,
-            required: true
+            required: true,
+            "class": "type-select"
         }, base + "type");
         dijit.startup();
         typeSelect.push(dijit);

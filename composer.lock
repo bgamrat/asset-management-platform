@@ -4,9 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b7502a43d672b01bd372bb96e22011fa",
-    "content-hash": "61cc580f1a0d55b9fd559d6ca5424652",
+    "hash": "aa3067edd39acd3f4a67be802248bad1",
+    "content-hash": "298239360c9931775200f763da306b32",
     "packages": [
+        {
+            "name": "FortAwesome/Font-Awesome",
+            "version": "4.7.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://github.com/FortAwesome/Font-Awesome/archive/master.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
         {
             "name": "behat/transliterator",
             "version": "v1.1.0",
@@ -1354,6 +1365,28 @@
             "time": "2015-11-12 13:51:40"
         },
         {
+            "name": "kriszyp/put-selector",
+            "version": "0.3.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://github.com/kriszyp/put-selector/archive/master.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "kriszyp/xstyle",
+            "version": "0.3.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://github.com/kriszyp/xstyle/archive/master.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
             "name": "monolog/monolog",
             "version": "1.21.0",
             "source": {
@@ -1478,6 +1511,17 @@
                 "random"
             ],
             "time": "2016-04-03 06:00:07"
+        },
+        {
+            "name": "persrv/rql",
+            "version": "0.3.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://github.com/persvr/rql/archive/master.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
         },
         {
             "name": "psr/log",
@@ -1674,6 +1718,39 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2015-11-07 08:07:40"
+        },
+        {
+            "name": "sitepen/dgrid",
+            "version": "1.1.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://github.com/SitePen/dgrid/archive/v1.1.0.tar.gz",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "sitepen/dojo",
+            "version": "1.11.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://download.dojotoolkit.org/release-1.11.2/dojo-release-1.11.2-src.tar.gz",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "sitepen/dstore",
+            "version": "1.1.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://github.com/SitePen/dstore/archive/master.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
         },
         {
             "name": "stof/doctrine-extensions-bundle",
@@ -2581,6 +2658,17 @@
             "time": "2016-08-05 08:37:39"
         },
         {
+            "name": "twbs/bootstrap",
+            "version": "3.3.7",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/twbs/bootstrap/releases/download/v3.3.7/bootstrap-3.3.7-dist.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
             "name": "twig/extensions",
             "version": "v1.3.0",
             "source": {
@@ -2784,6 +2872,17 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "dojo/src",
+            "version": "1.11.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://download.dojotoolkit.org/release-1.11.2/dojo-release-1.11.2-src.tar.gz",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
         {
             "name": "sensio/generator-bundle",
             "version": "v3.0.8",

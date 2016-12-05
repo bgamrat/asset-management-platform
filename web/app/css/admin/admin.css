@@ -114,3 +114,10 @@ fieldset .sub-form-legend {
     height:50px;
     width: 300px;
 }
+.dijit.type-select,
+.form-row.address .type-select,
+.form-row.email .type-select,
+.form-row.phone-number .type-select {
+    width: 75px;
+    display: inline-block;
+}

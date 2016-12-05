@@ -17,6 +17,91 @@
             "Tests\\": "tests/"
         }
     },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "sitepen/dojo",
+                "version": "1.11.2",
+                "dist": {
+                    "url": "https://download.dojotoolkit.org/release-1.11.2/dojo-release-1.11.2-src.tar.gz",
+                    "type": "tar"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "sitepen/dgrid",
+                "version": "1.1.0",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://github.com/SitePen/dgrid/archive/v1.1.0.tar.gz"
+                }
+            }
+        }, {
+            "type": "package",
+            "package": {
+                "name": "sitepen/dstore",
+                "version": "1.1.1",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://github.com/SitePen/dstore/archive/master.zip"
+                }
+            }
+        }, {
+            "type": "package",
+            "package": {
+                "name": "kriszyp/put-selector",
+                "version": "0.3.3",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://github.com/kriszyp/put-selector/archive/master.zip"
+                }
+            }
+        }, {
+            "type": "package",
+            "package": {
+                "name": "kriszyp/xstyle",
+                "version": "0.3.2",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://github.com/kriszyp/xstyle/archive/master.zip"
+                }
+            }
+        }, {
+            "type": "package",
+            "package": {
+                "name": "persrv/rql",
+                "version": "0.3.3",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://github.com/persvr/rql/archive/master.zip"
+                }
+            }
+        }, {
+            "type": "package",
+            "package": {
+                "name": "FortAwesome/Font-Awesome",
+                "version": "4.7.0",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://github.com/FortAwesome/Font-Awesome/archive/master.zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "twbs/bootstrap",
+                "version": "3.3.7",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/twbs/bootstrap/releases/download/v3.3.7/bootstrap-3.3.7-dist.zip"
+                }
+            }
+        }
+    ],
     "require": {
         "php": ">=5.5.9",
         "symfony/symfony": "3.0.*",
@@ -40,20 +125,41 @@
         "stof/doctrine-extensions-bundle": "^1.2",
         "knplabs/knp-menu-bundle": "^2.0",
         "symfony/translation": "^3.1",
-        "symfony/config": "^3.1"
+        "symfony/config": "^3.1",
+        "sitepen/dojo": "^1.11",
+        "sitepen/dgrid": "^1.1",
+        "sitepen/dstore": "^1.1",
+        "kriszyp/put-selector": "^0.3.3",
+        "persrv/rql": "^0.3.3",
+        "FortAwesome/Font-Awesome": "^4.7",
+        "twbs/bootstrap": "^3.3",
+        "kriszyp/xstyle": "^0.3.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0"
     },
     "scripts": {
+        "mvDojo": "cp -rf vendor/sitepen/dojo/* web/vendor/dojo; rm -rf vendor/sitepen/dojo",
+        "mvDgridDstore": "cp -rf vendor/sitepen/* web/vendor/dojo; rm -rf vendor/sitepen/dgrid vendor/sitepen/dstore",
+        "mvZyp": "cp -rf vendor/kriszyp/* web/vendor/dojo; rm -rf vendor/kriszyp",
+        "mvRql": "cp -rf vendor/persrv/* web/vendor/dojo; rm -rf vendor/persrv",
+        "mvBootstrap": "cp -rf vendor/twbs/* web/vendor; rm -rf vendor/twbs",
+        "mvFontAwesome": "cp -rf vendor/FortAwesome/Font-Awesome/fonts web/vendor; rm -rf vendor/FortAwesome",
+        "rmAllJS": "rm -rf web/vendor/dojo web/vendor/bootstrap web/vendor/fonts",
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "@mvDojo",
+            "@mvDgridDstore",
+            "@mvZyp",
+            "@mvRql",
+            "@mvBootstrap",
+            "@mvFontAwesome"
         ],
         "post-update-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
@@ -61,7 +167,16 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "@mvDojo",
+            "@mvDgridDstore",
+            "@mvZyp",
+            "@mvRql",
+            "@mvBootstrap",
+            "@mvFontAwesome"
+        ],
+        "post-package-uninstall": [
+            "@rmAllDojo"
         ]
     },
     "extra": {
@@ -73,9 +188,6 @@
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
-        },       
-        "installer-paths": {
-            "web/vendor/{$name}": ["dojo"]
         }
     }
 }
