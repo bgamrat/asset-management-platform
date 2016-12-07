@@ -47,7 +47,7 @@ assetic:
     assets:
         dojo_js:
             inputs:
-                - 'vendor/dojo-release-1.11.2-src/dojo/dojo.js'
+                - 'vendor/dojo/dojo/dojo.js'
         main_js:
             inputs:
                 - 'app/main.js'

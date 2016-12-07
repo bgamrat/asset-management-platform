@@ -13,11 +13,13 @@ web/css
 web/js
 web/vendor
 web/vendor/bootstrap
+web/vendor/bootstrap-7-col
+web/vendor/Font-Awesome
 web/vendor/fonts
 web/vendor/dojo*
 web/vendor/release
 !web/vendor
+!web/vendor/bootstrap-7-col
 !web/vendor/profiles
 !web/vendor/profiles/app.profile.js
 !web/vendor/build.sh
-!web/vendor/bootstrap-7-col

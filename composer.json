@@ -24,8 +24,8 @@
                 "name": "sitepen/dojo",
                 "version": "1.11.2",
                 "dist": {
-                    "url": "https://download.dojotoolkit.org/release-1.11.2/dojo-release-1.11.2-src.tar.gz",
-                    "type": "tar"
+                    "type": "tar",
+                    "url": "https://download.dojotoolkit.org/release-1.11.2/dojo-release-1.11.2-src.tar.gz"
                 }
             }
         },
@@ -45,7 +45,7 @@
                 "name": "sitepen/dstore",
                 "version": "1.1.1",
                 "dist": {
-                    "type": "tar",
+                    "type": "zip",
                     "url": "https://github.com/SitePen/dstore/archive/master.zip"
                 }
             }
@@ -55,7 +55,7 @@
                 "name": "kriszyp/put-selector",
                 "version": "0.3.3",
                 "dist": {
-                    "type": "tar",
+                    "type": "zip",
                     "url": "https://github.com/kriszyp/put-selector/archive/master.zip"
                 }
             }
@@ -65,7 +65,7 @@
                 "name": "kriszyp/xstyle",
                 "version": "0.3.2",
                 "dist": {
-                    "type": "tar",
+                    "type": "zip",
                     "url": "https://github.com/kriszyp/xstyle/archive/master.zip"
                 }
             }
@@ -85,7 +85,7 @@
                 "name": "FortAwesome/Font-Awesome",
                 "version": "4.7.0",
                 "dist": {
-                    "type": "tar",
+                    "type": "zip",
                     "url": "https://github.com/FortAwesome/Font-Awesome/archive/master.zip"
                 }
             }
@@ -145,7 +145,7 @@
         "mvZyp": "cp -rf vendor/kriszyp/* web/vendor/dojo; rm -rf vendor/kriszyp",
         "mvRql": "cp -rf vendor/persrv/* web/vendor/dojo; rm -rf vendor/persrv",
         "mvBootstrap": "cp -rf vendor/twbs/* web/vendor; rm -rf vendor/twbs",
-        "mvFontAwesome": "cp -rf vendor/FortAwesome/Font-Awesome/fonts web/vendor; rm -rf vendor/FortAwesome",
+        "mvFontAwesome": "cp -rf vendor/FortAwesome/Font-Awesome web/vendor; cp -rf vendor/FortAwesome/Font-Awesome/fonts web/vendor; rm -rf vendor/FortAwesome",
         "rmAllJS": "rm -rf web/vendor/dojo web/vendor/bootstrap web/vendor/fonts",
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",

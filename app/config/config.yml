@@ -61,7 +61,7 @@ assetic:
         # CSS
         admin_css:
             inputs:
-                - 'vendor/font-awesome-4.5.0/font-awesome.min.css'
+                - 'vendor/Font-Awesome/css/font-awesome.min.css'
                 - 'app/css/admin/common.css'
                 - 'app/css/admin/admin.css'
                 - 'app/css/admin/user.css'
@@ -69,15 +69,15 @@ assetic:
         # User side - stock Bootstrap
         bootstrap_css:
             inputs:
-                - 'vendor/bootstrap-3.3.6-dist/css/bootstrap.css'
-                - 'vendor/bootstrap-3.3.6-dist/css/bootstrap-theme.css'
-                - 'vendor/font-awesome-4.5.0/font-awesome.min.css'
+                - 'vendor/bootstrap/css/bootstrap.css'
+                - 'vendor/bootstrap/css/bootstrap-theme.css'
+                - 'vendor/Font-Awesome/css/font-awesome.min.css'
         # User side - custom Bootstrap (7 column)
         calendar_css:
             inputs:
                 - 'vendor/bootstrap-7-col/css/bootstrap.css'
                 - 'vendor/bootstrap-7-col/css/bootstrap-theme.css'
-                - 'vendor/font-awesome-4.5.0/font-awesome.min.css'
+                - 'vendor/Font-Awesome/css/font-awesome.min.css'
                 - 'app/css/user/calendar.css'
         dgrid_css:
             inputs:
@@ -99,7 +99,7 @@ assetic:
                 - 'app/admin/main.js'
         bootstrap_js:
             inputs:
-                - 'vendor/bootstrap-3.3.6-dist/js/bootstrap.js'
+                - 'vendor/bootstrap/js/bootstrap.js'
         calendar_js:
             inputs:
                 - 'vendor/bootstrap-7-col/js/bootstrap.js'

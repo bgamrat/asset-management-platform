@@ -4,14 +4,14 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "aa3067edd39acd3f4a67be802248bad1",
-    "content-hash": "298239360c9931775200f763da306b32",
+    "hash": "1bc6d1c90b91b5ba01ba0401c71127b1",
+    "content-hash": "c420f64829373624be227542d4cec811",
     "packages": [
         {
             "name": "FortAwesome/Font-Awesome",
             "version": "4.7.0",
             "dist": {
-                "type": "tar",
+                "type": "zip",
                 "url": "https://github.com/FortAwesome/Font-Awesome/archive/master.zip",
                 "reference": null,
                 "shasum": null
@@ -1368,7 +1368,7 @@
             "name": "kriszyp/put-selector",
             "version": "0.3.3",
             "dist": {
-                "type": "tar",
+                "type": "zip",
                 "url": "https://github.com/kriszyp/put-selector/archive/master.zip",
                 "reference": null,
                 "shasum": null
@@ -1379,7 +1379,7 @@
             "name": "kriszyp/xstyle",
             "version": "0.3.2",
             "dist": {
-                "type": "tar",
+                "type": "zip",
                 "url": "https://github.com/kriszyp/xstyle/archive/master.zip",
                 "reference": null,
                 "shasum": null
@@ -1745,7 +1745,7 @@
             "name": "sitepen/dstore",
             "version": "1.1.1",
             "dist": {
-                "type": "tar",
+                "type": "zip",
                 "url": "https://github.com/SitePen/dstore/archive/master.zip",
                 "reference": null,
                 "shasum": null
