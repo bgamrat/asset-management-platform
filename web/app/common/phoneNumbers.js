@@ -146,15 +146,18 @@ define([
     }
 
     function getData() {
-        var i, returnData = [];
+        var i, returnData = [], phone;
         for( i = 0; i < numberInput.length; i++ ) {
-            returnData.push(
+            phone = numberInput[i].get('value').trim();
+            if (phone !== "") {
+                returnData.push(
                     {
                         "id": phoneNumberId[i],
                         "type": parseInt(typeSelect[i].get('value')),
-                        "phoneNumber": numberInput[i].get('value'),
+                        "phoneNumber": phone,
                         "comment": commentInput[i].get('value')
                     });
+            }
         }
         return returnData.length > 0 ? returnData : null;
     }

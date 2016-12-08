@@ -10,4 +10,5 @@ namespace AppBundle\Repository;
  */
 class ManufacturerRepository extends \Doctrine\ORM\EntityRepository
 {
+
 }

@@ -17,33 +17,33 @@ define([
     function renderAddress(object, value, td) {
         var a, i, l, segments, content = [], address_lines, address_segments;
         var address;
-            if( typeof value === "object" && value.length !== 0 ) {
-                address_lines = ['street1', 'street2'];
-                address_segments = ['city', 'stateProvince', 'postalCode', 'country'];
-                for( a in value ) {
-                    address = value[a];
-                    if( isNaN(address['type']) ) {
-                        content.push(address['type']['type']);
-                    } else {
-                        content.push(lib.addressTypes[address['type']]);
-                    }
-                    l = address_lines.length;
-                    for( i = 0; i < l; i++ ) {
-                        if( address[address_lines[i]] !== null && address[address_lines[i]] !== "" ) {
-                            content.push(address[address_lines[i]]);
-                        }
-                    }
-                    segments = [];
-                    l = address_segments.length;
-                    for( i = 0; i < l; i++ ) {
-                        if( address[address_segments[i]] !== null && address[address_segments[i]] !== "" ) {
-                            segments.push(address[address_segments[i]]);
-                        }
-                    }
-                    content.push(segments.join(" "));
+        if( typeof value === "object" && value !== null && value.length !== 0 ) {
+            address_lines = ['street1', 'street2'];
+            address_segments = ['city', 'stateProvince', 'postalCode', 'country'];
+            for( a in value ) {
+                address = value[a];
+                if( isNaN(address['type']) ) {
+                    content.push(address['type']['type']);
+                } else {
+                    content.push(lib.addressTypes[address['type']]);
                 }
+                l = address_lines.length;
+                for( i = 0; i < l; i++ ) {
+                    if( address[address_lines[i]] !== null && address[address_lines[i]] !== "" ) {
+                        content.push(address[address_lines[i]]);
+                    }
+                }
+                segments = [];
+                l = address_segments.length;
+                for( i = 0; i < l; i++ ) {
+                    if( address[address_segments[i]] !== null && address[address_segments[i]] !== "" ) {
+                        segments.push(address[address_segments[i]]);
+                    }
+                }
+                content.push(segments.join(" "));
             }
-        
+        }
+
         if( content.length > 0 ) {
             content = content.join("\n");
             put(td, "pre", content);
@@ -51,10 +51,23 @@ define([
 
     }
     ;
+    function renderContacts(object, value, td) {
+        var i, l;
+        if (typeof object.contacts !== "undefined") {
+            l = object.contacts.length;
+            for( i = 0; i < l; i++ ) {
+                this.renderPerson(object.contacts[i], object.contacts[i].name, td);
+                this.renderPhone(object.contacts[i].phones, object.contacts[i].phones, td);
+                this.renderEmail(object.contacts[i].emails, object.contacts[i].emails, td);
+                this.renderAddress(object.contacts[i].addresses, object.contacts[i].addresses, td);
+            }
+        }
+    }
+    ;
     function renderEmail(object, value, td) {
         var e;
         var email, ul = null, li, t, link, c;
-        if( typeof value === "object" && value.length !== 0 ) {
+        if( typeof value === "object" && value !== null && value.length !== 0 ) {
             ul = document.createElement("ul");
             for( e in value ) {
                 li = document.createElement("li");
@@ -65,9 +78,9 @@ define([
                     t = document.createTextNode(lib.emailTypes[email['type']] + " ");
                 }
                 if( email['email'] !== null && email['email'] !== "" ) {
-                    link=document.createElement("a");
-                    link.href="mailto:"+email['email'];
-                    link.textContent=email['email'];
+                    link = document.createElement("a");
+                    link.href = "mailto:" + email['email'];
+                    link.textContent = email['email'];
                     li.appendChild(t);
                     li.appendChild(link);
                     if( email['comment'] !== null && email['comment'] !== "" ) {
@@ -85,13 +98,19 @@ define([
     }
     ;
     function renderPerson(object, value, td) {
-        put(td, "span", value + " (" + object.type_text + ")");
+        var type_text;
+        if (typeof object.type_text === "undefined") {
+            type_text = object.type.type;
+        } else {
+            type_text = object.type_text;
+        }
+        put(td, "span", value + " (" + type_text + ")");
     }
 
     function renderPhone(object, value, td) {
         var i, l, p, content = [], phone_lines;
         var phone, row;
-        if( typeof value === "object" && value.length !== 0 ) {
+        if( typeof value === "object" && value !== null && value.length !== 0 ) {
             phone_lines = ['phoneNumber', 'comment'];
             l = phone_lines.length;
             for( p in value ) {
@@ -122,6 +141,7 @@ define([
 
     return {
         renderAddress: renderAddress,
+        renderContacts: renderContacts,
         renderEmail: renderEmail,
         renderGridCheckbox: renderGridCheckbox,
         renderPerson: renderPerson,

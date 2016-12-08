@@ -166,7 +166,6 @@ class Manufacturer
 
     public function getBrands($deep = true)
     {
-
         $return = [];
         if ($deep === true) {
             $return = $this->brands->toArray();
@@ -190,20 +189,12 @@ class Manufacturer
         {
             $this->brands->add( $brand );
         }
+        return $this;
     }
 
     public function removeBrand( Brand $brand )
     {
         $this->brands->removeElement( $brand );
-    }
-
-    public function setContacts( $contacts )
-    {
-        foreach( $contacts as $m )
-        {
-            $this->addContacts( $m );
-        }
-        return $this;
     }
 
     public function getContacts()

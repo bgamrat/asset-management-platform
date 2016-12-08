@@ -127,16 +127,8 @@ define([
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
-                    "manufacturer": {
-                        "id": manufacturerId,
-                        "name": nameInput.get("value"),
-                        "active": activeCheckBox.get("checked"),
-                        "comment": commentInput.get("value"),
-                        "contacts": person.getData(),
-                        "brands": brands.getData(),
-                    },
-                    contacts: [], brands: []
-
+                    "contacts": person.getData(),
+                    "brands": brands.getData()
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -175,38 +167,8 @@ define([
                 name: {
                     label: core.manufacturer,
                     renderCell: function (object, value, td) {
-                        var i, j, k, content, contactText = [object.name], addresses, address_lines, phoneNumber;
-                        var contact, address;
-                        address_lines = ['street1', 'street2', 'city', 'stateProvince', 'postalCode', 'country'];
-                        if( typeof object.contacts !== "undefined" && object.contacts !== null ) {
-                            for( i = 0; i < object.contacts.length; i++ ) {
-                                contact = object.contacts[i];
-                                contactText.push("");
-                                contactText.push("\t" + contact.fullName);
-                                if( typeof contact.phones !== "undefined" ) {
-                                    for( j = 0; j < contact.phones.length; j++ ) {
-                                        phoneNumber = contact.phones[j];
-                                        contactText.push("\t" + phoneNumber.phoneNumber);
-                                    }
-                                }
-                                if( typeof contact.addresses !== "undefined" ) {
-                                    addresses = contact.addresses;
-                                    for( j = 0; j < addresses.length; j++ ) {
-                                        contactText.push("");
-                                        address = contact.addresses[j];
-                                        for( k = 0; k < address_lines.length; k++ ) {
-                                            if( address[address_lines[k]] !== "" ) {
-                                                contactText.push("\t" + address[address_lines[k]]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if( contactText.length > 0 ) {
-                            content = contactText.join("\n");
-                            put(td, "pre", content);
-                        }
+                        put(td, "pre", object.name);
+                        libGrid.renderContacts(object, object, td);
                     }
                 },
                 brands: {

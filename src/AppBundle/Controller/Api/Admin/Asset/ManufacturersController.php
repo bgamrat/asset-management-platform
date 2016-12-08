@@ -111,14 +111,14 @@ class ManufacturersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
-        $manufacturer = $em->getRepository( 'AppBundle\Entity\Asset\Manufacturer' )->findById( $id );
-        if( empty($manufacturer) )
+        $data = $request->request->all();
+        if( $id === 'null' )
         {
             $manufacturer = new Manufacturer();
         }
         else
         {
-            $manufacturer = $manufacturer[0];
+            $manufacturer = $em->getRepository( 'AppBundle\Entity\Asset\Manufacturer' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdated() ) === false )
             {
@@ -127,7 +127,7 @@ class ManufacturersController extends FOSRestController
         }
 
         $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
-        $form->submit( $request );
+        $form->submit( $data );
 
         if( $form->isValid() )
         {
@@ -136,7 +136,7 @@ class ManufacturersController extends FOSRestController
             $em->flush();
             $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
             $response->headers->set( 'Location', $this->generateUrl(
-                            'app_admin_api_manufacturers_get_manufacturer', array('name' => $manufacturer->getName()), true // absolute
+                            'app_admin_api_manufacturers_get_manufacturer', array('id' => $manufacturer->getId()), true // absolute
             ) );
 
             return $response;
