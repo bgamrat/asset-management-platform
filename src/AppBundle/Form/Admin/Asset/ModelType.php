@@ -48,6 +48,8 @@ class ModelType extends AbstractType
                 ] )
                 ->add( 'name', TextType::class, [
                     'label' => false, 'required' => true] )
+                ->add( 'container', CheckboxType::class, [
+                    'label' => 'asset.container'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false, 'required' => false
                 ] )
@@ -55,7 +57,7 @@ class ModelType extends AbstractType
                 ->add( 'requires', CollectionType::class, [
                     'entry_type' => EntityType::class,
                     'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
-                    'choice_label' =>false],
+                        'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,
@@ -67,7 +69,7 @@ class ModelType extends AbstractType
                 ->add( 'required_by', CollectionType::class, [
                     'entry_type' => EntityType::class,
                     'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
-                    'choice_label' => false],
+                        'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,
@@ -80,7 +82,7 @@ class ModelType extends AbstractType
                 ->add( 'extends', CollectionType::class, [
                     'entry_type' => EntityType::class,
                     'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
-                    'choice_label' => false],
+                        'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,
@@ -92,7 +94,7 @@ class ModelType extends AbstractType
                 ->add( 'extended_by', CollectionType::class, [
                     'entry_type' => EntityType::class,
                     'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
-                    'choice_label' => false],
+                        'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,

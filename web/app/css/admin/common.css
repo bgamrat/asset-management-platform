@@ -61,7 +61,7 @@
     padding: 10px 0;
     border-bottom: 1px solid;
 }
-.field-active {
+.field-active, .field-container {
     text-align: center;
     width: 75px;
 }

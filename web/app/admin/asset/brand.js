@@ -87,8 +87,9 @@ define([
         }, 'model-new-btn');
         newBtn.startup();
         newBtn.on("click", function (event) {
-            categorySelect.set("value", "");
+            categoryFilteringSelect.set("value", "");
             nameInput.set("value", "");
+            containerCheckBox.set("checked", false);
             activeCheckBox.set("checked", true);
             action = "new";
             modelId = null;
@@ -138,6 +139,9 @@ define([
         }, "model_name");
         nameInput.startup();
 
+        var containerCheckBox = new CheckBox({}, "model_container");
+        containerCheckBox.startup();
+
         var activeCheckBox = new CheckBox({}, "model_active");
         activeCheckBox.startup();
 
@@ -164,6 +168,7 @@ define([
                     "category_text": categoryFilteringSelect.get("displayedValue"),
                     "category": parseInt(categoryFilteringSelect.get("value")),
                     "name": nameInput.get("value"),
+                    "container": containerCheckBox.get("checked"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
                     "extends": modelRelationships.getData("extends"),
@@ -214,6 +219,10 @@ define([
                 name: {
                     label: asset.model,
                 },
+                container: {
+                    label: asset.container,
+                    renderCell: libGrid.renderGridCheckbox
+                },
                 comment: {
                     label: core.comment
                 },
@@ -263,6 +272,7 @@ define([
                     modelId = model.id;
                     categoryFilteringSelect.set('displayedValue', model.category_text);
                     nameInput.set('value', model.name);
+                    containerCheckBox.set('checked', model.container);
                     commentInput.set('value', model.comment);
                     activeCheckBox.set('checked', model.active);
                     modelRelationships.setData("extends", model['extends']);

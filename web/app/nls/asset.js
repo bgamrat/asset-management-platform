@@ -4,6 +4,7 @@ define({
         "barcode": "Barcode",
         "barcodes": "Barcodes",
         "category": "Category",
+        "container": "Container",
         "extends": "Extends",
         "extended_by": "Extended By",
         "history": "History",

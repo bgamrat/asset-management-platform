@@ -30,7 +30,7 @@ class AssetStatusController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $statuses = [];
-        $statuses['statuses'] = $em->getRepository( 'AppBundle:AssetStatus' )->findAll();
+        $statuses['statuses'] = $em->getRepository( 'AppBundle\Entity\Asset\AssetStatus' )->findAll();
 
         $statusesForm = $this->createForm( AssetStatusesType::class, $statuses, [ 'action' => $this->generateUrl( 'app_admin_asset_assetstatus_save' )] );
 
@@ -50,7 +50,7 @@ class AssetStatusController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $statuses = [];
-        $statuses['statuses'] = $em->getRepository( 'AppBundle:AssetStatus' )->findAll();
+        $statuses['statuses'] = $em->getRepository( 'AppBundle\Entity\Asset\AssetStatus' )->findAll();
         $form = $this->createForm( AssetStatusesType::class, $statuses, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )

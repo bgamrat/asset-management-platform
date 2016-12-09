@@ -246,7 +246,7 @@ class ManufacturersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['m.id', 'c.name AS category_text', 'c.name', 'm.name AS name', 'm.comment', 'm.active'];
+        $columns = ['m.id', 'c.name AS category_text', 'c.name', 'm.container', 'm.name AS name', 'm.comment', 'm.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'm.deletedAt AS deleted_at';
@@ -375,15 +375,15 @@ class ManufacturersController extends FOSRestController
             if( isset( $modelData[0]['model_id'] ) )
             {
                 $model = $em->getRepository( 'AppBundle\Entity\Asset\Model' )->find( $modelData[0]['model_id'] );
+                $formUtil = $this->get( 'app.util.form' );
+                if( $formUtil->checkDataTimestamp( 'model' . $model->getId(), $model->getUpdated() ) === false )
+                {
+                    throw new \Exception( "data.outdated", 400 );
+                }
             }
             else
             {
                 $model = new Model();
-                $formUtil = $this->get( 'app.util.form' );
-                if( $formUtil->checkDataTimestamp( 'model' . $model->getId(), $model->getUpdated() ) === false )
-                {
-                    throw new Exception( "data.outdated", 400 );
-                }
             }
             $brand = $em->getRepository( 'AppBundle\Entity\Asset\Brand' )->find( $manufacturerAndBrandData[0]['brand_id'] );
         }

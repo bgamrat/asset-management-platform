@@ -51,6 +51,12 @@ class Model
      */
     private $name;
     /**
+     * @var boolean
+     * @Gedmo\Versioned
+     * @ORM\Column(name="container", type="boolean", options={"default":false})
+     */
+    private $container;
+    /**
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
@@ -183,6 +189,16 @@ class Model
         return $this->name;
     }
 
+    public function setContainer( $container )
+    {
+        $this->container = $container;
+    }
+
+    public function isContainer()
+    {
+        return $this->container;
+    }
+
     /**
      * Set comment
      *
@@ -239,7 +255,7 @@ class Model
     public function getRelationships( $relationship, $full )
     {
         $relationships = [];
-        if( count($this->{$relationship}) > 0 )
+        if( count( $this->{$relationship} ) > 0 )
         {
             if( $full === false )
             {
@@ -370,11 +386,12 @@ class Model
     {
         $this->requires->removeElement( $model );
     }
-    
-    public function getUpdated() {
+
+    public function getUpdated()
+    {
         return $this->updated;
     }
-    
+
     public function getDeletedAt()
     {
         return $this->deletedAt;
@@ -397,6 +414,7 @@ class Model
             'id' => $this->getId(),
             'category' => $this->getCategory(),
             'name' => $this->getName(),
+            'container' => $this->isContainer(),
             'comment' => $this->getComment(),
             'active' => $this->isActive(),
             'extends' => $this->getExtends( false ),
@@ -405,4 +423,5 @@ class Model
             'required_by' => $this->getRequiredBy( false )
         ];
     }
+
 }

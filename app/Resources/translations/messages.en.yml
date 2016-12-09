@@ -13,6 +13,8 @@ asset:
         Categories
     category:
         Category
+    container:
+        Container
     extended_by:
         Extended By
     extends:
