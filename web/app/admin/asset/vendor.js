@@ -142,6 +142,8 @@ define([
                         beforeId = (results.length > 0) ? results[0].id : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
                             vendorViewDialog.hide();
+                            store.fetch();
+                            grid.refresh();
                         }, lib.xhrError);
                     });
                 }

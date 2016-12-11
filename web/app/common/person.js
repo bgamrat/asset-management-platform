@@ -115,6 +115,7 @@ define([
     function run() {
         var base, d, data;
         var select, storeData, memoryStore;
+        var addOneMoreControl;
 
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
@@ -150,6 +151,20 @@ define([
         store = new ObjectStore({objectStore: memoryStore});
 
         createDijits();
+
+        addOneMoreControl = query('.contacts .add-one-more-row');
+        if (addOneMoreControl.length > 0) {
+            addOneMoreControl.on("click", function (event) {
+                cloneNewNode();
+                createDijits();
+                phoneNumbers.run(getDivId());
+                emails.run(getDivId());
+                addresses.run(getDivId());
+                if (personId.length >= lib.constant.MAX_CONTACTS) {
+                    addOneMoreControl.addClass("hidden");
+                }
+            });
+        }
 
         phoneNumbers.run(getDivId());
         emails.run(getDivId());

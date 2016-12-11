@@ -41,15 +41,12 @@ define([
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         modelRelationships, lib, libGrid, core, asset) {
-    //"use strict";
+//"use strict";
     function run() {
 
         var apiUrl = location.href.replace(/admin\/asset\/manufacturer\/([^\/]+)\/brand\/(.*)/, 'api/manufacturers/$1/brands/$2/models');
-
         var modelId = null;
-
         var action = null;
-
         var modelViewDialog = new Dialog({
             title: core.view,
             style: "width:500px"
@@ -58,11 +55,9 @@ define([
         modelViewDialog.on("cancel", function (event) {
             grid.clearSelection();
         });
-
         var tabContainer = new TabContainer({
             style: "height: 300px; width: 100%;"
         }, "model-view-tabs");
-
         var requiresContentPane = new ContentPane({
             title: asset.requires},
         "model-view-requires-tab"
@@ -73,15 +68,12 @@ define([
         "model-view-extends-tab"
                 );
         tabContainer.addChild(extendsContentPane);
-        
         var historyContentPane = new ContentPane({
             title: asset.history},
         "model-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);
-
         tabContainer.startup();
-
         var newBtn = new Button({
             label: core["new"]
         }, 'model-new-btn');
@@ -95,7 +87,6 @@ define([
             modelId = null;
             modelViewDialog.set("title", core["new"]).show();
         });
-
         var removeBtn = new Button({
             label: core.remove
         }, 'model-remove-btn');
@@ -111,9 +102,7 @@ define([
                 });
             }
         });
-
         var select = "model_category";
-
         if( dom.byId(select) === null ) {
             lib.textError(select + " not found");
             return;
@@ -130,7 +119,6 @@ define([
             pageSize: 25
         }, select);
         categoryFilteringSelect.startup();
-
         var nameInput = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
@@ -138,23 +126,18 @@ define([
             required: true,
         }, "model_name");
         nameInput.startup();
-
         var containerCheckBox = new CheckBox({}, "model_container");
         containerCheckBox.startup();
-
         var activeCheckBox = new CheckBox({}, "model_active");
         activeCheckBox.startup();
-
         var commentInput = new SimpleTextarea({
             placeholder: core.comment,
             trim: true,
             required: false
         }, "model_comment");
         commentInput.startup();
-
         var modelForm = new Form({}, '[name="model"]');
         modelForm.startup();
-
         var saveBtn = new Button({
             label: core.save
         }, 'model-save-btn');
@@ -177,37 +160,27 @@ define([
                     "required_by": modelRelationships.getData("required_by")
                 };
                 if( action === "view" ) {
-                    grid.collection.put(data,{"overwrite": true}).then(function (data) {
+                    grid.collection.put(data, {"overwrite": true}).then(function (data) {
                         modelViewDialog.hide();
                     }, lib.xhrError);
                 } else {
-                    filter = new store.Filter();
-                    beforeNameFilter = filter.gt('name', data.name);
-                    store.filter(beforeNameFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        var beforeId;
-                        beforeId = (results.length > 0) ? results[0].id : null;
-                        if( beforeId !== null ) {
-                            objParm = {"beforeId": beforeId};
-                        } else {
-                            objParm = null;
-                        }
-                        grid.collection.add(data, objParm).then(function (data) {
-                            modelViewDialog.hide();
-                        }, lib.xhrError);
-                    });
+                    grid.collection.add(data, objParm).then(function (data) {
+                        modelViewDialog.hide();
+                        store.fetch();
+                        grid.refresh();
+                    }, lib.xhrError);
                 }
             } else {
                 lib.textError(core.invalid_form)
             }
         });
-
         var filterInput = new TextBox({placeHolder: core.filter}, "model-filter-input");
         filterInput.startup();
-
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
         var store = new TrackableRest({target: apiUrl, useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
+            sort: "name",
             className: "dgrid-autoheight",
             columns: {
                 id: {
@@ -255,7 +228,6 @@ define([
         }, 'model-grid');
         grid.startup();
         grid.collection.track();
-
         grid.on(".dgrid-row:click", function (event) {
             var checkBoxes = ["active", "remove"];
             var row = grid.row(event);
@@ -285,7 +257,6 @@ define([
                 }, lib.xhrError);
             }
         });
-
         grid.on('.field-active:dgrid-datachange', function (event) {
             var row = grid.row(event);
             var cell = grid.cell(event);
@@ -305,7 +276,6 @@ define([
                     break;
             }
         });
-
         var cbAll = new CheckBox({}, "cb-all");
         cbAll.startup();
         cbAll.on("click", function (event) {
@@ -314,7 +284,6 @@ define([
                 registry.findWidgets(node)[0].set("checked", state);
             });
         });
-
         aspect.before(grid, "removeRow", function (rowElement) {
             // Destroy the checkbox widgets
             var e, elements = [grid.cell(rowElement, "remove").element, grid.cell(rowElement, "active"), grid.cell(rowElement, "locked")];
@@ -326,7 +295,6 @@ define([
                 }
             }
         });
-
         on(dom.byId('model-grid-filter-form'), 'submit', function (event) {
             event.preventDefault();
             grid.set('collection', store.filter({

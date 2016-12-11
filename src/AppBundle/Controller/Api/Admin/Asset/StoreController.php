@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class StoreController extends FOSRestController
 {
+
     /**
      * @View()
      */
@@ -28,11 +29,10 @@ class StoreController extends FOSRestController
                 ->from( 'AppBundle\Entity\Common\AddressType', 'at' )
                 ->orderBy( 'at.type' );
         $data = $queryBuilder->getQuery()->getResult();
-        
+
         return $data;
     }
 
-    
     /**
      * @View()
      */
@@ -52,6 +52,37 @@ class StoreController extends FOSRestController
                     ->innerJoin( 'm.brands', 'b' )
                     ->where( "CONCAT(CONCAT(m.name, ' '), b.name) LIKE :manufacturer_brand" )
                     ->setParameter( 'manufacturer_brand', $manufacturerBrand );
+
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
+    public function getCasesAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $barcode = $request->get( 'name' );
+        if( !empty( $barcode ) )
+        {
+            $barcode = '%' . str_replace( '*', '%', $barcode );
+
+            $em = $this->getDoctrine()->getManager();
+
+            $queryBuilder = $em->createQueryBuilder()->select( ['a.id', "CONCAT(b.barcode,' ',m.name) AS name"] )
+                    ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
+                    ->innerJoin( 'a.barcodes', 'b' )
+                    ->innerJoin( 'a.model', 'm' );
+            $queryBuilder
+                    ->where( $queryBuilder->expr()->like( 'b.barcode', ':barcode' ) )
+                    ->andWhere( 'm.container = true' )
+                    ->setParameter( 'barcode', $barcode );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -102,7 +133,7 @@ class StoreController extends FOSRestController
                 ->from( 'AppBundle\Entity\Common\EmailType', 'e' )
                 ->orderBy( 'e.type' );
         $data = $queryBuilder->getQuery()->getResult();
-        
+
         return $data;
     }
 
@@ -162,7 +193,7 @@ class StoreController extends FOSRestController
         }
         return $data;
     }
-    
+
     /**
      * @View()
      */
@@ -176,7 +207,7 @@ class StoreController extends FOSRestController
                 ->from( 'AppBundle\Entity\Common\PersonType', 'pt' )
                 ->orderBy( 'pt.type' );
         $data = $queryBuilder->getQuery()->getResult();
-        
+
         return $data;
     }
 
@@ -193,7 +224,7 @@ class StoreController extends FOSRestController
                 ->from( 'AppBundle\Entity\Common\PhoneNumberType', 'pt' )
                 ->orderBy( 'pt.type' );
         $data = $queryBuilder->getQuery()->getResult();
-        
+
         return $data;
     }
 

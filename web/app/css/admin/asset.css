@@ -66,3 +66,14 @@
     width: 110px;
     display:inline-block;
 }
+.dijitTextBox.location-filtering-select {
+    width: 300px;
+}
+#asset-wrapper .field-comment {
+    display: none;
+}
+.field-barcode,
+.field-serial_number,
+.field-status_text {
+    width: 100px;
+}

@@ -199,7 +199,8 @@ define([
             labelAttr: "name",
             searchAttr: "name",
             pageSize: 25,
-            readOnly: true
+            readOnly: true,
+            "class": 'location-filtering-select'
         }, "asset_location_entity");
         locationFilteringSelect.startup();
 
@@ -271,6 +272,8 @@ define([
                         beforeId = (results.length > 0) ? results[0].id : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
                             assetViewDialog.hide();
+                            store.fetch();
+                            grid.refresh();
                         }, lib.xhrError);
                     });
                 }
@@ -287,6 +290,7 @@ define([
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
+            sort: "model_text",
             columns: {
                 id: {
                     label: core.id
@@ -355,7 +359,7 @@ define([
                     if( typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined" ) {
                         titleBarcode = asset.barcodes[0].barcode;
                     } else {
-                        titleBarcode = asset.no_barcode;
+                        titleBarcode = asset.model_text;
                     }
                     assetViewDialog.set('title', core.view + " " + titleBarcode);
                     assetViewDialog.show();

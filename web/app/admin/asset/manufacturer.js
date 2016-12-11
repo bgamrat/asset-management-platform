@@ -141,6 +141,8 @@ define([
                         beforeId = (results.length > 0) ? results[0].name : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
                             manufacturerViewDialog.hide();
+                            store.fetch();
+                            grid.refresh();
                         }, lib.xhrError);
                     });
                 }
@@ -160,6 +162,7 @@ define([
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
+            sort: "name",
             columns: {
                 id: {
                     label: core.id
