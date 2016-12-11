@@ -51,7 +51,24 @@ class Asset
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected $status = null;
+    /**
+     * @Gedmo\Versioned
+     * @ORM\Column(name="purchased", type="datetime", nullable=true, unique=false)
+     */
+    private $purchased = null;
+    /**
+     * @var float
+     * @Gedmo\Versioned
+     * @ORM\Column(name="cost", type="float", nullable=true, unique=false)
+     */
+    private $cost = 0.0;
+    /**
+     * @var float
+     * @Gedmo\Versioned
+     * @ORM\Column(name="value", type="float", nullable=true, unique=false)
 
+     */
+    private $value = 0.0;
     /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
@@ -204,6 +221,78 @@ class Asset
     }
 
     /**
+     * Set purchased
+     *
+     * @param int $purchased
+     *
+     * @return Asset
+     */
+    public function setPurchased( $purchased )
+    {
+        $this->purchased = $purchased;
+
+        return $this;
+    }
+
+    /**
+     * Get purchased
+     *
+     * @return int
+     */
+    public function getPurchased()
+    {
+        return $this->purchased;
+    }
+
+    /**
+     * Set cost
+     *
+     * @param float $cost
+     *
+     * @return Asset
+     */
+    public function setCost( $cost )
+    {
+        $this->cost = $cost;
+
+        return $this;
+    }
+
+    /**
+     * Get cost
+     *
+     * @return float
+     */
+    public function getCost()
+    {
+        return $this->cost;
+    }
+
+    /**
+     * Set value
+     *
+     * @param float $value
+     *
+     * @return Asset
+     */
+    public function setValue( $value )
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return int
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
      * Set location
      *
      * @param int $location
@@ -302,8 +391,9 @@ class Asset
     {
         return $this->active;
     }
-    
-    public function getUpdated() {
+
+    public function getUpdated()
+    {
         return $this->updated;
     }
 

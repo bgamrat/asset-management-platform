@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -50,6 +52,9 @@ class AssetType extends AbstractType
                     },
                     'choice_translation_domain' => false
                 ] )
+                ->add( 'purchased', DateType::class, ['label' => 'common.purchased'] )
+                ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
+                ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
                 ->add( 'location', LocationType::class )
                 ->add( 'location_text', HiddenType::class )
                 ->add( 'barcodes', CollectionType::class, [
@@ -67,25 +72,24 @@ class AssetType extends AbstractType
                     'label' => false
                 ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
-                ;
-                $builder->get( 'model' )
-                        ->addModelTransformer( new ModelToIdTransformer( $this->em ) );
-            }
+        ;
+        $builder->get( 'model' )
+                ->addModelTransformer( new ModelToIdTransformer( $this->em ) );
+    }
 
-            /**
-             * @param OptionsResolver $resolver
-             */
-            public function configureOptions( OptionsResolver $resolver )
-            {
-                $resolver->setDefaults( array(
-                    'data_class' => 'AppBundle\Entity\Asset\Asset'
-                ) );
-            }
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions( OptionsResolver $resolver )
+    {
+        $resolver->setDefaults( array(
+            'data_class' => 'AppBundle\Entity\Asset\Asset'
+        ) );
+    }
 
-            public function getName()
-            {
-                return 'asset';
-            }
+    public function getName()
+    {
+        return 'asset';
+    }
 
-        }
-        
+}

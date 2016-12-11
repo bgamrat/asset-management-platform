@@ -13,6 +13,8 @@ define([
     "dojo/store/Memory",
     "dijit/registry",
     "dijit/form/Form",
+    "dijit/form/CurrencyTextBox",
+    "dijit/form/DateTextBox",
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
@@ -41,7 +43,7 @@ define([
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
         xhr, aspect, query, ObjectStore, Memory,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, RadioButton, Select, FilteringSelect, SimpleTextarea, Button,
+        registry, Form, CurrencyTextBox, DateTextBox, TextBox, ValidationTextBox, CheckBox, RadioButton, Select, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
@@ -72,6 +74,13 @@ define([
         "asset-view-location-tab"
                 );
         tabContainer.addChild(locationContentPane);
+
+        var expensesContentPane = new ContentPane({
+            title: core.expenses},
+        "asset-view-expenses-tab"
+                );
+        tabContainer.addChild(expensesContentPane);
+        tabContainer.startup();
 
         var barcodesContentPane = new ContentPane({
             title: asset.barcodes},
@@ -162,8 +171,8 @@ define([
             dijit.startup();
             locationTypeRadioButton.push(dijit);
         });
-        query('label[for^="asset_location_ctype_"]').forEach(function(node){
-            locationTypeLabels[domAttr.get(node,"for").replace(/\D/g,'')] = node.textContent;
+        query('label[for^="asset_location_ctype_"]').forEach(function (node) {
+            locationTypeLabels[domAttr.get(node, "for").replace(/\D/g, '')] = node.textContent;
         });
 
         on(dom.byId('asset_location_ctype'), "click", function (event) {
@@ -177,15 +186,15 @@ define([
                 locationStore.target = dataUrl;
                 locationFilteringSelect.set("store", locationStore);
             } else {
-                targetId = target.id.replace(/\D/g,'');
-                textLocationMemoryStore.data = [{name:locationTypeLabels[targetId], id:0}];
+                targetId = target.id.replace(/\D/g, '');
+                textLocationMemoryStore.data = [{name: locationTypeLabels[targetId], id: 0}];
                 locationFilteringSelect.set("store", textLocationStore);
-                locationFilteringSelect.set("displayedValue",locationTypeLabels[targetId]);
+                locationFilteringSelect.set("displayedValue", locationTypeLabels[targetId]);
                 locationFilteringSelect.set("readOnly", true);
             }
         });
-        
-        
+
+
         var textLocationMemoryStore = new Memory({
             idProperty: "id",
             data: []});
@@ -222,6 +231,27 @@ define([
         }, select);
         statusSelect.startup();
 
+        var purchasedInput = new DateTextBox({
+            placeholder: core.purchased,
+            trim: true,
+            required: false
+        }, "asset_purchased");
+        purchasedInput.startup();
+
+        var costInput = new CurrencyTextBox({
+            placeholder: core.cost,
+            trim: true,
+            required: false
+        }, "asset_cost");
+        costInput.startup();
+
+        var valueInput = new CurrencyTextBox({
+            placeholder: core.value,
+            trim: true,
+            required: false
+        }, "asset_value");
+        valueInput.startup();
+
         var commentInput = new SimpleTextarea({
             placeholder: core.comment,
             trim: true,
@@ -251,6 +281,9 @@ define([
                     "model_text": modelFilteringSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
                     "status": parseInt(statusSelect.get("value")),
+                    "purchased": purchasedInput.get("value"),
+                    "cost": parseFloat(costInput.get("value")),
+                    "value": parseFloat(valueInput.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "location": locationData,
                     "location_text": locationFilteringSelect.get("displayedValue"),
@@ -367,6 +400,9 @@ define([
                     assetId = asset.id;
                     modelFilteringSelect.set('displayedValue', asset.model_text);
                     statusSelect.set("displayedValue", asset.status_text);
+                    purchasedInput.set("value", asset.purchased);
+                    costInput.set("value", asset.cost);
+                    valueInput.get("value", asset.value);
                     dom.byId("asset_location_id").value = asset.location.id;
                     setLocationType(asset.location.type.id);
                     if( asset.location.type.url !== null ) {
@@ -375,7 +411,7 @@ define([
                         locationFilteringSelect.set("readOnly", false);
                         locationFilteringSelect.set('displayedValue', asset.location_text);
                     } else {
-                        textLocationMemoryStore.data = [{name:locationTypeLabels[asset.location.type.id], id:0}];
+                        textLocationMemoryStore.data = [{name: locationTypeLabels[asset.location.type.id], id: 0}];
                         locationFilteringSelect.set("store", textLocationStore);
                         locationFilteringSelect.set('displayedValue', asset.location_text);
                         locationFilteringSelect.set("readOnly", true);

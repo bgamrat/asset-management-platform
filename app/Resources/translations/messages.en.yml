@@ -85,6 +85,8 @@ common:
         Contact
     contacts:
         Contacts
+    cost:
+        Cost
     country:
         Country
     email:
@@ -135,6 +137,8 @@ common:
         Position
     postal_code:
         Zip
+    purchased:
+        Purchased
     remove:
         Remove
     roles:
@@ -161,6 +165,8 @@ common:
         Users
     username:
         Username
+    value:
+        Value
         
 error:
     cannot_be_null:

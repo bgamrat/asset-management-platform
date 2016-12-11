@@ -77,3 +77,6 @@
 .field-status_text {
     width: 100px;
 }
+#expenses > div {
+    margin: 15px 0;
+}

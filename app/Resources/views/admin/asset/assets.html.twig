@@ -50,6 +50,13 @@
                             {{form_row(asset_form.location.entity)}}
                         </div>
                     </div>
+                    <div id="asset-view-expenses-tab">
+                        <div id="expenses">
+                            {{form_row(asset_form.purchased)}}
+                            {{form_row(asset_form.cost)}}
+                            {{form_row(asset_form.value)}}
+                        </div>
+                    </div>
                     <div id="asset-view-barcodes-tab">
                         <div id="barcodes" class="barcodes">
                             {{form_row(asset_form.barcodes)}}
