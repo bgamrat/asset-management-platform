@@ -54,30 +54,29 @@ class JsonRenderer implements RendererInterface
         $itemIterator = new \Knp\Menu\Iterator\RecursiveItemIterator( $item );
 
         $iterator = new \RecursiveIteratorIterator( $itemIterator, \RecursiveIteratorIterator::SELF_FIRST );
-        
+
         $items = [];
         foreach( $iterator as $item )
         {
             $translatedLabel = $translator->trans($item->getLabel());
-            $id = $item->getName();
-            $parentId = $item->getParent()->getName();
+            $id = $item->getName();  
             $itemData = [ 'id' => strtolower( $item->getName() ), 'name' => $translatedLabel, 'uri' => $item->getUri()];
-            if ($parentId !== $id) {
-                $itemData['parent'] =strtolower($parentId);
-            }
             $itemData['has_children'] = $item->hasChildren();
-            $items[] = $itemData;
+            $parentId = $item->getParent()->getName();
+            if ($parentId !== $id) {
+                $itemData['parent'] = strtolower($parentId);
+                if (!isset($items[$parentId]['children'])) {
+                    $items[$parentId]['children'] = [];
+                }
+                $items[$parentId]['children'][] = $itemData;
+            }
+            if (isset($items[$id])) {
+                $items[$id] = array_merge($itemData, $items[$id]);
+            } else {
+                $items[$id] = $itemData;
+            }
         }
-        $lastItem = count( $items ) - 1;
-        $items[$lastItem]['lastItem'] = true;
-
-        $html = $this->environment->render( $options['template'], array('items' => $items, 'options' => $options, 'matcher' => $this->matcher) );
-
-        if( $options['clear_matcher'] )
-        {
-            $this->matcher->clear();
-        }
-        return $html;
+        return $items;
     }
 
 }

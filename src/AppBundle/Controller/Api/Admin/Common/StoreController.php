@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Api\Admin\Asset;
+namespace AppBundle\Controller\Api\Admin\Common;
 
 use AppBundle\Util\DStore;
 use AppBundle\Entity\Asset\Model;
@@ -12,9 +12,17 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use FOS\RestBundle\Controller\Annotations\Get;
 
 class StoreController extends FOSRestController
 {
+
+    private $entityMenus;
+
+    public function __construct( Array $entityMenus )
+    {
+        $this->entityMenus = $entityMenus;
+    }
 
     /**
      * @View()
@@ -163,6 +171,60 @@ class StoreController extends FOSRestController
             $data = null;
         }
         return $data;
+    }
+
+    /**
+     * @View()
+     * @Get("/adminmenus", name="app_admin_api_store_get_adminmenu")
+     * @Get("/adminmenus/", name="app_admin_api_store_get_adminmenu_alt")
+     * @Get("/adminmenus/?parent={parent}", name="app_admin_api_store_get_adminmenu_parent", defaults={"parent" = "admin"})
+     * @Get("/adminmenus/{id}", name="app_admin_api_store_get_adminmenu_id", defaults={"id" = "admin"})
+     * 
+     */
+    public function getAdminmenuAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $adminMenu = $this->get( 'app.menu_builder' )->createAdminMenu( [] );
+        $renderer = $this->get( 'app.menu_renderer' );
+        $menu = [];
+        $id = $request->get( 'id' );
+        if( $id !== null )
+        {
+            if (!in_array($id, $this->entityMenus)) {
+                $menu = $renderer->render( $adminMenu, ['depth' => 1] );
+                $menu = $menu[$id];
+            } else {
+                switch ($id) {
+                    case 'manufacturers': dump('hi');
+                }
+            }
+        }
+        $parent = $request->get( 'parent' );
+        if( $parent !== null )
+        {
+            foreach( $adminMenu as $name => $children )
+            {
+                if( $name === $parent )
+                {
+                    $menu['id'] = $parent;
+                    $menu['name'] = $name;
+                    $menu['children'] = $renderer->render( $children, ['depth' => 1], 'json' );
+
+                    break;
+                }
+            }
+        }
+        if( isset( $menu['children'] ) )
+        {
+            foreach( $menu['children'] as $c => $child )
+            {
+                if( in_array( $child['id'], $this->entityMenus ) )
+                {
+                    $menu['children'][$c]['has_children'] = true;
+                }
+            }
+        }
+        return $menu;
     }
 
     /**

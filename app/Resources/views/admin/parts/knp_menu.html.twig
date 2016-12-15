@@ -1,1 +1,0 @@
-var menuTreeStoreData = [{% for item in items%}{{item|json_encode()|raw}}{% if item.lastItem is not defined %},{%endif%}{% endfor %}];

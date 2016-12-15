@@ -4,8 +4,9 @@ imports:
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
-
-services:
+    entity_menus: 
+        [ manufacturers, vendors ]
+    
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
@@ -81,6 +82,12 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
+            
+    app.admin.store_controller:
+        class: AppBundle\Controller\Api\Admin\Common\StoreController
+        arguments: ['%entity_menus%']
+        calls:
+            - [setContainer, ["@service_container"]]
 
     app.form.data_transformer.barcode:
         class: AppBundle\Form\Admin\Asset\DataTransformer\BarcodeToEntityTransformer

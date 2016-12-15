@@ -2,20 +2,31 @@ define([
     "dojo/dom",
     "dojo/store/Memory",
     "dijit/tree/ObjectStoreModel",
+    "dojo/store/JsonRest",
     "dijit/Tree",
     "dojo/domReady!"
 ], function (dom,
-        Memory, ObjectStoreModel, Tree) {
+        Memory, ObjectStoreModel, JsonRest, Tree) {
 //"use strict";
     function run() {
-        var store = new Memory({data: menuTreeStoreData
-            ,
+
+        var store = new JsonRest({
+            target: "/api/store/adminmenus/",
             getChildren: function (object) {
-                return this.query({parent: object.id});
-            }});
+                return this.get(object.id).then(function (fullObject) {
+                    return fullObject.children;
+                });
+            }
+        });
+
         var model = new ObjectStoreModel({
             store: store,
-            query: {id: 'admin'}
+            mayHaveChildren: function (object) {
+                console.log(object);
+                return object.has_children;
+            }, getRoot: function (onItem) {
+                this.store.get("admin").then(onItem);
+            },
         });
         // Create the Tree.
         var tree = new Tree({

@@ -28,31 +28,31 @@ class MenuBuilder implements ContainerAwareInterface
 
     public function createAdminMenu( array $options )
     {
-        $menu = $this->factory->createItem( 'admin', [ 'label' => 'common.admin'] )->setExtra( 'translation_domain', $this->container->get('translator')->getLocale());
+        $menu = $this->factory->createItem( 'root', [ 'label' => 'common.admin'] )->setExtra( 'translation_domain', $this->container->get('translator')->getLocale());
 
         $menu->addChild( 'admin', ['route' => 'root', 'label' => 'common.home'] );
-        $menu->addChild( 'admin-assets', ['label' => 'common.assets'] );
-        $menu['admin-assets']->addChild( 'assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_asset_index'] );
-        $menu['admin-assets']->addChild( 'issues', ['label' => 'common.issues', 'route' => 'app_admin_asset_issue_index'] );
-        $menu['admin-assets']->addChild( 'manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index'] );
-        $menu['admin-assets']->addChild( 'requirements', ['label' => 'asset.requirements', 'route' => 'app_admin_asset_requirements_index'] );
-        $menu['admin-assets']->addChild( 'vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index'] );
-        $menu['admin-assets']->addChild( 'configuration', [ 'label' => 'common.configuration'] );
-        $menu['admin-assets']['configuration']->addChild( 'statuses', ['label' => 'asset.asset-statuses', 'route' => 'app_admin_asset_assetstatus_index'] );
-        $menu['admin-assets']['configuration']->addChild( 'categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index'] );
+        $menu['admin']->addChild( 'admin-assets', ['label' => 'common.assets'] );
+        $menu['admin']['admin-assets']->addChild( 'assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_asset_index'] );
+        $menu['admin']['admin-assets']->addChild( 'issues', ['label' => 'common.issues', 'route' => 'app_admin_asset_issue_index'] );
+        $menu['admin']['admin-assets']->addChild( 'manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index'] );
+        $menu['admin']['admin-assets']->addChild( 'requirements', ['label' => 'asset.requirements', 'route' => 'app_admin_asset_requirements_index'] );
+        $menu['admin']['admin-assets']->addChild( 'vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index'] );
+        $menu['admin']['admin-assets']->addChild( 'configuration', [ 'label' => 'common.configuration'] );
+        $menu['admin']['admin-assets']['configuration']->addChild( 'statuses', ['label' => 'asset.asset-statuses', 'route' => 'app_admin_asset_assetstatus_index'] );
+        $menu['admin']['admin-assets']['configuration']->addChild( 'categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index'] );
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) ) {
-            $menu['admin-assets']['configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
+            $menu['admin']['admin-assets']['configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
         }
         
-        $menu->addChild( 'admin-common', ['label' => 'common.common'] );
-        $menu['admin-common']->addChild( 'people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index'] );
+        $menu['admin']->addChild( 'admin-common', ['label' => 'common.common'] );
+        $menu['admin']['admin-common']->addChild( 'people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index'] );
         
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN_USER' ) )
         {
-            $menu->addChild( 'user', ['label' => 'common.users'] );
+            $menu['admin']->addChild( 'user', ['label' => 'common.users'] );
 
-            $menu['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'app_admin_user_default_index'] );
-            $menu['user']->addChild( 'invitations', ['label' => 'user.invitation', 'route' => 'app_admin_user_invitation_index'] );
+            $menu['admin']['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'app_admin_user_default_index'] );
+            $menu['admin']['user']->addChild( 'invitations', ['label' => 'user.invitation', 'route' => 'app_admin_user_invitation_index'] );
         }
 
         // $menu->addChild( 'logout', ['class' => 'right', 'label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
