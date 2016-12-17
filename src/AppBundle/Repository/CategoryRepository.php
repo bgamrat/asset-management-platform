@@ -13,11 +13,20 @@ use AppBundle\Entity\Category;
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    public function findAll()
+    {
+        return $this->getEntityManager()
+                        ->createQuery(
+                                "SELECT c, p FROM AppBundle\Entity\Asset\Category c LEFT JOIN c.parent p ORDER BY c.position ASC"
+                        )
+                        ->getResult();
+    }
+
     public function findChildren()
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT c, p FROM AppBundle:Category c LEFT JOIN c.parent p WHERE c.name != 'top' ORDER BY c.position ASC"
+                                "SELECT c, p FROM AppBundle\Entity\Asset\Category c LEFT JOIN c.parent p WHERE c.name != 'top' ORDER BY c.position ASC"
                         )
                         ->getResult();
     }

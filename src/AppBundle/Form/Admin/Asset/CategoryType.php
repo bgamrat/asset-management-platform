@@ -30,7 +30,8 @@ class CategoryType extends AbstractType
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
-                    'required' => true,
+                    'required' => false,
+                    'empty_data' => null,
                     'label' => 'common.parent',
                     'choice_translation_domain' => false
                 ] )

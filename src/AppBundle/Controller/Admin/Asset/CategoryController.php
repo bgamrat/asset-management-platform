@@ -55,10 +55,18 @@ class CategoryController extends Controller
         {
             $categories = $form->getData();
             foreach( $categories['categories'] as $category )
-            {  
+            {
+                $em->persist( $category );
+            }
+
+            $categories = $em->getRepository( 'AppBundle\Entity\Asset\Category' )->findAll();
+            foreach( $categories as $category )
+            {
+                $category->setFullName();
                 $em->persist( $category );
             }
             $em->flush();
+
             $this->addFlash(
                     'notice', 'common.success' );
             $response = new RedirectResponse( $this->generateUrl( 'app_admin_asset_category_index', [], UrlGeneratorInterface::ABSOLUTE_URL ) );

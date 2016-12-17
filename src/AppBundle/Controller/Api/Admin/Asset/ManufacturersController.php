@@ -246,7 +246,7 @@ class ManufacturersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['m.id', 'c.name AS category_text', 'c.name', 'm.container', 'm.name AS name', 'm.comment', 'm.active'];
+        $columns = ['m.id', 'c.fullName AS category_text', 'm.container', 'm.name AS name', 'm.comment', 'm.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'm.deletedAt AS deleted_at';

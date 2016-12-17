@@ -30,7 +30,7 @@ class Category
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="name", type="string", length=64, nullable=false, unique=false)
      * @Assert\NotBlank(
      *     message = "blank.name")
      * @Assert\Regex(
@@ -40,6 +40,12 @@ class Category
      *     match=true)
      */
     private $name;
+    /**
+     * @var string
+     *   
+     * @ORM\Column(name="full_name", type="string", nullable=true, unique=true)
+     */
+    private $fullName;
     /**
      * @var integer
      * 
@@ -51,7 +57,7 @@ class Category
      * @ORM\ManyToOne(targetEntity="Category", fetch="EAGER",  cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    private $parent;
+    private $parent = null;
     /**
      * @var string
      * 
@@ -111,11 +117,42 @@ class Category
     }
 
     /**
+     * Set fullname
+     *
+     * @param string $fullName
+     *
+     * @return string
+     */
+    public function setFullName()
+    {
+        $fullName = $this->name;
+        $parent = $this->parent;
+        while( $parent !== null && $parent->name !== 'top' )
+        {
+            $fullName = $parent->name . '-' . $fullName;
+            $parent = $parent->parent;
+        }
+        $this->fullName = $fullName;
+
+        return $this;
+    }
+
+    /**
+     * Get fullName
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->fullName;
+    }
+
+    /**
      * Set position
      *
      * @param string $position
      *
-     * @return Email
+     * @return string
      */
     public function setPosition( $position )
     {

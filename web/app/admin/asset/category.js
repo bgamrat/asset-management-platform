@@ -33,18 +33,20 @@ define([
     function createDijits(newRow) {
         var dijit, index = nameInput.length;
         var base = divId + '_' + index + '_';
-
+        var readOnly = (index === 0);
         dijit = new ValidationTextBox({
             trim: true,
+            readOnly: readOnly,
             pattern: "[0-9]+",
-            required: true,
+            required: !readOnly,
             name: "categories[categories][" + index + "][position]",
-            value: index * 10
+            value: document.getElementById(base + "position").value
         }, base + "position");
         positionInput.push(dijit);
         dijit.startup();
         parentSelect = new Select({
             store: store,
+            readOnly: readOnly,
             placeholder: core.parent,
             name: "categories[categories][" + index + "][parent]",
             value: document.getElementById(base + "parent").getAttribute("data-selected"),
@@ -53,6 +55,7 @@ define([
         parentSelect.startup();
         dijit = new ValidationTextBox({
             placeholder: core.name,
+            readOnly: readOnly,
             trim: true,
             pattern: "[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}",
             required: true,
@@ -63,6 +66,7 @@ define([
         dijit.startup();
         dijit = new ValidationTextBox({
             placeholder: core.comment,
+            readOnly: readOnly,
             trim: true,
             required: false,
             name: "categories[categories][" + index + "][comment]",
@@ -70,8 +74,11 @@ define([
         }, base + "comment");
         commentInput.push(dijit);
         dijit.startup();
-        dijit = new CheckBox({'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
-            name: "categories[categories][" + index + "][active]"}, base + "active");
+        dijit = new CheckBox({
+            readOnly: readOnly,
+            'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
+            name: "categories[categories][" + index + "][active]"
+        }, base + "active");
         activeCheckBox.push(dijit);
         dijit.startup();
     }
@@ -99,14 +106,15 @@ define([
 
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
-        storeData = [];
+        storeData = [{value: null, label: ""}];
         for( d in data ) {
             storeData.push(data[d]);
         }
+
         memoryStore = new Memory({
             idProperty: "value",
             data: storeData});
-        
+
         store = new ObjectStore({objectStore: memoryStore});
         existingCategoryRows = query('.categories .form-row.category');
         existingCategoryRows = existingCategoryRows.length;

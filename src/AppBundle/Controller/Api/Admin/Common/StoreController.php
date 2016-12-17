@@ -174,7 +174,7 @@ class StoreController extends FOSRestController
 
             $em = $this->getDoctrine()->getManager();
 
-            $queryBuilder = $em->createQueryBuilder()->select( ['c.id', "c.name"] )
+            $queryBuilder = $em->createQueryBuilder()->select( ['c.id', "c.fullName AS name"] )
                     ->from( 'AppBundle\Entity\Asset\Category', 'c' )
                     ->where( "c.name LIKE :category_name" )
                     ->setParameter( 'category_name', $name );
@@ -235,6 +235,7 @@ class StoreController extends FOSRestController
                 }
                 else
                 {
+                    
                 }
                 $menu['children'] = $children;
                 break;
