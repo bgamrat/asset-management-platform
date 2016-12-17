@@ -22,7 +22,6 @@ define([
         var model = new ObjectStoreModel({
             store: store,
             mayHaveChildren: function (object) {
-                console.log(object);
                 return object.has_children;
             }, getRoot: function (onItem) {
                 this.store.get("admin").then(onItem);
