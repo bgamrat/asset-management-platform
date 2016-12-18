@@ -42,8 +42,8 @@ class Model
      * @Assert\NotBlank(
      *     message = "blank.name")
      * @Assert\Regex(
-     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$/",
-     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$",
+     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)\'\x22-]{2,32}$/",
+     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)\'\x22-]{2,32}$",
      *     message = "invalid.name {{ value }}",
      *     match=true)
      * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)

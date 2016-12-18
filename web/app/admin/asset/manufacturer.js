@@ -38,8 +38,6 @@ define([
     //"use strict";
     function run() {
         var action = null;
-        var brandName = null;
-        var manufacturerName = null;
         var manufacturerId = null;
 
         var manufacturerViewDialog = new Dialog({

@@ -53,7 +53,7 @@ define([
     ;
     function renderContacts(object, value, td) {
         var i, l;
-        if (typeof object.contacts !== "undefined") {
+        if (typeof object.contacts !== "undefined" && object.contacts !== null) {
             l = object.contacts.length;
             for( i = 0; i < l; i++ ) {
                 this.renderPerson(object.contacts[i], object.contacts[i].name, td);

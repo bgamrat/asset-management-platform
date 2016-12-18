@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Form\Admin\Asset\DataTransformer\LocationTypeToIdTransformer;
 use Doctrine\ORM\EntityManager;
 
-class LocationType extends AbstractType
+class AssetLocationType extends AbstractType
 {
 
     private $em;

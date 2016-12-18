@@ -41,11 +41,11 @@ services:
         tags:
             - { name: form.type, alias: 'app_barcode_type' }
             
-    app.admin.form.type.location_type_type:
-        class: AppBundle\Form\Admin\Asset\LocationType
+    app.admin.form.type.asset_location_type_type:
+        class: AppBundle\Form\Admin\Asset\AssetLocationType
         arguments: ['@doctrine.orm.entity_manager']
         tags:
-            - { name: form.type, alias: 'app_location_type' }
+            - { name: form.type, alias: 'app_asset_location_type' }
 
     app.admin.form.type.model:
         class: AppBundle\Form\Admin\Asset\ModelType
