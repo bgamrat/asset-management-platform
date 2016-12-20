@@ -27,14 +27,17 @@
 }
 #asset-view-history-tab ul,
 #model-view-history-tab ul,
-#asset-view-model-relationships-tab ul {
+#asset-view-model-relationships-tab ul,
+#trailer-view-history-tab ul,
+#trailer-view-model-relationships-tab ul {
     list-style-type: none;
     padding: 0;
 }
 .field-id {
     display: none;
 }
-#asset_location_ctype {
+#asset_location_ctype,
+#trailer_location_ctype{
     list-style-type: none;
     padding: 0;
 }

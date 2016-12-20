@@ -59,11 +59,11 @@ services:
         tags:
             - { name: form.type, alias: 'app_person_type' }
 
-    app.admin.form.type.test:
-        class: AppBundle\Form\TestType
-        arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']
+    app.admin.form.type.trailer:
+        class: AppBundle\Form\Admin\Asset\TrailerType
+        arguments: ['@doctrine.orm.entity_manager']
         tags:
-        - { name: form.type, alias: user }
+            - { name: form.type, alias: 'app_trailer_type' }
 
     app.admin.form.type.user:
         class: AppBundle\Form\Admin\User\UserType

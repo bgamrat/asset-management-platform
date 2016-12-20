@@ -15,6 +15,8 @@ asset:
         Category
     container:
         Container
+    equipment:
+        Equipment
     extended_by:
         Extended By
     extends:
@@ -45,6 +47,10 @@ asset:
         Status
     statuses:
         Statuses
+    trailer:
+        Trailer
+    trailers:
+        Trailers
     vendor:
         Vendor
     vendors:

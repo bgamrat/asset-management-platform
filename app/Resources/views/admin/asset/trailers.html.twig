@@ -1,0 +1,85 @@
+{% block title %}{{ 'asset.trailer'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="trailer-wrapper">
+        <h1>{{ 'asset.trailer'|trans }} {{'common.admin'|trans }}</h1>
+        <div class="grid-controls">
+            <div>
+                <button id="trailer-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            </div>
+            <div>
+                <form id="trailer-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="trailer-filter-input">
+                </form>
+            </div>
+            <button id="trailer-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+        </div>
+        <div id="trailer-grid">
+        </div>
+        <div id="trailer-view-dialog">
+            {{form_start(trailer_form)}} 
+            <div class="text-right">
+                <button id="trailer-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="trailer">
+                <fieldset class="name-active">
+                    <legend>{{'asset.trailer'|trans}}</legend> 
+                    <div class="justify">
+                        <span class="trailer-name">
+                            {{form_widget(trailer_form.name)}}
+                        </span>
+                        <span class="manufacturer-active">
+                            {{form_widget(trailer_form.active)}}
+                            {{form_label(trailer_form.active)}}
+                        </span>
+                    </div>
+                    <div class="justify">
+                        <span class="trailer-model">
+                            {{form_label(trailer_form.model)}}
+                            {{form_widget(trailer_form.model)}}
+                        </span>
+                        <span class="trailer-serial-number">
+                            {{form_widget(trailer_form.serial_number)}}
+                        </span>
+                    </div>
+                    <div class="justify">
+                        {{form_row(trailer_form.status)}}
+                    </div>
+                    {{form_row(trailer_form.comment)}}
+                </fieldset>
+                <div id="trailer-view-tabs">
+                    <div id="trailer-view-location-tab">
+                        <div class="justify">
+                            {{form_row(trailer_form.location.id)}}
+                            {{form_row(trailer_form.location.ctype)}}
+                            {{form_row(trailer_form.location.entity)}}
+                        </div>
+                    </div>
+                    <div id="trailer-view-expenses-tab">
+                        <div id="expenses">
+                            {{form_row(trailer_form.purchased)}}
+                            {{form_row(trailer_form.cost)}}
+                            {{form_row(trailer_form.value)}}
+                        </div>
+                    </div>
+                    <div id="trailer-view-model-relationships-tab">
+                        <div id="model-relationships" class="model-relationships">
+                        </div>
+                    </div>
+                    <div id="trailer-view-history-tab">
+                    </div>
+                </div>
+            </div>
+            {{ form_end(trailer_form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/trailer"], function (trailer) {
+            trailer.run();
+        });
+    </script>
+{% endblock %}

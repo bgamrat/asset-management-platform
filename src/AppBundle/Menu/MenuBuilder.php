@@ -32,11 +32,10 @@ class MenuBuilder implements ContainerAwareInterface
 
         $menu->addChild( 'admin', ['route' => 'root', 'label' => 'common.home'] );
         $menu['admin']->addChild( 'admin-assets', ['label' => 'common.assets'] );
-        $menu['admin']['admin-assets']->addChild( 'assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_asset_index'] );
+        $menu['admin']['admin-assets']->addChild( 'equipment', ['label' => 'asset.equipment', 'route' => 'app_admin_asset_equipment_index'] );
         $menu['admin']['admin-assets']->addChild( 'issues', ['label' => 'common.issues', 'route' => 'app_admin_asset_issue_index'] );
-        $menu['admin']['admin-assets']->addChild( 'locations', ['label' => 'common.locations', 'route' => 'app_admin_asset_location_index'] );
         $menu['admin']['admin-assets']->addChild( 'manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index'] );
-        $menu['admin']['admin-assets']->addChild( 'requirements', ['label' => 'asset.requirements', 'route' => 'app_admin_asset_requirements_index'] );
+        $menu['admin']['admin-assets']->addChild( 'trailers', ['label' => 'asset.trailers', 'route' => 'app_admin_asset_trailer_index'] );
         $menu['admin']['admin-assets']->addChild( 'vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index'] );
         $menu['admin']['admin-assets']->addChild( 'configuration', [ 'label' => 'common.configuration'] );
         $menu['admin']['admin-assets']['configuration']->addChild( 'statuses', ['label' => 'asset.asset-statuses', 'route' => 'app_admin_asset_assetstatus_index'] );
