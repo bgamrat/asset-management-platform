@@ -89,13 +89,9 @@ class Trailer
      */
     protected $location_text = null;
     /**
-     * @var ArrayCollection $barcodes
-     * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
-     * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\JoinTable(name="asset_barcode",
-     *      joinColumns={@ORM\JoinColumn(name="asset_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="barcode_id", referencedColumnName="id", unique=true, nullable=false)}
-     *      )
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
     /**
@@ -105,6 +101,31 @@ class Trailer
      * 
      */
     private $active = true;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $extended_by;
+    /**
+     * @ORM\ManyToMany(targetEntity="Trailer", inversedBy="extended_by", fetch="LAZY")
+     * @ORM\JoinTable(name="trailer_extend",
+     *      joinColumns={@ORM\JoinColumn(name="extends_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="extended_by_id", referencedColumnName="id")}
+     *      )
+     */
+    private $extends;
+    /**
+     * @ORM\ManyToMany(targetEntity="Trailer", mappedBy="requires", fetch="LAZY")
+     */
+    private $required_by;
+    /**
+     * @ORM\ManyToMany(targetEntity="Trailer", inversedBy="required_by", fetch="LAZY")
+     * @ORM\JoinTable(name="trailer_require",
+     *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="required_by_id", referencedColumnName="id")}
+     *      )
+     */
+    private $requires;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
@@ -123,7 +144,10 @@ class Trailer
 
     public function __construct()
     {
-        $this->barcodes = new ArrayCollection();
+        $this->extends = new ArrayCollection();
+        $this->requires = new ArrayCollection();
+        $this->extended_by = new ArrayCollection();
+        $this->required_by = new ArrayCollection();
     }
 
     /**
@@ -196,7 +220,6 @@ class Trailer
         return $this->name;
     }
 
-    
     /**
      * Set serial_number
      *
@@ -397,6 +420,141 @@ class Trailer
     public function isActive()
     {
         return $this->active;
+    }
+
+    public function getRelationships( $relationship, $full )
+    {
+        $relationships = [];
+        if( count( $this->{$relationship} ) > 0 )
+        {
+            if( $full === false )
+            {
+                foreach( $this->{$relationship} as $r )
+                {
+                    $relationships[] = ['id' => $r->getId(),
+                        'name' => $r->getName()];
+                }
+            }
+            else
+            {
+                foreach( $this->{$relationship} as $r )
+                {
+                    $relationships[] = $r;
+                }
+            }
+        }
+        return $relationships;
+    }
+
+    public function setExtends( $models )
+    {
+        foreach( $models as $m )
+        {
+            $this->addExtends( $m );
+        }
+        return $this;
+    }
+
+    public function getExtends( $full = true )
+    {
+        return $this->getRelationships( 'extends', $full );
+    }
+
+    public function addExtend( Model $model )
+    {
+        if( !$this->extends->contains( $model ) )
+        {
+            $this->extends->add( $model );
+        }
+    }
+
+    public function removeExtend( Model $model )
+    {
+        $this->extends->removeElement( $model );
+    }
+
+    public function setExtendedBy( $models )
+    {
+        foreach( $models as $m )
+        {
+            $this->addExtendedBy( $m );
+        }
+        return $this;
+    }
+
+    public function getExtendedBy( $full = true )
+    {
+        return $this->getRelationships( 'extended_by', $full );
+    }
+
+    public function addExtendedBy( Model $model )
+    {
+        if( !$this->extended_by->contains( $model ) )
+        {
+            $this->extended_by->add( $model );
+        }
+        return $this;
+    }
+
+    public function removeExtendedBy( Model $model )
+    {
+        $this->extends->removeElement( $model );
+        return $this;
+    }
+
+    public function setRequires( $models )
+    {
+        $this->requires->clear();
+        foreach( $models as $m )
+        {
+            $this->addRequires( $m );
+        }
+        return $this;
+    }
+
+    public function getRequires( $full = true )
+    {
+        return $this->getRelationships( 'requires', $full );
+    }
+
+    public function addRequire( Model $model )
+    {
+        if( !$this->requires->contains( $model ) )
+        {
+            $this->requires->add( $model );
+        }
+    }
+
+    public function removeRequire( Model $model )
+    {
+        $this->requires->removeElement( $model );
+    }
+
+    public function setRequiredBy( $models )
+    {
+        foreach( $models as $m )
+        {
+            $this->addRequiredBy( $m );
+        }
+        return $this;
+    }
+
+    public function getRequiredBy( $full = true )
+    {
+        return $this->getRelationships( 'required_by', $full );
+    }
+
+    public function addRequiredBy( Model $model )
+    {
+        if( !$this->required_by->contains( $model ) )
+        {
+            $this->required_by->add( $model );
+        }
+    }
+
+    public function removeRequiredBy( Model $model )
+    {
+        $this->requires->removeElement( $model );
     }
 
     public function getUpdated()

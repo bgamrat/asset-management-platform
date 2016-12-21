@@ -34,6 +34,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
+    "app/admin/asset/trailer_relationships",
     "app/admin/asset/common",
     "app/lib/common",
     "app/lib/grid",
@@ -46,7 +47,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        assetCommon, lib, libGrid, core, trailer) {
+        trailerRelationships, assetCommon, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -69,7 +70,7 @@ define([
 
 
         var locationContentPane = new ContentPane({
-            title: trailer.location},
+            title: asset.location},
         "trailer-view-location-tab"
                 );
         tabContainer.addChild(locationContentPane);
@@ -81,14 +82,20 @@ define([
         tabContainer.addChild(expensesContentPane);
         tabContainer.startup();
 
-        var modelRelationshipsContentPane = new ContentPane({
-            title: trailer.model_relationships},
-        "trailer-view-model-relationships-tab"
+        var requiresContentPane = new ContentPane({
+            title: asset.requires},
+        "trailer-view-requires-tab"
                 );
-        tabContainer.addChild(modelRelationshipsContentPane);
+        tabContainer.addChild(requiresContentPane);
+
+        var extendsContentPane = new ContentPane({
+            title: asset.extends},
+        "trailer-view-extends-tab"
+                );
+        tabContainer.addChild(extendsContentPane);
 
         var historyContentPane = new ContentPane({
-            title: trailer.history},
+            title: asset.history},
         "trailer-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);
@@ -290,6 +297,10 @@ define([
                     "location_text": locationFilteringSelect.get("displayedValue"),
                     "serial_number": serialNumberInput.get("value"),
                     "active": activeCheckBox.get("checked"),
+                    "extends": trailerRelationships.getData("extends"),
+                    "requires": trailerRelationships.getData("requires"),
+                    "extended_by": trailerRelationships.getData("extended_by"),
+                    "required_by": trailerRelationships.getData("required_by"),
                     "comment": commentInput.get("value"),
                 };
                 if( action === "view" ) {
@@ -331,16 +342,16 @@ define([
                     label: core.name
                 },
                 model_text: {
-                    label: trailer.model
+                    label: asset.model
                 },
                 serial_number: {
-                    label: trailer.serial_number
+                    label: asset.serial_number
                 },
                 status_text: {
                     label: core.status
                 },
                 location_text: {
-                    label: trailer.location
+                    label: asset.location
                 },
                 comment: {
                     label: core.comment
@@ -418,6 +429,10 @@ define([
                         barcodes.setData(null);
                     }
                     activeCheckBox.set('checked', trailer.active);
+                    trailerRelationships.setData("extends", trailer['extends']);
+                    trailerRelationships.setData("requires", trailer['requires']);
+                    trailerRelationships.setData("extended_by", trailer.extendedBy);
+                    trailerRelationships.setData("required_by", trailer.requiredBy);
                     assetCommon.relationshipLists(modelRelationshipsContentPane, trailer.model_relationships);
                     lib.showHistory(historyContentPane, trailer.history);
                 }, lib.xhrError);
@@ -495,7 +510,7 @@ define([
                 }
             }
         }
-
+        trailerRelationships.run();
         lib.pageReady();
     }
     return {

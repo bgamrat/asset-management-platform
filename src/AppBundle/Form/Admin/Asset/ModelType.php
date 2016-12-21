@@ -12,8 +12,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Asset\DataTransformer\ModelRelationshipsToIdsTransformer;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 
 class ModelType extends AbstractType
 {

@@ -63,10 +63,16 @@
                             {{form_row(trailer_form.value)}}
                         </div>
                     </div>
-                    <div id="trailer-view-model-relationships-tab">
-                        <div id="model-relationships" class="model-relationships">
-                        </div>
+
+                    <div id="trailer-view-requires-tab">
+                        {% block requires_trailers %}{% import 'form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.requires'|trans,'requires',trailer_form.requires) }}{% endblock %}
+                        {% block required_by_trailers %}{% import 'form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.required_by'|trans,'required_by',trailer_form.required_by) }}{% endblock %}
                     </div>
+                    <div id="trailer-view-extends-tab">
+                        {% block extends_trailers %}{% import 'form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.extends'|trans,'extends',trailer_form.extends) }}{% endblock %}
+                        {% block extended_by_trailers %}{% import 'form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.extended_by'|trans,'extended_by',trailer_form.extended_by) }}{% endblock %}
+                    </div>
+
                     <div id="trailer-view-history-tab">
                     </div>
                 </div>

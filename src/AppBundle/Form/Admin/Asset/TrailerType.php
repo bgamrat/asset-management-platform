@@ -15,6 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
+use AppBundle\Form\Admin\Asset\DataTransformer\TrailerRelationshipsToIdsTransformer;
 use AppBundle\Form\Admin\Asset\AssetLocationType;
 
 class TrailerType extends AbstractType
@@ -62,7 +63,65 @@ class TrailerType extends AbstractType
                     'label' => false
                 ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
-        ;
+                ->add( 'requires', CollectionType::class, [
+                    'entry_type' => EntityType::class,
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                        'choice_label' => false],
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true
+                ] )
+                ->add( 'required_by', CollectionType::class, [
+                    'entry_type' => EntityType::class,
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                        'choice_label' => false],
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'property_path' => 'requiredBy'
+                ] )
+                ->add( 'extends', CollectionType::class, [
+                    'entry_type' => EntityType::class,
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                        'choice_label' => false],
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true
+                ] )
+                ->add( 'extended_by', CollectionType::class, [
+                    'entry_type' => EntityType::class,
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                        'choice_label' => false],
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'property_path' => 'extendedBy'
+                ] );
+        $builder->get( 'requires' )
+                ->addModelTransformer( new TrailerRelationshipsToIdsTransformer( $this->em ) );
+        $builder->get( 'required_by' )
+                ->addModelTransformer( new TrailerRelationshipsToIdsTransformer( $this->em ) );
+        $builder->get( 'extends' )
+                ->addModelTransformer( new TrailerRelationshipsToIdsTransformer( $this->em ) );
+        $builder->get( 'extended_by' )
+                ->addModelTransformer( new TrailerRelationshipsToIdsTransformer( $this->em ) );
+
         $builder->get( 'model' )
                 ->addModelTransformer( new ModelToIdTransformer( $this->em ) );
     }

@@ -37,7 +37,7 @@
     display: none;
 }
 #asset_location_ctype,
-#trailer_location_ctype{
+#trailer_location_ctype {
     list-style-type: none;
     padding: 0;
 }

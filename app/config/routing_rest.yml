@@ -17,6 +17,12 @@ app_admin_asset_manufacturers:
     name_prefix:   app_admin_api_manufacturers_
     prefix: /api
 
+app_admin_asset_trailers:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Asset\TrailersController
+    name_prefix:   app_admin_api_trailers_
+    prefix: /api
+
 app_admin_asset_vendors:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\Asset\VendorsController

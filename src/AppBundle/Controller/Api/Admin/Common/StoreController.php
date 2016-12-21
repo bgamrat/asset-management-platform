@@ -454,13 +454,10 @@ class StoreController extends FOSRestController
 
             $em = $this->getDoctrine()->getManager();
 
-            $queryBuilder = $em->createQueryBuilder()->select( ['a.id', "b.barcode AS name"] )
-                    ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
-                    ->innerJoin( 'a.barcodes', 'b' )
-                    ->innerJoin( 'a.model', 'm' );
+            $queryBuilder = $em->createQueryBuilder()->select( ['t.id', 't.name'] )
+                    ->from( 'AppBundle\Entity\Asset\Trailer', 't' );
             $queryBuilder
-                    ->where( $queryBuilder->expr()->like( 'b.barcode', ':name' ) )
-                    ->andWhere( 'm.container = true' )
+                    ->where( $queryBuilder->expr()->like( 't.name', ':name' ) )
                     ->setParameter( 'name', $name );
 
             $data = $queryBuilder->getQuery()->getResult();
