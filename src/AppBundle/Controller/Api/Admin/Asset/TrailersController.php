@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Api\Admin\Asset;
 
 use AppBundle\Util\DStore;
 use AppBundle\Entity\Asset\Trailer;
-use AppBundle\Entity\Trailer\Location;
+use AppBundle\Entity\Asset\Location;
 use AppBundle\Form\Admin\Asset\TrailerType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;

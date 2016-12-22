@@ -59,7 +59,7 @@ class Trailer
     protected $status = null;
     /**
      * @Gedmo\Versioned
-     * @ORM\Column(name="purchased", type="datetime", nullable=true, unique=false)
+     * @ORM\Column(name="purchased", type="date", nullable=true, unique=false)
      */
     private $purchased = null;
     /**
@@ -102,8 +102,7 @@ class Trailer
      */
     private $active = true;
     /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends", fetch="LAZY")
      */
     private $extended_by;
     /**

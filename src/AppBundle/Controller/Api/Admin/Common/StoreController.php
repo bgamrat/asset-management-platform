@@ -336,6 +336,23 @@ class StoreController extends FOSRestController
     /**
      * @View()
      */
+    public function getModelAction( $brandModel )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $em = $this->getDoctrine()->getManager();
+        $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
+                ->from( 'AppBundle\Entity\Asset\Model', 'm' )
+                ->innerJoin( 'm.brand', 'b' )
+                ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
+                ->setParameter( 'brand_model', $brandModel );
+
+        $data = $queryBuilder->getQuery()->getResult();
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
     public function getModelsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
@@ -351,6 +368,7 @@ class StoreController extends FOSRestController
                     ->from( 'AppBundle\Entity\Asset\Model', 'm' )
                     ->innerJoin( 'm.brand', 'b' )
                     ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
+                    ->orderBy('name')
                     ->setParameter( 'brand_model', $brandModel );
 
             $data = $queryBuilder->getQuery()->getResult();
@@ -393,23 +411,6 @@ class StoreController extends FOSRestController
                 ->orderBy( 'pt.type' );
         $data = $queryBuilder->getQuery()->getResult();
 
-        return $data;
-    }
-
-    /**
-     * @View()
-     */
-    public function getModelAction( $brandModel )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
-                ->from( 'AppBundle\Entity\Asset\Model', 'm' )
-                ->innerJoin( 'm.brand', 'b' )
-                ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
-                ->setParameter( 'brand_model', $brandModel );
-
-        $data = $queryBuilder->getQuery()->getResult();
         return $data;
     }
 

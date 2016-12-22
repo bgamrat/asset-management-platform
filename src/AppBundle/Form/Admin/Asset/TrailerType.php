@@ -54,9 +54,15 @@ class TrailerType extends AbstractType
                     },
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'purchased', DateType::class, ['label' => 'common.purchased'] )
-                ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
-                ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
+                ->add( 'purchased', DateType::class, [
+                    'label' => 'common.purchased', 
+                    'widget' => 'single_text',
+                    'input' => 'string',
+                    'empty_data' => null,
+                    'required' => false
+                ] )
+                ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD', 'required' => false] )
+                ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD', 'required' => false] )
                 ->add( 'location', AssetLocationType::class )
                 ->add( 'location_text', HiddenType::class )
                 ->add( 'comment', TextType::class, [
@@ -65,7 +71,7 @@ class TrailerType extends AbstractType
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'requires', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Trailer',
                         'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
@@ -77,7 +83,7 @@ class TrailerType extends AbstractType
                 ] )
                 ->add( 'required_by', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Trailer',
                         'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
@@ -90,7 +96,7 @@ class TrailerType extends AbstractType
                 ] )
                 ->add( 'extends', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Trailer',
                         'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
@@ -102,7 +108,7 @@ class TrailerType extends AbstractType
                 ] )
                 ->add( 'extended_by', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Trailer',
                         'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,

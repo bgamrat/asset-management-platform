@@ -4,11 +4,13 @@
     height: 740px !important;
 }
 .manufacturer-name,
-.vendor-name {
+.vendor-name,
+.trailer-name {
     font-size: 1.5em;
     display: inline-block;
 }
 .manufacturer-name .dijitTextBox,
+.trailer-name .dijitTextBox,
 .vendor-name .dijitTextBox {
     width: 225px;
 }

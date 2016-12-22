@@ -154,7 +154,7 @@ define([
 
         var serialNumberInput = new ValidationTextBox({
             trim: true,
-            placeholder: trailer.serial_number,
+            placeholder: asset.serial_number,
             pattern: "[A-Za-z0-9\.\,\ \'-]{2,64}"
         }, "trailer_serial_number");
         serialNumberInput.startup();
@@ -274,7 +274,7 @@ define([
         }, 'trailer-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeModelTextFilter, filter, data, locationId, locationData;
+            var beforeTrailerTextFilter, filter, data, locationId, locationData, purchased;
             grid.clearSelection();
             if( trailerForm.validate() ) {
                 locationId = parseInt(dom.byId("trailer_location_id").value);
@@ -283,16 +283,17 @@ define([
                     "type": parseInt(getLocationType()),
                     "entity": parseInt(locationFilteringSelect.get("value"))
                 };
+                purchased = purchasedInput.get("value");
                 data = {
                     "id": trailerId,
                     "model_text": modelFilteringSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
                     "status": parseInt(statusSelect.get("value")),
-                    "purchased": purchasedInput.get("value"),
+                    "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
                     "value": parseFloat(valueInput.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
-                    "name": nameNumberInput.get("value"),
+                    "name": nameInput.get("value"),
                     "location": locationData,
                     "location_text": locationFilteringSelect.get("displayedValue"),
                     "serial_number": serialNumberInput.get("value"),
@@ -309,8 +310,8 @@ define([
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();
-                    beforeModelTextFilter = filter.gt('model_text', data.model_text);
-                    store.filter(beforeModelTextFilter).sort('model_text').fetchRange({start: 0, end: 1}).then(function (results) {
+                    beforeTrailerTextFilter = filter.gt('name', data.name);
+                    store.filter(beforeTrailerTextFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
                         var beforeId;
                         beforeId = (results.length > 0) ? results[0].id : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {

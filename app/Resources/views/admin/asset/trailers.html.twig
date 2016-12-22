@@ -63,7 +63,6 @@
                             {{form_row(trailer_form.value)}}
                         </div>
                     </div>
-
                     <div id="trailer-view-requires-tab">
                         {% block requires_trailers %}{% import 'form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.requires'|trans,'requires',trailer_form.requires) }}{% endblock %}
                         {% block required_by_trailers %}{% import 'form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.required_by'|trans,'required_by',trailer_form.required_by) }}{% endblock %}
