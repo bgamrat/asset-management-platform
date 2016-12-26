@@ -53,15 +53,15 @@ class ManufacturersController extends FOSRestController
                 case DStore::LIKE:
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
-                                    $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'u.email', '?1' ) )
+                                    $queryBuilder->expr()->like( 'LOWER(m.name)', '?1' ), $queryBuilder->expr()->like( 'LOWER(u.email)', '?1' ) )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'm.name', '?1' )
+                            $queryBuilder->expr()->gt( 'LOWER(m.name)', '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
+            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
         }
         $manufacturers = $queryBuilder->getQuery()->getResult();
         return $manufacturers;

@@ -276,7 +276,7 @@ class Trailer
      */
     public function setPurchased( $purchased )
     {
-        $this->purchased = $purchased;
+        $this->purchased = new \DateTime($purchased);
 
         return $this;
     }

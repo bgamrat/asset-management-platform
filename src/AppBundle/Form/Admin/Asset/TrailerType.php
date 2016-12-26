@@ -57,8 +57,8 @@ class TrailerType extends AbstractType
                 ->add( 'purchased', DateType::class, [
                     'label' => 'common.purchased', 
                     'widget' => 'single_text',
+                    'format' => 'yyyy-MM-dd',
                     'input' => 'string',
-                    'empty_data' => null,
                     'required' => false
                 ] )
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD', 'required' => false] )

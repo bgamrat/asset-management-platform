@@ -79,16 +79,18 @@ class AssetsController extends FOSRestController
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
                                     $queryBuilder->expr()->orX(
-                                            $queryBuilder->expr()->like( 'm.name', '?1' ), $queryBuilder->expr()->like( 'a.serial_number', '?1' ) ), $queryBuilder->expr()->like( 'a.location_text', '?1' )
+                                            $queryBuilder->expr()->like( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?1' ), 
+                                            $queryBuilder->expr()->like( 'LOWER(a.serial_number)', '?1' ) ), 
+                                    $queryBuilder->expr()->like( 'LOWER(a.location_text)', '?1' )
                             )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'm.name', '?1' )
+                            $queryBuilder->expr()->gt( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
+            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
         }
         //$queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
         $data = $queryBuilder->getQuery()->getResult();

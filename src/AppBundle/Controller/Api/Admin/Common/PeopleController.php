@@ -60,15 +60,15 @@ class PeopleController extends FOSRestController
             {
                 case DStore::LIKE:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->like( 'p.lastname', '?1' )
+                            $queryBuilder->expr()->like( 'LOWER(p.lastname)', '?1' )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'p.lastname', '?1' )
+                            $queryBuilder->expr()->gt( 'LOWER(p.lastname)', '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
+            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
         }
 
         $ids = $queryBuilder->getQuery()->getResult();

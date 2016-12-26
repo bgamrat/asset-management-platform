@@ -118,8 +118,8 @@ class StoreController extends FOSRestController
             $queryBuilder = $em->createQueryBuilder()->select( ['b.id', "CONCAT(CONCAT(m.name, ' '), b.name) AS name"] )
                     ->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
                     ->innerJoin( 'm.brands', 'b' )
-                    ->where( "CONCAT(CONCAT(m.name, ' '), b.name) LIKE :manufacturer_brand" )
-                    ->setParameter( 'manufacturer_brand', $manufacturerBrand );
+                    ->where( "LOWER(CONCAT(CONCAT(m.name, ' '), b.name)) LIKE :manufacturer_brand" )
+                    ->setParameter( 'manufacturer_brand', strtolower($manufacturerBrand) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -148,9 +148,9 @@ class StoreController extends FOSRestController
                     ->innerJoin( 'a.barcodes', 'b' )
                     ->innerJoin( 'a.model', 'm' );
             $queryBuilder
-                    ->where( $queryBuilder->expr()->like( 'b.barcode', ':barcode' ) )
+                    ->where( $queryBuilder->expr()->like( 'LOWER(b.barcode)', ':barcode' ) )
                     ->andWhere( 'm.container = true' )
-                    ->setParameter( 'barcode', $barcode );
+                    ->setParameter( 'barcode', strtolower($barcode) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -176,8 +176,8 @@ class StoreController extends FOSRestController
 
             $queryBuilder = $em->createQueryBuilder()->select( ['c.id', "c.fullName AS name"] )
                     ->from( 'AppBundle\Entity\Asset\Category', 'c' )
-                    ->where( "c.name LIKE :category_name" )
-                    ->setParameter( 'category_name', $name );
+                    ->where( "LOWER(c.name) LIKE :category_name" )
+                    ->setParameter( 'category_name', strtolower($name) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -321,8 +321,8 @@ class StoreController extends FOSRestController
 
             $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "m.name"] )
                     ->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
-                    ->where( "m.name LIKE :manufacturer_name" )
-                    ->setParameter( 'manufacturer_name', $name );
+                    ->where( "LOWER(m.name) LIKE :manufacturer_name" )
+                    ->setParameter( 'manufacturer_name', strtolower($name) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -330,23 +330,6 @@ class StoreController extends FOSRestController
         {
             $data = null;
         }
-        return $data;
-    }
-
-    /**
-     * @View()
-     */
-    public function getModelAction( $brandModel )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
-                ->from( 'AppBundle\Entity\Asset\Model', 'm' )
-                ->innerJoin( 'm.brand', 'b' )
-                ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
-                ->setParameter( 'brand_model', $brandModel );
-
-        $data = $queryBuilder->getQuery()->getResult();
         return $data;
     }
 
@@ -367,9 +350,9 @@ class StoreController extends FOSRestController
             $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
                     ->from( 'AppBundle\Entity\Asset\Model', 'm' )
                     ->innerJoin( 'm.brand', 'b' )
-                    ->where( "CONCAT(CONCAT(b.name, ' '), m.name) LIKE :brand_model" )
+                    ->where( "LOWER(CONCAT(CONCAT(b.name, ' '), m.name)) LIKE :brand_model" )
                     ->orderBy('name')
-                    ->setParameter( 'brand_model', $brandModel );
+                    ->setParameter( 'brand_model', strtolower($brandModel) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -430,8 +413,8 @@ class StoreController extends FOSRestController
 
             $queryBuilder = $em->createQueryBuilder()->select( ['v.id', "v.name"] )
                     ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
-                    ->where( "v.name LIKE :vendor_name" )
-                    ->setParameter( 'vendor_name', $name );
+                    ->where( "LOWER(v.name) LIKE :vendor_name" )
+                    ->setParameter( 'vendor_name', strtolower($name) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -458,8 +441,8 @@ class StoreController extends FOSRestController
             $queryBuilder = $em->createQueryBuilder()->select( ['t.id', 't.name'] )
                     ->from( 'AppBundle\Entity\Asset\Trailer', 't' );
             $queryBuilder
-                    ->where( $queryBuilder->expr()->like( 't.name', ':name' ) )
-                    ->setParameter( 'name', $name );
+                    ->where( $queryBuilder->expr()->like( 'LOWER(t.name)', ':name' ) )
+                    ->setParameter( 'name', strtolower($name) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }

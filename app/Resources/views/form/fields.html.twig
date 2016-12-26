@@ -69,7 +69,7 @@
     {{ block('_barcodes_entry_row') }}
 {% endblock %}
 
-{% block _asset_statuses_statuses_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('status',form) }}{% endblock %}
+{% block _asset_statuses_statuses_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_active_entry_row('status',form) }}{% endblock %}
 
 {% block _barcodes_entry_row %}
     {% spaceless %}
@@ -119,7 +119,7 @@
     {% endspaceless %}
 {% endblock %}
 
-{% block _manufacturer_brands_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('brand',form) }}{% endblock %}
+{% block _manufacturer_brands_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_active_entry_row('brand',form) }}{% endblock %}
 
 {% block _manufacturer_contacts_entry_row %}
     <div class="form-row contacts">

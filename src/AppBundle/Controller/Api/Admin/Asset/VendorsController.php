@@ -48,15 +48,15 @@ class VendorsController extends FOSRestController
             {
                 case DStore::LIKE:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->like( 'v.name', '?1' )
+                            $queryBuilder->expr()->like( 'LOWER(v.name)', '?1' )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'v.name', '?1' )
+                            $queryBuilder->expr()->gt( 'LOWER(v.name)', '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
+            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
         }
         $query = $queryBuilder->getQuery();
         $vendorCollection = $query->getResult();

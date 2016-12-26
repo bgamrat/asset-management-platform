@@ -75,16 +75,18 @@ class TrailersController extends FOSRestController
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
                                     $queryBuilder->expr()->orX(
-                                            $queryBuilder->expr()->like( 't.name', '?1' ), $queryBuilder->expr()->like( 't.serial_number', '?1' ) ), $queryBuilder->expr()->like( 't.location_text', '?1' )
+                                            $queryBuilder->expr()->like( 'LOWER(t.name)', '?1' ), 
+                                            $queryBuilder->expr()->like( 'LOWER(t.serial_number)', '?1' ) ), 
+                                    $queryBuilder->expr()->like( 'LOWER(t.location_text)', '?1' )
                             )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'm.name', '?1' )
+                            $queryBuilder->expr()->gt( 'LOWER(m.name)', '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, $dstore['filter'][DStore::VALUE] );
+            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
         }
         $data = $queryBuilder->getQuery()->getResult();
         return array_values( $data );

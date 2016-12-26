@@ -54,7 +54,9 @@ class DStore
         if( $query->has( 'match' ) )
         {
             preg_match( '#match=/(\w+)/#i', $query->get( 'match' ), $matches );
-            $filter = [self::OP => 'LIKE', self::VALUE => '%' . $matches[1] . '%'];
+            if (!empty($matches) && !empty($matches[1])) {
+                $filter = [self::OP => 'LIKE', self::VALUE => '%' . $matches[1] . '%'];
+            }
         }
         if( strpos( $queryString, '=gt=' ) !== false )
         {
