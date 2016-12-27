@@ -62,13 +62,7 @@ class Asset
      * @ORM\Column(name="cost", type="float", nullable=true, unique=false)
      */
     private $cost = 0.0;
-    /**
-     * @var float
-     * @Gedmo\Versioned
-     * @ORM\Column(name="value", type="float", nullable=true, unique=false)
 
-     */
-    private $value = 0.0;
     /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
@@ -229,7 +223,7 @@ class Asset
      */
     public function setPurchased( $purchased )
     {
-        $this->purchased = $purchased;
+        $this->purchased = new \DateTime($purchased);
 
         return $this;
     }
@@ -266,30 +260,6 @@ class Asset
     public function getCost()
     {
         return $this->cost;
-    }
-
-    /**
-     * Set value
-     *
-     * @param float $value
-     *
-     * @return Asset
-     */
-    public function setValue( $value )
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return int
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 
     /**

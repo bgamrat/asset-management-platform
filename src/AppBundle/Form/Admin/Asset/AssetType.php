@@ -52,9 +52,14 @@ class AssetType extends AbstractType
                     },
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'purchased', DateType::class, ['label' => 'common.purchased'] )
+                ->add( 'purchased', DateType::class, [
+                    'label' => 'common.purchased', 
+                    'widget' => 'single_text',
+                    'format' => 'yyyy-MM-dd',
+                    'input' => 'string',
+                    'required' => false
+                ] )
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
-                ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
                 ->add( 'location', AssetLocationType::class )
                 ->add( 'location_text', HiddenType::class )
                 ->add( 'barcodes', CollectionType::class, [

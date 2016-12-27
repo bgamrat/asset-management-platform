@@ -62,7 +62,6 @@ class TrailerType extends AbstractType
                     'required' => false
                 ] )
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD', 'required' => false] )
-                ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD', 'required' => false] )
                 ->add( 'location', AssetLocationType::class )
                 ->add( 'location_text', HiddenType::class )
                 ->add( 'comment', TextType::class, [

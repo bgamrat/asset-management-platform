@@ -120,7 +120,7 @@ class TrailersController extends FOSRestController
                 $locationId = $location->getId();
                 $locationTypeId = $location->getType();
                 $locationType = $this->getDoctrine()
-                                ->getRepository( 'AppBundle\Entity\Trailer\LocationType' )->find( $locationTypeId );
+                                ->getRepository( 'AppBundle\Entity\Asset\LocationType' )->find( $locationTypeId );
                 ;
             }
             $relationships = [

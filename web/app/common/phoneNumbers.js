@@ -67,16 +67,24 @@ define([
     }
 
     function destroyRow(id, target) {
+        var item;
+
         for( i = 0; i < phoneNumberId.length; i++ ) {
             if( phoneNumberId[i] === id ) {
                 id = i;
                 break;
             }
         }
+
         phoneNumberId.splice(id, 1);
-        typeSelect.pop().destroyRecursive();
-        numberInput.pop().destroyRecursive();
-        commentInput.pop().destroyRecursive();
+        item = typeSelect.splice(id, 1);
+        item[0].destroyRecursive();
+        domConstruct.destroy(target);
+        item = numberInput.splice(id, 1);
+        item[0].destroyRecursive();
+        domConstruct.destroy(target);
+        item = commentInput.splice(id, 1);
+        item[0].destroyRecursive();
         domConstruct.destroy(target);
     }
 
@@ -173,7 +181,7 @@ define([
 
         if( typeof phones === "object" && phones !== null && phones.length > 0 ) {
 
-            for( i = 0; i < numberInput.length; i++ ) {
+            for( i = 0; i < phones.length; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();

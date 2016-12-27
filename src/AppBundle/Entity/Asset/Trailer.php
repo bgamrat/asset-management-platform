@@ -69,13 +69,6 @@ class Trailer
      */
     private $cost = 0.0;
     /**
-     * @var float
-     * @Gedmo\Versioned
-     * @ORM\Column(name="value", type="float", nullable=true, unique=false)
-
-     */
-    private $value = 0.0;
-    /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets", cascade={"persist"})
@@ -313,30 +306,6 @@ class Trailer
     public function getCost()
     {
         return $this->cost;
-    }
-
-    /**
-     * Set value
-     *
-     * @param float $value
-     *
-     * @return Asset
-     */
-    public function setValue( $value )
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return int
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 
     /**

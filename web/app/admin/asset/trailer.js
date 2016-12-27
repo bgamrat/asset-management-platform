@@ -252,13 +252,6 @@ define([
         }, "trailer_cost");
         costInput.startup();
 
-        var valueInput = new CurrencyTextBox({
-            placeholder: core.value,
-            trim: true,
-            required: false
-        }, "trailer_value");
-        valueInput.startup();
-
         var commentInput = new SimpleTextarea({
             placeholder: core.comment,
             trim: true,
@@ -399,7 +392,7 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (trailer) {
-                    trailerViewDialog.set('title', core.view + " " + titleBarcode);
+                    trailerViewDialog.set('title', core.view + " " + trailer.name);
                     trailerViewDialog.show();
                     action = "view";
                     trailerId = trailer.id;
@@ -407,7 +400,6 @@ define([
                     statusSelect.set("displayedValue", trailer.status_text);
                     purchasedInput.set("value", trailer.purchased);
                     costInput.set("value", trailer.cost);
-                    valueInput.get("value", trailer.value);
                     dom.byId("trailer_location_id").value = trailer.location.id;
                     setLocationType(trailer.location.type.id);
                     if( trailer.location.type.url !== null ) {
@@ -421,20 +413,15 @@ define([
                         locationFilteringSelect.set('displayedValue', trailer.location_text);
                         locationFilteringSelect.set("readOnly", true);
                     }
-                    nameInput.set('value', common.name);
+                    nameInput.set('value', core.name);
                     serialNumberInput.set('value', trailer.serial_number);
                     commentInput.set('value', trailer.comment);
-                    if( typeof trailer.barcodes !== "undefined" ) {
-                        barcodes.setData(trailer.barcodes);
-                    } else {
-                        barcodes.setData(null);
-                    }
                     activeCheckBox.set('checked', trailer.active);
                     trailerRelationships.setData("extends", trailer['extends']);
                     trailerRelationships.setData("requires", trailer['requires']);
                     trailerRelationships.setData("extended_by", trailer.extendedBy);
                     trailerRelationships.setData("required_by", trailer.requiredBy);
-                    assetCommon.relationshipLists(modelRelationshipsContentPane, trailer.model_relationships);
+                    assetCommon.relationshipLists(trailerRelationshipsContentPane, trailer.model_relationships);
                     lib.showHistory(historyContentPane, trailer.history);
                 }, lib.xhrError);
             }
