@@ -95,7 +95,7 @@ define([
         tabContainer.addChild(extendsContentPane);
 
         var historyContentPane = new ContentPane({
-            title: asset.history},
+            title: core.history},
         "trailer-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);
@@ -284,7 +284,6 @@ define([
                     "status": parseInt(statusSelect.get("value")),
                     "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
-                    "value": parseFloat(valueInput.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "name": nameInput.get("value"),
                     "location": locationData,
@@ -421,8 +420,7 @@ define([
                     trailerRelationships.setData("requires", trailer['requires']);
                     trailerRelationships.setData("extended_by", trailer.extendedBy);
                     trailerRelationships.setData("required_by", trailer.requiredBy);
-                    assetCommon.relationshipLists(trailerRelationshipsContentPane, trailer.model_relationships);
-                    lib.showHistory(historyContentPane, trailer.history);
+                    lib.showHistory(historyContentPane, trailer["history"]);
                 }, lib.xhrError);
             }
         });

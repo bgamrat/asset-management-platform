@@ -37,21 +37,20 @@ class VendorType extends AbstractType
                 ->add( 'comment', TextareaType::class, [
                     'label' => false,
                     'required' => false
-                ] )
-                ->add( 'person', CollectionType::class, [
+                ]  )
+                ->add( 'contacts', CollectionType::class, [
                     'entry_type' => PersonType::class,
-                    'by_reference' => true,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'mapped' => false,
                     'prototype_name' => '__person__'
                 ] )
                 ->add( 'brands', CollectionType::class, [
-                    'entry_type' => TextType::class,
+                    'entry_type' => BrandType::class,
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,

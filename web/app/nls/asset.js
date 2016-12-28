@@ -7,7 +7,6 @@ define({
         "container": "Container",
         "extends": "Extends",
         "extended_by": "Extended By",
-        "history": "History",
         "location": "Location",
         "model": "Model",
         "model_relationships": "Model Relationships",

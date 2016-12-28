@@ -22,6 +22,7 @@ define({
         "filter": "Filter",
         "firstname": "First name",
         "groups": "Groups",
+        "history": "History",
 	"id": "Id",
         "invalid": "Invalid",
         "invalid_form": "Invalid data",

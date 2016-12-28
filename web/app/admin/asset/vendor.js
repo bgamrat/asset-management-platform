@@ -63,6 +63,12 @@ define([
         "vendor-view-brands-tab"
                 );
         tabContainer.addChild(brandsContentPane);
+
+        var historyContentPane = new ContentPane({
+            title: core.history},
+        "vendor-view-history-tab"
+                );
+        tabContainer.addChild(historyContentPane);
         tabContainer.startup();
 
         var newBtn = new Button({
@@ -286,7 +292,7 @@ define([
             }));
         });
 
-        person.run('vendor');
+        person.run('vendor_contacts');
         brandSelect.run('vendor');
 
         lib.pageReady();

@@ -204,55 +204,6 @@ class StoreController extends FOSRestController
 
         return $data;
     }
-
-    function getLocationMenu( $adminMenu, $renderer, $id )
-    {
-        $limit = 2500; // TODO: Change to deliver first letters if there are too many manfacturers
-        $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder();
-        $queryBuilder
-                ->select( ["CONCAT('manufacturer-',m.id) AS id", 'm.name', "'manufacturer' AS parent", 'COUNT(b.id) AS has_children'] )
-                ->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
-                ->leftJoin( 'm.brands', 'b' )
-                ->orderBy( 'm.name' )
-                ->groupBy( 'm.id' )
-                ->setFirstResult( 0 )
-                ->setMaxResults( $limit );
-        $menu = $renderer->render( $adminMenu['admin']['admin-assets']['manufacturers'] );
-        $children = $queryBuilder->getQuery()->getResult();
-        $l = count( $children );
-        if( $l < $limit )
-        {
-            for( $i = 0; $i < $l; $i++ )
-            {
-                $children[$i]['uri'] = $this->generateUrl(
-                        'app_admin_asset_manufacturer_index', ['name' => $children[$i]['name']], true ); // absolute
-            }
-        }
-        $menu['children'] = $children;
-        return $menu;
-    }
-
-    function getLocationTree( $adminMenu, $renderer, $id )
-    {
-        $manufacturer = $em->getRepository( 'AppBundle\Entity\Asset\Manufacturer' )->find( $base[1] );
-        $brands = $manufacturer->getBrands();
-        $children = [];
-        foreach( $brands as $b )
-        {
-            $children[] = [
-                'id' => $b->getId(),
-                'name' => $b->getName(),
-                'parent' => $id,
-                'uri' => $this->generateUrl(
-                        'app_admin_asset_manufacturer_getmanufacturerbrand', ['mname' => $manufacturer->getName(), 'bname' => $b->getName()], true ), // absolute
-                'has_children' => false,
-                'children' => null];
-        }
-        $menu['children'] = $children;
-
-        return $menu;
-    }
     
     function getManufacturerMenu( $adminMenu, $renderer, $id )
     {
@@ -396,6 +347,64 @@ class StoreController extends FOSRestController
 
         return $data;
     }
+    
+    
+    /**
+     * @View()
+     */
+    public function getTrailerAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $name = $request->get( 'name' );
+        if( !empty( $name ) )
+        {
+            $name = '%' . str_replace( '*', '%', $name );
+
+            $em = $this->getDoctrine()->getManager();
+
+            $queryBuilder = $em->createQueryBuilder()->select( ['t.id', 't.name'] )
+                    ->from( 'AppBundle\Entity\Asset\Trailer', 't' );
+            $queryBuilder
+                    ->where( $queryBuilder->expr()->like( 'LOWER(t.name)', ':name' ) )
+                    ->setParameter( 'name', strtolower($name) );
+
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
+
+    
+    function getTrailerMenu( $adminMenu, $renderer, $id )
+    {
+        $limit = 2500; // TODO: Change to deliver first letters if there are too many manfacturers
+        $em = $this->getDoctrine()->getManager();
+        $queryBuilder = $em->createQueryBuilder();
+        $queryBuilder
+                ->select( ["CONCAT('trailer-',t.id) AS id", 't.name', "'trailer' AS parent"] )
+                ->from( 'AppBundle\Entity\Asset\Trailer', 't' )
+                ->orderBy( 't.name' )
+                ->setFirstResult( 0 )
+                ->setMaxResults( $limit );
+        $menu = $renderer->render( $adminMenu['admin']['admin-assets']['trailers'] );
+        $children = $queryBuilder->getQuery()->getResult();
+        $l = count( $children );
+        if( $l < $limit )
+        {
+            for( $i = 0; $i < $l; $i++ )
+            {
+                $children[$i]['has_children'] = false;
+                $children[$i]['children'] = null;
+                $children[$i]['uri'] = $this->generateUrl(
+                        'app_admin_asset_trailer_index', ['name' => $children[$i]['name']], true ); // absolute
+            }
+        }
+        $menu['children'] = $children;
+        return $menu;
+    }
 
     /**
      * @View()
@@ -415,34 +424,6 @@ class StoreController extends FOSRestController
                     ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
                     ->where( "LOWER(v.name) LIKE :vendor_name" )
                     ->setParameter( 'vendor_name', strtolower($name) );
-
-            $data = $queryBuilder->getQuery()->getResult();
-        }
-        else
-        {
-            $data = null;
-        }
-        return $data;
-    }
-
-    /**
-     * @View()
-     */
-    public function getTrailerAction( Request $request )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $name = $request->get( 'name' );
-        if( !empty( $name ) )
-        {
-            $name = '%' . str_replace( '*', '%', $name );
-
-            $em = $this->getDoctrine()->getManager();
-
-            $queryBuilder = $em->createQueryBuilder()->select( ['t.id', 't.name'] )
-                    ->from( 'AppBundle\Entity\Asset\Trailer', 't' );
-            $queryBuilder
-                    ->where( $queryBuilder->expr()->like( 'LOWER(t.name)', ':name' ) )
-                    ->setParameter( 'name', strtolower($name) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }

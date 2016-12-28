@@ -269,7 +269,11 @@ class Trailer
      */
     public function setPurchased( $purchased )
     {
-        $this->purchased = new \DateTime($purchased);
+        if (!empty($purchased)) {
+            $this->purchased = $purchased;
+        } else {
+            $this->purchased = null;
+        }
 
         return $this;
     }

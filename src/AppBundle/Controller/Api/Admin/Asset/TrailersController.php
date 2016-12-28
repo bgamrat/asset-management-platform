@@ -142,6 +142,8 @@ class TrailersController extends FOSRestController
                 'status' => $status->getId(),
                 'name' => $trailer->getName(),
                 'comment' => $trailer->getComment(),
+                'purchased' => $trailer->getPurchased()->format('Y-m-d'),
+                'cost' => $trailer->getCost(),
                 'active' => $trailer->isActive()
             ];
 

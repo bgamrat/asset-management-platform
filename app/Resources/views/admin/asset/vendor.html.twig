@@ -39,7 +39,10 @@
                 <div id="vendor-view-tabs">
                     <div id="vendor-view-contacts-tab">
                         <fieldset class="contacts">
-                            {{form_row(vendor_form.person)}}
+                            {{form_row(vendor_form.contacts)}}
+                            {% if vendor_form.contacts.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
                         </fieldset>
                     </div>
                     <div id="vendor-view-brands-tab">

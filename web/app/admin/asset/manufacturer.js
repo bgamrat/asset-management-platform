@@ -64,6 +64,12 @@ define([
         "manufacturer-view-brands-tab"
                 );
         tabContainer.addChild(brandsContentPane);
+
+        var historyContentPane = new ContentPane({
+            title: core.history},
+        "manufacturer-view-history-tab"
+                );
+        tabContainer.addChild(historyContentPane);
         tabContainer.startup();
 
         var newBtn = new Button({

@@ -95,7 +95,7 @@ define([
         tabContainer.addChild(modelRelationshipsContentPane);
 
         var historyContentPane = new ContentPane({
-            title: asset.history},
+            title: core.history},
         "asset-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);
@@ -267,7 +267,7 @@ define([
         }, 'asset-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeModelTextFilter, filter, data, locationId, locationData;
+            var beforeModelTextFilter, filter, data, locationId, locationData, purchased;
             grid.clearSelection();
             if( assetForm.validate() ) {
                 locationId = parseInt(dom.byId("asset_location_id").value);
@@ -276,12 +276,13 @@ define([
                     "type": parseInt(getLocationType()),
                     "entity": parseInt(locationFilteringSelect.get("value"))
                 };
+                purchased = purchasedInput.get("value");
                 data = {
                     "id": assetId,
                     "model_text": modelFilteringSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
                     "status": parseInt(statusSelect.get("value")),
-                    "purchased": purchasedInput.get("value"),
+                    "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
                     "value": parseFloat(valueInput.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
