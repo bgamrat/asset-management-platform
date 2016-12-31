@@ -11,7 +11,7 @@ define([
     function run() {
 
         var store = new JsonRest({
-            target: "/api/store/adminmenus/",
+            target: "/api/menustore/adminmenus/",
             getChildren: function (object) {
                 return this.get(object.id).then(function (fullObject) {
                     return fullObject.children;

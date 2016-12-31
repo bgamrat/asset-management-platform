@@ -10,18 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
-use AppBundle\Form\Admin\Asset\DataTransformer\BrandsToIdsTransformer;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class BrandSelectType extends AbstractType
 {
-
-    private $em;
-
-    public function __construct( EntityManager $em )
-    {
-        $this->em = $em;
-    }
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -29,17 +21,16 @@ class BrandSelectType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'name', TextType::class, [
-                    'label' => 'common.brand'
-                ] )
-                ->add( 'comment', TextType::class, [
-                    'label' => false
-                ] )
-                ->add( 'active', CheckboxType::class, ['label' => 'common.active'] );
-        $builder->get( 'name' )
-                ->addModelTransformer( new BrandsToIdsTransformer( $this->em ) );
-
+                ->add( 'brand', EntityType::class, [
+                    'class' => 'AppBundle\Entity\Asset\Brand',
+                    'choice_label' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => false,
+                    'empty_data' => null,
+                    'label' => 'asset.brand',
+                    'choice_translation_domain' => false
+                ] );
         ;
     }
 

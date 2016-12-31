@@ -2,6 +2,15 @@
 
 {% form_theme form _self %}
 
+{% block _brands_entry_row %}{% spaceless %}
+    <div class="form-row brand">
+        <span class="brand">{{ form_widget(form) }}</span>
+        {% if form.parent.vars.allow_delete %}
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="brand-__brand__"><i class="fa fa-remove"></i></span>
+        {% endif %}
+    </div>
+{%endspaceless%}{%endblock%}
+
 {% block choice_widget_expanded %}
     {% spaceless %}
         <ul {{ block('widget_container_attributes') }}>
@@ -200,7 +209,9 @@
     {{ block('_phones_entry_row') }}
 {% endblock %}
 
-{% block _vendor_brands_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_active_entry_row('brand',form) }}{% endblock %}
+{% block _vendor_brands_entry_row %}
+    {{ block('_brands_entry_row') }}
+{% endblock %}
 
 {% block _vendor_contacts_entry_row %}
     <div class="form-row contacts">

@@ -56,7 +56,7 @@ class Vendor
     private $contacts = null;
     /**
      * @var ArrayCollection $brands
-     * @ORM\ManyToMany(targetEntity="Brand", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Brand")
      * @ORM\JoinTable(name="vendor_brand",
      *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", nullable=false)},
      *      inverseJoinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id", nullable=false)}
@@ -181,13 +181,11 @@ class Vendor
         if( !$this->brands->contains( $brand ) )
         {
             $this->brands->add( $brand );
-            $brand->addVendor( $this );
         }
     }
 
     public function removeBrand( Brand $brand )
     {
-        $brand->removeVendor( $this );
         $this->brands->removeElement( $brand );
     }
 

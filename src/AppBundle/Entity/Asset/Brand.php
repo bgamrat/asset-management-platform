@@ -186,7 +186,10 @@ class Brand
         if( !$this->vendors->contains( $vendor ) )
         {
             $this->vendors->add( $vendor );
-            $vendor->addBrand( $this );
+            if( !$vendor->getBrands()->contains( $this ) )
+            {
+                $vendor->addBrand( $this );
+            }
         }
     }
 
@@ -221,4 +224,5 @@ class Brand
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
     }
+
 }

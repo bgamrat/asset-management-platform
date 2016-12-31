@@ -33,4 +33,17 @@ class TrailerController extends Controller
                 ) );
     }
 
+    /**
+     * @Route("/admin/asset/trailer/{name}")
+     * @Method("GET")
+     */
+    public function viewAction( $name )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        return $this->render( 'admin/asset/trailer.html.twig', array(
+                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
+                ) );
+    }
+
 }

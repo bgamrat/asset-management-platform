@@ -1,0 +1,28 @@
+{% block title %}{{ 'asset.trailer'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="trailer-wrapper">
+        <h1>{{ 'asset.trailer'|trans }} {{'common.admin'|trans }}</h1>
+        <div class="justify">
+            <div id="trailer-tree"></div>
+            <div class="grid-controls">
+                <div>
+                    <form id="trailer-grid-filter-form">
+                        <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="trailer-filter-input">
+                    </form>
+                </div>
+            </div>
+            <div id="trailer-grid">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/trailer"], function (trailer) {
+            trailer.run();
+        });
+    </script>
+{% endblock %}

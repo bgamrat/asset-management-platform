@@ -83,8 +83,8 @@ services:
         tags:
             - { name: knp_menu.voter }
             
-    app.admin.store_controller:
-        class: AppBundle\Controller\Api\Admin\Common\StoreController
+    app.admin.menu_store_controller:
+        class: AppBundle\Controller\Api\Admin\Common\MenuStoreController
         arguments: ['%entity_menus%']
         calls:
             - [setContainer, ["@service_container"]]
@@ -170,10 +170,6 @@ services:
         
     app.util.log:
         class: AppBundle\Util\Log
-        arguments: ['@doctrine.orm.entity_manager']
-        
-    app.util.model:
-        class: AppBundle\Util\Model
         arguments: ['@doctrine.orm.entity_manager']
         
     app.util.user:

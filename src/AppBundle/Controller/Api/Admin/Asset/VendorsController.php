@@ -32,7 +32,7 @@ class VendorsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['v'] )
-                ->from( 'AppBundle:Vendor', 'v' )
+                ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
                 ->orderBy( 'v.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -90,7 +90,7 @@ class VendorsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $vendor = $this->getDoctrine()
-                        ->getRepository( 'AppBundle:Vendor' )->find( $id );
+                        ->getRepository( 'AppBundle\Entity\Asset\Vendor' )->find( $id );
         if( $vendor !== null )
         {
             $data = [
@@ -132,7 +132,7 @@ class VendorsController extends FOSRestController
         }
         else
         {
-            $vendor = $em->getRepository( 'AppBundle:Vendor' )->find( $id );
+            $vendor = $em->getRepository( 'AppBundle\Entity\Asset\Vendor' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdated() ) === false )
             {
@@ -177,7 +177,7 @@ class VendorsController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Vendor' );
+                ->getRepository( 'AppBundle\Entity\Asset\Vendor' );
         $vendor = $repository->find( $id );
         if( $vendor !== null )
         {
@@ -205,7 +205,7 @@ class VendorsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $vendor = $em->getRepository( 'AppBundle:Vendor' )->find( $id );
+        $vendor = $em->getRepository( 'AppBundle\Entity\Asset\Vendor' )->find( $id );
         if( $vendor !== null )
         {
             $em->remove( $vendor );

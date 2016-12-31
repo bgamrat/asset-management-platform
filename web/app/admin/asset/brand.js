@@ -143,7 +143,7 @@ define([
         }, 'model-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeNameFilter, objParm, filter;
+            var objParm, filter;
             grid.clearSelection();
             if( modelForm.validate() ) {
                 var data = {
