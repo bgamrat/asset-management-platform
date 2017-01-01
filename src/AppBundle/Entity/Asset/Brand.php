@@ -47,6 +47,10 @@ class Brand
      */
     private $active = true;
     /**
+     * @ORM\ManyToOne(targetEntity="Manufacturer")
+     */
+    private $manufacturer;
+    /**
      * @var ArrayCollection $models
      * @ORM\OneToMany(targetEntity="Model", mappedBy="brand", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="brand_model",
@@ -152,6 +156,30 @@ class Brand
     public function getComment()
     {
         return $this->comment;
+    }
+
+    /**
+     * Set manufacturer
+     *
+     * @param Manufacturer $manufacturer
+     *
+     * @return Brand
+     */
+    public function setManufacturer( $manufacturer )
+    {
+        $this->manufacturer = $manufacturer;
+
+        return $this;
+    }
+
+    /**
+     * Get manufacturer
+     *
+     * @return Manufacturer
+     */
+    public function getManufacturer()
+    {
+        return $this->manufacturer;
     }
 
     public function getModels()

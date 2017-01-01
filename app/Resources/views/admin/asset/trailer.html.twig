@@ -3,7 +3,57 @@
 
 {% block admin_content %}
     <div id="trailer-wrapper">
-        <h1>{{ 'asset.trailer'|trans }} {{'common.admin'|trans }}</h1>
+        {{dump(trailer.model.brand.getManufacturer)}}
+        <h1>{{ trailer.name }} {{'common.admin'|trans }}</h1>
+        <div class="trailer-details">
+            <div class="justify">
+                <span class="model">{{ trailer.model.brand.manufacturer.name }} {{ trailer.model.brand.name }} {{ trailer.model.name }} </span>
+                <span class="serial-number">{{trailer.getSerialNumber }}</span>
+                <span class="asset-status">{{ trailer.status.name }}</span>
+                <span class="location">{{ trailer.getLocationText }}</span>
+            </div>
+            <div class="comment">
+                {{trailer.comment}}
+            </div>
+            {#
+            <div class="trailer-relationships">
+                <dl>
+                    <dt>{{ 'asset.requires'|trans }}</dt>
+                    <dd>
+                        <ul>
+                            {{ for req in trailer.getRequires }}
+                            <li>{ { req.name } }</li>
+                            {{ endfor }}
+                        </ul>
+                    </dd>
+                    <dt>{{ 'asset.required_by'|trans }}</dt>
+                    <dd>
+                        <ul>
+                            {{ for req in trailer.required_by }}
+                            <li>{ { req.name } }</li>
+                            {{ endfor }}
+                        </ul>
+                    </dd>
+                    <dt>{{ 'asset.extends'|trans }}</dt>
+                    <dd>
+                        <ul>
+                            {{ for ext in trailer.extends }}
+                            <li>{ { ext.name } }</li>
+                            {{ endfor }}
+                        </ul>
+                    </dd>
+                    <dt>{{ 'asset.extendd_by'|trans }}</dt>
+                    <dd>
+                        <ul>
+                            {{ for ext in trailer.extendd_by }}
+                            <li>{ { ext.name } }</li>
+                            {{ endfor }}
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+            #}
+        </div>
         <div class="justify">
             <div id="trailer-tree"></div>
             <div class="grid-controls">

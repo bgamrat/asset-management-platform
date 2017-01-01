@@ -6,9 +6,13 @@ define([
     "dojo/store/Observable",
     "dijit/Tree",
     "dijit/tree/ObjectStoreModel",
+    "app/lib/common",
+    "dojo/i18n!app/nls/core",
+    "dojo/NodeList-dom",
+    "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (request, arrayUtil, aspect, Memory, Observable, Tree, ObjectStoreModel
-        ) {
+], function (request, arrayUtil, aspect, Memory, Observable, Tree, ObjectStoreModel,
+        lib, core) {
 
     function run() {
 
@@ -54,6 +58,7 @@ define([
             // This shouldn't occur, but it's defined just in case
             alert("An error occurred: " + err);
         });
+        lib.pageReady();
     }
     return {
         run: run

@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
+use AppBundle\Entity\Asset\Brand;
 
 /**
  * Manufacturer
@@ -59,8 +60,8 @@ class Manufacturer
      * @var ArrayCollection $brands
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Asset\Brand", cascade={"persist"})
      * @ORM\JoinTable(name="manufacturer_brand",
-     *      joinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", unique=true, nullable=false)}
+     *      joinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", onDelete="CASCADE", unique=true, nullable=false)}
      *      )
      */
     protected $brands = null;
@@ -188,6 +189,7 @@ class Manufacturer
         if( !$this->brands->contains( $brand ) )
         {
             $this->brands->add( $brand );
+            $brand->setManufacturer($this);
         }
         return $this;
     }

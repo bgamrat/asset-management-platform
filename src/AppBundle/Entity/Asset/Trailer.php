@@ -48,7 +48,7 @@ class Trailer
      * @Gedmo\Versioned
      * @ORM\Column(name="serial_number", type="string", length=64, nullable=true, unique=false)
      */
-    private $serial_number;
+    protected $serial_number;
     /**
      * @var int
      * @Gedmo\Versioned

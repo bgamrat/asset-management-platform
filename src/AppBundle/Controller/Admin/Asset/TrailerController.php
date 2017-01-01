@@ -25,10 +25,10 @@ class TrailerController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $assetForm = $this->createForm( TrailerType::class, null, [] );
+        $trailerForm = $this->createForm( TrailerType::class, null, [] );
 
         return $this->render( 'admin/asset/trailers.html.twig', array(
-                    'trailer_form' => $assetForm->createView(),
+                    'trailer_form' => $trailerForm->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
@@ -40,8 +40,10 @@ class TrailerController extends Controller
     public function viewAction( $name )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-
+        $em = $this->getDoctrine()->getManager();
+        $trailer = $em->getRepository( 'AppBundle\Entity\Asset\Trailer' )->findOneByName( $name );
         return $this->render( 'admin/asset/trailer.html.twig', array(
+                    'trailer' => $trailer,
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
