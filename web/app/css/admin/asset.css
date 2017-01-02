@@ -47,7 +47,7 @@
     justify-content: space-around;
     -webkit-justify-content: space-around;
 }
-#category-tree {
+#category-tree, #trailer-tree {
     padding-top: 75px;
 }
 .categories .header {

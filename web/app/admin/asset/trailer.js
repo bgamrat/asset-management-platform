@@ -14,35 +14,35 @@ define([
 ], function (request, arrayUtil, aspect, Memory, Observable, Tree, ObjectStoreModel,
         lib, core) {
 
-    function run() {
+    function run(trailerId) {
 
-        var categoryStore = new Memory({
+        var trailerContentsStore = new Memory({
             data: [],
             idProperty: 'id',
             getChildren: function (object) {
                 return this.query({parent: object.id});
             }
         });
-        aspect.around(categoryStore, "put", function (originalPut) {
+        aspect.around(trailerContentsStore, "put", function (originalPut) {
             return function (obj, options) {
                 if( options && options.parent ) {
                     obj.parent_id = obj.parent = options.parent.id;
                 }
-                return originalPut.call(categoryStore, obj, options);
+                return originalPut.call(trailerContentsStore, obj, options);
             }
         });
-        var deferred = request.get("/api/categories", {
+        var deferred = request.get("/api/store/trailercontents/"+trailerId, {
             handleAs: "json"
         });
 
         deferred.then(function (res) {
             var observableStore, model;
 
-            arrayUtil.forEach(res, function (category) {
-                categoryStore.put(category);
+            arrayUtil.forEach(res, function (item) {
+                trailerContentsStore.put(item);
             });
             
-            observableStore = new Observable(categoryStore);
+            observableStore = new Observable(trailerContentsStore);
             model = new ObjectStoreModel({
                 store: observableStore,
                 query: {name: 'top'}
@@ -52,7 +52,7 @@ define([
                 model: model,
                 showRoot: false,
                 persist: true,
-            })).placeAt("category-tree").startup();
+            })).placeAt("trailer-tree").startup();
 
         }, function (err) {
             // This shouldn't occur, but it's defined just in case

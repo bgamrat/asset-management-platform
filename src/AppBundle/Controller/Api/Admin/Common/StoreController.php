@@ -16,6 +16,7 @@ use FOS\RestBundle\Controller\Annotations\Get;
 
 class StoreController extends FOSRestController
 {
+
     /**
      * @View()
      */
@@ -51,7 +52,7 @@ class StoreController extends FOSRestController
                     ->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
                     ->innerJoin( 'm.brands', 'b' )
                     ->where( "LOWER(CONCAT(CONCAT(m.name, ' '), b.name)) LIKE :manufacturer_brand" )
-                    ->setParameter( 'manufacturer_brand', strtolower($manufacturerBrand) );
+                    ->setParameter( 'manufacturer_brand', strtolower( $manufacturerBrand ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -82,7 +83,7 @@ class StoreController extends FOSRestController
             $queryBuilder
                     ->where( $queryBuilder->expr()->like( 'LOWER(b.barcode)', ':barcode' ) )
                     ->andWhere( 'm.container = true' )
-                    ->setParameter( 'barcode', strtolower($barcode) );
+                    ->setParameter( 'barcode', strtolower( $barcode ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -109,7 +110,7 @@ class StoreController extends FOSRestController
             $queryBuilder = $em->createQueryBuilder()->select( ['c.id', "c.fullName AS name"] )
                     ->from( 'AppBundle\Entity\Asset\Category', 'c' )
                     ->where( "LOWER(c.name) LIKE :category_name" )
-                    ->setParameter( 'category_name', strtolower($name) );
+                    ->setParameter( 'category_name', strtolower( $name ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -154,7 +155,7 @@ class StoreController extends FOSRestController
             $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "m.name"] )
                     ->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
                     ->where( "LOWER(m.name) LIKE :manufacturer_name" )
-                    ->setParameter( 'manufacturer_name', strtolower($name) );
+                    ->setParameter( 'manufacturer_name', strtolower( $name ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -183,8 +184,8 @@ class StoreController extends FOSRestController
                     ->from( 'AppBundle\Entity\Asset\Model', 'm' )
                     ->innerJoin( 'm.brand', 'b' )
                     ->where( "LOWER(CONCAT(CONCAT(b.name, ' '), m.name)) LIKE :brand_model" )
-                    ->orderBy('name')
-                    ->setParameter( 'brand_model', strtolower($brandModel) );
+                    ->orderBy( 'name' )
+                    ->setParameter( 'brand_model', strtolower( $brandModel ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -228,8 +229,7 @@ class StoreController extends FOSRestController
 
         return $data;
     }
-    
-    
+
     /**
      * @View()
      */
@@ -247,7 +247,7 @@ class StoreController extends FOSRestController
                     ->from( 'AppBundle\Entity\Asset\Trailer', 't' );
             $queryBuilder
                     ->where( $queryBuilder->expr()->like( 'LOWER(t.name)', ':name' ) )
-                    ->setParameter( 'name', strtolower($name) );
+                    ->setParameter( 'name', strtolower( $name ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -255,6 +255,82 @@ class StoreController extends FOSRestController
         {
             $data = null;
         }
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
+    public function getTrailercontentsAction( $id, Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        switch( $dstore['sort-field'] )
+        {
+            case 'barcode':
+                $sortField = 'bc.barcode';
+                break;
+            case 'model':
+            case 'model_text':
+                $sortField = 'm.name';
+                break;
+            case 'category':
+                $sortField = 'c.name';
+                break;
+            default:
+                $sortField = 'a.' . $dstore['sort-field'];
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $columns = ['a.id', 'bc.barcode',
+            "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serial_number',
+            's.name AS status_text',
+            'a.comment', 'a.active'];
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $columns[] = 'a.deletedAt AS deleted_at';
+        }
+        $queryBuilder = $em->createQueryBuilder()->select( $columns )
+                ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
+                ->innerJoin( 'a.model', 'm' )
+                ->innerJoin( 'm.category', 'c' )
+                ->innerJoin( 'm.brand', 'b' )
+                ->leftJoin( 'a.location', 'l' )
+                ->leftJoin( 'l.type', 'lt' )
+                ->leftJoin( 'a.barcodes', 'bc', 'WITH', 'bc.active = true' )
+                ->leftJoin( 'a.status', 's' )
+                ->where("l.entity = ?1 AND lt.entity = 'trailer'")
+                ->orderBy( $sortField, $dstore['sort-direction'] );
+        $queryBuilder->setParameter( 1, $id );
+        if( $dstore['limit'] !== null )
+        {
+            $queryBuilder->setMaxResults( $dstore['limit'] );
+        }
+        if( $dstore['offset'] !== null )
+        {
+            $queryBuilder->setFirstResult( $dstore['offset'] );
+        }
+        if( $dstore['filter'] !== null )
+        {
+            switch( $dstore['filter'][DStore::OP] )
+            {
+                case DStore::LIKE:
+                    $queryBuilder->where(
+                            $queryBuilder->expr()->orX(
+                                    $queryBuilder->expr()->orX(
+                                            $queryBuilder->expr()->like( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?1' ), $queryBuilder->expr()->like( 'LOWER(a.serial_number)', '?1' ) ), $queryBuilder->expr()->like( 'LOWER(a.location_text)', '?1' )
+                            )
+                    );
+                    break;
+                case DStore::GT:
+                    $queryBuilder->where(
+                            $queryBuilder->expr()->gt( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?2' )
+                    );
+            }
+            $queryBuilder->setParameter( 2, strtolower( $dstore['filter'][DStore::VALUE] ) );
+        }
+        $data = $queryBuilder->getQuery()->getResult();
         return $data;
     }
 
@@ -275,7 +351,7 @@ class StoreController extends FOSRestController
             $queryBuilder = $em->createQueryBuilder()->select( ['v.id', "v.name"] )
                     ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
                     ->where( "LOWER(v.name) LIKE :vendor_name" )
-                    ->setParameter( 'vendor_name', strtolower($name) );
+                    ->setParameter( 'vendor_name', strtolower( $name ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }

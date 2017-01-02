@@ -53,7 +53,7 @@ class AssetType extends AbstractType
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'purchased', DateType::class, [
-                    'label' => 'common.purchased', 
+                    'label' => 'common.purchased',
                     'widget' => 'single_text',
                     'format' => 'yyyy-MM-dd',
                     'required' => false

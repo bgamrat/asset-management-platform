@@ -23,8 +23,9 @@ class LocationTypeType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
-                ->add( 'entity', ChoiceType::class , ['choices' => ["Asset" => 'asset', "Manufacturer" => 'manufacturer', "Shop" => 'shop', "Vendor" => 'vendor',
-                    "Venue" => 'venue']])
+                ->add( 'entity', ChoiceType::class, ['choices' =>
+                    ["Asset" => 'asset', "Manufacturer" => 'manufacturer', "Shop" => 'shop', "Trailer" => 'trailer', "Vendor" => 'vendor',
+                        "Venue" => 'venue']] )
                 ->add( 'url', TextType::class )
                 ->add( 'active', CheckboxType::class )
         ;

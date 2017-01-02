@@ -3,56 +3,67 @@
 
 {% block admin_content %}
     <div id="trailer-wrapper">
-        {{dump(trailer.model.brand.getManufacturer)}}
         <h1>{{ trailer.name }} {{'common.admin'|trans }}</h1>
         <div class="trailer-details">
             <div class="justify">
                 <span class="model">{{ trailer.model.brand.manufacturer.name }} {{ trailer.model.brand.name }} {{ trailer.model.name }} </span>
-                <span class="serial-number">{{trailer.getSerialNumber }}</span>
-                <span class="asset-status">{{ trailer.status.name }}</span>
-                <span class="location">{{ trailer.getLocationText }}</span>
+                <span class="serial-number"><strong>{{'asset.serial_number'|trans}}</strong> {{trailer.getSerialNumber }}</span>
+                <span class="asset-status"><strong>{{'asset.status'|trans}}</strong> {{ trailer.status.name }}</span>
+                <span class="location"><strong>{{'asset.location'|trans}}</strong> {{ trailer.getLocationText }}</span>
             </div>
-            <div class="comment">
-                {{trailer.comment}}
-            </div>
-            {#
+
+            {% if trailer.comment != null %}
+                <div class="comment">
+                    {{ trailer.comment }}
+                </div>
+            {% endif %}
+
             <div class="trailer-relationships">
                 <dl>
-                    <dt>{{ 'asset.requires'|trans }}</dt>
-                    <dd>
-                        <ul>
-                            {{ for req in trailer.getRequires }}
-                            <li>{ { req.name } }</li>
-                            {{ endfor }}
-                        </ul>
-                    </dd>
-                    <dt>{{ 'asset.required_by'|trans }}</dt>
-                    <dd>
-                        <ul>
-                            {{ for req in trailer.required_by }}
-                            <li>{ { req.name } }</li>
-                            {{ endfor }}
-                        </ul>
-                    </dd>
-                    <dt>{{ 'asset.extends'|trans }}</dt>
-                    <dd>
-                        <ul>
-                            {{ for ext in trailer.extends }}
-                            <li>{ { ext.name } }</li>
-                            {{ endfor }}
-                        </ul>
-                    </dd>
-                    <dt>{{ 'asset.extendd_by'|trans }}</dt>
-                    <dd>
-                        <ul>
-                            {{ for ext in trailer.extendd_by }}
-                            <li>{ { ext.name } }</li>
-                            {{ endfor }}
-                        </ul>
-                    </dd>
+
+                    {% if trailer.requires|length > 0 %}
+                        {{dump(trailer.requires|length)}}
+                        <dt>{{ 'asset.requires'|trans }}</dt>
+                        <dd>
+                            <ul>
+                                {% for req in trailer.requires %}
+                                    <li>{{ req.name }}</li>
+                                    {% endfor %}
+                            </ul>
+                        </dd>
+                    {% endif %}
+                    {% if trailer.requiredby|length > 0 %}
+                        <dt>{{ 'asset.required_by'|trans }}</dt>
+                        <dd>
+                            <ul>
+                                {% for req in trailer.requiredby %}
+                                    <li>{{ req.name }}</li>
+                                    {% endfor %}
+                            </ul>
+                        </dd>
+                    {% endif %}
+                    {% if trailer.extends|length > 0 %}
+                        <dt>{{ 'asset.extends'|trans }}</dt>
+                        <dd>
+                            <ul>
+                                {% for ext in trailer.extends %}
+                                    <li>{{ ext.name }}</li>
+                                    {% endfor %}
+                            </ul>
+                        </dd>
+                    {% endif %}
+                    {% if trailer.extendedby|length > 0 %}
+                        <dt>{{ 'asset.extended_by'|trans }}</dt>
+                        <dd>
+                            <ul>
+                                {% for ext in trailer.extendedby %}
+                                    <li>{{ ext.name }}</li>
+                                    {% endfor %}
+                            </ul>
+                        </dd>
+                    {% endif %}
                 </dl>
             </div>
-            #}
         </div>
         <div class="justify">
             <div id="trailer-tree"></div>
@@ -72,7 +83,7 @@
 {% block javascripts %}
     <script>
         require(["app/admin/asset/trailer"], function (trailer) {
-            trailer.run();
+            trailer.run({{trailer.id}});
         });
     </script>
 {% endblock %}

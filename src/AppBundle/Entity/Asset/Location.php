@@ -29,12 +29,11 @@ class Location
      */
     private $id;
     /**
-     * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="LocationType")
      * @ORM\JoinColumn(name="type", referencedColumnName="id")
      * @ORM\OrderBy({"type" = "ASC"})
      */
-    private $type;
+    protected $type;
     /**
      * @ORM\Column(type="integer", name="entity_id", nullable=true)
      */

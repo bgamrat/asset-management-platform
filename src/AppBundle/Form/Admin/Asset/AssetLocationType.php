@@ -54,6 +54,9 @@ class AssetLocationType extends AbstractType
                 ->add( 'type', HiddenType::class )
                 ->add( 'entity', IntegerType::class )
         ;
+        $builder->get( 'type' )
+            ->addModelTransformer( new LocationTypeToIdTransformer( $this->em ) );
+
     }
 
     /**

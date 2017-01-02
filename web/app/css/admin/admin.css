@@ -11,6 +11,9 @@
     display: inline-block;
     vertical-align: top;
 }
+.admin-body-wrapper h1 {
+    border-bottom: 1px solid #000;
+}
 .deleted {
     text-decoration: line-through;
 }

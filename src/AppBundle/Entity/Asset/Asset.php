@@ -239,7 +239,11 @@ class Asset
      */
     public function getPurchased()
     {
-        return $this->purchased;
+        if ($this->purchased === null) {
+            return $this->created;
+        } else {
+            return $this->purchased;
+        }
     }
 
     /**

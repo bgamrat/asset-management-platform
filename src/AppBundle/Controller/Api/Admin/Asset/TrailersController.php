@@ -75,9 +75,7 @@ class TrailersController extends FOSRestController
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
                                     $queryBuilder->expr()->orX(
-                                            $queryBuilder->expr()->like( 'LOWER(t.name)', '?1' ), 
-                                            $queryBuilder->expr()->like( 'LOWER(t.serial_number)', '?1' ) ), 
-                                    $queryBuilder->expr()->like( 'LOWER(t.location_text)', '?1' )
+                                            $queryBuilder->expr()->like( 'LOWER(t.name)', '?1' ), $queryBuilder->expr()->like( 'LOWER(t.serial_number)', '?1' ) ), $queryBuilder->expr()->like( 'LOWER(t.location_text)', '?1' )
                             )
                     );
                     break;
@@ -86,7 +84,7 @@ class TrailersController extends FOSRestController
                             $queryBuilder->expr()->gt( 'LOWER(m.name)', '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
+            $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
         return array_values( $data );
@@ -142,7 +140,7 @@ class TrailersController extends FOSRestController
                 'status' => $status->getId(),
                 'name' => $trailer->getName(),
                 'comment' => $trailer->getComment(),
-                'purchased' => $trailer->getPurchased()->format('Y-m-d'),
+                'purchased' => $trailer->getPurchased()->format( 'Y-m-d' ),
                 'cost' => $trailer->getCost(),
                 'active' => $trailer->isActive()
             ];
@@ -275,5 +273,4 @@ class TrailersController extends FOSRestController
             throw $this->createNotFoundException( 'Not found!' );
         }
     }
-
 }

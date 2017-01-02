@@ -43,6 +43,8 @@ asset:
         Required By
     requires:
         Requires
+    serial_number:
+        Serial Number
     status:
         Status
     statuses:
@@ -129,6 +131,8 @@ common:
         Name
     new:
         New
+    none:
+        None
     password:
         Password
     people:
