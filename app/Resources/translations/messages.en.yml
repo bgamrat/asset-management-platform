@@ -97,6 +97,8 @@ common:
         Cost
     country:
         Country
+    default:
+        Default
     email:
         Email
     enabled:

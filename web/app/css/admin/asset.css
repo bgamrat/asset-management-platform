@@ -85,3 +85,6 @@
 #expenses > div {
     margin: 15px 0;
 }
+.not-operational {
+    background-color: lightpink;
+}

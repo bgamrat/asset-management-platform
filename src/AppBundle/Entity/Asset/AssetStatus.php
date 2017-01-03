@@ -53,6 +53,13 @@ class AssetStatus
      * 
      */
     private $active = true;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="default", type="boolean", nullable=true)
+     * 
+     */
+    private $default = false;
 
     /**
      * Set id
@@ -132,6 +139,16 @@ class AssetStatus
         return $this->active;
     }
 
+    public function setDefault( $default )
+    {
+        $this->default = $default;
+    }
+
+    public function isDefault()
+    {
+        return $this->default;
+    }
+    
     public function toArray()
     {
         return [

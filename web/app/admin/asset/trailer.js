@@ -1,63 +1,97 @@
 define([
+    "dojo/_base/declare",
     "dojo/request",
     "dojo/_base/array",
     "dojo/aspect",
-    "dojo/store/Memory",
-    "dojo/store/Observable",
-    "dijit/Tree",
-    "dijit/tree/ObjectStoreModel",
+    "dojo/dom",
+    "dojo/on",
+    "dijit/form/Form",
+    "dijit/form/TextBox",
+    "dijit/form/Select",
+    'dojo/store/JsonRest',
+    'dstore/Rest',
+    'dstore/SimpleQuery',
+    'dgrid/OnDemandGrid',
+    'dgrid/Editor',
+    'put-selector/put',
     "app/lib/common",
     "dojo/i18n!app/nls/core",
+    "dojo/i18n!app/nls/asset",
     "dojo/NodeList-dom",
     "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (request, arrayUtil, aspect, Memory, Observable, Tree, ObjectStoreModel,
-        lib, core) {
+], function (declare, request, arrayUtil, aspect, dom, on,
+        Form, TextBox, Select,
+        JsonRest, Rest, SimpleQuery, OnDemandGrid, Editor, put,
+        lib, core, asset) {
 
     function run(trailerId) {
 
-        var trailerContentsStore = new Memory({
-            data: [],
-            idProperty: 'id',
-            getChildren: function (object) {
-                return this.query({parent: object.id});
-            }
+        var filterInput = new TextBox({placeHolder: core.filter}, "trailer-filter-input");
+        filterInput.startup();
+        on(dom.byId('trailer-grid-filter-form'), 'submit', function (event) {
+            event.preventDefault();
+            grid.set('collection', store.filter({
+                // Pass a RegExp to Memory's filter method
+                // Note: this code does not go out of its way to escape
+                // characters that have special meaning in RegExps
+                match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
+            }));
         });
-        aspect.around(trailerContentsStore, "put", function (originalPut) {
-            return function (obj, options) {
-                if( options && options.parent ) {
-                    obj.parent_id = obj.parent = options.parent.id;
+        var RestStore = declare([Rest, SimpleQuery]);
+        var store = new RestStore({target: "/api/store/trailercontents/" + trailerId, useRangeHeaders: true, idProperty: 'id'});
+        var grid = new OnDemandGrid({
+            collection: store,
+            className: "dgrid-autoheight",
+            sort: "category",
+            columns: {
+                id: {
+                    label: core.id
+                },
+                category_text: {
+                    label: asset.category
+                },
+                barcode: {
+                    label: asset.barcode
+                },
+                model_text: {
+                    label: asset.model,
+                },
+                serial_number: {
+                    label: asset.serial_number,
+                },
+                status_text: {                 
+                    label: core.status,
+                    editor: Select,
+                    editOn: "click",
+                    editorArgs: {
+                        style: "width:75px;",
+                        options: [
+                            {value: "true", label: "Operational"},
+                            {value: "false", label: "Not Operational"}
+                        ]
+                    }
+                },
+                location_text: {
+                    label: asset.location
+                },
+                comment: {
+                    label: core.comment
                 }
-                return originalPut.call(trailerContentsStore, obj, options);
-            }
-        });
-        var deferred = request.get("/api/store/trailercontents/"+trailerId, {
-            handleAs: "json"
-        });
-
-        deferred.then(function (res) {
-            var observableStore, model;
-
-            arrayUtil.forEach(res, function (item) {
-                trailerContentsStore.put(item);
-            });
-            
-            observableStore = new Observable(trailerContentsStore);
-            model = new ObjectStoreModel({
-                store: observableStore,
-                query: {name: 'top'}
-            });
-
-            (new Tree({
-                model: model,
-                showRoot: false,
-                persist: true,
-            })).placeAt("trailer-tree").startup();
-
-        }, function (err) {
-            // This shouldn't occur, but it's defined just in case
-            alert("An error occurred: " + err);
-        });
+            },
+            renderRow: function (object) {
+                var rowElement = this.inherited(arguments);
+                if( typeof object.deleted_at !== "undefined" && object.deleted_at !== null ) {
+                    rowElement.className += ' deleted';
+                }
+                if( typeof object.status_text !== "undefined" && object.status_text !== 'Operational' ) {
+                    rowElement.className += ' not-operational';
+                }
+                return rowElement;
+            },
+            selectionMode: "none"
+        }, 'trailer-grid');
+        grid.startup();
         lib.pageReady();
     }
     return {

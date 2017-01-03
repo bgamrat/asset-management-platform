@@ -5,6 +5,7 @@ namespace AppBundle\Form\Admin\Asset;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -24,6 +25,7 @@ class AssetStatusType extends AbstractType
                 ->add( 'name', TextType::class )
                 ->add( 'comment', TextType::class )
                 ->add( 'active', CheckboxType::class )
+                ->add( 'default', RadioType::class )
         ;
     }
 

@@ -265,6 +265,21 @@ class StoreController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
+        $em = $this->getDoctrine()->getManager();
+        $queryBuilder = $em->createQueryBuilder()->select( 'a.id' )
+                ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
+                ->innerJoin( 'a.model', 'm' )
+                ->leftJoin( 'a.location', 'l' )
+                ->leftJoin( 'l.type', 'lt' )
+                ->where( "l.entity = ?1 AND lt.entity = 'trailer' AND m.container = true" );
+        $queryBuilder->setParameter( 1, $id );
+        $data = $queryBuilder->getQuery()->getResult();
+        $containers = [];
+        foreach( $data as $c )
+        {
+            $containers[] = $c['id'];
+        }
+
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
@@ -281,16 +296,16 @@ class StoreController extends FOSRestController
             default:
                 $sortField = 'a.' . $dstore['sort-field'];
         }
-        $em = $this->getDoctrine()->getManager();
 
         $columns = ['a.id', 'bc.barcode',
-            "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serial_number',
-            's.name AS status_text',
+            "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serial_number', 'a.location_text',
+            's.name AS status_text', 'c.name AS category_text',
             'a.comment', 'a.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'a.deletedAt AS deleted_at';
         }
+
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
@@ -300,9 +315,11 @@ class StoreController extends FOSRestController
                 ->leftJoin( 'l.type', 'lt' )
                 ->leftJoin( 'a.barcodes', 'bc', 'WITH', 'bc.active = true' )
                 ->leftJoin( 'a.status', 's' )
-                ->where("l.entity = ?1 AND lt.entity = 'trailer'")
+                ->where( "l.entity = ?1 AND lt.entity = 'trailer'" )
+                ->orWhere( "l.entity IN (?2) AND lt.entity='asset'" )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         $queryBuilder->setParameter( 1, $id );
+        $queryBuilder->setParameter( 2, $containers );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -316,19 +333,16 @@ class StoreController extends FOSRestController
             switch( $dstore['filter'][DStore::OP] )
             {
                 case DStore::LIKE:
-                    $queryBuilder->where(
-                            $queryBuilder->expr()->orX(
-                                    $queryBuilder->expr()->orX(
-                                            $queryBuilder->expr()->like( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?1' ), $queryBuilder->expr()->like( 'LOWER(a.serial_number)', '?1' ) ), $queryBuilder->expr()->like( 'LOWER(a.location_text)', '?1' )
-                            )
-                    );
+                    $queryBuilder->andWhere(
+                            "LOWER(CONCAT(CONCAT(b.name,' '),m.name)) LIKE ?3 OR 
+                            LOWER(c.name) LIKE ?3 OR LOWER(a.serial_number) LIKE ?3" );
                     break;
                 case DStore::GT:
-                    $queryBuilder->where(
-                            $queryBuilder->expr()->gt( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?2' )
+                    $queryBuilder->andWhere(
+                            $queryBuilder->expr()->gt( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?3' )
                     );
             }
-            $queryBuilder->setParameter( 2, strtolower( $dstore['filter'][DStore::VALUE] ) );
+            $queryBuilder->setParameter( 3, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
         return $data;
