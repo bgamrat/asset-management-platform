@@ -56,7 +56,7 @@ class AssetStatus
     /**
      * @var boolean
      *
-     * @ORM\Column(name="default", type="boolean", nullable=true)
+     * @ORM\Column(name="default_value", type="boolean", nullable=true)
      * 
      */
     private $default = false;
@@ -147,16 +147,6 @@ class AssetStatus
     public function isDefault()
     {
         return $this->default;
-    }
-    
-    public function toArray()
-    {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'comment' => $this->getComment(),
-            'active' => $this->isActive()
-        ];
     }
 
 }

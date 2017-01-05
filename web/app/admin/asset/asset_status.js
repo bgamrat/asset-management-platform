@@ -2,9 +2,11 @@ define([
     "dojo/dom",
     "dojo/dom-attr",
     "dojo/dom-construct",
+    "dojo/on",
     "dojo/query",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
+    "dijit/form/RadioButton",
     "dijit/form/Button",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
@@ -12,14 +14,13 @@ define([
     "dojo/NodeList-traverse",
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct,
-        query,
-        ValidationTextBox, CheckBox, Button,
+        on, query,
+        ValidationTextBox, CheckBox, RadioButton, Button,
         lib, core) {
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var idInput = [], nameInput = [], commentInput = [], activeCheckBox = [];
-    var divIdInUse = null;
+    var nameInput = [], commentInput = [], activeCheckBox = [], defaultRadioButton = [];
     var addOneMoreControl = null;
     var divId = "asset_statuses_statuses";
 
@@ -31,7 +32,7 @@ define([
     function createDijits(newRow) {
         var dijit, index = nameInput.length;
         var base = divId + '_' + index + '_';
-
+        var checked = false;
         dijit = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
@@ -54,7 +55,15 @@ define([
         dijit = new CheckBox({'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
             name: "asset_statuses[statuses][" + index + "][active]"}, base + "active");
         activeCheckBox.push(dijit);
+        if( dom.byId(base + "default").checked === true ) {
+            checked = true;
+        }
         dijit.startup();
+        dijit = new RadioButton({
+        }, base + "default");
+        dijit.set("checked", checked);
+        dijit.startup();
+        defaultRadioButton.push(dijit);
     }
 
     function run() {
@@ -73,6 +82,17 @@ define([
         for( i = 0; i < existingStatusRows; i++ ) {
             createDijits(false);
         }
+
+        on(dom.byId("asset_statuses_statuses"), "click", function (event) {
+            var target = event.target;
+            var id = target.id;
+            if( target.checked && id.indexOf("default") !== -1 ) {
+                id = id.replace(/^.*(\d+).*$/, '$1');
+                target.name = 'asset_statuses[statuses][' + id + '][default]';
+            } else {
+                target.removeAttribute("name");
+            }
+        });
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__status__/g, nameInput.length);

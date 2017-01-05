@@ -28,7 +28,7 @@ class LocationTypeType extends AbstractType
                         "Venue" => 'venue']] )
                 ->add( 'url', TextType::class )
                 ->add( 'active', CheckboxType::class )
-        ;
+                ->add( 'default', CheckBoxType::class )   ;
     }
 
     /**

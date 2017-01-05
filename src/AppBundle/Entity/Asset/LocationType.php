@@ -60,6 +60,13 @@ class LocationType
      * 
      */
     private $active = true;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="default_value", type="boolean", nullable=true)
+     * 
+     */
+    private $default = false;
 
     /**
      * Set id
@@ -163,15 +170,14 @@ class LocationType
         return $this->active;
     }
 
-    public function toArray()
+    public function setDefault( $default )
     {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'url' => $this->getUrl(),
-            'entity' => $this->getEntity(),
-            'active' => $this->isActive()
-        ];
+        $this->default = $default;
+    }
+
+    public function isDefault()
+    {
+        return $this->default;
     }
 
 }

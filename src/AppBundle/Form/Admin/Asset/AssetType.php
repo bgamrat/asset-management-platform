@@ -33,6 +33,7 @@ class AssetType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
+        $defaultStatus = $this->em->getRepository('AppBundle\Entity\Asset\AssetStatus')->findOneBy(['default' => true]);
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'serial_number', TextType::class, ['label' => false] )
@@ -50,6 +51,7 @@ class AssetType extends AbstractType
                     {
                         return $status->isActive();
                     },
+                    'data' => $this->em->getReference('AppBundle\Entity\Asset\AssetStatus', $defaultStatus->getId()),
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'purchased', DateType::class, [

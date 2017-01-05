@@ -107,8 +107,9 @@ define([
         newBtn.startup();
         newBtn.on("click", function (event) {
             modelFilteringSelect.set("value", "");
-            statusSelect.set("value", "");
-            locationFilteringSelect.set("value", "");
+            statusSelect.reset();
+            locationFilteringSelect.reset();
+           // locationTypeRadioButton.reset();
             barcodes.setData(null);
             serialNumberInput.set("value", "");
             commentInput.set("value", "");
@@ -162,19 +163,6 @@ define([
             return;
         }
 
-        var locationTypeRadioButton = [];
-        var locationTypeLabels = {};
-        query('[name="asset[location][ctype]"]').forEach(function (node) {
-            var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
-            dijit.set("data-url", domAttr.get(node, "data-url"));
-            dijit.set("data-location-type-id", node.value);
-            dijit.startup();
-            locationTypeRadioButton.push(dijit);
-        });
-        query('label[for^="asset_location_ctype_"]').forEach(function (node) {
-            locationTypeLabels[domAttr.get(node, "for").replace(/\D/g, '')] = node.textContent;
-        });
-
         on(dom.byId('asset_location_ctype'), "click", function (event) {
             var target = event.target, targetId;
             if( target.tagName === 'LABEL' ) {
@@ -194,7 +182,6 @@ define([
             }
         });
 
-
         var textLocationMemoryStore = new Memory({
             idProperty: "id",
             data: []});
@@ -213,6 +200,31 @@ define([
         }, "asset_location_entity");
         locationFilteringSelect.startup();
 
+        var locationTypeLabels = {};
+        query('label[for^="asset_location_ctype_"]').forEach(function (node) {
+            locationTypeLabels[domAttr.get(node, "for").replace(/\D/g, '')] = node.textContent;
+        });
+
+        var locationTypeRadioButton = [];
+
+        query('[name="asset[location][ctype]"]').forEach(function (node) {
+            var id;
+            var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
+            if( node.checked ) {
+                dijit.set("checked", true);
+                id = node.id.replace(/\D/g, '');
+                textLocationMemoryStore.data = [{"name": locationTypeLabels[id], id: 0}];
+                locationFilteringSelect.set("store", textLocationMemoryStore);
+                locationFilteringSelect.set("displayedValue", locationTypeLabels[id]);
+                locationFilteringSelect.set("value", id);
+                locationFilteringSelect.set("readOnly", true);
+            }
+            dijit.set("data-url", domAttr.get(node, "data-url"));
+            dijit.set("data-location-type-id", node.value);
+            dijit.startup();
+            locationTypeRadioButton.push(dijit);
+        });
+
         var data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         var statusStoreData = [], d;
@@ -227,7 +239,8 @@ define([
         var statusSelect = new Select({
             store: store,
             placeholder: asset.status,
-            required: true
+            required: true,
+            value: domAttr.get(select, 'data-selected')
         }, select);
         statusSelect.startup();
 

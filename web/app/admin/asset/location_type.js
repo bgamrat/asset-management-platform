@@ -9,6 +9,7 @@ define([
         "dijit/form/Select",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
+        "dijit/form/RadioButton",
     "dijit/form/Button",
     "lib/common",
     "dojo/i18n!app/nls/core",
@@ -17,12 +18,12 @@ define([
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on,
         query, ObjectStore, Memory,
-        Select, ValidationTextBox, CheckBox, Button,
+        Select, ValidationTextBox, CheckBox, RadioButton, Button,
         lib, core) {
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var nameInput = [], entitySelect = [], urlInput = [], activeCheckBox = [];
+    var nameInput = [], entitySelect = [], urlInput = [], activeCheckBox = [], defaultRadioButton = [];
     var addOneMoreControl = null;
     var divId = "location_types_types";
     var store;
@@ -35,6 +36,7 @@ define([
     function createDijits(newRow) {
         var dijit, index = nameInput.length;
         var base = divId + '_' + index + '_';
+        var checked = false;
 
         dijit = new ValidationTextBox({
             placeholder: core.name,
@@ -68,6 +70,15 @@ define([
             name: "location_types[types][" + index + "][active]"}, base + "active");
         activeCheckBox.push(dijit);
         dijit.startup();
+        if( dom.byId(base + "default").checked === true ) {
+            checked = true;
+        }
+        dijit.startup();
+        dijit = new RadioButton({
+        }, base + "default");
+        dijit.set("checked", checked);
+        dijit.startup();
+        defaultRadioButton.push(dijit);
     }
 
     function run() {
@@ -114,6 +125,17 @@ define([
             type: "submit"
         }, 'location-types-save-btn');
         saveBtn.startup();
+
+        on(dom.byId("location_types_types"), "click", function (event) {
+            var target = event.target;
+            var id = target.id;
+            if( target.checked && id.indexOf("default") !== -1 ) {
+                id = id.replace(/^.*(\d+).*$/, '$1');
+                target.name = 'location_types[types][' + id + '][default]';
+            } else {
+                target.removeAttribute("name");
+            }
+        });
 
         lib.pageReady();
     }

@@ -30,6 +30,7 @@ class AssetLocationType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
+        $defaultLocationType = $this->em->getRepository('AppBundle\Entity\Asset\LocationType')->findOneBy(['default' => true]);
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'ctype', EntityType::class, [
@@ -42,7 +43,7 @@ class AssetLocationType extends AbstractType
                             return ['data-url' => $val->getUrl()];
                         }
                     },
-                    'empty_data' => '5',
+                    'data' => $this->em->getReference('AppBundle\Entity\Asset\LocationType', $defaultLocationType->getId()),
                     'multiple' => false,
                     'expanded' => true,
                     'required' => true,

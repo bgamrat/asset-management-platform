@@ -58,9 +58,11 @@ fieldset .sub-form-legend {
     font-weight: 700;
 }
 .form-row.header .url,
-.form-row.header .name,
-.form-row.header .comment {
+.form-row.header .name {
     width: 15em;
+    display: inline-block;
+}.form-row.header .comment {
+    width: 14.5em;
     display: inline-block;
 }
 .form-row.header .active,
@@ -83,7 +85,7 @@ fieldset .sub-form-legend {
     padding: 0 17px;
 }
 .header {
-    padding: 15px;
+    padding: 15px 15px 15px 0;
 }
 .addresses {
     width: 300px;

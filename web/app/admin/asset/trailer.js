@@ -61,16 +61,7 @@ define([
                     label: asset.serial_number,
                 },
                 status_text: {                 
-                    label: core.status,
-                    editor: Select,
-                    editOn: "click",
-                    editorArgs: {
-                        style: "width:75px;",
-                        options: [
-                            {value: "true", label: "Operational"},
-                            {value: "false", label: "Not Operational"}
-                        ]
-                    }
+                    label: core.status
                 },
                 location_text: {
                     label: asset.location
@@ -82,10 +73,10 @@ define([
             renderRow: function (object) {
                 var rowElement = this.inherited(arguments);
                 if( typeof object.deleted_at !== "undefined" && object.deleted_at !== null ) {
-                    rowElement.className += ' deleted';
+                    rowElement.classList.add('deleted');
                 }
                 if( typeof object.status_text !== "undefined" && object.status_text !== 'Operational' ) {
-                    rowElement.className += ' not-operational';
+                    rowElement.classList.add(object.status_text.replace(/ /g,'-').toLowerCase());
                 }
                 return rowElement;
             },

@@ -85,6 +85,9 @@
 #expenses > div {
     margin: 15px 0;
 }
+.partially-operational {
+    background-color: lightyellow;
+}
 .not-operational {
     background-color: lightpink;
 }
