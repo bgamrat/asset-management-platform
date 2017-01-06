@@ -69,10 +69,10 @@ class StoreController extends FOSRestController
     public function getCasesAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $barcode = $request->get( 'name' );
-        if( !empty( $barcode ) )
+        $barcode_model = $request->get( 'name' );
+        if( !empty( $barcode_model ) )
         {
-            $barcode = '%' . str_replace( '*', '%', $barcode );
+            $barcode = '%' . str_replace( '*', '%', $barcode_model );
 
             $em = $this->getDoctrine()->getManager();
 
@@ -81,9 +81,9 @@ class StoreController extends FOSRestController
                     ->innerJoin( 'a.barcodes', 'b' )
                     ->innerJoin( 'a.model', 'm' );
             $queryBuilder
-                    ->where( $queryBuilder->expr()->like( 'LOWER(b.barcode)', ':barcode' ) )
+                    ->where( "LOWER(CONCAT(CONCAT(b.barcode, ' '), m.name)) LIKE :barcode_model" )
                     ->andWhere( 'm.container = true' )
-                    ->setParameter( 'barcode', strtolower( $barcode ) );
+                    ->setParameter( 'barcode_model', strtolower( $barcode_model ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }

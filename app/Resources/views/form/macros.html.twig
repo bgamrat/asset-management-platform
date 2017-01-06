@@ -11,7 +11,9 @@
 {% macro name_comment_active_entry_row(type,form,default_rb) %}{% spaceless %}
     {% if type is not defined %}{% set type = '' %}{% endif %}
 <div class="form-row {{ type }}">
+    {% if default_rb is defined and default_rb == true %}
     <span class="default">{{ form_widget(form.default)}}</span>
+    {% endif %}
     <span class="id">{{ form_widget(form.id) }}</span>
     <span class="name">{{ form_widget(form.name) }}</span>
     <span class="comment">{{ form_widget(form.comment) }}</span>

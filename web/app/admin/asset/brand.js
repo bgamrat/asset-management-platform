@@ -69,7 +69,7 @@ define([
                 );
         tabContainer.addChild(extendsContentPane);
         var historyContentPane = new ContentPane({
-            title: asset.history},
+            title: core.history},
         "model-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);

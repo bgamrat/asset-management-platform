@@ -1,9 +1,10 @@
-{% block title %}{{ 'issue.issue'|trans }} {{ 'issue.status'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% block title %}{{ 'asset.issue'|trans }} {{ 'asset.status'|trans }} {{'common.admin'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
 {% block admin_content %}
     <div id="status-wrapper">
-        <h1>{{ 'issue.issue'|trans }} {{ 'issue.status'|trans }} {{'common.admin'|trans }}</h1>
+        <h1>{{ 'common.issues'|trans }} {{'common.admin'|trans }}</h1>
+        {#
         <div class="statuses">
             {% for flash_message in app.session.flashBag.get('notice') %}
                 <div class="flash-notice">
@@ -37,14 +38,15 @@
                 <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
             {% endif %}
             {{form_end(statuses_form)}}
+            #}
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        require(["app/admin/issue/issue_status"], function (status) {
-            status.run();
+        require(["app/admin/asset/issue"], function (issue) {
+            issue.run();
         });
     </script>
 {% endblock %}

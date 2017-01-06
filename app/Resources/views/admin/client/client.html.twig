@@ -1,0 +1,72 @@
+{% block title %}{{ 'asset.client'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="client-wrapper">
+        <h1>{{ 'asset.client'|trans }} {{'common.admin'|trans }}</h1>
+        <div class="grid-controls">
+            <div>
+                <button id="client-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            </div>
+            <div>
+                <form id="client-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="client-filter-input">
+                </form>
+            </div>
+            <button id="client-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+        </div>
+        <div id="client-grid">
+        </div>
+        <div id="client-view-dialog">
+            {{form_start(client_form)}} 
+            <div class="text-right">
+                <button id="client-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="client">
+                <fieldset class="name-active">
+                    <legend>{{'asset.client'|trans}}</legend>
+                    <div class="justify">
+                        <span class="client-name">
+                            {{form_widget(client_form.name)}}
+                        </span>
+                        <span class="client-active">
+                            {{form_widget(client_form.active)}}
+                            {{form_label(client_form.active)}}
+                        </span>
+                    </div>
+                    {{form_row(client_form.comment)}}
+                </fieldset>
+                <div id="client-view-tabs">
+                    <div id="client-view-contacts-tab">
+                        <fieldset class="contacts">
+                            {{form_row(client_form.contacts)}}
+                            {% if client_form.contacts.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div id="client-view-brands-tab">
+                        <fieldset class="brands">
+                            <legend>{{'asset.brands'|trans}}</legend>
+                            {{form_row(client_form.brands)}}
+                            {% if client_form.brands.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div id="client-view-history-tab">
+                    </div>
+                </div>
+            </div>
+            {{ form_end(client_form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/client"], function (client) {
+            client.run();
+        });
+    </script>
+{% endblock %}

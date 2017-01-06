@@ -51,6 +51,8 @@ define([
     //"use strict";
     function run() {
 
+        var defaultLocationType, defaultLocationTypeId, defaultLocationMemoryStore;
+
         var assetId = null;
 
         var action = null;
@@ -106,10 +108,15 @@ define([
         }, 'asset-new-btn');
         newBtn.startup();
         newBtn.on("click", function (event) {
+            var id;
             modelFilteringSelect.set("value", "");
             statusSelect.reset();
-            locationFilteringSelect.reset();
-           // locationTypeRadioButton.reset();
+            defaultLocationType.set("checked", true);
+            id = defaultLocationTypeId;
+            locationFilteringSelect.set("readOnly", false);
+            locationFilteringSelect.set("store", defaultLocationMemoryStore);
+            locationFilteringSelect.set("displayedValue", locationTypeLabels[id]);
+            locationFilteringSelect.set("readOnly", true);
             barcodes.setData(null);
             serialNumberInput.set("value", "");
             commentInput.set("value", "");
@@ -176,6 +183,7 @@ define([
             } else {
                 targetId = target.id.replace(/\D/g, '');
                 textLocationMemoryStore.data = [{name: locationTypeLabels[targetId], id: 0}];
+                locationFilteringSelect.set("readOnly", false);
                 locationFilteringSelect.set("store", textLocationStore);
                 locationFilteringSelect.set("displayedValue", locationTypeLabels[targetId]);
                 locationFilteringSelect.set("readOnly", true);
@@ -212,8 +220,12 @@ define([
             var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
             if( node.checked ) {
                 dijit.set("checked", true);
+                defaultLocationType = dijit;
                 id = node.id.replace(/\D/g, '');
+                defaultLocationTypeId = id;
                 textLocationMemoryStore.data = [{"name": locationTypeLabels[id], id: 0}];
+                defaultLocationMemoryStore = lang.clone(textLocationMemoryStore);
+                locationFilteringSelect.set("readOnly", false);
                 locationFilteringSelect.set("store", textLocationMemoryStore);
                 locationFilteringSelect.set("displayedValue", locationTypeLabels[id]);
                 locationFilteringSelect.set("value", id);
@@ -427,6 +439,7 @@ define([
                     } else {
                         textLocationMemoryStore.data = [{name: locationTypeLabels[asset.location.type.id], id: 0}];
                         locationFilteringSelect.set("store", textLocationStore);
+                        locationFilteringSelect.set("readOnly", false);
                         locationFilteringSelect.set('displayedValue', asset.location_text);
                         locationFilteringSelect.set("readOnly", true);
                     }
