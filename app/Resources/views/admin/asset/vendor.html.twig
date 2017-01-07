@@ -54,6 +54,13 @@
                             {% endif %}
                         </fieldset>
                     </div>
+                    <div id="vendor-view-service-tab">
+                        <fieldset class="service-instructions">
+                            <legend>{{'asset.service_instructions'|trans}}</legend>
+                            {{form_row(vendor_form.rma_required)}}
+                            {{form_row(vendor_form.service_instructions)}}
+                        </fieldset>
+                    </div>
                     <div id="vendor-view-history-tab">
                     </div>
                 </div>

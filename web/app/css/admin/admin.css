@@ -61,7 +61,8 @@ fieldset .sub-form-legend {
 .form-row.header .name {
     width: 15em;
     display: inline-block;
-}.form-row.header .comment {
+}
+.form-row.header .comment {
     width: 14.5em;
     display: inline-block;
 }

@@ -64,6 +64,12 @@ define([
                 );
         tabContainer.addChild(brandsContentPane);
 
+        var serviceContentPane = new ContentPane({
+            title: asset.service},
+        "vendor-view-service-tab"
+                );
+        tabContainer.addChild(serviceContentPane);
+
         var historyContentPane = new ContentPane({
             title: core.history},
         "vendor-view-history-tab"
@@ -115,6 +121,17 @@ define([
         }, "vendor_comment");
         commentInput.startup();
 
+        var rmaRequiredCheckBox = new CheckBox({}, "vendor_rma_required");
+        rmaRequiredCheckBox.startup();
+
+        var serviceInstructionsInput = new SimpleTextarea({
+            placeholder: asset.service_instructions,
+            trim: true,
+            required: false,
+            "class": "service-instructions"
+        }, "vendor_service_instructions");
+        serviceInstructionsInput.startup();
+
         var vendorForm = new Form({}, '[name="vendor"]');
         vendorForm.startup();
 
@@ -135,6 +152,9 @@ define([
                     "brand_data": brandData,
                     "brands": brandIds,
                     "active": activeCheckBox.get("checked"),
+                    "comment": commentInput.get("value"),
+                    "rma_required": rmaRequiredCheckBox.get("checked"),
+                    "service_instructions": serviceInstructionsInput.get("value")
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -236,6 +256,9 @@ define([
                     nameInput.set("value", vendor.name);
                     brandSelect.setData(vendor.brand_data);
                     activeCheckBox.set("checked", vendor.active === true);
+                    commentInput.set("value",vendor.comment);
+                    rmaRequiredCheckBox.set("checked", vendor.rma_required === true);
+                    serviceInstructionsInput.set("value",vendor.service_instructions);
                     vendorViewDialog.show();
                 }, lib.xhrError);
             }

@@ -43,8 +43,12 @@ asset:
         Required By
     requires:
         Requires
+    rma_required:
+        RMA Required
     serial_number:
         Serial Number
+    service_instructions:
+        Service Instructions
     status:
         Status
     statuses:

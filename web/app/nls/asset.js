@@ -13,7 +13,10 @@ define({
         "no_barcode": "No barcode",
         "requires": "Requires",
         "required_by": "Required By",
+        "rma_required": "RMA Required",
         "serial_number": "Serial Number",
+        "service": "Service",
+        "service_instructions": "Service Instructions",
         "supports": "Supports"
     })
 });

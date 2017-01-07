@@ -61,9 +61,14 @@ class VendorType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__brand__'
                 ] )
+                ->add( 'rma_required', CheckboxType::class, ['label' => 'asset.rma_required'] )
+                ->add( 'service_instructions', TextareaType::class, [
+                    'label' => false,
+                    'required' => false
+                ] )
         ;
-         $builder->get( 'brands' )
-          ->addModelTransformer( new BrandsToIdsTransformer( $this->em ) );
+        $builder->get( 'brands' )
+                ->addModelTransformer( new BrandsToIdsTransformer( $this->em ) );
     }
 
     /**

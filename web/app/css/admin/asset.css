@@ -91,3 +91,7 @@
 .not-operational {
     background-color: lightpink;
 }
+.service-instructions.dijitTextBox.dijitTextArea {
+    height: 150px;
+    width: 100%;
+}

@@ -36,14 +36,13 @@ class Vendor
     /**
      * @var boolean
      * @Gedmo\Versioned
-     * @ORM\Column(name="active", type="boolean")
-     * 
+     * @ORM\Column(name="active", type="boolean") 
      */
     private $active = true;
     /**
      * @var string
      * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=64, nullable=true)
+     * @ORM\Column(type="string", length=256, nullable=true)
      */
     private $comment;
     /**
@@ -63,6 +62,18 @@ class Vendor
      *      )
      */
     protected $brands = null;
+    /**
+     * @var boolean
+     * @Gedmo\Versioned
+     * @ORM\Column(name="rma_required", type="boolean") 
+     */
+    private $rmaRequired = false;
+    /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ORM\Column(type="string", length=256, nullable=true)
+     */
+    private $serviceInstructions = null;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
@@ -144,7 +155,7 @@ class Vendor
      *
      * @param string $comment
      *
-     * @return Email
+     * @return Vendor
      */
     public function setComment( $comment )
     {
@@ -162,10 +173,12 @@ class Vendor
     {
         return $this->comment;
     }
-    
-    public function getBrandData() {
+
+    public function getBrandData()
+    {
         $data = [];
-        foreach ($this->brands as $b) {
+        foreach( $this->brands as $b )
+        {
             $data[] = ['id' => $b->getId(), 'name' => $b->getName()];
         }
         return $data;
@@ -206,8 +219,43 @@ class Vendor
     {
         $this->contacts->removeElement( $contact );
     }
-        
-    public function getUpdated() {
+
+    public function setRmaRequired( $rmaRequired )
+    {
+        $this->rmaRequired = $rmaRequired;
+    }
+
+    public function isRmaRequired()
+    {
+        return $this->rmaRequired;
+    }
+
+    /**
+     * Set ServiceInstructions
+     *
+     * @param string $serviceInstructions
+     *
+     * @return Vendor
+     */
+    public function setServiceInstructions( $sServiceInstructions )
+    {
+        $this->serviceInstructions = $serviceInstructions;
+
+        return $this;
+    }
+
+    /**
+     * Get ServiceInstructions
+     *
+     * @return string
+     */
+    public function getServiceInstructions()
+    {
+        return $this->serviceInstructions;
+    }
+
+    public function getUpdated()
+    {
         return $this->updated;
     }
 

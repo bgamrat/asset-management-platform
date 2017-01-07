@@ -97,7 +97,10 @@ class VendorsController extends FOSRestController
                 'id' => $vendor->getId(),
                 'name' => $vendor->getName(),
                 'brand_data' => $vendor->getBrandData(),
-                'active' => $vendor->isActive()
+                'active' => $vendor->isActive(),
+                'comment' => $vendor->getComment(),
+                'rma_required' => $vendor->isRmaRequired(),
+                'service_instructions' => $vendor->getserviceInstructions(),
             ];
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdated() );
