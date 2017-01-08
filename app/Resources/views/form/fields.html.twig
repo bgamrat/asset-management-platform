@@ -106,6 +106,24 @@
     </div>
 {% endspaceless %}{% endblock %}
 
+{% block _client_contacts_entry_row %}
+    <div class="form-row contacts">
+        {% include 'common/person.html.twig' with {'legend': 'common.contact'} %}
+    </div>
+{% endblock %}
+
+{% block _client_contacts_entry_addresses_entry_row %}
+    {{ block('_address_entry_row') }}
+{% endblock %}
+
+{% block _client_contacts_entry_emails_entry_row %}
+    {{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _client_contacts_entry_phones_entry_row %}
+    {{ block('_phones_entry_row') }}
+{% endblock %}
+
 {% block _emails_entry_row %}
     {% spaceless %}
         <div class="form-row email">

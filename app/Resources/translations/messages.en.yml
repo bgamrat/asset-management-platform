@@ -65,7 +65,13 @@ asset:
 calendar:
     controls:
         Calendar Controls
-        
+ 
+client:
+    client:
+        Client
+    contracts:
+        Contracts
+ 
 common:
     active:
         Active

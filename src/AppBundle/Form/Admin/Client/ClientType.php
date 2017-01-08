@@ -59,7 +59,7 @@ class ClientType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Asset\Client'
+            'data_class' => 'AppBundle\Entity\Client\Client'
         ) );
     }
 
