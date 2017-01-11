@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Client
  *
  * @ORM\Table(name="client")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ClientRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -54,6 +54,15 @@ class Client
      *      )
      */
     private $contacts = null;
+    /**
+     * @var ArrayCollection $contracts
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\Contract", cascade={"persist"})
+     * @ORM\JoinTable(name="client_contract",
+     *      joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="contract_id", referencedColumnName="id", onDelete="CASCADE", unique=true, nullable=false)}
+     *      )
+     */
+    protected $contracts = null;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
@@ -152,7 +161,7 @@ class Client
     {
         return $this->comment;
     }
-   
+
     public function getContacts()
     {
         return $this->contacts->toArray();
@@ -170,8 +179,46 @@ class Client
     {
         $this->contacts->removeElement( $contact );
     }
-        
-    public function getUpdated() {
+
+    public function getContracts( $deep = true )
+    {
+        $return = [];
+        if( $deep === true )
+        {
+            $return = $this->contracts->toArray();
+        }
+        else
+        {
+            foreach( $this->contracts as $b )
+            {
+                $br = [];
+                $br['id'] = $b->getId();
+                $br['name'] = $b->getName();
+                $br['comment'] = $b->getComment();
+                $br['active'] = $b->isActive();
+                $return[] = $br;
+            }
+        }
+        return $return;
+    }
+
+    public function addContract( Contract $contract )
+    {
+        if( !$this->contracts->contains( $contract ) )
+        {
+            $this->contracts->add( $contract );
+            $contract->setManufacturer( $this );
+        }
+        return $this;
+    }
+
+    public function removeContract( Contract $contract )
+    {
+        $this->contracts->removeElement( $contract );
+    }
+
+    public function getUpdated()
+    {
         return $this->updated;
     }
 

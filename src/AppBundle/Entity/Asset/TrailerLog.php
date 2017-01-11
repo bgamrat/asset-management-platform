@@ -5,10 +5,10 @@ namespace AppBundle\Entity\Asset;
 use Gedmo\Loggable\Entity\LogEntry;
 use Doctrine\ORM\Mapping as ORM;
 /**
- * AssetLog
+ * TrailerLog
  *
  * @ORM\Table(name="trailer_log")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TrailerLogEntryRepository")
+ * @ORM\Entity()
  */
 class TrailerLog Extends LogEntry
 {

@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * Asset
  *
  * @ORM\Table(name="trailer")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TrailerRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\TrailerLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 

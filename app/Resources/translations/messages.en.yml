@@ -163,6 +163,8 @@ common:
         Zip
     purchased:
         Purchased
+    quantity:
+        Quantity
     remove:
         Remove
     roles:

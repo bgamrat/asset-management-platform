@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BarcodeLog
  *
  * @ORM\Table(name="barcode_log")
- * @ORM\Entity(repositoryClass="Gedmo\Loggable\Entity\Repository\LogEntryRepository")
+ * @ORM\Entity()
  */
 class BarcodeLog Extends LogEntry
 {

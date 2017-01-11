@@ -1,10 +1,10 @@
 <?php
 
-namespace AppBundle\Controller\Api\Admin\Asset;
+namespace AppBundle\Controller\Api\Admin\Client;
 
-use AppBundle\Entity\Vendor;
+use AppBundle\Entity\Client\Client;
 use AppBundle\Util\DStore;
-use AppBundle\Form\Admin\Asset\VendorType;
+use AppBundle\Form\Admin\Client\ClientType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,13 +15,13 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
-class VendorsController extends FOSRestController
+class ClientsController extends FOSRestController
 {
 
     /**
      * @View()
      */
-    public function getVendorsAction( Request $request )
+    public function getClientsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
@@ -32,7 +32,7 @@ class VendorsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['v'] )
-                ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
+                ->from( 'AppBundle\Entity\Client\Client', 'v' )
                 ->orderBy( 'v.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -56,22 +56,21 @@ class VendorsController extends FOSRestController
                             $queryBuilder->expr()->gt( 'LOWER(v.name)', '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
+            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
         }
         $query = $queryBuilder->getQuery();
-        $vendorCollection = $query->getResult();
+        $clientCollection = $query->getResult();
         $data = [];
-        foreach( $vendorCollection as $v )
+        foreach( $clientCollection as $c )
         {
             $item = [
-                'id' => $v->getId(),
-                'name' => $v->getName(),
-                'brand_data' => $v->getBrands(),
-                'active' => $v->isActive(),
+                'id' => $c->getId(),
+                'name' => $c->getName(),
+                'active' => $c->isActive(),
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
-                $item['deleted_at'] = $v->getDeletedAt();
+                $item['deleted_at'] = $c->getDeletedAt();
             }
             $data[] = $item;
         }
@@ -81,7 +80,7 @@ class VendorsController extends FOSRestController
     /**
      * @View()
      */
-    public function getVendorAction( $id )
+    public function getClientAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
@@ -89,22 +88,18 @@ class VendorsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $vendor = $this->getDoctrine()
-                        ->getRepository( 'AppBundle\Entity\Asset\Vendor' )->find( $id );
-        if( $vendor !== null )
+        $client = $this->getDoctrine()
+                        ->getRepository( 'AppBundle\Entity\Client\Client' )->find( $id );
+        if( $client !== null )
         {
             $data = [
-                'id' => $vendor->getId(),
-                'name' => $vendor->getName(),
-                'contacts' => $vendor->getContacts( false ),
-                'brand_data' => $vendor->getBrandData(),
-                'active' => $vendor->isActive(),
-                'comment' => $vendor->getComment(),
-                'rma_required' => $vendor->isRmaRequired(),
-                'service_instructions' => $vendor->getserviceInstructions(),
+                'id' => $client->getId(),
+                'name' => $client->getName(),
+                'active' => $client->isActive(),
+                'comment' => $client->getComment(),
             ];
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdated() );
+            $formUtil->saveDataTimestamp( 'client' . $client->getId(), $client->getUpdated() );
             return $data;
         }
         else
@@ -116,15 +111,15 @@ class VendorsController extends FOSRestController
     /**
      * @View()
      */
-    public function postVendorAction( $id, Request $request )
+    public function postClientAction( $id, Request $request )
     {
-        return $this->putVendorAction( $id, $request );
+        return $this->putClientAction( $id, $request );
     }
 
     /**
      * @View()
      */
-    public function putVendorAction( $id, Request $request )
+    public function putClientAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
@@ -132,29 +127,29 @@ class VendorsController extends FOSRestController
         $data = $request->request->all();
         if( $id === "null" )
         {
-            $vendor = new Vendor();
+            $client = new Client();
         }
         else
         {
-            $vendor = $em->getRepository( 'AppBundle\Entity\Asset\Vendor' )->find( $id );
+            $client = $em->getRepository( 'AppBundle\Entity\Client\Client' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'client' . $client->getId(), $client->getUpdated() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }
         }
-        $form = $this->createForm( VendorType::class, $vendor, ['allow_extra_fields' => true] );
+        $form = $this->createForm( ClientType::class, $client, ['allow_extra_fields' => true] );
         try
         {
             $form->submit( $data );
             if( $form->isValid() )
             {
-                $vendor = $form->getData();
-                $em->persist( $vendor );
+                $client = $form->getData();
+                $em->persist( $client );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_vendor_get_vendor', array('id' => $vendor->getId()), true // absolute
+                                'app_admin_api_client_get_client', array('id' => $client->getId()), true // absolute
                         )
                 );
             }
@@ -176,14 +171,14 @@ class VendorsController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function patchVendorAction( $id, Request $request )
+    public function patchClientAction( $id, Request $request )
     {
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle\Entity\Asset\Vendor' );
-        $vendor = $repository->find( $id );
-        if( $vendor !== null )
+                ->getRepository( 'AppBundle\Entity\Client\Client' );
+        $client = $repository->find( $id );
+        if( $client !== null )
         {
             if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
             {
@@ -191,11 +186,11 @@ class VendorsController extends FOSRestController
                 switch( $data['field'] )
                 {
                     case 'active':
-                        $vendor->setActive( $value );
+                        $client->setActive( $value );
                         break;
                 }
 
-                $em->persist( $vendor );
+                $em->persist( $client );
                 $em->flush();
             }
         }
@@ -204,15 +199,15 @@ class VendorsController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function deleteVendorAction( $id )
+    public function deleteClientAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $vendor = $em->getRepository( 'AppBundle\Entity\Asset\Vendor' )->find( $id );
-        if( $vendor !== null )
+        $client = $em->getRepository( 'AppBundle\Entity\Client\Client' )->find( $id );
+        if( $client !== null )
         {
-            $em->remove( $vendor );
+            $em->remove( $client );
             $em->flush();
         }
         else

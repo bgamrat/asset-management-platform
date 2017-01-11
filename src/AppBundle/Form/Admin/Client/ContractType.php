@@ -8,11 +8,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use AppBundle\Form\Admin\Asset\Type\ModelRelationshipType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
-use AppBundle\Form\Admin\Asset\DataTransformer\CategoryToIdTransformer;
+use AppBundle\Form\Admin\Asset\DataTransformer\ModelRelationshipsToIdsTransformer;
 
 class ModelType extends AbstractType
 {
@@ -32,8 +31,18 @@ class ModelType extends AbstractType
     {
         $builder
                 ->add( 'id', HiddenType::class, ['required' => false, 'mapped' => false] )
-                ->add( 'category', TextType::class, [
-                    'label' => 'asset.category'
+                ->add( 'category', EntityType::class, [
+                    'class' => 'AppBundle\Entity\Asset\Category',
+                    'choice_label' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => true,
+                    'label' => 'asset.category',
+                    'preferred_choices' => function($category, $key, $index)
+                    {
+                        return $category->isActive();
+                    },
+                    'choice_translation_domain' => false
                 ] )
                 ->add( 'name', TextType::class, [
                     'label' => false, 'required' => true] )
@@ -44,7 +53,10 @@ class ModelType extends AbstractType
                 ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'requires', CollectionType::class, [
-                    'entry_type' => ModelRelationshipType::class,
+                    'entry_type' => EntityType::class,
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                        'choice_label' => false],
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -53,7 +65,10 @@ class ModelType extends AbstractType
                     'delete_empty' => true
                 ] )
                 ->add( 'required_by', CollectionType::class, [
-                    'entry_type' => ModelRelationshipType::class,
+                    'entry_type' => EntityType::class,
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                        'choice_label' => false],
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -63,7 +78,10 @@ class ModelType extends AbstractType
                     'property_path' => 'requiredBy'
                 ] )
                 ->add( 'extends', CollectionType::class, [
-                    'entry_type' => ModelRelationshipType::class,
+                    'entry_type' => EntityType::class,
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                        'choice_label' => false],
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -72,7 +90,10 @@ class ModelType extends AbstractType
                     'delete_empty' => true
                 ] )
                 ->add( 'extended_by', CollectionType::class, [
-                    'entry_type' => ModelRelationshipType::class,
+                    'entry_type' => EntityType::class,
+                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
+                        'choice_label' => false],
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -81,8 +102,16 @@ class ModelType extends AbstractType
                     'delete_empty' => true,
                     'property_path' => 'extendedBy'
                 ] );
-        $builder->get( 'category' )
-                ->addModelTransformer( new CategoryToIdTransformer( $this->em ) );
+        $builder->get( 'requires' )
+                ->addModelTransformer( new ModelRelationshipsToIdsTransformer( $this->em ) );
+        $builder->get( 'required_by' )
+                ->addModelTransformer( new ModelRelationshipsToIdsTransformer( $this->em ) );
+        $builder->get( 'extends' )
+                ->addModelTransformer( new ModelRelationshipsToIdsTransformer( $this->em ) );
+        $builder->get( 'extended_by' )
+                ->addModelTransformer( new ModelRelationshipsToIdsTransformer( $this->em ) );
+
+        ;
     }
 
     /**

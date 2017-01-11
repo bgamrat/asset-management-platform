@@ -142,13 +142,14 @@ define([
         saveBtn.on("click", function (event) {
             var beforeNameFilter, filter;
             if( vendorForm.validate() ) {
-                var i,brandData = brandSelect.getData(), brandIds = [];
-                for (i = 0; i < brandData.length; i++) {
+                var i, brandData = brandSelect.getData(), brandIds = [];
+                for( i = 0; i < brandData.length; i++ ) {
                     brandIds.push(brandData[i].id);
                 }
                 var data = {
                     "id": vendorId,
                     "name": nameInput.get("value"),
+                    "contacts": person.getData(),
                     "brand_data": brandData,
                     "brands": brandIds,
                     "active": activeCheckBox.get("checked"),
@@ -256,9 +257,10 @@ define([
                     nameInput.set("value", vendor.name);
                     brandSelect.setData(vendor.brand_data);
                     activeCheckBox.set("checked", vendor.active === true);
-                    commentInput.set("value",vendor.comment);
+                    person.setData(vendor.contacts);
+                    commentInput.set("value", vendor.comment);
                     rmaRequiredCheckBox.set("checked", vendor.rma_required === true);
-                    serviceInstructionsInput.set("value",vendor.service_instructions);
+                    serviceInstructionsInput.set("value", vendor.service_instructions);
                     vendorViewDialog.show();
                 }, lib.xhrError);
             }

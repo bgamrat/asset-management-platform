@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * Asset
  *
  * @ORM\Table(name="asset")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\AssetRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\AssetLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 

@@ -6,12 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Common\Person;
 
 /**
  * Vendor
  *
  * @ORM\Table(name="vendor")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\VendorRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */

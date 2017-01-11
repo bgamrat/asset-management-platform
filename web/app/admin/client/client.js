@@ -172,21 +172,6 @@ define([
                 name: {
                     label: core.name
                 },
-                brand_data: {
-                    label: core.brands,
-                    formatter: function (data, object) {
-                        var b, nameList = [], html = "";
-                        for( b in data ) {
-                            nameList.push(data[b].name);
-                        }
-                        if( nameList.length > 0 ) {
-                            for( n = 0; n < nameList.length; n++ ) {
-                                html += '<a class="brand link" href="/admin/asset/manufacturer/' + object.name + '/brand/' + nameList[n] + '">' + nameList[n] + '</a><br>';
-                            }
-                        }
-                        return html;
-                    }
-                },
                 active: {
                     label: core.active,
                     editor: CheckBox,

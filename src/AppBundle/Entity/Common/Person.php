@@ -17,7 +17,7 @@ use AppBundle\Entity\Common\PersonLog;
  * Person
  *
  * @ORM\Table(name="person")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable(logEntryClass="PersonLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("user")

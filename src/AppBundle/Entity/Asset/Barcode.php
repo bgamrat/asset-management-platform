@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * Barcode
  *
  * @ORM\Table(name="barcode")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\BarcodeRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\BarcodeLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("barcode")

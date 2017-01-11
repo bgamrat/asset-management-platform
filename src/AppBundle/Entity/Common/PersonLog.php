@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * AssetLog
  *
  * @ORM\Table(name="person_log")
- * @ORM\Entity(repositoryClass="Gedmo\Loggable\Entity\Repository\LogEntryRepository")
+ * @ORM\Entity()
  */
 class PersonLog Extends LogEntry
 {

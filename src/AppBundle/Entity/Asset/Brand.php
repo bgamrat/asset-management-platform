@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Brand
  *
  * @ORM\Table(name="brand")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\BrandRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 

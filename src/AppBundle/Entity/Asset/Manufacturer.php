@@ -13,7 +13,7 @@ use AppBundle\Entity\Asset\Brand;
  * Manufacturer
  *
  * @ORM\Table(name="manufacturer")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ManufacturerRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */

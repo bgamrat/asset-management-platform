@@ -50,6 +50,17 @@ class ClientType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__person__'
                 ] )
+                ->add( 'contracts', CollectionType::class, [
+                    'entry_type' => ContractType::class,
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__contract__'
+                ] )
         ;
     }
 

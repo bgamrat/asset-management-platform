@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ModelLog
  *
  * @ORM\Table(name="model_log")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ModelLogEntryRepository")
+ * @ORM\Entity()
  */
 class ModelLog Extends LogEntry
 {

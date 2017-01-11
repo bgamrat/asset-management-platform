@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * AssetLog
  *
  * @ORM\Table(name="asset_log")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\AssetLogEntryRepository")
+ * @ORM\Entity()
  */
 class AssetLog Extends LogEntry
 {

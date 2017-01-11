@@ -30,6 +30,12 @@ services:
             1:
                 - '@app.encoder.json'
 
+    app.admin.field.type.model_relationship:
+        class: AppBundle\Form\Admin\Asset\Type\ModelRelationshipType
+        arguments: ['@app.form.data_transformer.model']
+        tags:
+            - { name: form.type, alias: 'app_model_relationship_type' }
+
     app.admin.form.type.asset:
         class: AppBundle\Form\Admin\Asset\AssetType
         arguments: ['@doctrine.orm.entity_manager']
@@ -58,7 +64,7 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_model_type' }
-
+           
     app.admin.form.type.person:
         class: AppBundle\Form\Common\PersonType
         arguments: ['@doctrine.orm.entity_manager']
@@ -109,7 +115,7 @@ services:
         class: AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false
-        
+
     app.form.data_transformer.person_type:
         class: AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']

@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Location
  *
  * @ORM\Table(name="location")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\LocationRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 

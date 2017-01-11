@@ -29,6 +29,12 @@ app_admin_asset_vendors:
     name_prefix:   app_admin_api_vendor_
     prefix: /api
     
+app_admin_client_clients:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Client\ClientsController
+    name_prefix:   app_admin_api_client_
+    prefix: /api
+    
 app_admin_common_people:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\Common\PeopleController
