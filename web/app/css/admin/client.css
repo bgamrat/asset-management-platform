@@ -1,0 +1,11 @@
+#client-view-dialog .dijitDialogPaneContent {
+    width: 760px !important;
+    height: 740px !important;
+}
+.client-name {
+    font-size: 1.5em;
+    display: inline-block;
+}
+.client-name .dijitTextBox {
+    width: 225px;
+}
