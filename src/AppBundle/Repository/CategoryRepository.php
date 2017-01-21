@@ -2,7 +2,7 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\Category;
+use AppBundle\Entity\Asset\Category;
 
 /**
  * ManufacturerRepository

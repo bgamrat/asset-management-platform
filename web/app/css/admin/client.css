@@ -9,3 +9,22 @@
 .client-name .dijitTextBox {
     width: 225px;
 }
+.comment .dijitTextBox {
+    width: 300px;
+}
+.details .dijitTextBox {
+    width: 125px;
+}
+.form-row.contract {
+    width: 100%;
+    padding: 5px 0;
+    border-bottom: 1px solid;
+}
+.form-row.contract .id {
+    display: none;
+}
+.form-row.contract .contract-id .active,
+.form-row.contract .contract-id .remove-form-row {
+    position: absolute;
+    right: 20px;
+}

@@ -3,12 +3,12 @@
 {% form_theme form _self %}
 
 {% block _brands_entry_row %}{% spaceless %}
-    <div class="form-row brand">
-        <span class="brand">{{ form_widget(form) }}</span>
-        {% if form.parent.vars.allow_delete %}
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="brand-__brand__"><i class="fa fa-remove"></i></span>
-        {% endif %}
-    </div>
+        <div class="form-row brand">
+            <span class="brand">{{ form_widget(form) }}</span>
+            {% if form.parent.vars.allow_delete %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="brand-__brand__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>
 {%endspaceless%}{%endblock%}
 
 {% block choice_widget_expanded %}
@@ -93,17 +93,17 @@
 {% endblock %}
 
 {% block _categories_categories_entry_row %}{% spaceless %}
-    <div class="form-row category" data-category-id="{{form.id.vars.value}}">
-        <span class="id">{{ form_widget(form.id) }}</span>
-        <span class="parent">{{ form_widget(form.parent) }}</span>
-        <span class="position">{{ form_widget(form.position) }}</span>
-        <span class="name">{{ form_widget(form.name) }}</span>
-        <span class="comment">{{ form_widget(form.comment) }}</span>
-        <span class="active">{{ form_widget(form.active) }}</span>
-        {% if form.parent.vars.allow_delete is defined %}
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="categories-__categories__"><i class="fa fa-remove"></i></span>
-        {% endif %}
-    </div>
+        <div class="form-row category" data-category-id="{{form.id.vars.value}}">
+            <span class="id">{{ form_widget(form.id) }}</span>
+            <span class="parent">{{ form_widget(form.parent) }}</span>
+            <span class="position">{{ form_widget(form.position) }}</span>
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+            {% if form.parent.vars.allow_delete is defined %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="categories-__categories__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>
 {% endspaceless %}{% endblock %}
 
 {% block _client_contacts_entry_row %}
@@ -124,7 +124,24 @@
     {{ block('_phones_entry_row') }}
 {% endblock %}
 
-{% block _client_contracts_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_active_entry_row('contract',form) }}{% endblock %}
+{% block _client_contracts_entry_row %}{% spaceless %}
+    <div class="form-row contract">
+        <div class="contract-id">
+            <span class="id">{{ form_widget(form.id) }}</span>
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+            {% if form.parent.vars.allow_delete is defined %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="contract-__contract__"><i class="fa fa-remove"></i></span>
+            {% endif %}
+        </div>
+        <div class="details justify">
+            {{form_row(form.start)}}
+            {{form_row(form.end)}}
+            {{form_row(form.value)}}
+        </div> 
+    </div>
+{% endspaceless %}{% endblock %}
 
 {% block _emails_entry_row %}
     {% spaceless %}
@@ -176,13 +193,13 @@
 {% block _model_required_by_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('required_by',form) }}{% endblock %}
 
 {% block _models_models_entry_row %}{% spaceless %}
-    <div class="form-row model">
-        <span class="category">{{ form_widget(form.category) }}</span>
-        <span class="name">{{ form_widget(form.name) }}</span>
-        <span class="comment">{{ form_widget(form.comment) }}</span>
-        <span class="active">{{ form_widget(form.active) }}</span>
-        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="model-__model__"><i class="fa fa-remove"></i></span>
-    </div>
+        <div class="form-row model">
+            <span class="category">{{ form_widget(form.category) }}</span>
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="model-__model__"><i class="fa fa-remove"></i></span>
+        </div>
 {% endspaceless %}{% endblock %}
 
 {% block _person_row %}

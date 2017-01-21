@@ -6,6 +6,8 @@ define([
     "dojo/query",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
+    "dijit/form/CurrencyTextBox",
+    "dijit/form/DateTextBox",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/NodeList-dom",
@@ -13,12 +15,13 @@ define([
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on,
         query,
-        ValidationTextBox, CheckBox,
+        ValidationTextBox, CheckBox, CurrencyTextBox, DateTextBox,
         lib, core) {
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
     var contractId = [], nameInput = [], commentInput = [], activeCheckBox = [];
+    var startInput = [], endInput = [], valueInput = [];
     var divIdInUse = null;
     var addOneMoreControl = null;
 
@@ -54,20 +57,34 @@ define([
         }, base + "comment");
         commentInput.push(dijit);
         dijit.startup();
-        dijit = new CheckBox({ 'checked': true }, base + "active");
+        dijit = new CheckBox({'checked': true}, base + "active");
         activeCheckBox.push(dijit);
+        dijit = new DateTextBox({
+            placeholder: core.start,
+            trim: true,
+            required: false
+        }, base + "start");
         dijit.startup();
+        startInput.push(dijit);
+        dijit = new DateTextBox({
+            placeholder: core.end,
+            trim: true,
+            required: false
+        }, base + "end");
+        dijit.startup();
+        endInput.push(dijit);
+        dijit.startup();
+        dijit = new CurrencyTextBox({
+            placeholder: core.value,
+            trim: true,
+            required: false
+        }, base + "value");
+        dijit.startup();
+        valueInput.push(dijit);
     }
 
     function destroyRow(id, target) {
-        var i, item;
-
-        for( i = 0; i < contractId.length; i++ ) {
-            if( contractId[i] === id ) {
-                id = i;
-                break;
-            }
-        }
+        var item;
         contractId.splice(id, 1);
         item = nameInput.splice(id, 1);
         item[0].destroyRecursive();
@@ -75,9 +92,15 @@ define([
         item[0].destroyRecursive();
         item = activeCheckBox.splice(id, 1);
         item[0].destroyRecursive();
+        item = startInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = endInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = valueInput.splice(id, 1);
+        item[0].destroyRecursive();
         domConstruct.destroy(target);
     }
-    
+
     function run() {
 
         if( arguments.length > 0 ) {
@@ -123,15 +146,20 @@ define([
     }
 
     function getData() {
-        var i, returnData = [];
+        var i, returnData = [], st, en;
         for( i = 0; i < nameInput.length; i++ ) {
-            if (nameInput[i].get('value') !== "") {
+            if( nameInput[i].get('value') !== "" ) {
+                st = startInput[i].get('value');
+                en = endInput[i].get('value');
                 returnData.push(
                         {
                             "id": contractId[i],
                             "name": nameInput[i].get('value'),
                             "comment": commentInput[i].get('value'),
-                            "active": activeCheckBox[i].get("checked")
+                            "active": activeCheckBox[i].get("checked"),
+                            "start": st === null ? "" : st,
+                            "end": en === null ? "" : en,
+                            "value": valueInput[i].get('value'),
                         });
             }
         }
@@ -159,12 +187,18 @@ define([
                 nameInput[i].set('value', obj.name);
                 commentInput[i].set('value', obj.comment);
                 activeCheckBox[i].set("checked", obj.active === true);
+                startInput[i].set('value', obj.start);
+                endInput[i].set('value', obj.end);
+                valueInput[i].set('value', obj.value);
             }
         } else {
             contractId[0] = null;
             nameInput[0].set('value', "");
             commentInput[0].set('value', "");
-            activeCheckBox[0].set('checked',true);
+            activeCheckBox[0].set('checked', true);
+            startInput[0].set('value', "");
+            endInput[0].set('value', "");
+            valueInput[0].set('value', "");
         }
     }
 

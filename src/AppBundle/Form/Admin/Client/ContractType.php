@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use AppBundle\Form\Admin\Client\CategoryQuantityType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -32,7 +33,18 @@ class ContractType extends AbstractType
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'container', CheckboxType::class, [
                     'label' => 'asset.container'] )
-                
+                ->add( 'start', DateType::class, [
+                    'label' => 'common.start',
+                    'widget' => 'single_text',
+                    'format' => 'yyyy-MM-dd',
+                    'required' => false
+                ] )
+                ->add( 'end', DateType::class, [
+                    'label' => 'common.end',
+                    'widget' => 'single_text',
+                    'format' => 'yyyy-MM-dd',
+                    'required' => false
+                ] )
                 ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
                 ->add( 'requires', CollectionType::class, [
                     'entry_type' => CategoryQuantityType::class,

@@ -48,18 +48,28 @@ class Contract
      */
     private $name;
     /**
-     * @var boolean
-     * @Gedmo\Versioned
-     * @ORM\Column(name="container", type="boolean")
-     */
-    private $container = false;
-    /**
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
      * @Gedmo\Versioned
      */
     private $comment;
+    /**
+     * @var boolean
+     * @Gedmo\Versioned
+     * @ORM\Column(name="container", type="boolean")
+     */
+    private $container = false;
+    /**
+     * @Gedmo\Versioned
+     * @ORM\Column(name="startdate", type="datetime", nullable=true, unique=false)
+     */
+    private $start = null;
+    /**
+     * @Gedmo\Versioned
+     * @ORM\Column(name="enddate", type="datetime", nullable=true, unique=false)
+     */
+    private $end = null;
     /**
      * @var float
      * @Gedmo\Versioned
@@ -117,7 +127,7 @@ class Contract
     public function setId( $id )
     {
         $this->id = $id;
-        
+
         return $this;
     }
 
@@ -179,16 +189,6 @@ class Contract
         return $this->name;
     }
 
-    public function setContainer( $container )
-    {
-        $this->container = $container;
-    }
-
-    public function isContainer()
-    {
-        return $this->container;
-    }
-
     /**
      * Set comment
      *
@@ -211,6 +211,65 @@ class Contract
     public function getComment()
     {
         return $this->comment;
+    }
+
+    public function setContainer( $container )
+    {
+        $this->container = $container;
+        return $this;
+    }
+
+    public function isContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * Set start
+     *
+     * @param float $start
+     *
+     * @return Contract
+     */
+    public function setStart( $start )
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    /**
+     * Get start
+     *
+     * @return float
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * Set end
+     *
+     * @param float $end
+     *
+     * @return Contract
+     */
+    public function setEnd( $end )
+    {
+        $this->end = $end;
+
+        return $this;
+    }
+
+    /**
+     * Get end
+     *
+     * @return float
+     */
+    public function getEnd()
+    {
+        return $this->end;
     }
 
     /**

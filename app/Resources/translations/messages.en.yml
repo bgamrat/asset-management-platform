@@ -115,6 +115,8 @@ common:
         Email
     enabled:
         Enabled
+    end:
+        End
     filter:
         Filter
     group:
@@ -173,6 +175,8 @@ common:
         Save
     send:
         Send
+    start:
+        Start
     state_province:
         State
     street:

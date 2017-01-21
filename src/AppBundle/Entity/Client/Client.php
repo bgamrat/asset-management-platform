@@ -197,6 +197,11 @@ class Client
                 $ct['name'] = $c->getName();
                 $ct['comment'] = $c->getComment();
                 $ct['active'] = $c->isActive();
+                $dt = $c->getStart();
+                $ct['start'] = !empty( $dt ) ? $dt->format( 'Y-m-d' ) : null;
+                $dt = $c->getEnd();
+                $ct['end'] = !empty( $dt ) ? $dt->format( 'Y-m-d' ) : null;
+                $ct['value'] = $c->getValue();
                 $return[] = $ct;
             }
         }
