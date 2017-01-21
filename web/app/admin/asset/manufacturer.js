@@ -79,6 +79,8 @@ define([
         newBtn.on("click", function (event) {
             nameInput.set("value", "");
             activeCheckBox.set("checked", true);
+            person.setData(null);
+            brands.setData(null);
             manufacturerViewDialog.set("title", core["new"]).show();
             action = "new";
             manufacturerId = null;

@@ -48,10 +48,10 @@
                     <div id="client-view-contracts-tab">
                         <fieldset class="contracts">
                             <legend>{{'client.contracts'|trans}}</legend>
-                            {# {form_row(client_form.brands)}}
-                            {% if client_form.brands.vars.allow_add %}
+                            {{form_row(client_form.contracts)}}
+                            {% if client_form.contracts.vars.allow_add %}
                                 <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                            {% endif % #}
+                            {% endif %}
                         </fieldset>
                     </div>
                     <div id="client-view-history-tab">

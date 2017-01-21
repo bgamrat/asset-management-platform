@@ -82,6 +82,7 @@ class Client
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
+        $this->contracts = new ArrayCollection();
     }
 
     /**
@@ -189,14 +190,14 @@ class Client
         }
         else
         {
-            foreach( $this->contracts as $b )
+            foreach( $this->contracts as $c )
             {
-                $br = [];
-                $br['id'] = $b->getId();
-                $br['name'] = $b->getName();
-                $br['comment'] = $b->getComment();
-                $br['active'] = $b->isActive();
-                $return[] = $br;
+                $ct = [];
+                $ct['id'] = $c->getId();
+                $ct['name'] = $c->getName();
+                $ct['comment'] = $c->getComment();
+                $ct['active'] = $c->isActive();
+                $return[] = $ct;
             }
         }
         return $return;
@@ -207,7 +208,7 @@ class Client
         if( !$this->contracts->contains( $contract ) )
         {
             $this->contracts->add( $contract );
-            $contract->setManufacturer( $this );
+            $contract->setClient( $this );
         }
         return $this;
     }

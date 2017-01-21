@@ -173,7 +173,8 @@ define([
             MAX_PHONE_NUMBERS: 5,
             MAX_ADDRESSES: 3,
             MAX_CONTACTS: 5,
-            MAX_BRANDS: 20
+            MAX_BRANDS: 20,
+            MAX_CONTRACTS: 50
         }
     };
 });

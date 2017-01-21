@@ -24,7 +24,7 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/common/person",
-    "app/admin/asset/brand_select",
+    "app/admin/client/contracts",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -33,7 +33,7 @@ define([
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, brandSelect, lib, libGrid, core, client) {
+        person, contracts, lib, libGrid, core, client) {
     //"use strict";
     function run() {
         var action = null;
@@ -79,6 +79,8 @@ define([
             clientId = null;
             nameInput.set("value", "");
             activeCheckBox.set("checked", true);
+            person.setData(null);
+            contracts.setData(null);
             clientViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -125,15 +127,13 @@ define([
         saveBtn.on("click", function (event) {
             var beforeNameFilter, filter;
             if( clientForm.validate() ) {
-                var i,brandData = brandSelect.getData(), brandIds = [];
-                for (i = 0; i < brandData.length; i++) {
-                    brandIds.push(brandData[i].id);
-                }
                 var data = {
                     "id": clientId,
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
-                    "comment": commentInput.get("value")
+                    "comment": commentInput.get("value"),
+                    "contacts": person.getData(),
+                    "contracts": contracts.getData()
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -219,7 +219,9 @@ define([
                     clientId = client.id;
                     nameInput.set("value", client.name);
                     activeCheckBox.set("checked", client.active === true);
-                    commentInput.set("value",client.comment);
+                    commentInput.set("value", client.comment);
+                    person.setData(client.contacts);
+                    contracts.setData(client.contracts);
                     clientViewDialog.show();
                 }, lib.xhrError);
             }
@@ -277,6 +279,7 @@ define([
         });
 
         person.run('client_contacts');
+        contracts.run('client');
 
         lib.pageReady();
     }

@@ -13,17 +13,11 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Form\Common\PersonType;
+use AppBundle\Form\Admin\Client\ContractType;
 use Doctrine\ORM\EntityManager;
 
 class ClientType extends AbstractType
 {
-
-    private $em;
-
-    public function __construct( EntityManager $em )
-    {
-        $this->em = $em;
-    }
 
     /**
      * @param FormBuilderInterface $builder

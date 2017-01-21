@@ -56,7 +56,7 @@ class ClientsController extends FOSRestController
                             $queryBuilder->expr()->gt( 'LOWER(v.name)', '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
+            $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
         $query = $queryBuilder->getQuery();
         $clientCollection = $query->getResult();
@@ -97,6 +97,8 @@ class ClientsController extends FOSRestController
                 'name' => $client->getName(),
                 'active' => $client->isActive(),
                 'comment' => $client->getComment(),
+                'contacts' => $client->getContacts( false ),
+                'contracts' => $client->getContracts( false ),
             ];
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'client' . $client->getId(), $client->getUpdated() );

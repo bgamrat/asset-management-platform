@@ -46,12 +46,6 @@ services:
         class: AppBundle\Form\Admin\Asset\BarcodeType
         tags:
             - { name: form.type, alias: 'app_barcode_type' }
-    
-    app.admin.form.type.client:
-        class: AppBundle\Form\Admin\Client\ClientType
-        arguments: ['@doctrine.orm.entity_manager']
-        tags:
-            - { name: form.type, alias: 'app_client_type' }
             
     app.admin.form.type.asset_location_type_type:
         class: AppBundle\Form\Admin\Asset\AssetLocationType
@@ -64,6 +58,12 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_model_type' }
+            
+    app.admin.form.type.category_quantity:
+        class: AppBundle\Form\Admin\Client\CategoryQuantityType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_category_quantity_type' }
            
     app.admin.form.type.person:
         class: AppBundle\Form\Common\PersonType

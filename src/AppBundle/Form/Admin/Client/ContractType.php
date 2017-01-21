@@ -1,27 +1,20 @@
 <?php
 
-namespace AppBundle\Form\Admin\Asset;
+namespace AppBundle\Form\Admin\Client;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use AppBundle\Form\Admin\Client\CategoryQuantityType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Doctrine\ORM\EntityManager;
-use AppBundle\Form\Admin\Asset\DataTransformer\ModelRelationshipsToIdsTransformer;
 
-class ModelType extends AbstractType
+class ContractType extends AbstractType
 {
-
-    private $em;
-
-    public function __construct( EntityManager $em )
-    {
-        $this->em = $em;
-    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -30,33 +23,19 @@ class ModelType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['required' => false, 'mapped' => false] )
-                ->add( 'category', EntityType::class, [
-                    'class' => 'AppBundle\Entity\Asset\Category',
-                    'choice_label' => 'name',
-                    'multiple' => false,
-                    'expanded' => false,
-                    'required' => true,
-                    'label' => 'asset.category',
-                    'preferred_choices' => function($category, $key, $index)
-                    {
-                        return $category->isActive();
-                    },
-                    'choice_translation_domain' => false
-                ] )
+                ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class, [
-                    'label' => false, 'required' => true] )
-                ->add( 'container', CheckboxType::class, [
-                    'label' => 'asset.container'] )
+                    'label' => false] )
                 ->add( 'comment', TextType::class, [
-                    'label' => false, 'required' => false
+                    'label' => false
                 ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
+                ->add( 'container', CheckboxType::class, [
+                    'label' => 'asset.container'] )
+                
+                ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
                 ->add( 'requires', CollectionType::class, [
-                    'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
-                        'choice_label' => false],
-                    'by_reference' => false,
+                    'entry_type' => CategoryQuantityType::class,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -64,24 +43,8 @@ class ModelType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true
                 ] )
-                ->add( 'required_by', CollectionType::class, [
-                    'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
-                        'choice_label' => false],
-                    'by_reference' => false,
-                    'required' => false,
-                    'label' => false,
-                    'empty_data' => null,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'delete_empty' => true,
-                    'property_path' => 'requiredBy'
-                ] )
-                ->add( 'extends', CollectionType::class, [
-                    'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
-                        'choice_label' => false],
-                    'by_reference' => false,
+                ->add( 'available', CollectionType::class, [
+                    'entry_type' => CategoryQuantityType::class,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -89,28 +52,6 @@ class ModelType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true
                 ] )
-                ->add( 'extended_by', CollectionType::class, [
-                    'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'AppBundle\Entity\Asset\Model',
-                        'choice_label' => false],
-                    'by_reference' => false,
-                    'required' => false,
-                    'label' => false,
-                    'empty_data' => null,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'delete_empty' => true,
-                    'property_path' => 'extendedBy'
-                ] );
-        $builder->get( 'requires' )
-                ->addModelTransformer( new ModelRelationshipsToIdsTransformer( $this->em ) );
-        $builder->get( 'required_by' )
-                ->addModelTransformer( new ModelRelationshipsToIdsTransformer( $this->em ) );
-        $builder->get( 'extends' )
-                ->addModelTransformer( new ModelRelationshipsToIdsTransformer( $this->em ) );
-        $builder->get( 'extended_by' )
-                ->addModelTransformer( new ModelRelationshipsToIdsTransformer( $this->em ) );
-
         ;
     }
 
@@ -120,13 +61,14 @@ class ModelType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Asset\Model'
+            'allow_extra_fields' => true,
+            'data_class' => 'AppBundle\Entity\Client\Contract'
         ) );
     }
 
     public function getName()
     {
-        return 'model';
+        return 'contract';
     }
 
 }

@@ -83,6 +83,10 @@ define([
             nameInput.set("value", "");
             containerCheckBox.set("checked", false);
             activeCheckBox.set("checked", true);
+            modelRelationships.setData("extends", null);
+            modelRelationships.setData("requires", null);
+            modelRelationships.setData("extended_by", null);
+            modelRelationships.setData("required_by", null);
             action = "new";
             modelId = null;
             modelViewDialog.set("title", core["new"]).show();

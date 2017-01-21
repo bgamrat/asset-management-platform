@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * CategoryQuantity
  *
  * @ORM\Table(name="categoryquantity")
+ * @Gedmo\Loggable
  * @ORM\Entity()
  * 
  */
@@ -28,7 +29,7 @@ class CategoryQuantity
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Asset\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */

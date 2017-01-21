@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\Admin\Asset\DataTransformer;
+namespace AppBundle\Form\Admin\Client\DataTransformer;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;

@@ -12,12 +12,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Contract
  *
  * @ORM\Table(name="contract")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ContractRepository")
+ * @ORM\Entity
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Client\ContractLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @UniqueEntity(
- *     fields={"brand", "name"},
- *     message="name.must-be-unique")
  */
 class Contract
 {
@@ -50,6 +47,12 @@ class Contract
      * @Gedmo\Versioned
      */
     private $name;
+    /**
+     * @var boolean
+     * @Gedmo\Versioned
+     * @ORM\Column(name="container", type="boolean")
+     */
+    private $container = false;
     /**
      * @var string
      * 
@@ -99,5 +102,245 @@ class Contract
      * @Gedmo\Versioned
      */
     private $deletedAt;
+
+    public function __construct()
+    {
+        $this->requires = new ArrayCollection();
+        $this->available = new ArrayCollection();
+    }
+
+    /**
+     * Set id
+     * 
+     * @return Contract
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set client
+     *
+     * @param string $client
+     *
+     * @return Contract
+     */
+    public function setClient( $client )
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Get client
+     *
+     * @return string
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Contract
+     */
+    public function setName( $name )
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setContainer( $container )
+    {
+        $this->container = $container;
+    }
+
+    public function isContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return Contract
+     */
+    public function setComment( $comment )
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Set value
+     *
+     * @param float $value
+     *
+     * @return Contract
+     */
+    public function setValue( $value )
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return float
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function setActive( $active )
+    {
+        $this->active = $active;
+    }
+
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    public function getCategoryQuantities( $categoryQuantity, $full )
+    {
+        $categoryQuantities = [];
+        if( count( $this->{$categoryQuantity} ) > 0 )
+        {
+            if( $full === false )
+            {
+                foreach( $this->{$categoryQuantity} as $cq )
+                {
+                    $categoryQuantities[] = ['id' => $cq->getId(),
+                        'category' => $cq->getName(),
+                        'quantity' => $cq->getQuantity()];
+                }
+            }
+            else
+            {
+                foreach( $this->{$categoryQuantity} as $cq )
+                {
+                    $categoryQuantities[] = $cq;
+                }
+            }
+        }
+        return $categoryQuantities;
+    }
+
+    public function setRequires( $categoryQuantities )
+    {
+        $this->requires->clear();
+        foreach( $categoryQuantities as $m )
+        {
+            $this->addRequires( $m );
+        }
+        return $this;
+    }
+
+    public function getRequires( $full = true )
+    {
+        return $this->getCategoryQuantities( 'requires', $full );
+    }
+
+    public function addRequire( CategoryQuantity $categoryQuantity )
+    {
+        if( !$this->requires->contains( $categoryQuantity ) )
+        {
+            $this->requires->add( $categoryQuantity );
+        }
+    }
+
+    public function removeRequire( CategoryQuantity $categoryQuantity )
+    {
+        $this->requires->removeElement( $categoryQuantity );
+    }
+
+    public function setAvailable( $categoryQuantities )
+    {
+        foreach( $categoryQuantities as $m )
+        {
+            $this->addAvailable( $m );
+        }
+        return $this;
+    }
+
+    public function getAvailable( $full = true )
+    {
+        return $this->getCategoryQuantities( 'available', $full );
+    }
+
+    public function addAvailable( CategoryQuantity $categoryQuantity )
+    {
+        if( !$this->available->contains( $categoryQuantity ) )
+        {
+            $this->available->add( $categoryQuantity );
+        }
+    }
+
+    public function removeAvailable( CategoryQuantity $categoryQuantity )
+    {
+        $this->requires->removeElement( $categoryQuantity );
+    }
+
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt( $deletedAt )
+    {
+        $this->deletedAt = $deletedAt;
+        $this->setActive( false );
+    }
 
 }

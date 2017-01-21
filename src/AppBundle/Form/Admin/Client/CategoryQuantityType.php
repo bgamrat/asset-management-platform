@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\Admin\Asset;
+namespace AppBundle\Form\Admin\Client;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -53,7 +53,7 @@ class CategoryQuantityType extends AbstractType
 
     public function getName()
     {
-        return 'modelquantity';
+        return 'categoryquantity';
     }
 
 }
