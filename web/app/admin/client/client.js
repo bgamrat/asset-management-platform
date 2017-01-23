@@ -172,6 +172,30 @@ define([
                 name: {
                     label: core.name
                 },
+                contracts: {
+                    label: client.contracts,
+		    formatter: function (data, object) {
+                        var c, n, nameList = [], html = "", datesList = [], st = "", en = "";
+                        if( data !== "" ) {
+                            for( c in data ) {
+                                nameList.push(data[c].name);
+				if (data[c].start !== null) {
+				    st = data[c].start;
+				}
+				if (data[c].end !== null) {
+				    en = data[c].end;
+                                }
+				datesList.push(en + "-" + st);
+                            }
+                            if( nameList.length > 0 ) {
+                                for( n = 0; n < nameList.length; n++ ) {
+                                    html += '<a class="contract link" href="/admin/client/' + object.name + '/contract/' + nameList[n] + '">' + nameList[n] + '</a><span class="date-span">' + datesList[n] + '</span><br>';
+                                }
+                            }
+                        }
+                        return html;
+                    }
+                },
                 active: {
                     label: core.active,
                     editor: CheckBox,

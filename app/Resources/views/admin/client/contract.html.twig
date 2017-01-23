@@ -1,0 +1,74 @@
+{% block title %}{{ contract.client.name }} {{ contract.name }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% block admin_content %}
+    <div id="contract-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="contract">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
+                </div>
+            {% endfor %}
+            {% if not contract_form.vars.valid %}
+                <div class="form-errors contract">
+                    {% for contract in contract_form.contract %}
+                        {% if not contract.vars.valid %}
+                            {{form_errors(contract.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form_start(contract_form)}}
+            <div class="text-right">
+                <button id="contract-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+            </div>
+	    <div class="contract-data">
+		<div class="name-value-active">
+		    <span class="contract name">
+		        {{form_label(contract_form.name)}}
+		        {{form_widget(contract_form.name)}}
+                    </span>
+		    <span class="contract value">
+		        {{form_label(contract_form.value)}}
+		        {{form_widget(contract_form.value)}}
+                    </span>
+		    <span class="contract active">
+		        {{form_label(contract_form.active)}}
+		        {{form_widget(contract_form.active)}}
+                    </span>
+		    <span class="contract start">
+		        {{form_label(contract_form.start)}}
+		        {{form_widget(contract_form.start)}}
+                    </span>
+		    <span class="contract end">
+		        {{form_label(contract_form.end)}}
+		        {{form_widget(contract_form.end)}}
+                    </span>
+		</div>
+		<div class="comment">
+		    {{form_widget(contract_form.comment)}}		    
+		</div>
+	    </div>
+    {#        <div class="form-row header">
+                <span class="default">{{ 'common.default'|trans }}</span>
+                <span class="name">{{ 'common.name'|trans }}</span>
+                <span class="comment">{{ 'common.comment'|trans }}</span>
+                <span class="active">{{ 'common.active'|trans }}</span>
+            </div>
+
+            {% if contract_form.contract.vars.allow_add %}
+                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+            {% endif %} #}
+            {{form_end(contract_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/client/contract"], function (contract) {
+            contract.run();
+        });
+    </script>
+{% endblock %}

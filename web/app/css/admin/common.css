@@ -115,3 +115,7 @@
 .center {
     margin: 0 auto;
 }
+.date-span {
+    padding-left: 15px;
+    font-style: italic;
+}

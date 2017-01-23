@@ -31,9 +31,9 @@ class ClientsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['v'] )
-                ->from( 'AppBundle\Entity\Client\Client', 'v' )
-                ->orderBy( 'v.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $queryBuilder = $em->createQueryBuilder()->select( ['c'] )
+                ->from( 'AppBundle\Entity\Client\Client', 'c' )
+                ->orderBy( 'c.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -48,12 +48,12 @@ class ClientsController extends FOSRestController
             {
                 case DStore::LIKE:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->like( 'LOWER(v.name)', '?1' )
+                            $queryBuilder->expr()->like( 'LOWER(c.name)', '?1' )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'LOWER(v.name)', '?1' )
+                            $queryBuilder->expr()->gt( 'LOWER(c.name)', '?1' )
                     );
             }
             $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
@@ -66,6 +66,7 @@ class ClientsController extends FOSRestController
             $item = [
                 'id' => $c->getId(),
                 'name' => $c->getName(),
+                'contracts' => $c->getContracts(false),
                 'active' => $c->isActive(),
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )

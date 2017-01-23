@@ -26,7 +26,7 @@ class ContractType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class, [
-                    'label' => false] )
+                    'label' => 'common.name' ] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
