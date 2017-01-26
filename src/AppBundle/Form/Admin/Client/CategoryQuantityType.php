@@ -32,10 +32,13 @@ class CategoryQuantityType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'category', TextType::class, [
-                    'label' => 'common.category'
+                    'label' => 'asset.category'
                 ] )
                 ->add( 'quantity', IntegerType::class, ['label' => 'common.quantity'] )
                 ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
+                ->add( 'comment', TextType::class, [
+                    'label' => false
+                ] )
         ;
         $builder->get( 'category' )
                 ->addModelTransformer( new CategoryToIdTransformer( $this->em ) );

@@ -41,8 +41,6 @@ asset:
         Requirements
     required_by:
         Required By
-    requires:
-        Requires
     rma_required:
         RMA Required
     serial_number:
@@ -85,6 +83,8 @@ common:
         Apply
     assets:
         Assets
+    available:
+        Available
     calendar:
         Calendar
     character:
@@ -169,6 +169,8 @@ common:
         Quantity
     remove:
         Remove
+    requires:
+        Requires
     roles:
         Roles
     save:

@@ -28,7 +28,7 @@
         </fieldset>
         <div id="model-view-tabs">
             <div id="model-view-requires-tab">
-                {% block requires_models %}{% import '/form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.requires'|trans,'requires',model_form.requires) }}{% endblock %}
+                {% block requires_models %}{% import '/form/macros.html.twig' as page_macros %}{{ page_macros.relation('common.requires'|trans,'requires',model_form.requires) }}{% endblock %}
                 {% block required_by_models %}{% import '/form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.required_by'|trans,'required_by',model_form.required_by) }}{% endblock %}
             </div>
             <div id="model-view-extends-tab">

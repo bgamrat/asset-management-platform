@@ -46,6 +46,13 @@ class CategoryQuantity
      * @ORM\Column(name="value", type="float", nullable=true, unique=false)
      */
     private $value = 0.0;
+    /**
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
+     * @Gedmo\Versioned
+     */
+    private $comment;
 
     /**
      * Get id
@@ -127,8 +134,33 @@ class CategoryQuantity
         return $this->value;
     }
 
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     *
+     * @return CategoryQuantity
+     */
+    public function setComment( $comment )
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
     public function getUpdated()
     {
         return $this->updated;
     }
+
 }

@@ -5,7 +5,7 @@ imports:
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
     entity_menus: 
-        [ manufacturers, vendors, trailers ]
+        [ clients, manufacturers, vendors, trailers ]
     
 #    service_name:
 #        class: AppBundle\Directory\ClassName

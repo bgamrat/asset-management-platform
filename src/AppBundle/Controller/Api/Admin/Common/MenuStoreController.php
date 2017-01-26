@@ -22,7 +22,6 @@ class MenuStoreController extends FOSRestController
         $this->entityMenus = $entityMenus;
     }
 
-
     /**
      * @View()
      * @Get("/adminmenus")
@@ -82,7 +81,58 @@ class MenuStoreController extends FOSRestController
         }
         return $menu;
     }
-    
+
+    function getClientMenu( $adminMenu, $renderer, $id )
+    {
+        $limit = 2500; // TODO: Change to deliver first letters if there are too many manfacturers
+        $em = $this->getDoctrine()->getManager();
+        $base = explode( '-', $id );
+        switch( $base[0] )
+        {
+            case 'clients':
+                $queryBuilder = $em->createQueryBuilder();
+                $queryBuilder
+                        ->select( ["CONCAT('client-',c.id) AS id", 'c.name', "'client' AS parent", 'COUNT(ct.id) AS has_children'] )
+                        ->from( 'AppBundle\Entity\Client\Client', 'c' )
+                        ->leftJoin( 'c.contracts', 'ct' )
+                        ->orderBy( 'c.name' )
+                        ->groupBy( 'c.id' )
+                        ->setFirstResult( 0 )
+                        ->setMaxResults( $limit );
+                $menu = $renderer->render( $adminMenu['admin']['admin-clients'] );
+                $children = $queryBuilder->getQuery()->getResult();
+                $l = count( $children );
+                if( $l < $limit )
+                {
+                    for( $i = 0; $i < $l; $i++ )
+                    {
+                        $children[$i]['uri'] = $this->generateUrl(
+                                'app_admin_client_client_index', ['name' => $children[$i]['name']], true ); // absolute
+                    }
+                }
+                $menu['children'] = $children;
+                break;
+            case 'client':
+                $client = $em->getRepository( 'AppBundle\Entity\Client\Client' )->find( $base[1] );
+                $contracts = $client->getContracts();
+                $children = [];
+                foreach( $contracts as $c )
+                {
+                    $children[] = [
+                        'id' => $c->getId(),
+                        'name' => $c->getName(),
+                        'parent' => $id,
+                        'uri' => $this->generateUrl(
+                                'app_admin_client_client_contract', ['name' => $client->getName(), 'cname' => $c->getName()], true ), // absolute
+                        'has_children' => false,
+                        'children' => null];
+                }
+                $menu['children'] = $children;
+                break;
+        }
+        return $menu;
+    }
+
     function getManufacturerMenu( $adminMenu, $renderer, $id )
     {
         $limit = 2500; // TODO: Change to deliver first letters if there are too many manfacturers
@@ -162,10 +212,7 @@ class MenuStoreController extends FOSRestController
         return $menu;
     }
 
-    /**
-     * @View()
-     */
-    public function getVendorsAction( Request $request )
+    public function getVendorMenu( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
@@ -179,7 +226,7 @@ class MenuStoreController extends FOSRestController
             $queryBuilder = $em->createQueryBuilder()->select( ['v.id', "v.name"] )
                     ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
                     ->where( "LOWER(v.name) LIKE :vendor_name" )
-                    ->setParameter( 'vendor_name', strtolower($name) );
+                    ->setParameter( 'vendor_name', strtolower( $name ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
