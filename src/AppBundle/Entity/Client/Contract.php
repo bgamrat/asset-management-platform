@@ -77,14 +77,14 @@ class Contract
      */
     private $value = 0.0;
     /**
-     * @ORM\ManyToMany(targetEntity="CategoryQuantity")
+     * @ORM\ManyToMany(targetEntity="CategoryQuantity", cascade={"persist"})
      * @ORM\JoinTable(name="contract_categoryquantity_required",
      *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")}
      *      )
      */
     private $requires;
     /**
-     * @ORM\ManyToMany(targetEntity="CategoryQuantity")
+     * @ORM\ManyToMany(targetEntity="CategoryQuantity", cascade={"persist"})
      * @ORM\JoinTable(name="contract_categoryquantity_available",
      *      joinColumns={@ORM\JoinColumn(name="available_id", referencedColumnName="id")}
      *      )

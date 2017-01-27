@@ -2,7 +2,7 @@
 {% extends 'admin.base.html.twig' %}
 {% block admin_content %}
     <div id="category-wrapper">
-        <h1>{{ 'asset.category'|trans }} {{'common.admin'|trans }}</h1>
+        <h1>{{ block ('title') }}</h1>
         <div class="categories">
             {% for flash_message in app.session.flashBag.get('notice') %}
                 <div class="flash-notice">

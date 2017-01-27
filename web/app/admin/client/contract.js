@@ -28,57 +28,69 @@ define([
 
         var nameInput, commentInput, activeCheckBox;
         var startInput, endInput, valueInput, containerCheckBox;
+        var d;
         var saveBtn;
-
 
         nameInput = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
             pattern: "[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}",
-            required: true
+            required: true,
+            name: "contract[name]",
+            value: document.getElementById("contract_name").value
         }, "contract_name");
         nameInput.startup();
         commentInput = new SimpleTextarea({
             placeholder: core.comment,
             trim: true,
-            required: false
+            required: false,
+            name: "contract[comment]",
+            value: document.getElementById("contract_comment").value
         }, "contract_comment");
         commentInput.startup();
-        activeCheckBox = new CheckBox({'checked': true}, "contract_active");
+        activeCheckBox = new CheckBox({
+            name: "contract[active]",
+            'checked': document.getElementById("contract_active").checked
+        }, "contract_active");
         activeCheckBox.startup();
+        d = document.getElementById("contract_start").value;
         startInput = new DateTextBox({
             placeholder: core.start,
             trim: true,
-            required: false
+            required: false,
+            name: "contract[start]",
+            value: (d === "") ? null : d
         }, "contract_start");
         startInput.startup();
+        d = document.getElementById("contract_end").value;
         endInput = new DateTextBox({
             placeholder: core.end,
             trim: true,
-            required: false
+            required: false,
+            name: "contract[end]",
+            value: (d === "") ? null : d
         }, "contract_end");
         endInput.startup();
         valueInput = new CurrencyTextBox({
             placeholder: core.value,
             trim: true,
-            required: false
+            required: false,
+            name: "contract[value]",
+            value: document.getElementById("contract_value").value
         }, "contract_value");
         valueInput.startup();
-        var saveBtn = new Button({
-            label: core.save
-        }, 'contract-save-btn');
-        saveBtn.startup();
-        lib.pageReady();
-
-
+        containerCheckBox = new CheckBox({
+            name: "contract[container]",
+            'checked': document.getElementById("contract_container").checked
+        }, "contract_container");
+        containerCheckBox.startup();
 
         var saveBtn = new Button({
             label: core.save,
             type: "submit"
-        }, 'statuses-save-btn');
+        }, 'contract-save-btn');
         saveBtn.startup();
-
-
+        lib.pageReady();
     }
     categoryQuantities.run();
     lib.pageReady();

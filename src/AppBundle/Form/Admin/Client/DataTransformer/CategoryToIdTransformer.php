@@ -27,7 +27,7 @@ class CategoryToIdTransformer implements DataTransformerInterface
             return '';
         }
 
-        return $category->getId();
+        return $category->getName();
     }
 
     /**

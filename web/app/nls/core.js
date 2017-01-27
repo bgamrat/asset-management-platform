@@ -41,6 +41,7 @@ define({
         "phone_numbers": "Phone numbers",
         "postal_code": "Zip",
         "purchased": "Purchased",
+        "quantity": "Quantity",
         "remove": "Remove",
         "roles": "Roles",
         "save": "Save",

@@ -1,5 +1,6 @@
 {% block title %}{{ contract.client.name }} {{ contract.name }} {{'common.admin'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
+{% form_theme contract_form _self %}
 
 {% macro category_quantity_entry_row(type,form) %}{% spaceless %}
     {% if type is not defined %}{% set type = '' %}{% endif %}
@@ -14,8 +15,8 @@
             {% endif %}
     </div>{% endspaceless %}{% endmacro %}
 
-    {% block _contract_requires_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('requires',form) }}{% endblock %}
-    {% block _contract_available_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('requires',form) }}{% endblock %}
+{% block _contract_requires_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('requires',form) }}{% endblock %}
+{% block _contract_available_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('available',form) }}{% endblock %}
 
     {% block admin_content %}
         <div id="contract-wrapper">
@@ -28,19 +29,20 @@
                 {% endfor %}
                 {% if not contract_form.vars.valid %}
                     <div class="form-errors contract">
-                        {% for contract in contract_form.contract %}
+                        {% for contract in contract_form %}
                             {% if not contract.vars.valid %}
-                                {{form_errors(contract.name)}}
+                                {{form_errors(contract_form)}}
                             {% endif %}
                         {% endfor %}
                     </div>
                 {% endif %}
                 {{form_start(contract_form)}}
+                <span class="id">{{ form_widget(contract_form.id) }}</span>
                 <div class="text-right">
                     <button id="contract-save-btn" type="submit">{{ 'common.save'|trans }}</button>
                 </div>
                 <div class="contract-data">
-                    <div class="name-value-active">
+                    <div class="name-value-active">   
                         <span class="contract name">
                             {{form_label(contract_form.name)}}
                             {{form_widget(contract_form.name)}}
@@ -49,10 +51,6 @@
                             {{form_label(contract_form.value)}}
                             {{form_widget(contract_form.value)}}
                         </span>
-                        <span class="contract active">
-                            {{form_label(contract_form.active)}}
-                            {{form_widget(contract_form.active)}}
-                        </span>
                         <span class="contract start">
                             {{form_label(contract_form.start)}}
                             {{form_widget(contract_form.start)}}
@@ -60,6 +58,10 @@
                         <span class="contract end">
                             {{form_label(contract_form.end)}}
                             {{form_widget(contract_form.end)}}
+                        </span>
+                        <span class="contract active">
+                            {{form_label(contract_form.active)}}
+                            {{form_widget(contract_form.active)}}
                         </span>
                     </div>
                     <div class="container">

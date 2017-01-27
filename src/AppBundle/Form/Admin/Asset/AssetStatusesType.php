@@ -38,7 +38,6 @@ class AssetStatusesType extends AbstractType
      */
     public function configureOptions( OptionsResolver $resolver )
     {
-        return;
         $resolver->setDefaults( array(
             'csrf_protection' => true,
             'csrf_field_name' => '_token',

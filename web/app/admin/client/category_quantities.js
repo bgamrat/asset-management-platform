@@ -42,13 +42,14 @@ define([
     function createDijits() {
         var dijit, index = this.categoryFilteringSelect.length;
         var base = this.prototypeNode.id + "_" + index + '_';
+        var type = this.prototypeNode.id.replace(/contract_/, '');
         var dijit = new FilteringSelect({
             store: categoryStore,
             labelAttr: "name",
             searchAttr: "name",
             pageSize: 25,
-            name: "contract[requires][" + index + "][category]",
-            value: document.getElementById(base + "category").getAttribute("data-selected"),
+            name: "contract[" + type + "][" + index + "][category]",
+            displayedValue: document.getElementById(base + "category").value,
             required: true
         }, base + "category");
         this.categoryFilteringSelect.push(dijit);
@@ -57,7 +58,8 @@ define([
             trim: true,
             pattern: "[0-9]+",
             required: true,
-            name: "contract[requires][" + index + "][quantity]",
+            placeholder: core.quantity,
+            name: "contract[" + type + "][" + index + "][quantity]",
             value: document.getElementById(base + "quantity").value
         }, base + "quantity");
         this.quantityInput.push(dijit);
@@ -65,7 +67,9 @@ define([
         dijit = new CurrencyTextBox({
             placeholder: core.value,
             trim: true,
-            required: false
+            required: false,
+            name: "contract[" + type + "][" + index + "][value]",
+            value: document.getElementById(base + "value").value
         }, base + "value");
         this.valueInput.push(dijit);
         dijit.startup();
@@ -73,7 +77,7 @@ define([
             placeholder: core.comment,
             trim: true,
             required: false,
-            name: "contract[requires][" + index + "][comment]",
+            name: "contract[" + type + "][" + index + "][comment]",
             value: document.getElementById(base + "comment").value
         }, base + "comment");
         this.commentInput.push(dijit);
@@ -101,7 +105,7 @@ define([
     }
 
     function run() {
-        var c, addOneMoreControl = null;
+        var existingRows, c, addOneMoreControl = null;
         categoryStore = new JsonRest({
             target: '/api/store/categories',
             useRangeHeaders: false,
@@ -110,10 +114,15 @@ define([
         for( c in categoryQuantityObjs ) {
             prototypeNode = dom.byId("contract_" + c);
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-
             addOneMoreControl = query('#contract-' + c + ' .add-one-more-row');
 
             categoryQuantityObjs[c] = new CategoryQuantityObj(c, dataPrototype, prototypeNode);
+            existingRows = query('.form-row.' + c);
+            existingRows = existingRows.length;
+
+            for( i = 0; i < existingRows; i++ ) {
+                createDijits.call(categoryQuantityObjs[c]);
+            }
             addOneMoreControl.on("click", function (event) {
                 var dataType = domAttr.get(event.target, "data-type");
                 cloneNewNode.call(categoryQuantityObjs[dataType]);

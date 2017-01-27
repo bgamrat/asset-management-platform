@@ -3,7 +3,7 @@
 
 {% block admin_content %}
     <div id="status-wrapper">
-        <h1>{{ 'asset.asset'|trans }} {{ 'asset.status'|trans }} {{'common.admin'|trans }}</h1>
+        <h1>{{ block ('title') }}</h1>
         <div class="statuses">
             {% for flash_message in app.session.flashBag.get('notice') %}
                 <div class="flash-notice">

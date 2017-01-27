@@ -3,7 +3,7 @@
 
 {% block admin_content %}
     <div id="location-types-wrapper">
-        <h1>{{ 'asset.asset'|trans }} {{ 'asset.location_type'|trans }} {{'common.admin'|trans }}</h1>
+        <h1>{{ block ('title') }}</h1>
         <div class="location-types">
             {% for flash_message in app.session.flashBag.get('notice') %}
                 <div class="flash-notice">

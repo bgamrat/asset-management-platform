@@ -2,13 +2,15 @@
 
 namespace AppBundle\Controller\Admin\Client;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Form\Admin\Client\ClientType;
 use AppBundle\Form\Admin\Client\ContractType;;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Description of AssetController
@@ -33,6 +35,7 @@ class ClientController extends Controller
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
+
     /**
      * @Route("/admin/client/{name}/contract/{cname}")
      * @Method("GET")
@@ -44,23 +47,24 @@ class ClientController extends Controller
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder()->select( ['ct'] )
                 ->from( 'AppBundle\Entity\Client\Contract', 'ct' )
-		->join( 'AppBundle\Entity\Client\Client', 'c');
-	$queryBuilder->where( $queryBuilder->expr()->eq( 'c.name', '?1' ))
-		->andWhere( $queryBuilder->expr()->eq( 'ct.name', '?2' ))
-	        ->setParameters([ 1 => $name, 2 => $cname ] );
+                ->join( 'AppBundle\Entity\Client\Client', 'c' );
+        $queryBuilder->where( $queryBuilder->expr()->eq( 'c.name', '?1' ) )
+                ->andWhere( $queryBuilder->expr()->eq( 'ct.name', '?2' ) )
+                ->setParameters( [ 1 => $name, 2 => $cname] );
         $query = $queryBuilder->getQuery();
         $clientContract = $query->getResult();
-	if (is_array($clientContract)) {
-		$clientContract = $clientContract[0];
+        if( is_array( $clientContract ) )
+        {
+            $clientContract = $clientContract[0];
 
-	        $contractForm = $this->createForm( ContractType::class, $clientContract, [ 'action' => $this->generateUrl( 'app_admin_client_client_savecontract', ['name' => $name, 'cname' => $cname] ) ] );
+            $contractForm = $this->createForm( ContractType::class, $clientContract, [ 'action' => $this->generateUrl( 'app_admin_client_client_savecontract', ['name' => $name, 'cname' => $cname] )] );
 
-        	return $this->render( 'admin/client/contract.html.twig', array(
-		    'contract' => $clientContract,
-                    'contract_form' => $contractForm->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                ) );
-	}
+            return $this->render( 'admin/client/contract.html.twig', array(
+                        'contract' => $clientContract,
+                        'contract_form' => $contractForm->createView(),
+                        'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
+                    ) );
+        }
     }
 
     /**
@@ -72,31 +76,42 @@ class ClientController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
-        $statuses = [];
-        $statuses['statuses'] = $em->getRepository( 'AppBundle\Entity\Asset\AssetStatus' )->findAll();
-        $form = $this->createForm( AssetStatusesType::class, $statuses, ['allow_extra_fields' => true] );
-        $form->handleRequest( $request );
-        if( $form->isSubmitted() && $form->isValid() )
-        {
-            $statuses = $form->getData();
-            foreach( $statuses['statuses'] as $status )
-            {
-                $em->persist( $status );
-            }
-            $em->flush();
-            $this->addFlash(
-                    'notice', 'common.success' );
-            $response = new RedirectResponse( $this->generateUrl( 'app_admin_asset_assetstatus_index', [], UrlGeneratorInterface::ABSOLUTE_URL ) );
-            $response->prepare( $request );
 
-            return $response->send();
-        }
-        else
+        $queryBuilder = $em->createQueryBuilder()->select( ['ct'] )
+                ->from( 'AppBundle\Entity\Client\Contract', 'ct' )
+                ->join( 'AppBundle\Entity\Client\Client', 'c' );
+        $queryBuilder->where( $queryBuilder->expr()->eq( 'c.name', '?1' ) )
+                ->andWhere( $queryBuilder->expr()->eq( 'ct.name', '?2' ) )
+                ->setParameters( [ 1 => $name, 2 => $cname] );
+        $query = $queryBuilder->getQuery();
+        $clientContract = $query->getResult();
+        if( is_array( $clientContract ) )
         {
-            return $this->render( 'admin/asset/asset-statuses.html.twig', array(
-                        'statuses_form' => $form->createView(),
-                        'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                    ) );
+            $clientContract = $clientContract[0];
+
+            $form = $this->createForm( ContractType::class, $clientContract, [ 'action' => $this->generateUrl( 'app_admin_client_client_savecontract', ['name' => $name, 'cname' => $cname] )] );
+
+            $form->handleRequest( $request );
+            if( $form->isSubmitted() && $form->isValid() )
+            {
+                $clientContract = $form->getData();
+                $em->persist( $clientContract );
+                $em->flush();
+                $this->addFlash(
+                        'notice', 'common.success' );
+                $response = new RedirectResponse( $this->generateUrl( 'app_admin_client_client_contract', ['name' => $name, 'cname' => $cname], UrlGeneratorInterface::ABSOLUTE_URL ) );
+                $response->prepare( $request );
+
+                return $response->send();
+            }
+            else
+            {
+                return $this->render( 'admin/client/contract.html.twig', array(
+                            'contract' => $clientContract,
+                            'contract_form' => $form->createView(),
+                            'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
+                        ) );
+            }
         }
     }
 
