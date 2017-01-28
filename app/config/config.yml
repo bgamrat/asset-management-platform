@@ -65,7 +65,11 @@ assetic:
                 - 'app/css/admin/common.css'
                 - 'app/css/admin/admin.css'
                 - 'app/css/admin/user.css'
+        admin_asset_css:
+            inputs:
                 - 'app/css/admin/asset.css'
+        admin_client_css:
+            inputs:
                 - 'app/css/admin/client.css'
         # User side - stock Bootstrap
         bootstrap_css:

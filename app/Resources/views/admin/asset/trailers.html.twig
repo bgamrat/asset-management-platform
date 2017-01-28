@@ -1,5 +1,13 @@
 {% block title %}{{ 'asset.trailer'|trans }} {{'common.admin'|trans }}{% endblock %}
-{% extends 'admin.base.html.twig' %}
+
+{% extends 'admin/asset/asset.base.html.twig' %}
+
+{% form_theme trailer_form _self %}
+
+{% block _trailer_extends_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('extends',form) }}{% endblock %}
+{% block _trailer_extended_by_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('extended_by',form) }}{% endblock %}
+{% block _trailer_requires_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('requires',form) }}{% endblock %}
+{% block _trailer_required_by_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('required_by',form) }}{% endblock %}
 
 {% block admin_content %}
     <div id="trailer-wrapper">
@@ -63,7 +71,7 @@
                         </div>
                     </div>
                     <div id="trailer-view-requires-tab">
-                        {% block requires_trailers %}{% import 'form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.requires'|trans,'requires',trailer_form.requires) }}{% endblock %}
+                        {% block requires_trailers %}{% import 'form/macros.html.twig' as page_macros %}{{ page_macros.relation('common.requires'|trans,'requires',trailer_form.requires) }}{% endblock %}
                         {% block required_by_trailers %}{% import 'form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.required_by'|trans,'required_by',trailer_form.required_by) }}{% endblock %}
                     </div>
                     <div id="trailer-view-extends-tab">

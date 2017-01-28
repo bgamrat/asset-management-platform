@@ -28,6 +28,13 @@
     position: absolute;
     right: 20px;
 }
+
+.contract-data {
+    margin: 25px 0;
+}
+.name-value-active {
+    margin: 10px 0;
+}
 .value .dijitTextBox,
 .start .dijitTextBox,
 .end .dijitTextBox {
@@ -41,7 +48,6 @@
     width: 100%;
     height: 50px;
 }
-
 .form-row .id {
     display: none;
 }

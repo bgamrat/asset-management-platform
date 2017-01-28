@@ -1,5 +1,22 @@
 {% block title %}{{ 'asset.location_type'|trans }} {{'common.admin'|trans }}{% endblock %}
+
 {% extends 'admin.base.html.twig' %}
+
+{% form_theme location_types_form _self %}
+
+{% block _location_types_types_entry_row %}
+    {% spaceless %}
+        <div class="form-row type">
+            <span class="default">{{ form_widget(form.default)}}</span>
+            <span class="id">{{ form_widget(form.id) }}</span>
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="entity">{{ form_widget(form.entity) }}</span>
+            <span class="url">{{ form_widget(form.url) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
 
 {% block admin_content %}
     <div id="location-types-wrapper">

@@ -1,5 +1,23 @@
 {% block title %}{{ 'asset.model'|trans }} {{'common.admin'|trans }}{% endblock %}
-{% extends 'admin.base.html.twig' %}
+
+{% extends 'admin/asset/asset.base.html.twig' %}
+
+{% form_theme model_form _self %}
+
+{% block _model_extends_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('extends',form) }}{% endblock %}
+{% block _model_extended_by_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('extended_by',form) }}{% endblock %}
+{% block _model_requires_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('requires',form) }}{% endblock %}
+{% block _model_required_by_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('required_by',form) }}{% endblock %}
+
+{% block _models_models_entry_row %}{% spaceless %}
+        <div class="form-row model">
+            <span class="category">{{ form_widget(form.category) }}</span>
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="model-__model__"><i class="fa fa-remove"></i></span>
+        </div>
+{% endspaceless %}{% endblock %}
 
 {% block admin_content %}
     <div id="model-wrapper">

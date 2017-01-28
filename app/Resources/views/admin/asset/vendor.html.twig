@@ -1,5 +1,29 @@
 {% block title %}{{ 'asset.vendor'|trans }} {{'common.admin'|trans }}{% endblock %}
-{% extends 'admin.base.html.twig' %}
+{% extends 'admin/asset/asset.base.html.twig' %}
+
+{% form_theme vendor_form _self %}
+
+{% block _vendor_brands_entry_row %}
+    {{ block('_brands_entry_row') }}
+{% endblock %}
+
+{% block _vendor_contacts_entry_row %}
+    <div class="form-row contacts">
+        {% include 'common/person.html.twig' with {'legend': 'common.contact'} %}
+    </div>
+{% endblock %}
+
+{% block _vendor_contacts_entry_addresses_entry_row %}
+    {{ block('_address_entry_row') }}
+{% endblock %}
+
+{% block _vendor_contacts_entry_emails_entry_row %}
+    {{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _vendor_contacts_entry_phones_entry_row %}
+    {{ block('_phones_entry_row') }}
+{% endblock %}
 
 {% block admin_content %}
     <div id="vendor-wrapper">

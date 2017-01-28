@@ -1,5 +1,23 @@
 {% block title %}{{ 'asset.category'|trans }} {{'common.admin'|trans }}{% endblock %}
-{% extends 'admin.base.html.twig' %}
+
+{% extends 'admin/asset/asset.base.html.twig' %}
+
+{% form_theme categories_form _self %}
+
+{% block _categories_categories_entry_row %}{% spaceless %}
+        <div class="form-row category" data-category-id="{{form.id.vars.value}}">
+            <span class="id">{{ form_widget(form.id) }}</span>
+            <span class="parent">{{ form_widget(form.parent) }}</span>
+            <span class="position">{{ form_widget(form.position) }}</span>
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+            {% if form.parent.vars.allow_delete is defined %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="categories-__categories__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>
+{% endspaceless %}{% endblock %}
+
 {% block admin_content %}
     <div id="category-wrapper">
         <h1>{{ block ('title') }}</h1>

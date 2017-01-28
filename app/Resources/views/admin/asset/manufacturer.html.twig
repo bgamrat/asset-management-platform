@@ -1,6 +1,28 @@
 {% block title %}{{ 'asset.manufacturer'|trans }} {{'common.admin'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
+{% form_theme manufacturer_form _self %}
+
+{% block _manufacturer_brands_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_active_entry_row('brand',form) }}{% endblock %}
+
+{% block _manufacturer_contacts_entry_row %}
+    <div class="form-row contacts">
+        {% include 'common/person.html.twig' with {'legend': 'common.contact'} %}
+    </div>
+{% endblock %}
+
+{% block _manufacturer_contacts_entry_addresses_entry_row %}
+    {{ block('_address_entry_row') }}
+{% endblock %}
+
+{% block _manufacturer_contacts_entry_emails_entry_row %}
+    {{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _manufacturer_contacts_entry_phones_entry_row %}
+    {{ block('_phones_entry_row') }}
+{% endblock %}
+
 {% block admin_content %}
     <div id="manufacturer-wrapper">
         <h1>{{ block ('title') }}</h1>

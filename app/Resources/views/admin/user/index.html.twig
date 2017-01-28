@@ -1,6 +1,20 @@
 {% block title %}{{ 'user.admin'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
+{% form_theme user_form _self %}
+
+{% block _user_person_addresses_entry_row %}
+    {{ block('_address_entry_row') }}
+{% endblock %}
+
+{% block _user_person_emails_entry_row %}
+    {{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _user_person_phones_entry_row %}
+    {{ block('_phones_entry_row') }}
+{% endblock %}
+
 {% block admin_content %}
     <div id="user-wrapper">
         <h1>{{ 'user.admin'|trans }}</h1>

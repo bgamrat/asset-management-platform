@@ -1,6 +1,26 @@
 {% block title %}{{ 'common.people'|trans }} {{'common.admin'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
+{% form_theme person_form _self %}
+
+{% block _person_row %}
+    <div class="form-row person">
+        {% include 'common/person.html.twig' with {'legend': 'common.person'} %}
+    </div>
+{% endblock %}
+
+{% block _person_addresses_entry_row %}
+    {{ block('_address_entry_row') }}
+{% endblock %}
+
+{% block _person_emails_entry_row %}
+    {{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _person_phones_entry_row %}
+    {{ block('_phones_entry_row') }}
+{% endblock %}
+
 {% block admin_content %}
     <div id="person-wrapper">
         <h1>{{ 'common.person'|trans }} {{'common.admin'|trans }}</h1>
