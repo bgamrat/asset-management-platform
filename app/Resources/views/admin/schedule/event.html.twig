@@ -1,0 +1,114 @@
+{% block title %}{{ event.client.name }} {{ event.name }} {{'common.admin'|trans }}{% endblock %}
+
+{% extends 'admin.base.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets 
+            '@admin_client_css'
+            filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% form_theme event_form _self %}
+
+{% macro category_quantity_entry_row(type,form) %}{% spaceless %}
+    {% if type is not defined %}{% set type = '' %}{% endif %}
+    <div class="form-row {{ type }}">
+        <span class="id">{{ form_widget(form.id) }}</span>
+        <span class="type-select">{{ form_widget(form.category) }}</span>
+        <span class="quantity">{{ form_widget(form.quantity) }}</span>
+        <span class="value">{{ form_widget(form.value) }}</span>
+        <span class="comment">{{ form_widget(form.comment) }}</span>
+        {% if form.parent.vars.allow_delete is defined %}
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__{{type}}__"><i class="fa fa-remove"></i></span>
+            {% endif %}
+    </div>{% endspaceless %}{% endmacro %}
+
+{% block _event_requires_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('requires',form) }}{% endblock %}
+{% block _event_available_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('available',form) }}{% endblock %}
+
+    {% block admin_content %}
+        <div id="event-wrapper">
+            <h1>{{ block ('title') }}</h1>
+            <div class="event">
+                {% for flash_message in app.session.flashBag.get('notice') %}
+                    <div class="flash-notice">
+                        {{ flash_message|trans }}
+                    </div>
+                {% endfor %}
+                {% if not event_form.vars.valid %}
+                    <div class="form-errors event">
+                        {% for event in event_form %}
+                            {% if not event.vars.valid %}
+                                {{form_errors(event_form)}}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {{form_start(event_form)}}
+                <span class="id">{{ form_widget(event_form.id) }}</span>
+                <div class="text-right">
+                    <button id="event-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+                </div>
+                <div class="event-data">
+                    <div class="name-value-active">   
+                        <span class="event name">
+                            {{form_label(event_form.name)}}
+                            {{form_widget(event_form.name)}}
+                        </span>
+                        <span class="event value">
+                            {{form_label(event_form.value)}}
+                            {{form_widget(event_form.value)}}
+                        </span>
+                        <span class="event start">
+                            {{form_label(event_form.start)}}
+                            {{form_widget(event_form.start)}}
+                        </span>
+                        <span class="event end">
+                            {{form_label(event_form.end)}}
+                            {{form_widget(event_form.end)}}
+                        </span>
+                        <span class="event active">
+                            {{form_label(event_form.active)}}
+                            {{form_widget(event_form.active)}}
+                        </span>
+                    </div>
+                    <div class="container">
+                        {{form_label(event_form.container)}}
+                        {{form_widget(event_form.container)}}		    
+                    </div>
+                    <div class="comment">
+                        {{form_widget(event_form.comment)}}		    
+                    </div>
+                </div>
+
+                <fieldset id="event-requires" class="event requires">
+                    <legend>{{'common.requires'|trans}}</legend>
+                    {{form_row(event_form.requires)}}
+                    {% if event_form.requires.vars.allow_add %}
+                        <span  data-type="requires" class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                    {% endif %}
+                </fieldset>
+
+                <fieldset id="event-available" class="event available">
+                    <legend>{{'common.available'|trans}}</legend>
+                    {{form_row(event_form.available)}}
+                    {% if event_form.available.vars.allow_add %}
+                        <span data-type="available" class="available add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                    {% endif %}
+                </fieldset>
+
+                {{form_end(event_form)}}
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block javascripts %}
+        <script>
+            require(["app/admin/client/event"], function (event) {
+                event.run();
+            });
+        </script>
+    {% endblock %}
+

@@ -1,34 +1,29 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\Admin\Schedule;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Form\TestType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use AppBundle\Entity\Invitation;
 
 /**
- * Description of UserController
+ * Description of ServiceController
  *
  * @author bgamrat
  */
-class TestController extends Controller
+class ServiceController extends Controller
 {
     /**
-     * @Route("/admin/test")
+     * @Route("/admin/schedule/service")
      * @Method("GET")
      */
     public function indexAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-
-        $form = $this->createForm( TestType::class, null, [] );
-        
-        return $this->render( 'admin/user/test.html.twig', array(
-                    'form' => $form->createView(),
+      
+        return $this->render( 'admin/schedule/service.html.twig', array(
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }

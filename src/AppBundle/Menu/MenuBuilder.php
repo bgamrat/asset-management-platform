@@ -28,7 +28,7 @@ class MenuBuilder implements ContainerAwareInterface
 
     public function createAdminMenu( array $options )
     {
-        $menu = $this->factory->createItem( 'root', [ 'label' => 'common.admin'] )->setExtra( 'translation_domain', $this->container->get('translator')->getLocale());
+        $menu = $this->factory->createItem( 'root', [ 'label' => 'common.admin'] )->setExtra( 'translation_domain', $this->container->get( 'translator' )->getLocale() );
 
         $menu->addChild( 'admin', ['route' => 'root', 'label' => 'common.home'] );
         $menu['admin']->addChild( 'admin-assets', ['label' => 'common.assets'] );
@@ -40,16 +40,23 @@ class MenuBuilder implements ContainerAwareInterface
         $menu['admin']['admin-assets']->addChild( 'configuration', [ 'label' => 'common.configuration'] );
         $menu['admin']['admin-assets']['configuration']->addChild( 'statuses', ['label' => 'asset.asset-statuses', 'route' => 'app_admin_asset_assetstatus_index'] );
         $menu['admin']['admin-assets']['configuration']->addChild( 'categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index'] );
-        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) ) {
+        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
             $menu['admin']['admin-assets']['configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
         }
 
         $menu['admin']->addChild( 'admin-clients', ['label' => 'common.clients', 'route' => 'app_admin_client_client_index'] );
         $menu['admin']['admin-clients']->addChild( 'clients', ['label' => 'common.clients'] );
-        
+
+        $menu['admin']->addChild( 'admin-schedule', ['label' => 'common.schedule', 'route' => 'app_admin_schedule_default_index'] );
+        $menu['admin']['admin-schedule']->addChild( 'events', ['label' => 'common.events', 'route' => 'app_admin_schedule_event_index'] );
+        $menu['admin']['admin-schedule']->addChild( 'service', ['label' => 'common.service', 'route' => 'app_admin_schedule_service_index'] );
+        $menu['admin']['admin-schedule']->addChild( 'shop', ['label' => 'common.shop', 'route' => 'app_admin_schedule_shop_index'] );
+        $menu['admin']['admin-schedule']->addChild( 'park', ['label' => 'common.park', 'route' => 'app_admin_schedule_park_index'] );
+
         $menu['admin']->addChild( 'admin-common', ['label' => 'common.common'] );
         $menu['admin']['admin-common']->addChild( 'people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index'] );
-        
+
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN_USER' ) )
         {
             $menu['admin']->addChild( 'user', ['label' => 'common.users'] );
@@ -121,7 +128,7 @@ class MenuBuilder implements ContainerAwareInterface
 
         return $menu;
     }
-    
+
     public function createVendorMenu( array $options )
     {
         $menu = $this->factory->createItem( 'vendor' );

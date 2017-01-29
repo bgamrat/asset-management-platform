@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Admin;
+namespace AppBundle\Controller\Admin\Schedule;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,21 +9,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
- * Description of DefaultController
+ * Description of ParkController
  *
  * @author bgamrat
  */
-class DefaultController extends Controller
+class ParkController extends Controller
 {
     /**
-     * @Route("/admin")
+     * @Route("/admin/schedule/park")
      * @Method("GET")
      */
     public function indexAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
       
-        return $this->render( 'admin.base.html.twig', array(
+        return $this->render( 'admin/schedule/park.html.twig', array(
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }

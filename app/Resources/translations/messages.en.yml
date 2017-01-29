@@ -117,6 +117,10 @@ common:
         Enabled
     end:
         End
+    event:
+        Event
+    events:
+        Events
     filter:
         Filter
     group:
@@ -149,6 +153,8 @@ common:
         New
     none:
         None
+    park:
+        Park
     password:
         Password
     people:
@@ -175,8 +181,14 @@ common:
         Roles
     save:
         Save
+    schedule:
+        Schedule
     send:
         Send
+    service:
+        Service
+    shop:
+        Shop
     start:
         Start
     state_province:
