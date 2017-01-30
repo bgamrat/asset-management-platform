@@ -37,7 +37,7 @@ class CategoryToIdTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (category) is not found.
      */
-    public function reverseTransform($categoryId)
+    public function reverseTransform($categoryName)
     {
         // no category id? It's optional, so that's ok
         if (!$categoryId) {
@@ -46,13 +46,13 @@ class CategoryToIdTransformer implements DataTransformerInterface
 
         $category = $this->em
             ->getRepository('AppBundle\Entity\Asset\Category')
-            ->find($categoryId)
+            ->find($categoryName)
         ;
 
         if (null === $category) {
             throw new TransformationFailedException(sprintf(
-                'An category with id "%s" does not exist!',
-                $categoryId
+                'An category with name "%s" does not exist!',
+                $categoryName
             ));
         }
         return $category;

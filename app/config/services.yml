@@ -64,6 +64,12 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_category_quantity_type' }
+
+    app.admin.form.type.event:
+        class: AppBundle\Form\Admin\Schedule\EventType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_schedule_event_type' }
            
     app.admin.form.type.person:
         class: AppBundle\Form\Common\PersonType
@@ -136,7 +142,7 @@ services:
         class: AppBundle\Form\User\RegistrationFormType
         tags:
             - { name: "form.type", alias: "app_user_registration" }
-        
+
     app.form.user:
         factory_method: createNamed
         factory_service: form.factory

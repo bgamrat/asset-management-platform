@@ -71,6 +71,9 @@ assetic:
         admin_client_css:
             inputs:
                 - 'app/css/admin/client.css'
+        admin_schedule_css:
+            inputs:
+                - 'app/css/admin/schedule.css'
         # User side - stock Bootstrap
         bootstrap_css:
             inputs:

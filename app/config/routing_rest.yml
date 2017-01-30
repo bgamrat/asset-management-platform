@@ -65,3 +65,9 @@ app_admin_users_invitations:
     resource: AppBundle\Controller\Api\Admin\User\InvitationsController
     name_prefix: app_admin_api_user_invitation_
     prefix: /api
+
+app_admin_schedule_events:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Schedule\EventsController
+    name_prefix:   app_admin_api_schedule_
+    prefix: /api

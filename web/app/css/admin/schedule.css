@@ -1,0 +1,15 @@
+.dgrid-column-id,
+.dgrid-column-billable,
+.dgrid-column-canceled,
+.dgrid-column-tentative {
+    width: 75px;
+}
+.dgrid-column-billable,
+.dgrid-column-canceled,
+.dgrid-column-tentative {
+    text-align: center;
+}
+.event.name{
+    font-size: 1.5em;
+    display: inline-block;
+}
