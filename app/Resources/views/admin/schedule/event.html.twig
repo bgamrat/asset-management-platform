@@ -30,6 +30,15 @@
     {{ block('_phones_entry_row') }}
 {% endblock %}
 
+{% block _event_contracts_entry_row %}{% spaceless %}
+        <div class="form-row contract">
+            <span class="name"> <input id="{{id}}" type="text"></span>
+                {% if form.parent.vars.allow_delete %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="brand-__brand__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>
+{% endspaceless %}{% endblock %}
+
 {% block admin_content %}
     <div id="event-wrapper">
         <h1>{{ block('title') }}</h1>
@@ -79,15 +88,36 @@
                             {{form_label(event_form.canceled)}}
                         </span>
                     </div>
-                    {{form_row(event_form.comment)}}
                 </fieldset>
                 <div id="event-view-tabs">
+                    <div id="event-view-details-tab">
+                        <fieldset class="details">
+                            {{form_row(event_form.description,{"attr":{"class":"description"}})}}
+                        </fieldset>
+                    </div>
+                    <div id="event-view-contracts-tab">
+                        <fieldset class="contracts">
+                            {{form_row(event_form.contracts)}}
+                            {% if event_form.contracts.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
+                        </fieldset>
+                    </div>
                     <div id="event-view-contacts-tab">
                         <fieldset class="contacts">
                             {{form_row(event_form.contacts)}}
                             {% if event_form.contacts.vars.allow_add %}
                                 <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
                             {% endif %}
+                        </fieldset>
+                    </div>
+                    <div id="event-view-venue-tab">
+                        <fieldset class="event venue">
+                            <legend>{{'common.venue'|trans}}</legend>
+                            {# {{form_row(event_form.event_times)}}
+                                                    {% if event_form.events.vars.allow_add %}
+                                                        <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                                    {% endif %} #}
                         </fieldset>
                     </div>
                     <div id="event-view-times-tab">

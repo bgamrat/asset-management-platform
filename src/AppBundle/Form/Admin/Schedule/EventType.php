@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Client\DataTransformer\ClientToIdTransformer;
+use AppBundle\Form\Admin\Client\Type\ContractType;
 use AppBundle\Form\Common\PersonType;
 
 class EventType extends AbstractType
@@ -37,7 +38,7 @@ class EventType extends AbstractType
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class, [
                     'label' => 'common.name'] )
-                ->add( 'comment', TextType::class, [
+                ->add( 'description', TextType::class, [
                     'label' => false
                 ] )
                 ->add( 'start', DateType::class, [
@@ -66,11 +67,18 @@ class EventType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__person__'
                 ] )
-                ->add( 'comment', TextType::class, [
-                    'label' => false
-                ] )
                 ->add( 'client', TextType::class, [
                     'label' => 'common.client'
+                ] )
+                ->add( 'contracts', CollectionType::class, [
+                    'entry_type' => ContractType::class,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__contract__'
                 ] )
         ;
         $builder->get( 'client' )

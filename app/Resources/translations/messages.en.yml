@@ -211,6 +211,8 @@ common:
         Username
     value:
         Value
+    venue:
+        Venue
         
 error:
     cannot_be_null:

@@ -30,11 +30,42 @@ services:
             1:
                 - '@app.encoder.json'
 
+    app.form.data_transformer.barcode:
+        class: AppBundle\Form\Admin\Asset\DataTransformer\BarcodeToEntityTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.contract:
+        class: AppBundle\Form\Admin\Client\DataTransformer\ContractToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.invitation:
+        class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.model:
+        class: AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.person_type:
+        class: AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
     app.admin.field.type.model_relationship:
         class: AppBundle\Form\Admin\Asset\Type\ModelRelationshipType
         arguments: ['@app.form.data_transformer.model']
         tags:
             - { name: form.type, alias: 'app_model_relationship_type' }
+
+    app.admin.field.type.contract:
+        class: AppBundle\Form\Admin\Client\Type\ContractType
+        arguments: ['@app.form.data_transformer.contract']
+        tags:
+            - { name: form.type, alias: 'app_client_contract_type' }
 
     app.admin.form.type.asset:
         class: AppBundle\Form\Admin\Asset\AssetType
@@ -106,26 +137,6 @@ services:
         arguments: ['%entity_menus%']
         calls:
             - [setContainer, ["@service_container"]]
-
-    app.form.data_transformer.barcode:
-        class: AppBundle\Form\Admin\Asset\DataTransformer\BarcodeToEntityTransformer
-        arguments: ['@doctrine.orm.entity_manager']
-        public: false    
-
-    app.form.data_transformer.invitation:
-        class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
-        arguments: ['@doctrine.orm.entity_manager']
-        public: false
-        
-    app.form.data_transformer.model:
-        class: AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer
-        arguments: ['@doctrine.orm.entity_manager']
-        public: false
-
-    app.form.data_transformer.person_type:
-        class: AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer
-        arguments: ['@doctrine.orm.entity_manager']
-        public: false
         
     app.form.invitation:
         class: AppBundle\Form\User\InvitationFormType

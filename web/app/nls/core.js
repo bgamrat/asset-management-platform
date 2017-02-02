@@ -15,6 +15,8 @@ define({
         "cost": "Cost",
         "country": "Country",
         "dates": "Dates",
+        "description": "Description",
+        "details": "Details",
         "disabled": "Disabled",
         "email": "Email",
         "enabled": "Enabled",
@@ -58,6 +60,7 @@ define({
         "user": "User",
         "username": "Username",
         "value": "Value",
+        "venue": "Venue",
         "view": "View",
         "yes": "Yes"
     })

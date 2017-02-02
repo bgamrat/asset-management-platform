@@ -27,16 +27,17 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/common/person",
+    "app/admin/schedule/contracts",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/schedule",
     "dojo/domReady!"
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
-        registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea,  FilteringSelect, JsonRest,
+        registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, lib, libGrid, core, schedule) {
+        person, contracts, lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
         var action = null, d;
@@ -44,7 +45,8 @@ define([
         var eventId;
 
         var eventViewDialog = new Dialog({
-            title: core.view
+            title: core.view,
+            style: "height:700px;width:1000px"
         }, "event-view-dialog");
         eventViewDialog.startup();
         eventViewDialog.on("cancel", function (event) {
@@ -55,11 +57,35 @@ define([
             style: "height: 525px; width: 100%;"
         }, "event-view-tabs");
 
+        var detailsContentPane = new ContentPane({
+            title: core.details},
+        "event-view-details-tab"
+                );
+        tabContainer.addChild(detailsContentPane);
+
+        var contractsContentPane = new ContentPane({
+            title: schedule.contracts},
+        "event-view-contracts-tab"
+                );
+        tabContainer.addChild(contractsContentPane);
+
         var contactsContentPane = new ContentPane({
             title: core.contacts},
         "event-view-contacts-tab"
                 );
         tabContainer.addChild(contactsContentPane);
+
+        var venueContentPane = new ContentPane({
+            title: core.venue},
+        "event-view-venue-tab"
+                );
+        tabContainer.addChild(venueContentPane);
+
+        var timesContentPane = new ContentPane({
+            title: schedule.times},
+        "event-view-times-tab"
+                );
+        tabContainer.addChild(timesContentPane);
 
         var historyContentPane = new ContentPane({
             title: core.history},
@@ -75,13 +101,13 @@ define([
         newBtn.on("click", function (event) {
             eventId = null;
             nameInput.set("value", "");
-            startInput.set('value', "");
-            endInput.set('value', "");
+            startInput.set('value', null);
+            endInput.set('value', null);
             tentativeCheckBox.set("checked", false);
             billableCheckBox.set("checked", true);
             canceledCheckBox.set("checked", false);
             clientFilteringSelect.set('displayedValue', "");
-            commentInput.set("value", "");
+            descriptionInput.set("value", "");
             person.setData(null);
             eventViewDialog.set("title", core["new"]).show();
             action = "new";
@@ -110,7 +136,7 @@ define([
         nameInput.startup();
 
         d = document.getElementById("event_start").value;
-        startInput = new DateTextBox({
+        var startInput = new DateTextBox({
             placeholder: core.start,
             trim: true,
             required: false,
@@ -120,7 +146,7 @@ define([
         startInput.startup();
 
         d = document.getElementById("event_end").value;
-        endInput = new DateTextBox({
+        var endInput = new DateTextBox({
             placeholder: core.end,
             trim: true,
             required: false,
@@ -149,12 +175,12 @@ define([
         }, "event_client");
         clientFilteringSelect.startup();
 
-        var commentInput = new SimpleTextarea({
-            placeholder: core.comment,
+        var descriptionInput = new SimpleTextarea({
+            placeholder: core.description,
             trim: true,
             required: false
-        }, "event_comment");
-        commentInput.startup();
+        }, "event_description");
+        descriptionInput.startup();
 
         var eventForm = new Form({}, '[name="event"]');
         eventForm.startup();
@@ -360,6 +386,7 @@ define([
         });
 
         person.run('event_contacts');
+        contracts.run('event_contracts');
         lib.pageReady();
     }
     return {

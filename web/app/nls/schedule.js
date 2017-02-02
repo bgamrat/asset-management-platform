@@ -2,6 +2,9 @@ define({
     root: ({
         "billable": "Billable",
         "canceled": "Canceled",
-        "tentative": "Tentative"
+        "contracts": "Contracts",
+        "schedule": "Schedule",
+        "tentative": "Tentative",
+        "times": "Times"
     })
 });

@@ -13,3 +13,9 @@
     font-size: 1.5em;
     display: inline-block;
 }
+.event .description .dijitTextArea {
+    height: 150px;
+}
+.event .contract .name .dijitTextBox {
+    width: 300px;
+}

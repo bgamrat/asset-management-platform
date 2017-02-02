@@ -35,6 +35,12 @@ class Event
      */
     private $name;
     /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ORM\Column(type="string", length=256, nullable=true)
+     */
+    private $description;
+    /**
      * @Gedmo\Versioned
      * @ORM\Column(name="startdate", type="datetime", nullable=true, unique=false)
      */
@@ -77,11 +83,14 @@ class Event
      */
     private $contacts = null;
     /**
-     * @var string
-     * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=256, nullable=true)
+     * @var ArrayCollection $contracts
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\Contract", cascade={"persist"})
+     * @ORM\JoinTable(name="event_contract",
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="contract_id", referencedColumnName="id", onDelete="CASCADE", unique=true, nullable=false)}
+     *      )
      */
-    private $comment;
+    protected $contracts = null;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
@@ -101,7 +110,7 @@ class Event
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
-        $this->brands = new ArrayCollection();
+        $this->contracts = new ArrayCollection();
     }
 
     /**
@@ -227,17 +236,27 @@ class Event
     }
 
     /**
-     * Set comment
+     * Set description
      *
-     * @param string $comment
+     * @param string $description
      *
      * @return Event
      */
-    public function setComment( $comment )
+    public function setDescription( $description )
     {
-        $this->comment = $comment;
+        $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
@@ -264,16 +283,6 @@ class Event
         return $this->client;
     }
 
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
     public function getContacts()
     {
         return $this->contacts->toArray();
@@ -290,6 +299,42 @@ class Event
     public function removeContact( Person $contact )
     {
         $this->contacts->removeElement( $contact );
+    }
+
+    public function getContracts()
+    {
+        $return = [];
+
+        foreach( $this->contracts as $c )
+        {
+            $ct = [];
+            $ct['id'] = $c->getId();
+            $ct['name'] = $c->getName();
+            $ct['comment'] = $c->getComment();
+            $ct['active'] = $c->isActive();
+            $dt = $c->getStart();
+            $ct['start'] = !empty( $dt ) ? $dt->format( 'Y-m-d' ) : null;
+            $dt = $c->getEnd();
+            $ct['end'] = !empty( $dt ) ? $dt->format( 'Y-m-d' ) : null;
+            $ct['value'] = $c->getValue();
+            $return[] = $ct;
+        }
+        return $return;
+    }
+
+    public function addContract( Contract $contract )
+    {
+        if( !$this->contracts->contains( $contract ) )
+        {
+            $this->contracts->add( $contract );
+            $contract->setClient( $this );
+        }
+        return $this;
+    }
+
+    public function removeContract( Contract $contract )
+    {
+        $this->contracts->removeElement( $contract );
     }
 
     public function getUpdated()
