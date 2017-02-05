@@ -10,14 +10,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * CategoryQuantity
+ * Trailer
  *
- * @ORM\Table(name="category_quantity")
+ * @ORM\Table(name="client_trailer")
  * @Gedmo\Loggable
  * @ORM\Entity()
  * 
  */
-class CategoryQuantity
+class Trailer
 {
 
     /**
@@ -29,17 +29,11 @@ class CategoryQuantity
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Asset\Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Asset\Trailer")
+     * @ORM\JoinColumn(name="trailer_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
-    private $category;
-    /**
-     * @var int
-     * @Gedmo\Versioned
-     * @ORM\Column(name="quantity", type="integer", nullable=false, unique=false)
-     */
-    private $quantity = 1;
+    private $trailer;
     /**
      * @var float
      * @Gedmo\Versioned
@@ -77,44 +71,27 @@ class CategoryQuantity
     }
 
     /**
-     * Set category
+     * Set trailer
      *
-     * @param string $category
+     * @param string $trailer
      *
-     * @return Category
+     * @return Trailer
      */
-    public function setCategory( $category )
+    public function setTrailer( $trailer )
     {
-        $this->category = $category;
+        $this->trailer = $trailer;
 
         return $this;
     }
 
     /**
-     * Get category
+     * Get trailer
      *
-     * @return string
+     * @return Trailer
      */
-    public function getCategory()
+    public function getTrailer()
     {
-        return $this->category;
-    }
-
-    public function setQuantity( $quantity )
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    /**
-     * Get quantity
-     *
-     * @return string
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
+        return $this->trailer;
     }
 
     public function setValue( $value )
@@ -139,7 +116,7 @@ class CategoryQuantity
      *
      * @param string $comment
      *
-     * @return CategoryQuantity
+     * @return Trailer
      */
     public function setComment( $comment )
     {

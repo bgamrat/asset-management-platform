@@ -40,7 +40,7 @@ class Trailer
     /**
      * @var string
      * @Gedmo\Versioned
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="name", type="string", length=64, nullable=false, unique=true)
      */
     private $name;
     /**
@@ -193,7 +193,7 @@ class Trailer
      *
      * @param string $name
      *
-     * @return Asset
+     * @return Trailer
      */
     public function setName( $name )
     {

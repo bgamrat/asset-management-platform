@@ -181,6 +181,31 @@ class StoreController extends FOSRestController
 
     /**
      * @View()
+     * @Route("/api/store/contracttrailers/{id}")
+     * @Method("GET")
+     */
+    public function getContracttrailersAction( $id )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        if( !empty( $id ) )
+        {
+            $contractRepository = $this->getDoctrine()
+                    ->getRepository( 'AppBundle\Entity\Client\Contract' );
+
+            $contract = $contractRepository->find( $id );
+            $data = ['required' => $contract->getRequiresTrailers( false ),
+                'available' => $contract->getAvailableTrailers( false )];
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
+
+    /**
+     * @View()
      */
     public function getEmailtypesAction( Request $request )
     {
@@ -291,7 +316,7 @@ class StoreController extends FOSRestController
     /**
      * @View()
      */
-    public function getTrailerAction( Request $request )
+    public function getTrailersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $name = $request->get( 'name' );

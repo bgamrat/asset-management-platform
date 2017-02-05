@@ -12,6 +12,21 @@
 
 {% form_theme contract_form _self %}
 
+{% macro trailer_entry_row(type,form) %}{% spaceless %}
+    {% if type is not defined %}{% set type = '' %}{% endif %}
+    <div class="form-row {{ type }}">
+        <span class="id">{{ form_widget(form.id) }}</span>
+        <span class="trailer">{{ form_widget(form.trailer) }}</span>
+        <span class="value">{{ form_widget(form.value) }}</span>
+        <span class="comment">{{ form_widget(form.comment) }}</span>
+        {% if form.parent.vars.allow_delete is defined %}
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__{{type}}__"><i class="fa fa-remove"></i></span>
+            {% endif %}
+    </div>{% endspaceless %}{% endmacro %}
+
+{% block _contract_requires_trailers_entry_row %}{% import _self as form_macros %}{{ form_macros.trailer_entry_row('requires_trailers',form) }}{% endblock %}
+{% block _contract_available_trailers_entry_row %}{% import _self as form_macros %}{{ form_macros.trailer_entry_row('available_trailers',form) }}{% endblock %}
+
 {% macro category_quantity_entry_row(type,form) %}{% spaceless %}
     {% if type is not defined %}{% set type = '' %}{% endif %}
     <div class="form-row {{ type }}">
@@ -25,8 +40,8 @@
             {% endif %}
     </div>{% endspaceless %}{% endmacro %}
 
-{% block _contract_requires_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('requires',form) }}{% endblock %}
-{% block _contract_available_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('available',form) }}{% endblock %}
+{% block _contract_requires_category_quantities_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('requires_category_quantities',form) }}{% endblock %}
+{% block _contract_available_category_quantities_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('available_category_quantities',form) }}{% endblock %}
 
     {% block admin_content %}
         <div id="contract-wrapper">
@@ -83,22 +98,36 @@
                     </div>
                 </div>
 
-                <fieldset id="contract-requires" class="contract requires">
-                    <legend>{{'common.requires'|trans}}</legend>
-                    {{form_row(contract_form.requires)}}
-                    {% if contract_form.requires.vars.allow_add %}
-                        <span  data-type="requires" class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                <fieldset id="contract-requires_trailers" class="contract requires">
+                    <legend>{{'common.requires'|trans}} {{'asset.trailers'|trans}}</legend>
+                    {{form_row(contract_form.requires_trailers)}}
+                    {% if contract_form.requires_trailers.vars.allow_add %}
+                        <span  data-type="requires_trailers" class="requires_trailers add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
                     {% endif %}
                 </fieldset>
 
-                <fieldset id="contract-available" class="contract available">
-                    <legend>{{'common.available'|trans}}</legend>
-                    {{form_row(contract_form.available)}}
-                    {% if contract_form.available.vars.allow_add %}
-                        <span data-type="available" class="available add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                <fieldset id="contract-available_trailers" class="contract available">
+                    <legend>{{'common.available'|trans}} {{'asset.trailers'|trans}}</legend>
+                    {{form_row(contract_form.available_trailers)}}
+                    {% if contract_form.available_trailers.vars.allow_add %}
+                        <span data-type="available_trailers" class="available_trailers add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                    {% endif %}
+                </fieldset>
+                <fieldset id="contract-requires_category_quantities" class="contract requires">
+                    <legend>{{'common.requires'|trans}} {{'asset.equipment'|trans}}</legend>
+                    {{form_row(contract_form.requires_category_quantities)}}
+                    {% if contract_form.requires_category_quantities.vars.allow_add %}
+                        <span data-type="requires_category_quantities" class="requires_category_quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
                     {% endif %}
                 </fieldset>
 
+                <fieldset id="contract-available_category_quantities" class="contract available">
+                    <legend>{{'common.available'|trans}} {{'asset.equipment'|trans}}</legend>
+                    {{form_row(contract_form.available_category_quantities)}}
+                    {% if contract_form.available_category_quantities.vars.allow_add %}
+                        <span data-type="available_category_quantities" class="available_category_quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                    {% endif %}
+                </fieldset>
                 {{form_end(contract_form)}}
             </div>
         </div>

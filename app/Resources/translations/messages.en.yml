@@ -39,6 +39,8 @@ asset:
         Parent
     requirements:
         Requirements
+    required:
+        Required
     required_by:
         Required By
     rma_required:
@@ -67,6 +69,8 @@ calendar:
 client:
     client:
         Client
+    contract:
+        Contract
     contracts:
         Contracts
  
@@ -75,6 +79,8 @@ common:
         Active
     add_one_more:
         Add one more
+    additional:
+        Additional
     address:
         Address
     admin:
@@ -117,6 +123,8 @@ common:
         Enabled
     end:
         End
+    equipment:
+        Equipment
     event:
         Event
     events:

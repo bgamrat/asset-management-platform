@@ -16,52 +16,42 @@ define([
         JsonRest,
         core) {
     //"use strict";
-    function CategoryQuantityObj(categoryQuantity, dataPrototype, prototypeNode) {
-        this.categoryQuantity = categoryQuantity;
+    function TrailerObj(trailer, dataPrototype, prototypeNode) {
+        this.trailer = trailer;
         this.dataPrototype = dataPrototype;
         this.prototypeNode = prototypeNode;
-        this.categoryFilteringSelect = [];
+        this.trailerFilteringSelect = [];
         this.quantityInput = [];
         this.valueInput = [];
         this.commentInput = [];
     }
 
-    var categoryQuantityObjs = {
-        "requires_category_quantities": null,
-        "available_category_quantities": null,
+    var trailerObjs = {
+        "requires_trailers": null,
+        "available_trailers": null,
     };
 
-    var categoryStore;
+    var trailerStore;
 
     function cloneNewNode() {
-        var prototypeContent = this.dataPrototype.replace(/__name__/g, this.categoryFilteringSelect.length);
+        var prototypeContent = this.dataPrototype.replace(/__name__/g, this.trailerFilteringSelect.length);
         domConstruct.place(prototypeContent, this.prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
-        var dijit, index = this.categoryFilteringSelect.length;
+        var dijit, index = this.trailerFilteringSelect.length;
         var base = this.prototypeNode.id + "_" + index + '_';
         var type = this.prototypeNode.id.replace(/contract_/, '');
         var dijit = new FilteringSelect({
-            store: categoryStore,
+            store: trailerStore,
             labelAttr: "name",
             searchAttr: "name",
             pageSize: 25,
-            name: "contract[" + type + "][" + index + "][category]",
-            displayedValue: document.getElementById(base + "category").value,
+            name: "contract[" + type + "][" + index + "][trailer]",
+            displayedValue: document.getElementById(base + "trailer").value,
             required: true
-        }, base + "category");
-        this.categoryFilteringSelect.push(dijit);
-        dijit.startup();
-        dijit = new ValidationTextBox({
-            trim: true,
-            pattern: "[0-9]+",
-            required: true,
-            placeholder: core.quantity,
-            name: "contract[" + type + "][" + index + "][quantity]",
-            value: document.getElementById(base + "quantity").value
-        }, base + "quantity");
-        this.quantityInput.push(dijit);
+        }, base + "trailer");
+        this.trailerFilteringSelect.push(dijit);
         dijit.startup();
         dijit = new CurrencyTextBox({
             placeholder: core.value,
@@ -86,7 +76,7 @@ define([
     function destroyRow(id, target) {
         var item;
         if( id !== null ) {
-            item = this.categoryFilteringSelect.splice(id, 1);
+            item = this.trailerFilteringSelect.splice(id, 1);
             item[0].destroyRecursive();
             item = this.quantityInput.splice(id, 1);
             item[0].destroyRecursive();
@@ -95,7 +85,7 @@ define([
             item = this.commentInput.splice(id, 1);
             item[0].destroyRecursive();
         } else {
-            this.categoryFilteringSelect.pop().destroyRecursive();
+            this.trailerFilteringSelect.pop().destroyRecursive();
             this.quantityInput.pop().destroyRecursive();
             this.valueInput.pop().destroyRecursive();
             this.commentInput.pop().destroyRecursive();
@@ -105,35 +95,34 @@ define([
 
     function run() {
         var existingRows, c, addOneMoreControl = null;
-        categoryStore = new JsonRest({
-            target: '/api/store/categories',
+        trailerStore = new JsonRest({
+            target: '/api/store/trailers',
             useRangeHeaders: false,
             idProperty: 'id'});
         var prototypeNode, dataPrototype;
-        for( c in categoryQuantityObjs ) {
+        for( c in trailerObjs ) {
             prototypeNode = dom.byId("contract_" + c);
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
             addOneMoreControl = query('#contract-' + c + ' .add-one-more-row');
 
-            categoryQuantityObjs[c] = new CategoryQuantityObj(c, dataPrototype, prototypeNode);
-
+            trailerObjs[c] = new TrailerObj(c, dataPrototype, prototypeNode);
             existingRows = query('.form-row.' + c);
             existingRows = existingRows.length;
 
             for( i = 0; i < existingRows; i++ ) {
-                createDijits.call(categoryQuantityObjs[c]);
+                createDijits.call(trailerObjs[c]);
             }
             addOneMoreControl.on("click", function (event) {
                 var dataType = domAttr.get(event.target, "data-type");
-                cloneNewNode.call(categoryQuantityObjs[dataType]);
-                createDijits.call(categoryQuantityObjs[dataType]);
+                cloneNewNode.call(trailerObjs[dataType]);
+                createDijits.call(trailerObjs[dataType]);
             });
 
             on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
                 var target = event.target;
                 var targetParent = target.parentNode;
                 var idPieces = targetParent.id.split('-');
-                destroyRow.call(categoryQuantityObjs[idPieces[0]], idPieces[1], targetParent.parentNode);
+                destroyRow.call(trailerObjs[idPieces[0]], idPieces[1], targetParent.parentNode);
             });
 
         }
@@ -144,4 +133,4 @@ define([
     }
 }
 );
-//# sourceURL=model_categoryQuantitys.js
+//# sourceURL=model_trailers.js

@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use AppBundle\Form\Admin\Client\CategoryQuantityType;
+use AppBundle\Form\Admin\Client\TrailerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,7 +26,7 @@ class ContractType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class, [
-                    'label' => 'common.name' ] )
+                    'label' => 'common.name'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
@@ -45,8 +46,9 @@ class ContractType extends AbstractType
                     'required' => false
                 ] )
                 ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
-                ->add( 'requires', CollectionType::class, [
-                    'entry_type' => CategoryQuantityType::class,
+                ->add( 'requires_trailers', CollectionType::class, [
+                    'entry_type' => TrailerType::class,
+                    'property_path' => 'requiresTrailers',
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -54,8 +56,29 @@ class ContractType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true
                 ] )
-                ->add( 'available', CollectionType::class, [
+                ->add( 'available_trailers', CollectionType::class, [
+                    'entry_type' => TrailerType::class,
+                    'property_path' => 'availableTrailers',
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true
+                ] )
+                ->add( 'requires_category_quantities', CollectionType::class, [
                     'entry_type' => CategoryQuantityType::class,
+                    'property_path' => 'requiresCategoryQuantities',
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true
+                ] )
+                ->add( 'available_category_quantities', CollectionType::class, [
+                    'entry_type' => CategoryQuantityType::class,
+                    'property_path' => 'availableCategoryQuantities',
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,

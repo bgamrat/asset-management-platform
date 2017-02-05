@@ -15,7 +15,7 @@ define([
     "use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var divIdInUse, contractStore, contractFilteringSelect = [], contractTrailersStore;
+    var divIdInUse, trailerStore, trailerFilteringSelect = [];
 
     function getDivId() {
         return divIdInUse;
@@ -26,47 +26,29 @@ define([
     }
 
     function cloneNewNode() {
-        var prototypeContent = dataPrototype.replace(/__contract__/g, contractFilteringSelect.length);
+        var prototypeContent = dataPrototype.replace(/__trailer__/g, trailerFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijit() {
-        var base = prototypeNode.id + "_" + contractFilteringSelect.length;
+        var base = prototypeNode.id + "_" + trailerFilteringSelect.length;
         var dijit = new FilteringSelect({
-            store: contractStore,
+            store: trailerStore,
             labelAttr: "name",
             searchAttr: "name",
             pageSize: 25
         }, base);
         dijit.startup();
-        dijit.on("change", function () {
-            var trailers = [];
-            var selectedContract = this;
-            contractTrailersStore.get(selectedContract.value).then(function (data) {
-                var i, l, reqd = [], avail = [];
-                l = data.required.length;
-                for( i = 0; i < l; i++ ) {
-                    reqd.push(data.required[i].name);
-                }
-                l = data.available.length;
-                for( i = 0; i < l; i++ ) {
-                    avail.push(data.available[i].name);
-                }
-                domConstruct.place("<dt>" + selectedContract.displayedValue + "</dt><dd>" +
-                        reqd.join('<br>') + avail.join('br') + "</dd>",
-                        dom.byId("trailers-required-by-contracts"), "last");
-            });
-        });
-        contractFilteringSelect.push(dijit);
+        trailerFilteringSelect.push(dijit);
     }
 
     function destroyRow(id, target) {
         var item;
         if( id !== null ) {
-            item = contractFilteringSelect.splice(id, 1);
+            item = trailerFilteringSelect.splice(id, 1);
             item[0].destroyRecursive();
         } else {
-            contractFilteringSelect.pop().destroyRecursive();
+            trailerFilteringSelect.pop().destroyRecursive();
         }
         domConstruct.destroy(target);
     }
@@ -74,13 +56,8 @@ define([
     function run() {
         var addOneMoreControl = null;
 
-        contractStore = new JsonRest({
-            target: '/api/store/contracts',
-            useRangeHeaders: false,
-            idProperty: 'id'});
-
-        contractTrailersStore = new JsonRest({
-            target: '/api/store/contracttrailers',
+        trailerStore = new JsonRest({
+            target: '/api/store/trailers',
             useRangeHeaders: false,
             idProperty: 'id'});
 
@@ -100,12 +77,12 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__contract__/g, contractFilteringSelect.length);
+        prototypeContent = dataPrototype.replace(/__trailer__/g, trailerFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
         createDijit();
 
-        addOneMoreControl = query('.contracts .add-one-more-row');
+        addOneMoreControl = query('.trailers .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
             var dataType = domAttr.get(event.target, "data-type");
@@ -124,9 +101,9 @@ define([
 
     function getData(relationship) {
         var i, returnData = [];
-        for( i = 0; i < contractsFilteringSelect.length; i++ ) {
+        for( i = 0; i < trailersFilteringSelect.length; i++ ) {
             returnData.push(
-                    parseInt(contractsFilteringSelect[i].get("value")));
+                    parseInt(trailersFilteringSelect[i].get("value")));
         }
         return returnData;
     }
@@ -134,7 +111,7 @@ define([
     function setData(relationship, models) {
         var i;
 
-        query(".form-row.contract", prototypeNode.parentNode).forEach(function (node, index) {
+        query(".form-row.trailer", prototypeNode.parentNode).forEach(function (node, index) {
             destroyRow(null, node);
         });
 
@@ -142,8 +119,8 @@ define([
             for( i = 0; i < models.length; i++ ) {
                 cloneNewNode();
                 createDijit();
-                contractFilteringSelect[i].set("value", contracts[i].id);
-                contractFilteringSelect[i].set("displayedValue", contracts[i].name);
+                trailerFilteringSelect[i].set("value", trailers[i].id);
+                trailerFilteringSelect[i].set("displayedValue", trailers[i].name);
             }
         }
     }
@@ -155,4 +132,4 @@ define([
     }
 }
 );
-//# sourceURL=contract.js
+//# sourceURL=trailer.js

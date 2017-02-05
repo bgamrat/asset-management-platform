@@ -80,6 +80,16 @@ class EventType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__contract__'
                 ] )
+                ->add( 'trailers', CollectionType::class, [
+                    'entry_type' => TextType::class,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__trailer__'
+                ] )
         ;
         $builder->get( 'client' )
                 ->addModelTransformer( new ClientToIdTransformer( $this->em ) );

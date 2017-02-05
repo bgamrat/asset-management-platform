@@ -13,6 +13,7 @@ define([
     "dijit/form/CheckBox",
     "dijit/form/RadioButton",
     "dijit/form/Button",
+    "app/admin/client/trailers",
     "app/admin/client/category_quantities",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
@@ -22,10 +23,9 @@ define([
 ], function (dom, domAttr, domConstruct,
         on, query,
         Form, TextBox, ValidationTextBox, DateTextBox, CurrencyTextBox, SimpleTextarea, CheckBox, RadioButton, Button,
-        categoryQuantities, lib, core) {
+        trailers, categoryQuantities, lib, core) {
     //"use strict";
     function run() {
-
         var nameInput, commentInput, activeCheckBox;
         var startInput, endInput, valueInput, containerCheckBox;
         var d;
@@ -92,6 +92,7 @@ define([
         saveBtn.startup();
         lib.pageReady();
     }
+    trailers.run();
     categoryQuantities.run();
     lib.pageReady();
 

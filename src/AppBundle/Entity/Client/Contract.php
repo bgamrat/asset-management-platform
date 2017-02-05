@@ -77,19 +77,33 @@ class Contract
      */
     private $value = 0.0;
     /**
-     * @ORM\ManyToMany(targetEntity="CategoryQuantity", cascade={"persist"})
-     * @ORM\JoinTable(name="contract_categoryquantity_required",
+     * @ORM\ManyToMany(targetEntity="Trailer", cascade={"persist"})
+     * @ORM\JoinTable(name="contract_trailer_required",
      *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")}
      *      )
      */
-    private $requires;
+    private $requiresTrailers;
     /**
-     * @ORM\ManyToMany(targetEntity="CategoryQuantity", cascade={"persist"})
-     * @ORM\JoinTable(name="contract_categoryquantity_available",
+     * @ORM\ManyToMany(targetEntity="Trailer", cascade={"persist"})
+     * @ORM\JoinTable(name="contract_trailer_available",
      *      joinColumns={@ORM\JoinColumn(name="available_id", referencedColumnName="id")}
      *      )
      */
-    private $available;
+    private $availableTrailers;
+    /**
+     * @ORM\ManyToMany(targetEntity="CategoryQuantity", cascade={"persist"})
+     * @ORM\JoinTable(name="contract_category_quantity_required",
+     *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")}
+     *      )
+     */
+    private $requiresCategoryQuantities;
+    /**
+     * @ORM\ManyToMany(targetEntity="CategoryQuantity", cascade={"persist"})
+     * @ORM\JoinTable(name="contract_category_quantity_available",
+     *      joinColumns={@ORM\JoinColumn(name="available_id", referencedColumnName="id")}
+     *      )
+     */
+    private $availableCategoryQuantities;
     /**
      * @var boolean
      * @Gedmo\Versioned
@@ -115,8 +129,10 @@ class Contract
 
     public function __construct()
     {
-        $this->requires = new ArrayCollection();
-        $this->available = new ArrayCollection();
+        $this->requiresTrailers = new ArrayCollection();
+        $this->availableTrailers = new ArrayCollection();
+        $this->requiresCategoryQuantities = new ArrayCollection();
+        $this->availableCategoryQuantities = new ArrayCollection();
     }
 
     /**
@@ -306,6 +322,86 @@ class Contract
         return $this->active;
     }
 
+    public function getTrailers( $trailer, $full )
+    {
+        $trailers = [];
+        if( count( $this->{$trailer} ) > 0 )
+        {
+            if( $full === false )
+            {
+                foreach( $this->{$trailer} as $t )
+                {
+                    $tr = $t->getTrailer();
+                    $trailers[] = ['id' => $tr->getId(),
+                        'name' => $tr->getName()];
+                }
+            }
+            else
+            {
+                foreach( $this->{$trailer} as $tr )
+                {
+                    $trailers[] = $tr;
+                }
+            }
+        }
+        return $trailers;
+    }
+
+    public function setRequiresTrailers( $trailers )
+    {
+        $this->requiresTrailers->clear();
+        foreach( $trailers as $m )
+        {
+            $this->addRequiresTrailers( $m );
+        }
+        return $this;
+    }
+
+    public function getRequiresTrailers( $full = true )
+    {
+        return $this->getTrailers( 'requiresTrailers', $full );
+    }
+
+    public function addRequiresTrailers( Trailer $trailer )
+    {
+        if( !$this->requiresTrailers->contains( $trailer ) )
+        {
+            $this->requiresTrailers->add( $trailer );
+        }
+    }
+
+    public function removeRequiresTrailers( Trailer $trailer )
+    {
+        $this->requiresTrailers->removeElement( $trailer );
+    }
+
+    public function setAvailableTrailers( $trailers )
+    {
+        foreach( $trailers as $m )
+        {
+            $this->addAvailableTrailer( $m );
+        }
+        return $this;
+    }
+
+    public function getAvailableTrailers( $full = true )
+    {
+        return $this->getTrailers( 'availableTrailers', $full );
+    }
+
+    public function addAvailableTrailers( Trailer $trailer )
+    {
+        if( !$this->availableTrailers->contains( $trailer ) )
+        {
+            $this->availableTrailers->add( $trailer );
+        }
+    }
+
+    public function removeAvailableTrailers( Trailer $trailer )
+    {
+        $this->availableTrailers->removeElement( $trailer );
+    }
+
     public function getCategoryQuantities( $categoryQuantity, $full )
     {
         $categoryQuantities = [];
@@ -331,59 +427,59 @@ class Contract
         return $categoryQuantities;
     }
 
-    public function setRequires( $categoryQuantities )
+    public function setRequiresCategoryQuantities( $categoryQuantities )
     {
-        $this->requires->clear();
+        $this->requiresCategoryQuantities->clear();
         foreach( $categoryQuantities as $m )
         {
-            $this->addRequires( $m );
+            $this->addRequiresCategoryQuantities( $m );
         }
         return $this;
     }
 
-    public function getRequires( $full = true )
+    public function getRequiresCategoryQuantities( $full = true )
     {
-        return $this->getCategoryQuantities( 'requires', $full );
+        return $this->getCategoryQuantities( 'requiresCategoryQuantities', $full );
     }
 
-    public function addRequire( CategoryQuantity $categoryQuantity )
+    public function addRequiresCategoryQuantity( CategoryQuantity $categoryQuantity )
     {
-        if( !$this->requires->contains( $categoryQuantity ) )
+        if( !$this->requiresCategoryQuantities->contains( $categoryQuantity ) )
         {
-            $this->requires->add( $categoryQuantity );
+            $this->requiresCategoryQuantities->add( $categoryQuantity );
         }
     }
 
-    public function removeRequire( CategoryQuantity $categoryQuantity )
+    public function removeRequiresCategoryQuantity( CategoryQuantity $categoryQuantity )
     {
-        $this->requires->removeElement( $categoryQuantity );
+        $this->requiresCategoryQuantities->removeElement( $categoryQuantity );
     }
 
-    public function setAvailable( $categoryQuantities )
+    public function setAvailableCategoryQuantities( $categoryQuantities )
     {
         foreach( $categoryQuantities as $m )
         {
-            $this->addAvailable( $m );
+            $this->addAvailableCategoryQuantity( $m );
         }
         return $this;
     }
 
-    public function getAvailable( $full = true )
+    public function getAvailableCategoryQuantities( $full = true )
     {
-        return $this->getCategoryQuantities( 'available', $full );
+        return $this->getCategoryQuantities( 'availableCategoryQuantities', $full );
     }
 
-    public function addAvailable( CategoryQuantity $categoryQuantity )
+    public function addAvailableCategoryQuantity( CategoryQuantity $categoryQuantity )
     {
-        if( !$this->available->contains( $categoryQuantity ) )
+        if( !$this->availableCategoryQuantities->contains( $categoryQuantity ) )
         {
-            $this->available->add( $categoryQuantity );
+            $this->availableCategoryQuantities->add( $categoryQuantity );
         }
     }
 
-    public function removeAvailable( CategoryQuantity $categoryQuantity )
+    public function removeAvailableCategoryQuantity( CategoryQuantity $categoryQuantity )
     {
-        $this->requires->removeElement( $categoryQuantity );
+        $this->availableCategoryQuantities->removeElement( $categoryQuantity );
     }
 
     public function getUpdated()

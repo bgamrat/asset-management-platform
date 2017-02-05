@@ -108,11 +108,17 @@ services:
         tags:
             - { name: form.type, alias: 'app_person_type' }
 
-    app.admin.form.type.trailer:
+    app.admin.form.type.trailer.asset:
         class: AppBundle\Form\Admin\Asset\TrailerType
         arguments: ['@doctrine.orm.entity_manager']
         tags:
-            - { name: form.type, alias: 'app_trailer_type' }
+            - { name: form.type, alias: 'app_trailer_asset_type' }
+
+    app.admin.form.type.trailer.client:
+        class: AppBundle\Form\Admin\Client\TrailerType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_trailer_client_type' }
 
     app.admin.form.type.user:
         class: AppBundle\Form\Admin\User\UserType

@@ -92,6 +92,15 @@ class Event
      */
     protected $contracts = null;
     /**
+     * @var ArrayCollection $trailers
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\Trailer", cascade={"persist"})
+     * @ORM\JoinTable(name="event_trailer",
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="trailer_id", referencedColumnName="id", onDelete="CASCADE", unique=true, nullable=false)}
+     *      )
+     */
+    protected $trailers = null;
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -335,6 +344,35 @@ class Event
     public function removeContract( Contract $contract )
     {
         $this->contracts->removeElement( $contract );
+    }
+
+    public function getTrailers()
+    {
+        $return = [];
+
+        foreach( $this->trailers as $t )
+        {
+            $et = [];
+            $et['id'] = $t->getId();
+            $et['name'] = $t->getName();
+            $return[] = $et;
+        }
+        return $return;
+    }
+
+    public function addTrailer( Trailer $trailer )
+    {
+        if( !$this->trailers->contains( $trailer ) )
+        {
+            $this->trailers->add( $trailer );
+            $trailer->setClient( $this );
+        }
+        return $this;
+    }
+
+    public function removeTrailer( Trailer $trailer )
+    {
+        $this->trailers->removeElement( $trailer );
     }
 
     public function getUpdated()

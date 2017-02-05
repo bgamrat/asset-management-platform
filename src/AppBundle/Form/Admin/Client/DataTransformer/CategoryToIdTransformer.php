@@ -40,7 +40,7 @@ class CategoryToIdTransformer implements DataTransformerInterface
     public function reverseTransform($categoryName)
     {
         // no category id? It's optional, so that's ok
-        if (!$categoryId) {
+        if (!$categoryName) {
             return;
         }
 

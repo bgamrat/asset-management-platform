@@ -23,6 +23,7 @@ define({
         "end": "End",
         "entity": "Entity",
         "error": "Error",
+        "equipment": "Equipment",
         "expenses": "Expenses",
         "filter": "Filter",
         "firstname": "First name",

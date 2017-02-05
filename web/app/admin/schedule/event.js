@@ -28,6 +28,7 @@ define([
     'put-selector/put',
     "app/common/person",
     "app/admin/schedule/contracts",
+    "app/admin/schedule/trailers",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -37,7 +38,7 @@ define([
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, contracts, lib, libGrid, core, schedule) {
+        person, contracts, trailers, lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
         var action = null, d;
@@ -63,11 +64,11 @@ define([
                 );
         tabContainer.addChild(detailsContentPane);
 
-        var contractsContentPane = new ContentPane({
-            title: schedule.contracts},
-        "event-view-contracts-tab"
+        var equipmentContentPane = new ContentPane({
+            title: core.equipment},
+        "event-view-equipment-tab"
                 );
-        tabContainer.addChild(contractsContentPane);
+        tabContainer.addChild(equipmentContentPane);
 
         var contactsContentPane = new ContentPane({
             title: core.contacts},
@@ -387,6 +388,7 @@ define([
 
         person.run('event_contacts');
         contracts.run('event_contracts');
+        trailers.run('event_trailers');
         lib.pageReady();
     }
     return {
