@@ -7,11 +7,12 @@ define([
     "dijit/form/FilteringSelect",
     'dojo/store/JsonRest',
     "app/lib/common",
+    "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on,
         query,
         FilteringSelect,
-        JsonRest, lib) {
+        JsonRest, lib, core) {
     "use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
@@ -40,10 +41,12 @@ define([
         }, base);
         dijit.startup();
         dijit.on("change", function () {
-            var trailers = [];
             var selectedContract = this;
+
             contractTrailersStore.get(selectedContract.value).then(function (data) {
+                var templateContract;
                 var i, l, reqd = [], avail = [];
+                var equipmentLink = dom.byId("contract-equipment-link-" + selectedContract.id);
                 l = data.required.length;
                 for( i = 0; i < l; i++ ) {
                     reqd.push(data.required[i].name);
@@ -52,9 +55,16 @@ define([
                 for( i = 0; i < l; i++ ) {
                     avail.push(data.available[i].name);
                 }
-                domConstruct.place("<dt>" + selectedContract.displayedValue + "</dt><dd>" +
-                        reqd.join('<br>') + avail.join('br') + "</dd>",
-                        dom.byId("trailers-required-by-contracts"), "last");
+                // Backticks won't work with the old Chrome browser
+                templateContract = '<dt data-contract-id="' + data.id + '" class="term">' + selectedContract.displayedValue + '</dt>' +
+                        '<dd>' +
+                        '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>' +
+                        '<span class="label">&nbsp;' + core.available + '</span>' + avail.join() +
+                        '</dd>';
+
+                domConstruct.place(templateContract, dom.byId("trailers-required-by-contracts"), "last");
+                // TODO: Fix so it puts the URL in
+                equipmentLink.href = equipmentLink.href.replace(/-\d+$/, data.id);
             });
         });
         contractFilteringSelect.push(dijit);

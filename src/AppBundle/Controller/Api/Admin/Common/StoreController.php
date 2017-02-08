@@ -194,7 +194,8 @@ class StoreController extends FOSRestController
                     ->getRepository( 'AppBundle\Entity\Client\Contract' );
 
             $contract = $contractRepository->find( $id );
-            $data = ['required' => $contract->getRequiresTrailers( false ),
+            $data = ['id' => $id,
+                'required' => $contract->getRequiresTrailers( false ),
                 'available' => $contract->getAvailableTrailers( false )];
         }
         else

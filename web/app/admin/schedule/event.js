@@ -110,6 +110,8 @@ define([
             clientFilteringSelect.set('displayedValue', "");
             descriptionInput.set("value", "");
             person.setData(null);
+            contracts.setData(null);
+            trailers.setData(null);
             eventViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -328,7 +330,7 @@ define([
                     billableCheckBox.set("checked", event.billable === true);
                     canceledCheckBox.set("checked", event.canceled === true);
                     clientFilteringSelect.set('displayedValue', event.client_text);
-                    commentInput.set("value", event.comment);
+                    descriptionInput.set("value", event.comment);
                     person.setData(event.contacts);
                     eventViewDialog.show();
                 }, lib.xhrError);

@@ -32,7 +32,7 @@
 
 {% block _event_contracts_entry_row %}{% spaceless %}
         <div class="form-row contract">
-            <span class="name"><input id="{{id}}" type="text"> <a href="equipment-link">{{'common.equipment'|trans}}</a></span>
+            <span class="name"><input id="{{id}}" type="text"> <a id="contract-equipment-link-{{id}}" data-type="contract-equipment-link">{{'common.equipment'|trans}}</a></span>
                 {% if form.parent.vars.allow_delete %}
                 <span class="remove-form-row" title="{{'common.remove'|trans}}" id="contract-__contract__"><i class="fa fa-remove"></i></span>
                 {% endif %}
