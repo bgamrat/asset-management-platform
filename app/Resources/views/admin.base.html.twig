@@ -14,19 +14,23 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 <body class="tundra">
-    <div class="loading"></div>
-    <header class="header right hide-on-load">
-        <div class="header-user">
-            {{ app.user.username }}
-            <a href="{{ path('fos_user_security_logout') }}">{{ 'common.log_out'|trans }}</a>
+    {% if no_hide is not defined %}
+        <div class="loading"></div>
+    {% endif %}
+    {% if omit_menu is not defined %}
+        <header class="header right{% if no_hide is not defined %} hide-on-load{% endif %}">
+            <div class="header-user">
+                {{ app.user.username }}
+                <a href="{{ path('fos_user_security_logout') }}">{{ 'common.log_out'|trans }}</a>
+            </div>
+        </header>
+        <div class="admin-menu-block{% if no_hide is not defined %} hide-on-load{% endif %}">
+            <a href="/"><img src="{{asset('images/logo.png')}}" width="75" height="auto" alt="{{ 'common.logo'|trans }}"></a>
+            <nav id="admin-left-menu" class="admin-left-menu">
+            </nav>
         </div>
-    </header>
-    <div class="admin-menu-block hide-on-load">
-        <a href="/"><img src="{{asset('images/logo.png')}}" width="75" height="auto" alt="{{ 'common.logo'|trans }}"></a>
-        <nav id="admin-left-menu" class="admin-left-menu">
-        </nav>
-    </div>
-    <div class="admin-body-wrapper hide-on-load">
+    {% endif %}
+    <div class="admin-body-wrapper{% if no_hide is not defined %} hide-on-load{% endif %}{% if omit_menu is defined %} no-menu{% endif %}">
         {% block body %}
         {% block admin_content %}{% endblock %}
     {% endblock %}
@@ -39,14 +43,16 @@
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
-<script>
-    require([
-        "app/admin/menu",
-        "dojo/domReady!"
-    ], function (menu) {
-        //"use strict";
-        menu.run();
-    });
-</script>
+{% if omit_menu is not defined %}
+    <script>
+        require([
+            "app/admin/menu",
+            "dojo/domReady!"
+        ], function (menu) {
+            //"use strict";
+            menu.run();
+        });
+    </script>
+{% endif %}
 </body>
 </html>

@@ -66,3 +66,17 @@
 .form-row .quantity .dijitInputInner {
     text-align: right;
 }
+.requires-available-list {
+    list-style-type: none;
+    width: 200px;
+}
+.requires-available-list {
+    padding: 3px;
+    margin: 1px;
+}
+.requires-available-list li:nth-child(odd) {
+    background-color: #ddd;
+}
+.requires-available-list .quantity {
+    font-weight: 700;
+}

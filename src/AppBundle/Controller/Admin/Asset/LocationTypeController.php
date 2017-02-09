@@ -33,7 +33,7 @@ class LocationTypeController extends Controller
         $locationTypes['types'] = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findAll();
         $locationTypesForm = $this->createForm( LocationTypesType::class, $locationTypes, [ 'action' => $this->generateUrl( 'app_admin_asset_locationtype_save' )] );
 
-        return $this->render( 'admin/asset/location_types.html.twig', array(
+        return $this->render( 'admin/asset/location-types.html.twig', array(
                     'location_types_form' => $locationTypesForm->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
@@ -78,7 +78,7 @@ class LocationTypeController extends Controller
                     $errorMessages[] = $name . ' - ' . $item->getErrors( true );
                 }
             }
-            return $this->render( 'admin/asset/location_types.html.twig', array(
+            return $this->render( 'admin/asset/location-types.html.twig', array(
                         'location_types_form' => $form->createView(),
                         'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                     ) );

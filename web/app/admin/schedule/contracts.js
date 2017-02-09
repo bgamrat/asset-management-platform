@@ -57,14 +57,18 @@ define([
                 }
                 // Backticks won't work with the old Chrome browser
                 templateContract = '<dt data-contract-id="' + data.id + '" class="term">' + selectedContract.displayedValue + '</dt>' +
-                        '<dd>' +
-                        '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>' +
-                        '<span class="label">&nbsp;' + core.available + '</span>' + avail.join() +
-                        '</dd>';
+                        '<dd>';
+                if( reqd.length > 0 ) {
+                    templateContract += '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>';
+                }
+                if( avail.length > 0 ) {
+                    '<span class="label">&nbsp;' + core.available + '</span>' + avail.join();
+                }
+                templateContract += '</dd>';
 
                 domConstruct.place(templateContract, dom.byId("trailers-required-by-contracts"), "last");
                 // TODO: Fix so it puts the URL in
-                equipmentLink.href = equipmentLink.href.replace(/-\d+$/, data.id);
+                equipmentLink.href = '/admin/contract/'+ data.id + '/equipment';
             });
         });
         contractFilteringSelect.push(dijit);

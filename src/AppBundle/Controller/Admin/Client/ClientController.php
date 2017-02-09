@@ -3,7 +3,9 @@
 namespace AppBundle\Controller\Admin\Client;
 
 use AppBundle\Form\Admin\Client\ClientType;
-use AppBundle\Form\Admin\Client\ContractType;;
+use AppBundle\Form\Admin\Client\ContractType;
+;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -34,6 +36,26 @@ class ClientController extends Controller
                     'client_form' => $form->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
+    }
+
+    /**
+     * @Route("/admin/contract/{id}/equipment")
+     * @Method("GET")
+     */
+    public function viewContractEquipmentAction( $id )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $em = $this->getDoctrine()->getManager();
+        $contract = $em->getRepository( 'AppBundle\Entity\Client\Contract' )->find( $id );
+        if( $contract !== null )
+        {
+            return $this->render( 'admin/client/contract-equipment.html.twig', array(
+                        'contract' => $contract,
+                        'no_hide' => true,
+                        'omit_menu' => true )
+                     );
+        }
     }
 
     /**
