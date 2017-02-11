@@ -1,0 +1,97 @@
+{% block title %}{{ contract.client.name }} {{ contract.name }} {{'common.equipment'|trans }}{% endblock %}
+
+{% extends 'admin.base.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets 
+            '@admin_client_css'
+            filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block admin_content %}
+    <div id="contract-equipment-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="contract">
+            <div class="contract-data">
+                <div class="name-value-active">   
+                    <span class="contract name">
+                        {{contract.name}}
+                    </span>
+                    <span class="contract start">
+                        {{contract.start|date('m/d/Y')}}
+                    </span>
+                    &dash;
+                    <span class="contract end">
+                        {{contract.end|date('m/d/Y')}}
+                    </span>
+                    <span class="contract active">
+                        {% if contract.active %}
+                            {{'common.active'|trans}}
+                        {% else %}
+                            {{'common.not_active'|trans}}  
+                        {%endif%}
+                    </span>
+                    <span class="container">
+                        {% if contract.container %}
+                            {{'asset.container'|trans}}
+                        {% endif %}
+                    </span> 
+                </div>
+                <div class="comment">
+                    <div class="label">{{'common.comment'|trans}}</div>
+                    {{contract.comment}}		    
+                </div>
+            </div>
+
+            <section>
+                {% if contract.requiresTrailers is not empty %}
+                    <article class="contract requires">
+                        <h2>{{'common.requires'|trans}} {{'asset.trailers'|trans}}</h2>
+                        {% for trailer in contract.requiresTrailers %}
+                            {{trailer.trailer.name}}
+                        {% endfor %}
+                    </article>
+                {% endif %}
+
+                {% if contract.availableTrailers is not empty %}
+                    <article class="contract available">
+                        <h2>{{'common.available'|trans}} {{'asset.trailers'|trans}}</h2>
+                        {% for trailer in contract.availableTrailers %}
+                            {{trailer.trailer.name}}
+                        {% endfor %}
+                    </article>
+                {% endif %}
+
+                {% if contract.requiresCategoryQuantities is not empty %}
+                    <article class="contract requires">
+                        <h2>{{'common.requires'|trans}} {{'asset.equipment'|trans}}</h2>
+                        <ul class="requires-available-list">
+                            {% for category_quantity in contract.requiresCategoryQuantities%}
+                                <li class="justify">
+                                    <span class="category">{{category_quantity.category.fullName}}</span>
+                                    <span class="quantity">{{category_quantity.quantity}}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </article>
+                {% endif %}
+
+                {% if contract.availableCategoryQuantities is not empty %}
+                    <article class="contract available">
+                        <h2>{{'common.available'|trans}} {{'asset.equipment'|trans}}</h2>
+                        <ul class="requires-available-list">
+                            {% for category_quantity in contract.availableCategoryQuantities%}
+                                <li class="justify">
+                                    <span class="category">{{category_quantity.category.fullName}}</span>
+                                    <span class="quantity">{{category_quantity.quantity}}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </article>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+{% endblock %}

@@ -40,6 +40,10 @@ define([
         }, base);
         dijit.startup();
         trailerFilteringSelect.push(dijit);
+        dijit.on("change", function () {
+            var equipmentLink = dom.byId("trailer-equipment-link-" + this.id);
+            equipmentLink.href = '/admin/trailer/' + this.value + '/equipment-by-category';
+        });
     }
 
     function destroyRow(id, target) {
@@ -122,6 +126,9 @@ define([
                 trailerFilteringSelect[i].set("value", trailers[i].id);
                 trailerFilteringSelect[i].set("displayedValue", trailers[i].name);
             }
+        } else {
+            cloneNewNode();
+            createDijit();
         }
     }
 

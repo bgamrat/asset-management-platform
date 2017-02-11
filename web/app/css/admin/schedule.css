@@ -19,3 +19,9 @@
 .event .contract .name .dijitTextBox {
     width: 300px;
 }
+#event-view-equipment-tab .justify fieldset {
+    width: 45%;
+}
+.contract-equipment-link {
+    margin-left: 25px;
+}

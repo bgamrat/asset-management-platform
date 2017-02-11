@@ -27,8 +27,8 @@ define([
     }
 
     function cloneNewNode() {
-        var prototypeContent = dataPrototype.replace(/__contract__/g, contractFilteringSelect.length);
-        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+        prototypeContent = dataPrototype.replace(/__contract__/g, contractFilteringSelect.length);
+        domConstruct.place(prototypeContent, prototypeNode, "after");
     }
 
     function createDijit() {
@@ -40,6 +40,7 @@ define([
             pageSize: 25
         }, base);
         dijit.startup();
+        contractFilteringSelect.push(dijit);
         dijit.on("change", function () {
             var selectedContract = this;
 
@@ -67,11 +68,10 @@ define([
                 templateContract += '</dd>';
 
                 domConstruct.place(templateContract, dom.byId("trailers-required-by-contracts"), "last");
-                // TODO: Fix so it puts the URL in
-                equipmentLink.href = '/admin/contract/'+ data.id + '/equipment';
+
+                equipmentLink.href = '/admin/contract/' + data.id + '/equipment';
             });
         });
-        contractFilteringSelect.push(dijit);
     }
 
     function destroyRow(id, target) {
@@ -114,15 +114,13 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__contract__/g, contractFilteringSelect.length);
-        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
+        cloneNewNode();
         createDijit();
 
         addOneMoreControl = query('.contracts .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
-            var dataType = domAttr.get(event.target, "data-type");
             cloneNewNode();
             createDijit();
         });
@@ -159,6 +157,9 @@ define([
                 contractFilteringSelect[i].set("value", contracts[i].id);
                 contractFilteringSelect[i].set("displayedValue", contracts[i].name);
             }
+        } else {
+            cloneNewNode();
+            createDijit();
         }
     }
 
