@@ -1,10 +1,10 @@
-{% block title %}{{ 'asset.trailer'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% block title %}{{ 'asset.trailer'|trans }} {{'common.equipment'|trans }}{% endblock %}
 
 {% extends 'admin/asset/asset.base.html.twig' %}
 
 {% block admin_content %}
     <div id="trailer-wrapper">
-        <h1>{{ trailer.name }} {{'common.admin'|trans }}</h1>
+        <h1>{{ block('title') }}</h1>
         <div class="trailer-details">
             <div class="justify">
                 <span class="model">{{ trailer.model.brand.manufacturer.name }} {{ trailer.model.brand.name }} {{ trailer.model.name }} </span>
@@ -23,7 +23,6 @@
                 <dl>
 
                     {% if trailer.requires|length > 0 %}
-                        {{dump(trailer.requires|length)}}
                         <dt>{{ 'asset.requires'|trans }}</dt>
                         <dd>
                             <ul>

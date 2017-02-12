@@ -42,7 +42,7 @@ define([
         trailerFilteringSelect.push(dijit);
         dijit.on("change", function () {
             var equipmentLink = dom.byId("trailer-equipment-link-" + this.id);
-            equipmentLink.href = '/admin/trailer/' + this.value + '/equipment-by-category';
+            equipmentLink.href = '/admin/trailer/' + this.displayedValue + '/equipment-by-category';
         });
     }
 

@@ -30,8 +30,7 @@ class EventController extends Controller
         $form = $this->createForm( EventType::class, null, [] );
 
         return $this->render( 'admin/schedule/event.html.twig', array(
-                    'event_form' => $form->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
+                    'event_form' => $form->createView()
                 ) );
     }
 
