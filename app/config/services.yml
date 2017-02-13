@@ -179,8 +179,9 @@ services:
             - { name: knp_menu.menu_builder, method: createAdminMenu, alias: admin }
             - { name: knp_menu.menu_builder, method: createCalendarMenu, alias: calendar }
             - { name: knp_menu.menu_builder, method: createMainMenu, alias: main }
+            - { name: knp_menu.menu_builder, method: createTrailerMenu, alias: trailer }
             - { name: knp_menu.menu_builder, method: createUserMenu, alias: user }
-            - { name: knp_menu.menu_builder, method: createVendorMenu, alias: vendor }
+
 
     app.menu_renderer:
         # The class implements Knp\Menu\Renderer\RendererInterface

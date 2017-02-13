@@ -77,11 +77,6 @@ class MenuBuilder implements ContainerAwareInterface
 
         $menu->addChild( 'home', ['label' => 'common.home', 'route' => 'root'] )
                 ->setAttribute( 'icon', 'fa fa-home' );
-        if( !$this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
-        {
-            $menu->addChild( 'login', ['label' => 'common.log_in', 'route' => 'fos_user_security_login'] )
-                    ->setAttribute( 'icon', 'fa fa-login' );
-        }
         return $menu;
     }
 
@@ -98,6 +93,17 @@ class MenuBuilder implements ContainerAwareInterface
             $menu->addChild( 'map', ['label' => 'common.map', 'route' => 'map'] )
                     ->setAttribute( 'icon', 'fa fa-map' );
         }
+        return $menu;
+    }
+
+    public function createTrailerMenu( array $options )
+    {
+        $menu = $this->factory->createItem( 'trailer' );
+
+        $menu->setChildrenAttribute( 'class', 'nav navbar-nav' );
+        $menu->addChild( 'trailer', ['label' => 'asset.trailers', 'route' => 'trailers'] )
+                ->setAttribute( 'icon', 'fa fa-truck' );
+
         return $menu;
     }
 
@@ -125,20 +131,12 @@ class MenuBuilder implements ContainerAwareInterface
                     ->setAttribute( 'icon', 'fa fa-edit' );
             $menu['user']->addChild( 'logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
         }
-
-        return $menu;
-    }
-
-    public function createVendorMenu( array $options )
-    {
-        $menu = $this->factory->createItem( 'vendor' );
-
-        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
+        else
         {
-            $menu->setChildrenAttribute( 'class', 'nav navbar-nav' );
-            $menu->addChild( 'vendor', ['label' => 'asset.vendors', 'route' => 'vendor'] )
-                    ->setAttribute( 'icon', 'fa fa-th-large' );
+            $menu->addChild( 'login', ['label' => 'common.log_in', 'route' => 'fos_user_security_login'] )
+                    ->setAttribute( 'icon', 'fa fa-login' );
         }
+
         return $menu;
     }
 

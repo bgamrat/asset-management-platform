@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'asset.trailers'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {% stylesheets
+            '@bootstrap_css'
+            '@main_css'
+            filter='cssrewrite' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">  
+    {% endstylesheets %}  
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>{{ block('title') }}
+                <small data-toggle="modal" data-target="#trailer-controls"><i class="fa fa-gears"></i></small>
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for trailer in trailers %}
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title trailer-name">{{ trailer.name }}</h3>
+                    </div>
+                    <div class="panel-body trailer">
+                        <div class="trailer-relationships">
+                            <dl>
+                                {% if trailer.requires|length > 0 %}
+                                    <dt>{{ 'asset.requires'|trans }}</dt>
+                                    <dd>
+                                        <ul>
+                                            {% for req in trailer.requires %}
+                                                <li>{{ req.name }}</li>
+                                                {% endfor %}
+                                        </ul>
+                                    </dd>
+                                {% endif %}
+                                {% if trailer.requiredby|length > 0 %}
+                                    <dt>{{ 'asset.required_by'|trans }}</dt>
+                                    <dd>
+                                        <ul>
+                                            {% for req in trailer.requiredby %}
+                                                <li>{{ req.name }}</li>
+                                                {% endfor %}
+                                        </ul>
+                                    </dd>
+                                {% endif %}
+                                {% if trailer.extends|length > 0 %}
+                                    <dt>{{ 'asset.extends'|trans }}</dt>
+                                    <dd>
+                                        <ul>
+                                            {% for ext in trailer.extends %}
+                                                <li>{{ ext.name }}</li>
+                                                {% endfor %}
+                                        </ul>
+                                    </dd>
+                                {% endif %}
+                                {% if trailer.extendedby|length > 0 %}
+                                    <dt>{{ 'asset.extended_by'|trans }}</dt>
+                                    <dd>
+                                        <ul>
+                                            {% for ext in trailer.extendedby %}
+                                                <li>{{ ext.name }}</li>
+                                                {% endfor %}
+                                        </ul>
+                                    </dd>
+                                {% endif %}
+                            </dl>
+                        </div>
+                        <div class="equipment">
+                            {% if equipment[trailer.name] is not empty %}
+                                <h4>{{'common.available'|trans}} {{'asset.equipment'|trans}}</h4>
+                                <ul class="list-unstyled">
+                                    {% for category in equipment[trailer.name] %}
+                                        <li class="justify">
+                                            <span class="category">{{category.fullName}}</span>
+                                            <span class="quantity">{{category.quantity}}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="trailer-controls" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{'calendar.controls'|trans}}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>What would you like to see on this calendar?</p>
+                    <p>How would you like the calendar to be formatted?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success">{{ 'common.apply'|trans}}</button>
+                    <button type="button" class="btn btn-primary">{{ 'common.save'|trans}}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -161,7 +161,7 @@ class EventsController extends FOSRestController
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_event_get_event', array('id' => $event->getId()), true // absolute
+                                'app_admin_api_schedule_get_event', array('id' => $event->getId()), true // absolute
                         )
                 );
             }

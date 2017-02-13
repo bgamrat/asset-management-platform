@@ -1,4 +1,3 @@
-
 app_admin_asset_assets:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\Asset\AssetsController
@@ -54,6 +53,12 @@ app_admin_common_menu_store:
     name_prefix:   app_admin_api_menu_store_
     prefix: /api/menustore
 
+app_admin_schedule_events:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Schedule\EventsController
+    name_prefix:   app_admin_api_schedule_
+    prefix: /api
+
 app_admin_users:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\User\UsersController
@@ -64,10 +69,4 @@ app_admin_users_invitations:
     type: rest
     resource: AppBundle\Controller\Api\Admin\User\InvitationsController
     name_prefix: app_admin_api_user_invitation_
-    prefix: /api
-
-app_admin_schedule_events:
-    type:     rest
-    resource: AppBundle\Controller\Api\Admin\Schedule\EventsController
-    name_prefix:   app_admin_api_schedule_
     prefix: /api

@@ -195,8 +195,8 @@ define([
         saveBtn.on("click", function (event) {
             var beforeNameFilter, filter, st, en;
             if( eventForm.validate() ) {
-                st = startInput[i].get('value');
-                en = endInput[i].get('value');
+                st = startInput.get('value');
+                en = endInput.get('value');
                 var data = {
                     "id": eventId,
                     "name": nameInput.get("value"),
@@ -207,7 +207,7 @@ define([
                     "canceled": canceledCheckBox.get("checked"),
                     "contacts": person.getData(),
                     "client": parseInt(clientFilteringSelect.get("value")),
-                    "comment": commentInput.get("value")
+                    "description": descriptionInput.get("value")
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {

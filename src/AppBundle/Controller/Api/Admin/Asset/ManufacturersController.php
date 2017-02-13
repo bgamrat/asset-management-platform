@@ -196,7 +196,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{name}/brands")
+     * @Route("/api/manufacturers/{name}/brands", name="app_admin_api_manufacturers_get_manufacturer_brands")
      * @Method("GET")
      * @View()
      */
@@ -219,7 +219,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brands/{bname}/models")
+     * @Route("/api/manufacturers/{mname}/brands/{bname}/models", name="app_admin_api_manufacturers_get_manufacturers_brands_models")
      * @Method("GET")
      * @View()
      */
@@ -289,7 +289,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mnname}/brands/{bname}/model/{mname}")
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/model/{mname}", name="app_admin_api_manufacturers_get_manufacturers_brands_model")
      * @Method("GET")
      * @View()
      */
@@ -330,7 +330,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}")
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}", name="app_admin_api_manufacturers_post_manufacturer_brand_models")
      * @Method("POST")
      * @View()
      */
@@ -340,7 +340,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}")
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}", name="app_admin_api_manufacturers_put_manufacturer_brand_models")
      * @Method("PUT")
      * @View()
      */
@@ -416,7 +416,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}")
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}", name="app_admin_api_manufacturers_patch_manufacturers_brands_models")
      * @Method("PATCH")
      * @View(statusCode=204)
      */

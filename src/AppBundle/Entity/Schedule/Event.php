@@ -120,6 +120,7 @@ class Event
     {
         $this->contacts = new ArrayCollection();
         $this->contracts = new ArrayCollection();
+        $this->trailers = new ArrayCollection();
     }
 
     /**

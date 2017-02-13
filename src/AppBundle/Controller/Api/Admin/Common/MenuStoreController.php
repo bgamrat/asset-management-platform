@@ -24,10 +24,10 @@ class MenuStoreController extends FOSRestController
 
     /**
      * @View()
-     * @Get("/adminmenus")
-     * @Get("/adminmenus/", name="_alt")
-     * @Get("/adminmenus/?parent={parent}", name="_parent", defaults={"parent" = "admin"})
-     * @Get("/adminmenus/{id}", name="_id", defaults={"id" = "admin"})
+     * @Get("/adminmenus", name="app_admin_api_common_menustore_getadminmenu")
+     * @Get("/adminmenus/", name="app_admin_api_common_menustore_getadminmenu_alt")
+     * @Get("/adminmenus/?parent={parent}", name="app_admin_api_common_menustore_getadminmenu_parent", defaults={"parent" = "admin"})
+     * @Get("/adminmenus/{id}", name="app_admin_api_common_menustore_getadminmenu_id", defaults={"id" = "admin"})
      *
      */
     public function getAdminmenuAction( Request $request )

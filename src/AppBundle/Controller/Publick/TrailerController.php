@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Admin\Asset;
+namespace AppBundle\Controller\Publick;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +18,31 @@ class TrailerController extends Controller
 {
 
     /**
-     * @Route("/admin/asset/trailer")
+     * @Route("/trailers/", name="trailers")
      * @Method("GET")
      */
     public function indexAction( Request $request )
+    {
+        $repository = $this->getDoctrine()
+                ->getRepository( '\AppBundle\Entity\Asset\Trailer' );
+        $trailers = $repository->findAll();
+        $equipment = [];
+        foreach( $trailers as $trailer )
+        {
+            $equipment[$trailer->getName()] = $this->getTrailerEquipment( $trailer->getName() );
+        }
+
+        return $this->render( 'public/trailers/index.html.twig', array(
+                    'trailers' => $trailers,
+                    'equipment' => $equipment
+                ) );
+    }
+
+    /**
+     * @Route("/admin/asset/trailer/index", name="app_admin_asset_trailer_index")
+     * @Method("GET")
+     */
+    public function adminIndexAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
@@ -33,7 +54,7 @@ class TrailerController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/trailer/{name}")
+     * @Route("/admin/asset/trailer/{name}", name="app_admin_asset_trailer_view")
      * @Method("GET")
      */
     public function viewAction( $name )
@@ -53,7 +74,18 @@ class TrailerController extends Controller
     public function viewTrailerEquipmentAction( $name )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $em = $this->getDoctrine()->getManager();
+        $trailer = $em->getRepository( 'AppBundle\Entity\Asset\Trailer' )->findOneByName( $name );
+        return $this->render( 'common/trailer-equipment-by-category.html.twig', array(
+                    'trailer' => $trailer,
+                    'equipment' => $this->getTrailerEquipment( $name ),
+                    'no_hide' => true,
+                    'omit_menu' => true)
+        );
+    }
 
+    private function getTrailerEquipment( $name )
+    {
         $em = $this->getDoctrine()->getManager();
         $trailer = $em->getRepository( 'AppBundle\Entity\Asset\Trailer' )->findOneByName( $name );
         $queryBuilder = $em->createQueryBuilder()->select( 'c.fullName', 'COUNT(c.id) AS quantity' )
@@ -69,14 +101,7 @@ class TrailerController extends Controller
                         $queryBuilder->expr()->eq( 'lt.entity', "'trailer'" ), $queryBuilder->expr()->eq( 'l.entity', '?1' )
         ) );
         $queryBuilder->setParameter( 1, $trailer->getId() );
-        $equipment = $queryBuilder->getQuery()->getResult();
-
-        return $this->render( 'admin/client/trailer-equipment-by-category.html.twig', array(
-                    'trailer' => $trailer,
-                    'equipment' => $equipment,
-                    'no_hide' => true,
-                    'omit_menu' => true)
-        );
+        return $queryBuilder->getQuery()->getResult();
     }
 
 }

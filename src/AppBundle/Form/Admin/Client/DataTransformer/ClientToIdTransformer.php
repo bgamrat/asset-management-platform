@@ -37,7 +37,7 @@ class ClientToIdTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (client) is not found.
      */
-    public function reverseTransform($clientName)
+    public function reverseTransform($clientId)
     {
         // no client id? It's optional, so that's ok
         if (!$clientId) {
@@ -46,13 +46,13 @@ class ClientToIdTransformer implements DataTransformerInterface
 
         $client = $this->em
             ->getRepository('AppBundle\Entity\Client\Client')
-            ->find($clientName)
+            ->find($clientId)
         ;
 
         if (null === $client) {
             throw new TransformationFailedException(sprintf(
-                'An client with name "%s" does not exist!',
-                $clientName
+                'An client with id "%s" does not exist!',
+                $clientId
             ));
         }
         return $client;

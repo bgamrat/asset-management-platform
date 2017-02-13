@@ -1,15 +1,27 @@
-app:
+app_admin:
     resource: "@AppBundle/Controller/Admin"
+    type:     annotation
+
+app_common:
+    resource: "@AppBundle/Controller/Common"
+    type:     annotation
+
+app_public:
+    resource: "@AppBundle/Controller"
+    type:     annotation
+
+app_publick:
+    resource: "@AppBundle/Controller/Publick"
     type:     annotation
 
 app_user:
     resource: "@AppBundle/Controller/User"
     type:     annotation
-    
+
 admin_rest:
     type: rest
     resource: routing_rest.yml
-    
+
 legacy_app:
     resource: "@LegacyBridgeBundle/Resources/config/routing.yml"
     prefix:   / 

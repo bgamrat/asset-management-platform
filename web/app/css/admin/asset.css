@@ -35,7 +35,8 @@
     list-style-type: none;
     padding: 0;
 }
-.field-id {
+.field-id,
+.dgrid-column-id {
     display: none;
 }
 #asset_location_ctype,

@@ -16,7 +16,7 @@
 
     <div class="row">
         <div class="col-sm-6">
-            <h1>{{ 'common.calendar'|trans }}
+            <h1>{{ block('title' }}
                 <small data-toggle="modal" data-target="#calendar-controls"><i class="fa fa-gears"></i></small>
             </h1>
         </div>
@@ -64,6 +64,9 @@
 
 {% endblock %}
 
-{% block footer %}
-    {% include 'user/calendar/page_footer_script.html.twig' %}
-{% endblock %}
+<script src=""></script>
+{% javascripts
+    '@calendar_js'
+%}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}

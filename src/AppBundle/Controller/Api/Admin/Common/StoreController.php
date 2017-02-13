@@ -181,8 +181,6 @@ class StoreController extends FOSRestController
 
     /**
      * @View()
-     * @Route("/api/store/contracttrailers/{id}")
-     * @Method("GET")
      */
     public function getContracttrailersAction( $id )
     {
