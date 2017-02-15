@@ -131,3 +131,7 @@ fieldset .sub-form-legend {
     width: 75px;
     display: inline-block;
 }
+.field-id,
+.dgrid-column-id {
+    display: none;
+}

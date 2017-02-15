@@ -86,7 +86,7 @@ class Trailer
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $comment;
+    private $description;
     /**
      * @var boolean
      * @Gedmo\Versioned
@@ -361,27 +361,27 @@ class Trailer
     }
 
     /**
-     * Set comment
+     * Set description
      *
-     * @param string $comment
+     * @param string $description
      *
-     * @return Asset
+     * @return Trailer
      */
-    public function setComment( $comment )
+    public function setDescription( $description )
     {
-        $this->comment = $comment;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get comment
+     * Get description
      *
      * @return string
      */
-    public function getComment()
+    public function getDescription()
     {
-        return $this->comment;
+        return $this->description;
     }
 
     public function setActive( $active )

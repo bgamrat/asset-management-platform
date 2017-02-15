@@ -1,8 +1,5 @@
-{% macro event(startdate,enddate,title,content) %}
-    <span class="startdate">{{ startdate|date('m/d/Y') }}</span>
-    {% if startdate != enddate %}
-    <span class="enddate">{{ enddate|date('m/d/Y') }}</span>
-    {% endif %}
-    <span class="title">{{ title }}</span>
-    <span class="content">{{ content }}</span>
+{% macro display_event(event) %}
+    <div class="event">
+        <span class="description">{{ event.description }}</span>
+    </div>
 {% endmacro %}

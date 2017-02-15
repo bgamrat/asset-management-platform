@@ -66,8 +66,8 @@ define([
                 location_text: {
                     label: asset.location
                 },
-                comment: {
-                    label: core.comment
+                description: {
+                    label: core.description
                 }
             },
             renderRow: function (object) {

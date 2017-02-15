@@ -25,3 +25,6 @@
 .contract-equipment-link {
     margin-left: 25px;
 }
+.dgrid-column-dates .date-span {
+    font-style: normal;
+}

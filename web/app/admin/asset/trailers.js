@@ -110,7 +110,7 @@ define([
             statusSelect.set("value", "");
             locationFilteringSelect.set("value", "");
             serialNumberInput.set("value", "");
-            commentInput.set("value", "");
+            descriptionInput.set("value", "");
             activeCheckBox.set("checked", true);
             trailerViewDialog.set("title", core["new"]).show();
             action = "new";
@@ -252,12 +252,12 @@ define([
         }, "trailer_cost");
         costInput.startup();
 
-        var commentInput = new SimpleTextarea({
-            placeholder: core.comment,
+        var descriptionInput = new SimpleTextarea({
+            placeholder: core.description,
             trim: true,
             required: false
-        }, "trailer_comment");
-        commentInput.startup();
+        }, "trailer_description");
+        descriptionInput.startup();
 
         var trailerForm = new Form({}, '[name="trailer"]');
         trailerForm.startup();
@@ -294,7 +294,7 @@ define([
                     "requires": trailerRelationships.getData("requires"),
                     "extended_by": trailerRelationships.getData("extended_by"),
                     "required_by": trailerRelationships.getData("required_by"),
-                    "comment": commentInput.get("value"),
+                    "description": descriptionInput.get("value"),
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -346,8 +346,8 @@ define([
                 location_text: {
                     label: asset.location
                 },
-                comment: {
-                    label: core.comment
+                description: {
+                    label: core.description
                 },
                 active: {
                     label: core.active,
@@ -414,7 +414,7 @@ define([
                     }
                     nameInput.set('value', core.name);
                     serialNumberInput.set('value', trailer.serial_number);
-                    commentInput.set('value', trailer.comment);
+                    descriptionInput.set('value', trailer.description);
                     activeCheckBox.set('checked', trailer.active);
                     trailerRelationships.setData("extends", trailer['extends']);
                     trailerRelationships.setData("requires", trailer['requires']);

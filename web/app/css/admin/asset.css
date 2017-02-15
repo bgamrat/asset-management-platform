@@ -35,10 +35,6 @@
     list-style-type: none;
     padding: 0;
 }
-.field-id,
-.dgrid-column-id {
-    display: none;
-}
 #asset_location_ctype,
 #trailer_location_ctype {
     list-style-type: none;

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Publick;
+namespace AppBundle\Controller\Common;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

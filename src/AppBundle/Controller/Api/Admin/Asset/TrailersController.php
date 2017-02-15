@@ -48,7 +48,7 @@ class TrailersController extends FOSRestController
         $columns = ['t.id', 't.location_text', 't.name',
             "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 't.serial_number',
             's.name AS status_text', 's.id AS status',
-            't.comment', 't.active'];
+            't.description', 't.active'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 't.deletedAt AS deleted_at';
@@ -139,7 +139,7 @@ class TrailersController extends FOSRestController
                 'status_text' => $status->getName(),
                 'status' => $status->getId(),
                 'name' => $trailer->getName(),
-                'comment' => $trailer->getComment(),
+                'description' => $trailer->getDescription(),
                 'purchased' => $trailer->getPurchased()->format( 'Y-m-d' ),
                 'cost' => $trailer->getCost(),
                 'active' => $trailer->isActive()

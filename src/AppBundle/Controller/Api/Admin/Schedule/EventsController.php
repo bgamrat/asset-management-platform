@@ -63,14 +63,14 @@ class EventsController extends FOSRestController
         $data = [];
         foreach( $eventCollection as $e )
         {
-            $cl = $c->getClient();
+            $cl = $e->getClient();
             $client_text = !empty( $cl ) ? $cl->getName() : null;
-            $st = $c->getStart();
-            $en = $c->getEnd();
+            $st = $e->getStart();
+            $en = $e->getEnd();
             $item = [
                 'id' => $e->getId(),
                 'name' => $e->getName(),
-                'client_text' => $cl,
+                'client' => $client_text,
                 'contacts' => $e->getContacts( false ),
                 'tentative' => $e->isTentative(),
                 'billable' => $e->isBillable(),
@@ -80,7 +80,7 @@ class EventsController extends FOSRestController
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
-                $item['deleted_at'] = $c->getDeletedAt();
+                $item['deleted_at'] = $e->getDeletedAt();
             }
             $data[] = $item;
         }

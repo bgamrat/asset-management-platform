@@ -28,6 +28,9 @@
                         <h3 class="panel-title trailer-name">{{ trailer.name }}</h3>
                     </div>
                     <div class="panel-body trailer">
+                        <div class="description">
+                            {{ trailer.description }}
+                        </div>
                         <div class="trailer-relationships">
                             <dl>
                                 {% if trailer.requires|length > 0 %}
