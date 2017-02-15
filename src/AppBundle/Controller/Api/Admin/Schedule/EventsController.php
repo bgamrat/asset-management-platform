@@ -99,16 +99,23 @@ class EventsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $event = $this->getDoctrine()
-                        ->getRepository( 'AppBundle\Entity\Event\Event' )->find( $id );
+                    ->getRepository( 'AppBundle\Entity\Schedule\Event' )->find( $id );
         if( $event !== null )
         {
+            $client_text = !empty( $event->getClient() ) ? $event->getClient()->getName() : null;
+            $st = $event->getStart();
+            $en = $event->getEnd();
             $data = [
                 'id' => $event->getId(),
                 'name' => $event->getName(),
-                'active' => $event->isActive(),
-                'comment' => $event->getComment(),
+                'client' => $event->getClient(),
+                'client_text' => $client_text,
                 'contacts' => $event->getContacts( false ),
-                'contracts' => $event->getContracts( false ),
+                'tentative' => $event->isTentative(),
+                'billable' => $event->isBillable(),
+                'canceled' => $event->isCanceled(),
+                'start' => !empty( $st ) ? $st->format( 'Y-m-d' ) : null,
+                'end' => !empty( $en ) ? $en->format( 'Y-m-d' ) : null
             ];
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'event' . $event->getId(), $event->getUpdated() );

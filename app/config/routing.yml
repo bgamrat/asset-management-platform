@@ -10,9 +10,9 @@ app_public:
     resource: "@AppBundle/Controller"
     type:     annotation
 
-app_publick:
-    resource: "@AppBundle/Controller/Publick"
-    type:     annotation
+#app_publick:
+#    resource: "@AppBundle/Controller/Publick"
+#    type:     annotation
 
 app_user:
     resource: "@AppBundle/Controller/User"

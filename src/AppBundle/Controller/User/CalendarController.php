@@ -31,15 +31,20 @@ class CalendarController extends Controller
         $queryBuilder = $em->createQueryBuilder()->select( ['e'] )
                 ->from( 'AppBundle\Entity\Schedule\Event', 'e' )
                 ->join( 'e.client', 'c' )
-                ->orderBy( 'e.start,c.name');
-    
+                ->orderBy( 'e.start,c.name' );
+        $queryBuilder->where( $queryBuilder->expr()->between(
+                        ':now', 'e.start', 'e.end'
+                )
+        );
+        $queryBuilder->setParameters( array('now' => date('Y/m/d') ));
+
         $events = $queryBuilder->getQuery()->getResult();
 
         return $this->render( 'user/calendar/index.html.twig', array(
                     'date' => $today,
                     'days_of_the_week' => $daysOfTheWeek,
                     'events' => $events
-        ) );
+                ) );
     }
 
 }

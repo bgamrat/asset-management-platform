@@ -1,4 +1,4 @@
-{% block title %}{{ 'asset.trailer'|trans }} {{'common.equipment'|trans }}{% endblock %}
+{% block title %}{{ trailer.name}} {{'common.equipment'|trans }}{% endblock %}
 
 {% extends 'admin/asset/asset.base.html.twig' %}
 
@@ -13,9 +13,9 @@
                 <span class="location"><strong>{{'asset.location'|trans}}</strong> {{ trailer.getLocationText }}</span>
             </div>
 
-            {% if trailer.comment != null %}
-                <div class="comment">
-                    {{ trailer.comment }}
+            {% if trailer.description != null %}
+                <div class="description">
+                    {{ trailer.description }}
                 </div>
             {% endif %}
 
