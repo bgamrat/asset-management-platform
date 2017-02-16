@@ -35,8 +35,7 @@ class AssetStatusController extends Controller
         $statusesForm = $this->createForm( AssetStatusesType::class, $statuses, [ 'action' => $this->generateUrl( 'app_admin_asset_assetstatus_save' )] );
 
         return $this->render( 'admin/asset/asset-statuses.html.twig', array(
-                    'statuses_form' => $statusesForm->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
+                    'statuses_form' => $statusesForm->createView()
                 ) );
     }
 

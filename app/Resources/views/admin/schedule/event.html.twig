@@ -143,14 +143,23 @@
                                                     {% endif %} #}
                         </fieldset>
                     </div>
-                    <div id="event-view-times-tab">
-                        <fieldset class="event times">
-                            <legend>{{'event.times'|trans}}</legend>
-                            {# {{form_row(event_form.event_times)}}
-                                                    {% if event_form.events.vars.allow_add %}
-                                                        <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                                                    {% endif %} #}
-                        </fieldset>
+                    <div id="event-view-times-and-staff-tab">
+                        <div class="justify">
+                            <fieldset class="event times">
+                                <legend>{{'event.times'|trans}}</legend>
+                                {# {{form_row(event_form.event_times)}}
+                                                        {% if event_form.events.vars.allow_add %}
+                                                            <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                                        {% endif %} #}
+                            </fieldset>
+                            <fieldset class="event staff">
+                                <legend>{{'event.staff'|trans}}</legend>
+                                {# {{form_row(event_form.event_times)}}
+                                                        {% if event_form.events.vars.allow_add %}
+                                                            <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                                        {% endif %} #}
+                            </fieldset>
+                        </div>
                     </div>
                     <div id="event-view-history-tab">
                     </div>

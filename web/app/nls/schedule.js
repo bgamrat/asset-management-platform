@@ -5,6 +5,7 @@ define({
         "contracts": "Contracts",
         "schedule": "Schedule",
         "tentative": "Tentative",
-        "times": "Times"
+        "times": "Times",
+        "times_and_staff": "Times and Staff"
     })
 });

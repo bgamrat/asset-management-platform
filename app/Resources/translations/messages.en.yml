@@ -1,7 +1,7 @@
 asset:
     asset:
         Asset
-    asset-statuses:
+    asset_statuses:
         Asset Statuses
     barcode:
         Barcode
@@ -243,10 +243,18 @@ event:
         Billable
     canceled:
         Canceled
+    staff:
+        Staff
     tentative:
         Tentative
     times:
         Times
+    times_and_staff:
+        Times and Staff
+    time_span_type:
+        Time Span Type
+    time_span_types:
+        Time Span Types
 
 invitation:
     user: 

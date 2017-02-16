@@ -82,11 +82,11 @@ define([
                 );
         tabContainer.addChild(venueContentPane);
 
-        var timesContentPane = new ContentPane({
-            title: schedule.times},
-        "event-view-times-tab"
+        var timesAndStaffContentPane = new ContentPane({
+            title: schedule.times_and_staff},
+        "event-view-times-and-staff-tab"
                 );
-        tabContainer.addChild(timesContentPane);
+        tabContainer.addChild(timesAndStaffContentPane);
 
         var historyContentPane = new ContentPane({
             title: core.history},

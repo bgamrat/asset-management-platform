@@ -19,6 +19,7 @@
 .event .contract .name .dijitTextBox {
     width: 300px;
 }
+#event-times-and-staff-tab .justify fieldset, 
 #event-view-equipment-tab .justify fieldset {
     width: 45%;
 }
