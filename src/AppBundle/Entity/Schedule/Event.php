@@ -101,6 +101,14 @@ class Event
      */
     protected $trailers = null;
     /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Schedule\TimeSpan", cascade={"persist"})
+     * @ORM\JoinTable(name="event_time_span",
+     *      joinColumns={@ORM\JoinColumn(name="time_span_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    private $time_spans = null;
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -121,6 +129,7 @@ class Event
         $this->contacts = new ArrayCollection();
         $this->contracts = new ArrayCollection();
         $this->trailers = new ArrayCollection();
+        $this->time_spans = new ArrayCollection();
     }
 
     /**
@@ -374,6 +383,24 @@ class Event
     public function removeTrailer( Trailer $trailer )
     {
         $this->trailers->removeElement( $trailer );
+    }
+
+    public function getTimeSpans()
+    {
+        return $this->timespans->toArray();
+    }
+
+    public function addTimeSpan( TimeSpan $timespan )
+    {
+        if( !$this->timespans->contains( $timespan ) )
+        {
+            $this->timespans->add( $timespan );
+        }
+    }
+
+    public function removeTimeSpan( TimeSpan $timespan )
+    {
+        $this->timespans->removeElement( $timespan );
     }
 
     public function getUpdated()

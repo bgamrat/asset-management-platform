@@ -29,3 +29,7 @@
 .dgrid-column-dates .date-span {
     font-style: normal;
 }
+.event .time-span .start .dijitTextBox,
+.event .time-span .end .dijitTextBox {
+    width: 100px;
+}

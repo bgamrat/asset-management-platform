@@ -48,6 +48,24 @@
         </div>
 {% endspaceless %}{% endblock %}
 
+{% block _event_time_spans_entry_row %}{% spaceless %}
+        <div class="form-row time-span">
+            <span class="type">
+                {{ form_widget(form.type) }}
+            </span>
+            <span class="start">
+                {{ form_widget(form.start) }} <input id="{{id}}-start-time" type="text">
+            </span>
+            <span class="end">
+                {{ form_widget(form.end) }} <input id="{{id}}-end-time" type="text">
+            </span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            {% if form.parent.vars.allow_delete %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="trailer-__trailer__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>
+{% endspaceless %}{% endblock %}      
+
 {% block admin_content %}
     <div id="event-wrapper">
         <h1>{{ block('title') }}</h1>
@@ -143,23 +161,23 @@
                                                     {% endif %} #}
                         </fieldset>
                     </div>
-                    <div id="event-view-times-and-staff-tab">
-                        <div class="justify">
-                            <fieldset class="event times">
-                                <legend>{{'event.times'|trans}}</legend>
-                                {# {{form_row(event_form.event_times)}}
-                                                        {% if event_form.events.vars.allow_add %}
-                                                            <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                                                        {% endif %} #}
-                            </fieldset>
-                            <fieldset class="event staff">
-                                <legend>{{'event.staff'|trans}}</legend>
-                                {# {{form_row(event_form.event_times)}}
-                                                        {% if event_form.events.vars.allow_add %}
-                                                            <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                                                        {% endif %} #}
-                            </fieldset>
-                        </div>
+                    <div id="event-view-times-tab">
+                        <fieldset class="event times">
+                            <legend>{{'event.times'|trans}}</legend>
+                            {{form_row(event_form.time_spans)}}
+                            {% if event_form.time_spans.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div id="event-view-staff-tab">
+                        <fieldset class="event staff">
+                            <legend>{{'event.staff'|trans}}</legend>
+                            {# {{form_row(event_form.event_times)}}
+                                                    {% if event_form.events.vars.allow_add %}
+                                                        <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                                    {% endif %} #}
+                        </fieldset>
                     </div>
                     <div id="event-view-history-tab">
                     </div>

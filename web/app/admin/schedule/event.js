@@ -29,6 +29,7 @@ define([
     "app/common/person",
     "app/admin/schedule/contracts",
     "app/admin/schedule/trailers",
+    "app/admin/schedule/time_spans",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -38,7 +39,8 @@ define([
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, contracts, trailers, lib, libGrid, core, schedule) {
+        person, contracts, trailers, timeSpans,
+        lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
         var action = null, d;
@@ -82,11 +84,17 @@ define([
                 );
         tabContainer.addChild(venueContentPane);
 
-        var timesAndStaffContentPane = new ContentPane({
-            title: schedule.times_and_staff},
-        "event-view-times-and-staff-tab"
+        var timesContentPane = new ContentPane({
+            title: schedule.times},
+        "event-view-times-tab"
                 );
-        tabContainer.addChild(timesAndStaffContentPane);
+        tabContainer.addChild(timesContentPane);
+
+        var staffContentPane = new ContentPane({
+            title: schedule.staff},
+        "event-view-staff-tab"
+                );
+        tabContainer.addChild(staffContentPane);
 
         var historyContentPane = new ContentPane({
             title: core.history},
@@ -391,6 +399,7 @@ define([
         person.run('event_contacts');
         contracts.run('event_contracts');
         trailers.run('event_trailers');
+        timeSpans.run('event_time_spans');
         lib.pageReady();
     }
     return {

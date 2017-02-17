@@ -315,6 +315,23 @@ class StoreController extends FOSRestController
     /**
      * @View()
      */
+    public function getTimespantypesAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $em = $this->getDoctrine()->getManager();
+
+        $queryBuilder = $em->createQueryBuilder()->select( ['ts.id', 'ts.name'] )
+                ->from( 'AppBundle\Entity\Schedule\TimeSpanType', 'ts' )
+                ->orderBy( 'ts.name' );
+        $data = $queryBuilder->getQuery()->getResult();
+
+        return $data;
+    }
+    
+    /**
+     * @View()
+     */
     public function getTrailersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );

@@ -15,6 +15,7 @@ define({
         "contacts": "Contacts",
         "cost": "Cost",
         "country": "Country",
+        "date": "Date",
         "dates": "Dates",
         "description": "Description",
         "details": "Details",

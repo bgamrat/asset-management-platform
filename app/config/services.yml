@@ -108,6 +108,12 @@ services:
         tags:
             - { name: form.type, alias: 'app_person_type' }
 
+    app.admin.form.type.time_span:
+        class: AppBundle\Form\Admin\Schedule\TimeSpanType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_time_span_type' }
+
     app.admin.form.type.trailer.asset:
         class: AppBundle\Form\Admin\Asset\TrailerType
         arguments: ['@doctrine.orm.entity_manager']

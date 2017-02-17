@@ -27,38 +27,25 @@ class TimeSpan
      */
     private $id;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
-     * @Assert\NotBlank(
-     *     message = "blank.name")
-     * @Assert\Regex(
-     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$/",
-     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$",
-     *     message = "invalid.name {{ value }}",
-     *     match=true)
+     * @ORM\ManyToOne(targetEntity="TimeSpanType")
+     * @ORM\JoinColumn(name="type", referencedColumnName="id")
+     * @ORM\OrderBy({"type" = "ASC"})
      */
-    private $name;
+    protected $type;
+    /**
+     * @ORM\Column(name="startdate", type="datetime", nullable=true, unique=false)
+     */
+    private $start = null;
+    /**
+     * @ORM\Column(name="enddate", type="datetime", nullable=true, unique=false)
+     */
+    private $end = null;
     /**
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="default_value", type="boolean", nullable=true)
-     * 
-     */
-    private $default = false;
 
     /**
      * Set id
@@ -81,27 +68,75 @@ class TimeSpan
     }
 
     /**
-     * Set name
+     * Set type
      *
-     * @param string $name
+     * @param string $type
      *
-     * @return Status
+     * @return Event
      */
-    public function setName( $name )
+    public function setType( $type )
     {
-        $this->name = $name;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get type
      *
      * @return string
      */
-    public function getName()
+    public function getType()
     {
-        return $this->name;
+        return $this->type;
+    }
+
+    /**
+     * Set start
+     *
+     * @param float $start
+     *
+     * @return Event
+     */
+    public function setStart( $start )
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    /**
+     * Get start
+     *
+     * @return float
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * Set end
+     *
+     * @param float $end
+     *
+     * @return Event
+     */
+    public function setEnd( $end )
+    {
+        $this->end = $end;
+
+        return $this;
+    }
+
+    /**
+     * Get end
+     *
+     * @return float
+     */
+    public function getEnd()
+    {
+        return $this->end;
     }
 
     /**
@@ -109,7 +144,7 @@ class TimeSpan
      *
      * @param string $comment
      *
-     * @return Email
+     * @return TimeSpan
      */
     public function setComment( $comment )
     {
@@ -126,26 +161,6 @@ class TimeSpan
     public function getComment()
     {
         return $this->comment;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    public function setDefault( $default )
-    {
-        $this->default = $default;
-    }
-
-    public function isDefault()
-    {
-        return $this->default;
     }
 
 }

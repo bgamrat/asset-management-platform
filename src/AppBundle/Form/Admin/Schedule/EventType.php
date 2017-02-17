@@ -90,6 +90,16 @@ class EventType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__trailer__'
                 ] )
+                ->add( 'time_spans', CollectionType::class, [
+                    'entry_type' => TimeSpanType::class,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__time_span__'
+                ] )
         ;
         $builder->get( 'client' )
                 ->addModelTransformer( new ClientToIdTransformer( $this->em ) );
