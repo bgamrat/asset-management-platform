@@ -1,0 +1,55 @@
+{% block title %}{{ 'asset.issue'|trans }} {{ 'common.type'|trans}} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% form_theme issue_types_form _self %}
+
+{% block _issue_types_types_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_active_entry_row('type',form,true) }}{% endblock %}
+
+{% block admin_content %}
+    <div id="issue-type-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="types">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
+                </div>
+            {% endfor %}
+            {% if not issue_types_form.vars.valid %}
+                <div class="form-errors types">
+                    {% for type in issue_types_form.types %}
+                        {% if not type.vars.valid %}
+                            {{form_errors(type.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form_start(issue_types_form)}}
+            <div class="text-right">
+                <button id="types-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="form-row header">
+                <span class="default">{{ 'common.default'|trans }}</span>
+                <span class="name">{{ 'common.name'|trans }}</span>
+                <span class="comment">{{ 'common.comment'|trans }}</span>
+                <span class="active">{{ 'common.active'|trans }}</span>
+            </div>
+            {{form_row(issue_types_form)}}
+            {% for type in issue_types_form.types %}
+                {{form_row(type)}}
+            {% endfor %}
+
+            {% if issue_types_form.types.vars.allow_add %}
+                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+            {% endif %}
+            {{form_end(issue_types_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/issue_type"], function (issue) {
+            issue.run();
+        });
+    </script>
+{% endblock %}

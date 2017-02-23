@@ -21,6 +21,10 @@ asset:
         Extended By
     extends:
         Extends
+    issue:
+        Issue
+    issue_types:
+        Issue Types
     location:
         Location
     location_type:

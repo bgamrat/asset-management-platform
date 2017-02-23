@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class IssueStatusType extends AbstractType
+class IssueTypeType extends AbstractType
 {
 
     /**
@@ -19,10 +19,13 @@ class IssueStatusType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $builder
+         $builder
                 ->add( 'id', HiddenType::class )
-                ->add( 'name', TextType::class )
+                ->add( 'name', TextType::class, ['property_path' => 'type'] )
+                ->add( 'comment', TextType::class )
                 ->add( 'active', CheckboxType::class )
+                ->add( 'default', CheckBoxType::class )
+        ;
         ;
     }
 
@@ -32,13 +35,13 @@ class IssueStatusType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'AppBundle\Entity\Asset\IssueStatus'
+            'data_class' => 'AppBundle\Entity\Asset\IssueType'
         ] );
     }
 
     public function getName()
     {
-        return 'issue_status';
+        return 'issue_type';
     }
 
 }
