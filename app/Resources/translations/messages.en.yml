@@ -23,6 +23,8 @@ asset:
         Extends
     issue:
         Issue
+    issue_statuses:
+        Issue Statuses
     issue_types:
         Issue Types
     location:
@@ -167,6 +169,8 @@ common:
         None
     not_active:
         Not active
+    order:
+        Order
     park:
         Park
     password:
@@ -207,6 +211,8 @@ common:
         Start
     state_province:
         State
+    status:
+        Status
     street:
         Street
     street2:

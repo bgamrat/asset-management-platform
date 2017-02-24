@@ -1,0 +1,70 @@
+{% block title %}{{ 'asset.issue'|trans }} {{ 'common.status'|trans}} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin/asset/asset.base.html.twig' %}
+
+{% form_theme issue_statuses_form _self %}
+
+{% block _issue_statuses_statuses_entry_row %}
+    {% spaceless %}
+        <div class="form-row issue-status">
+            <span class="default">{{ form_widget(form.default)}}</span>
+            <span class="id">{{ form_widget(form.id) }}</span>
+            <span class="order">{{ form_widget(form.order) }}</span>
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+            {% if form.parent.vars.allow_delete is defined %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="status-__status__"><i class="fa fa-remove"></i></span>
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
+{% block admin_content %}
+    <div id="issue-type-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="statuses">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
+                </div>
+            {% endfor %}
+            {% if not issue_statuses_form.vars.valid %}
+                <div class="form-errors statuses">
+                    {% for type in issue_statuses_form.statuses %}
+                        {% if not type.vars.valid %}
+                            {{form_errors(type.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form_start(issue_statuses_form)}}
+            <div class="text-right">
+                <button id="statuses-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="form-row header">
+                <span class="default">{{ 'common.default'|trans }}</span>
+                <span class="order">{{ 'common.order'|trans }}</span>
+                <span class="name">{{ 'common.name'|trans }}</span>
+                <span class="comment">{{ 'common.comment'|trans }}</span>
+                <span class="active">{{ 'common.active'|trans }}</span>
+            </div>
+            {{form_row(issue_statuses_form)}}
+            {% for type in issue_statuses_form.statuses %}
+                {{form_row(type)}}
+            {% endfor %}
+
+            {% if issue_statuses_form.statuses.vars.allow_add %}
+                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+            {% endif %}
+            {{form_end(issue_statuses_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/issue_status"], function (issue) {
+            issue.run();
+        });
+    </script>
+{% endblock %}

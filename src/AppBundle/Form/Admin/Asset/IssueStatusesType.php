@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Form\Admin\Issue;
+namespace AppBundle\Form\Admin\Asset;
 
-use AppBundle\Form\Admin\Issue\IssueStatusType;
+use AppBundle\Form\Admin\Asset\IssueStatusType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;

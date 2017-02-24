@@ -46,7 +46,8 @@ class IssueType
      * @ORM\Column(name="default_value", type="boolean", nullable=true)
      * 
      */
-    private $default = false;/**
+    private $default = false;
+    /**
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)

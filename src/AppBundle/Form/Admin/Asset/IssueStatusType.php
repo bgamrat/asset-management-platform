@@ -5,6 +5,7 @@ namespace AppBundle\Form\Admin\Asset;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -21,8 +22,11 @@ class IssueStatusType extends AbstractType
     {
         $builder
                 ->add( 'id', HiddenType::class )
-                ->add( 'name', TextType::class )
+                ->add( 'order', IntegerType::class )
+                ->add( 'name', TextType::class, ['property_path' => 'status'] )
+                ->add( 'comment', TextType::class )
                 ->add( 'active', CheckboxType::class )
+                ->add( 'default', CheckBoxType::class )
         ;
     }
 

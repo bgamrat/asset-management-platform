@@ -26,7 +26,6 @@ class IssueTypeType extends AbstractType
                 ->add( 'active', CheckboxType::class )
                 ->add( 'default', CheckBoxType::class )
         ;
-        ;
     }
 
     /**

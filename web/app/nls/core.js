@@ -43,6 +43,7 @@ define({
         "new": "New",
         "no": "No",
         "okay": "Okay",
+        "order": "Order",
         "person": "Person",
         "phone_number": "Phone number",
         "phone_numbers": "Phone numbers",

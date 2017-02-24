@@ -42,9 +42,10 @@ class MenuBuilder implements ContainerAwareInterface
         {
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'statuses', ['label' => 'asset.asset_statuses', 'route' => 'app_admin_asset_assetstatus_index'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index'] );
+            $menu['admin']['admin-assets']['asset-configuration']->addChild( 'issue_statuses', ['label' => 'asset.issue_statuses', 'route' => 'app_admin_asset_issuestatus_index'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'issue_types', ['label' => 'asset.issue_types', 'route' => 'app_admin_asset_issuetype_index'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
-            }
+        }
 
         $menu['admin']->addChild( 'admin-clients', ['label' => 'common.clients', 'route' => 'app_admin_client_client_index'] );
         $menu['admin']['admin-clients']->addChild( 'clients', ['label' => 'common.clients'] );

@@ -28,9 +28,15 @@ class IssueStatus
      */
     private $id;
     /**
+     * @var integer
+     * 
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $order = 0;
+    /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="status", type="string", length=64, nullable=true, unique=false)
      * @Assert\NotBlank(
      *     message = "blank.name")
      * @Assert\Regex(
@@ -39,13 +45,20 @@ class IssueStatus
      *     message = "invalid.name {{ value }}",
      *     match=true)
      */
-    private $name;
+    private $status;
     /**
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="default_value", type="boolean", nullable=true)
+     * 
+     */
+    private $default = false;
     /**
      * @var boolean
      *
@@ -75,27 +88,51 @@ class IssueStatus
     }
 
     /**
-     * Set name
+     * Set order
      *
-     * @param string $name
+     * @param string $order
      *
-     * @return Status
+     * @return Order
      */
-    public function setName( $name )
+    public function setOrder( $order )
     {
-        $this->name = $name;
+        $this->order = $order;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get order
      *
      * @return string
      */
-    public function getName()
+    public function getOrder()
     {
-        return $this->name;
+        return $this->order;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Status
+     */
+    public function setStatus( $status )
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -122,6 +159,16 @@ class IssueStatus
         return $this->comment;
     }
 
+    public function setDefault( $default )
+    {
+        $this->default = $default;
+    }
+
+    public function isDefault()
+    {
+        return $this->default;
+    }
+
     public function setActive( $active )
     {
         $this->active = $active;
@@ -130,16 +177,6 @@ class IssueStatus
     public function isActive()
     {
         return $this->active;
-    }
-
-    public function toArray()
-    {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'comment' => $this->getComment(),
-            'active' => $this->isActive()
-        ];
     }
 
 }
