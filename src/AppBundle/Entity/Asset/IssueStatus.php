@@ -12,8 +12,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Status
  *
  * @ORM\Table(name="issue_status")
- * @ORM\Entity()
- * @UniqueEntity("name")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\IssueStatusRepository")
+ * @UniqueEntity("status")
  * @UniqueEntity("id")
  */
 class IssueStatus
@@ -30,13 +30,13 @@ class IssueStatus
     /**
      * @var integer
      * 
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(name="`order`", type="integer", nullable=false)
      */
     private $order = 0;
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="status", type="string", length=64, nullable=true, unique=true)
      * @Assert\NotBlank(
      *     message = "blank.name")
      * @Assert\Regex(

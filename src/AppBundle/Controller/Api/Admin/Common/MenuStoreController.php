@@ -211,30 +211,39 @@ class MenuStoreController extends FOSRestController
         $menu['children'] = $children;
         return $menu;
     }
+    
+    /*
+     * @View()
+     */
 
-    public function getVendorMenu( Request $request )
+    public function getVendorMenu(  $adminMenu, $renderer, $id  )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $name = $request->get( 'name' );
-        if( !empty( $name ) )
+        $limit = 2500; // TODO: Change to deliver first letters if there are too many manfacturers
+        $em = $this->getDoctrine()->getManager();
+        $queryBuilder = $em->createQueryBuilder();
+        $queryBuilder
+                ->select( ["CONCAT('vendor-',v.id) AS id", 'v.name', "'vendor' AS parent"] )
+                ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
+                ->orderBy( 'v.name' )
+                ->setFirstResult( 0 )
+                ->setMaxResults( $limit );
+        $menu = $renderer->render( $adminMenu['admin']['admin-assets']['vendors'] );
+        $children = $queryBuilder->getQuery()->getResult();
+        $l = count( $children );
+        if( $l < $limit )
         {
-            $name = '%' . str_replace( '*', '%', $name );
-
-            $em = $this->getDoctrine()->getManager();
-
-            $queryBuilder = $em->createQueryBuilder()->select( ['v.id', "v.name"] )
-                    ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
-                    ->where( "LOWER(v.name) LIKE :vendor_name" )
-                    ->setParameter( 'vendor_name', strtolower( $name ) );
-
-            $data = $queryBuilder->getQuery()->getResult();
+            for( $i = 0; $i < $l; $i++ )
+            {
+                $children[$i]['has_children'] = false;
+                $children[$i]['children'] = null;
+               // $children[$i]['uri'] = $this->generateUrl(
+               //         'app_admin_asset_vendor_view', ['name' => $children[$i]['name']], true ); // absolute
+            }
         }
-        else
-        {
-            $data = null;
-        }
-        return $data;
+        $menu['children'] = $children;
+        return $menu;
     }
 
 }

@@ -94,4 +94,5 @@
 }
 .form-row.issue-status .order .dijitTextBox {
     width: 50px;
+    text-align: right;
 }

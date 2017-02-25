@@ -5,6 +5,7 @@ define([
     "dojo/on",
     "dojo/query",
     "dijit/form/ValidationTextBox",
+    "dijit/form/NumberTextBox",
     "dijit/form/CheckBox",
     "dijit/form/RadioButton",
     "dijit/form/Button",
@@ -15,7 +16,7 @@ define([
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct,
         on, query,
-        ValidationTextBox, CheckBox, RadioButton, Button,
+        ValidationTextBox, NumberTextBox, CheckBox, RadioButton, Button,
         lib, core) {
     //"use strict";
 
@@ -33,10 +34,18 @@ define([
         var dijit, index = nameInput.length;
         var base = divId + '_' + index + '_';
         var checked = false;
-        dijit = new ValidationTextBox({
+        if( dom.byId(base + "default").checked === true ) {
+            checked = true;
+        }
+        dijit = new RadioButton({
+        }, base + "default");
+        dijit.set("checked", checked);
+        dijit.startup();
+        defaultRadioButton.push(dijit);
+        dijit = new NumberTextBox({
             placeholder: core.order,
             trim: true,
-            pattern: "\d+",
+            constraints: {min: 1, max: 200, places: 0},
             required: true,
             "class": "order",
             name: "issue_statuses[statuses][" + index + "][order]",
@@ -66,15 +75,7 @@ define([
         dijit = new CheckBox({'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
             name: "issue_statuses[statuses][" + index + "][active]"}, base + "active");
         activeCheckBox.push(dijit);
-        if( dom.byId(base + "default").checked === true ) {
-            checked = true;
-        }
         dijit.startup();
-        dijit = new RadioButton({
-        }, base + "default");
-        dijit.set("checked", checked);
-        dijit.startup();
-        defaultRadioButton.push(dijit);
     }
 
     function run() {
@@ -87,7 +88,7 @@ define([
             return;
         }
 
-        existingStatusRows = query('.statuses .form-row.status');
+        existingStatusRows = query('.statuses .form-row.issue-status');
         existingStatusRows = existingStatusRows.length;
 
         for( i = 0; i < existingStatusRows; i++ ) {
@@ -107,7 +108,11 @@ define([
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__status__/g, nameInput.length);
-        //domConstruct.place(prototypeContent, "statuses_statuses", "last");
+        if (existingStatusRows === 0) {
+            console.log('zero');
+            domConstruct.place(prototypeContent, "issue_statuses_statuses", "last");
+            createDijits(true);
+        }
 
         addOneMoreControl = query('.statuses .add-one-more-row');
 
