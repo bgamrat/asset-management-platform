@@ -125,3 +125,6 @@
 .term {
     text-decoration: underline;
 }
+.instructions {
+    margin: 25px 0;
+}

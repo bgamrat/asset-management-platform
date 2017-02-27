@@ -66,6 +66,20 @@ class IssueStatus
      * 
      */
     private $active = true;
+    /**
+     * Many Users have Many Groups.
+     * @ORM\ManyToMany(targetEntity="IssueStatus")
+     * @ORM\JoinTable(name="issue_status_next",
+     *      joinColumns={@ORM\JoinColumn(name="next", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="id", referencedColumnName="id")}
+     *      )
+     */
+    private $next;
+
+    public function __construct()
+    {
+        $this->next = new ArrayCollection();
+    }
 
     /**
      * Set id
@@ -85,6 +99,16 @@ class IssueStatus
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setDefault( $default )
+    {
+        $this->default = $default;
+    }
+
+    public function isDefault()
+    {
+        return $this->default;
     }
 
     /**
@@ -159,14 +183,47 @@ class IssueStatus
         return $this->comment;
     }
 
-    public function setDefault( $default )
+    public function setNext( $statuses )
     {
-        $this->default = $default;
+        foreach( $statuses as $s )
+        {
+            $this->addNext( $s );
+        }
+        return $this;
     }
 
-    public function isDefault()
+    public function getNext( $full = true )
     {
-        return $this->default;
+        $next = [];
+        if( count( $this->next ) > 0 )
+        {
+            if( $full === false )
+            {
+                foreach( $this->next as $n )
+                {
+                    $next[] = ['id' => $n->getId(),
+                        'name' => $n->getStatus()];
+                }
+            }
+            else
+            {
+                $next = $this->next;
+            }
+        }
+        return $next;
+    }
+
+    public function addNext( IssueStatus $status )
+    {
+        if( !$this->next->contains( $status ) )
+        {
+            $this->next->add( $status );
+        }
+    }
+
+    public function removeNext( IssueStatus $status )
+    {
+        $this->next->removeElement( $status );
     }
 
     public function setActive( $active )

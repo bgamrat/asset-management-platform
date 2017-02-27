@@ -55,17 +55,17 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         public: false
 
-    app.admin.field.type.model_relationship:
-        class: AppBundle\Form\Admin\Asset\Type\ModelRelationshipType
-        arguments: ['@app.form.data_transformer.model']
-        tags:
-            - { name: form.type, alias: 'app_model_relationship_type' }
-
     app.admin.field.type.contract:
         class: AppBundle\Form\Admin\Client\Type\ContractType
         arguments: ['@app.form.data_transformer.contract']
         tags:
             - { name: form.type, alias: 'app_client_contract_type' }
+
+    app.admin.field.type.model_relationship:
+        class: AppBundle\Form\Admin\Asset\Type\ModelRelationshipType
+        arguments: ['@app.form.data_transformer.model']
+        tags:
+            - { name: form.type, alias: 'app_model_relationship_type' }
 
     app.admin.form.type.asset:
         class: AppBundle\Form\Admin\Asset\AssetType

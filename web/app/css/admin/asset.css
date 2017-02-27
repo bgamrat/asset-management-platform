@@ -96,3 +96,23 @@
     width: 50px;
     text-align: right;
 }
+.form-row.issue-workflow .name {
+    display: inline-block;
+    width: 150px;
+}
+.form-row.issue-workflow .next {
+    display: inline-block;
+}
+.form-row.issue-workflow {
+    margin: 5px 0;
+    border-bottom: 1px solid #ccc;
+    padding: 2px 0;
+}
+.form-row.issue-workflow .next ul {
+    margin: 0;
+}
+.form-row.issue-workflow .next ul li {
+    display: inline-block;
+    list-style-type: none;
+    padding-right: 21px;
+}

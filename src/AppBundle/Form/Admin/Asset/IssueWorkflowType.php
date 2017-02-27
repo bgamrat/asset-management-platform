@@ -2,14 +2,13 @@
 
 namespace AppBundle\Form\Admin\Asset;
 
-use AppBundle\Form\Admin\Asset\IssueStatusType;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use AppBundle\Form\Admin\Asset\Type\IssueStatusType;
 
-class IssueStatusesType extends AbstractType
+class IssueWorkflowType extends AbstractType
 {
 
     /**
@@ -19,16 +18,14 @@ class IssueStatusesType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'statuses', CollectionType::class, [
+                ->add( 'next', CollectionType::class, [
                     'entry_type' => IssueStatusType::class,
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,
-                    'empty_data' => null,
-                    'allow_add' => true,
+                    'allow_add' => false,
                     'allow_delete' => false,
-                    'delete_empty' => true,
-                    'prototype_name' => '__status__'
+                    'delete_empty' => false
                 ] )
         ;
     }
@@ -42,7 +39,7 @@ class IssueStatusesType extends AbstractType
         $resolver->setDefaults( array(
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
-            'csrf_token_id' => 'statuses',
+            'csrf_token_id' => 'statuses'
         ) );
     }
 

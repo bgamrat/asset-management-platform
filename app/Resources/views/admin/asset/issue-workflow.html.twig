@@ -1,0 +1,52 @@
+{% block title %}{{ 'asset.issue_workflow'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin/asset/asset.base.html.twig' %}
+
+{% form_theme issue_statuses_form _self %}
+
+{% block admin_content %}
+    <div id="issue-type-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="instructions">
+            {{'issue.workflow.configuration.instructions.next'|trans}}
+        </div>
+        <div class="statuses">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
+                </div>
+            {% endfor %}
+            {% if not issue_statuses_form.vars.valid %}
+                <div class="form-errors statuses">
+                    {% for type in issue_statuses_form.statuses %}                
+                        {% if not type.vars.valid %}
+                            {{form_errors(type.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form_start(issue_statuses_form)}}
+            <div class="text-right">
+                <button id="statuses-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="form-row header">
+                <span class="current name">{{ 'common.current'|trans }}</span>
+                <span class="next">{{ 'common.next'|trans }}</span>
+            </div>
+            {% for key,issue_status in issue_statuses %}
+                <div class="form-row issue-workflow">
+                    <span class="name label">{{ issue_status.status }}</span>
+                    <span class="next">{{form_widget(issue_statuses_form.next[key],{"attr":{"data-id":issue_status.id}})}}</span>
+                </div>
+            {% endfor %}
+            {{form_end(issue_statuses_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/issue_workflow"], function (issue) {
+            issue.run();
+        });
+    </script>
+{% endblock %}

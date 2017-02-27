@@ -27,6 +27,8 @@ asset:
         Issue Statuses
     issue_types:
         Issue Types
+    issue_workflow:
+        Issue Workflow
     location:
         Location
     location_type:
@@ -67,6 +69,8 @@ asset:
         Vendor
     vendors:
         Vendors
+    workflow:
+        Workflow
         
 calendar:
     controls:
@@ -121,6 +125,8 @@ common:
         Cost
     country:
         Country
+    current:
+        Current
     default:
         Default
     email:
@@ -165,6 +171,8 @@ common:
         Name
     new:
         New
+    next:
+        Next
     none:
         None
     not_active:
@@ -271,6 +279,13 @@ invitation:
         Invitation
     admin:
         User Invitation Admin
+
+issue:
+    workflow:
+        configuration:
+            instructions:
+                next:
+                    Check the boxes to indicate which status or statuses an issue may transistion to next
 
 person:
     firstname:
