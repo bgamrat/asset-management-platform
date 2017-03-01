@@ -57,6 +57,18 @@ class Model
      */
     private $container;
     /**
+     * @var float
+     * @Gedmo\Versioned
+     * @ORM\Column(name="default_contract_value", type="float", nullable=true, unique=false)
+     */
+    private $defaultContractValue = 0.0;
+    /**
+     * @var float
+     * @Gedmo\Versioned
+     * @ORM\Column(name="default_event_value", type="float", nullable=true, unique=false)
+     */
+    private $defaultEventValue = 0.0;
+    /**
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
@@ -197,6 +209,54 @@ class Model
     public function isContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Set defaultContractValue
+     *
+     * @param float $defaultContractValue
+     *
+     * @return Model
+     */
+    public function setDefaultContractValue( $defaultContractValue )
+    {
+        $this->defaultContractValue = $defaultContractValue;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultContractValue
+     *
+     * @return float
+     */
+    public function getDefaultContractValue()
+    {
+        return $this->defaultContractValue;
+    }
+
+    /**
+     * Set defaultEventValue
+     *
+     * @param float $defaultEventValue
+     *
+     * @return Model
+     */
+    public function setDefaultEventValue( $defaultEventValue )
+    {
+        $this->defaultEventValue = $defaultEventValue;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultEventValue
+     *
+     * @return float
+     */
+    public function getDefaultEventValue()
+    {
+        return $this->defaultEventValue;
     }
 
     /**
@@ -415,6 +475,8 @@ class Model
             'category' => $this->getCategory(),
             'name' => $this->getName(),
             'container' => $this->isContainer(),
+            'default_contract_value' => $this->getDefaultContractValue(),
+            'default_event_value' => $this->getDefaultEventValue(),
             'comment' => $this->getComment(),
             'active' => $this->isActive(),
             'extends' => $this->getExtends( false ),

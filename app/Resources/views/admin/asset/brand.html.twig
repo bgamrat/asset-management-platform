@@ -70,6 +70,16 @@
                         {% block extends_models %}{% import '/form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.extends'|trans,'extends',model_form.extends) }}{% endblock %}
                         {% block extended_by_models %}{% import '/form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.extended_by'|trans,'extended_by',model_form.extended_by) }}{% endblock %}
                     </div>
+                    <div id="model-view-values-tab">
+                        <div id="values">
+                            <div class="form-row">
+                                {{form_row(model_form.default_contract_value)}}
+                            </div>
+                            <div class="form-row">
+                                {{form_row(model_form.default_event_value)}}
+                            </div>
+                        </div>
+                    </div>
                     <div id="model-view-history-tab">
                     </div>
                 </div>

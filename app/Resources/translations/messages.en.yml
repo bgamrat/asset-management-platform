@@ -15,6 +15,10 @@ asset:
         Category
     container:
         Container
+    default_contract_value:
+        Default Contract Value
+    default_event_value:
+        Default Event Value
     equipment:
         Equipment
     extended_by:

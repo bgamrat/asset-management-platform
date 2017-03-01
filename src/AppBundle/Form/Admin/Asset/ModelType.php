@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Form\Admin\Asset\Type\ModelRelationshipType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -39,6 +40,8 @@ class ModelType extends AbstractType
                     'label' => false, 'required' => true] )
                 ->add( 'container', CheckboxType::class, [
                     'label' => 'asset.container'] )
+                ->add( 'default_contract_value', MoneyType::class, ['label' => 'asset.default_contract_value', 'currency' => 'USD'] )
+                ->add( 'default_event_value', MoneyType::class, ['label' => 'asset.default_event_value', 'currency' => 'USD'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false, 'required' => false
                 ] )

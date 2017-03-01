@@ -65,6 +65,7 @@ define({
         "user": "User",
         "username": "Username",
         "value": "Value",
+        "values": "Values",
         "venue": "Venue",
         "view": "View",
         "yes": "Yes"

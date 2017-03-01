@@ -106,7 +106,7 @@ define([
     function run() {
         var existingRows, c, addOneMoreControl = null;
         categoryStore = new JsonRest({
-            target: '/api/store/categories',
+            target: '/api/store/categories?value',
             useRangeHeaders: false,
             idProperty: 'id'});
         var prototypeNode, dataPrototype;

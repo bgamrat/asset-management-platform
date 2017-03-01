@@ -62,6 +62,12 @@ class Asset
      * @ORM\Column(name="cost", type="float", nullable=true, unique=false)
      */
     private $cost = 0.0;
+    /**
+     * @var float
+     * @Gedmo\Versioned
+     * @ORM\Column(name="value", type="float", nullable=true, unique=false)
+     */
+    private $value = 0.0;
 
     /**
      * @var int
@@ -223,9 +229,12 @@ class Asset
      */
     public function setPurchased( $purchased )
     {
-        if (!empty($purchased)) {
+        if( !empty( $purchased ) )
+        {
             $this->purchased = $purchased;
-        } else {
+        }
+        else
+        {
             $this->purchased = null;
         }
 
@@ -239,9 +248,12 @@ class Asset
      */
     public function getPurchased()
     {
-        if ($this->purchased === null) {
+        if( $this->purchased === null )
+        {
             return $this->created;
-        } else {
+        }
+        else
+        {
             return $this->purchased;
         }
     }
@@ -268,6 +280,30 @@ class Asset
     public function getCost()
     {
         return $this->cost;
+    }
+
+    /**
+     * Set value
+     *
+     * @param float $value
+     *
+     * @return Asset
+     */
+    public function setValue( $value )
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return float
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 
     /**
