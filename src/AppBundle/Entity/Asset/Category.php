@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Category
  *
+ * @Gedmo\Loggable
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  * @UniqueEntity("name")
@@ -46,6 +47,12 @@ class Category
      * @ORM\Column(name="full_name", type="string", nullable=true, unique=true)
      */
     private $fullName;
+    /**
+     * @var float
+
+     * @ORM\Column(name="value", type="float", nullable=true, unique=false)
+     */
+    private $value = 0.0;
     /**
      * @var integer
      * 
@@ -145,6 +152,30 @@ class Category
     public function getFullName()
     {
         return $this->fullName;
+    }
+
+    /**
+     * Set value
+     *
+     * @param float $value
+     *
+     * @return Category
+     */
+    public function setValue( $value )
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return float
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 
     /**

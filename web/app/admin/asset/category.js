@@ -5,6 +5,7 @@ define([
     "dojo/on",
     "dojo/query",
     "dijit/form/ValidationTextBox",
+    "dijit/form/CurrencyTextBox",
     "dijit/form/CheckBox",
     "dijit/form/Button",
     "dijit/form/Select",
@@ -16,12 +17,12 @@ define([
     "dojo/NodeList-traverse",
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on, query,
-        ValidationTextBox, CheckBox, Button, Select, ObjectStore, Memory,
+        ValidationTextBox, CurrencyTextBox, CheckBox, Button, Select, ObjectStore, Memory,
         lib, core) {
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent, store;
-    var positionInput = [], parentSelect = [], nameInput = [], commentInput = [], activeCheckBox = [];
+    var positionInput = [], parentSelect = [], nameInput = [], valueInput = [], commentInput = [], activeCheckBox = [];
     var addOneMoreControl = null;
     var divId = "categories_categories";
 
@@ -63,6 +64,15 @@ define([
             value: document.getElementById(base + "name").value
         }, base + "name");
         nameInput.push(dijit);
+        dijit.startup();
+        dijit = new CurrencyTextBox({
+            placeholder: core.value,
+            trim: true,
+            name: "categories[categories][" + index + "][value]",
+            value: document.getElementById(base + "value").value,
+            required: false
+        }, base + "value");
+        valueInput.push(dijit);
         dijit.startup();
         dijit = new ValidationTextBox({
             placeholder: core.comment,

@@ -55,7 +55,9 @@
     display: inline-block;
 }
 .category-form .position,
-.category-form .position .dijitTextBox {
+.category-form .position .dijitTextBox,
+.category-form .value,
+.category-form .value .dijitTextBox{
     width: 45px;
 }
 .category .position .dijitInputContainer input {

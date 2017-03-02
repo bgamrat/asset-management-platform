@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Admin\Asset;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -34,6 +35,7 @@ class CategoryType extends AbstractType
                     'label' => 'common.parent',
                     'choice_translation_domain' => false
                 ] )
+                ->add( 'value', MoneyType::class, ['currency' => 'USD'] )
                 ->add( 'comment', TextType::class )
                 ->add( 'active', CheckboxType::class )
         ;

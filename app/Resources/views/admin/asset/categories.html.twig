@@ -10,6 +10,7 @@
             <span class="parent">{{ form_widget(form.parent) }}</span>
             <span class="position">{{ form_widget(form.position) }}</span>
             <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="value">{{ form_widget(form.value) }}</span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
             <span class="active">{{ form_widget(form.active) }}</span>
             {% if form.parent.vars.allow_delete is defined %}
@@ -48,6 +49,7 @@
                             <span class="parent">{{ 'asset.parent'|trans }}</span>
                             <span class="position">{{ 'common.position'|trans }}</span>
                             <span class="name">{{ 'common.name'|trans }}</span>
+                            <span class="value">{{ 'common.value'|trans }}</span>
                             <span class="comment">{{ 'common.comment'|trans }}</span>
                             <span class="active">{{ 'common.active'|trans }}</span>
                         </div>
