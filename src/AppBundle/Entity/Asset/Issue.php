@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Issue
 {
+
     /**
      * @var int
      *
@@ -24,6 +25,24 @@ class Issue
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    /**
+     * @var integer
+     * @Gedmo\Versioned
+     * @ORM\Column(name="priority", type="integer", nullable=false, unique=false)
+     */
+    private $priority = 3;
+    /**
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $title;
+    /**
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $description;
     /**
      * @var ArrayCollection $barcodes
      * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
@@ -35,18 +54,22 @@ class Issue
      */
     protected $barcodes;
     /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Common\Person", mappedBy="assigned_to", cascade={"persist"})
      */
-    private $title;
+    private $assignedTo = null;
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
+     * @Gedmo\Versioned
+     * @ORM\Column(type="boolean")
      * 
      */
-    private $active = true;
+    private $clientBillable = true;
+    /**
+     * @var float
+     * @Gedmo\Versioned
+     * @ORM\Column(name="cost", type="float", nullable=true, unique=false)
+     */
+    private $cost = 0.0;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
@@ -62,6 +85,11 @@ class Issue
      * @Gedmo\Versioned
      */
     private $deletedAt;
+
+    public function __construct()
+    {
+        $this->barcodes = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -84,63 +112,149 @@ class Issue
     }
 
     /**
-     * Set barcode
+     * Get priority
      *
-     * @param string $barcode
-     *
-     * @return Barcode
+     * @return integer
      */
-    public function setBarcode( $barcode )
+    public function getPriority()
     {
-        $this->barcode = $barcode;
+        return $this->priority;
+    }
+
+    /**
+     * Set priority
+     *
+     * @return integer
+     */
+    public function setPriority( $priority )
+    {
+        $this->priority = $priority;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Issue
+     */
+    public function setTitle( $title )
+    {
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get barcode
+     * Get title
      *
      * @return string
      */
-    public function getBarcode()
+    public function getTitle()
     {
-        return $this->barcode;
+        return $this->title;
     }
 
     /**
-     * Set comment
+     * Set description
      *
-     * @param string $comment
+     * @param string $description
      *
-     * @return Barcode
+     * @return Issue
      */
-    public function setComment( $comment )
+    public function setDescription( $description )
     {
-        $this->comment = $comment;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get comment
+     * Get description
      *
      * @return string
      */
-    public function getComment()
+    public function getDescription()
     {
-        return $this->comment;
+        return $this->description;
     }
 
-    public function setActive( $active )
+    public function getBarcodes()
     {
-        $this->active = $active;
+        return $this->barcodes->toArray();
     }
 
-    public function isActive()
+    public function addBarcode( Barcode $barcode )
     {
-        return $this->active;
+        if( !$this->barcodes->contains( $barcode ) )
+        {
+            $this->barcodes->add( $barcode );
+        }
     }
-    
+
+    public function removeBarcode( Barcode $barcode )
+    {
+        $this->barcodes->removeElement( $barcode );
+    }
+
+    /**
+     * Set assignedTo
+     *
+     * @param string $assignedTo
+     *
+     * @return Issue
+     */
+    public function setAssignedTo( $assignedTo )
+    {
+        $this->assignedTo = $assignedto;
+
+        return $this;
+    }
+
+    /**
+     * Get assignedTo
+     *
+     * @return string
+     */
+    public function getAssignedTo()
+    {
+        return $this->assignedTo;
+    }
+
+    public function setClientBillable( $clientBillable )
+    {
+        $this->clientBillable = $clientBillable;
+    }
+
+    public function isClientBillable()
+    {
+        return $this->clientBillable;
+    }
+
+    /**
+     * Set cost
+     *
+     * @param float $cost
+     *
+     * @return Asset
+     */
+    public function setCost( $cost )
+    {
+        $this->cost = $cost;
+
+        return $this;
+    }
+
+    /**
+     * Get cost
+     *
+     * @return float
+     */
+    public function getCost()
+    {
+        return $this->cost;
+    }
+
     public function getUpdated()
     {
         return $this->updated;
@@ -160,16 +274,6 @@ class Issue
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
-    }
-
-    public function toArray()
-    {
-        return [
-            'barcode' => $this->getBarcode(),
-            'comment' => $this->getComment(),
-            'active' => $this->isActive(),
-            'updated' => $this->getUpdated()
-        ];
     }
 
 }

@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Status
  *
  * @ORM\Table(name="issue_type")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\IssueTypeRepository")
  * @UniqueEntity("type")
  * @UniqueEntity("id")
  */

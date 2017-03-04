@@ -17,6 +17,8 @@
         </div>
         <div id="issue-grid">
         </div>
+        {{form(issue_form)}}
+        {#
         <div id="issue-view-dialog">
             {{form_start(issue_form)}} 
             <div class="text-right">
@@ -74,13 +76,14 @@
             </div>
             {{ form_end(issue_form) }}
         </div>
+        #}
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        require(["app/admin/asset/issue"], function (issue) {
-            issue.run();
-        });
+        //require(["app/admin/asset/issue"], function (issue) {
+         //   issue.run();
+        //});
     </script>
 {% endblock %}

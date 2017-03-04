@@ -102,6 +102,12 @@ services:
         tags:
             - { name: form.type, alias: 'app_schedule_event_type' }
            
+    app.admin.form.type.issue:
+        class: AppBundle\Form\Admin\Asset\IssueType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_asset_issue_type' }
+           
     app.admin.form.type.person:
         class: AppBundle\Form\Common\PersonType
         arguments: ['@doctrine.orm.entity_manager']

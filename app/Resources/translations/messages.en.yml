@@ -113,6 +113,8 @@ common:
         characters
     city:
         City
+    client_billable:
+        Client Billable
     clients:
         Clients
     comment:
@@ -285,6 +287,8 @@ invitation:
         User Invitation Admin
 
 issue:
+    priority:
+        Priority
     workflow:
         configuration:
             instructions:
