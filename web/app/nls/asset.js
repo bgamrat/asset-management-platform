@@ -1,22 +1,31 @@
 define({
     root: ({
         "asset": "Asset",
+        "assigned_to": "Assigned To",
         "barcode": "Barcode",
         "barcodes": "Barcodes",
         "category": "Category",
+        "client_billable": "Client Billable",
         "container": "Container",
+        "description": "Description",
+        "details": "Details",
         "extends": "Extends",
         "extended_by": "Extended By",
+        "issue": "Issue",
         "location": "Location",
         "model": "Model",
         "model_relationships": "Model Relationships",
         "no_barcode": "No barcode",
+        "priority": "Priority",
         "requires": "Requires",
         "required_by": "Required By",
         "rma_required": "RMA Required",
         "serial_number": "Serial Number",
         "service": "Service",
         "service_instructions": "Service Instructions",
-        "supports": "Supports"
+        "status": "Status",
+        "summary": "Summary",
+        "supports": "Supports",
+        "type": "Type"
     })
 });

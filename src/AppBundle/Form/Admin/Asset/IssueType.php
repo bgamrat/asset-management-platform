@@ -8,7 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,11 +33,57 @@ class IssueType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $defaultStatus = $this->em->getRepository( 'AppBundle\Entity\Asset\IssueStatus' )->findOneBy( ['default' => true] );
+        $defaultType = $this->em->getRepository( 'AppBundle\Entity\Asset\IssueType' )->findOneBy( ['default' => true] );
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
+                ->add( 'created', DateTimeType::class, [
+                    'label' => 'common.created',
+                    'widget' => 'single_text',
+                    'format' => 'yyyy-MM-dd HH:mm:ss',
+                    'required' => false,
+                    'disabled' => true
+                ] )
+                ->add( 'updated', DateTimeType::class, [
+                    'label' => 'common.updated',
+                    'widget' => 'single_text',
+                    'format' => 'yyyy-MM-dd HH:mm:ss',
+                    'required' => false,
+                    'disabled' => true,
+                    'data' => new \DateTime()
+                ] )
                 ->add( 'priority', IntegerType::class, ['label' => 'issue.priority'] )
-                ->add( 'title', TextType::class, ['label' => false] )
-                ->add( 'description', TextType::class, [
+                ->add( 'type', EntityType::class, [
+                    'class' => 'AppBundle\Entity\Asset\IssueType',
+                    'choice_label' => 'type',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => true,
+                    'label' => 'issue.type',
+                    'preferred_choices' => function($type, $key, $index)
+                    {
+                        return $type->isActive();
+                    },
+                    'data' => $this->em->getReference( 'AppBundle\Entity\Asset\IssueType', $defaultType->getId() ),
+                    'choice_translation_domain' => false
+                ] )
+                ->add( 'status', EntityType::class, [
+                    'class' => 'AppBundle\Entity\Asset\IssueStatus',
+                    'choice_label' => 'status',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => true,
+                    'label' => 'issue.status',
+                    'preferred_choices' => function($status, $key, $index)
+                    {
+                        return $status->isActive();
+                    },
+                    'data' => $this->em->getReference( 'AppBundle\Entity\Asset\IssueStatus', $defaultStatus->getId() ),
+                    'choice_translation_domain' => false
+                ] )
+                ->add( 'assigned_to', TextType::class, ['label' => 'issue.assigned_to'] )
+                ->add( 'replaced', CheckboxType::class, ['label' => 'issue.replaced'] )
+                ->add( 'summary', TextType::class, ['label' => false] )
+                ->add( 'details', TextType::class, [
                     'label' => false
                 ] )
                 ->add( 'barcodes', CollectionType::class, [
@@ -51,22 +97,7 @@ class IssueType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__barcode__'
                 ] )
-                ->add( 'issue_status', EntityType::class, [
-                    'class' => 'AppBundle\Entity\Asset\IssueStatus',
-                    'choice_label' => 'status',
-                    'multiple' => false,
-                    'expanded' => false,
-                    'required' => true,
-                    'label' => 'asset.status',
-                    'preferred_choices' => function($status, $key, $index)
-                    {
-                        return $status->isActive();
-                    },
-                    'data' => $this->em->getReference( 'AppBundle\Entity\Asset\IssueStatus', $defaultStatus->getId() ),
-                    'choice_translation_domain' => false
-                ] )
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
-                ->add( 'assigned_to', TextType::class )
                 ->add( 'client_billable', CheckboxType::class, ['label' => 'common.client_billable'] )
         ;
         $builder->get( 'assigned_to' )

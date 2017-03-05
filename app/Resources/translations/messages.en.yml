@@ -131,6 +131,8 @@ common:
         Cost
     country:
         Country
+    created:
+        Created
     current:
         Current
     default:
@@ -235,6 +237,8 @@ common:
         Success
     type:
         Type
+    updated:
+        Updated
     url:
         URL
     user:
@@ -287,8 +291,18 @@ invitation:
         User Invitation Admin
 
 issue:
+    assigned_to:
+        Assigned to
+    issue:
+        Issue
     priority:
         Priority
+    replaced:
+        Replaced
+    status:
+        Status
+    type:
+        Type
     workflow:
         configuration:
             instructions:

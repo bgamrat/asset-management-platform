@@ -4,12 +4,12 @@ define([
     "dojo/dom-construct",
     "dojo/on",
     "dojo/query",
-        "dojo/data/ObjectStore",
+    "dojo/data/ObjectStore",
     "dojo/store/Memory",
-        "dijit/form/Select",
+    "dijit/form/Select",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
-        "dijit/form/RadioButton",
+    "dijit/form/RadioButton",
     "dijit/form/Button",
     "lib/common",
     "dojo/i18n!app/nls/core",
@@ -53,7 +53,7 @@ define([
             placeholder: core.entity,
             name: "location_types[types][" + index + "][entity]",
             required: true,
-            value: domAttr.get(dom.byId(base + "entity"),'data-selected')
+            value: domAttr.get(dom.byId(base + "entity"), 'data-selected')
         }, base + "entity");
         dijit.startup();
         entitySelect.push(dijit);
@@ -90,7 +90,7 @@ define([
             lib.textError(divId + " not found");
             return;
         }
-        
+
         var select = "location_types_types_0_entity";
         var data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects

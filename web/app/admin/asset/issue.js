@@ -1,33 +1,482 @@
 define([
     "dojo/_base/declare",
-    "dojo/request",
-    "dojo/_base/array",
-    "dojo/aspect",
+    "dojo/_base/lang",
     "dojo/dom",
+    "dojo/dom-attr",
+    "dojo/dom-class",
+    "dojo/dom-construct",
     "dojo/on",
+    "dojo/request/xhr",
+    "dojo/aspect",
+    "dojo/query",
+    "dojo/data/ObjectStore",
+    "dojo/store/Memory",
+    "dijit/registry",
     "dijit/form/Form",
+    "dijit/form/CurrencyTextBox",
+    "dijit/form/DateTextBox",
     "dijit/form/TextBox",
+    "dijit/form/ValidationTextBox",
+    "dijit/form/CheckBox",
+    "dijit/form/RadioButton",
     "dijit/form/Select",
+    "dijit/form/FilteringSelect",
+    "dijit/form/SimpleTextarea",
+    "dijit/form/Button",
+    "dijit/Dialog",
+    "dijit/layout/TabContainer",
+    "dijit/layout/ContentPane",
     'dojo/store/JsonRest',
     'dstore/Rest',
     'dstore/SimpleQuery',
+    'dstore/Trackable',
     'dgrid/OnDemandGrid',
+    "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
     "app/lib/common",
+    "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/asset",
-    "dojo/NodeList-dom",
-    "dojo/NodeList-traverse",
     "dojo/domReady!"
-], function (declare, request, arrayUtil, aspect, dom, on,
-        Form, TextBox, Select,
-        JsonRest, Rest, SimpleQuery, OnDemandGrid, Editor, put,
-        lib, core, asset) {
-
+], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
+        xhr, aspect, query, ObjectStore, Memory,
+        registry, Form, CurrencyTextBox, DateTextBox, TextBox, ValidationTextBox, CheckBox, RadioButton, Select, FilteringSelect, SimpleTextarea, Button,
+        Dialog, TabContainer, ContentPane,
+        JsonRest,
+        Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
+        lib, libGrid, core, asset) {
+    //"use strict";
     function run() {
 
-      
+
+        var issueId = null;
+
+        var action = null;
+
+        var issueViewDialog = new Dialog({
+            title: core.view,
+            style: "width:500px"
+        }, "issue-view-dialog");
+        issueViewDialog.startup();
+        issueViewDialog.on("cancel", function (event) {
+            grid.clearSelection();
+        });
+
+        var tabContainer = new TabContainer({
+            style: "height: 300px; width: 100%;"
+        }, "issue-view-tabs");
+
+        var detailsContentPane = new ContentPane({
+            title: asset.details},
+        "issue-view-details-tab"
+                );
+        tabContainer.addChild(detailsContentPane);
+        tabContainer.startup();
+
+        var expensesContentPane = new ContentPane({
+            title: core.expenses},
+        "issue-view-expenses-tab"
+                );
+        tabContainer.addChild(expensesContentPane);
+        tabContainer.startup();
+
+        var barcodesContentPane = new ContentPane({
+            title: asset.barcodes},
+        "issue-view-barcodes-tab"
+                );
+        tabContainer.addChild(barcodesContentPane);
+
+        var historyContentPane = new ContentPane({
+            title: core.history},
+        "issue-view-history-tab"
+                );
+        tabContainer.addChild(historyContentPane);
+        tabContainer.startup();
+
+        var newBtn = new Button({
+            label: core["new"]
+        }, 'issue-new-btn');
+        newBtn.startup();
+        newBtn.on("click", function (event) {
+            priorityInput.reset();
+            typeSelect.set("value", defaultTypeId);
+            statusSelect.set("value", defaultStatusId);
+            assignedToFilteringSelect.set("value", "");
+            summaryInput.set("value", "");
+            detailsInput.set("value", "");
+            //barcodes.setData(null);
+            clientBillableCheckBox.set("checked", false);
+            replacedCheckBox.set("checked", false);
+            issueViewDialog.set("title", core["new"]).show();
+            action = "new";
+        });
+
+        var removeBtn = new Button({
+            label: core.remove
+        }, 'issue-remove-btn');
+        removeBtn.startup();
+        removeBtn.on("click", function (event) {
+            var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "issue-grid");
+            if( markedForDeletion.length > 0 ) {
+                lib.confirmAction(core.areyousure, function () {
+                    markedForDeletion.forEach(function (node) {
+                        var row = grid.row(node);
+                        store.remove(row.data.id);
+                    });
+                });
+            }
+        });
+
+        var createdInput = new TextBox({
+            value: dom.byId("issue_created").value,
+            disabled: true
+        }, "issue_created");
+        createdInput.startup();
+        var updatedInput = new ValidationTextBox({
+            value: dom.byId("issue_updated").value,
+            disabled: true
+        }, "issue_updated");
+        updatedInput.startup();
+
+        var priorityInput = new ValidationTextBox({
+            trim: true,
+            pattern: "[0-9]+",
+            required: true,
+            placeholder: asset.priority
+        }, "issue_priority");
+        priorityInput.startup();
+
+        var issueSelect = dom.byId('issue_type');
+        var d, data = JSON.parse(domAttr.get(issueSelect, "data-options"));
+        // Convert the data to an array of objects
+        var storeData = [];
+        for( d in data ) {
+            storeData.push(data[d]);
+        }
+        var memoryStore = new Memory({
+            idProperty: "value",
+            data: storeData});
+        var typeStore = new ObjectStore({objectStore: memoryStore});
+        var defaultTypeId = domAttr.get("issue_type", "data-selected");
+        var typeSelect = new Select({
+            store: typeStore,
+            placeholder: asset.type,
+            required: true,
+            "class": "status-type"
+        }, "issue_type");
+        typeSelect.startup();
+
+        issueSelect = dom.byId('issue_status');
+        data = JSON.parse(domAttr.get(issueSelect, "data-options"));
+        // Convert the data to an array of objects
+        storeData = [];
+        for( d in data ) {
+            storeData.push(data[d]);
+        }
+        memoryStore = new Memory({
+            idProperty: "value",
+            data: storeData});
+        var statusStore = new ObjectStore({objectStore: memoryStore});
+        var defaultStatusId = domAttr.get("issue_status", "data-selected");
+        var statusSelect = new Select({
+            store: statusStore,
+            placeholder: asset.status,
+            required: true,
+            "class": "status-select"
+        }, "issue_status");
+        statusSelect.startup();
+
+        var replacedCheckBox = new CheckBox({}, "issue_replaced");
+        replacedCheckBox.startup();
+
+        var clientBillableCheckBox = new CheckBox({}, "issue_client_billable");
+        clientBillableCheckBox.startup();
+
+        var select = "issue_status";
+
+        if( dom.byId(select) === null ) {
+            lib.textError(select + " not found");
+            return;
+        }
+
+        var peopleStore = new JsonRest({
+            target: '/api/store/people',
+            useRangeHeaders: false,
+            idProperty: 'id'});
+        var assignedToFilteringSelect = new FilteringSelect({
+            store: peopleStore,
+            labelAttr: "name",
+            searchAttr: "name",
+            placeholder: asset.assigned_to,
+            pageSize: 25
+        }, "issue_assigned_to");
+        assignedToFilteringSelect.startup();
+
+        var costInput = new CurrencyTextBox({
+            placeholder: core.cost,
+            trim: true,
+            required: false
+        }, "issue_cost");
+        costInput.startup();
+
+        var summaryInput = new ValidationTextBox({
+            placeholder: asset.summary,
+            trim: true,
+            "class": "wide",
+            required: false
+        }, "issue_summary");
+        summaryInput.startup();
+
+        var detailsInput = new SimpleTextarea({
+            placeholder: core.details,
+            trim: true,
+            required: false
+        }, "issue_details");
+        detailsInput.startup();
+
+        var issueForm = new Form({}, '[name="issue"]');
+        issueForm.startup();
+
+        var saveBtn = new Button({
+            label: core.save
+        }, 'issue-save-btn');
+        saveBtn.startup();
+        saveBtn.on("click", function (event) {
+            var beforeModelTextFilter, filter, data, locationId, locationData, purchased;
+            grid.clearSelection();
+            if( issueForm.validate() ) {
+                locationId = parseInt(dom.byId("issue_location_id").value);
+                locationData = {
+                    "id": isNaN(locationId) ? null : locationId,
+                    "type": parseInt(getLocationType()),
+                    "entity": parseInt(locationFilteringSelect.get("value"))
+                };
+                purchased = purchasedInput.get("value");
+                data = {
+                    "id": issueId,
+                    "model_text": modelFilteringSelect.get("displayedValue"),
+                    "status_text": statusSelect.get("displayedValue"),
+                    "status": parseInt(statusSelect.get("value")),
+                    "purchased": purchased === null ? "" : purchased,
+                    "cost": parseFloat(costInput.get("value")),
+                    "value": parseFloat(valueInput.get("value")),
+                    "model": parseInt(modelFilteringSelect.get("value")),
+                    "location": locationData,
+                    "location_text": locationFilteringSelect.get("displayedValue"),
+                    "barcode": barcodes.getActive(),
+                    "barcodes": barcodes.getData(),
+                    "serial_number": serialNumberInput.get("value"),
+                    "active": activeCheckBox.get("checked"),
+                    "comment": commentInput.get("value"),
+                };
+                if( action === "view" ) {
+                    grid.collection.put(data).then(function (data) {
+                        issueViewDialog.hide();
+                    }, lib.xhrError);
+                } else {
+                    filter = new store.Filter();
+                    beforeModelTextFilter = filter.lt('priority', data.priority);
+                    store.filter(beforeModelTextFilter).sort('priority').fetchRange({start: 0, end: 1}).then(function (results) {
+                        var beforeId;
+                        beforeId = (results.length > 0) ? results[0].id : null;
+                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
+                            issueViewDialog.hide();
+                            store.fetch();
+                            grid.refresh();
+                        }, lib.xhrError);
+                    });
+                }
+            } else {
+                lib.textError(core.invalid_form)
+            }
+        });
+
+        var filterInput = new TextBox({placeHolder: core.filter}, "issue-filter-input");
+        filterInput.startup();
+
+        var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
+        var store = new TrackableRest({target: '/api/issues', useRangeHeaders: true, idProperty: 'id'});
+        var grid = new (declare([OnDemandGrid, Selection, Editor]))({
+            collection: store,
+            className: "dgrid-autoheight",
+            sort: "priority",
+            columns: {
+                id: {
+                    label: core.id
+                },
+                priority: {
+                    label: asset.priority
+                },
+                type: {
+                    label: asset.type,
+                },
+                status: {
+                    label: asset.status,
+                },
+                assigned_to: {
+                    label: asset.assigned_to
+                },
+                summary: {
+                    label: asset.summary
+                },
+                client_billable: {
+                    label: asset.client_billable,
+                    editor: CheckBox,
+                    editOn: "click",
+                    sortable: false,
+                    renderCell: libGrid.renderGridCheckbox
+                },
+                remove: {
+                    editor: CheckBox,
+                    label: core.remove,
+                    sortable: false,
+                    className: "remove-cb",
+                    renderHeaderCell: function (node) {
+                        var inp = domConstruct.create("input", {id: "cb-all", type: "checkbox"});
+                        return inp;
+                    }
+                }
+            },
+            renderRow: function (object) {
+                var rowElement = this.inherited(arguments);
+                if( typeof object.deleted_at !== "undefined" && object.deleted_at !== null ) {
+                    rowElement.className += ' deleted';
+                }
+                return rowElement;
+            },
+            selectionMode: "none"
+        }, 'issue-grid');
+        grid.startup();
+        grid.collection.track();
+
+        grid.on(".dgrid-row:click", function (event) {
+            var checkBoxes = ["enabled", "locked", "remove"];
+            var row = grid.row(event);
+            var cell = grid.cell(event);
+            var field = cell.column.field;
+            var id = row.data.id;
+            if( checkBoxes.indexOf(field) === -1 ) {
+                if( typeof grid.selection[0] !== "undefined" ) {
+                    grid.clearSelection();
+                }
+                grid.select(row);
+                grid.collection.get(id).then(function (issue) {
+                    var titleBarcode;
+                    if( typeof issue.barcodes[0] !== "undefined" && typeof issue.barcodes[0].barcode !== "undefined" ) {
+                        titleBarcode = issue.barcodes[0].barcode;
+                    } else {
+                        titleBarcode = issue.model_text;
+                    }
+                    issueViewDialog.set('title', core.view + " " + titleBarcode);
+                    issueViewDialog.show();
+                    action = "view";
+                    issueId = issue.id;
+                    modelFilteringSelect.set('displayedValue', issue.model_text);
+                    statusSelect.set("displayedValue", issue.status_text);
+                    purchasedInput.set("value", issue.purchased);
+                    costInput.set("value", issue.cost);
+                    valueInput.get("value", issue.value);
+                    dom.byId("issue_location_id").value = issue.location.id;
+                    setLocationType(issue.location.type.id);
+                    if( issue.location.type.url !== null ) {
+                        locationStore.target = issue.location.type.url;
+                        locationFilteringSelect.set("store", locationStore);
+                        locationFilteringSelect.set("readOnly", false);
+                        locationFilteringSelect.set('displayedValue', issue.location_text);
+                    } else {
+                        textLocationMemoryStore.data = [{name: locationTypeLabels[issue.location.type.id], id: 0}];
+                        locationFilteringSelect.set("store", textLocationStore);
+                        locationFilteringSelect.set("readOnly", false);
+                        locationFilteringSelect.set('displayedValue', issue.location_text);
+                        locationFilteringSelect.set("readOnly", true);
+                    }
+                    serialNumberInput.set('value', issue.serial_number);
+                    commentInput.set('value', issue.comment);
+                    if( typeof issue.barcodes !== "undefined" ) {
+                        barcodes.setData(issue.barcodes);
+                    } else {
+                        barcodes.setData(null);
+                    }
+                    activeCheckBox.set('checked', issue.active);
+                    issueCommon.relationshipLists(modelRelationshipsContentPane, issue.model_relationships);
+                    lib.showHistory(historyContentPane, issue.history);
+                }, lib.xhrError);
+            }
+        });
+
+        grid.on('.field-active:dgrid-datachange', function (event) {
+            var row = grid.row(event);
+            var cell = grid.cell(event);
+            var field = cell.column.field;
+            var name = row.data.name;
+            var value = event.value;
+            switch( field ) {
+                case "active":
+                    xhr("/api/issues/" + name, {
+                        method: "PATCH",
+                        handleAs: "json",
+                        headers: {'Content-Type': 'application/json'},
+                        data: JSON.stringify({"field": field,
+                            "value": value})
+                    }).then(function (data) {
+                    }, lib.xhrError);
+                    break;
+            }
+        });
+
+        var cbAll = new CheckBox({}, "cb-all");
+        cbAll.startup();
+        cbAll.on("click", function (event) {
+            var state = this.checked;
+            query(".dgrid-row .remove-cb", "issue-grid").forEach(function (node) {
+                registry.findWidgets(node)[0].set("checked", state);
+            });
+        });
+
+        aspect.before(grid, "removeRow", function (rowElement) {
+            // Destroy the checkbox widgets
+            var e, elements = [grid.cell(rowElement, "remove").element, grid.cell(rowElement, "active"), grid.cell(rowElement, "locked")];
+            var widget;
+            for( e in elements ) {
+                widget = (e.contents || e).widget;
+                if( widget ) {
+                    widget.destroyRecursive();
+                }
+            }
+        });
+
+        on(dom.byId('issue-grid-filter-form'), 'submit', function (event) {
+            event.preventDefault();
+            grid.set('collection', store.filter({
+                // Pass a RegExp to Memory's filter method
+                // Note: this code does not go out of its way to escape
+                // characters that have special meaning in RegExps
+                match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
+            }));
+        });
+
+        function getLocationType() {
+            var i, locationTypeSet = false;
+            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
+                if( locationTypeRadioButton[i].get("checked") === true ) {
+                    locationTypeSet = true;
+                    break;
+                }
+            }
+            return locationTypeSet ? locationTypeRadioButton[i].get("value") : null;
+        }
+
+        function setLocationType(locationType) {
+            var i;
+            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
+                if( parseInt(locationTypeRadioButton[i].get("data-location-type-id")) === locationType ) {
+                    locationTypeRadioButton[i].set("checked", true);
+                    break;
+                }
+            }
+        }
+
         lib.pageReady();
     }
     return {

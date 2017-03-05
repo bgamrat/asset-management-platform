@@ -32,17 +32,33 @@ class Issue
      */
     private $priority = 3;
     /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
+     * @var int
+     * @Gedmo\Versioned
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\ManyToOne(targetEntity="IssueStatus")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
-    private $title;
+    protected $status = null;
+    /**
+     * @var int
+     * @Gedmo\Versioned
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\ManyToOne(targetEntity="IssueType")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     */
+    protected $type = null;
     /**
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $description;
+    private $summary;
+    /**
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $details;
     /**
      * @var ArrayCollection $barcodes
      * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
@@ -61,7 +77,11 @@ class Issue
      * @var boolean
      * @Gedmo\Versioned
      * @ORM\Column(type="boolean")
-     * 
+     */
+    private $replaced = true;
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
      */
     private $clientBillable = true;
     /**
@@ -132,51 +152,99 @@ class Issue
     }
 
     /**
-     * Set title
+     * Set status
      *
-     * @param string $title
+     * @param int $status
      *
      * @return Issue
      */
-    public function setTitle( $title )
+    public function setStatus( $status )
     {
-        $this->title = $title;
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * Get title
+     * Get status
      *
-     * @return string
+     * @return int
      */
-    public function getTitle()
+    public function getStatus()
     {
-        return $this->title;
+        return $this->status;
     }
 
     /**
-     * Set description
+     * Set type
      *
-     * @param string $description
+     * @param int $type
      *
      * @return Issue
      */
-    public function setDescription( $description )
+    public function setType( $type )
     {
-        $this->description = $description;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get description
+     * Get type
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set summary
+     *
+     * @param string $summary
+     *
+     * @return Issue
+     */
+    public function setSummary( $summary )
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    /**
+     * Get summary
      *
      * @return string
      */
-    public function getDescription()
+    public function getSummary()
     {
-        return $this->description;
+        return $this->summary;
+    }
+
+    /**
+     * Set details
+     *
+     * @param string $details
+     *
+     * @return Issue
+     */
+    public function setDetails( $details )
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * Get details
+     *
+     * @return string
+     */
+    public function getDetails()
+    {
+        return $this->details;
     }
 
     public function getBarcodes()
@@ -221,6 +289,16 @@ class Issue
         return $this->assignedTo;
     }
 
+    public function setReplaced( $replaced )
+    {
+        $this->replaced = $replaced;
+    }
+
+    public function isReplaced()
+    {
+        return $this->replaced;
+    }
+
     public function setClientBillable( $clientBillable )
     {
         $this->clientBillable = $clientBillable;
@@ -253,6 +331,16 @@ class Issue
     public function getCost()
     {
         return $this->cost;
+    }
+
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    public function setCreated( $created )
+    {
+        $this->updated = $updated;
     }
 
     public function getUpdated()

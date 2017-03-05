@@ -28,8 +28,7 @@ class IssueController extends Controller
         $issueForm = $this->createForm( IssueType::class, null, [] );
 
         return $this->render( 'admin/asset/issues.html.twig', array(
-                    'issue_form' => $issueForm->createView(),
-                    'no_hide' => true 
+                    'issue_form' => $issueForm->createView()
                 ) );
     }
 

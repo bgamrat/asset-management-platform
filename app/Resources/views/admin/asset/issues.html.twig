@@ -1,5 +1,5 @@
 {% block title %}{{ 'asset.issue'|trans }} {{ 'asset.status'|trans }} {{'common.admin'|trans }}{% endblock %}
-{% extends 'admin.base.html.twig' %}
+{% extends 'admin/asset/asset.base.html.twig' %}
 
 {% block admin_content %}
     <div id="issue-wrapper">
@@ -17,57 +17,66 @@
         </div>
         <div id="issue-grid">
         </div>
-        {{form(issue_form)}}
-        {#
         <div id="issue-view-dialog">
-            {{form_start(issue_form)}} 
+            {{form_start(issue_form)}}
             <div class="text-right">
                 <button id="issue-save-btn" type="button">{{ 'common.save'|trans }}</button>
             </div>
             <div class="issue">
-                <fieldset class="name-active">
+                <fieldset class="priority-status">
                     <legend>{{'issue.issue'|trans}}</legend>
                     <div class="justify">
-                        <span class="issue-model">
-                            {{form_widget(issue_form.model)}}
+                        <span class="issue-summary">
+                            {{form_widget(issue_form.summary)}}
                         </span>
-                        <span class="issue-serial-number">
-                            {{form_widget(issue_form.serial_number)}}
-                        </span>
-                        <span class="issue-active">
-                            {{form_widget(issue_form.active)}}
-                            {{form_label(issue_form.active)}}
+                        <span class="issue-assigned-to">
+                            {{form_widget(issue_form.assigned_to)}}
                         </span>
                     </div>
                     <div class="justify">
-                        {{form_row(issue_form.status)}}
+                        <span class="issue-created">
+                            {{form_row(issue_form.created)}}
+                        </span>
+                        <span class="issue-updated">
+                            {{form_row(issue_form.updated)}}
+                        </span>
                     </div>
-                    {{form_row(issue_form.comment)}}
+                    <div class="justify">
+                        <span class="issue-priority">
+                            {{form_widget(issue_form.priority)}}
+                        </span>
+                        <span class="issue-status">
+                            {{form_widget(issue_form.status)}}
+                        </span>
+                        <span class="issue-type">
+                            {{form_widget(issue_form.type)}}
+                        </span>
+                        <span class="issue-replaced">
+                            {{form_row(issue_form.replaced)}}
+                        </span>
+                    </div>
                 </fieldset>
+
                 <div id="issue-view-tabs">
-                    <div id="issue-view-location-tab">
-                        <div class="justify">
-                            {{form_row(issue_form.location.id)}}
-                            {{form_row(issue_form.location.ctype)}}
-                            {{form_row(issue_form.location.entity)}}
-                        </div>
+                    <div id="issue-view-details-tab">
+                        <span class="issue-details">
+                            {{form_row(issue_form.details)}}
+                        </span>
                     </div>
                     <div id="issue-view-expenses-tab">
                         <div id="expenses">
-                            {{form_row(issue_form.purchased)}}
                             {{form_row(issue_form.cost)}}
+                            {{form_row(issue_form.client_billable)}}
                         </div>
                     </div>
                     <div id="issue-view-barcodes-tab">
+
                         <div id="barcodes" class="barcodes">
+
                             {{form_row(issue_form.barcodes)}}
                             {% if issue_form.barcodes.vars.allow_add %}
                                 <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                             {% endif %}
-                        </div>
-                    </div>
-                    <div id="issue-view-model-relationships-tab">
-                        <div id="model-relationships" class="model-relationships">
                         </div>
                     </div>
                     <div id="issue-view-history-tab">
@@ -76,14 +85,13 @@
             </div>
             {{ form_end(issue_form) }}
         </div>
-        #}
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        //require(["app/admin/asset/issue"], function (issue) {
-         //   issue.run();
-        //});
+        require(["app/admin/asset/issue"], function (issue) {
+            issue.run();
+        });
     </script>
 {% endblock %}

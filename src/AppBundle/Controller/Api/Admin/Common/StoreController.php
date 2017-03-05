@@ -281,6 +281,34 @@ class StoreController extends FOSRestController
     /**
      * @View()
      */
+    public function getPeopleAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $name = $request->get( 'name' );
+        if( !empty( $name ) )
+        {
+            $name = '%' . str_replace( '*', '%', $name );
+
+            $em = $this->getDoctrine()->getManager();
+
+            $queryBuilder = $em->createQueryBuilder()->select( ['p.id', "CONCAT(CONCAT(p.firstname, ' '), p.lastname) AS name"] )
+                    ->from( 'AppBundle\Entity\Common\Person', 'p' )
+                    ->where( "LOWER(CONCAT(CONCAT(p.firstname, ' '), p.lastname)) LIKE :name" )
+                    ->orderBy( 'name' )
+                    ->setParameter( 'name', strtolower( $name ) );
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
+
+    /**
+     * @View()
+     */
     public function getPersontypesAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
@@ -328,7 +356,7 @@ class StoreController extends FOSRestController
 
         return $data;
     }
-    
+
     /**
      * @View()
      */

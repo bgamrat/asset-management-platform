@@ -119,6 +119,7 @@ define([
             locationFilteringSelect.set("readOnly", true);
             barcodes.setData(null);
             serialNumberInput.set("value", "");
+            costInput.set("value", null);
             commentInput.set("value", "");
             activeCheckBox.set("checked", true);
             assetViewDialog.set("title", core["new"]).show();

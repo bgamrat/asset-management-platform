@@ -10,6 +10,12 @@ app_admin_asset_categories:
     name_prefix:   app_admin_api_categories_
     prefix: /api
 
+app_admin_asset_issues:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Asset\IssuesController
+    name_prefix:   app_admin_api_issues_
+    prefix: /api
+
 app_admin_asset_manufacturers:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\Asset\ManufacturersController

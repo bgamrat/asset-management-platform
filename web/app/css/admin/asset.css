@@ -57,7 +57,8 @@
 .category-form .position,
 .category-form .position .dijitTextBox,
 .category-form .value,
-.category-form .value .dijitTextBox{
+.category-form .value .dijitTextBox,
+.issue-priority .dijitTextBox {
     width: 45px;
 }
 .category .position .dijitInputContainer input {
@@ -117,4 +118,7 @@
     display: inline-block;
     list-style-type: none;
     padding-right: 21px;
+}
+.issue-summary .dijitTextBox {
+    width: 250px;
 }
