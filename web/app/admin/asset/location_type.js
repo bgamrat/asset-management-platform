@@ -6,6 +6,7 @@ define([
     "dojo/query",
     "dojo/data/ObjectStore",
     "dojo/store/Memory",
+    "dijit/form/Form",
     "dijit/form/Select",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
@@ -18,7 +19,7 @@ define([
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on,
         query, ObjectStore, Memory,
-        Select, ValidationTextBox, CheckBox, RadioButton, Button,
+        Form, Select, ValidationTextBox, CheckBox, RadioButton, Button,
         lib, core) {
     //"use strict";
 
@@ -64,8 +65,8 @@ define([
             name: "location_types[types][" + index + "][url]",
             value: document.getElementById(base + "url").value
         }, base + "url");
-        urlInput.push(dijit);
         dijit.startup();
+        urlInput.push(dijit);
         dijit = new CheckBox({'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
             name: "location_types[types][" + index + "][active]"}, base + "active");
         activeCheckBox.push(dijit);
@@ -120,6 +121,9 @@ define([
             createDijits(true);
         });
 
+        var locationTypesForm = new Form({}, '[name="location_types"]');
+        locationTypesForm.startup();
+
         var saveBtn = new Button({
             label: core.save,
             type: "submit"
@@ -129,11 +133,13 @@ define([
         on(dom.byId("location_types_types"), "click", function (event) {
             var target = event.target;
             var id = target.id;
-            if( target.checked && id.indexOf("default") !== -1 ) {
-                id = id.replace(/^.*(\d+).*$/, '$1');
-                target.name = 'location_types[types][' + id + '][default]';
-            } else {
-                target.removeAttribute("name");
+            if( id.indexOf("default") !== -1 ) {
+                if( target.checked ) {
+                    id = id.replace(/^.*(\d+).*$/, '$1');
+                    target.name = 'location_types[types][' + id + '][default]';
+                } else {
+                    target.removeAttribute("name");
+                }
             }
         });
 

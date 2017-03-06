@@ -163,6 +163,8 @@ common:
         Invite
     issues:
         Issues
+    item:
+        Item
     locations:
         Locations
     locked:

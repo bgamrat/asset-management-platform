@@ -122,3 +122,12 @@
 .issue-summary .dijitTextBox {
     width: 250px;
 }
+.issue-item .item .dijitTextBox {
+    width: 285px;
+}
+.issue-item .status .dijitTextBox {
+    width: 150px;
+}
+.issue-item .comment .dijitTextBox {
+    width: 350px;
+}

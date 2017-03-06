@@ -29,13 +29,12 @@ class LocationTypeController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
 
         $em = $this->getDoctrine()->getManager();
-        $location_types = [];
+        $locationTypes = [];
         $locationTypes['types'] = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findAll();
         $locationTypesForm = $this->createForm( LocationTypesType::class, $locationTypes, [ 'action' => $this->generateUrl( 'app_admin_asset_locationtype_save' )] );
 
         return $this->render( 'admin/asset/location-types.html.twig', array(
-                    'location_types_form' => $locationTypesForm->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
+                    'location_types_form' => $locationTypesForm->createView()
                 ) );
     }
 
@@ -64,7 +63,6 @@ class LocationTypeController extends Controller
                     'notice', 'common.success' );
             $response = new RedirectResponse( $this->generateUrl( 'app_admin_asset_locationtype_index', [], UrlGeneratorInterface::ABSOLUTE_URL ) );
             $response->prepare( $request );
-
             return $response->send();
         }
         else

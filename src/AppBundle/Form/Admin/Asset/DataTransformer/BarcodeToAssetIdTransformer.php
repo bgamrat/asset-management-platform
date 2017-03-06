@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class BarcodeToEntityTransformer implements DataTransformerInterface
+class BarcodeToAssetIdTransformer implements DataTransformerInterface
 {
     private $em;
 
@@ -22,7 +22,7 @@ class BarcodeToEntityTransformer implements DataTransformerInterface
      * @param  Issue|null $barcode
      * @return string
      */
-    public function transform($barcodes)
+    public function transform($barcode)
     {
         return null;
     }
@@ -34,7 +34,7 @@ class BarcodeToEntityTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (barcode) is not found.
      */
-    public function reverseTransform($barcodes)
+    public function reverseTransform($barcode)
     {
         // no barcode id? It's optional, so that's ok
         if (!$barcodes) {

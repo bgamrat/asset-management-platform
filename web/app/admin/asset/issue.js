@@ -34,6 +34,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
+    "app/admin/asset/issue_items",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -45,7 +46,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        lib, libGrid, core, asset) {
+        issueItems, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -74,6 +75,12 @@ define([
         tabContainer.addChild(detailsContentPane);
         tabContainer.startup();
 
+        var itemsContentPane = new ContentPane({
+            title: core.items},
+        "issue-view-items-tab"
+                );
+        tabContainer.addChild(itemsContentPane);
+        
         var expensesContentPane = new ContentPane({
             title: core.expenses},
         "issue-view-expenses-tab"
@@ -81,11 +88,6 @@ define([
         tabContainer.addChild(expensesContentPane);
         tabContainer.startup();
 
-        var barcodesContentPane = new ContentPane({
-            title: asset.barcodes},
-        "issue-view-barcodes-tab"
-                );
-        tabContainer.addChild(barcodesContentPane);
 
         var historyContentPane = new ContentPane({
             title: core.history},
@@ -478,6 +480,7 @@ define([
         }
 
         lib.pageReady();
+        issueItems.run();
     }
     return {
         run: run

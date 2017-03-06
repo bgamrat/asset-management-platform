@@ -35,6 +35,8 @@ define({
         "invalid": "Invalid",
         "invalid_form": "Invalid data",
         "invite": "Invite",
+        "item": "Item",
+        "items": "Items",
         "lastname": "Last name",
         "locked": "Locked",
         "manufacturer": "Manufacturer",

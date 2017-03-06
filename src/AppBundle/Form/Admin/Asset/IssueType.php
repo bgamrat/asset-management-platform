@@ -86,8 +86,8 @@ class IssueType extends AbstractType
                 ->add( 'details', TextType::class, [
                     'label' => false
                 ] )
-                ->add( 'barcodes', CollectionType::class, [
-                    'entry_type' => BarcodeType::class,
+                ->add( 'items', CollectionType::class, [
+                    'entry_type' => IssueItemType::class,
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,
@@ -95,7 +95,7 @@ class IssueType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'prototype_name' => '__barcode__'
+                    'prototype_name' => '__item__'
                 ] )
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
                 ->add( 'client_billable', CheckboxType::class, ['label' => 'common.client_billable'] )

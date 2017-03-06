@@ -30,11 +30,6 @@ services:
             1:
                 - '@app.encoder.json'
 
-    app.form.data_transformer.barcode:
-        class: AppBundle\Form\Admin\Asset\DataTransformer\BarcodeToEntityTransformer
-        arguments: ['@doctrine.orm.entity_manager']
-        public: false
-
     app.form.data_transformer.contract:
         class: AppBundle\Form\Admin\Client\DataTransformer\ContractToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
@@ -83,13 +78,7 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_asset_location_type' }
-
-    app.admin.form.type.model:
-        class: AppBundle\Form\Admin\Asset\ModelType
-        arguments: ['@doctrine.orm.entity_manager']
-        tags:
-            - { name: form.type, alias: 'app_model_type' }
-            
+    
     app.admin.form.type.category_quantity:
         class: AppBundle\Form\Admin\Client\CategoryQuantityType
         arguments: ['@doctrine.orm.entity_manager']
@@ -107,7 +96,19 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_admin_asset_issue_type' }
-           
+            
+    app.admin.form.type.issue_item:
+        class: AppBundle\Form\Admin\Asset\IssueItemType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_asset_issue_item_type' }
+
+    app.admin.form.type.model:
+        class: AppBundle\Form\Admin\Asset\ModelType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_model_type' }
+        
     app.admin.form.type.person:
         class: AppBundle\Form\Common\PersonType
         arguments: ['@doctrine.orm.entity_manager']
