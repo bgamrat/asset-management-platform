@@ -149,7 +149,7 @@ define([
         }, "issue_priority");
         priorityInput.startup();
 
-        var issueSelect = dom.byId('issue_type');
+        var issueSelect = dom.byId('issue_trailer');
         var d, data = JSON.parse(domAttr.get(issueSelect, "data-options"));
         // Convert the data to an array of objects
         var storeData = [];
@@ -157,6 +157,25 @@ define([
             storeData.push(data[d]);
         }
         var memoryStore = new Memory({
+            idProperty: "value",
+            data: storeData});
+        var trailerStore = new ObjectStore({objectStore: memoryStore});
+        var trailerSelect = new Select({
+            store: trailerStore,
+            placeholder: asset.trailer,
+            required: true,
+            "class": "asset-trailer"
+        }, "issue_trailer");
+        trailerSelect.startup();
+
+        issueSelect = dom.byId('issue_type');
+        d, data = JSON.parse(domAttr.get(issueSelect, "data-options"));
+        // Convert the data to an array of objects
+        storeData = [];
+        for( d in data ) {
+            storeData.push(data[d]);
+        }
+        memoryStore = new Memory({
             idProperty: "value",
             data: storeData});
         var typeStore = new ObjectStore({objectStore: memoryStore});
@@ -381,18 +400,6 @@ define([
                     valueInput.get("value", issue.value);
                     dom.byId("issue_location_id").value = issue.location.id;
                     setLocationType(issue.location.type.id);
-                    if( issue.location.type.url !== null ) {
-                        locationStore.target = issue.location.type.url;
-                        locationFilteringSelect.set("store", locationStore);
-                        locationFilteringSelect.set("readOnly", false);
-                        locationFilteringSelect.set('displayedValue', issue.location_text);
-                    } else {
-                        textLocationMemoryStore.data = [{name: locationTypeLabels[issue.location.type.id], id: 0}];
-                        locationFilteringSelect.set("store", textLocationStore);
-                        locationFilteringSelect.set("readOnly", false);
-                        locationFilteringSelect.set('displayedValue', issue.location_text);
-                        locationFilteringSelect.set("readOnly", true);
-                    }
                     serialNumberInput.set('value', issue.serial_number);
                     commentInput.set('value', issue.comment);
                     if( typeof issue.barcodes !== "undefined" ) {
@@ -457,27 +464,6 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
-
-        function getLocationType() {
-            var i, locationTypeSet = false;
-            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
-                if( locationTypeRadioButton[i].get("checked") === true ) {
-                    locationTypeSet = true;
-                    break;
-                }
-            }
-            return locationTypeSet ? locationTypeRadioButton[i].get("value") : null;
-        }
-
-        function setLocationType(locationType) {
-            var i;
-            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
-                if( parseInt(locationTypeRadioButton[i].get("data-location-type-id")) === locationType ) {
-                    locationTypeRadioButton[i].set("checked", true);
-                    break;
-                }
-            }
-        }
 
         lib.pageReady();
         issueItems.run();

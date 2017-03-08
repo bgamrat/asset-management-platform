@@ -60,6 +60,10 @@ class Issue
      */
     private $details;
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Asset\Trailer", mappedBy="trailer")
+     */
+    private $trailer = null;
+    /**
      * @var ArrayCollection $barcodes
      * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
@@ -245,6 +249,30 @@ class Issue
     public function getDetails()
     {
         return $this->details;
+    }
+
+    /**
+     * Set trailer
+     *
+     * @param string $trailer
+     *
+     * @return Issue
+     */
+    public function setTrailer( $trailer )
+    {
+        $this->trailer = $trailer;
+
+        return $this;
+    }
+
+    /**
+     * Get trailer
+     *
+     * @return string
+     */
+    public function getTrailer()
+    {
+        return $this->trailer;
     }
 
     public function getBarcodes()

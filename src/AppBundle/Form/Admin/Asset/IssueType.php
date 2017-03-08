@@ -86,6 +86,15 @@ class IssueType extends AbstractType
                 ->add( 'details', TextType::class, [
                     'label' => false
                 ] )
+                ->add( 'trailer', EntityType::class, [
+                    'class' => 'AppBundle\Entity\Asset\Trailer',
+                    'choice_label' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => false,
+                    'label' => false,
+                    'choice_translation_domain' => false
+                ] )
                 ->add( 'items', CollectionType::class, [
                     'entry_type' => IssueItemType::class,
                     'by_reference' => false,

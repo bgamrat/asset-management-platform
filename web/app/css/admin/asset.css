@@ -122,11 +122,19 @@
 .issue-summary .dijitTextBox {
     width: 250px;
 }
+.issue-status .dijitSelect,
+.issue-type .dijitSelect {
+    width: 100px;
+}
+.issue-details .dijitTextArea {
+    width: 97%;
+    height: 250px;
+}
 .issue-item .item .dijitTextBox {
     width: 285px;
 }
 .issue-item .status .dijitTextBox {
-    width: 150px;
+    width: 75px;
 }
 .issue-item .comment .dijitTextBox {
     width: 350px;
