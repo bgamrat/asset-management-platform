@@ -50,7 +50,6 @@ define([
     //"use strict";
     function run() {
 
-
         var issueId = null;
 
         var action = null;
@@ -80,7 +79,7 @@ define([
         "issue-view-items-tab"
                 );
         tabContainer.addChild(itemsContentPane);
-        
+
         var expensesContentPane = new ContentPane({
             title: core.expenses},
         "issue-view-expenses-tab"
@@ -104,10 +103,11 @@ define([
             priorityInput.reset();
             typeSelect.set("value", defaultTypeId);
             statusSelect.set("value", defaultStatusId);
+            trailerSelect.set("value", "");
             assignedToFilteringSelect.set("value", "");
             summaryInput.set("value", "");
             detailsInput.set("value", "");
-            //barcodes.setData(null);
+            issueItems.setData(null);
             clientBillableCheckBox.set("checked", false);
             replacedCheckBox.set("checked", false);
             issueViewDialog.set("title", core["new"]).show();
@@ -267,29 +267,19 @@ define([
             var beforeModelTextFilter, filter, data, locationId, locationData, purchased;
             grid.clearSelection();
             if( issueForm.validate() ) {
-                locationId = parseInt(dom.byId("issue_location_id").value);
-                locationData = {
-                    "id": isNaN(locationId) ? null : locationId,
-                    "type": parseInt(getLocationType()),
-                    "entity": parseInt(locationFilteringSelect.get("value"))
-                };
-                purchased = purchasedInput.get("value");
                 data = {
                     "id": issueId,
-                    "model_text": modelFilteringSelect.get("displayedValue"),
-                    "status_text": statusSelect.get("displayedValue"),
+                    "priority": parseInt(priorityInput.get("value")),
+                    "assigned_to": assignedToFilteringSelect.get("value"),
+                    "type": typeSelect.get("value"),
                     "status": parseInt(statusSelect.get("value")),
                     "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
-                    "value": parseFloat(valueInput.get("value")),
-                    "model": parseInt(modelFilteringSelect.get("value")),
-                    "location": locationData,
-                    "location_text": locationFilteringSelect.get("displayedValue"),
-                    "barcode": barcodes.getActive(),
-                    "barcodes": barcodes.getData(),
-                    "serial_number": serialNumberInput.get("value"),
-                    "active": activeCheckBox.get("checked"),
-                    "comment": commentInput.get("value"),
+                    "trailer": trailerSelect.get("value"),
+                    "items": issueItems.getData(),
+                    "summary": summaryInput.get("value"),
+                    "details": detailsInput.get("value"),
+                    "replaced": replacedCheckBox.get("checked")
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -393,22 +383,15 @@ define([
                     issueViewDialog.show();
                     action = "view";
                     issueId = issue.id;
-                    modelFilteringSelect.set('displayedValue', issue.model_text);
-                    statusSelect.set("displayedValue", issue.status_text);
-                    purchasedInput.set("value", issue.purchased);
-                    costInput.set("value", issue.cost);
-                    valueInput.get("value", issue.value);
-                    dom.byId("issue_location_id").value = issue.location.id;
-                    setLocationType(issue.location.type.id);
-                    serialNumberInput.set('value', issue.serial_number);
-                    commentInput.set('value', issue.comment);
-                    if( typeof issue.barcodes !== "undefined" ) {
-                        barcodes.setData(issue.barcodes);
-                    } else {
-                        barcodes.setData(null);
-                    }
-                    activeCheckBox.set('checked', issue.active);
-                    issueCommon.relationshipLists(modelRelationshipsContentPane, issue.model_relationships);
+                    priorityInput.set("value", issue.priority);
+                    typeSelect.set("value", issue.type);
+                    statusSelect.set("value", issue.status);
+                    assignedToFilteringSelect.set("value", issue.assigned_to);
+                    summaryInput.set("value", issue.summary);
+                    detailsInput.set("value", issue.details);
+                    issueItems.setData(issue.items);
+                    clientBillableCheckBox.set("checked", issue.client_billable === true);
+                    replacedCheckBox.set("checked", issue.replaced === true);
                     lib.showHistory(historyContentPane, issue.history);
                 }, lib.xhrError);
             }

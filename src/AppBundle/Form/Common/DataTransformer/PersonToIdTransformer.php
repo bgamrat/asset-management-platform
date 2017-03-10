@@ -24,7 +24,7 @@ class PersonToIdTransformer implements DataTransformerInterface
     public function transform($person)
     {
         if (null === $person) {
-            return '';
+            return null;
         }
 
         return $person->getId();
@@ -45,7 +45,7 @@ class PersonToIdTransformer implements DataTransformerInterface
         }
 
         $person = $this->em
-            ->getRepository('AppBundle\Entity\Asset\Person')
+            ->getRepository('AppBundle\Entity\Common\Person')
             ->find($personId)
         ;
 

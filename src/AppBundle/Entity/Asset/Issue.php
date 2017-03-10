@@ -5,6 +5,8 @@ Namespace AppBundle\Entity\Asset;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Common\Person;
 
 /**
  * Issue
@@ -64,17 +66,17 @@ class Issue
      */
     private $trailer = null;
     /**
-     * @var ArrayCollection $barcodes
-     * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
+     * @var ArrayCollection $items
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Asset\IssueItem", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\JoinTable(name="issue_barcode",
+     * @ORM\JoinTable(name="issue_item_item",
      *      joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="barcode_id", referencedColumnName="id", unique=true, nullable=false)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id", unique=false, nullable=true)}
      *      )
      */
-    protected $barcodes;
+    protected $items;
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Common\Person", mappedBy="assigned_to", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Common\Person", mappedBy="assigned_to")
      */
     private $assignedTo = null;
     /**
@@ -112,7 +114,7 @@ class Issue
 
     public function __construct()
     {
-        $this->barcodes = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     /**
@@ -275,22 +277,22 @@ class Issue
         return $this->trailer;
     }
 
-    public function getBarcodes()
+    public function getItems()
     {
-        return $this->barcodes->toArray();
+        return $this->items->toArray();
     }
 
-    public function addBarcode( Barcode $barcode )
+    public function addItem( Item $item )
     {
-        if( !$this->barcodes->contains( $barcode ) )
+        if( !$this->items->contains( $item ) )
         {
-            $this->barcodes->add( $barcode );
+            $this->items->add( $item );
         }
     }
 
-    public function removeBarcode( Barcode $barcode )
+    public function removeItem( Item $item )
     {
-        $this->barcodes->removeElement( $barcode );
+        $this->items->removeElement( $item );
     }
 
     /**
@@ -300,9 +302,9 @@ class Issue
      *
      * @return Issue
      */
-    public function setAssignedTo( $assignedTo )
+    public function setAssignedTo( Person $assignedTo )
     {
-        $this->assignedTo = $assignedto;
+        $this->assignedTo = $assignedTo;
 
         return $this;
     }

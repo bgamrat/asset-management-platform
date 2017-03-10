@@ -4,7 +4,8 @@ namespace AppBundle\Controller\Api\Admin\Asset;
 
 use AppBundle\Util\DStore;
 use AppBundle\Entity\Asset\Issue;
-use AppBundle\Entity\Asset\Location;
+use AppBundle\Entity\Asset\Trailer;
+use AppBundle\Entity\Common\Person;
 use AppBundle\Form\Admin\Asset\IssueType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -92,44 +93,19 @@ class IssuesController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Asset\Issue' )->find( $id );
         if( $issue !== null )
         {
-            $model = $issue->getModel();
-            $brand = $model->getBrand();
-            $location = $issue->getLocation();
-            if( $location === null )
-            {
-                $location = new Location();
-                $locationId = $locationType = null;
-            }
-            else
-            {
-                $locationId = $location->getId();
-                $locationTypeId = $location->getType();
-                $locationType = $this->getDoctrine()
-                                ->getRepository( 'AppBundle\Entity\Asset\LocationType' )->find( $locationTypeId );
-                ;
-            }
-            $relationships = [
-                'extends' => $issue->getExtends( false ),
-                'requires' => $issue->getRequires( false ),
-                'extended_by' => $issue->getExtendedBy( false ),
-                'required_by' => $issue->getRequiredBy( false )
-            ];
             $status = $issue->getStatus();
             $data = [
                 'id' => $id,
-                'model_text' => $brand->getName() . ' ' . $model->getName(),
-                'model' => $model->getId(),
-                'issue_relationships' => $relationships,
-                'serial_number' => $issue->getSerialNumber(),
-                'location_text' => $issue->getLocationText(),
-                'location' => [ 'id' => $locationId, 'entity' => $location->getEntity(), 'type' => $locationType],
-                'status_text' => $status->getName(),
-                'status' => $status->getId(),
-                'name' => $issue->getName(),
-                'description' => $issue->getDescription(),
-                'purchased' => $issue->getPurchased()->format( 'Y-m-d' ),
+                'priority' => $issue->getPriority(),
+                'type' => $issue->getType(),
+                'status' => $issue->getStatus(),
+                'assigned_to' => $issue->getAssignedTo(),
+                'summary' => $issue->getSummary(),
+                'details' => $issue->getDetails(),
+                'issues' => $issue->getIssues(),
+                'client_billable' => $issue->isClientBillable(),
                 'cost' => $issue->getCost(),
-                'active' => $issue->isActive()
+                'replaced' => $issue->isReplaced()
             ];
 
             $logUtil = $this->get( 'app.util.log' );
@@ -174,10 +150,6 @@ class IssuesController extends FOSRestController
             {
                 throw new Exception( "data.outdated", 400 );
             }
-        }
-        if( $issue->getLocation() === null )
-        {
-            $issue->setLocation( new Location() );
         }
         $form = $this->createForm( IssueType::class, $issue, ['allow_extra_fields' => true] );
         try

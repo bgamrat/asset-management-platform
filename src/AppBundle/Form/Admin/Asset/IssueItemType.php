@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use AppBundle\Form\Admin\Asset\DataTransformer\BarcodeToAssetIdTransformer;
+use AppBundle\Form\Admin\Asset\DataTransformer\BarcodeIdToAssetTransformer;
 
 class IssueItemType extends AbstractType
 {
@@ -31,7 +31,7 @@ class IssueItemType extends AbstractType
     {
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'item', TextType::class, ['label' => false] )
+                ->add( 'item', TextType::class, ['label' => false, 'property_path' => 'asset'] )
                 ->add( 'status', EntityType::class, [
                     'class' => 'AppBundle\Entity\Asset\AssetStatus',
                     'choice_label' => 'name',
@@ -51,7 +51,7 @@ class IssueItemType extends AbstractType
                 ] )
         ;
         $builder->get( 'item' )
-                ->addModelTransformer( new BarcodeToAssetIdTransformer( $this->em ) );
+                ->addModelTransformer( new BarcodeIdToAssetTransformer( $this->em ) );
     }
 
     /**
