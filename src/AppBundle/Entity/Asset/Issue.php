@@ -62,7 +62,9 @@ class Issue
      */
     private $details;
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Asset\Trailer", mappedBy="trailer")
+     * @var int
+     * @ORM\ManyToOne(targetEntity="Trailer")
+     * @ORM\JoinColumn(name="trailer_id", referencedColumnName="id")
      */
     private $trailer = null;
     /**
@@ -76,7 +78,9 @@ class Issue
      */
     protected $items;
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Common\Person", mappedBy="assigned_to")
+     * @var int
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Person")
+     * @ORM\JoinColumn(name="trailer_id", referencedColumnName="id")
      */
     private $assignedTo = null;
     /**
