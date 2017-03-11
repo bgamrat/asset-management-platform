@@ -26,6 +26,8 @@ class IssueItem
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\ManyToOne(targetEntity="Issue", inversedBy="items")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      */
     private $id;
     /**

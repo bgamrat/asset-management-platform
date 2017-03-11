@@ -314,7 +314,10 @@ define([
             sort: "priority",
             columns: {
                 id: {
-                    label: core.id
+                    label: asset.issue+" "+core.id
+                },
+                barcode: {
+                    label: asset.barcode
                 },
                 priority: {
                     label: asset.priority

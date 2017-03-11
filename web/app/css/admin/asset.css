@@ -139,3 +139,27 @@
 .issue-item .comment .dijitTextBox {
     width: 350px;
 }
+
+#issue-grid td.field-id,
+#issue-grid .dgrid-column-id {
+    display: table-cell;
+    width:75px;
+    text-align: right;
+}
+#issue-grid th,
+#issue-grid th.field-id {
+    vertical-align: bottom;
+    text-align: center;
+}
+.field-priority {
+    width:75px;
+    text-align: center;
+}
+.field-client_billable {
+    width: 75px;
+    text-align: center;
+}
+.field-type,
+.field-status {
+    width: 100px;
+}

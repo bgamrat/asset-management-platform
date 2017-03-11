@@ -202,7 +202,7 @@ class IssueStatus
                 foreach( $this->next as $n )
                 {
                     $next[] = ['id' => $n->getId(),
-                        'name' => $n->getStatus()];
+                        'status' => $n->getStatus()];
                 }
             }
             else

@@ -34,15 +34,12 @@ class Issue
      */
     private $priority = 3;
     /**
-     * @var int
      * @Gedmo\Versioned
-     * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="IssueStatus")
+s    * @ORM\ManyToOne(targetEntity="IssueStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected $status = null;
     /**
-     * @var int
      * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\ManyToOne(targetEntity="IssueType")

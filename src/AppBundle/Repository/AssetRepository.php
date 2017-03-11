@@ -34,4 +34,23 @@ class AssetRepository extends \Doctrine\ORM\EntityRepository
         }
         return $data;
     }
+    
+    public function findByBarcode( $barcode )
+    {
+        if( !empty( $barcode ) )
+        {          
+            $em = $this->getEntityManager();
+            $queryBuilder = $em->createQueryBuilder()->select( ['a' ])
+                    ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
+                    ->join( 'a.barcodes', 'b' )
+                    ->where( "LOWER(b.barcode) LIKE :barcode" )
+                    ->setParameter( 'barcode', strtolower( $barcode ) );
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
 }

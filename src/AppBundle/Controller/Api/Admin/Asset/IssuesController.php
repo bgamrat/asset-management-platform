@@ -28,8 +28,8 @@ class IssuesController extends FOSRestController
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
-            case 'name':
-                $sortField = 't.name';
+            case 'barcode':
+                $sortField = 'bc.barcode';
                 break;
             default:
                 $sortField = 'i.' . $dstore['sort-field'];
@@ -44,9 +44,45 @@ class IssuesController extends FOSRestController
         {
             $columns[] = 'i.deletedAt AS deleted_at';
         }
+        $issueIds = [];
+        if( !empty( $dstore['filter'][DStore::VALUE] ) )
+        {
+            $assetData = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByBarcode( $dstore['filter'][DStore::VALUE] );
+            if( !empty( $assetData ) )
+            {
+                $assetIds = [];
+                foreach( $assetData as $a )
+                {
+                    $assetIds[] = $a->getId();
+                }
+                $queryBuilder = $em->createQueryBuilder()->select( 'i.id' )
+                        ->from( 'AppBundle\Entity\Asset\Issue', 'i')
+                        ->join( 'i.items', 'ii' )
+                        ->join( 'ii.asset', 'a');
+                $queryBuilder->where( 'a.id IN (:asset_ids)' );
+                $queryBuilder->setParameter( 'asset_ids', $assetIds );
+                $issueData = $queryBuilder->getQuery()->getResult();
+                $issueIds = [];
+                foreach( $issueData as $i )
+                {
+                    $issueIds[] = $i['id'];
+                }
+            }
+        }
+
+        $columns = ['i.id', 'i.priority', 'i.summary', 's.status', 't.type',
+            "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to", 
+            'b.barcode'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Issue', 'i' )
+                ->join( 'i.status', 's' )
+                ->join( 'i.type', 't' )
+                ->join( 'i.assignedTo', 'p' )
+                ->join( 'i.items', 'ii')
+                ->join( 'ii.asset', 'a')
+                ->join( 'a.barcodes', 'b')
                 ->orderBy( $sortField, $dstore['sort-direction'] );
+
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -63,18 +99,25 @@ class IssuesController extends FOSRestController
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
                                     $queryBuilder->expr()->orX(
-                                            $queryBuilder->expr()->like( 'LOWER(t.name)', '?1' ), $queryBuilder->expr()->like( 'LOWER(t.serial_number)', '?1' ) ), $queryBuilder->expr()->like( 'LOWER(t.location_text)', '?1' )
+                                            $queryBuilder->expr()->like( 'LOWER(i.summary)', ':filter' ), $queryBuilder->expr()->like( 'LOWER(i.details)', ':filter' ) ), $queryBuilder->expr()->like( 'LOWER(p.lastname)', ':filter' )
                             )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'LOWER(m.name)', '?1' )
+                            $queryBuilder->expr()->gt( 'LOWER(i.summary)', ':filter' )
                     );
             }
-            $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
+            $queryBuilder->setParameter( 'filter', strtolower( $dstore['filter'][DStore::VALUE] ) );
+            if( !empty( $issueIds ) )
+            {
+                $queryBuilder->orWhere( 'i.id IN (:issue_ids)' );
+                $queryBuilder->setParameter( 'issue_ids', $issueIds );
+            }
         }
+
         $data = $queryBuilder->getQuery()->getResult();
+
         return array_values( $data );
     }
 
@@ -232,4 +275,5 @@ class IssuesController extends FOSRestController
             throw $this->createNotFoundException( 'Not found!' );
         }
     }
+
 }
