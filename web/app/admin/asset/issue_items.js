@@ -145,7 +145,7 @@ define([
     function setData(items) {
         var i, p, obj, nodes;
 
-        nodes = query(".form-row.item", "items");
+        nodes = query(".form-row.issue-item", "items");
         nodes.forEach(function (node, index) {
             destroyRow(index, node);
         });
@@ -156,7 +156,7 @@ define([
                 createDijits();
                 obj = items[i];
                 itemId[i] = obj.id;
-                itemFilteringSelect[i].set('value', obj.item);
+                itemFilteringSelect[i].set('value', obj.item.name);
                 statusSelect[i].set('value', obj.status);
                 commentInput[i].set('value', obj.comment);
             }

@@ -27,6 +27,10 @@ class TrailerToIdTransformer implements DataTransformerInterface
             return '';
         }
 
+        if (is_string($trailer)) {
+            return $trailer;
+        }
+        
         return $trailer->getName();
     }
 

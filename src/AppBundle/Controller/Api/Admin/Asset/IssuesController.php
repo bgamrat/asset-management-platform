@@ -56,9 +56,9 @@ class IssuesController extends FOSRestController
                     $assetIds[] = $a->getId();
                 }
                 $queryBuilder = $em->createQueryBuilder()->select( 'i.id' )
-                        ->from( 'AppBundle\Entity\Asset\Issue', 'i')
+                        ->from( 'AppBundle\Entity\Asset\Issue', 'i' )
                         ->join( 'i.items', 'ii' )
-                        ->join( 'ii.asset', 'a');
+                        ->join( 'ii.asset', 'a' );
                 $queryBuilder->where( 'a.id IN (:asset_ids)' );
                 $queryBuilder->setParameter( 'asset_ids', $assetIds );
                 $issueData = $queryBuilder->getQuery()->getResult();
@@ -71,16 +71,16 @@ class IssuesController extends FOSRestController
         }
 
         $columns = ['i.id', 'i.priority', 'i.summary', 's.status', 't.type',
-            "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to", 
+            "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to",
             'b.barcode'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Issue', 'i' )
                 ->join( 'i.status', 's' )
                 ->join( 'i.type', 't' )
-                ->join( 'i.assignedTo', 'p' )
-                ->join( 'i.items', 'ii')
-                ->join( 'ii.asset', 'a')
-                ->join( 'a.barcodes', 'b')
+                ->leftJoin( 'i.assignedTo', 'p' )
+                ->leftJoin( 'i.items', 'ii' )
+                ->join( 'ii.asset', 'a' )
+                ->join( 'a.barcodes', 'b' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
 
         if( $dstore['limit'] !== null )
@@ -136,7 +136,6 @@ class IssuesController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Asset\Issue' )->find( $id );
         if( $issue !== null )
         {
-            $status = $issue->getStatus();
             $data = [
                 'id' => $id,
                 'priority' => $issue->getPriority(),
@@ -145,10 +144,13 @@ class IssuesController extends FOSRestController
                 'assigned_to' => $issue->getAssignedTo(),
                 'summary' => $issue->getSummary(),
                 'details' => $issue->getDetails(),
-                'issues' => $issue->getIssues(),
+                'items' => $issue->getItems(),
                 'client_billable' => $issue->isClientBillable(),
                 'cost' => $issue->getCost(),
-                'replaced' => $issue->isReplaced()
+                'trailer' => $issue->getTrailer(),
+                'replaced' => $issue->isReplaced(),
+                'created' => $issue->getCreated()->format( 'Y-m-d' ),
+                'updated' => $issue->getUpdated()->format( 'Y-m-d' )
             ];
 
             $logUtil = $this->get( 'app.util.log' );

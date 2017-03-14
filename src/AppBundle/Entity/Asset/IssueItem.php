@@ -38,10 +38,32 @@ class IssueItem
     /**
      * @var string
      * 
+     * @ORM\Column(type="string", length=64, nullable=false)
+     * @Gedmo\Versioned
+     */
+    private $name;
+    /**
+     * @var string
+     * 
      * @ORM\Column(type="string", length=64, nullable=true)
      * @Gedmo\Versioned
      */
     private $comment;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Versioned
+     */
+    private $deletedAt;
 
     /**
      * Get id
@@ -75,6 +97,24 @@ class IssueItem
     public function setAsset( $asset )
     {
         $this->asset = $asset;
+        
+        $name = '';
+        if( !empty( $asset ) )
+        {
+            $barcodes = $asset->getBarcodes();
+            if( !empty( $barcodes ) )
+            {
+                foreach( $barcodes as $b )
+                {
+                    if( $b->isActive() )
+                    {
+                        $name = $b->getBarcode();
+                    }
+                }
+            }
+            $name .= $asset->model->getBrandModelName();
+        }
+        $this->name = $name;
 
         return $this;
     }
@@ -87,6 +127,30 @@ class IssueItem
     public function getAsset()
     {
         return $this->asset;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return IssueItem
+     */
+    public function setName( $name )
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -116,6 +180,17 @@ class IssueItem
     public function getUpdated()
     {
         return $this->updated;
+    }
+
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt( $deletedAt )
+    {
+        $this->deletedAt = $deletedAt;
+        $this->setActive( false );
     }
 
 }

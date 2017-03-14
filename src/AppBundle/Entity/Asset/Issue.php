@@ -12,7 +12,7 @@ use AppBundle\Entity\Common\Person;
  * Issue
  *
  * @ORM\Table(name="issue")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\IssueRepository")
+ * @ORM\Entity()
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\IssueLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -77,7 +77,7 @@ s    * @ORM\ManyToOne(targetEntity="IssueStatus")
     /**
      * @var int
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Person")
-     * @ORM\JoinColumn(name="trailer_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="assigned_to", referencedColumnName="id")
      */
     private $assignedTo = null;
     /**

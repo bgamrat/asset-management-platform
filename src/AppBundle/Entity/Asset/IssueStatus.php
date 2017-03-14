@@ -70,7 +70,7 @@ class IssueStatus
      * Many Users have Many Groups.
      * @ORM\ManyToMany(targetEntity="IssueStatus")
      * @ORM\JoinTable(name="issue_status_next",
-     *      joinColumns={@ORM\JoinColumn(name="next", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="next_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id", referencedColumnName="id")}
      *      )
      */
@@ -156,6 +156,10 @@ class IssueStatus
      */
     public function getStatus()
     {
+        return $this->status;
+    }
+    
+    public function getName() {
         return $this->status;
     }
 

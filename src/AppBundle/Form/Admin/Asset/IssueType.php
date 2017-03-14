@@ -112,6 +112,8 @@ class IssueType extends AbstractType
         ;
         $builder->get( 'assigned_to' )
                 ->addModelTransformer( new PersonToIdTransformer( $this->em ) );
+        $builder->get( 'trailer' )
+                ->addModelTransformer( new TrailerToIdTransformer( $this->em ) );
     }
 
     /**

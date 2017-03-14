@@ -171,6 +171,10 @@ class Asset
     {
         return $this->model;
     }
+    
+    public function getName() {
+        return $this->model;
+    }
 
     /**
      * Set serial_number

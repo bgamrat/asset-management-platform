@@ -18,7 +18,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Location
 {
-
     /**
      * @var int
      *
@@ -49,6 +48,16 @@ class Location
      * 
      */
     private $active = true;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Versioned

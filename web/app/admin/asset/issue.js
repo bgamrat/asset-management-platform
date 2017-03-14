@@ -111,6 +111,8 @@ define([
             clientBillableCheckBox.set("checked", false);
             replacedCheckBox.set("checked", false);
             issueViewDialog.set("title", core["new"]).show();
+            updatedInput.set("value",null);
+            createdInput.set("value",null);
             action = "new";
         });
 
@@ -271,11 +273,11 @@ define([
                     "id": issueId,
                     "priority": parseInt(priorityInput.get("value")),
                     "assigned_to": assignedToFilteringSelect.get("value"),
-                    "type": typeSelect.get("value"),
+                    "type": parseInt(typeSelect.get("value")),
                     "status": parseInt(statusSelect.get("value")),
                     "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
-                    "trailer": trailerSelect.get("value"),
+                    "trailer": parseInt(trailerSelect.get("value")),
                     "items": issueItems.getData(),
                     "summary": summaryInput.get("value"),
                     "details": detailsInput.get("value"),
@@ -376,23 +378,19 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (issue) {
-                    var titleBarcode;
-                    if( typeof issue.barcodes[0] !== "undefined" && typeof issue.barcodes[0].barcode !== "undefined" ) {
-                        titleBarcode = issue.barcodes[0].barcode;
-                    } else {
-                        titleBarcode = issue.model_text;
-                    }
-                    issueViewDialog.set('title', core.view + " " + titleBarcode);
                     issueViewDialog.show();
                     action = "view";
                     issueId = issue.id;
                     priorityInput.set("value", issue.priority);
-                    typeSelect.set("value", issue.type);
-                    statusSelect.set("value", issue.status);
-                    assignedToFilteringSelect.set("value", issue.assigned_to);
+                    typeSelect.set("value", issue.type.id);
+                    statusSelect.set("value", issue.status.id);
+                    trailerSelect.set("value", issue.trailer.id);
+                    assignedToFilteringSelect.set("displayedValue", issue.assigned_to.fullName);
                     summaryInput.set("value", issue.summary);
                     detailsInput.set("value", issue.details);
                     issueItems.setData(issue.items);
+                    updatedInput.set("value",issue.created);
+                    createdInput.set("value",issue.updated);
                     clientBillableCheckBox.set("checked", issue.client_billable === true);
                     replacedCheckBox.set("checked", issue.replaced === true);
                     lib.showHistory(historyContentPane, issue.history);
