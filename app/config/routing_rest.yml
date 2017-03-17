@@ -53,10 +53,11 @@ app_admin_common_store:
     prefix: /api/store
 
 app_admin_common_menu_store:
+    resource: app.admin.menu_store_controller
     type:     rest
     class: AppBundle\Controller\Api\Admin\Common\MenuStoreController
-    resource: app.admin.menu_store_controller
     prefix: /api/menustore
+    name_prefix: app_admin_api_common_menustore_
 
 app_admin_schedule_events:
     type:     rest

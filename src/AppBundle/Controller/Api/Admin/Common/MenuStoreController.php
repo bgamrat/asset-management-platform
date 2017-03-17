@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NoRoute;
+use AppBundle\TransformerInterface;
 
 class MenuStoreController extends FOSRestController
 {
@@ -25,11 +26,6 @@ class MenuStoreController extends FOSRestController
 
     /**
      * @View()
-     * @Get("/adminmenus", name="app_admin_api_common_menustore_getadminmenu")
-     * @Get("/adminmenus/", name="app_admin_api_common_menustore_getadminmenu_alt")
-     * @Get("/adminmenus/?parent={parent}", name="app_admin_api_common_menustore_getadminmenu_parent", defaults={"parent" = "admin"})
-     * @Get("/adminmenus/{id}", name="app_admin_api_common_menustore_getadminmenu_id", defaults={"id" = "admin"})
-     * @NoRoute()
      */
     public function getAdminmenuAction( Request $request )
     {
