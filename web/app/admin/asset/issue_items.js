@@ -129,8 +129,8 @@ define([
     }
 
     function getData() {
-        var i, returnData = [];
-        for( i = 0; i < itemFilteringSelect.length; i++ ) {
+        var i, l = itemId.length, returnData = [];
+        for( i = 0; i < l; i++ ) {
             returnData.push(
                     {
                         "id": itemId[i],
@@ -143,21 +143,21 @@ define([
     }
 
     function setData(items) {
-        var i, p, obj, nodes;
+        var i, l, obj, nodes;
 
         nodes = query(".form-row.issue-item", "items");
         nodes.forEach(function (node, index) {
             destroyRow(index, node);
         });
-
-        if( typeof items === "object" && items !== null && items.length > 0 ) {
-            for( i = 0; i < items.length; i++ ) {
+        l = items.length;
+        if( typeof items === "object" && items !== null && l > 0 ) {
+            for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits();
                 obj = items[i];
                 itemId[i] = obj.id;
-                itemFilteringSelect[i].set('value', obj.item.name);
-                statusSelect[i].set('value', obj.status);
+                itemFilteringSelect[i].set('displayedValue', obj.name);
+                statusSelect[i].set('value', obj.asset.status.id);
                 commentInput[i].set('value', obj.comment);
             }
         }

@@ -70,8 +70,8 @@ class IssuesController extends FOSRestController
             }
         }
 
-        $columns = ['i.id', 'i.priority', 'i.summary', 's.status', 't.type',
-            "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to",
+        $columns = ['i.id', 'i.priority', 'i.summary', 's.status AS status_text', 't.type AS type_text',
+            "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to_text",
             'b.barcode'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Issue', 'i' )
@@ -203,6 +203,10 @@ class IssuesController extends FOSRestController
             if( $form->isValid() )
             {
                 $issue = $form->getData();
+                $issueItems = $issue->getItems();
+                foreach ($issueItems as $i => $item) {
+                    $item->getAsset()->setStatus($form['items'][$i]['status']->getData());
+                }
                 $em->persist( $issue );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );

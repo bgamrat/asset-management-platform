@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
+use AppBundle\Entity\Asset\IssueItem;
 
 /**
  * Issue
@@ -283,7 +284,7 @@ s    * @ORM\ManyToOne(targetEntity="IssueStatus")
         return $this->items->toArray();
     }
 
-    public function addItem( Item $item )
+    public function addItem( IssueItem $item )
     {
         if( !$this->items->contains( $item ) )
         {
@@ -291,7 +292,7 @@ s    * @ORM\ManyToOne(targetEntity="IssueStatus")
         }
     }
 
-    public function removeItem( Item $item )
+    public function removeItem( IssueItem $item )
     {
         $this->items->removeElement( $item );
     }

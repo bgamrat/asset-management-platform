@@ -108,11 +108,12 @@ class IssueItem
                 {
                     if( $b->isActive() )
                     {
-                        $name = $b->getBarcode();
+                        $name = $b->getBarcode().' - ';
                     }
                 }
             }
-            $name .= $asset->model->getBrandModelName();
+            $model = $asset->getModel();
+            $name .= $model->getBrand()->getName().' '.$asset->getModel()->getName();
         }
         $this->name = $name;
 

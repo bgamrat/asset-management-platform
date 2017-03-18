@@ -24,6 +24,7 @@ class AssetRepository extends \Doctrine\ORM\EntityRepository
                     ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                     ->join( 'a.barcodes', 'b' )
                     ->where( "b.id = :barcode_id" )
+                    ->setMaxResults(1)
                     ->setParameter( 'barcode_id', strtolower( $barcodeId ) );
 
             $data = $queryBuilder->getQuery()->getResult();

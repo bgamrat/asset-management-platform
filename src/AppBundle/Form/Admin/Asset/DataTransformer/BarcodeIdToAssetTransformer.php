@@ -29,7 +29,7 @@ class BarcodeIdToAssetTransformer implements DataTransformerInterface
         {
             return null;
         }
-        
+
         $barcodes = $asset->getBarcodes();
         foreach ($barcodes as $b) {
             if ($b->isActive()) {
@@ -47,20 +47,20 @@ class BarcodeIdToAssetTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (barcode) is not found.
      */
-    public function reverseTransform( $barcodeId )
+    public function reverseTransform( $assetId )
     {
         // no barcode id? It's optional, so that's ok
-        if( !$barcodeId )
+        if( !$assetId )
         {
             return;
         }
 
-        $asset = $this->em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findOneByBarcodeId( $barcodeId );
+        $asset = $this->em->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $assetId );
 
         if( null === $asset )
         {
             throw new TransformationFailedException( sprintf(
-                    'An asset with barcode id "%s" does not exist!', $barcodeId
+                    'An asset with asset id "%s" does not exist!', $assetId
             ) );
         }
         return $asset;

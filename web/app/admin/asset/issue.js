@@ -275,6 +275,9 @@ define([
                     "assigned_to": assignedToFilteringSelect.get("value"),
                     "type": parseInt(typeSelect.get("value")),
                     "status": parseInt(statusSelect.get("value")),
+                    "assigned_to_text": assignedToFilteringSelect.get("displayedValue"),
+                    "type_text": typeSelect.get("displayedValue"),
+                    "status_text": statusSelect.get("displayedValue"),
                     "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
                     "trailer": parseInt(trailerSelect.get("value")),
@@ -324,13 +327,13 @@ define([
                 priority: {
                     label: asset.priority
                 },
-                type: {
+                type_text: {
                     label: asset.type,
                 },
-                status: {
+                status_text: {
                     label: asset.status,
                 },
-                assigned_to: {
+                assigned_to_text: {
                     label: asset.assigned_to
                 },
                 summary: {
