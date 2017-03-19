@@ -50,7 +50,16 @@ class IssueType extends AbstractType
                     'format' => 'yyyy-MM-dd HH:mm:ss',
                     'required' => false,
                     'disabled' => true,
-                    'data' => new \DateTime()
+                        //'data' => new \DateTime()
+                ] )
+                ->add( 'trailer', EntityType::class, [
+                    'class' => 'AppBundle\Entity\Asset\Trailer',
+                    'choice_label' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => false,
+                    'label' => false,
+                    'choice_translation_domain' => false
                 ] )
                 ->add( 'priority', IntegerType::class, ['label' => 'issue.priority'] )
                 ->add( 'type', EntityType::class, [
@@ -87,14 +96,16 @@ class IssueType extends AbstractType
                 ->add( 'details', TextType::class, [
                     'label' => false
                 ] )
-                ->add( 'trailer', EntityType::class, [
-                    'class' => 'AppBundle\Entity\Asset\Trailer',
-                    'choice_label' => 'name',
-                    'multiple' => false,
-                    'expanded' => false,
+                ->add( 'notes', CollectionType::class, [
+                    'entry_type' => IssueNoteType::class,
+                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
-                    'choice_translation_domain' => false
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__note__'
                 ] )
                 ->add( 'items', CollectionType::class, [
                     'entry_type' => IssueItemType::class,

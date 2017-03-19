@@ -35,6 +35,7 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/admin/asset/issue_items",
+    "app/admin/asset/issue_notes",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -46,7 +47,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        issueItems, lib, libGrid, core, asset) {
+        issueItems, issueNotes, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -107,12 +108,13 @@ define([
             assignedToFilteringSelect.set("value", "");
             summaryInput.set("value", "");
             detailsInput.set("value", "");
+            issueNotes.setData(null);
             issueItems.setData(null);
             clientBillableCheckBox.set("checked", false);
             replacedCheckBox.set("checked", false);
             issueViewDialog.set("title", core["new"]).show();
-            updatedInput.set("value",null);
-            createdInput.set("value",null);
+            updatedInput.set("value", null);
+            createdInput.set("value", null);
             action = "new";
         });
 
@@ -281,7 +283,9 @@ define([
                     "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
                     "trailer": parseInt(trailerSelect.get("value")),
+                    "trailer_text": trailerSelect.get("displayedValue"),
                     "items": issueItems.getData(),
+                    "notes": issueNotes.getData(),
                     "summary": summaryInput.get("value"),
                     "details": detailsInput.get("value"),
                     "replaced": replacedCheckBox.get("checked")
@@ -319,11 +323,17 @@ define([
             sort: "priority",
             columns: {
                 id: {
-                    label: asset.issue+" "+core.id
+                    label: asset.issue + " " + core.id
                 },
-                barcode: {
-                    label: asset.barcode
+                trailer_text: {
+                    label: asset.trailer
                 },
+                /*
+                 barcode: {
+                 label: asset.barcode
+                 },
+                 */
+
                 priority: {
                     label: asset.priority
                 },
@@ -333,11 +343,11 @@ define([
                 status_text: {
                     label: asset.status,
                 },
-                assigned_to_text: {
-                    label: asset.assigned_to
-                },
                 summary: {
                     label: asset.summary
+                },
+                assigned_to_text: {
+                    label: asset.assigned_to
                 },
                 client_billable: {
                     label: asset.client_billable,
@@ -392,8 +402,9 @@ define([
                     summaryInput.set("value", issue.summary);
                     detailsInput.set("value", issue.details);
                     issueItems.setData(issue.items);
-                    updatedInput.set("value",issue.created);
-                    createdInput.set("value",issue.updated);
+                    issueNotes.setData(issue.notes);
+                    updatedInput.set("value", issue.created);
+                    createdInput.set("value", issue.updated);
                     clientBillableCheckBox.set("checked", issue.client_billable === true);
                     replacedCheckBox.set("checked", issue.replaced === true);
                     lib.showHistory(historyContentPane, issue.history);
@@ -454,6 +465,7 @@ define([
 
         lib.pageReady();
         issueItems.run();
+        issueNotes.run();
     }
     return {
         run: run

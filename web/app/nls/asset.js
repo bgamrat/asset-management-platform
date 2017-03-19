@@ -26,6 +26,7 @@ define({
         "status": "Status",
         "summary": "Summary",
         "supports": "Supports",
+        "trailer": "Trailer",
         "type": "Type"
     })
 });

@@ -36,7 +36,7 @@ class Issue
     private $priority = 3;
     /**
      * @Gedmo\Versioned
-s    * @ORM\ManyToOne(targetEntity="IssueStatus")
+      s    * @ORM\ManyToOne(targetEntity="IssueStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected $status = null;
@@ -59,6 +59,12 @@ s    * @ORM\ManyToOne(targetEntity="IssueStatus")
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $details;
+    /**
+     * @var ArrayCollection $notes
+     * @ORM\ManyToMany(targetEntity="IssueNote", cascade={"persist"})
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    protected $notes;
     /**
      * @var int
      * @ORM\ManyToOne(targetEntity="Trailer")
@@ -253,6 +259,24 @@ s    * @ORM\ManyToOne(targetEntity="IssueStatus")
     public function getDetails()
     {
         return $this->details;
+    }
+
+    public function getNotes()
+    {
+        return $this->notes->toArray();
+    }
+
+    public function addNote( IssueNote $note )
+    {
+        if( !$this->notes->contains( $note ) )
+        {
+            $this->notes->add( $note );
+        }
+    }
+
+    public function removeNote( IssueNote $note )
+    {
+        $this->notes->removeElement( $note );
     }
 
     /**

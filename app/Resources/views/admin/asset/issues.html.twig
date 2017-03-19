@@ -8,12 +8,22 @@
             <div class="justify">
                 <span class="item">{{ form_widget(form.item) }}</span>
                 <span class="status">{{ form_widget(form.status) }}</span>
-            </div>
-            <div class="justify">
-                <span class="comment">
-                    {{ form_widget(form.comment) }}
-                </span>
                 <span class="remove-form-row" title="{{'common.remove'|trans}}" id="issue_item-__item__"><i class="fa fa-remove"></i></span>
+            </div>
+            <div  class="comment">
+                {{ form_widget(form.comment) }}
+            </div>
+        </div>
+{% endspaceless %}{% endblock %}
+
+{% block _issue_notes_entry_row %}{% spaceless %}
+        <div class="form-row issue-note">
+            <div class="justify">
+                <span class="updated">{{ form_widget(form.updated) }}</span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="issue_note-__note__"><i class="fa fa-remove"></i></span>
+            </div>
+            <div class="note">
+                {{ form_widget(form.note) }}
             </div>
         </div>
 {% endspaceless %}{% endblock %}
@@ -81,6 +91,15 @@
                         <span class="issue-details">
                             {{form_row(issue_form.details)}}
                         </span>
+                        <div id="notes" class="notes">
+                            <div class="justify">
+                                <strong>{{ 'common.notes' | trans }}</strong>
+                                {% if issue_form.notes.vars.allow_add %}
+                                    <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                                {% endif %}
+                            </div>
+                            {{form_row(issue_form.notes)}}
+                        </div>
                     </div>
                     <div id="issue-view-items-tab">
                         <div id="items" class="items">

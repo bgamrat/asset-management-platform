@@ -128,8 +128,17 @@
 }
 .issue-details .dijitTextArea {
     width: 97%;
-    height: 250px;
+    height: 100px;
 }
+.notes {
+    margin-top: 5px;
+    border-top: 1px solid #999;
+    padding-top: 3px;
+}
+.issue-item .note .dijitTextArea {
+    width: 93%;
+}
+
 .issue-item .item .dijitTextBox {
     width: 285px;
 }
@@ -159,7 +168,10 @@
     width: 75px;
     text-align: center;
 }
-.field-type,
-.field-status {
+.field-type_text,
+.field-status_text {
+    width: 85px;
+}
+.field-trailer_text {
     width: 100px;
 }

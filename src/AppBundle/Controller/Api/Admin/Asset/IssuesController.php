@@ -31,6 +31,18 @@ class IssuesController extends FOSRestController
             case 'barcode':
                 $sortField = 'bc.barcode';
                 break;
+            case 'status_text':
+                $sortField = 's.status';
+                break;
+            case 'type_text':
+                $sortField = 't.type';
+                break;
+            case 'trailer_text':
+                $sortField = 'tr.name';
+                break;
+            case 'assigned_to_text':
+                $sortField = 'p.lastname';
+                break;
             default:
                 $sortField = 'i.' . $dstore['sort-field'];
         }
@@ -70,13 +82,14 @@ class IssuesController extends FOSRestController
             }
         }
 
-        $columns = ['i.id', 'i.priority', 'i.summary', 's.status AS status_text', 't.type AS type_text',
+        $columns = ['i.id', 'i.priority', 'tr.name AS trailer_text', 'i.summary', 's.status AS status_text', 't.type AS type_text',
             "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to_text",
             'b.barcode'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Issue', 'i' )
                 ->join( 'i.status', 's' )
                 ->join( 'i.type', 't' )
+                ->leftJoin( 'i.trailer', 'tr' )
                 ->leftJoin( 'i.assignedTo', 'p' )
                 ->leftJoin( 'i.items', 'ii' )
                 ->join( 'ii.asset', 'a' )
@@ -145,12 +158,13 @@ class IssuesController extends FOSRestController
                 'summary' => $issue->getSummary(),
                 'details' => $issue->getDetails(),
                 'items' => $issue->getItems(),
+                'notes' => $issue->getNotes(),
                 'client_billable' => $issue->isClientBillable(),
                 'cost' => $issue->getCost(),
                 'trailer' => $issue->getTrailer(),
                 'replaced' => $issue->isReplaced(),
-                'created' => $issue->getCreated()->format( 'Y-m-d' ),
-                'updated' => $issue->getUpdated()->format( 'Y-m-d' )
+                'created' => $issue->getCreated()->format( 'Y-m-d H:i:s' ),
+                'updated' => $issue->getUpdated()->format( 'Y-m-d H:i:s' )
             ];
 
             $logUtil = $this->get( 'app.util.log' );

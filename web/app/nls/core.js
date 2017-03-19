@@ -44,6 +44,7 @@ define({
         "name": "Name",
         "new": "New",
         "no": "No",
+        "note": "Note",
         "okay": "Okay",
         "order": "Order",
         "person": "Person",

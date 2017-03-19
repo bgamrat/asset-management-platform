@@ -187,6 +187,10 @@ common:
         None
     not_active:
         Not active
+    note:
+        Note
+    notes:
+        Notes
     order:
         Order
     park:

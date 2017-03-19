@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * CategoryQuantity
+ * IssueItem
  *
  * @ORM\Table(name="issue_item")
  * @Gedmo\Loggable
