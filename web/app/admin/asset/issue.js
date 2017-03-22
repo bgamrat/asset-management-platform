@@ -403,8 +403,8 @@ define([
                     detailsInput.set("value", issue.details);
                     issueItems.setData(issue.items);
                     issueNotes.setData(issue.notes);
-                    updatedInput.set("value", issue.created);
-                    createdInput.set("value", issue.updated);
+                    updatedInput.set("value", issue.updated);
+                    createdInput.set("value", issue.created);
                     clientBillableCheckBox.set("checked", issue.client_billable === true);
                     replacedCheckBox.set("checked", issue.replaced === true);
                     lib.showHistory(historyContentPane, issue.history);

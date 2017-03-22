@@ -50,7 +50,7 @@ class IssueType extends AbstractType
                     'format' => 'yyyy-MM-dd HH:mm:ss',
                     'required' => false,
                     'disabled' => true,
-                        //'data' => new \DateTime()
+                    //'data' => new \DateTime()
                 ] )
                 ->add( 'trailer', EntityType::class, [
                     'class' => 'AppBundle\Entity\Asset\Trailer',

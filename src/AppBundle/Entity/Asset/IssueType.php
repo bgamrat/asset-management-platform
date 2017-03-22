@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Table(name="issue_type")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\IssueTypeRepository")
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\IssueLog")
  * @UniqueEntity("type")
  * @UniqueEntity("id")
  */

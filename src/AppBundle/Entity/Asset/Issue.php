@@ -396,7 +396,7 @@ class Issue
 
     public function setCreated( $created )
     {
-        $this->updated = $updated;
+        $this->created = $created;
     }
 
     public function getUpdated()

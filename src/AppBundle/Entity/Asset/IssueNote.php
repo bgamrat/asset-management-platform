@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * IssueNote
  *
  * @ORM\Table(name="issue_note")
- * @Gedmo\Loggable
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\IssueLog")
  * @ORM\Entity()
  * 
  */
