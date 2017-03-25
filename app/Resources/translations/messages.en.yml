@@ -69,6 +69,8 @@ asset:
         Trailer
     trailers:
         Trailers
+    transfer:
+        Transfer
     vendor:
         Vendor
     vendors:

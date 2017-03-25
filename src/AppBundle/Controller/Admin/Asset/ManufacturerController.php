@@ -19,7 +19,7 @@ class ManufacturerController extends Controller
 {
 
     /**
-     * @Route("/admin/asset/manufacturer")
+     * @Route("/admin/asset/manufacturers")
      * @Method("GET")
      */
     public function indexAction( Request $request )

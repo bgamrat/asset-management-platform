@@ -46,12 +46,6 @@ app_admin_common_people:
     name_prefix:   app_admin_api_people_
     prefix: /api
 
-app_admin_common_store:
-    type:     rest
-    resource: AppBundle\Controller\Api\Admin\Common\StoreController
-    name_prefix:   app_admin_api_store_
-    prefix: /api/store
-
 app_admin_common_menu_store:
     resource: app.admin.menu_store_controller
     type:     rest
