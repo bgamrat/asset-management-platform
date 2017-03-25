@@ -5,11 +5,13 @@ namespace AppBundle\Controller\Api\Common\Trailers;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use FOS\RestBundle\Controller\Annotations\View;
 
 class DefaultController extends FOSRestController
 {
 
     /**
+     * @View()
      * @Route("/api/store/trailers")
      */
     public function getTrailersAction( Request $request )
