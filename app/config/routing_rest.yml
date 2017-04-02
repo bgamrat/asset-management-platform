@@ -3,6 +3,12 @@ app_admin_asset_assets:
     resource: AppBundle\Controller\Api\Admin\Asset\AssetsController
     name_prefix:   app_admin_api_assets_
     prefix: /api
+
+app_admin_asset_carriers:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Asset\CarriersController
+    name_prefix:   app_admin_api_carrier_
+    prefix: /api
     
 app_admin_asset_categories:
     type:     rest

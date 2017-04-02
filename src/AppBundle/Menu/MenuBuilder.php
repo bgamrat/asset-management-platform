@@ -32,6 +32,7 @@ class MenuBuilder implements ContainerAwareInterface
 
         $menu->addChild( 'admin', ['route' => 'root', 'label' => 'common.home'] );
         $menu['admin']->addChild( 'admin-assets', ['label' => 'common.assets'] );
+        $menu['admin']['admin-assets']->addChild( 'carriers', ['label' => 'common.carriers', 'route' => 'app_admin_asset_carrier_index'] );
         $menu['admin']['admin-assets']->addChild( 'equipment', ['label' => 'asset.equipment', 'route' => 'app_admin_asset_equipment_index'] );
         $menu['admin']['admin-assets']->addChild( 'issues', ['label' => 'common.issues', 'route' => 'app_admin_asset_issue_index'] );
         $menu['admin']['admin-assets']->addChild( 'manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index'] );
@@ -47,6 +48,7 @@ class MenuBuilder implements ContainerAwareInterface
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'issue_types', ['label' => 'asset.issue_types', 'route' => 'app_admin_asset_issuetype_index'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'issue_workflow', ['label' => 'asset.issue_workflow', 'route' => 'app_admin_asset_issuestatus_workflow'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
+            $menu['admin']['admin-assets']['asset-configuration']->addChild( 'transfer_statuses', ['label' => 'asset.transfer_statuses', 'route' => 'app_admin_asset_transferstatus_index'] );  
         }
 
         $menu['admin']->addChild( 'admin-clients', ['label' => 'common.clients', 'route' => 'app_admin_client_client_index'] );

@@ -1,0 +1,93 @@
+{% block title %}{{ 'common.carrier'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin/asset/asset.base.html.twig' %}
+
+{% form_theme carrier_form _self %}
+
+{% block _carrier_brands_entry_row %}
+    {{ block('_brands_entry_row') }}
+{% endblock %}
+
+{% block _carrier_contacts_entry_row %}
+    <div class="form-row contacts">
+        {% include 'common/person.html.twig' with {'legend': 'common.contact'} %}
+    </div>
+{% endblock %}
+
+{% block _carrier_contacts_entry_addresses_entry_row %}
+    {{ block('_address_entry_row') }}
+{% endblock %}
+
+{% block _carrier_contacts_entry_emails_entry_row %}
+    {{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _carrier_contacts_entry_phones_entry_row %}
+    {{ block('_phones_entry_row') }}
+{% endblock %}
+
+{% block admin_content %}
+    <div id="carrier-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="grid-controls">
+            <div>
+                <button id="carrier-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            </div>
+            <div>
+                <form id="carrier-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="carrier-filter-input">
+                </form>
+            </div>
+            <button id="carrier-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+        </div>
+        <div id="carrier-grid">
+        </div>
+        <div id="carrier-view-dialog">
+            {{form_start(carrier_form)}} 
+            <div class="text-right">
+                <button id="carrier-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="carrier">
+                <fieldset class="name-active">
+                    <legend>{{'common.carrier'|trans}}</legend>
+                    <div class="justify">
+                        <span class="carrier-name">
+                            {{form_widget(carrier_form.name)}}
+                        </span>
+                        <span class="carrier-active">
+                            {{form_widget(carrier_form.active)}}
+                            {{form_label(carrier_form.active)}}
+                        </span>
+                    </div>
+                    {{form_row(carrier_form.comment)}}
+                </fieldset>
+                <div id="carrier-view-tabs">
+                    <div id="carrier-view-contacts-tab">
+                        <fieldset class="contacts">
+                            {{form_row(carrier_form.contacts)}}
+                            {% if carrier_form.contacts.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div id="carrier-view-account-tab">
+                        <fieldset class="account-information">
+                            <legend>{{'common.account_information'|trans}}</legend>
+                            {{form_row(carrier_form.account_information)}}
+                        </fieldset>
+                    </div>
+                    <div id="carrier-view-history-tab">
+                    </div>
+                </div>
+            </div>
+            {{ form_end(carrier_form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/carrier"], function (carrier) {
+            carrier.run();
+        });
+    </script>
+{% endblock %}

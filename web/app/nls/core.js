@@ -1,5 +1,7 @@
 define({
     root: ({
+        "account": "Account",
+        "account_information": "Account Information",
         "active": "Active",
         "address": "Address",
         "addresses": "Addresses",
@@ -7,6 +9,7 @@ define({
         "available": "Available",
         "brands": "Brands",
         "cancel": "Cancel",
+        "carrier": "Carrier",
         "city": "City",
         "client": "Client",
         "comment": "Comment",

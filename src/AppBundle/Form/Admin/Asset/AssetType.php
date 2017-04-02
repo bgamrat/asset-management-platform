@@ -33,7 +33,7 @@ class AssetType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $defaultStatus = $this->em->getRepository('AppBundle\Entity\Asset\AssetStatus')->findOneBy(['default' => true]);
+        $defaultStatus = $this->em->getRepository( 'AppBundle\Entity\Asset\AssetStatus' )->findOneBy( ['default' => true] );
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'serial_number', TextType::class, ['label' => false] )
@@ -51,7 +51,7 @@ class AssetType extends AbstractType
                     {
                         return $status->isActive();
                     },
-                    'data' => $this->em->getReference('AppBundle\Entity\Asset\AssetStatus', $defaultStatus->getId()),
+                    'data' => $this->em->getReference( 'AppBundle\Entity\Asset\AssetStatus', $defaultStatus->getId() ),
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'purchased', DateType::class, [
@@ -63,6 +63,15 @@ class AssetType extends AbstractType
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
                 ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
                 ->add( 'location', AssetLocationType::class )
+                ->add( 'transfer', EntityType::class, [
+                    'class' => 'AppBundle\Entity\Asset\Transfer',
+                    'choice_label' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => false,
+                    'label' => false,
+                    'choice_translation_domain' => false
+                ] )
                 ->add( 'location_text', HiddenType::class )
                 ->add( 'barcodes', CollectionType::class, [
                     'entry_type' => BarcodeType::class,

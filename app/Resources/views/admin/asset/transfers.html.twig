@@ -1,0 +1,138 @@
+{% block title %}{{ 'asset.transfer'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin/asset/asset.base.html.twig' %}
+
+{% form_theme transfer_form _self %}
+
+{% block _transfer_items_entry_row %}{% spaceless %}
+        <div class="form-row transfer-item">
+            <div class="justify">
+                <span class="item">{{ form_widget(form.item) }}</span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="transfer_item-__item__"><i class="fa fa-remove"></i></span>
+            </div>
+        </div>
+{% endspaceless %}{% endblock %}
+
+{% block _transfer_notes_entry_row %}{% spaceless %}
+        <div class="form-row transfer-note">
+            <div class="justify">
+                <span class="updated">{{ form_widget(form.updated) }}</span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="transfer_note-__note__"><i class="fa fa-remove"></i></span>
+            </div>
+            <div class="note">
+                {{ form_widget(form.note) }}
+            </div>
+        </div>
+{% endspaceless %}{% endblock %}
+
+{% block admin_content %}
+    <div id="transfer-wrapper">
+        <h1>{{ block('title') }}</h1>
+        <div class="grid-controls">
+            <div>
+                <button id="transfer-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            </div>
+            <div>
+                <form id="transfer-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="transfer-filter-input">
+                </form>
+            </div>
+            <button id="transfer-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+        </div>
+        <div id="transfer-grid">
+        </div>
+        <div id="transfer-view-dialog">
+            {{form_start(transfer_form)}}
+            <div class="text-right">
+                <button id="transfer-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="transfer">
+                <fieldset class="priority-status">
+                    <legend>{{'transfer.transfer'|trans}}</legend>
+                    <div class="justify">
+                        <span class="transfer-status">
+                            {{form_widget(transfer_form.status)}}
+                        </span>
+                        <span class="transfer-created">
+                            {{form_row(transfer_form.created)}}
+                        </span>
+                        <span class="transfer-updated">
+                            {{form_row(transfer_form.updated)}}
+                        </span>
+                    </div>
+                    <div id="transfer-from-location">
+                        <div class="justify">
+                            {{form_widget(transfer_form.from)}}
+                            {{form_row(asset_form.source_location.id)}}
+                            {{form_row(asset_form.source_location.ctype)}}
+                            {{form_row(asset_form.source_location.entity)}}
+                        </div>
+                    </div>
+                    <div id="transfer-to-location">
+                        <div class="justify">
+                            {{form_widget(transfer_form.to)}}
+                            {{form_row(asset_form.destination_location.id)}}
+                            {{form_row(asset_form.destination_location.ctype)}}
+                            {{form_row(asset_form.destination_location.entity)}}
+                        </div>
+                    </div>
+                    <div class="justify">
+                        <span class="transfer-cost">
+                            {{form_widget(transfer_form.cost)}}
+                        </span>
+                        <span class="transfer-priority">
+                            {{form_widget(transfer_form.priority)}}
+                        </span>
+
+                        <span class="transfer-type">
+                            {{form_widget(transfer_form.type)}}
+                        </span>
+                        <span class="transfer-replaced">
+                            {{form_row(transfer_form.replaced)}}
+                        </span>
+                    </div>
+                </fieldset>
+                <div id="transfer-view-tabs">
+                    <div id="transfer-view-details-tab">
+                        <span class="transfer-details">
+                            {{form_row(transfer_form.details)}}
+                        </span>
+                        <div id="notes" class="notes">
+                            <div class="justify">
+                                <strong>{{ 'common.notes' | trans }}</strong>
+                                {% if transfer_form.notes.vars.allow_add %}
+                                    <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                                {% endif %}
+                            </div>
+                            {{form_row(transfer_form.notes)}}
+                        </div>
+                    </div>
+                    <div id="transfer-view-items-tab">
+                        <div id="items" class="items">
+                            {{form_row(transfer_form.items)}}
+                            {% if transfer_form.items.vars.allow_add %}
+                                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div id="transfer-view-expenses-tab">
+                        <div id="expenses">
+                            {{form_row(transfer_form.cost)}}
+                            {{form_row(transfer_form.client_billable)}}
+                        </div>
+                    </div>
+                    <div id="transfer-view-history-tab">
+                    </div>
+                </div>
+            </div>
+            {{ form_end(transfer_form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/transfer"], function (transfer) {
+            transfer.run();
+        });
+    </script>
+{% endblock %}

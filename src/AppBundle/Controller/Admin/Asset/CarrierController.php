@@ -4,31 +4,32 @@ namespace AppBundle\Controller\Admin\Asset;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Form\Admin\Asset\IssueType;
+use AppBundle\Form\Admin\Asset\CarrierType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
- * Description of TransferController
+ * Description of AssetController
  *
  * @author bgamrat
  */
-class TransferController extends Controller
+class CarrierController extends Controller
 {
 
     /**
-     * @Route("/admin/asset/transfer")
+     * @Route("/admin/asset/carrier")
      * @Method("GET")
      */
     public function indexAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        //$transferForm = $this->createForm( TransferType::class, null, [] );
+        $form = $this->createForm( CarrierType::class, null, [] );
 
-        return $this->render( 'admin/asset/transfers.html.twig', array(
-                   // 'transfer_form' => $transferForm->createView()
+        return $this->render( 'admin/asset/carrier.html.twig', array(
+                    'carrier_form' => $form->createView(),
+                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
 

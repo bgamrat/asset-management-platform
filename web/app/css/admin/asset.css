@@ -3,12 +3,14 @@
     width: 760px !important;
     height: 740px !important;
 }
+.carrier-name,
 .manufacturer-name,
 .vendor-name,
 .trailer-name {
     font-size: 1.5em;
     display: inline-block;
 }
+.carrier-name .dijitTextBox,
 .manufacturer-name .dijitTextBox,
 .trailer-name .dijitTextBox,
 .vendor-name .dijitTextBox {

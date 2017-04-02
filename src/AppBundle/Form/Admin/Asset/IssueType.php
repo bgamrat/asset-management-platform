@@ -49,8 +49,7 @@ class IssueType extends AbstractType
                     'widget' => 'single_text',
                     'format' => 'yyyy-MM-dd HH:mm:ss',
                     'required' => false,
-                    'disabled' => true,
-                    //'data' => new \DateTime()
+                    'disabled' => true
                 ] )
                 ->add( 'trailer', EntityType::class, [
                     'class' => 'AppBundle\Entity\Asset\Trailer',

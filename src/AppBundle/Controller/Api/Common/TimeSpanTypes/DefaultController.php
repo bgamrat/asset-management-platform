@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Api\Common\PhoneTypes;
+namespace AppBundle\Controller\Api\Common\TimeSpanTypes;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +12,7 @@ class DefaultController extends FOSRestController
 
     /**
      * @View()
-     * @Route("/api/store/phonetypes")
+     * @Route("/api/store/timespantypes")
      */
     public function getPhonetypesAction( Request $request )
     {
@@ -20,9 +20,9 @@ class DefaultController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
-        $queryBuilder = $em->createQueryBuilder()->select( ['pt.id', 'pt.type'] )
-                ->from( 'AppBundle\Entity\Common\PhoneNumberType', 'pt' )
-                ->orderBy( 'pt.type' );
+        $queryBuilder = $em->createQueryBuilder()->select( ['ts.id', 'ts.name'] )
+                ->from( 'AppBundle\Entity\Schedule\TimeSpanType', 'ts' )
+                ->orderBy( 'ts.name' );
         $data = $queryBuilder->getQuery()->getResult();
 
         return $data;

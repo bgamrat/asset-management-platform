@@ -71,6 +71,8 @@ asset:
         Trailers
     transfer:
         Transfer
+    transfer_statuses:
+        Transfer Statuses
     vendor:
         Vendor
     vendors:
@@ -91,6 +93,8 @@ client:
         Contracts
  
 common:
+    account_information:
+        Account Information
     active:
         Active
     add_one_more:
@@ -109,6 +113,10 @@ common:
         Available
     calendar:
         Calendar
+    carrier:
+        Carrier
+    carriers:
+        Carriers
     character:
         character
     characters:
