@@ -128,3 +128,6 @@
 .instructions {
     margin: 25px 0;
 }
+.dgrid-column-name.field-name pre.name {
+    font-weight: 700;
+}

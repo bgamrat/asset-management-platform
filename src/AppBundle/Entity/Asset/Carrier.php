@@ -59,7 +59,7 @@ class Carrier
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=256, nullable=true)
      */
-    private $accountInformation = null;
+    private $account_information = null;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
@@ -178,16 +178,6 @@ class Carrier
         $this->contacts->removeElement( $contact );
     }
 
-    public function setRmaRequired( $rmaRequired )
-    {
-        $this->rmaRequired = $rmaRequired;
-    }
-
-    public function isRmaRequired()
-    {
-        return $this->rmaRequired;
-    }
-
     /**
      * Set AccountInformation
      *
@@ -195,9 +185,9 @@ class Carrier
      *
      * @return Carrier
      */
-    public function setAccountInformation( $sAccountInformation )
+    public function setAccountInformation( $accountInformation )
     {
-        $this->accountInformation = $accountInformation;
+        $this->account_information = $accountInformation;
 
         return $this;
     }
@@ -209,7 +199,7 @@ class Carrier
      */
     public function getAccountInformation()
     {
-        return $this->accountInformation;
+        return $this->account_information;
     }
 
     public function getUpdated()

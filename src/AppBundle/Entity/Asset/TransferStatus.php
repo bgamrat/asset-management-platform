@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * TransferStatus
  *
  * @ORM\Table(name="transfer_status")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TransferStatusRepository")
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  */

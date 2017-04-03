@@ -133,6 +133,12 @@ services:
         tags:
             - { name: form.type, alias: 'app_trailer_client_type' }
 
+    app.admin.form.type.transfer:
+        class: AppBundle\Form\Admin\Asset\TransferType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_transfer_type' }
+
     app.admin.form.type.user:
         class: AppBundle\Form\Admin\User\UserType
         arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']

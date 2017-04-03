@@ -86,6 +86,16 @@ class Transfer
      */
     private $assets;
     /**
+     * @ ORM\ManyToMany(targetEntity="Events", mappedBy="transfers")
+     */
+    //private $events;
+    /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $tracking_number;
+    /**
      * @var string
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=64, nullable=true)
@@ -348,6 +358,30 @@ class Transfer
             $this->extends->add( $asset );
             $a->setTransfer( $this );
         }
+    }
+
+    /**
+     * Set tracking_number
+     *
+     * @param string $tracking_number
+     *
+     * @return Transfer
+     */
+    public function setTrackingNumber( $tracking_number )
+    {
+        $this->tracking_number = $tracking_number;
+
+        return $this;
+    }
+
+    /**
+     * Get tracking_number
+     *
+     * @return string
+     */
+    public function getTrackingNumber()
+    {
+        return $this->tracking_number;
     }
 
     /**

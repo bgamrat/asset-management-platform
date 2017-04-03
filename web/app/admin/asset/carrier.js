@@ -175,15 +175,20 @@ define([
                     label: core.id
                 },
                 name: {
-                    label: core.name
+                    label: core.carrier,
+                    renderCell: function (object, value, td) {
+                        put(td, "pre.name", object.name);
+                        libGrid.renderContacts(object, object, td);
+                    }
                 },
-                phones: {
-                    label: core.phone_number,
-                    renderCell: libGrid.renderPhone
+                account_information: {
+                    label: core.account_information,
+                    renderCell: function (object, value, td) {
+                        put(td, "pre", object.accountInformation);
+                    }
                 },
-                emails: {
-                    label: core.email,
-                    renderCell: libGrid.renderEmail
+                comment: {
+                    label: core.comment
                 },
                 active: {
                     label: core.active,

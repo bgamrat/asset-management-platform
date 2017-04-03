@@ -176,7 +176,7 @@ define([
                 name: {
                     label: core.manufacturer,
                     renderCell: function (object, value, td) {
-                        put(td, "pre", object.name);
+                        put(td, "pre.name", object.name);
                         libGrid.renderContacts(object, object, td);
                     }
                 },

@@ -33,6 +33,7 @@ class CarriersController extends FOSRestController
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['c'] )
                 ->from( 'AppBundle\Entity\Asset\Carrier', 'c' )
+                ->leftJoin( 'c.contacts', 'cc' )
                 ->orderBy( 'c.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -58,22 +59,7 @@ class CarriersController extends FOSRestController
             }
             $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
-        $query = $queryBuilder->getQuery();
-        $carrierCollection = $query->getResult();
-        $data = [];
-        foreach( $carrierCollection as $c )
-        {
-            $item = [
-                'id' => $c->getId(),
-                'name' => $c->getName(),
-                'active' => $c->isActive(),
-            ];
-            if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
-            {
-                $item['deleted_at'] = $c->getDeletedAt();
-            }
-            $data[] = $item;
-        }
+        $data = $queryBuilder->getQuery()->getResult();
         return $data;
     }
 

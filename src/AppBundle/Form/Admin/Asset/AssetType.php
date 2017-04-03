@@ -63,6 +63,7 @@ class AssetType extends AbstractType
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
                 ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
                 ->add( 'location', AssetLocationType::class )
+                ->add( 'location_text', HiddenType::class )
                 ->add( 'transfer', EntityType::class, [
                     'class' => 'AppBundle\Entity\Asset\Transfer',
                     'choice_label' => 'name',
@@ -72,7 +73,6 @@ class AssetType extends AbstractType
                     'label' => false,
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'location_text', HiddenType::class )
                 ->add( 'barcodes', CollectionType::class, [
                     'entry_type' => BarcodeType::class,
                     'by_reference' => false,
