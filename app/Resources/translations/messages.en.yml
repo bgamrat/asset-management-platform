@@ -229,6 +229,8 @@ common:
         Requires
     roles:
         Roles
+    satisfies:
+        Satisfies
     save:
         Save
     schedule:

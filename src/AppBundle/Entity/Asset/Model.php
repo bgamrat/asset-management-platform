@@ -111,6 +111,10 @@ class Model
      */
     private $requires;
     /**
+     * @ORM\ManyToMany(targetEntity="Category")
+     */
+    private $satisfies;
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -132,6 +136,7 @@ class Model
         $this->requires = new ArrayCollection();
         $this->extended_by = new ArrayCollection();
         $this->required_by = new ArrayCollection();
+        $this->satisfies = new ArrayCollection();
     }
 
     /**
@@ -445,6 +450,34 @@ class Model
     public function removeRequiredBy( Model $model )
     {
         $this->requires->removeElement( $model );
+    }
+    
+    
+    public function setSatisfies( $categories )
+    {
+        foreach( $categories as $c )
+        {
+            $this->addSatisfies( $c );
+        }
+        return $this;
+    }
+
+    public function getSatisfies()
+    {
+        return $this->satisfies;
+    }
+
+    public function addSatisfies( Category $category )
+    {
+        if( !$this->satisfies->contains( $category ) )
+        {
+            $this->satisfies->add( $category );
+        }
+    }
+
+    public function removeSatisfies( Category $category )
+    {
+        $this->satisfies->removeElement( $category );
     }
 
     public function getUpdated()

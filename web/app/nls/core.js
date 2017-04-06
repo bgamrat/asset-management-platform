@@ -59,6 +59,7 @@ define({
         "remove": "Remove",
         "requires": "Requires",
         "roles": "Roles",
+        "satisfies": "Satisfies",
         "save": "Save",
         "send": "Send",
         "sent": "Sent",

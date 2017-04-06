@@ -30,6 +30,11 @@ services:
             1:
                 - '@app.encoder.json'
 
+    app.form.data_transformer.category:
+        class: AppBundle\Form\Admin\Asset\DataTransformer\CategoryToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
     app.form.data_transformer.contract:
         class: AppBundle\Form\Admin\Client\DataTransformer\ContractToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
@@ -49,6 +54,13 @@ services:
         class: AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false
+        
+    app.admin.field.type.category:
+        class: AppBundle\Form\Admin\Asset\Type\CategoryType
+        arguments: ['@app.form.data_transformer.category']
+        tags:
+            - { name: form.type, alias: 'app_category_type' }
+
 
     app.admin.field.type.contract:
         class: AppBundle\Form\Admin\Client\Type\ContractType

@@ -19,6 +19,15 @@
         </div>
 {% endspaceless %}{% endblock %}
 
+{% block _model_satisfies_entry_row %}
+    {% spaceless %}
+        <div class="form-row satisfies">
+            <span class="satisfies">{{ form_widget(form) }}</span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="satisfies-__satisfies__"><i class="fa fa-remove"></i></span>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
 {% block admin_content %}
     <div id="model-wrapper">
         <h1>{{ brand_name }} {{'common.admin'|trans }}</h1>
@@ -62,6 +71,14 @@
                     {{form_row(model_form.comment)}}
                 </fieldset>
                 <div id="model-view-tabs">
+                    <div id="model-view-satisfies-tab">                   
+                        <div id="model-satisfies">
+                            {{ form_row(model_form.satisfies) }}
+                            {% if model_form.satisfies.vars.allow_add %}
+                                <span  class="satisfies add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
+                        </div>
+                    </div>
                     <div id="model-view-requires-tab">
                         {% block requires_models %}{% import '/form/macros.html.twig' as page_macros %}{{ page_macros.relation('common.requires'|trans,'requires',model_form.requires) }}{% endblock %}
                         {% block required_by_models %}{% import '/form/macros.html.twig' as page_macros %}{{ page_macros.relation('asset.required_by'|trans,'required_by',model_form.required_by) }}{% endblock %}
@@ -80,6 +97,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div id="model-view-history-tab">
                     </div>
                 </div>

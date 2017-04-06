@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Form\Admin\Asset\Type\ModelRelationshipType;
+use AppBundle\Form\Admin\Asset\Type\CategoryType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
@@ -83,7 +84,17 @@ class ModelType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true,
                     'property_path' => 'extendedBy'
-                ] );
+                ] )
+                ->add( 'satisfies', CollectionType::class, [
+                    'label' => 'common.satisfies',
+                    'entry_type' => CategoryType::class,
+                    'required' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__satisfies__'
+                    ] );
         $builder->get( 'category' )
                 ->addModelTransformer( new CategoryToIdTransformer( $this->em ) );
     }

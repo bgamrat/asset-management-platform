@@ -29,6 +29,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
+    "app/admin/asset/satisfies",
     "app/admin/asset/model_relationships",
     "app/lib/common",
     "app/lib/grid",
@@ -41,7 +42,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        modelRelationships, lib, libGrid, core, asset) {
+        satisfies, modelRelationships, lib, libGrid, core, asset) {
 //"use strict";
     function run() {
 
@@ -59,6 +60,12 @@ define([
         var tabContainer = new TabContainer({
             style: "height: 300px; width: 100%;"
         }, "model-view-tabs");
+
+        var satisfiesContentPane = new ContentPane({
+            title: core.satisfies},
+        "model-view-satisfies-tab"
+                );
+        tabContainer.addChild(satisfiesContentPane);
         var requiresContentPane = new ContentPane({
             title: asset.requires},
         "model-view-requires-tab"
@@ -91,6 +98,7 @@ define([
             defaultContractValueInput.set('value', null);
             defaultEventValueInput.set('value', null);
             activeCheckBox.set("checked", true);
+            satisfies.setData("required_by", null);
             modelRelationships.setData("extends", null);
             modelRelationships.setData("requires", null);
             modelRelationships.setData("extended_by", null);
@@ -180,6 +188,7 @@ define([
                     "default_event_value": parseFloat(defaultEventValueInput.get("value")),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
+                    "satisfies": satisfies.getData(),
                     "extends": modelRelationships.getData("extends"),
                     "requires": modelRelationships.getData("requires"),
                     "extended_by": modelRelationships.getData("extended_by"),
@@ -275,6 +284,7 @@ define([
                     activeCheckBox.set('checked', model.active);
                     defaultContractValueInput.set('value', model.default_contract_value);
                     defaultEventValueInput.set('value', model.default_event_value);
+                    satisfies.setData(model.satisfies);
                     modelRelationships.setData("extends", model['extends']);
                     modelRelationships.setData("requires", model['requires']);
                     modelRelationships.setData("extended_by", model.extendedBy);
@@ -332,6 +342,7 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
+        satisfies.run();
         modelRelationships.run();
         lib.pageReady();
     }

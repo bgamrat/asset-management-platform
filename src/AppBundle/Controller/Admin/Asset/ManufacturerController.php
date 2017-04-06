@@ -29,8 +29,7 @@ class ManufacturerController extends Controller
         $manufacturerForm = $this->createForm( ManufacturerType::class, null, [] );
 
         return $this->render( 'admin/asset/manufacturer.html.twig', array(
-                    'manufacturer_form' => $manufacturerForm->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
+                    'manufacturer_form' => $manufacturerForm->createView()
                 ) );
     }
 
@@ -47,8 +46,7 @@ class ManufacturerController extends Controller
         return $this->render( 'admin/asset/brand.html.twig', array(
                     'manufacturer_name' => $mname,
                     'brand_name' => $bname,
-                    'model_form' => $modelForm->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
+                    'model_form' => $modelForm->createView()
                 ) );
     }
 
