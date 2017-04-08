@@ -28,8 +28,7 @@ class TransferController extends Controller
         $transferForm = $this->createForm( TransferType::class, null, [] );
 
         return $this->render( 'admin/asset/transfers.html.twig', array(
-                    'transfer_form' => $transferForm->createView(),
-                    'no_hide' => true
+                    'transfer_form' => $transferForm->createView()
                 ) );
     }
 

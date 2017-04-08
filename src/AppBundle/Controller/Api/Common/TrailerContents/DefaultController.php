@@ -12,7 +12,7 @@ class DefaultController extends FOSRestController
 
     /**
      * @View()
-     * @Route("/api/store/trailercontents")
+     * @Route("/api/store/trailercontents/{id}")
      */
     public function getTrailercontentsAction( $id, Request $request )
     {

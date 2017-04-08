@@ -70,10 +70,23 @@ class TransferType extends AbstractType
                 ->add( 'to', TextType::class, ['label' => 'common.to'] )
                 ->add( 'destination_location', AssetLocationType::class )
                 ->add( 'destination_location_text', HiddenType::class )
+                ->add( 'carrier', EntityType::class, [
+                    'class' => 'AppBundle\Entity\Asset\Carrier',
+                    'choice_label' => 'name',
+                    'multiple' => false,
+                    'expanded' => false,
+                    'required' => true,
+                    'label' => 'issue.status',
+                    'preferred_choices' => function($carrier, $key, $index)
+                    {
+                        return $carrier->isActive();
+                    },
+                    'choice_translation_domain' => false
+                ] )
                 ->add( 'tracking_number', TextType::class, ['label' => 'common.from'] )
                 ->add( 'instructions', TextType::class, ['label' => false] )
                 ->add( 'items', CollectionType::class, [
-                    'entry_type' => IssueItemType::class,
+                    'entry_type' => TransferItemType::class,
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,

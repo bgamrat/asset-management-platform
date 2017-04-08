@@ -68,7 +68,6 @@ class Asset
      * @ORM\Column(name="value", type="float", nullable=true, unique=false)
      */
     private $value = 0.0;
-
     /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
@@ -76,13 +75,6 @@ class Asset
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     protected $location = null;
-        /**
-     * @var int
-     * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Transfer", inversedBy="assets", cascade={"persist"})
-     * @ORM\JoinColumn(name="transfer_id", referencedColumnName="id")
-     */
-    protected $transfer = null;
     /**
      * @var string
      * @Gedmo\Versioned
@@ -178,8 +170,9 @@ class Asset
     {
         return $this->model;
     }
-    
-    public function getName() {
+
+    public function getName()
+    {
         return $this->model;
     }
 
@@ -363,29 +356,6 @@ class Asset
     public function getLocationText()
     {
         return $this->location_text;
-    }
-    /**
-     * Set transfer
-     *
-     * @param int $transfer
-     *
-     * @return Asset
-     */
-    public function setTransfer( $transfer )
-    {
-        $this->transfer = $transfer;
-
-        return $this;
-    }
-
-    /**
-     * Get transfer
-     *
-     * @return Transfer
-     */
-    public function getTransfer()
-    {
-        return $this->transfer;
     }
 
     public function getBarcodes()

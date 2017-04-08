@@ -71,6 +71,8 @@ asset:
         Trailers
     transfer:
         Transfer
+    transfers:
+        Transfers
     transfer_statuses:
         Transfer Statuses
     vendor:
@@ -161,6 +163,8 @@ common:
         Events
     filter:
         Filter
+    from:
+        From
     group:
         Group
     groups:
@@ -253,6 +257,8 @@ common:
         ' '
     success:
         Success
+    to:
+        To
     type:
         Type
     updated:

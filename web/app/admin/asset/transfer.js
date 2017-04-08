@@ -34,8 +34,9 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/admin/asset/issue_items",
-    "app/admin/asset/issue_notes",
+    "app/admin/asset/transfer_items",
+    "app/admin/asset/location",
+    "app/admin/asset/common",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -47,84 +48,73 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        issueItems, issueNotes, lib, libGrid, core, asset) {
+        transferItems, xlocation, assetCommon, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
-        var issueId = null;
+        var transferId = null;
 
         var action = null;
 
-        var issueViewDialog = new Dialog({
+        var transferViewDialog = new Dialog({
             title: core.view,
-            style: "width:500px"
-        }, "issue-view-dialog");
-        issueViewDialog.startup();
-        issueViewDialog.on("cancel", function (event) {
+            style: "width:900px"
+        }, "transfer-view-dialog");
+        transferViewDialog.startup();
+        transferViewDialog.on("cancel", function (event) {
             grid.clearSelection();
         });
 
         var tabContainer = new TabContainer({
             style: "height: 300px; width: 100%;"
-        }, "issue-view-tabs");
-
-        var detailsContentPane = new ContentPane({
-            title: asset.details},
-        "issue-view-details-tab"
-                );
-        tabContainer.addChild(detailsContentPane);
-        tabContainer.startup();
+        }, "transfer-view-tabs");
 
         var itemsContentPane = new ContentPane({
             title: core.items},
-        "issue-view-items-tab"
+        "transfer-view-items-tab"
                 );
         tabContainer.addChild(itemsContentPane);
 
         var expensesContentPane = new ContentPane({
             title: core.expenses},
-        "issue-view-expenses-tab"
+        "transfer-view-expenses-tab"
                 );
         tabContainer.addChild(expensesContentPane);
         tabContainer.startup();
 
-
         var historyContentPane = new ContentPane({
             title: core.history},
-        "issue-view-history-tab"
+        "transfer-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);
         tabContainer.startup();
 
         var newBtn = new Button({
             label: core["new"]
-        }, 'issue-new-btn');
+        }, 'transfer-new-btn');
         newBtn.startup();
         newBtn.on("click", function (event) {
-            priorityInput.reset();
-            typeSelect.set("value", defaultTypeId);
-            statusSelect.set("value", defaultStatusId);
-            trailerSelect.set("value", "");
-            assignedToFilteringSelect.set("value", "");
-            summaryInput.set("value", "");
-            detailsInput.set("value", "");
-            issueNotes.setData(null);
-            issueItems.setData(null);
-            costInput.set("value",null);
-            clientBillableCheckBox.set("checked", false);
-            replacedCheckBox.set("checked", false);
-            issueViewDialog.set("title", core["new"]).show();
-            updatedInput.set("value", null);
             createdInput.set("value", null);
+            updatedInput.set("value", null);
+            statusSelect.set("value", "");
+            transferItems.setData(null);
+            fromFilteringSelect.set("value", "");
+            sourceLocation.setData(null);
+            toFilteringSelect.set("value", "");
+            destinationLocation.setData(null);
+            trackingNumberInput.set("value", "");
+            costInput.set("value", null);
+            instructionsInput.set("value", "");
+            transferViewDialog.set("title", core["new"]).show();
             action = "new";
         });
 
         var removeBtn = new Button({
             label: core.remove
-        }, 'issue-remove-btn');
+        }, 'transfer-remove-btn');
         removeBtn.startup();
         removeBtn.on("click", function (event) {
-            var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "issue-grid");
+            var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "transfer-grid");
             if( markedForDeletion.length > 0 ) {
                 lib.confirmAction(core.areyousure, function () {
                     markedForDeletion.forEach(function (node) {
@@ -136,65 +126,18 @@ define([
         });
 
         var createdInput = new TextBox({
-            value: dom.byId("issue_created").value,
+            value: dom.byId("transfer_created").value,
             disabled: true
-        }, "issue_created");
+        }, "transfer_created");
         createdInput.startup();
         var updatedInput = new ValidationTextBox({
-            value: dom.byId("issue_updated").value,
+            value: dom.byId("transfer_updated").value,
             disabled: true
-        }, "issue_updated");
+        }, "transfer_updated");
         updatedInput.startup();
 
-        var priorityInput = new ValidationTextBox({
-            trim: true,
-            pattern: "[0-9]+",
-            required: true,
-            placeholder: asset.priority
-        }, "issue_priority");
-        priorityInput.startup();
-
-        var issueSelect = dom.byId('issue_trailer');
-        var d, data = JSON.parse(domAttr.get(issueSelect, "data-options"));
-        // Convert the data to an array of objects
-        var storeData = [];
-        for( d in data ) {
-            storeData.push(data[d]);
-        }
-        var memoryStore = new Memory({
-            idProperty: "value",
-            data: storeData});
-        var trailerStore = new ObjectStore({objectStore: memoryStore});
-        var trailerSelect = new Select({
-            store: trailerStore,
-            placeholder: asset.trailer,
-            required: true,
-            "class": "asset-trailer"
-        }, "issue_trailer");
-        trailerSelect.startup();
-
-        issueSelect = dom.byId('issue_type');
-        d, data = JSON.parse(domAttr.get(issueSelect, "data-options"));
-        // Convert the data to an array of objects
-        storeData = [];
-        for( d in data ) {
-            storeData.push(data[d]);
-        }
-        memoryStore = new Memory({
-            idProperty: "value",
-            data: storeData});
-        var typeStore = new ObjectStore({objectStore: memoryStore});
-        var defaultTypeId = domAttr.get("issue_type", "data-selected");
-        var typeSelect = new Select({
-            store: typeStore,
-            placeholder: asset.type,
-            required: true,
-            "class": "status-type"
-        }, "issue_type");
-        typeSelect.startup();
-
-        issueSelect = dom.byId('issue_status');
-        data = JSON.parse(domAttr.get(issueSelect, "data-options"));
+        transferStatusSelect = dom.byId('transfer_status');
+        data = JSON.parse(domAttr.get(transferStatusSelect, "data-options"));
         // Convert the data to an array of objects
         storeData = [];
         for( d in data ) {
@@ -204,105 +147,110 @@ define([
             idProperty: "value",
             data: storeData});
         var statusStore = new ObjectStore({objectStore: memoryStore});
-        var defaultStatusId = domAttr.get("issue_status", "data-selected");
+        var defaultStatusId = domAttr.get("transfer_status", "data-selected");
         var statusSelect = new Select({
             store: statusStore,
             placeholder: asset.status,
             required: true,
             "class": "status-select"
-        }, "issue_status");
+        }, "transfer_status");
         statusSelect.startup();
-
-        var replacedCheckBox = new CheckBox({}, "issue_replaced");
-        replacedCheckBox.startup();
-
-        var clientBillableCheckBox = new CheckBox({}, "issue_client_billable");
-        clientBillableCheckBox.startup();
-
-        var select = "issue_status";
-
-        if( dom.byId(select) === null ) {
-            lib.textError(select + " not found");
-            return;
-        }
+        statusSelect.set("value", defaultStatusId);
 
         var peopleStore = new JsonRest({
             target: '/api/store/people',
             useRangeHeaders: false,
             idProperty: 'id'});
-        var assignedToFilteringSelect = new FilteringSelect({
+        var fromFilteringSelect = new FilteringSelect({
             store: peopleStore,
             labelAttr: "name",
             searchAttr: "name",
-            placeholder: asset.assigned_to,
+            placeholder: core.from,
             pageSize: 25
-        }, "issue_assigned_to");
-        assignedToFilteringSelect.startup();
+        }, "transfer_from");
+        fromFilteringSelect.startup();
+        var sourceLocation = xlocation.run("transfer_source");
+        
+        var toFilteringSelect = new FilteringSelect({
+            store: peopleStore,
+            labelAttr: "name",
+            searchAttr: "name",
+            placeholder: core.from,
+            pageSize: 25
+        }, "transfer_to");
+        toFilteringSelect.startup();
+        var destinationLocation = xlocation.run("transfer_destination");
+        
+        var trackingNumberInput = new ValidationTextBox({
+            trim: true,
+            placeholder: asset.tracking_number,
+            pattern: "[A-Za-z0-9\.\,\ \'-]{2,64}"
+        }, "transfer_tracking_number");
+        trackingNumberInput.startup();
 
         var costInput = new CurrencyTextBox({
             placeholder: core.cost,
             trim: true,
             required: false
-        }, "issue_cost");
+        }, "transfer_cost");
         costInput.startup();
 
-        var summaryInput = new ValidationTextBox({
-            placeholder: asset.summary,
-            trim: true,
-            "class": "wide",
-            required: false
-        }, "issue_summary");
-        summaryInput.startup();
-
-        var detailsInput = new SimpleTextarea({
-            placeholder: core.details,
+        var instructionsInput = new SimpleTextarea({
+            placeholder: core.instructions,
             trim: true,
             required: false
-        }, "issue_details");
-        detailsInput.startup();
+        }, "transfer_instructions");
+        instructionsInput.startup();
 
-        var issueForm = new Form({}, '[name="issue"]');
-        issueForm.startup();
+        var transferForm = new Form({}, '[name="transfer"]');
+        transferForm.startup();
 
         var saveBtn = new Button({
             label: core.save
-        }, 'issue-save-btn');
+        }, 'transfer-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeModelTextFilter, filter, data, locationId, locationData, purchased;
+            var beforeTransferTextFilter, filter, data, locationId, locationData, purchased;
             grid.clearSelection();
-            if( issueForm.validate() ) {
+            if( transferForm.validate() ) {
+                locationId = parseInt(dom.byId("transfer_location_id").value);
+                locationData = {
+                    "id": isNaN(locationId) ? null : locationId,
+                    "type": parseInt(getLocationType()),
+                    "entity": parseInt(locationFilteringSelect.get("value"))
+                };
+                purchased = purchasedInput.get("value");
                 data = {
-                    "id": issueId,
-                    "priority": parseInt(priorityInput.get("value")),
-                    "assigned_to": assignedToFilteringSelect.get("value"),
-                    "type": parseInt(typeSelect.get("value")),
-                    "status": parseInt(statusSelect.get("value")),
-                    "assigned_to_text": assignedToFilteringSelect.get("displayedValue"),
-                    "type_text": typeSelect.get("displayedValue"),
+                    "id": transferId,
+                    "model_text": modelFilteringSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
+                    "status": parseInt(statusSelect.get("value")),
                     "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
-                    "trailer": parseInt(trailerSelect.get("value")),
-                    "trailer_text": trailerSelect.get("displayedValue"),
-                    "items": issueItems.getData(),
-                    "notes": issueNotes.getData(),
-                    "summary": summaryInput.get("value"),
-                    "details": detailsInput.get("value"),
-                    "replaced": replacedCheckBox.get("checked")
+                    "model": parseInt(modelFilteringSelect.get("value")),
+                    "name": nameInput.get("value"),
+                    "location": locationData,
+                    "location_text": locationFilteringSelect.get("displayedValue"),
+                    "serial_number": serialNumberInput.get("value"),
+                    "active": activeCheckBox.get("checked"),
+                    "extends": transferRelationships.getData("extends"),
+                    "requires": transferRelationships.getData("requires"),
+                    "extended_by": transferRelationships.getData("extended_by"),
+                    "required_by": transferRelationships.getData("required_by"),
+                    "description": descriptionInput.get("value"),
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
-                        issueViewDialog.hide();
+                        transferViewDialog.hide();
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();
-                    beforeModelTextFilter = filter.lt('priority', data.priority);
-                    store.filter(beforeModelTextFilter).sort('priority').fetchRange({start: 0, end: 1}).then(function (results) {
+                    beforeTransferTextFilter = filter.gt('name', data.name);
+                    store.filter(beforeTransferTextFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
                         var beforeId;
                         beforeId = (results.length > 0) ? results[0].id : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            issueViewDialog.hide();
+                            transferViewDialog.hide();
                             store.fetch();
                             grid.refresh();
                         }, lib.xhrError);
@@ -313,49 +261,33 @@ define([
             }
         });
 
-        var filterInput = new TextBox({placeHolder: core.filter}, "issue-filter-input");
+        var filterInput = new TextBox({placeHolder: core.filter}, "transfer-filter-input");
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/issues', useRangeHeaders: true, idProperty: 'id'});
+        var store = new TrackableRest({target: '/api/transfers', useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
-            sort: "priority",
+            sort: "id",
             columns: {
                 id: {
-                    label: asset.issue + " " + core.id
-                },
-                trailer_text: {
-                    label: asset.trailer
-                },
-                /*
-                 barcode: {
-                 label: asset.barcode
-                 },
-                 */
-
-                priority: {
-                    label: asset.priority
-                },
-                type_text: {
-                    label: asset.type,
+                    label: core.id
                 },
                 status_text: {
-                    label: asset.status,
+                    label: core.status
                 },
-                summary: {
-                    label: asset.summary
+                from: {
+                    label: core.from
                 },
-                assigned_to_text: {
-                    label: asset.assigned_to
+                to: {
+                    label: core.to
                 },
-                client_billable: {
-                    label: asset.client_billable,
-                    editor: CheckBox,
-                    editOn: "click",
-                    sortable: false,
-                    renderCell: libGrid.renderGridCheckbox
+                carrier: {
+                    label: core.description
+                },
+                tracking_number: {
+                    label: core.description
                 },
                 remove: {
                     editor: CheckBox,
@@ -376,7 +308,7 @@ define([
                 return rowElement;
             },
             selectionMode: "none"
-        }, 'issue-grid');
+        }, 'transfer-grid');
         grid.startup();
         grid.collection.track();
 
@@ -391,24 +323,34 @@ define([
                     grid.clearSelection();
                 }
                 grid.select(row);
-                grid.collection.get(id).then(function (issue) {
-                    issueViewDialog.show();
+                grid.collection.get(id).then(function (transfer) {
+                    transferViewDialog.set('title', core.view + " " + transfer.name);
+                    transferViewDialog.show();
                     action = "view";
-                    issueId = issue.id;
-                    priorityInput.set("value", issue.priority);
-                    typeSelect.set("value", issue.type.id);
-                    statusSelect.set("value", issue.status.id);
-                    trailerSelect.set("value", issue.trailer.id);
-                    assignedToFilteringSelect.set("displayedValue", issue.assigned_to.fullName);
-                    summaryInput.set("value", issue.summary);
-                    detailsInput.set("value", issue.details);
-                    issueItems.setData(issue.items);
-                    issueNotes.setData(issue.notes);
-                    updatedInput.set("value", issue.updated);
-                    createdInput.set("value", issue.created);
-                    clientBillableCheckBox.set("checked", issue.client_billable === true);
-                    replacedCheckBox.set("checked", issue.replaced === true);
-                    lib.showHistory(historyContentPane, issue.history);
+                    transferId = transfer.id;
+                    modelFilteringSelect.set('displayedValue', transfer.model_text);
+                    statusSelect.set("displayedValue", transfer.status_text);
+                    purchasedInput.set("value", transfer.purchased);
+                    costInput.set("value", transfer.cost);
+
+                    dom.byId("transfer_location_id").value = transfer.location.id;
+                    setLocationType(transfer.location.type.id);
+                    if( transfer.location.type.url !== null ) {
+                        locationStore.target = transfer.location.type.url;
+                        locationFilteringSelect.set("store", locationStore);
+                        locationFilteringSelect.set("readOnly", false);
+                        locationFilteringSelect.set('displayedValue', transfer.location_text);
+                    } else {
+                        textLocationMemoryStore.data = [{name: locationTypeLabels[transfer.location.type.id], id: 0}];
+                        locationFilteringSelect.set("store", textLocationStore);
+                        locationFilteringSelect.set('displayedValue', transfer.location_text);
+                        locationFilteringSelect.set("readOnly", true);
+                    }
+                    nameInput.set('value', core.name);
+                    serialNumberInput.set('value', transfer.serial_number);
+                    descriptionInput.set('value', transfer.description);
+                    activeCheckBox.set('checked', transfer.active);
+                    lib.showHistory(historyContentPane, transfer["history"]);
                 }, lib.xhrError);
             }
         });
@@ -421,7 +363,7 @@ define([
             var value = event.value;
             switch( field ) {
                 case "active":
-                    xhr("/api/issues/" + name, {
+                    xhr("/api/transfers/" + name, {
                         method: "PATCH",
                         handleAs: "json",
                         headers: {'Content-Type': 'application/json'},
@@ -437,7 +379,7 @@ define([
         cbAll.startup();
         cbAll.on("click", function (event) {
             var state = this.checked;
-            query(".dgrid-row .remove-cb", "issue-grid").forEach(function (node) {
+            query(".dgrid-row .remove-cb", "transfer-grid").forEach(function (node) {
                 registry.findWidgets(node)[0].set("checked", state);
             });
         });
@@ -454,7 +396,7 @@ define([
             }
         });
 
-        on(dom.byId('issue-grid-filter-form'), 'submit', function (event) {
+        on(dom.byId('transfer-grid-filter-form'), 'submit', function (event) {
             event.preventDefault();
             grid.set('collection', store.filter({
                 // Pass a RegExp to Memory's filter method
@@ -465,8 +407,6 @@ define([
         });
 
         lib.pageReady();
-        issueItems.run();
-        issueNotes.run();
     }
     return {
         run: run

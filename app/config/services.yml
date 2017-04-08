@@ -145,6 +145,12 @@ services:
         tags:
             - { name: form.type, alias: 'app_trailer_client_type' }
 
+    app.admin.form.type.transfer_item:
+        class: AppBundle\Form\Admin\Asset\TransferItemType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_asset_transfer_item_type' }
+
     app.admin.form.type.transfer:
         class: AppBundle\Form\Admin\Asset\TransferType
         arguments: ['@doctrine.orm.entity_manager']

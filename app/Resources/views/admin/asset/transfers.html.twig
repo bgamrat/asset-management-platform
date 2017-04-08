@@ -12,18 +12,6 @@
         </div>
 {% endspaceless %}{% endblock %}
 
-{% block _transfer_notes_entry_row %}{% spaceless %}
-        <div class="form-row transfer-note">
-            <div class="justify">
-                <span class="updated">{{ form_widget(form.updated) }}</span>
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="transfer_note-__note__"><i class="fa fa-remove"></i></span>
-            </div>
-            <div class="note">
-                {{ form_widget(form.note) }}
-            </div>
-        </div>
-{% endspaceless %}{% endblock %}
-
 {% block admin_content %}
     <div id="transfer-wrapper">
         <h1>{{ block('title') }}</h1>
@@ -47,10 +35,10 @@
             </div>
             <div class="transfer">
                 <fieldset class="priority-status">
-                    <legend>{{'transfer.transfer'|trans}}</legend>
+                    <legend>{{'asset.transfer'|trans}}</legend>
                     <div class="justify">
                         <span class="transfer-status">
-                            {{form_widget(transfer_form.status)}}
+                            {{form_row(transfer_form.status)}}
                         </span>
                         <span class="transfer-created">
                             {{form_row(transfer_form.created)}}
@@ -61,26 +49,31 @@
                     </div>
                     <div id="transfer-from-location">
                         <div class="justify">
-                            {{form_widget(transfer_form.from)}}
-                            {{form_row(transfer_form.source_location.id)}}
-                            {{form_row(transfer_form.source_location.ctype)}}
-                            {{form_row(transfer_form.source_location.entity)}}
-                        </div>
-                    </div>
-                    <div id="transfer-to-location">
-                        <div class="justify">
-                            {{form_widget(transfer_form.to)}}
-                            {{form_row(transfer_form.destination_location.id)}}
-                            {{form_row(transfer_form.destination_location.ctype)}}
-                            {{form_row(transfer_form.destination_location.entity)}}
+                            <div class="location">
+                                <h3>{{ 'common.from'|trans }}</h3>
+                                {{form_widget(transfer_form.from)}}
+                                {{form_row(transfer_form.source_location.id)}}
+                                {{form_row(transfer_form.source_location.ctype)}}
+                                {{form_row(transfer_form.source_location.entity)}}
+                            </div>
+                            <div class="location">
+                                <h3>{{ 'common.to'|trans }}</h3>
+                                {{form_widget(transfer_form.to)}}
+                                {{form_row(transfer_form.destination_location.id)}}
+                                {{form_row(transfer_form.destination_location.ctype)}}
+                                {{form_row(transfer_form.destination_location.entity)}}
+                            </div>
                         </div>
                     </div>
                     <div class="justify">
-                        <span class="transfer-cost">
-                            {{form_widget(transfer_form.cost)}}
-                        </span>
+                        <span class="transfer-carrier">
+                            {{form_widget(transfer_form.carrier)}}
+                        </span> 
                         <span class="transfer-tracking-number">
                             {{form_widget(transfer_form.tracking_number)}}
+                        </span>
+                        <span class="transfer-cost">
+                            {{form_widget(transfer_form.cost)}}
                         </span>
                         <span class="transfer-instructions">
                             {{form_row(transfer_form.instructions)}}

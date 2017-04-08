@@ -82,13 +82,23 @@ class Transfer
      */
     protected $destination_location_text = null;
     /**
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="transfer")
+     * @var ArrayCollection $items
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Asset\TransferItem", cascade={"persist"})
+     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\JoinTable(name="transfer_item_item",
+     *      joinColumns={@ORM\JoinColumn(name="transfer_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id", unique=false, nullable=true)}
+     *      )
      */
-    private $assets;
+    private $items;
     /**
      * @ ORM\ManyToMany(targetEntity="Events", mappedBy="transfers")
      */
     //private $events;
+    /**
+     * @ORM\ManyToOne(targetEntity="Carrier")
+     */
+    private $carrier;
     /**
      * @var string
      * @Gedmo\Versioned
@@ -332,32 +342,56 @@ class Transfer
     }
 
     /**
-     * Get assets
+     * Get items
      *
      * @return ArrayCollection
      */
-    public function getAssets()
+    public function getItems()
     {
-        return $this->assets->toArray();
+        return $this->items->toArray();
     }
 
-    public function setAssets( $assets )
+    public function setItems( $items )
     {
-        foreach( $assets as $a )
+        foreach( $items as $a )
         {
-            $this->addAssets( $a );
+            $this->addItems( $a );
             $a->setTransfer( $this );
         }
         return $this;
     }
 
-    public function addAsset( Model $asset )
+    public function addItem( Model $item )
     {
-        if( !$this->extends->contains( $asset ) )
+        if( !$this->extends->contains( $item ) )
         {
-            $this->extends->add( $asset );
+            $this->extends->add( $item );
             $a->setTransfer( $this );
         }
+    }
+
+    /**
+     * Set carrier
+     *
+     * @param $carrier
+     *
+     * @return Transfer
+     */
+    public function setCarrier( $carrier )
+    {
+        $this->carrier = $carrier;
+
+        return $this;
+    }
+
+    /**
+     * Get carrier
+     *
+     * @return Carrier
+     */
+    public function getCarrier()
+    {
+        return $this->carrier;
     }
 
     /**

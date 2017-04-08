@@ -23,9 +23,9 @@ define([
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var itemId = [], itemFilteringSelect = [], statusSelect = [], commentInput = [];
-    var itemStore, statusStoreData, statusMemoryStore, statusStore;
-    var divIdInUse = 'issue_items';
+    var itemId = [], itemFilteringSelect = [], commentInput = [];
+    var itemStore;
+    var divIdInUse = 'transfer_items';
     var addOneMoreControl = null;
 
     function getDivId() {
@@ -50,13 +50,6 @@ define([
         }, base + "item");
         itemFilteringSelect.push(dijit);
         dijit.startup();
-        dijit = new Select({
-            store: statusStore,
-            placeholder: asset.status,
-            value: domAttr.get(base + "status", 'data-selected')
-        }, base + "status");
-        dijit.startup();
-        statusSelect.push(dijit);
         dijit = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
@@ -78,8 +71,6 @@ define([
         itemId.splice(id, 1);
         item = itemFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
-        item = statusSelect.splice(id, 1);
-        item[0].destroyRecursive();
         item = commentInput.splice(id, 1);
         item[0].destroyRecursive();
         domConstruct.destroy(target);
@@ -99,17 +90,6 @@ define([
             target: '/api/store/barcodes',
             useRangeHeaders: false,
             idProperty: 'id'});
-
-        data = JSON.parse(domAttr.get('issue_items_0_status', "data-options"));
-        // Convert the data to an array of objects
-        statusStoreData = []
-        for( d in data ) {
-            statusStoreData.push(data[d]);
-        }
-        statusMemoryStore = new Memory({
-            idProperty: "value",
-            data: statusStoreData});
-        statusStore = new ObjectStore({objectStore: statusMemoryStore});
 
         createDijits();
 
@@ -135,7 +115,6 @@ define([
                     {
                         "id": itemId[i],
                         "item": itemFilteringSelect[i].get('value'),
-                        "status": statusSelect[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
@@ -145,7 +124,7 @@ define([
     function setData(items) {
         var i, l, obj, nodes;
 
-        nodes = query(".form-row.issue-item", "items");
+        nodes = query(".form-row.transfer-item", "items");
         nodes.forEach(function (node, index) {
             destroyRow(index, node);
         });
@@ -158,7 +137,6 @@ define([
                 obj = items[i];
                 itemId[i] = obj.id;
                 itemFilteringSelect[i].set('displayedValue', obj.name);
-                statusSelect[i].set('value', obj.asset.status.id);
                 commentInput[i].set('value', obj.comment);
             }
         }

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Asset\Transfer;
 use AppBundle\Entity\Common\Person;
 
 /**
@@ -79,7 +80,6 @@ class Carrier
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
-        $this->brands = new ArrayCollection();
     }
 
     /**
@@ -201,7 +201,6 @@ class Carrier
     {
         return $this->account_information;
     }
-
     public function getUpdated()
     {
         return $this->updated;
