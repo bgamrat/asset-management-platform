@@ -47,7 +47,7 @@
                             {{form_row(transfer_form.updated)}}
                         </span>
                     </div>
-                    <div id="transfer-from-location">
+                    <div id="transfer-from-to-details">
                         <div class="justify">
                             <div class="location">
                                 <h3>{{ 'common.from'|trans }}</h3>
@@ -63,21 +63,20 @@
                                 {{form_row(transfer_form.destination_location.ctype)}}
                                 {{form_row(transfer_form.destination_location.entity)}}
                             </div>
+                            <div class="transfer-details">
+                                {{form_widget(transfer_form.carrier)}}
+                                </span> 
+                                <span class="transfer-tracking-number">
+                                    {{form_widget(transfer_form.tracking_number)}}
+                                </span>
+                                <span class="transfer-cost">
+                                    {{form_widget(transfer_form.cost)}}
+                                </span>
+                                <span class="transfer-instructions">
+                                    {{form_row(transfer_form.instructions)}}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="justify">
-                        <span class="transfer-carrier">
-                            {{form_widget(transfer_form.carrier)}}
-                        </span> 
-                        <span class="transfer-tracking-number">
-                            {{form_widget(transfer_form.tracking_number)}}
-                        </span>
-                        <span class="transfer-cost">
-                            {{form_widget(transfer_form.cost)}}
-                        </span>
-                        <span class="transfer-instructions">
-                            {{form_row(transfer_form.instructions)}}
-                        </span>
                     </div>
                 </fieldset>
                 <div id="transfer-view-tabs">
@@ -87,11 +86,6 @@
                             {% if transfer_form.items.vars.allow_add %}
                                 <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                             {% endif %}
-                        </div>
-                    </div>
-                    <div id="transfer-view-expenses-tab">
-                        <div id="expenses">
-                            {{form_row(transfer_form.cost)}}
                         </div>
                     </div>
                     <div id="transfer-view-history-tab">

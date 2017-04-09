@@ -75,13 +75,6 @@ define([
                 );
         tabContainer.addChild(itemsContentPane);
 
-        var expensesContentPane = new ContentPane({
-            title: core.expenses},
-        "transfer-view-expenses-tab"
-                );
-        tabContainer.addChild(expensesContentPane);
-        tabContainer.startup();
-
         var historyContentPane = new ContentPane({
             title: core.history},
         "transfer-view-history-tab"
@@ -169,7 +162,7 @@ define([
             pageSize: 25
         }, "transfer_from");
         fromFilteringSelect.startup();
-        var sourceLocation = xlocation.run("transfer_source");
+        var sourceLocation = xlocation.run("source","transfer");
         
         var toFilteringSelect = new FilteringSelect({
             store: peopleStore,
@@ -179,7 +172,7 @@ define([
             pageSize: 25
         }, "transfer_to");
         toFilteringSelect.startup();
-        var destinationLocation = xlocation.run("transfer_destination");
+        var destinationLocation = xlocation.run("destination","transfer");
         
         var trackingNumberInput = new ValidationTextBox({
             trim: true,

@@ -7,7 +7,6 @@ define([
     "dojo/query",
     "dojo/data/ObjectStore",
     "dojo/store/Memory",
-    "dijit/registry",
     "dijit/form/RadioButton",
     "dijit/form/FilteringSelect",
     'dojo/store/JsonRest',
@@ -28,26 +27,43 @@ define([
         divIdInUse = divId + '_location';
     }
 
-    function run(id) {
+    //"use strict";
+    var formNameInUse = 'transfer';
+
+    function getFormName() {
+        return formNameInUse;
+    }
+
+    function setFormName(name) {
+        formNameInUse = name;
+    }
+
+    function run() {
 
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
+        if( arguments.length > 1 ) {
+            setFormName(arguments[1]);
+        }
+
+        var id = getDivId();
+        var formName = getFormName();
 
         var locationTypeRadioButton = [];
         var locationTypeLabels = {};
-        query('[name="transfer[' + id + '][ctype]"]').forEach(function (node) {
+        query('[name="' + formName + '[' + id + '][ctype]"]').forEach(function (node) {
             var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
             dijit.set("data-url", domAttr.get(node, "data-url"));
             dijit.set("data-location-type-id", node.value);
             dijit.startup();
             locationTypeRadioButton.push(dijit);
         });
-        query('label[for^="' + id + '_location_ctype_"]').forEach(function (node) {
+        query('label[for^="' + id + '_ctype_"]').forEach(function (node) {
             locationTypeLabels[domAttr.get(node, "for").replace(/\D/g, '')] = node.textContent;
         });
 
-        on(dom.byId(id + '_location_ctype'), "click", function (event) {
+        on(dom.byId(formName + "_" + id + '_ctype'), "click", function (event) {
             var target = event.target, targetId;
             if( target.tagName === 'LABEL' ) {
                 target = dom.byId(domAttr.get(target, "for"));
@@ -81,7 +97,7 @@ define([
             pageSize: 25,
             readOnly: true,
             "class": 'location-filtering-select'
-        }, id + "_location_entity");
+        }, formName + "_" + id + "_entity");
         locationFilteringSelect.startup();
 
         // This should probably be a widget, but this is working for now
