@@ -76,6 +76,12 @@
 .dijitTextBox.location-filtering-select {
     width: 300px;
 }
+.location {
+    margin: 5px;
+}
+.location ul {
+    list-style-type: none;
+}
 #asset-wrapper .field-comment {
     display: none;
 }
@@ -176,4 +182,15 @@
 }
 .field-trailer_text {
     width: 100px;
+}
+.transfer-details > div {
+    margin: 5px;
+}
+.transfer-details .carrier,
+.transfer-details .tracking-number,
+.transfer-details .cost {
+    text-align: right;
+}
+.transfer-details .instructions .dijitTextArea {
+    height: 250px;
 }

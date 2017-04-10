@@ -66,7 +66,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 300px; width: 100%;"
+            style: "height: 200px; width: 100%;"
         }, "transfer-view-tabs");
 
         var itemsContentPane = new ContentPane({
@@ -74,6 +74,12 @@ define([
         "transfer-view-items-tab"
                 );
         tabContainer.addChild(itemsContentPane);
+
+        var billToContentPane = new ContentPane({
+            title: core.bill_to},
+        "transfer-view-bill-to-tab"
+                );
+        tabContainer.addChild(billToContentPane);
 
         var historyContentPane = new ContentPane({
             title: core.history},
@@ -158,7 +164,7 @@ define([
             store: peopleStore,
             labelAttr: "name",
             searchAttr: "name",
-            placeholder: core.from,
+            placeholder: core.person,
             pageSize: 25
         }, "transfer_from");
         fromFilteringSelect.startup();
@@ -168,11 +174,30 @@ define([
             store: peopleStore,
             labelAttr: "name",
             searchAttr: "name",
-            placeholder: core.from,
+            placeholder: core.person,
             pageSize: 25
         }, "transfer_to");
         toFilteringSelect.startup();
         var destinationLocation = xlocation.run("destination","transfer");
+        
+        carrierSelect = dom.byId('transfer_carrier');
+        data = JSON.parse(domAttr.get(carrierSelect, "data-options"));
+        // Convert the data to an array of objects
+        storeData = [];
+        for( d in data ) {
+            storeData.push(data[d]);
+        }
+        memoryStore = new Memory({
+            idProperty: "value",
+            data: storeData});
+        var carrierStore = new ObjectStore({objectStore: memoryStore});
+        var carrierSelect = new Select({
+            store: carrierStore,
+            placeholder: asset.carrier,
+            required: true,
+            "class": "carrier-select"
+        }, "transfer_carrier");
+        carrierSelect.startup();
         
         var trackingNumberInput = new ValidationTextBox({
             trim: true,
@@ -399,6 +424,7 @@ define([
             }));
         });
 
+        transferItems.run();
         lib.pageReady();
     }
     return {

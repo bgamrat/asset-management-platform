@@ -76,7 +76,7 @@ class TransferType extends AbstractType
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
-                    'label' => 'issue.status',
+                    'label' => 'common.carrier',
                     'preferred_choices' => function($carrier, $key, $index)
                     {
                         return $carrier->isActive();

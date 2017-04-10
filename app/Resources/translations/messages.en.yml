@@ -231,6 +231,8 @@ common:
         Remove
     requires:
         Requires
+    rma:
+        RMA
     roles:
         Roles
     satisfies:

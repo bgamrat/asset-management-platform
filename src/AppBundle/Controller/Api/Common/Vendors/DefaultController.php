@@ -25,7 +25,7 @@ class DefaultController extends FOSRestController
 
             $em = $this->getDoctrine()->getManager();
 
-            $queryBuilder = $em->createQueryBuilder()->select( ['v.id', "v.name"] )
+            $queryBuilder = $em->createQueryBuilder()->select( ['v.id', "v.name" ] )
                     ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
                     ->where( "LOWER(v.name) LIKE :vendor_name" )
                     ->setParameter( 'vendor_name', strtolower( $name ) );

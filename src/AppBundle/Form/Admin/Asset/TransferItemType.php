@@ -32,6 +32,7 @@ class TransferItemType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'item', TextType::class, ['label' => false, 'property_path' => 'asset'] )
+                ->add( 'rma', TextType::class, ['label' => 'asset.rma'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )

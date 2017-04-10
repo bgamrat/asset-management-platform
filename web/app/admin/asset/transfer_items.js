@@ -9,7 +9,7 @@ define([
     'dojo/store/JsonRest',
     "dijit/form/ValidationTextBox",
     "dijit/form/FilteringSelect",
-        "dijit/form/Select",
+    "dijit/form/Select",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/asset",
     "dojo/NodeList-dom",
@@ -23,7 +23,7 @@ define([
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var itemId = [], itemFilteringSelect = [], commentInput = [];
+    var itemId = [], itemFilteringSelect = [], rmaInput = [], commentInput = [];
     var itemStore;
     var divIdInUse = 'transfer_items';
     var addOneMoreControl = null;
@@ -51,6 +51,13 @@ define([
         itemFilteringSelect.push(dijit);
         dijit.startup();
         dijit = new ValidationTextBox({
+            placeholder: asset.rma,
+            trim: true,
+            required: false
+        }, base + "rma");
+        rmaInput.push(dijit);
+        dijit.startup();
+        dijit = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
             required: false
@@ -70,6 +77,8 @@ define([
         }
         itemId.splice(id, 1);
         item = itemFilteringSelect.splice(id, 1);
+        item[0].destroyRecursive();
+        item = rmaInput.splice(id, 1);
         item[0].destroyRecursive();
         item = commentInput.splice(id, 1);
         item[0].destroyRecursive();
@@ -115,6 +124,7 @@ define([
                     {
                         "id": itemId[i],
                         "item": itemFilteringSelect[i].get('value'),
+                        "rma": rmaFilteringSelect[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
@@ -126,9 +136,11 @@ define([
 
         nodes = query(".form-row.transfer-item", "items");
         nodes.forEach(function (node, index) {
-            destroyRow(index, node);
+            if( index !== 0 ) {
+                destroyRow(index, node);
+            }
         });
-        
+
         if( typeof items === "object" && items !== null && l > 0 ) {
             l = items.length;
             for( i = 0; i < l; i++ ) {
@@ -137,8 +149,14 @@ define([
                 obj = items[i];
                 itemId[i] = obj.id;
                 itemFilteringSelect[i].set('displayedValue', obj.name);
+                rmaInput[i].set('value', obj.rma);
                 commentInput[i].set('value', obj.comment);
             }
+        } else {
+            itemId[0] = null;
+            itemFilteringSelect[0].set('value', "");
+            rmaInput[0].set("value", '');
+            commentInput[0].set('value', "");
         }
     }
 

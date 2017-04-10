@@ -7,6 +7,8 @@
         <div class="form-row transfer-item">
             <div class="justify">
                 <span class="item">{{ form_widget(form.item) }}</span>
+                <span class="rma">{{ form_widget(form.rma) }}</span>
+                <span class="comment">{{ form_widget(form.comment) }}</span>
                 <span class="remove-form-row" title="{{'common.remove'|trans}}" id="transfer_item-__item__"><i class="fa fa-remove"></i></span>
             </div>
         </div>
@@ -64,17 +66,18 @@
                                 {{form_row(transfer_form.destination_location.entity)}}
                             </div>
                             <div class="transfer-details">
-                                {{form_widget(transfer_form.carrier)}}
-                                </span> 
-                                <span class="transfer-tracking-number">
+                                <div class="carrier">
+                                    {{form_row(transfer_form.carrier)}}
+                                </div> 
+                                <div class="tracking-number">
                                     {{form_widget(transfer_form.tracking_number)}}
-                                </span>
-                                <span class="transfer-cost">
+                                </div>
+                                <div class="cost">
                                     {{form_widget(transfer_form.cost)}}
-                                </span>
-                                <span class="transfer-instructions">
+                                </div>
+                                <div class="instructions">
                                     {{form_row(transfer_form.instructions)}}
-                                </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,6 +89,17 @@
                             {% if transfer_form.items.vars.allow_add %}
                                 <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                             {% endif %}
+                        </div>
+                    </div>
+                    <div id="transfer-view-bill-to-tab">
+                        <div id="items" class="items">
+                            TODO
+                            {#
+                            {{form_row(transfer_form.items)}}
+                            {% if transfer_form.items.vars.allow_add %}
+                                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                            {% endif %}
+                            #}
                         </div>
                     </div>
                     <div id="transfer-view-history-tab">

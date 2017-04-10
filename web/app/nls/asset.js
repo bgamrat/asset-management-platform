@@ -19,6 +19,7 @@ define({
         "priority": "Priority",
         "requires": "Requires",
         "required_by": "Required By",
+        "rma": "RMA",
         "rma_required": "RMA Required",
         "serial_number": "Serial Number",
         "service": "Service",
@@ -26,6 +27,7 @@ define({
         "status": "Status",
         "summary": "Summary",
         "supports": "Supports",
+        "tracking_number": "Tracking Number",
         "trailer": "Trailer",
         "type": "Type"
     })

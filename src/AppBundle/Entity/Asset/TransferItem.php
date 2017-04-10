@@ -50,6 +50,12 @@ class TransferItem
      */
     private $comment;
     /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $rma;
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -97,7 +103,7 @@ class TransferItem
     public function setAsset( $asset )
     {
         $this->asset = $asset;
-        
+
         $name = '';
         if( !empty( $asset ) )
         {
@@ -108,12 +114,12 @@ class TransferItem
                 {
                     if( $b->isActive() )
                     {
-                        $name = $b->getBarcode().' - ';
+                        $name = $b->getBarcode() . ' - ';
                     }
                 }
             }
             $model = $asset->getModel();
-            $name .= $model->getBrand()->getName().' '.$asset->getModel()->getName();
+            $name .= $model->getBrand()->getName() . ' ' . $asset->getModel()->getName();
         }
         $this->name = $name;
 
@@ -152,6 +158,30 @@ class TransferItem
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set rma
+     *
+     * @param string $rma
+     *
+     * @return TransferItem
+     */
+    public function setRma( $rma )
+    {
+        $this->rma = $rma;
+
+        return $this;
+    }
+
+    /**
+     * Get rma
+     *
+     * @return string
+     */
+    public function getRma()
+    {
+        return $this->rma;
     }
 
     /**
