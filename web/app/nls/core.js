@@ -5,6 +5,7 @@ define({
         "active": "Active",
         "address": "Address",
         "addresses": "Addresses",
+        "amount": "Amount",
         "areyousure": "Are you sure?",
         "available": "Available",
         "bill_to": "Bill To",

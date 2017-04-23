@@ -14,6 +14,19 @@
         </div>
 {% endspaceless %}{% endblock %}
 
+
+{% block _transfer_bill_tos_entry_row %}{% spaceless %}
+        <div class="form-row transfer-item">
+            <div class="justify">
+                <span class="client">{{ form_widget(form.client) }}</span>
+                <span class="event">{{ form_widget(form.event) }}</span>
+                <span class="amount">{{ form_widget(form.amount) }}</span>
+                <span class="comment">{{ form_widget(form.comment) }}</span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="transfer_item-__item__"><i class="fa fa-remove"></i></span>
+            </div>
+        </div>
+{% endspaceless %}{% endblock %}
+
 {% block admin_content %}
     <div id="transfer-wrapper">
         <h1>{{ block('title') }}</h1>
@@ -92,14 +105,11 @@
                         </div>
                     </div>
                     <div id="transfer-view-bill-to-tab">
-                        <div id="items" class="items">
-                            TODO
-                            {#
-                            {{form_row(transfer_form.items)}}
-                            {% if transfer_form.items.vars.allow_add %}
+                        <div id="bill-tos" class="bill-tos">
+                            {{form_row(transfer_form.bill_tos)}}
+                            {% if transfer_form.bill_tos.vars.allow_add %}
                                 <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                             {% endif %}
-                            #}
                         </div>
                     </div>
                     <div id="transfer-view-history-tab">

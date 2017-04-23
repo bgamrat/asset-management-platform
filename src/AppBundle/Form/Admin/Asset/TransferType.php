@@ -15,6 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
+use AppBundle\Form\Admin\Client\BillToType;
 
 class TransferType extends AbstractType
 {
@@ -96,7 +97,17 @@ class TransferType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__item__'
                 ] )
-        //->add( 'client_billable', CheckboxType::class, ['label' => 'common.client_billable'] )
+                ->add( 'bill_tos', CollectionType::class, [
+                    'entry_type' => BillToType::class,
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__bill_to__'
+                ] )
         ;
         $builder->get( 'from' )
                 ->addModelTransformer( new PersonToIdTransformer( $this->em ) );

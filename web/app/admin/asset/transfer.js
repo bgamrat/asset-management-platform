@@ -35,6 +35,7 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/admin/asset/transfer_items",
+    "app/admin/client/bill_to",
     "app/admin/asset/location",
     "app/admin/asset/common",
     "app/lib/common",
@@ -48,7 +49,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        transferItems, xlocation, assetCommon, lib, libGrid, core, asset) {
+        transferItems, billTo, xlocation, assetCommon, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -168,8 +169,8 @@ define([
             pageSize: 25
         }, "transfer_from");
         fromFilteringSelect.startup();
-        var sourceLocation = xlocation.run("source","transfer");
-        
+        var sourceLocation = xlocation.run("source", "transfer");
+
         var toFilteringSelect = new FilteringSelect({
             store: peopleStore,
             labelAttr: "name",
@@ -178,8 +179,8 @@ define([
             pageSize: 25
         }, "transfer_to");
         toFilteringSelect.startup();
-        var destinationLocation = xlocation.run("destination","transfer");
-        
+        var destinationLocation = xlocation.run("destination", "transfer");
+
         carrierSelect = dom.byId('transfer_carrier');
         data = JSON.parse(domAttr.get(carrierSelect, "data-options"));
         // Convert the data to an array of objects
@@ -198,7 +199,7 @@ define([
             "class": "carrier-select"
         }, "transfer_carrier");
         carrierSelect.startup();
-        
+
         var trackingNumberInput = new ValidationTextBox({
             trim: true,
             placeholder: asset.tracking_number,
@@ -425,6 +426,7 @@ define([
         });
 
         transferItems.run();
+        billTo.run();
         lib.pageReady();
     }
     return {

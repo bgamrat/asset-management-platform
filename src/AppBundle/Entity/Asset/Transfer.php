@@ -92,9 +92,15 @@ class Transfer
      */
     private $items;
     /**
-     * @ ORM\ManyToMany(targetEntity="Events", mappedBy="transfers")
+     * @var ArrayCollection $bill_tos
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\BillTo", cascade={"persist"})
+     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\JoinTable(name="bill_to_client",
+     *      joinColumns={@ORM\JoinColumn(name="transfer_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id", unique=false, nullable=true)}
+     *      )
      */
-    //private $events;
+    private $bill_tos;
     /**
      * @ORM\ManyToOne(targetEntity="Carrier")
      */
@@ -366,6 +372,35 @@ class Transfer
         if( !$this->extends->contains( $item ) )
         {
             $this->extends->add( $item );
+            $a->setTransfer( $this );
+        }
+    }
+
+    /**
+     * Get bill_tos
+     *
+     * @return ArrayCollection
+     */
+    public function getBillTos()
+    {
+        return $this->bill_tos->toArray();
+    }
+
+    public function setBillTos( $bill_tos )
+    {
+        foreach( $bill_tos as $a )
+        {
+            $this->addBillTos( $a );
+            $a->setTransfer( $this );
+        }
+        return $this;
+    }
+
+    public function addBillTo( Model $bill_to )
+    {
+        if( !$this->extends->contains( $bill_to ) )
+        {
+            $this->extends->add( $bill_to );
             $a->setTransfer( $this );
         }
     }

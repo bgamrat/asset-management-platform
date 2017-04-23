@@ -61,7 +61,6 @@ services:
         tags:
             - { name: form.type, alias: 'app_category_type' }
 
-
     app.admin.field.type.contract:
         class: AppBundle\Form\Admin\Client\Type\ContractType
         arguments: ['@app.form.data_transformer.contract']
@@ -144,6 +143,12 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_trailer_client_type' }
+
+    app.admin.form.type.transfer_bill_to:
+        class: AppBundle\Form\Admin\Client\BillToType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_client_bill_to_type' }
 
     app.admin.form.type.transfer_item:
         class: AppBundle\Form\Admin\Asset\TransferItemType

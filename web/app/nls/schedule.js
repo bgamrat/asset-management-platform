@@ -5,6 +5,7 @@ define({
         "contracts": "Contracts",
         "end_date": "End Date",
         "end_time": "End Time",
+        "event": "Event",
         "schedule": "Schedule",
         "staff": "Staff",
         "start_date": "Start Date",
