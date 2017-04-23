@@ -37,7 +37,7 @@ class BillTo
      */
     private $client;
     /**
-     * @ORM\ManyToOne(targetEntity="Event")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Schedule\Event")
      * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
