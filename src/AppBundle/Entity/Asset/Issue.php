@@ -105,6 +105,16 @@ class Issue
      */
     private $cost = 0.0;
     /**
+     * @var ArrayCollection $bill_tos
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\BillTo", cascade={"persist"})
+     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\JoinTable(name="issue_bill_to",
+     *      joinColumns={@ORM\JoinColumn(name="transfer_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id", unique=false, nullable=true)}
+     *      )
+     */
+    private $bill_tos;
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -123,6 +133,7 @@ class Issue
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->bill_tos = new ArrayCollection();
     }
 
     /**
@@ -387,6 +398,35 @@ class Issue
     public function getCost()
     {
         return $this->cost;
+    }
+
+    /**
+     * Get bill_tos
+     *
+     * @return ArrayCollection
+     */
+    public function getBillTos()
+    {
+        return $this->bill_tos->toArray();
+    }
+
+    public function setBillTos( $bill_tos )
+    {
+        foreach( $bill_tos as $a )
+        {
+            $this->addBillTos( $a );
+            $a->setTransfer( $this );
+        }
+        return $this;
+    }
+
+    public function addBillTo( Model $bill_to )
+    {
+        if( !$this->extends->contains( $bill_to ) )
+        {
+            $this->extends->add( $bill_to );
+            $a->setTransfer( $this );
+        }
     }
 
     public function getCreated()

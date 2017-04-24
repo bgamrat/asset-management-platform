@@ -426,7 +426,7 @@ define([
         });
 
         transferItems.run();
-        billTo.run();
+        billTo.run('transfer');
         lib.pageReady();
     }
     return {

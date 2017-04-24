@@ -36,6 +36,7 @@ define([
     'put-selector/put',
     "app/admin/asset/issue_items",
     "app/admin/asset/issue_notes",
+    "app/admin/client/bill_to",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -47,7 +48,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        issueItems, issueNotes, lib, libGrid, core, asset) {
+        issueItems, issueNotes, billTo, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -57,7 +58,7 @@ define([
 
         var issueViewDialog = new Dialog({
             title: core.view,
-            style: "width:500px"
+            style: "width:800px"
         }, "issue-view-dialog");
         issueViewDialog.startup();
         issueViewDialog.on("cancel", function (event) {
@@ -88,6 +89,11 @@ define([
         tabContainer.addChild(expensesContentPane);
         tabContainer.startup();
 
+        var billToContentPane = new ContentPane({
+            title: core.bill_to},
+        "issue-view-bill-to-tab"
+                );
+        tabContainer.addChild(billToContentPane);
 
         var historyContentPane = new ContentPane({
             title: core.history},
@@ -110,7 +116,7 @@ define([
             detailsInput.set("value", "");
             issueNotes.setData(null);
             issueItems.setData(null);
-            costInput.set("value",null);
+            costInput.set("value", null);
             clientBillableCheckBox.set("checked", false);
             replacedCheckBox.set("checked", false);
             issueViewDialog.set("title", core["new"]).show();
@@ -464,9 +470,10 @@ define([
             }));
         });
 
-        lib.pageReady();
         issueItems.run();
         issueNotes.run();
+        billTo.run('issue');
+        lib.pageReady();
     }
     return {
         run: run

@@ -183,6 +183,10 @@
 .field-trailer_text {
     width: 100px;
 }
+.account-information.dijitTextBox {
+    height: 360px;
+}
+
 .transfer-details > div {
     margin: 5px;
 }

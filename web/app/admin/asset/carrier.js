@@ -48,7 +48,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 525px; width: 100%;"
+            style: "height: 535px; width: 900px;"
         }, "carrier-view-tabs");
 
         var contactsContentPane = new ContentPane({
@@ -138,6 +138,9 @@ define([
                     "contacts": person.getData(),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
+                    // For the server
+                    "accountInformation": accountInformationInput.get("value"),
+                    // For the grid
                     "account_information": accountInformationInput.get("value")
                 };
                 if( action === "view" ) {
@@ -239,7 +242,7 @@ define([
                     activeCheckBox.set("checked", carrier.active === true);
                     person.setData(carrier.contacts);
                     commentInput.set("value", carrier.comment);
-                    accountInformationInput.set("value", carrier.service_instructions);
+                    accountInformationInput.set("value", carrier.account_information);
                     carrierViewDialog.show();
                 }, lib.xhrError);
             }

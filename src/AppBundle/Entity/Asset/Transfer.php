@@ -95,7 +95,7 @@ class Transfer
      * @var ArrayCollection $bill_tos
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\BillTo", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\JoinTable(name="bill_to_client",
+     * @ORM\JoinTable(name="transfer_bill_to",
      *      joinColumns={@ORM\JoinColumn(name="transfer_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id", unique=false, nullable=true)}
      *      )
@@ -132,6 +132,11 @@ class Transfer
      * @Gedmo\Versioned
      */
     private $deletedAt;
+
+    public function __construct()
+    {
+        $this->bill_tos = new ArrayCollection();
+    }
 
     /**
      * Get id

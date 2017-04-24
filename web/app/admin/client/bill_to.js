@@ -25,11 +25,16 @@ define([
     var prototypeNode, prototypeContent;
     var billToId = [], clientId = [], clientFilteringSelect = [], eventId = [], eventFilteringSelect = [], amountInput = [], commentInput = [];
     var clientStore, eventStore;
-    var divIdInUse = 'transfer_bill_tos';
+    var divIdInUse = null;
     var addOneMoreControl = null;
+    var currentRowIndex;
 
     function getDivId() {
         return divIdInUse;
+    }
+
+    function setDivId(divId) {
+        divIdInUse = divId + '_bill_tos';
     }
 
     function cloneNewNode() {
@@ -48,6 +53,10 @@ define([
             placeholder: core.client,
             pageSize: 25
         }, base + "client");
+        dijit.on("change", function () {
+            currentRowIndex = clientFilteringSelect.length - 1;
+            eventFilteringSelect[currentRowIndex].set("value",null);
+        });
         clientFilteringSelect.push(dijit);
         dijit.startup();
         dijit = new FilteringSelect({
@@ -55,6 +64,7 @@ define([
             labelAttr: "name",
             searchAttr: "name",
             placeholder: schedule.event,
+            required: false,
             pageSize: 25
         }, base + "event");
         eventFilteringSelect.push(dijit);
@@ -98,6 +108,12 @@ define([
 
     function run() {
 
+        if( arguments.length > 0 ) {
+            setDivId(arguments[0]);
+        } else {
+            throw new Error('No divId');
+        }
+
         prototypeNode = dom.byId(getDivId());
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__bill_to__/g, '0');
@@ -110,13 +126,15 @@ define([
             idProperty: 'id'});
 
         eventStore = new JsonRest({
-            target: '/api/store/events',
+            target: '/api/store/events?client=',
             useRangeHeaders: false,
             idProperty: 'id'});
 
         aspect.before(eventStore, "query", function (args) {
-            console.log('ha');
-            console.log(this,args);
+            var clientId = clientFilteringSelect[currentRowIndex].get('value');
+            if( !isNaN(clientId) ) {
+                this.target = this.target.replace(/(\d+)?$/, clientId);
+            }
         });
 
         createDijits();
@@ -154,7 +172,7 @@ define([
     function setData(items) {
         var i, l, obj, nodes;
 
-        nodes = query(".form-row.transfer-bill-to", "bill-tos");
+        nodes = query(".form-row.bill-to", "bill-tos");
         nodes.forEach(function (node, index) {
             if( index !== 0 ) {
                 destroyRow(index, node);

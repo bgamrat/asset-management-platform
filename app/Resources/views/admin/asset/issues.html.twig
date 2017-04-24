@@ -28,6 +28,18 @@
         </div>
 {% endspaceless %}{% endblock %}
 
+{% block _issue_bill_tos_entry_row %}{% spaceless %}
+        <div class="form-row bill-to">
+            <div class="justify">
+                <span class="client">{{ form_widget(form.client) }}</span>
+                <span class="event">{{ form_widget(form.event) }}</span>
+                <span class="amount">{{ form_widget(form.amount) }}</span>
+                <span class="comment">{{ form_widget(form.comment) }}</span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="issue_bill_to-__bill_to__"><i class="fa fa-remove"></i></span>
+            </div>
+        </div>
+{% endspaceless %}{% endblock %}
+
 {% block admin_content %}
     <div id="issue-wrapper">
         <h1>{{ block('title') }}</h1>
@@ -84,6 +96,9 @@
                         <span class="issue-replaced">
                             {{form_row(issue_form.replaced)}}
                         </span>
+                        <span class="issue-client-billable">
+                        {{form_row(issue_form.client_billable)}}
+                        </span>
                     </div>
                 </fieldset>
                 <div id="issue-view-tabs">
@@ -112,7 +127,14 @@
                     <div id="issue-view-expenses-tab">
                         <div id="expenses">
                             {{form_row(issue_form.cost)}}
-                            {{form_row(issue_form.client_billable)}}
+                        </div>
+                    </div>
+                    <div id="issue-view-bill-to-tab">
+                        <div id="bill-tos" class="bill-tos">
+                            {{form_row(issue_form.bill_tos)}}
+                            {% if issue_form.bill_tos.vars.allow_add %}
+                                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                            {% endif %}
                         </div>
                     </div>
                     <div id="issue-view-history-tab">

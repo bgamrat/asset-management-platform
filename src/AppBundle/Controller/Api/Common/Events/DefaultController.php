@@ -18,20 +18,21 @@ class DefaultController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $name = $request->get( 'name' );
-        if( !empty( $name ) )
+        $eventName = $request->get( 'name' );
+        $clientId = $request->get( 'client' );
+        if( !empty( $eventName ) )
         {
-            $clientEvent = '%' . str_replace( '*', '%', $name );
+            $eventName = '%' . str_replace( '*', '%', $eventName );
 
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['e.id', "e.name"] )
                     ->from( 'AppBundle\Entity\Schedule\Event', 'e' )
                     ->innerJoin( 'e.client', 'cl' )
-                    ->where( "LOWER(CONCAT(CONCAT(cl.name, ' '), e.name)) LIKE :client_event" )
+                    ->where( "LOWER(e.name) LIKE :event_name AND cl.id = :client_id" )
                     ->orderBy( 'e.name' )
-                    ->setParameter( 'client_event', strtolower( $clientEvent ) );
-
+                    ->setParameter( 'event_name', strtolower( $eventName ) )
+                    ->setParameter( 'client_id', $clientId );
             $data = $queryBuilder->getQuery()->getResult();
         }
         else

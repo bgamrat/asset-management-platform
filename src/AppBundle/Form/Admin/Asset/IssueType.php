@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
 use AppBundle\Form\Admin\Asset\DataTransformer\TrailerToIdTransformer;
+use AppBundle\Form\Admin\Client\BillToType;
 
 class IssueType extends AbstractType
 {
@@ -91,6 +92,7 @@ class IssueType extends AbstractType
                 ] )
                 ->add( 'assigned_to', TextType::class, ['label' => 'issue.assigned_to'] )
                 ->add( 'replaced', CheckboxType::class, ['label' => 'issue.replaced'] )
+                ->add( 'client_billable', CheckboxType::class, ['label' => 'common.client_billable'] )
                 ->add( 'summary', TextType::class, ['label' => false] )
                 ->add( 'details', TextType::class, [
                     'label' => false
@@ -118,7 +120,17 @@ class IssueType extends AbstractType
                     'prototype_name' => '__item__'
                 ] )
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
-                ->add( 'client_billable', CheckboxType::class, ['label' => 'common.client_billable'] )
+                ->add( 'bill_tos', CollectionType::class, [
+                    'entry_type' => BillToType::class,
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__bill_to__'
+                ] )
         ;
         $builder->get( 'assigned_to' )
                 ->addModelTransformer( new PersonToIdTransformer( $this->em ) );
