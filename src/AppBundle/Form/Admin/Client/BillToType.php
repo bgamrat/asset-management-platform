@@ -51,7 +51,7 @@ class BillToType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Asset\TransferItem'
+            'data_class' => 'AppBundle\Entity\Client\BillTo'
         ) );
     }
 

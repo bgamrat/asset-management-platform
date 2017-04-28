@@ -92,8 +92,8 @@ class IssuesController extends FOSRestController
                 ->leftJoin( 'i.trailer', 'tr' )
                 ->leftJoin( 'i.assignedTo', 'p' )
                 ->leftJoin( 'i.items', 'ii' )
-                ->join( 'ii.asset', 'a' )
-                ->join( 'a.barcodes', 'b' )
+                ->leftJoin( 'ii.asset', 'a' )
+                ->leftJoin( 'a.barcodes', 'b' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
 
         if( $dstore['limit'] !== null )
@@ -160,6 +160,7 @@ class IssuesController extends FOSRestController
                 'items' => $issue->getItems(),
                 'notes' => $issue->getNotes(),
                 'client_billable' => $issue->isClientBillable(),
+                'bill_to' => $issue->getBillTos(),
                 'cost' => $issue->getCost(),
                 'trailer' => $issue->getTrailer(),
                 'replaced' => $issue->isReplaced(),

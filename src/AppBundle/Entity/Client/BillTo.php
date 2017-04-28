@@ -26,7 +26,8 @@ class BillTo
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\ManyToOne(targetEntity="Transfer", inversedBy="bill_tos")
+     * @ORM\ManyToOne(targetEntity="Issue", inversedBy="issue_bill_to")
+     * @ORM\ManyToOne(targetEntity="Transfer", inversedBy="transfer_bill_to")
      * @ORM\JoinColumn(name="bill_to_id", referencedColumnName="id")
      */
     private $id;

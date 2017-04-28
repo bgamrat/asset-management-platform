@@ -27,7 +27,7 @@ define([
     var clientStore, eventStore;
     var divIdInUse = null;
     var addOneMoreControl = null;
-    var currentRowIndex;
+    var currentRowIndex = 0;
 
     function getDivId() {
         return divIdInUse;
@@ -51,11 +51,12 @@ define([
             labelAttr: "name",
             searchAttr: "name",
             placeholder: core.client,
+            required: false,
             pageSize: 25
         }, base + "client");
         dijit.on("change", function () {
             currentRowIndex = clientFilteringSelect.length - 1;
-            eventFilteringSelect[currentRowIndex].set("value",null);
+            eventFilteringSelect[currentRowIndex].set("value", null);
         });
         clientFilteringSelect.push(dijit);
         dijit.startup();
@@ -155,14 +156,14 @@ define([
     }
 
     function getData() {
-        var i, l = itemId.length, returnData = [];
+        var i, l = billToId.length, returnData = [];
         for( i = 0; i < l; i++ ) {
             returnData.push(
                     {
                         "id": billToId[i],
                         "client": clientFilteringSelect[i].get('value'),
                         "event": eventFilteringSelect[i].get('value'),
-                        "amount": parseFloat(amountInput.get("value")),
+                        "amount": parseFloat(amountInput[i].get("value")),
                         "comment": commentInput[i].get('value')
                     });
         }
@@ -178,9 +179,8 @@ define([
                 destroyRow(index, node);
             }
         });
-
-        if( typeof items === "object" && items !== null && l > 0 ) {
-            l = items.length;
+        l = items.length;
+        if( typeof items === "object" && items.length !== 0 ) {
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits();

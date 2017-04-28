@@ -293,6 +293,7 @@ define([
                     "trailer_text": trailerSelect.get("displayedValue"),
                     "items": issueItems.getData(),
                     "notes": issueNotes.getData(),
+                    "bill_tos": billTo.getData(),
                     "summary": summaryInput.get("value"),
                     "details": detailsInput.get("value"),
                     "replaced": replacedCheckBox.get("checked")
@@ -405,7 +406,9 @@ define([
                     typeSelect.set("value", issue.type.id);
                     statusSelect.set("value", issue.status.id);
                     trailerSelect.set("value", issue.trailer.id);
-                    assignedToFilteringSelect.set("displayedValue", issue.assigned_to.fullName);
+                    if (issue.assigned_to !== null) {
+                        assignedToFilteringSelect.set("displayedValue", issue.assigned_to.fullName);
+                    }
                     summaryInput.set("value", issue.summary);
                     detailsInput.set("value", issue.details);
                     issueItems.setData(issue.items);
@@ -414,6 +417,7 @@ define([
                     createdInput.set("value", issue.created);
                     clientBillableCheckBox.set("checked", issue.client_billable === true);
                     replacedCheckBox.set("checked", issue.replaced === true);
+                    billTo.setData(issue.bill_to);
                     lib.showHistory(historyContentPane, issue.history);
                 }, lib.xhrError);
             }

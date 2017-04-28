@@ -232,31 +232,16 @@ define([
             var beforeTransferTextFilter, filter, data, locationId, locationData, purchased;
             grid.clearSelection();
             if( transferForm.validate() ) {
-                locationId = parseInt(dom.byId("transfer_location_id").value);
-                locationData = {
-                    "id": isNaN(locationId) ? null : locationId,
-                    "type": parseInt(getLocationType()),
-                    "entity": parseInt(locationFilteringSelect.get("value"))
-                };
-                purchased = purchasedInput.get("value");
                 data = {
                     "id": transferId,
-                    "model_text": modelFilteringSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
                     "status": parseInt(statusSelect.get("value")),
-                    "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
-                    "model": parseInt(modelFilteringSelect.get("value")),
-                    "name": nameInput.get("value"),
-                    "location": locationData,
-                    "location_text": locationFilteringSelect.get("displayedValue"),
-                    "serial_number": serialNumberInput.get("value"),
-                    "active": activeCheckBox.get("checked"),
-                    "extends": transferRelationships.getData("extends"),
-                    "requires": transferRelationships.getData("requires"),
-                    "extended_by": transferRelationships.getData("extended_by"),
-                    "required_by": transferRelationships.getData("required_by"),
-                    "description": descriptionInput.get("value"),
+                    "carrier": carrierSelect.get("value"),
+                    "tracking_number": trackingNumberInput.get("value"),
+                    "instructions": instructionsInput.get("value"),
+                    "items": transferItems.getData(),
+                    "bill_to": billTo.getData()
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -347,28 +332,10 @@ define([
                     transferViewDialog.show();
                     action = "view";
                     transferId = transfer.id;
-                    modelFilteringSelect.set('displayedValue', transfer.model_text);
                     statusSelect.set("displayedValue", transfer.status_text);
-                    purchasedInput.set("value", transfer.purchased);
                     costInput.set("value", transfer.cost);
-
-                    dom.byId("transfer_location_id").value = transfer.location.id;
-                    setLocationType(transfer.location.type.id);
-                    if( transfer.location.type.url !== null ) {
-                        locationStore.target = transfer.location.type.url;
-                        locationFilteringSelect.set("store", locationStore);
-                        locationFilteringSelect.set("readOnly", false);
-                        locationFilteringSelect.set('displayedValue', transfer.location_text);
-                    } else {
-                        textLocationMemoryStore.data = [{name: locationTypeLabels[transfer.location.type.id], id: 0}];
-                        locationFilteringSelect.set("store", textLocationStore);
-                        locationFilteringSelect.set('displayedValue', transfer.location_text);
-                        locationFilteringSelect.set("readOnly", true);
-                    }
-                    nameInput.set('value', core.name);
-                    serialNumberInput.set('value', transfer.serial_number);
-                    descriptionInput.set('value', transfer.description);
-                    activeCheckBox.set('checked', transfer.active);
+                    transferItems.setData(transfer.items);
+                    billTo.setData(transfer.bill_to);
                     lib.showHistory(historyContentPane, transfer["history"]);
                 }, lib.xhrError);
             }

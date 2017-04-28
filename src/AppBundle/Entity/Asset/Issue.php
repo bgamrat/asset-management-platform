@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Asset\IssueItem;
+use AppBundle\Entity\Client\BillTo;
 
 /**
  * Issue
@@ -109,7 +110,7 @@ class Issue
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\BillTo", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\JoinTable(name="issue_bill_to",
-     *      joinColumns={@ORM\JoinColumn(name="transfer_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id", unique=false, nullable=true)}
      *      )
      */
@@ -415,17 +416,15 @@ class Issue
         foreach( $bill_tos as $a )
         {
             $this->addBillTos( $a );
-            $a->setTransfer( $this );
         }
         return $this;
     }
 
-    public function addBillTo( Model $bill_to )
+    public function addBillTos( BillTo $bill_to )
     {
-        if( !$this->extends->contains( $bill_to ) )
+        if( !$this->bill_tos->contains( $bill_to ) )
         {
-            $this->extends->add( $bill_to );
-            $a->setTransfer( $this );
+            $this->bill_tos->add( $bill_to );
         }
     }
 
