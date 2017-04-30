@@ -7,6 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
+use AppBundle\Entity\Client\Contract;
+use AppBundle\Entity\Client\Trailer;
+use AppBundle\Entity\Schedule\TimeSpan;
 
 /**
  * Event
@@ -107,7 +110,7 @@ class Event
      *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", unique=true)}
      *      )
      */
-    private $time_spans = null;
+    private $timespans = null;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")

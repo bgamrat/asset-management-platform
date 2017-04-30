@@ -119,9 +119,9 @@ define([
                 destroyRow(noteId[index], node);
         });
 
-        l = notes.length;
         timestamp = new Date();
-        if( typeof notes === "object" && notes !== null && l > 0 ) {
+        if( typeof notes === "object" && notes !== null ) {
+            l = notes.length;
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits(true);

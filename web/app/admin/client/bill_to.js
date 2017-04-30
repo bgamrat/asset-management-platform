@@ -56,7 +56,11 @@ define([
         }, base + "client");
         dijit.on("change", function () {
             currentRowIndex = clientFilteringSelect.length - 1;
-            eventFilteringSelect[currentRowIndex].set("value", null);
+            var clientId = this.get('value');
+            if( !isNaN(clientId) ) {
+                eventStore.target = eventStore.target.replace(/\d*$/, clientId);
+                //eventFilteringSelect[currentRowIndex].reset();
+            }
         });
         clientFilteringSelect.push(dijit);
         dijit.startup();
@@ -90,11 +94,12 @@ define([
         var i, item;
 
         for( i = 0; i < billToId.length; i++ ) {
-            if( billToId[i].get("id").indexOf(id) !== -1 ) {
+            if( billToId[i] === id ) {
                 id = i;
                 break;
             }
         }
+
         billToId.splice(id, 1);
         item = clientFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
@@ -105,6 +110,7 @@ define([
         item = commentInput.splice(id, 1);
         item[0].destroyRecursive();
         domConstruct.destroy(target);
+
     }
 
     function run() {
@@ -122,7 +128,7 @@ define([
         domConstruct.place(prototypeContent, prototypeNode, "after");
 
         clientStore = new JsonRest({
-            target: '/api/store/clients',
+            target: '/api/store/clients?',
             useRangeHeaders: false,
             idProperty: 'id'});
 
@@ -130,13 +136,6 @@ define([
             target: '/api/store/events?client=',
             useRangeHeaders: false,
             idProperty: 'id'});
-
-        aspect.before(eventStore, "query", function (args) {
-            var clientId = clientFilteringSelect[currentRowIndex].get('value');
-            if( !isNaN(clientId) ) {
-                this.target = this.target.replace(/(\d+)?$/, clientId);
-            }
-        });
 
         createDijits();
 
@@ -175,28 +174,26 @@ define([
 
         nodes = query(".form-row.bill-to", "bill-tos");
         nodes.forEach(function (node, index) {
-            if( index !== 0 ) {
-                destroyRow(index, node);
-            }
+            destroyRow(index, node);
         });
         l = items.length;
         if( typeof items === "object" && items.length !== 0 ) {
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits();
+                currentRowIndex = i;
                 obj = items[i];
                 billToId[i] = obj.id;
-                clientFilteringSelect[i].set('displayedValue', obj.client);
-                eventFilteringSelect[i].set('value', obj.event);
+                clientFilteringSelect[i].set('displayedValue', obj.client.name);
                 amountInput[i].set("value", obj.amount);
                 commentInput[i].set('value', obj.comment);
+                if( typeof items[i].event !== "undefined" && typeof items[i].event.name !== "undefined" ) {
+                    eventStore.target = eventStore.target.replace(/\d*$/, obj.client.id);
+                    eventFilteringSelect[i].set('displayedValue', obj.event.name);
+                } else {
+                    eventFilteringSelect[i].reset();
+                }
             }
-        } else {
-            billToId[0] = null;
-            clientFilteringSelect[0].set('displayedValue', '');
-            eventFilteringSelect[0].set('value', '');
-            amountInput[0].set("value", null);
-            commentInput[0].set('value', '');
         }
     }
 
