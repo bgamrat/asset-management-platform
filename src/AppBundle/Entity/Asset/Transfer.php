@@ -106,6 +106,10 @@ class Transfer
      */
     private $carrier;
     /**
+     * @ORM\ManyToOne(targetEntity="CarrierService")
+     */
+    private $carrier_service;
+    /**
      * @var string
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=64, nullable=true)
@@ -432,6 +436,31 @@ class Transfer
     public function getCarrier()
     {
         return $this->carrier;
+    }
+    
+    
+    /**
+     * Set carrier_service
+     *
+     * @param $carrier_service
+     *
+     * @return Transfer
+     */
+    public function setCarrierService( $carrier_service )
+    {
+        $this->carrier_service = $carrier_service;
+
+        return $this;
+    }
+
+    /**
+     * Get carrier_service
+     *
+     * @return CarrierService
+     */
+    public function getCarrierService()
+    {
+        return $this->carrier_service;
     }
 
     /**

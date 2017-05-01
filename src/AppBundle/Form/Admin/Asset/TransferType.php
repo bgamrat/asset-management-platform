@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
 use AppBundle\Form\Admin\Client\BillToType;
+use AppBundle\Form\Admin\Asset\DataTransformer\CarrierServiceToIdTransformer;
 
 class TransferType extends AbstractType
 {
@@ -84,6 +85,7 @@ class TransferType extends AbstractType
                     },
                     'choice_translation_domain' => false
                 ] )
+                ->add( 'carrier_service', TextType::class, ['label' => 'common.service'] )
                 ->add( 'tracking_number', TextType::class, ['label' => 'common.from'] )
                 ->add( 'instructions', TextType::class, ['label' => false] )
                 ->add( 'items', CollectionType::class, [
@@ -113,6 +115,8 @@ class TransferType extends AbstractType
                 ->addModelTransformer( new PersonToIdTransformer( $this->em ) );
         $builder->get( 'to' )
                 ->addModelTransformer( new PersonToIdTransformer( $this->em ) );
+        $builder->get( 'carrier_service' )
+                ->addModelTransformer( new CarrierServiceToIdTransformer( $this->em ) );
     }
 
     /**

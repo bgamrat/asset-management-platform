@@ -199,6 +199,26 @@ define([
             "class": "carrier-select"
         }, "transfer_carrier");
         carrierSelect.startup();
+        carrierSelect.on("change", function () {
+            var carrierId = this.get('value');
+            if( !isNaN(carrierId) ) {
+                carrierServiceStore.target = carrierServiceStore.target.replace(/\d*$/, carrierId);
+            }
+        });
+
+        var carrierServiceStore = new JsonRest({
+            target: '/api/store/carrierservices?carrier=',
+            useRangeHeaders: false,
+            idProperty: 'id'});
+        var carrierServiceSelect = new FilteringSelect({
+            store: carrierServiceStore,
+            labelAttr: "name",
+            searchAttr: "name",
+            placeholder: core.service,
+            required: false,
+            pageSize: 25
+        }, "transfer_carrier_service");
+        carrierServiceSelect.startup();
 
         var trackingNumberInput = new ValidationTextBox({
             trim: true,
@@ -238,6 +258,7 @@ define([
                     "status": parseInt(statusSelect.get("value")),
                     "cost": parseFloat(costInput.get("value")),
                     "carrier": carrierSelect.get("value"),
+                    "carrier_service": carrierServiceSelect.get("value"),
                     "tracking_number": trackingNumberInput.get("value"),
                     "instructions": instructionsInput.get("value"),
                     "items": transferItems.getData(),
@@ -335,6 +356,8 @@ define([
                     statusSelect.set("displayedValue", transfer.status_text);
                     costInput.set("value", transfer.cost);
                     transferItems.setData(transfer.items);
+                    carrierSelect.set("displayedValue", transfer.carrier_name_text);
+                    carrierServiceSelect.set("displayedValue", transfer.carrier_service_text)
                     billTo.setData(transfer.bill_to);
                     lib.showHistory(historyContentPane, transfer["history"]);
                 }, lib.xhrError);

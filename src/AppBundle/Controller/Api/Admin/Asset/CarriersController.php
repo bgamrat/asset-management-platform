@@ -82,6 +82,7 @@ class CarriersController extends FOSRestController
                 'id' => $carrier->getId(),
                 'name' => $carrier->getName(),
                 'contacts' => $carrier->getContacts( false ),
+                'services' => $carrier->getServices(),
                 'active' => $carrier->isActive(),
                 'comment' => $carrier->getComment(),
                 'account_information' => $carrier->getAccountInformation(),

@@ -62,6 +62,11 @@ class Carrier
      */
     private $account_information = null;
     /**
+     * @var ArrayCollection $services
+     * @ORM\OneToMany(targetEntity="CarrierService", mappedBy="carrier", cascade={"persist"})
+     */
+    private $services = null;
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -80,6 +85,7 @@ class Carrier
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     /**
@@ -201,6 +207,26 @@ class Carrier
     {
         return $this->account_information;
     }
+
+    public function getServices()
+    {
+        return $this->services->toArray();
+    }
+
+    public function addService( CarrierService $service )
+    {
+        if( !$this->services->contains( $service ) )
+        {
+            $this->services->add( $service );
+            $service->setCarrier($this);
+        }
+    }
+
+    public function removeService( CarrierService $service )
+    {
+        $this->services->removeElement( $service );
+    }
+
     public function getUpdated()
     {
         return $this->updated;

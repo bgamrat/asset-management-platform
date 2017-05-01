@@ -55,11 +55,9 @@ define([
             pageSize: 25
         }, base + "client");
         dijit.on("change", function () {
-            currentRowIndex = clientFilteringSelect.length - 1;
             var clientId = this.get('value');
             if( !isNaN(clientId) ) {
                 eventStore.target = eventStore.target.replace(/\d*$/, clientId);
-                //eventFilteringSelect[currentRowIndex].reset();
             }
         });
         clientFilteringSelect.push(dijit);

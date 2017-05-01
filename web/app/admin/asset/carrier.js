@@ -24,6 +24,7 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/common/person",
+    "app/admin/asset/carrier_service",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -32,7 +33,7 @@ define([
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, lib, libGrid, core, asset) {
+        person, carrierService, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
         var action = null;
@@ -62,6 +63,12 @@ define([
         "carrier-view-account-tab"
                 );
         tabContainer.addChild(accountContentPane);
+
+        var servicesContentPane = new ContentPane({
+            title: core.services},
+        "carrier-view-services-tab"
+                );
+        tabContainer.addChild(servicesContentPane);
 
         var historyContentPane = new ContentPane({
             title: core.history},
@@ -136,6 +143,7 @@ define([
                     "id": carrierId,
                     "name": nameInput.get("value"),
                     "contacts": person.getData(),
+                    "services": carrierService.getData(),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
                     // For the server
@@ -241,6 +249,7 @@ define([
                     nameInput.set("value", carrier.name);
                     activeCheckBox.set("checked", carrier.active === true);
                     person.setData(carrier.contacts);
+                    carrierService.setData(carrier.services);
                     commentInput.set("value", carrier.comment);
                     accountInformationInput.set("value", carrier.account_information);
                     carrierViewDialog.show();
@@ -300,6 +309,7 @@ define([
         });
 
         person.run('carrier_contacts');
+        carrierService.run();
 
         lib.pageReady();
     }

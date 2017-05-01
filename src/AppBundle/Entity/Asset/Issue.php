@@ -37,7 +37,7 @@ class Issue
     private $priority = 3;
     /**
      * @Gedmo\Versioned
-      s    * @ORM\ManyToOne(targetEntity="IssueStatus")
+     * @ORM\ManyToOne(targetEntity="IssueStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected $status = null;

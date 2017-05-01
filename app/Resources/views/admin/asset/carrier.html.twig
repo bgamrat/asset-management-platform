@@ -25,6 +25,21 @@
     {{ block('_phones_entry_row') }}
 {% endblock %}
 
+{% block _carrier_services_entry_row %}
+    {% spaceless %}
+        <div class="form-row carrier-service">
+            <span class="default">{{ form_widget(form.default)}}</span>
+            <span class="id">{{ form_widget(form.id) }}</span>
+            <span class="name">{{ form_widget(form.name) }}</span>
+            <span class="comment">{{ form_widget(form.comment) }}</span>
+            <span class="active">{{ form_widget(form.active) }}</span>
+            {% if form.parent.vars.allow_delete is defined %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="carrier_service-__carrier_service__"><i class="fa fa-remove"></i></span>
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
 {% block admin_content %}
     <div id="carrier-wrapper">
         <h1>{{ block ('title') }}</h1>
@@ -73,6 +88,14 @@
                         <fieldset class="account-information">
                             <legend>{{'common.account_information'|trans}}</legend>
                             {{form_row(carrier_form.account_information)}}
+                        </fieldset>
+                    </div>
+                    <div id="carrier-view-services-tab">
+                        <fieldset class="services">
+                            {{form_row(carrier_form.services)}}
+                            {% if carrier_form.services.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
                         </fieldset>
                     </div>
                     <div id="carrier-view-history-tab">
