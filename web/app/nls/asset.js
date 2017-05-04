@@ -27,7 +27,6 @@ define({
         "status": "Status",
         "summary": "Summary",
         "supports": "Supports",
-        "tracking_number": "Tracking Number",
         "trailer": "Trailer",
         "type": "Type"
     })

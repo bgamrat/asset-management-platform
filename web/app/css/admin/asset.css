@@ -186,7 +186,12 @@
 .account-information.dijitTextBox {
     height: 360px;
 }
-
+#transfer-grid .field-id,
+#transfer-grid .dgrid-column-id {
+    display: table-cell;
+    width: 100px;
+    text-align: right;
+}
 .transfer-details > div {
     margin: 5px;
 }

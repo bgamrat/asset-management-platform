@@ -182,13 +182,13 @@ define([
         var destinationLocation = xlocation.run("destination", "transfer");
 
         carrierSelect = dom.byId('transfer_carrier');
-        data = JSON.parse(domAttr.get(carrierSelect, "data-options"));
+        var data = JSON.parse(domAttr.get(carrierSelect, "data-options"));
         // Convert the data to an array of objects
-        storeData = [];
+        var storeData = [], d;
         for( d in data ) {
             storeData.push(data[d]);
         }
-        memoryStore = new Memory({
+        var memoryStore = new Memory({
             idProperty: "value",
             data: storeData});
         var carrierStore = new ObjectStore({objectStore: memoryStore});
@@ -262,7 +262,9 @@ define([
                     "tracking_number": trackingNumberInput.get("value"),
                     "instructions": instructionsInput.get("value"),
                     "items": transferItems.getData(),
-                    "bill_to": billTo.getData()
+                    "bill_to": billTo.getData(),
+                    "to": destinationLocation.getData(),
+                    "from": sourceLocation.getData()
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -270,8 +272,8 @@ define([
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();
-                    beforeTransferTextFilter = filter.gt('name', data.name);
-                    store.filter(beforeTransferTextFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
+                    beforeTransferTextFilter = filter.gt('id', data.id);
+                    store.filter(beforeTransferTextFilter).sort('id').fetchRange({start: 0, end: 1}).then(function (results) {
                         var beforeId;
                         beforeId = (results.length > 0) ? results[0].id : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
@@ -302,17 +304,17 @@ define([
                 status_text: {
                     label: core.status
                 },
-                from: {
+                from_text: {
                     label: core.from
                 },
-                to: {
+                to_text: {
                     label: core.to
                 },
                 carrier: {
-                    label: core.description
+                    label: core.carrier
                 },
                 tracking_number: {
-                    label: core.description
+                    label: core.tracking_number
                 },
                 remove: {
                     editor: CheckBox,
@@ -338,7 +340,7 @@ define([
         grid.collection.track();
 
         grid.on(".dgrid-row:click", function (event) {
-            var checkBoxes = ["enabled", "locked", "remove"];
+            var checkBoxes = [ "remove"];
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
@@ -349,30 +351,32 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (transfer) {
-                    transferViewDialog.set('title', core.view + " " + transfer.name);
+                    transferViewDialog.set('title', core.view + " " + transfer.id);
                     transferViewDialog.show();
                     action = "view";
                     transferId = transfer.id;
                     statusSelect.set("displayedValue", transfer.status_text);
                     costInput.set("value", transfer.cost);
                     transferItems.setData(transfer.items);
+                    carrierSelect.set("value", transfer.carrier.id);
                     carrierSelect.set("displayedValue", transfer.carrier_name_text);
-                    carrierServiceSelect.set("displayedValue", transfer.carrier_service_text)
+                    carrierServiceSelect.set("displayedValue", transfer.carrier_service.name);
+                    trackingNumberInput.set("value", transfer.tracking_number);
                     billTo.setData(transfer.bill_to);
                     lib.showHistory(historyContentPane, transfer["history"]);
                 }, lib.xhrError);
             }
         });
 
-        grid.on('.field-active:dgrid-datachange', function (event) {
+        grid.on('.field-remove:dgrid-datachange', function (event) {
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var name = row.data.name;
+            var id = row.data.id;
             var value = event.value;
             switch( field ) {
                 case "active":
-                    xhr("/api/transfers/" + name, {
+                    xhr("/api/transfers/" + id, {
                         method: "PATCH",
                         handleAs: "json",
                         headers: {'Content-Type': 'application/json'},
@@ -395,7 +399,7 @@ define([
 
         aspect.before(grid, "removeRow", function (rowElement) {
             // Destroy the checkbox widgets
-            var e, elements = [grid.cell(rowElement, "remove").element, grid.cell(rowElement, "active"), grid.cell(rowElement, "locked")];
+            var e, elements = [grid.cell(rowElement, "remove").element];
             var widget;
             for( e in elements ) {
                 widget = (e.contents || e).widget;

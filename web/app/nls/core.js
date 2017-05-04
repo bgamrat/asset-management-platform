@@ -74,6 +74,7 @@ define({
         "status": "Status",
         "street": "Street",
         "to": "To",
+        "tracking_number": "Tracking Number",
         "type": "Type",
         "url": "URL",
         "user": "User",

@@ -73,7 +73,7 @@ class TransfersController extends FOSRestController
             }
         }
 
-        $columns = ['t.id', 't.instructions',  
+        $columns = ['t.id', 't.instructions', 's.name AS status_text',
             "CONCAT(CONCAT(to.firstname,' '),to.lastname) AS to_text",
             "CONCAT(CONCAT(fm.firstname,' '),fm.lastname) AS from_text",
             'b.barcode'];
@@ -109,7 +109,7 @@ class TransfersController extends FOSRestController
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'LOWER(i.instructions)', ':filter' )
+                            $queryBuilder->expr()->gt( 'LOWER(t.instructions)', ':filter' )
                     );
             }
             $queryBuilder->setParameter( 'filter', strtolower( $dstore['filter'][DStore::VALUE] ) );
@@ -142,18 +142,17 @@ class TransfersController extends FOSRestController
         {
             $data = [
                 'id' => $id,
-                'priority' => $transfer->getPriority(),
-                'type' => $transfer->getType(),
                 'status' => $transfer->getStatus(),
-                'assigned_to' => $transfer->getAssignedTo(),
-                'summary' => $transfer->getSummary(),
-                'details' => $transfer->getDetails(),
                 'items' => $transfer->getItems(),
-                'notes' => $transfer->getNotes(),
-                'client_billable' => $transfer->isClientBillable(),
+                'from' => $transfer->getFrom(),
+                'to' => $transfer->getTo(),
+                'carrier' => $transfer->getCarrier(),
+                'carrier_service' => $transfer->getCarrierService(),
+                'tracking_number' => $transfer->getTrackingNumber(),
+                'bill_to' => $transfer->getBillTos(),
                 'cost' => $transfer->getCost(),
-                'trailer' => $transfer->getTrailer(),
-                'replaced' => $transfer->isReplaced(),
+                'instructions' => $transfer->getInstructions(),
+                'cost' => $transfer->getCost(),
                 'created' => $transfer->getCreated()->format( 'Y-m-d H:i:s' ),
                 'updated' => $transfer->getUpdated()->format( 'Y-m-d H:i:s' )
             ];
@@ -209,9 +208,6 @@ class TransfersController extends FOSRestController
             {
                 $transfer = $form->getData();
                 $transferItems = $transfer->getItems();
-                foreach ($transferItems as $i => $item) {
-                    $item->getAsset()->setStatus($form['items'][$i]['status']->getData());
-                }
                 $em->persist( $transfer );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );

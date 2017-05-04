@@ -52,7 +52,7 @@ class Transfer
     /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Location", cascade={"persist"})
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     protected $source_location = null;
@@ -71,7 +71,7 @@ class Transfer
     /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Location", cascade={"persist"})
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     protected $destination_location = null;
@@ -140,6 +140,7 @@ class Transfer
     public function __construct()
     {
         $this->bill_tos = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     /**
@@ -371,17 +372,15 @@ class Transfer
         foreach( $items as $a )
         {
             $this->addItems( $a );
-            $a->setTransfer( $this );
         }
         return $this;
     }
 
-    public function addItem( Model $item )
+    public function addItems( TransferItem $item )
     {
-        if( !$this->extends->contains( $item ) )
+        if( !$this->items->contains( $item ) )
         {
-            $this->extends->add( $item );
-            $a->setTransfer( $this );
+            $this->items->add( $item );
         }
     }
 

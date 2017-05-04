@@ -27,7 +27,7 @@ class CarrierService
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Carrier", inversedBy="services")
+     * @ORM\ManyToOne(targetEntity="Carrier", inversedBy="services", fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"name" = "ASC"})
      */
     protected $carrier;

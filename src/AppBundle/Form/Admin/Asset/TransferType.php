@@ -125,13 +125,13 @@ class TransferType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Asset\Issue'
+            'data_class' => 'AppBundle\Entity\Asset\Transfer'
         ) );
     }
 
     public function getName()
     {
-        return 'issue';
+        return 'transfer';
     }
 
 }

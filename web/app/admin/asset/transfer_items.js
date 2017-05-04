@@ -93,14 +93,10 @@ define([
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__item__/g, '0');
 
-        domConstruct.place(prototypeContent, prototypeNode, "after");
-
         itemStore = new JsonRest({
             target: '/api/store/barcodes',
             useRangeHeaders: false,
             idProperty: 'id'});
-
-        createDijits();
 
         addOneMoreControl = query('.items .add-one-more-row');
 
@@ -124,7 +120,7 @@ define([
                     {
                         "id": itemId[i],
                         "item": itemFilteringSelect[i].get('value'),
-                        "rma": rmaFilteringSelect[i].get('value'),
+                        "rma": rmaInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
@@ -134,14 +130,12 @@ define([
     function setData(items) {
         var i, l, obj, nodes;
 
-        nodes = query(".form-row.transfer-item", "items");
+        nodes = query(".form-row.transfer-item", ".items");
         nodes.forEach(function (node, index) {
-            if( index !== 0 ) {
-                destroyRow(index, node);
-            }
+            destroyRow(index, node);
         });
 
-        if( typeof items === "object" && items !== null && l > 0 ) {
+        if( typeof items === "object" && items !== null ) {
             l = items.length;
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();
@@ -152,11 +146,6 @@ define([
                 rmaInput[i].set('value', obj.rma);
                 commentInput[i].set('value', obj.comment);
             }
-        } else {
-            itemId[0] = null;
-            itemFilteringSelect[0].set('value', "");
-            rmaInput[0].set("value", '');
-            commentInput[0].set('value', "");
         }
     }
 
