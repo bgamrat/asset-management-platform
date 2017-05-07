@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use AppBundle\Entity\Common\Person;
 
 /**
  * Transfer
@@ -53,7 +54,7 @@ class Transfer
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\ManyToOne(targetEntity="Location", cascade={"persist"})
-     * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="source_location_id", referencedColumnName="id")
      */
     protected $source_location = null;
     /**
@@ -72,7 +73,7 @@ class Transfer
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\ManyToOne(targetEntity="Location", cascade={"persist"})
-     * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="destination_location_id", referencedColumnName="id")
      */
     protected $destination_location = null;
     /**
@@ -314,7 +315,7 @@ class Transfer
      *
      * @param int $destination_location
      *
-     * @return Asset
+     * @return Transfer
      */
     public function setDestinationLocation( $destination_location )
     {

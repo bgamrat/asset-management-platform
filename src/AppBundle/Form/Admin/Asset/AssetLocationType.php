@@ -66,7 +66,8 @@ class AssetLocationType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'AppBundle\Entity\Asset\Location'
+            'data_class' => 'AppBundle\Entity\Asset\Location',
+            'allow_extra_fields' => true
         ] );
     }
 

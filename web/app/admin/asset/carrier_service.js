@@ -7,7 +7,6 @@ define([
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
     "dijit/form/RadioButton",
-    "dijit/form/Button",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/NodeList-dom",
@@ -15,7 +14,7 @@ define([
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct,
         on, query,
-        ValidationTextBox, CheckBox, RadioButton, Button,
+        ValidationTextBox, CheckBox, RadioButton,
         lib, core) {
     //"use strict";
 
@@ -30,7 +29,7 @@ define([
         serviceId.push(null);
     }
 
-    function createDijits(newRow) {
+    function createDijits() {
         var dijit, index = nameInput.length;
         var base = divId + '_' + index + '_';
         var checked = false;
@@ -67,6 +66,26 @@ define([
         dijit.startup();
     }
 
+    function destroyRow(id, target) {
+        var item;
+        for( i = 0; i < nameInput.length; i++ ) {
+            if( nameInput[i].get("id").indexOf(id) !== -1 ) {
+                id = i;
+                break;
+            }
+        }
+        serviceId.splice(id, 1);     
+        item = defaultRadioButton.splice(id, 1);
+        item[0].destroyRecursive();
+        item = nameInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = commentInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = activeCheckBox.splice(id, 1);
+        item[0].destroyRecursive();
+        domConstruct.destroy(target);
+    }
+
     function run() {
 
         prototypeNode = dom.byId(divId);
@@ -81,9 +100,6 @@ define([
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__services__/g, nameInput.length);
-        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-
-        createDijits();
 
         on(dom.byId("carrier_services"), "click", function (event) {
             var target = event.target;
@@ -100,7 +116,14 @@ define([
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
-            createDijits(true);
+            createDijits();
+        });
+        
+        on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
+            var target = event.target;
+            var targetParent = target.parentNode;
+            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            destroyRow(id, targetParent.parentNode);
         });
     }
 
@@ -122,19 +145,14 @@ define([
     function setData(services) {
         var i, p, obj;
 
-        query(".form-row.services", prototypeNode.parentNode).forEach(function (node, index) {
-            if( index !== 0 ) {
-                destroyRow(index, node);
-            }
+        query(".form-row.carrier-service", "carrier-services").forEach(function (node, index) {
+            destroyRow(index, node);
         });
 
         if( typeof services === "object" && services !== null && services.length > 0 ) {
-
             for( i = 0; i < services.length; i++ ) {
-                if( i !== 0 ) {
-                    cloneNewNode();
-                    createDijits();
-                }
+                cloneNewNode();
+                createDijits();
                 obj = services[i];
                 serviceId[i] = obj.id;
                 nameInput[i].set('value', obj.name);
@@ -142,12 +160,6 @@ define([
                 activeCheckBox[i].set('value', obj.active);
                 defaultRadioButton[i].set('checked', obj.default);
             }
-        } else {
-            serviceId[0] = null;
-            nameInput[0].set('value', "");
-            commentInput[0].set('value', "");
-            activeCheckBox[0].set('value', "");
-            defaultRadioButton[0].set('value', "");
         }
     }
 

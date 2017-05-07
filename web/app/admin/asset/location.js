@@ -16,29 +16,33 @@ define([
         RadioButton, FilteringSelect,
         JsonRest) {
 
-    //"use strict";
-    var divIdInUse = 'location';
-
-    function getDivId() {
-        return divIdInUse;
-    }
-
-    function setDivId(divId) {
-        divIdInUse = divId + '_location';
-    }
-
-    //"use strict";
-    var formNameInUse = 'transfer';
-
-    function getFormName() {
-        return formNameInUse;
-    }
-
-    function setFormName(name) {
-        formNameInUse = name;
-    }
 
     function run() {
+        //"use strict";
+        var divIdInUse = 'location';
+
+        function getDivId() {
+            return divIdInUse;
+        }
+
+        function setDivId(divId) {
+            divIdInUse = divId + '_location';
+        }
+
+        //"use strict";
+        var formNameInUse = 'transfer';
+
+        function getFormName() {
+            return formNameInUse;
+        }
+
+        function setFormName(name) {
+            formNameInUse = name;
+        }
+
+        var locationTypeRadioButton = [];
+        var locationTypeLabels = {};
+        var locationFilteringSelect;
 
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
@@ -50,8 +54,6 @@ define([
         var id = getDivId();
         var formName = getFormName();
 
-        var locationTypeRadioButton = [];
-        var locationTypeLabels = {};
         query('[name="' + formName + '[' + id + '][ctype]"]').forEach(function (node) {
             var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
             dijit.set("data-url", domAttr.get(node, "data-url"));
@@ -90,7 +92,7 @@ define([
         var locationStore = new JsonRest({
             useRangeHeaders: false,
             idProperty: 'id'});
-        var locationFilteringSelect = new FilteringSelect({
+        locationFilteringSelect = new FilteringSelect({
             store: null,
             labelAttr: "name",
             searchAttr: "name",
@@ -100,61 +102,56 @@ define([
         }, formName + "_" + id + "_entity");
         locationFilteringSelect.startup();
 
-        // This should probably be a widget, but this is working for now
-        return this;
-    }
-    function getLocationType() {
-        var i, locationTypeSet = false;
-        for( i = 0; i < locationTypeRadioButton.length; i++ ) {
-            if( locationTypeRadioButton[i].get("checked") === true ) {
-                locationTypeSet = true;
-                break;
+        function getLocationType() {
+            var i, locationTypeSet = false;
+            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
+                if( locationTypeRadioButton[i].get("checked") === true ) {
+                    locationTypeSet = true;
+                    break;
+                }
+            }
+            return locationTypeSet ? locationTypeRadioButton[i].get("value") : null;
+        }
+
+        function setLocationType(locationType) {
+            var i;
+            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
+                if( parseInt(locationTypeRadioButton[i].get("data-location-type-id")) === locationType ) {
+                    locationTypeRadioButton[i].set("checked", true);
+                    break;
+                }
             }
         }
-        return locationTypeSet ? locationTypeRadioButton[i].get("value") : null;
-    }
 
-    function setLocationType(locationType) {
-        var i;
-        for( i = 0; i < locationTypeRadioButton.length; i++ ) {
-            if( parseInt(locationTypeRadioButton[i].get("data-location-type-id")) === locationType ) {
-                locationTypeRadioButton[i].set("checked", true);
-                break;
-            }
-        }
-    }
-
-    function getData() {
-        return{
-            locationId: parseInt(dom.byId(getDivId() + "_id").value),
-            locationData: {
-                "id": isNaN(locationId) ? null : locationId,
-                "type": parseInt(getLocationType()),
-                "entity": parseInt(locationFilteringSelect.get("value"))
-            }
-        };
-    }
-
-    function setData(obj, location_text) {
-        if( typeof obj !== "undefined" && obj !== null ) {
-            dom.byId(getDivId() + "_id").value = obj.id;
-            setLocationType(obj.type.id);
-            if( obj.type.url !== null ) {
-                locationStore.target = obj.type.url;
-                locationFilteringSelect.set("store", locationStore);
-                locationFilteringSelect.set("readOnly", false);
-                locationFilteringSelect.set('displayedValue', location_text);
-            } else {
-                textLocationMemoryStore.data = [{name: locationTypeLabels[obj.type.id], id: 0}];
-                locationFilteringSelect.set("store", textLocationStore);
-                locationFilteringSelect.set('displayedValue', location_text);
-                locationFilteringSelect.set("readOnly", true);
+        return {
+            getData: function () {
+                var locationId = parseInt(dom.byId(getFormName() + "_" + getDivId() + "_id").value);
+                return{
+                    "id": isNaN(locationId) ? null : locationId,
+                    "type": parseInt(getLocationType()),
+                    "entity": parseInt(locationFilteringSelect.get("value"))
+                };
+            },
+            setData: function (obj, location_text) {
+                if( typeof obj !== "undefined" && obj !== null ) {
+                    dom.byId(getFormName() + "_" + getDivId() + "_id").value = obj.id;
+                    setLocationType(obj.type.id);
+                    if( obj.type.url !== null ) {
+                        locationStore.target = obj.type.url;
+                        locationFilteringSelect.set("store", locationStore);
+                        locationFilteringSelect.set("readOnly", false);
+                        locationFilteringSelect.set('displayedValue', location_text);
+                    } else {
+                        textLocationMemoryStore.data = [{name: locationTypeLabels[obj.type.id], id: 0}];
+                        locationFilteringSelect.set("store", textLocationStore);
+                        locationFilteringSelect.set('displayedValue', location_text);
+                        locationFilteringSelect.set("readOnly", true);
+                    }
+                }
             }
         }
     }
     return {
-        run: run,
-        getData: getData,
-        setData: setData
+        run: run
     }
 });

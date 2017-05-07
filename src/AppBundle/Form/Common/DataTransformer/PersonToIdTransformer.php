@@ -5,6 +5,7 @@ namespace AppBundle\Form\Common\DataTransformer;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use AppBundle\Entity\Common\Person;
 
 class PersonToIdTransformer implements DataTransformerInterface
 {

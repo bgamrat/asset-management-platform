@@ -43,7 +43,6 @@ class LocationTypeToIdTransformer implements DataTransformerInterface
         if (!$locationtypeId) {
             return;
         }
-
         $locationtype = $this->em
             ->getRepository('AppBundle\Entity\Asset\LocationType')
             ->find($locationtypeId)

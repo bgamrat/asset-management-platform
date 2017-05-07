@@ -6,6 +6,7 @@ use AppBundle\Util\DStore;
 use AppBundle\Entity\Asset\Transfer;
 use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Common\Person;
+use AppBundle\Entity\Asset\Location;
 use AppBundle\Form\Admin\Asset\TransferType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -145,7 +146,9 @@ class TransfersController extends FOSRestController
                 'status' => $transfer->getStatus(),
                 'items' => $transfer->getItems(),
                 'from' => $transfer->getFrom(),
+                'source_location' => $transfer->getSourceLocation(),
                 'to' => $transfer->getTo(),
+                'destination_location' => $transfer->getDestinationLocation(),
                 'carrier' => $transfer->getCarrier(),
                 'carrier_service' => $transfer->getCarrierService(),
                 'tracking_number' => $transfer->getTrackingNumber(),
@@ -207,7 +210,6 @@ class TransfersController extends FOSRestController
             if( $form->isValid() )
             {
                 $transfer = $form->getData();
-                $transferItems = $transfer->getItems();
                 $em->persist( $transfer );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );

@@ -263,8 +263,10 @@ define([
                     "instructions": instructionsInput.get("value"),
                     "items": transferItems.getData(),
                     "bill_to": billTo.getData(),
-                    "to": destinationLocation.getData(),
-                    "from": sourceLocation.getData()
+                    "from": fromFilteringSelect.get("value"),
+                    "source_location": sourceLocation.getData(),
+                    "to": toFilteringSelect.get("value"),
+                    "destination_location": destinationLocation.getData()
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -340,7 +342,7 @@ define([
         grid.collection.track();
 
         grid.on(".dgrid-row:click", function (event) {
-            var checkBoxes = [ "remove"];
+            var checkBoxes = ["remove"];
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
@@ -358,11 +360,20 @@ define([
                     statusSelect.set("displayedValue", transfer.status_text);
                     costInput.set("value", transfer.cost);
                     transferItems.setData(transfer.items);
-                    carrierSelect.set("value", transfer.carrier.id);
-                    carrierSelect.set("displayedValue", transfer.carrier_name_text);
-                    carrierServiceSelect.set("displayedValue", transfer.carrier_service.name);
+                    if( typeof transfer.carrier !== "undefined" && typeof transfer.carrier.id !== "undefined" ) {
+                        carrierServiceStore.target = carrierServiceStore.target.replace(/\d*$/, transfer.carrier.id);
+                        carrierServiceSelect.set('displayedValue', transfer.carrier_service.name);
+                        carrierSelect.set("value", transfer.carrier.id);
+                        carrierSelect.set("displayedValue", transfer.carrier_name_text);
+                    } else {
+                        carrierSelect.reset();
+                    }
                     trackingNumberInput.set("value", transfer.tracking_number);
                     billTo.setData(transfer.bill_to);
+                    fromFilteringSelect.set("displayedValue",transfer.from.fullName);
+                    sourceLocation.setData(transfer.source_location, transfer.source_location_text);
+                    toFilteringSelect.set("displayedValue",transfer.to.fullName);
+                    destinationLocation.setData(transfer.transfer.destination_location, transfer.destination_location_text);
                     lib.showHistory(historyContentPane, transfer["history"]);
                 }, lib.xhrError);
             }
