@@ -21,16 +21,32 @@ class DefaultController extends FOSRestController
         $name = $request->get( 'name' );
         if( !empty( $name ) )
         {
-            $name = '%' . str_replace( '*', '%', $name );
-
             $em = $this->getDoctrine()->getManager();
-
-            $queryBuilder = $em->createQueryBuilder()->select( ['v.id', "v.name" ] )
-                    ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
-                    ->where( "LOWER(v.name) LIKE :vendor_name" )
-                    ->setParameter( 'vendor_name', strtolower( $name ) );
-
-            $data = $queryBuilder->getQuery()->getResult();
+            $vendors = $em->getRepository( 'AppBundle\Entity\Asset\Vendor' )->findByNameLike( $name );
+            $data = [];
+            foreach( $vendors as $v )
+            {
+                $contacts = $v->getContacts();
+                if( !empty( $contacts ) )
+                {
+                    foreach( $contacts as $c )
+                    {
+                        $addresses = $c->getAddresses();
+                        if( !empty( $addresses ) )
+                        {
+                            foreach( $addresses as $a )
+                            {
+                                $d = [];
+                                $d['id'] = $v->getId();
+                                $d['name'] = $v->getName();
+                                // HTML label attributes for dijit.FilteringSelects MUST start with a tag
+                                $d['label'] = '<div>'.$v->getName().'<br>'.$c->getFullName().'<br>'.nl2br( $a->getAddress() ).'</div>';
+                                $data[] = $d;
+                            }
+                        }
+                    }
+                }
+            }
         }
         else
         {

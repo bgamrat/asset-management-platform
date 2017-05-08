@@ -373,7 +373,7 @@ define([
                     fromFilteringSelect.set("displayedValue",transfer.from.fullName);
                     sourceLocation.setData(transfer.source_location, transfer.source_location_text);
                     toFilteringSelect.set("displayedValue",transfer.to.fullName);
-                    destinationLocation.setData(transfer.transfer.destination_location, transfer.destination_location_text);
+                    destinationLocation.setData(transfer.destination_location, transfer.destination_location_text);
                     lib.showHistory(historyContentPane, transfer["history"]);
                 }, lib.xhrError);
             }

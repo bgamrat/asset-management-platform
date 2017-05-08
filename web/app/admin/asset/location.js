@@ -3,6 +3,7 @@ define([
     "dojo/_base/lang",
     "dojo/dom",
     "dojo/dom-attr",
+    "dojo/dom-construct",
     "dojo/on",
     "dojo/query",
     "dojo/data/ObjectStore",
@@ -10,15 +11,18 @@ define([
     "dijit/form/RadioButton",
     "dijit/form/FilteringSelect",
     'dojo/store/JsonRest',
+    "dojo/aspect",
     "dojo/domReady!"
-], function (declare, lang, dom, domAttr, on,
+], function (declare, lang, dom, domAttr, domConstruct, on,
         query, ObjectStore, Memory,
         RadioButton, FilteringSelect,
-        JsonRest) {
+        JsonRest, aspect) {
 
 
     function run() {
         //"use strict";
+        var currentLabel = '';
+        
         var divIdInUse = 'location';
 
         function getDivId() {
@@ -89,18 +93,33 @@ define([
             data: []});
         var textLocationStore = new ObjectStore({objectStore: textLocationMemoryStore});
 
+
         var locationStore = new JsonRest({
             useRangeHeaders: false,
             idProperty: 'id'});
+        aspect.after(locationStore, "query", function (deferred) {
+            return deferred.then(function (response) {
+                if (response !== null && response.length === 1) {
+                    currentLabel = response[0].label;
+                }
+                return response;
+            });
+        });
+
         locationFilteringSelect = new FilteringSelect({
             store: null,
-            labelAttr: "name",
+            labelAttr: "label",
+            labelType: "html",
             searchAttr: "name",
             pageSize: 25,
             readOnly: true,
             "class": 'location-filtering-select'
         }, formName + "_" + id + "_entity");
         locationFilteringSelect.startup();
+
+        on(locationFilteringSelect, "change", function (evt) {
+            domConstruct.place(currentLabel, this.id.replace("entity", "echo"), "only");
+        });
 
         function getLocationType() {
             var i, locationTypeSet = false;
@@ -125,10 +144,11 @@ define([
 
         return {
             getData: function () {
+                var locationType = getLocationType();
                 var locationId = parseInt(dom.byId(getFormName() + "_" + getDivId() + "_id").value);
                 return{
                     "id": isNaN(locationId) ? null : locationId,
-                    "type": parseInt(getLocationType()),
+                    "type": parseInt(locationType),
                     "entity": parseInt(locationFilteringSelect.get("value"))
                 };
             },

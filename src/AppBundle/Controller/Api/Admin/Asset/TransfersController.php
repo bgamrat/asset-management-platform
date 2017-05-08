@@ -77,13 +77,14 @@ class TransfersController extends FOSRestController
         $columns = ['t.id', 't.instructions', 's.name AS status_text',
             "CONCAT(CONCAT(to.firstname,' '),to.lastname) AS to_text",
             "CONCAT(CONCAT(fm.firstname,' '),fm.lastname) AS from_text",
-            'b.barcode'];
+            'b.barcode', 'c.name AS carrier', 't.tracking_number'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
                 ->join( 't.status', 's' )
                 ->leftJoin( 't.to', 'to' )
                 ->leftJoin( 't.from', 'fm' )
                 ->leftJoin( 't.items', 'ti' )
+                ->leftJoin( 't.carrier', 'c' )
                 ->join( 'ti.asset', 'a' )
                 ->join( 'a.barcodes', 'b' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );

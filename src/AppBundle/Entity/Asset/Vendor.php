@@ -12,7 +12,7 @@ use AppBundle\Entity\Common\Person;
  * Vendor
  *
  * @ORM\Table(name="vendor")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\VendorRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */

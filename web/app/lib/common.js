@@ -23,11 +23,12 @@ define([
         confirmDialog.show();
     }
     function isEmpty(obj) {
+        var prop;
         // Thanks to: http://stackoverflow.com/a/32108184/2182349
         if( typeof obj.keys !== "undefined" ) {
             return obj.keys({}).length !== 0;
         } else {
-            for( var prop in obj ) {
+            for( prop in obj ) {
                 if( obj.hasOwnProperty(prop) )
                     return false;
             }

@@ -296,4 +296,20 @@ class Address
     {
         return $this->comment;
     }
+
+    public function getAddress()
+    {
+        $addr = [$this->getType()->getType(), $this->street1];
+        if( !empty( $this->street2 ) )
+        {
+            $addr[] = $this->street2;
+        }
+        $addr[] = $this->city . ', ' . $this->state_province . '  ' . $this->postal_code;
+        if( !empty( $this->country ) )
+        {
+            $addr[] = $this->country;
+        }
+        return implode( PHP_EOL, $addr );
+    }
+
 }
