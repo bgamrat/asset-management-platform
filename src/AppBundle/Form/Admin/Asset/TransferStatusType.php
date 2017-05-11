@@ -22,6 +22,9 @@ class TransferStatusType extends AbstractType
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
                 ->add( 'comment', TextType::class )
+                ->add( 'in_transit', CheckboxType::class )
+                ->add( 'location_destination', CheckboxType::class )
+                ->add( 'location_unknown', CheckboxType::class )
                 ->add( 'active', CheckboxType::class )
                 ->add( 'default', CheckBoxType::class )
         ;

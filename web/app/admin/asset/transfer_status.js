@@ -20,7 +20,8 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var nameInput = [], commentInput = [], activeCheckBox = [], defaultRadioButton = [];
+    var nameInput = [], commentInput = [], inTransitCheckBox = [],
+            locationDestinationCheckBox = [], locationUnknownCheckBox = [], activeCheckBox = [], defaultRadioButton = [];
     var addOneMoreControl = null;
     var divId = "transfer_statuses_statuses";
 
@@ -52,13 +53,28 @@ define([
         }, base + "comment");
         commentInput.push(dijit);
         dijit.startup();
-        dijit = new CheckBox({'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
+        dijit = new RadioButton({'checked': document.getElementById(base + "in_transit").checked,
+            "data-name": "transfer_statuses[statuses][" + index + "][in_transit]",
+            name: "transfer_statuses[statuses][" + index + "][location]"}, base + "in_transit");
+        inTransitCheckBox.push(dijit);
+        dijit.startup();
+        dijit = new RadioButton({'checked': document.getElementById(base + "location_destination").checked,
+            "data-name": "transfer_statuses[statuses][" + index + "][location_destination]",
+            name: "transfer_statuses[statuses][" + index + "][location]"}, base + "location_destination");
+        locationDestinationCheckBox.push(dijit);
+        dijit.startup();
+        dijit = new RadioButton({'checked': document.getElementById(base + "location_unknown").checked,
+            "data-name": "transfer_statuses[statuses][" + index + "][location_unknown]",
+            name: "transfer_statuses[statuses][" + index + "][location]"}, base + "location_unknown");
+        locationUnknownCheckBox.push(dijit);
+        dijit.startup();
+        dijit = new CheckBox({'checked': document.getElementById(base + "active").checked || newRow === true,
             name: "transfer_statuses[statuses][" + index + "][active]"}, base + "active");
         activeCheckBox.push(dijit);
+        dijit.startup();
         if( dom.byId(base + "default").checked === true ) {
             checked = true;
         }
-        dijit.startup();
         dijit = new RadioButton({
         }, base + "default");
         dijit.set("checked", checked);
@@ -83,16 +99,6 @@ define([
             createDijits(false);
         }
 
-        on(dom.byId("transfer_statuses_statuses"), "click", function (event) {
-            var target = event.target;
-            var id = target.id;
-            if( target.checked && id.indexOf("default") !== -1 ) {
-                id = id.replace(/^.*(\d+).*$/, '$1');
-                target.name = 'transfer_statuses[statuses][' + id + '][default]';
-            } else {
-                target.removeAttribute("name");
-            }
-        });
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__status__/g, nameInput.length);
@@ -107,10 +113,28 @@ define([
 
         var saveBtn = new Button({
             label: core.save,
-            type: "submit"
+            type: "button"
         }, 'statuses-save-btn');
         saveBtn.startup();
-
+        saveBtn.on("click", function (event) {
+            var checks = query('[type="radio"]');
+            checks.forEach(function (node, index) {
+                var id;
+                if( node.checked ) {
+                    if( node.id.indexOf("default") !== -1 ) {
+                        id = id.replace(/^.*(\d+).*$/, '$1');
+                        node.name = 'transfer_statuses[statuses][' + id + '][default]';
+                    } else {
+                        if( domAttr.has(node, "data-name") ) {
+                            node.name = domAttr.get(node, "data-name");
+                        }
+                    }
+                } else {
+                    node.removeAttribute("name");
+                }
+            });
+            document.getElementById("status-type-form").submit();
+        });
         lib.pageReady();
     }
 

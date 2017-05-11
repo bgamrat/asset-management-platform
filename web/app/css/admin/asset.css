@@ -203,3 +203,26 @@
 .transfer-details .instructions .dijitTextArea {
     height: 250px;
 }
+.form-row.status-header {
+    font-weight: 700;
+}
+.form-row.status-header span,
+.form-row.status span {
+    display: table-cell;
+    margin: 3px;
+    padding: 3px;
+}
+#status-wrapper .default {
+    width: 35px;
+    text-align: center;
+}
+#status-wrapper .name,
+#status-wrapper .comment {
+    width: 200px;
+}
+#status-wrapper .in-transit,
+#status-wrapper .location-destination,
+#status-wrapper .location-unknown{
+    width: 150px;
+    text-align: center;
+}

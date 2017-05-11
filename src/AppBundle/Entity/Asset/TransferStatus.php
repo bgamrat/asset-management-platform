@@ -60,7 +60,27 @@ class TransferStatus
      * 
      */
     private $default = false;
-
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     */
+    private $in_transit = false;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     */
+    private $location_destination = false;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     */
+    private $location_unknown = false;
     /**
      * Set id
      *
@@ -149,4 +169,32 @@ class TransferStatus
         return $this->default;
     }
 
+    public function setInTransit( $in_transit )
+    {
+        $this->in_transit = $in_transit;
+    }
+
+    public function isInTransit()
+    {
+        return $this->in_transit;
+    }
+
+    public function setLocationDestination( $location_destination )
+    {
+        $this->location_destination = $location_destination;
+    }
+
+    public function isLocationDestination()
+    {
+        return $this->location_destination;
+    }
+    public function setLocationUnknown( $location_unknown )
+    {
+        $this->location_unknown = $location_unknown;
+    }
+
+    public function isLocationUnknown()
+    {
+        return $this->location_unknown;
+    }
 }

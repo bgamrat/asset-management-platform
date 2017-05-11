@@ -25,6 +25,8 @@ asset:
         Extended By
     extends:
         Extends
+    in_transit:
+        In Transit
     issue:
         Issue
     issue_statuses:
@@ -35,10 +37,14 @@ asset:
         Issue Workflow
     location:
         Location
+    location_destination:
+        Location Destination
     location_type:
         "Location Type"
     location_types:
         "Location Types"
+    location_unknown:
+        Location Unknown
     manufacturer:
         Manufacturer
     manufacturers:

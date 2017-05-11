@@ -212,6 +212,11 @@ class TransfersController extends FOSRestController
             {
                 $transfer = $form->getData();
                 $em->persist( $transfer );
+                if ($transfer->getStatus())
+                $transferItems = $transfer->getItems();
+                foreach ($transferItems as $t) {
+                    
+                }
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(

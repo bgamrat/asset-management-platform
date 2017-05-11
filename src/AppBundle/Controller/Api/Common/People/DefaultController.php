@@ -28,7 +28,7 @@ class DefaultController extends FOSRestController
             $queryBuilder = $em->createQueryBuilder()->select( ['p.id',
                 "CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname) AS name"] )
                     ->from( 'AppBundle\Entity\Common\Person', 'p' )
-                    ->where( "LOWER(CONCAT(CONCAT(p.firstname, ' '), p.lastname)) LIKE :name" )
+                    ->where( "LOWER(CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname)) LIKE :name" )
                     ->orderBy( 'name' )
                     ->setParameter( 'name', strtolower( $name ) );
             $data = $queryBuilder->getQuery()->getResult();

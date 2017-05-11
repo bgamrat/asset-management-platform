@@ -105,6 +105,8 @@ define([
             trackingNumberInput.set("value", "");
             costInput.set("value", null);
             instructionsInput.set("value", "");
+            updatedInput.set("value", null);
+            createdInput.set("value", null);
             transferViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -374,6 +376,8 @@ define([
                     sourceLocation.setData(transfer.source_location, transfer.source_location_text);
                     toFilteringSelect.set("displayedValue",transfer.to.fullName);
                     destinationLocation.setData(transfer.destination_location, transfer.destination_location_text);
+                    updatedInput.set("value", transfer.updated);
+                    createdInput.set("value", transfer.created);
                     lib.showHistory(historyContentPane, transfer["history"]);
                 }, lib.xhrError);
             }
