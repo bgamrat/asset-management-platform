@@ -20,7 +20,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var nameInput = [], commentInput = [], inTransitCheckBox = [],
+    var nameInput = [], commentInput = [], noneCheckBox = [], inTransitCheckBox = [],
             locationDestinationCheckBox = [], locationUnknownCheckBox = [], activeCheckBox = [], defaultRadioButton = [];
     var addOneMoreControl = null;
     var divId = "transfer_statuses_statuses";
@@ -31,7 +31,7 @@ define([
     }
 
     function createDijits(newRow) {
-        var dijit, index = nameInput.length;
+        var dijit, index = nameInput.length, none;
         var base = divId + '_' + index + '_';
         var checked = false;
         dijit = new ValidationTextBox({
@@ -52,6 +52,13 @@ define([
             value: document.getElementById(base + "comment").value
         }, base + "comment");
         commentInput.push(dijit);
+        dijit.startup();
+        
+        none = !document.getElementById(base + "in_transit").checked &&
+                !document.getElementById(base + "location_destination").checked &&
+                !document.getElementById(base + "location_unknown").checked;
+        dijit = new RadioButton({'checked': none, name: "transfer_statuses[statuses][" + index + "][location]"}, base + "none");
+        noneCheckBox.push(dijit);
         dijit.startup();
         dijit = new RadioButton({'checked': document.getElementById(base + "in_transit").checked,
             "data-name": "transfer_statuses[statuses][" + index + "][in_transit]",
@@ -122,11 +129,13 @@ define([
                 var id;
                 if( node.checked ) {
                     if( node.id.indexOf("default") !== -1 ) {
-                        id = id.replace(/^.*(\d+).*$/, '$1');
+                        id = node.id.replace(/^.*(\d+).*$/, '$1');
                         node.name = 'transfer_statuses[statuses][' + id + '][default]';
                     } else {
                         if( domAttr.has(node, "data-name") ) {
                             node.name = domAttr.get(node, "data-name");
+                        } else {
+                            node.removeAttribute("name");
                         }
                     }
                 } else {

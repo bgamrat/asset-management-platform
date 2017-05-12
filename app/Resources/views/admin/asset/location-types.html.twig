@@ -9,7 +9,12 @@
         <div class="form-row type">
             <span class="default">{{ form_widget(form.default)}}</span>
             <span class="id">{{ form_widget(form.id) }}</span>
-            <span class="name">{{ form_widget(form.name) }}</span>
+            {% if form.name.vars.value == 'common.unknown'|trans or form.name.vars.value == 'asset.in_transit'|trans %}
+                {% set attr = {"attr":{"disabled":true}} %}
+            {% else %}
+                {% set attr = {} %}
+            {%endif %}
+            <span class="name">{{ form_widget(form.name,attr) }}</span>
             <span class="entity">{{ form_widget(form.entity) }}</span>
             <span class="url">{{ form_widget(form.url) }}</span>
             <span class="active">{{ form_widget(form.active) }}</span>
@@ -48,7 +53,9 @@
                 <span class="url">{{ 'common.url'|trans }}</span>
                 <span class="active">{{ 'common.active'|trans }}</span>
             </div>
+
             {{form_row(location_types_form)}}
+
             {% for location_type in location_types_form.types %}
                 {{form_row(location_type)}}
             {% endfor %}

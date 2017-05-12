@@ -35,17 +35,18 @@ define([
     }
 
     function createDijits(newRow) {
-        var dijit, index = nameInput.length;
+        var dijit, index = nameInput.length, el;
         var base = divId + '_' + index + '_';
         var checked = false;
-
+        el = document.getElementById(base + "name");
         dijit = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
             pattern: "[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}",
             required: true,
             name: "location_types[types][" + index + "][name]",
-            value: document.getElementById(base + "name").value
+            value: el.value,
+            disabled: el.disabled
         }, base + "name");
         nameInput.push(dijit);
         dijit.startup();

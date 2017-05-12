@@ -26,7 +26,17 @@ class Normalizer extends SerializerAwareNormalizer implements NormalizerInterfac
 
         $normalizer->setCircularReferenceHandler( function ($object)
         {
-            return $object->getName();
+            if (method_exists($object,'getName')) {
+                return $object->getName();
+            } else {
+                if (method_exists($object,'getType')) {
+                    return $object->getType();
+                } else {
+                    if (method_exists($object,'getStatus')) {
+                        return $object->getStatus();
+                    }
+                }
+            }
         } );
 
         $serializer = new Serializer( array($normalizer), array($encoder) );

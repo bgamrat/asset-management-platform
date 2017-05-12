@@ -62,7 +62,7 @@ class TransferType extends AbstractType
                     {
                         return $status->isActive();
                     },
-                    'data' => $this->em->getReference( 'AppBundle\Entity\Asset\IssueStatus', $defaultStatus->getId() ),
+                    'data' => $defaultStatus !== null ? $this->em->getReference( 'AppBundle\Entity\Asset\TransferStatus', $defaultStatus->getId() ) : '',
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )

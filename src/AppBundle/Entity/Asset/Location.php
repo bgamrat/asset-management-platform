@@ -1,4 +1,6 @@
 <?php
+/* Be sure to create the In Transit and Unknown locations */
+
 
 namespace AppBundle\Entity\Asset;
 

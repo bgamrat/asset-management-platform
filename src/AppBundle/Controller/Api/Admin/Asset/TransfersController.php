@@ -212,10 +212,49 @@ class TransfersController extends FOSRestController
             {
                 $transfer = $form->getData();
                 $em->persist( $transfer );
-                if ($transfer->getStatus())
                 $transferItems = $transfer->getItems();
-                foreach ($transferItems as $t) {
-                    
+                $transferStatus = $transfer->getStatus();
+
+                if( $transferStatus->isLocationDestination() )
+                {
+                    foreach( $transferItems as $t )
+                    {
+                        $t->getAsset()->setLocation( $transfer->getDestinationLocation() );
+                    }
+                }
+                else
+                {
+                    if( $transferStatus->isInTransit() )
+                    {
+                        $inTransit = $this->get( 'translator' )->trans( 'asset.in_transit' );
+                        $queryBuilder = $em->createQueryBuilder()->select( ['l'] )
+                                ->from( 'AppBundle\Entity\Asset\Location', 'l' )
+                                ->join( 'l.type', 't' )
+                                ->where( 't.name = :type' )
+                                ->setParameter( 'type', $inTransit );
+                        $data = $queryBuilder->getQuery()->getResult()[0];
+                        foreach( $transferItems as $t )
+                        {
+                            $t->getAsset()->setLocation( $data );
+                        }
+                    }
+                    else
+                    {
+                        if( $transferStatus->isLocationUnknown() )
+                        {
+                            $unknown = $this->get( 'translator' )->trans( 'common.unknown' );
+                            $queryBuilder = $em->createQueryBuilder()->select( ['l'] )
+                                            ->from( 'AppBundle\Entity\Asset\Location', 'l' )
+                                            ->join( 'l.type', 't' )
+                                            ->where( 't.name = :type' )
+                                            ->setParameter( 'type', $unknown )[0];
+                            $data = $queryBuilder->getQuery()->getResult();
+                            foreach( $transferItems as $t )
+                            {
+                                $t->getAsset()->setLocation( $data );
+                            }
+                        }
+                    }
                 }
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
