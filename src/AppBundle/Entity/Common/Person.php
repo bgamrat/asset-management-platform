@@ -17,7 +17,7 @@ use AppBundle\Entity\Common\PersonLog;
  * Person
  *
  * @ORM\Table(name="person")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
  * @Gedmo\Loggable(logEntryClass="PersonLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("user")
@@ -370,6 +370,17 @@ class Person
         $this->phoneNumbers->removeElement( $phoneNumber );
     }
 
+    public function getPhoneLines()
+    {
+        $phones = $this->getPhones();
+        $phoneLines = [];
+        foreach( $phones as $p )
+        {
+            $phoneLines[] = $p->getType()->getType() . ' ' . $p->getPhoneNumber();
+        }
+        return $phoneLines;
+    }
+
     public function getEmails()
     {
         return $this->emails->toArray();
@@ -386,6 +397,17 @@ class Person
     public function removeEmail( Email $email )
     {
         $this->emails->removeElement( $email );
+    }
+
+    public function getEmailLines()
+    {
+        $emails = $this->getEmails();
+        $emailLines = [];
+        foreach( $emails as $e )
+        {
+            $emailLines[] = $e->getType()->getType() . ' ' . $e->getEmail();
+        }
+        return $emailLines;
     }
 
     public function getAddresses()
@@ -425,4 +447,5 @@ class Person
             $this->user->setLocked( true );
         }
     }
+
 }

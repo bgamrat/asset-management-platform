@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\View;
+use AppBundle\Controller\Api\Common\Common;
 
 class DefaultController extends FOSRestController
 {
@@ -21,16 +22,10 @@ class DefaultController extends FOSRestController
         $name = $request->get( 'name' );
         if( !empty( $name ) )
         {
-            $name = '%' . str_replace( '*', '%', $name );
-
             $em = $this->getDoctrine()->getManager();
-
-            $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "m.name"] )
-                    ->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
-                    ->where( "LOWER(m.name) LIKE :manufacturer_name" )
-                    ->setParameter( 'manufacturer_name', strtolower( $name ) );
-
-            $data = $queryBuilder->getQuery()->getResult();
+            $manufacturers = $em->getRepository( 'AppBundle\Entity\Asset\Manufacturer' )->findByNameLike( $name );
+            $common = new Common;
+            $data = $common->getContacts($manufacturers);
         }
         else
         {

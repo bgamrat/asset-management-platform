@@ -12,7 +12,7 @@ use AppBundle\Entity\Common\Person;
  * Client
  *
  * @ORM\Table(name="client")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ClientRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */

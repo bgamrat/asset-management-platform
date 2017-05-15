@@ -2,12 +2,10 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\Asset\Vendor;
-
 /**
- * VendorRepository
+ * ManufacturerRepository
  */
-class VendorRepository extends \Doctrine\ORM\EntityRepository
+class ManufacturerRepository extends \Doctrine\ORM\EntityRepository
 {
 
     public function findByNameLike( $name )
@@ -15,7 +13,7 @@ class VendorRepository extends \Doctrine\ORM\EntityRepository
         $name = '%' . str_replace( '*', '%', strtolower( $name ) );
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT v FROM AppBundle\Entity\Asset\Vendor v WHERE LOWER(v.name) LIKE :name ORDER BY v.name ASC"
+                                "SELECT m FROM AppBundle\Entity\Asset\Manufacturer m WHERE LOWER(m.name) LIKE :name ORDER BY m.name ASC"
                         )
                         ->setParameter( 'name', $name )
                         ->getResult();
@@ -23,12 +21,11 @@ class VendorRepository extends \Doctrine\ORM\EntityRepository
 
     public function findByContacts( $contactIds )
     {
-        $queryBuilder = $this->getEntityManager()->createQueryBuilder()->select( ['v.id', 'v.name', 'c.id AS contact_id'] )
-                ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
-                ->leftJoin( 'v.contacts', 'c' );
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder()->select( ['m.id', 'm.name', 'c.id AS contact_id'] )
+                ->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
+                ->leftJoin( 'm.contacts', 'c' );
         $queryBuilder->where( $queryBuilder->expr()->in( 'c.id', ':ids' ) )
                 ->setParameter( 'ids', $contactIds );
         return $queryBuilder->getQuery()->getResult();
     }
-
 }

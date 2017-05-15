@@ -34,6 +34,9 @@ class DefaultController extends FOSRestController
                     ->setParameter( 'barcode_model', strtolower( $barcode_model ) );
 
             $data = $queryBuilder->getQuery()->getResult();
+            foreach ($data as $i => $d) {
+                $data[$i]['label'] = '<span>'.$d['name'].'</span>';
+            }
         }
         else
         {

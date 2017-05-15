@@ -126,7 +126,7 @@ define([
         domConstruct.place(prototypeContent, prototypeNode, "after");
 
         clientStore = new JsonRest({
-            target: '/api/store/clients?',
+            target: '/api/store/contacts?client&venue&',
             useRangeHeaders: false,
             idProperty: 'id'});
 

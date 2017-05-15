@@ -31,6 +31,9 @@ class DefaultController extends FOSRestController
                     ->setParameter( 'name', strtolower( $name ) );
 
             $data = $queryBuilder->getQuery()->getResult();
+            foreach ($data as $i => $d) {
+                $data[$i]['label'] = '<span>'.$d['name'].'</span>';
+            }
         }
         else
         {

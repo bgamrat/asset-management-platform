@@ -12,6 +12,7 @@ parameters:
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
 
 services:
+
     # JSON Encoder
     app.encoder.json:
         class: 'Symfony\Component\Serializer\Encoder\JsonEncoder'
