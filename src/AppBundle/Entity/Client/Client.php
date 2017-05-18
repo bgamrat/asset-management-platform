@@ -49,9 +49,9 @@ class Client
     private $comment;
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
-     * @ORM\JoinTable(name="client_contacts",
-     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id", unique=true)}
+     * @ORM\JoinTable(name="client_contact",
+     *      joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", unique=true)}
      *      )
      */
     private $contacts = null;

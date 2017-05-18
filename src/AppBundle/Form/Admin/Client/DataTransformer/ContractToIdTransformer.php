@@ -27,7 +27,7 @@ class ContractToIdTransformer implements DataTransformerInterface
             return '';
         }
 
-        return $contract->getName();
+        return $contract->getId();
     }
 
     /**
@@ -37,7 +37,7 @@ class ContractToIdTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (contract) is not found.
      */
-    public function reverseTransform($contractName)
+    public function reverseTransform($contractId)
     {
         // no contract id? It's optional, so that's ok
         if (!$contractId) {

@@ -24,7 +24,7 @@ define([
 
     "use strict";
     var divIdInUse = "user_person";
-    var firstnameInput = [], middlenameInput = [], lastnameInput = [];
+    var firstnameInput = [], middlenameInput = [], lastnameInput = [], titleInput = [];
     var typeSelect = [], commentInput = [];
     var dataPrototype;
     var prototypeNode, prototypeContent;
@@ -87,6 +87,15 @@ define([
         }, base + "lastname");
         dijit.startup();
         lastnameInput.push(dijit);
+        dijit = new ValidationTextBox({
+            required: true,
+            trim: true,
+            pattern: "[A-Za-z\.\,\ \'-]{2,64}",
+            "class": "name",
+            placeholder: core.title
+        }, base + "title");
+        dijit.startup();
+        titleInput.push(dijit);
         dijit = new Textarea({
             placeholder: core.comment,
             trim: true,
@@ -153,14 +162,14 @@ define([
         createDijits();
 
         addOneMoreControl = query('.contacts .add-one-more-row');
-        if (addOneMoreControl.length > 0) {
+        if( addOneMoreControl.length > 0 ) {
             addOneMoreControl.on("click", function (event) {
                 cloneNewNode();
                 createDijits();
                 phoneNumbers.run(getDivId());
                 emails.run(getDivId());
                 addresses.run(getDivId());
-                if (personId.length >= lib.constant.MAX_CONTACTS) {
+                if( personId.length >= lib.constant.MAX_CONTACTS ) {
                     addOneMoreControl.addClass("hidden");
                 }
             });
@@ -174,11 +183,12 @@ define([
     function getData() {
         var i, returnData = [];
         for( i = 0; i < personId.length; i++ ) {
-            if (lastnameInput[i].get('value') !== "") {
+            if( lastnameInput[i].get('value') !== "" ) {
                 returnData.push({
                     "id": personId[i],
                     "type": parseInt(typeSelect[i].get('value')),
                     "type_text": typeSelect[i].get('displayedValue'),
+                    "title": titleInput[i].get('value'),
                     "firstname": firstnameInput[i].get('value'),
                     "middlename": middlenameInput[i].get('value'),
                     "lastname": lastnameInput[i].get('value'),
@@ -198,23 +208,24 @@ define([
 
         nodes = query(".form-row.person,.form-row.contacts");
         nodes.forEach(function (node, index) {
-            if (index !== 0) {
+            if( index !== 0 ) {
                 destroyRow(index, node);
             }
         });
 
-        if( typeof person === "object" && person !== null ) {    
-            if (!person.hasOwnProperty('length')) {
+        if( typeof person === "object" && person !== null ) {
+            if( !person.hasOwnProperty('length') ) {
                 person = [person];
             }
             for( i = 0; i < person.length; i++ ) {
-                if (i !== 0) {
+                if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();
                 }
                 obj = person[i];
                 personId[i] = obj.id;
                 typeSelect[i].set('value', obj.type);
+                titleInput[i].set('value', obj.title);
                 firstnameInput[i].set('value', obj.firstname);
                 middlenameInput[i].set('value', obj.middlename);
                 lastnameInput[i].set('value', obj.lastname);
@@ -238,6 +249,7 @@ define([
         } else {
             personId[0] = null;
             typeSelect[0].set('value', '');
+            titleInput[0].set('value', '');
             firstnameInput[0].set('value', '');
             middlenameInput[0].set('value', '');
             lastnameInput[0].set('value', '');

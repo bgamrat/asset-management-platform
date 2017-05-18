@@ -48,7 +48,7 @@ class Vendor
     private $comment;
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
-     * @ORM\JoinTable(name="vendor_contacts",
+     * @ORM\JoinTable(name="vendor_contact",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id", unique=true)}
      *      )

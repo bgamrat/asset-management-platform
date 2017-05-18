@@ -23,8 +23,8 @@ define([
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var billToId = [], clientId = [], clientFilteringSelect = [], eventId = [], eventFilteringSelect = [], amountInput = [], commentInput = [];
-    var clientStore, eventStore;
+    var billToId = [], contactId = [], contactFilteringSelect = [], eventId = [], eventFilteringSelect = [], amountInput = [], commentInput = [];
+    var contactStore, eventStore;
     var divIdInUse = null;
     var addOneMoreControl = null;
     var currentRowIndex = 0;
@@ -38,29 +38,30 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__bill_to__/g, clientFilteringSelect.length);
+        prototypeContent = dataPrototype.replace(/__bill_to__/g, contactFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode, "after");
         billToId.push(null);
     }
 
     function createDijits() {
         var dijit;
-        var base = prototypeNode.id + "_" + clientFilteringSelect.length + "_";
+        var base = prototypeNode.id + "_" + contactFilteringSelect.length + "_";
         dijit = new FilteringSelect({
-            store: clientStore,
-            labelAttr: "name",
+            store: contactStore,
+            labelAttr: "label",
+            labelType: "html",
             searchAttr: "name",
-            placeholder: core.client,
+            placeholder: core.contact,
             required: false,
             pageSize: 25
-        }, base + "client");
+        }, base + "contact");
         dijit.on("change", function () {
-            var clientId = this.get('value');
-            if( !isNaN(clientId) ) {
-                eventStore.target = eventStore.target.replace(/\d*$/, clientId);
+            var contactId = this.get('value');
+            if( !isNaN(contactId) ) {
+                eventStore.target = eventStore.target.replace(/\d*$/, contactId);
             }
         });
-        clientFilteringSelect.push(dijit);
+        contactFilteringSelect.push(dijit);
         dijit.startup();
         dijit = new FilteringSelect({
             store: eventStore,
@@ -99,7 +100,7 @@ define([
         }
 
         billToId.splice(id, 1);
-        item = clientFilteringSelect.splice(id, 1);
+        item = contactFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
         item = eventFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
@@ -125,13 +126,13 @@ define([
 
         domConstruct.place(prototypeContent, prototypeNode, "after");
 
-        clientStore = new JsonRest({
-            target: '/api/store/contacts?client&venue&',
+        contactStore = new JsonRest({
+            target: '/api/store/contacts?client&venue',
             useRangeHeaders: false,
             idProperty: 'id'});
 
         eventStore = new JsonRest({
-            target: '/api/store/events?client=',
+            target: '/api/store/events?contact=',
             useRangeHeaders: false,
             idProperty: 'id'});
 
@@ -158,7 +159,7 @@ define([
             returnData.push(
                     {
                         "id": billToId[i],
-                        "client": clientFilteringSelect[i].get('value'),
+                        "contact": contactFilteringSelect[i].get('value'),
                         "event": eventFilteringSelect[i].get('value'),
                         "amount": parseFloat(amountInput[i].get("value")),
                         "comment": commentInput[i].get('value')
@@ -182,11 +183,11 @@ define([
                 currentRowIndex = i;
                 obj = items[i];
                 billToId[i] = obj.id;
-                clientFilteringSelect[i].set('displayedValue', obj.client.name);
+                contactFilteringSelect[i].set('displayedValue', obj.contact.name);
                 amountInput[i].set("value", obj.amount);
                 commentInput[i].set('value', obj.comment);
                 if( typeof items[i].event !== "undefined" && typeof items[i].event.name !== "undefined" ) {
-                    eventStore.target = eventStore.target.replace(/\d*$/, obj.client.id);
+                    eventStore.target = eventStore.target.replace(/\d*$/, obj.contact.id);
                     eventFilteringSelect[i].set('displayedValue', obj.event.name);
                 } else {
                     eventFilteringSelect[i].reset();

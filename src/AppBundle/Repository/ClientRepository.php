@@ -19,14 +19,4 @@ class ClientRepository extends \Doctrine\ORM\EntityRepository
                         ->getResult();
     }
 
-    public function findByContacts( $contactIds )
-    {
-        $queryBuilder = $this->getEntityManager()->createQueryBuilder()->select( ['c.id', 'c.name', 'cc.id AS contact_id'] )
-                ->from( 'AppBundle\Entity\Client\Client', 'c' )
-                ->leftJoin( 'c.contacts', 'cc' );
-        $queryBuilder->where( $queryBuilder->expr()->in( 'cc.id', ':ids' ) )
-                ->setParameter( 'ids', $contactIds );
-        return $queryBuilder->getQuery()->getResult();
-    }
-
 }

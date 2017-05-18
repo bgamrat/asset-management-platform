@@ -50,7 +50,7 @@ class Manufacturer
     private $comment;
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
-     * @ORM\JoinTable(name="manufacturer_contacts",
+     * @ORM\JoinTable(name="manufacturer_contact",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", unique=true)}
      *      )

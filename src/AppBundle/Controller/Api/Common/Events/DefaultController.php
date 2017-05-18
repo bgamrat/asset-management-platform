@@ -19,7 +19,7 @@ class DefaultController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $eventName = $request->get( 'name' );
-        $clientId = $request->get( 'client' );
+        $contactId = $request->get( 'contact' );
         if( !empty( $eventName ) )
         {
             $eventName = '%' . str_replace( '*', '%', $eventName );
@@ -32,7 +32,7 @@ class DefaultController extends FOSRestController
                     ->where( "LOWER(e.name) LIKE :event_name AND cl.id = :client_id" )
                     ->orderBy( 'e.name' )
                     ->setParameter( 'event_name', strtolower( $eventName ) )
-                    ->setParameter( 'client_id', $clientId );
+                    ->setParameter( 'contact_id', $contactId );
             $data = $queryBuilder->getQuery()->getResult();
         }
         else

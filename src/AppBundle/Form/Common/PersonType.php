@@ -36,6 +36,7 @@ class PersonType extends AbstractType
                 ->add( 'firstname', TextType::class, ['label' => 'person.firstname'] )
                 ->add( 'middlename', TextType::class, ['label' => 'person.middlename'] )
                 ->add( 'lastname', TextType::class, ['label' => 'person.lastname'] )
+                ->add( 'title', TextType::class, ['label' => 'person.title'] )
                 ->add( 'phones', CollectionType::class, [
                     'entry_type' => PhoneNumberType::class,
                     'by_reference' => false,

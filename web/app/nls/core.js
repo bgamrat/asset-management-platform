@@ -73,6 +73,7 @@ define({
         "state_province": "State",
         "status": "Status",
         "street": "Street",
+        "title": "Title",
         "to": "To",
         "tracking_number": "Tracking Number",
         "type": "Type",

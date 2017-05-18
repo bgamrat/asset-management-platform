@@ -105,6 +105,12 @@ fieldset .sub-form-legend {
     display: inline-block;
     width: 290px;
 }
+.name .dijitTextBox {
+    width: 100px;
+}
+.name .title .dijitTextBox {
+    margin: 0 10px;
+}
 .contacts .type,
 .contacts .email,
 .contacts .person,

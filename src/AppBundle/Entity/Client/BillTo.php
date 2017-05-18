@@ -32,11 +32,11 @@ class BillTo
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Client")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Person")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
-    private $client;
+    private $contact;
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Schedule\Event")
      * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
@@ -95,27 +95,27 @@ class BillTo
     }
 
     /**
-     * Set client
+     * Set contact
      *
-     * @param string $client
+     * @param string $contact
      *
      * @return BillTo
      */
-    public function setClient( $client )
+    public function setContact( $contact )
     {
-        $this->client = $client;
+        $this->contact = $contact;
 
         return $this;
     }
 
     /**
-     * Get client
+     * Get contact
      *
      * @return string
      */
-    public function getClient()
+    public function getContact()
     {
-        return $this->client;
+        return $this->contact;
     }
 
     /**

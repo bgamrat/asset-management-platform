@@ -352,6 +352,8 @@ person:
         Middle initial
     middlename:
         Middle name
+    title:
+        Title
                 
 user:
     admin:

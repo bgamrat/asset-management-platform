@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use AppBundle\Form\Admin\Client\DataTransformer\ClientToIdTransformer;
+use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
 use AppBundle\Form\Admin\Schedule\DataTransformer\EventToIdTransformer;
 
 class BillToType extends AbstractType
@@ -32,15 +32,15 @@ class BillToType extends AbstractType
     {
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'client', TextType::class, ['label' => false] )
+                ->add( 'contact', TextType::class, ['label' => false] )
                 ->add( 'event', TextType::class, ['label' => 'common.event'] )
                 ->add( 'amount', MoneyType::class, ['label' => 'common.amount', 'currency' => 'USD'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
         ;
-        $builder->get( 'client' )
-                ->addModelTransformer( new ClientToIdTransformer( $this->em ) );
+        $builder->get( 'contact' )
+                ->addModelTransformer( new PersonToIdTransformer( $this->em ) );
         $builder->get( 'event' )
                 ->addModelTransformer( new EventToIdTransformer( $this->em ) );
     }

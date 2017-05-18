@@ -79,7 +79,7 @@ class Event
     private $client;
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
-     * @ORM\JoinTable(name="event_contacts",
+     * @ORM\JoinTable(name="event_contact",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", unique=true)}
      *      )

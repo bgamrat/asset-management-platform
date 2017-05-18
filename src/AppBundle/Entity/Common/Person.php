@@ -43,10 +43,13 @@ class Person
     /**
      * @var string
      * @Assert\Length(
-     *      min = 2,
+     *      min = 0,
      *      max = 64,
      *      minMessage = "person.firstname error.must_be_at_least {{ limit }} common.characters",
      *      maxMessage = "person.firstname error.must_be_less_than_or_equal_to {{ limit }} common.characters",
+     * )
+     * @Assert\Expression(expression = "value=='' or this.getTitle() == ''",
+     *      message="person.firstname is required if no title is provided"
      * )
      * @ORM\Column(name="firstname", type="string", length=64, nullable=false, unique=false)
      * @Gedmo\Versioned
@@ -69,15 +72,34 @@ class Person
      * @var string
      *
      * @Assert\Length(
-     *      min = 2,
+     *      min = 0,
      *      max = 64,
      *      minMessage = "person.lastname error.must_be_at_least {{ limit }} common.characters",
      *      maxMessage = "person.lastname error.must_be_less_than_or_equal_to {{ limit }} common.characters",
+     * )
+     * @Assert\Expression(expression = "value=='' or this.getTitle() == ''",
+     *      message="person.lastname is required if no title is provided"
      * )
      * @ORM\Column(name="lastname", type="string", length=64, nullable=false, unique=false)
      * @Gedmo\Versioned
      */
     private $lastname;
+    /**
+     * @var string
+     *
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 64,
+     *      minMessage = "person.title error.must_be_at_least {{ limit }} common.characters",
+     *      maxMessage = "person.title error.must_be_less_than_or_equal_to {{ limit }} common.characters",
+     * )
+     * @Assert\Expression(expression = "value=='' or this.getLastname() == ''",
+     *      message="person.title is required if no name is provided"
+     * )
+     * @ORM\Column(name="title", type="string", length=64, nullable=true, unique=false)
+     * @Gedmo\Versioned
+     */
+    private $title;
     /**
      * @var string
      * 
@@ -140,6 +162,7 @@ class Person
      * @Gedmo\Versioned
      */
     private $deletedAt;
+    private $contact_name = null;
 
     public function __construct()
     {
@@ -216,6 +239,30 @@ class Person
     }
 
     /**
+     * Set middlename
+     *
+     * @param string $middlename
+     *
+     * @return Person
+     */
+    public function setMiddlename( $middlename )
+    {
+        $this->middlename = $middlename;
+
+        return $this;
+    }
+
+    /**
+     * Get middlename
+     *
+     * @return string
+     */
+    public function getMiddlename()
+    {
+        return $this->middlename;
+    }
+
+    /**
      * Set lastname
      *
      * @param string $lastname
@@ -240,27 +287,27 @@ class Person
     }
 
     /**
-     * Set middlename
+     * Set title
      *
-     * @param string $middlename
+     * @param string $title
      *
      * @return Person
      */
-    public function setMiddlename( $middlename )
+    public function setTitle( $title )
     {
-        $this->middlename = $middlename;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get middlename
+     * Get title
      *
      * @return string
      */
-    public function getMiddlename()
+    public function getTitle()
     {
-        return $this->middlename;
+        return $this->title;
     }
 
     public function getName()
@@ -287,6 +334,13 @@ class Person
         if( !empty( $this->lastname ) )
         {
             $name[] = $this->lastname;
+        }
+        if( count( $name ) === 0 )
+        {
+            if( !empty( $this->title ) )
+            {
+                $name[] = $this->title;
+            }
         }
         return implode( ' ', $name );
     }
@@ -446,6 +500,57 @@ class Person
             $this->user->setEnabled( false );
             $this->user->setLocked( true );
         }
+    }
+
+    public function setContactName( $contactName )
+    {
+        $this->contact_name = $contactName;
+        return $this;
+    }
+
+    public function getContactName()
+    {
+        return $this->contact_name;
+    }
+
+    function getContactDetails()
+    {
+        $d = [];
+        $d['id'] = $this->getId();
+        $d['name'] = $this->getContactName();
+        $phoneLines = $this->getPhoneLines();
+        if( count( $phoneLines ) > 0 )
+        {
+            $phoneLines = implode( '<br>', $phoneLines ) . '<br>';
+        }
+        else
+        {
+            $phoneLines = '';
+        }
+        $emailLines = $this->getEmailLines();
+        if( count( $emailLines ) > 0 )
+        {
+            $emailLines = implode( '<br>', $emailLines ) . '<br>';
+        }
+        else
+        {
+            $emailLines = '';
+        }
+
+        // HTML label attributes for dijit.FilteringSelects MUST start with a tag
+        $d['label'] = '<div>' . $d['name'] . '<br>'
+                . $phoneLines
+                . $emailLines;
+        $addresses = $this->getAddresses();
+        if( !empty( $addresses ) )
+        {
+            foreach( $addresses as $a )
+            {
+                $d['label'] .= nl2br( $a->getAddress() );
+            }
+        }
+        $d['label'] .= '</div>';
+        return $d;
     }
 
 }
