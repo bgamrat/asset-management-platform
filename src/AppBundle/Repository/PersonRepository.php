@@ -24,40 +24,29 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
                         ->getResult();
     }
 
-    public function findByContactNameLike( $contactName )
+    public function findByContactNameLike( $contactName, $entityTypes )
     {
         $contactName = '%' . str_replace( '*', '%', strtolower( $contactName ) );
 
         $em = $this->getEntityManager();
-        $queryBuilder = $em->createQueryBuilder()->select( [ 'c.id AS contact_id', 'c.name AS name', 'p.id'] )
+        $queryBuilder = $em->createQueryBuilder()->select( [ 'c'] )
                 ->from( 'AppBundle\Entity\Common\Contact', 'c' )
-                ->join( 'c.person', 'p' )
-                ->where( self::CONCAT_NAME_LIKE )
-                ->orWhere( "LOWER(c.name) LIKE :name" )
-                ->setParameter( 'name', $contactName );
-
-        $contacts = $queryBuilder->getQuery()->getResult();
-
-        if( !empty( $contacts ) )
+                ->join( 'c.type', 'e')
+                ->where( "LOWER(c.name) LIKE :name AND e.entity IN (:types)" )
+                ->setParameter( 'name', $contactName )
+                ->setParameter( 'types', $entityTypes);
+        $fullContacts = $queryBuilder->getQuery()->getResult();
+        if( !empty( $fullContacts ) )
         {
-            $contactIds = [];
-            foreach( $contacts as $cc )
+            $contacts = [];
+            foreach( $fullContacts as $c )
             {
-                $contactIds[$cc['id']] = $cc;
-            }
-
-            $queryBuilder = $em->createQueryBuilder();
-            $queryBuilder->select( 'p' )
-                    ->from( 'AppBundle\Entity\Common\Person', 'p' )
-                    ->where( $queryBuilder->expr()->in( 'p.id', array_keys( $contactIds ) ) );
-
-            $contacts = $queryBuilder->getQuery()->getResult();
-            foreach( $contacts as $c )
-            {
-                $id = $c->getId();
-                $c->setContactName( $contactIds[$id]['name'] );
-                $c->setContactType( $contactIds[$id]['entity'] );
-                $c->setContactId( $contactIds[$id]['entity_id'] );
+                $p = $c->getPerson();
+                $p->setContactId( $c->getId() );
+                $p->setContactName( $c->getName() );
+                $p->setContactEntityType( $c->getType()->getEntity());
+                $p->setContactEntityId( $c->getEntity() );
+                $contacts[$c->getHash()] = $p;
             }
             return $contacts;
         }
@@ -91,13 +80,17 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
                     ->from( 'AppBundle\Entity\Common\Person', 'p' )
                     ->where( $queryBuilder->expr()->in( 'p.id', array_keys( $contactIds ) ) );
 
-            $contacts = $queryBuilder->getQuery()->getResult();
-            foreach( $contacts as $c )
+            $people = $queryBuilder->getQuery()->getResult();
+            $contacts = [];
+            foreach( $people as $p)
             {
-                $id = $c->getId();
-                $c->setContactName( $contactIds[$id]['client_name'] . ' - ' . $c->getFullName() );
-                $c->setContactType( 'client' );
-                $c->setContactId( $contactIds[$id]['client_id'] );
+                $id = $p->getId();
+                // This is a new contact created from the client list
+                $p->setContactId( null );
+                $p->setContactName( $contactIds[$id]['client_name'] . ' - ' . $p->getFullName() );
+                $p->setContactEntityType( 'client' );
+                $p->setContactEntityId( $contactIds[$id]['client_id'] );
+                $contacts[] = $p;
             }
             return $contacts;
         }
@@ -134,10 +127,13 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
             foreach( $contacts as $c )
             {
                 $id = $c->getId();
-                $c->setContactName( $contactIds[$id]['client_name'] . ' - ' . $c->getFullName() );
-                $c->setContactType( 'client' );
-                $c->setContactId( $contactIds[$id] );
+                // This is a new contact created from the manufacturer list
+                $c->setContactId( null );
+                $c->setContactName( $contactIds[$id]['manufacturer_name'] . ' - ' . $c->getFullName() );
+                $c->setContactEntityType( 'manufacturer' );
+                $c->setContactEntityId( $contactIds[$id]['manufacturer_id'] );
             }
+            return $contacts;
             return $contacts;
         }
         return [];

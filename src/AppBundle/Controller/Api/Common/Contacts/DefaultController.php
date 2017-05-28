@@ -21,31 +21,52 @@ class DefaultController extends FOSRestController
         $name = $request->get( 'name' );
         if( !empty( $name ) )
         {
+            parse_str( $request->getQueryString(), $contactTypes );
+            unset( $contactTypes['name'] );
+
             $em = $this->getDoctrine()->getManager();
 
-            $contacts = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByContactNameLike( $name );
+            // Get existing contacts of the requested types
+            $contacts = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByContactNameLike( $name, array_keys( $contactTypes ) );
+            $data = [];
+            if( !empty( $contacts ) )
+            {
+                foreach( $contacts as $c )
+                {
+                    $data = array_merge( $data, $c->getContactDetails() );
+                }
+            }
 
+            $people = [];
             $client = $request->get( 'client' );
             $venue = $request->get( 'venue' );
             if( $request->get( 'client' ) !== null )
             {
-                $contacts += $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByClientContactNameLike( $name );
+                $people += $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByClientContactNameLike( $name );
             }
             if( $request->get( 'manufacturer' ) !== null )
             {
-                $contacts += $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByManufacturerContactNameLike( $name );
+                $people += $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByManufacturerContactNameLike( $name );
             }
-            if( !empty( $contacts ) )
+            if( !empty( $contacts ) || !empty( $people ) )
             {
-                $data = [];
-                foreach( $contacts as $c )
+                $personContactDetails = [];
+                foreach( $people as $p )
                 {
-                    $data = array_merge( $data, $c->getContactDetails( $c ) );
+                    $personContactDetails = $p->getContactDetails();
+                    foreach( $personContactDetails as $pd )
+                    {
+                        if( !isset( $contacts[$pd['hash']] ) )
+                        {
+                            $data = array_merge($data,$personContactDetails);
+                        }
+                    }
+
+                    return array_values( $data );
                 }
-                return array_values( $data );
             }
+            return null;
         }
-        return null;
     }
 
 }

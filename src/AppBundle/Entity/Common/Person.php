@@ -162,9 +162,10 @@ class Person
      * @Gedmo\Versioned
      */
     private $deletedAt;
-    private $contact_name = null;
-    private $contact_type = null;
     private $contact_id = null;
+    private $contact_name = null;
+    private $contact_entity_type = null;
+    private $contact_entity_id = null;
 
     public function __construct()
     {
@@ -504,17 +505,6 @@ class Person
         }
     }
 
-    public function setContactType( $contactType )
-    {
-        $this->contact_type = $contactType;
-        return $this;
-    }
-
-    public function getContactType()
-    {
-        return $this->contact_type;
-    }
-
     public function setContactId( $contactId )
     {
         $this->contact_id = $contactId;
@@ -524,6 +514,29 @@ class Person
     public function getContactId()
     {
         return $this->contact_id;
+    }
+    
+    public function setContactEntityType( $contactEntityType )
+    {
+        $this->contact_entity_type = $contactEntityType;
+        return $this;
+    }
+
+    public function getContactEntityType()
+    {
+        return $this->contact_entity_type;
+    }
+
+    // Contact Entity Id is the entity id of the organization of the selected contact
+    public function setContactEntityId( $contactEntityId )
+    {
+        $this->contact_entity_id = $contactEntityId;
+        return $this;
+    }
+
+    public function getContactEntityId()
+    {
+        return $this->contact_entity_id;
     }
 
     public function setContactName( $contactName )
@@ -542,11 +555,13 @@ class Person
         $details = [];
 
         $d = [];
-        // 'id' is the Contact id
+        
         $d['person_id'] = $this->getId();
         $d['name'] = $this->getContactName();
         $d['contact_id'] = $this->getContactId();
-        $d['contact_type'] = $this->getContactType();
+        $d['contact_entity_id'] = $this->getContactEntityId();
+        $d['contact_type'] = $this->getContactEntityType();
+
         $phoneLines = $this->getPhoneLines();
         if( count( $phoneLines ) > 0 )
         {
@@ -572,14 +587,17 @@ class Person
                 . $emailLines;
         $d['label'] = $labelBase;
         $addresses = $this->getAddresses();
+        $d['hash'] = $this->getContactEntityType().'/'.$this->getContactEntityId().'/'.$this->getId();
         if( !empty( $addresses ) )
         {
+            $hashBase = $d['hash'];
             foreach( $addresses as $a )
             {
                 $d['address_id'] = $a->getId();
                 $d['label'] .= nl2br( $a->getAddress() ) . '</div>';
-                $details[] = $d;
                 $d['label'] = $labelBase;
+                $d['hash'] = $hashBase .'/'.$a->getId();
+                $details[] = $d;
             }
         }
         else
@@ -590,5 +608,4 @@ class Person
 
         return $details;
     }
-
 }

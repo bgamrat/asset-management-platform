@@ -235,6 +235,15 @@ class Contact
     {
         return $this->active;
     }
+    
+    // Must match the one in Person
+    public function getHash() {
+        $entityType = $this->getType()->getEntity();
+        $entityId = $this->getEntity();
+        $personId = $this->getPerson()->getId();
+        $addressId = ($this->getAddress() !== null) ? $this->getAddress()->getId() : null;
+        return ($entityType.'/'.$entityId.'/'.$personId.'/'.$addressId);
+    }
 
     public function getUpdated()
     {
