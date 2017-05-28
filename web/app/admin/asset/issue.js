@@ -36,7 +36,7 @@ define([
     'put-selector/put',
     "app/admin/asset/issue_items",
     "app/admin/asset/issue_notes",
-    "app/admin/client/bill_to",
+    "app/admin/common/bill_to",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",

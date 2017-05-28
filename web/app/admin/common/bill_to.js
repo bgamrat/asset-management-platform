@@ -23,11 +23,11 @@ define([
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var billToId = [], contactId = [], contactFilteringSelect = [], eventId = [], eventFilteringSelect = [], amountInput = [], commentInput = [];
-    var contactStore, eventStore;
+    var billToId = [], contactId = [], contactFilteringSelect = [], eventFilteringSelect = [], amountInput = [], commentInput = [];
+    var contactStore, currentContact, eventStore;
     var divIdInUse = null;
     var addOneMoreControl = null;
-    var currentRowIndex = 0;
+    var currentContact;
 
     function getDivId() {
         return divIdInUse;
@@ -48,21 +48,22 @@ define([
         var base = prototypeNode.id + "_" + contactFilteringSelect.length + "_";
         dijit = new FilteringSelect({
             store: contactStore,
-            labelAttr: "label",
+            labelAttr: "name",
             labelType: "html",
             searchAttr: "name",
             placeholder: core.contact,
             required: false,
-            pageSize: 25
+            pageSize: 25,
+            intermediateChanges: true
         }, base + "contact");
-        dijit.on("change", function () {
-            var contactId = this.get('value');
-            if( !isNaN(contactId) ) {
-                eventStore.target = eventStore.target.replace(/\d*$/, contactId);
-            }
+        dijit.startup();
+        dijit.on("change", function (evt) {
+            var id = parseInt(this.id.replace(/\D/g, ''));
+            var item = this.get('item');
+            eventFilteringSelect[id].store.target = "/api/store/events?" + item.contact_type + "=" + item.contact_id;
         });
         contactFilteringSelect.push(dijit);
-        dijit.startup();
+
         dijit = new FilteringSelect({
             store: eventStore,
             labelAttr: "name",
@@ -154,12 +155,13 @@ define([
     }
 
     function getData() {
-        var i, l = billToId.length, returnData = [];
+        var i, l = billToId.length, contact, returnData = [];
         for( i = 0; i < l; i++ ) {
+            contact = contactFilteringSelect[i].get('item');
             returnData.push(
                     {
                         "id": billToId[i],
-                        "contact": contactFilteringSelect[i].get('value'),
+                        "contact": contact,
                         "event": eventFilteringSelect[i].get('value'),
                         "amount": parseFloat(amountInput[i].get("value")),
                         "comment": commentInput[i].get('value')
@@ -180,13 +182,12 @@ define([
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits();
-                currentRowIndex = i;
                 obj = items[i];
                 billToId[i] = obj.id;
-                contactFilteringSelect[i].set('displayedValue', obj.contact.name);
+                contactFilteringSelect[i].set('item', obj.contact);
                 amountInput[i].set("value", obj.amount);
                 commentInput[i].set('value', obj.comment);
-                if( typeof items[i].event !== "undefined" && typeof items[i].event.name !== "undefined" ) {
+                if( typeof items[i].event !== "undefined" && items[i].event !== null && typeof items[i].event.name !== "undefined" ) {
                     eventStore.target = eventStore.target.replace(/\d*$/, obj.contact.id);
                     eventFilteringSelect[i].set('displayedValue', obj.event.name);
                 } else {

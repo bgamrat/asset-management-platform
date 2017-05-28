@@ -163,6 +163,8 @@ class Person
      */
     private $deletedAt;
     private $contact_name = null;
+    private $contact_type = null;
+    private $contact_id = null;
 
     public function __construct()
     {
@@ -502,6 +504,28 @@ class Person
         }
     }
 
+    public function setContactType( $contactType )
+    {
+        $this->contact_type = $contactType;
+        return $this;
+    }
+
+    public function getContactType()
+    {
+        return $this->contact_type;
+    }
+
+    public function setContactId( $contactId )
+    {
+        $this->contact_id = $contactId;
+        return $this;
+    }
+
+    public function getContactId()
+    {
+        return $this->contact_id;
+    }
+
     public function setContactName( $contactName )
     {
         $this->contact_name = $contactName;
@@ -515,9 +539,14 @@ class Person
 
     function getContactDetails()
     {
+        $details = [];
+
         $d = [];
-        $d['id'] = $this->getId();
+        // 'id' is the Contact id
+        $d['person_id'] = $this->getId();
         $d['name'] = $this->getContactName();
+        $d['contact_id'] = $this->getContactId();
+        $d['contact_type'] = $this->getContactType();
         $phoneLines = $this->getPhoneLines();
         if( count( $phoneLines ) > 0 )
         {
@@ -538,19 +567,28 @@ class Person
         }
 
         // HTML label attributes for dijit.FilteringSelects MUST start with a tag
-        $d['label'] = '<div>' . $d['name'] . '<br>'
+        $labelBase = '<div>' . $d['name'] . '<br>'
                 . $phoneLines
                 . $emailLines;
+        $d['label'] = $labelBase;
         $addresses = $this->getAddresses();
         if( !empty( $addresses ) )
         {
             foreach( $addresses as $a )
             {
-                $d['label'] .= nl2br( $a->getAddress() );
+                $d['address_id'] = $a->getId();
+                $d['label'] .= nl2br( $a->getAddress() ) . '</div>';
+                $details[] = $d;
+                $d['label'] = $labelBase;
             }
         }
-        $d['label'] .= '</div>';
-        return $d;
+        else
+        {
+            $d['label'] .= '</div>';
+            $details[] = $d;
+        }
+
+        return $details;
     }
 
 }

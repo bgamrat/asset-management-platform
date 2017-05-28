@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\Admin\Client;
+namespace AppBundle\Form\Admin\Common;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
+use AppBundle\Form\Admin\Common\ContactType;
 use AppBundle\Form\Admin\Schedule\DataTransformer\EventToIdTransformer;
 
 class BillToType extends AbstractType
@@ -31,16 +31,14 @@ class BillToType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'contact', TextType::class, ['label' => false] )
+                ->add( 'id', HiddenType::class )
+                ->add( 'contact', ContactType::class )
                 ->add( 'event', TextType::class, ['label' => 'common.event'] )
                 ->add( 'amount', MoneyType::class, ['label' => 'common.amount', 'currency' => 'USD'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
         ;
-        $builder->get( 'contact' )
-                ->addModelTransformer( new PersonToIdTransformer( $this->em ) );
         $builder->get( 'event' )
                 ->addModelTransformer( new EventToIdTransformer( $this->em ) );
     }
@@ -51,13 +49,13 @@ class BillToType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Client\BillTo'
+            'data_class' => 'AppBundle\Entity\Common\BillTo'
         ) );
     }
 
     public function getName()
     {
-        return 'transfer_item';
+        return 'bill_to';
     }
 
 }

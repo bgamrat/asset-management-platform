@@ -19,7 +19,8 @@ class DefaultController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $eventName = $request->get( 'name' );
-        $contactId = $request->get( 'contact' );
+        $contactId = $request->get( 'client' );
+        $venueId = $request->get( 'venue' );
         if( !empty( $eventName ) )
         {
             $eventName = '%' . str_replace( '*', '%', $eventName );
@@ -29,10 +30,14 @@ class DefaultController extends FOSRestController
             $queryBuilder = $em->createQueryBuilder()->select( ['e.id', "e.name"] )
                     ->from( 'AppBundle\Entity\Schedule\Event', 'e' )
                     ->innerJoin( 'e.client', 'cl' )
-                    ->where( "LOWER(e.name) LIKE :event_name AND cl.id = :client_id" )
+                    //->leftJoin( 'e.venue', 'v' )
+                    //->where( "LOWER(e.name) LIKE :event_name AND (cl.id = :client_id/* OR v.id = :venue_id*/)" )
+                    ->where( "LOWER(e.name) LIKE :event_name AND (cl.id = :client_id)" )
                     ->orderBy( 'e.name' )
                     ->setParameter( 'event_name', strtolower( $eventName ) )
-                    ->setParameter( 'contact_id', $contactId );
+                    ->setParameter( 'client_id', $contactId )
+                    //->setParameter( 'venue_id', $venueId )
+                    ;
             $data = $queryBuilder->getQuery()->getResult();
         }
         else
@@ -41,4 +46,5 @@ class DefaultController extends FOSRestController
         }
         return $data;
     }
+
 }

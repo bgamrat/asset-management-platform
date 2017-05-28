@@ -23,20 +23,24 @@ class DefaultController extends FOSRestController
         {
             $em = $this->getDoctrine()->getManager();
 
-            $name = '%' . str_replace( '*', '%', strtolower( $name ) );
+            $contacts = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByContactNameLike( $name );
 
             $client = $request->get( 'client' );
             $venue = $request->get( 'venue' );
             if( $request->get( 'client' ) !== null )
             {
-                $contacts = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByClientContactNameLike( $name );
+                $contacts += $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByClientContactNameLike( $name );
+            }
+            if( $request->get( 'manufacturer' ) !== null )
+            {
+                $contacts += $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByManufacturerContactNameLike( $name );
             }
             if( !empty( $contacts ) )
             {
                 $data = [];
                 foreach( $contacts as $c )
                 {
-                    $data[] = $c->getContactDetails( $c );
+                    $data = array_merge( $data, $c->getContactDetails( $c ) );
                 }
                 return array_values( $data );
             }

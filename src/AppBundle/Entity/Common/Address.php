@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="address")
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Common\AddressLog")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\AddressRepository")
+ * @ORM\Entity()
  */
 class Address
 {

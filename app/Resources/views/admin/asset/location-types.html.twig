@@ -10,7 +10,7 @@
             <span class="default">{{ form_widget(form.default)}}</span>
             <span class="id">{{ form_widget(form.id) }}</span>
             {% if form.name.vars.value == 'common.unknown'|trans or form.name.vars.value == 'asset.in_transit'|trans %}
-                {% set attr = {"attr":{"disabled":true}} %}
+                {% set attr = {"attr":{"readonly":true}} %}
             {% else %}
                 {% set attr = {} %}
             {%endif %}

@@ -6,7 +6,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\View;
-use AppBundle\Controller\Api\Common\Common;
+use AppBundle\Controller\Api\Common\Person;
 
 class DefaultController extends FOSRestController
 {

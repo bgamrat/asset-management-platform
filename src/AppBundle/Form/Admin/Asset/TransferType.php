@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
-use AppBundle\Form\Admin\Client\BillToType;
+use AppBundle\Form\Admin\Common\BillToType;
 use AppBundle\Form\Admin\Asset\DataTransformer\CarrierServiceToIdTransformer;
 
 class TransferType extends AbstractType

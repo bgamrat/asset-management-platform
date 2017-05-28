@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
 use AppBundle\Form\Admin\Asset\DataTransformer\TrailerToIdTransformer;
-use AppBundle\Form\Admin\Client\BillToType;
+use AppBundle\Form\Admin\Common\BillToType;
 
 class IssueType extends AbstractType
 {

@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Asset\IssueItem;
-use AppBundle\Entity\Client\BillTo;
+use AppBundle\Entity\Common\BillTo;
 
 /**
  * Issue
@@ -107,11 +107,11 @@ class Issue
     private $cost = 0.0;
     /**
      * @var ArrayCollection $bill_tos
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\BillTo", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\BillTo", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\JoinTable(name="issue_bill_to",
      *      joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id", unique=false, nullable=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", unique=false, nullable=true)}
      *      )
      */
     private $bill_tos;

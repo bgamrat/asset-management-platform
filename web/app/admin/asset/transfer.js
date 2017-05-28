@@ -35,7 +35,7 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/admin/asset/transfer_items",
-    "app/admin/client/bill_to",
+    "app/admin/common/bill_to",
     "app/admin/asset/location",
     "app/admin/asset/common",
     "app/lib/common",

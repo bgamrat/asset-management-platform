@@ -222,7 +222,7 @@
 }
 #status-wrapper .in-transit,
 #status-wrapper .location-destination,
-#status-wrapper .location-unknown{
+#status-wrapper .location-unknown {
     width: 150px;
     text-align: center;
 }

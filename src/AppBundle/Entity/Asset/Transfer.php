@@ -94,7 +94,7 @@ class Transfer
     private $items;
     /**
      * @var ArrayCollection $bill_tos
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\BillTo", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\BillTo", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\JoinTable(name="transfer_bill_to",
      *      joinColumns={@ORM\JoinColumn(name="transfer_id", referencedColumnName="id")},

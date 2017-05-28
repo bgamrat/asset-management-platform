@@ -46,7 +46,7 @@ define([
             required: true,
             name: "location_types[types][" + index + "][name]",
             value: el.value,
-            disabled: el.disabled
+            readonly: el.readonly
         }, base + "name");
         nameInput.push(dijit);
         dijit.startup();

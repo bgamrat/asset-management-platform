@@ -1,6 +1,6 @@
 <?php
 
-Namespace AppBundle\Entity\Client;
+Namespace AppBundle\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -32,8 +32,8 @@ class BillTo
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Person")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Contact", cascade={"persist"})
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
     private $contact;

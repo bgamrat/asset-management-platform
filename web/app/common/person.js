@@ -70,7 +70,7 @@ define([
         dijit = new ValidationTextBox({
             trim: true,
             properCase: true,
-            pattern: "[A-Za-z\.\,\ \'-]{2,64}",
+            pattern: "[A-Za-z\.\,\ \'-]{,64}",
             maxLength: 64,
             required: false,
             "class": "name",

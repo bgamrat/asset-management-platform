@@ -1,6 +1,8 @@
 <?php
 
-namespace AppBundle\Entity\Asset;
+/* Be sure to create the In Transit and Unknown locations */
+
+namespace AppBundle\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -8,27 +10,28 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Location
+ * Contact
  *
- * @ORM\Table(name="location")
+ * @ORM\Table(name="contact") * 
  * @ORM\Entity()
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 
  */
-class Location
+class Contact
 {
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
+     * @ORM\OneToMany(targetEntity="Person", mappedBy="id")
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="LocationType")
+     * @ORM\ManyToOne(targetEntity="ContactType")
      * @ORM\JoinColumn(name="type", referencedColumnName="id")
      * @ORM\OrderBy({"type" = "ASC"})
      */
@@ -38,9 +41,23 @@ class Location
      */
     private $entity = null;
     /**
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="location")
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=64, nullable=false, unique=false)
+     * @Gedmo\Versioned
      */
-    private $assets;
+    private $name;
+    /**
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="person", referencedColumnName="id")
+     * @ORM\OrderBy({"type" = "ASC"})
+     */
+    protected $person;
+    /**
+     * @ORM\ManyToOne(targetEntity="Address", cascade={"persist"})
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $address;
     /**
      * @var boolean
      *
@@ -90,35 +107,11 @@ class Location
     }
 
     /**
-     * Set entity
-     *
-     * @param int $entity_id
-     *
-     * @return Location
-     */
-    public function setEntity( $entity )
-    {
-        $this->entity = $entity;
-
-        return $this;
-    }
-
-    /**
-     * Get entity
-     *
-     * @return int
-     */
-    public function getEntity()
-    {
-        return $this->entity;
-    }
-
-    /**
      * Set type
      *
      * @param int $type
      *
-     * @return Location
+     * @return Contact
      */
     public function setType( $type )
     {
@@ -138,35 +131,101 @@ class Location
     }
 
     /**
-     * Get assets
+     * Set person
      *
-     * @return ArrayCollection
+     * @param int $person
+     *
+     * @return Contact
      */
-    public function getAssets()
+    public function setPerson( $person )
     {
-        return $this->assets->toArray();
-    }
+        $this->person = $person;
 
-    public function setAssets( $assets )
-    {
-        foreach( $assets as $a )
-        {
-            $this->addAssets( $a );
-            $a->setLocation($this);
-        }
         return $this;
     }
 
- 
-    public function addAsset( Model $asset )
+    /**
+     * Get person
+     *
+     * @return int
+     */
+    public function getPerson()
     {
-        if( !$this->extends->contains( $asset ) )
-        {
-            $this->extends->add( $asset );
-            $a->setLocation($this);
-        }
+        return $this->person;
     }
-    
+
+    /**
+     * Set entity
+     *
+     * @param int $entity_id
+     *
+     * @return Contact
+     */
+    public function setEntity( $entity )
+    {
+        $this->entity = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Get entity
+     *
+     * @return int
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Contact
+     */
+    public function setName( $name )
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set address
+     *
+     * @param int $address
+     *
+     * @return Contact
+     */
+    public function setAddress( $address )
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return int
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
     public function setActive( $active )
     {
         $this->active = $active;
@@ -176,8 +235,9 @@ class Location
     {
         return $this->active;
     }
-        
-    public function getUpdated() {
+
+    public function getUpdated()
+    {
         return $this->updated;
     }
 
