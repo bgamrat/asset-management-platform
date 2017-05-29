@@ -60,7 +60,7 @@ define([
         dijit.on("change", function (evt) {
             var id = parseInt(this.id.replace(/\D/g, ''));
             var item = this.get('item');
-            eventFilteringSelect[id].store.target = "/api/store/events?" + item.contact_type + "=" + item.contact_id;
+            eventFilteringSelect[id].store.target = "/api/store/events?" + item.contact_type + "=" + item.contact_entity_id;
         });
         contactFilteringSelect.push(dijit);
 

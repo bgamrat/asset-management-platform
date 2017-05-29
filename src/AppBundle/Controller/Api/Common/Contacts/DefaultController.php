@@ -37,20 +37,10 @@ class DefaultController extends FOSRestController
                 }
             }
 
-            $people = [];
-            $client = $request->get( 'client' );
-            $venue = $request->get( 'venue' );
-            if( $request->get( 'client' ) !== null )
+            $people = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByEntityContactNameLike( $name, array_keys( $contactTypes ) );
+
+            if( !empty( $people ) )
             {
-                $people += $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByClientContactNameLike( $name );
-            }
-            if( $request->get( 'manufacturer' ) !== null )
-            {
-                $people += $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByManufacturerContactNameLike( $name );
-            }
-            if( !empty( $contacts ) || !empty( $people ) )
-            {
-                $personContactDetails = [];
                 foreach( $people as $p )
                 {
                     $personContactDetails = $p->getContactDetails();
@@ -58,12 +48,11 @@ class DefaultController extends FOSRestController
                     {
                         if( !isset( $contacts[$pd['hash']] ) )
                         {
-                            $data = array_merge($data,$personContactDetails);
+                            $data = array_merge( $data, $personContactDetails );
                         }
                     }
-
-                    return array_values( $data );
                 }
+                return array_values( $data );
             }
             return null;
         }
