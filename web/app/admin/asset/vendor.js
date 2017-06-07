@@ -33,7 +33,7 @@ define([
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, brandSelect, lib, libGrid, core, asset) {
+        xperson, brandSelect, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
         var action = null;
@@ -317,7 +317,7 @@ define([
             }));
         });
 
-        person.run('vendor_contacts');
+        person = xperson.run('vendor_contacts');
         brandSelect.run('vendor');
 
         lib.pageReady();

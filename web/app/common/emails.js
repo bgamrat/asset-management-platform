@@ -20,83 +20,88 @@ define([
         lib, core) {
     "use strict";
 
-    var dataPrototype;
-    var prototypeNode, prototypeContent;
-    var store;
-    var emailId = [], typeSelect = [], emailInput = [], commentInput = [];
-    var divIdInUse = null;
-    var addOneMoreControl = null;
-
-    function getDivId() {
-        return divIdInUse;
-    }
-
-    function setDivId(divId) {
-        divIdInUse = divId + '_emails';
-    }
-
-    function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__email__/g, emailInput.length);
-        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-        emailId.push(null);
-    }
-
-    function createDijits() {
-        var dijit;
-        var base = prototypeNode.id + "_" + emailInput.length + "_";
-        dijit = new Select({
-            store: store,
-            placeholder: core.type,
-            required: true
-        }, base + "type");
-        typeSelect.push(dijit);
-        dijit.startup();
-        dijit = new ValidationTextBox({
-            placeholder: core.email,
-            required: false,
-            pattern: "[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?",
-            trim: true
-        }, base + "email");
-        emailInput.push(dijit);
-        dijit.startup();
-        dijit = new ValidationTextBox({
-            placeholder: core.comment,
-            trim: true,
-            required: false
-        }, base + "comment");
-        commentInput.push(dijit);
-        dijit.startup();
-    }
-    
-    function destroyRow(id, target) {
-        var i, item;
-
-        for( i = 0; i < emailId.length; i++ ) {
-            if( emailId[i] === id ) {
-                id = i;
-                break;
-            }
-        }
-        emailId.splice(id, 1);
-        item = emailInput.splice(id, 1);
-        item[0].destroyRecursive();
-        item = commentInput.splice(id, 1);
-        item[0].destroyRecursive();
-        domConstruct.destroy(target);
-    }
-
     function run() {
 
         var base, select, data, storeData, d, memoryStore;
+        var dataPrototype;
+        var prototypeNode, prototypeContent;
+        var store;
+        var emailId = [], typeSelect = [], emailInput = [], commentInput = [];
+        var divIdInUse = null, iteration = '0';
+        var addOneMoreControl = null;
+
+        function getDivId() {
+            return divIdInUse;
+        }
+
+        function setDivId(divId) {
+            divIdInUse = divId + '_emails';
+        }
+
+        function cloneNewNode() {
+            prototypeContent = dataPrototype.replace(/__email__/g, emailInput.length);
+            domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+            emailId.push(null);
+        }
+
+        function createDijits() {
+            var dijit;
+            var base = prototypeNode.id + "_" + emailInput.length + "_";
+            dijit = new Select({
+                store: store,
+                placeholder: core.type,
+                required: true
+            }, base + "type");
+            typeSelect.push(dijit);
+            dijit.startup();
+            dijit = new ValidationTextBox({
+                placeholder: core.email,
+                required: false,
+                pattern: "[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?",
+                trim: true
+            }, base + "email");
+            emailInput.push(dijit);
+            dijit.startup();
+            dijit = new ValidationTextBox({
+                placeholder: core.comment,
+                trim: true,
+                required: false
+            }, base + "comment");
+            commentInput.push(dijit);
+            dijit.startup();
+        }
+
+        function destroyRow(id, target) {
+            var i, item;
+
+            for( i = 0; i < emailId.length; i++ ) {
+                if( emailId[i] === id ) {
+                    id = i;
+                    break;
+                }
+            }
+            emailId.splice(id, 1);
+            item = emailInput.splice(id, 1);
+            item[0].destroyRecursive();
+            item = commentInput.splice(id, 1);
+            item[0].destroyRecursive();
+            domConstruct.destroy(target);
+        }
+
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
 
+        if( arguments.length > 1 ) {
+            iteration = arguments[1];
+        }
+
         prototypeNode = dom.byId(getDivId());
-        if (prototypeNode === null) {
-            setDivId(arguments[0]+'_0');
+        if( prototypeNode === null ) {
+            setDivId(arguments[0] + '_' + iteration);
             prototypeNode = dom.byId(getDivId());
         }
+
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__email__/g, emailInput.length);
         base = prototypeNode.id + "_" + emailInput.length;
@@ -105,7 +110,7 @@ define([
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         storeData = [];
-        storeData.push({value:"",label:core.type.toLowerCase()});
+        storeData.push({value: "", label: core.type.toLowerCase()});
         for( d in data ) {
             storeData.push(data[d]);
         }
@@ -117,11 +122,11 @@ define([
         createDijits();
 
         addOneMoreControl = query('.emails .add-one-more-row');
-                
+
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
             createDijits();
-            if (emailInput.length >= lib.constant.MAX_PHONE_NUMBERS) {
+            if( emailInput.length >= lib.constant.MAX_PHONE_NUMBERS ) {
                 addOneMoreControl.addClass("hidden");
             }
         });
@@ -131,63 +136,65 @@ define([
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
             destroyRow(id, targetParent.parentNode);
-            if (emailInput.length <= lib.constant.MAX_PHONE_NUMBERS) {
+            if( emailInput.length <= lib.constant.MAX_PHONE_NUMBERS ) {
                 addOneMoreControl.removeClass("hidden");
             }
         });
-    }
 
-    function getData() {
-        var i, returnData = [], email;
-        for( i = 0; i < emailInput.length; i++ ) {
-            email = emailInput[i].get('value').trim();
-            if (email !== "") {
-                returnData.push(
-                    {
-                        "id": emailId[i],
-                        "type": parseInt(typeSelect[i].get('value')),
-                        "email": email,
-                        "comment": commentInput[i].get('value')
-                    });
+
+        function getData() {
+            var i, returnData = [], email;
+            for( i = 0; i < emailInput.length; i++ ) {
+                email = emailInput[i].get('value').trim();
+                if( email !== "" ) {
+                    returnData.push(
+                            {
+                                "id": emailId[i],
+                                "type": parseInt(typeSelect[i].get('value')),
+                                "email": email,
+                                "comment": commentInput[i].get('value')
+                            });
                 }
-        }
-        return returnData;
-    }
-
-    function setData(emails) {
-        var i, obj;
-
-        query(".form-row.email").forEach(function (node, index) {
-            if( index !== 0 ) {
-                destroyRow(index, node);
             }
-        });
+            return returnData;
+        }
+        function setData(emails) {
+            var i, obj;
 
-        if( typeof emails === "object" && emails !== null && emails.length > 0 ) {
-
-            for( i = 0; i < emails.length; i++ ) {
-                if( i !== 0 ) {
-                    cloneNewNode();
-                    createDijits();
+            query(".form-row.email").forEach(function (node, index) {
+                if( index !== 0 ) {
+                    destroyRow(index, node);
                 }
-                obj = emails[i];
-                emailId[i] = obj.id;
-                typeSelect[i].set('value', obj.type.id);
-                emailInput[i].set('value', obj.email);
-                commentInput[i].set('value', obj.comment);
+            });
+
+            if( typeof emails === "object" && emails !== null && emails.length > 0 ) {
+
+                for( i = 0; i < emails.length; i++ ) {
+                    if( i !== 0 ) {
+                        cloneNewNode();
+                        createDijits();
+                    }
+                    obj = emails[i];
+                    emailId[i] = obj.id;
+                    typeSelect[i].set('value', obj.type.id);
+                    emailInput[i].set('value', obj.email);
+                    commentInput[i].set('value', obj.comment);
+                }
+            } else {
+                emailId[0] = null;
+                typeSelect[0].set('value', "");
+                emailInput[0].set('value', "");
+                commentInput[0].set('value', "");
             }
-        } else {
-            emailId[0] = null;
-            typeSelect[0].set('value', "");
-            emailInput[0].set('value', "");
-            commentInput[0].set('value', "");
+        }
+        return {
+            setData: setData,
+            getData: getData
         }
     }
-    
+
     return {
-        run: run,
-        getData: getData,
-        setData: setData
+        run: run
     }
 }
 );

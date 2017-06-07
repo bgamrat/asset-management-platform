@@ -39,7 +39,7 @@ define([
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, contracts, trailers, timeSpans,
+        xperson, contracts, trailers, timeSpans,
         lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
@@ -396,7 +396,7 @@ define([
             }));
         });
 
-        person.run('event_contacts');
+        person = xperson.run('event_contacts');
         contracts.run('event_contracts');
         trailers.run('event_trailers');
         timeSpans.run('event_time_spans');

@@ -19,85 +19,90 @@ define([
         lib, core) {
     "use strict";
 
-    var dataPrototype, prototypeNode, prototypeContent;
-    var store;
-    var phoneNumberId = [], typeSelect = [], numberInput = [], commentInput = [];
-    var divIdInUse = null;
-    var addOneMoreControl = null;
-
-    function getDivId() {
-        return divIdInUse;
-    }
-
-    function setDivId(divId) {
-        divIdInUse = divId + '_phones';
-    }
-
-    function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__phone__/g, numberInput.length);
-        domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-    }
-
-    function createDijits() {
-        var dijit;
-        var base = getDivId() + '_' + numberInput.length + '_';
-        phoneNumberId.push(null);
-        dijit = new Select({
-            store: store,
-            placeholder: core.type,
-            required: true
-        }, base + "type");
-        typeSelect.push(dijit);
-        dijit.startup();
-        dijit = new ValidationTextBox({
-            placeholder: core.phone_number,
-            trim: true,
-            pattern: "[0-9x\.\,\ \+\(\)-]{2,24}",
-            required: true
-        }, base + "phoneNumber");
-        numberInput.push(dijit);
-        dijit.startup();
-        dijit = new ValidationTextBox({
-            placeholder: core.comment,
-            trim: true,
-            required: false
-        }, base + "comment");
-        commentInput.push(dijit);
-        dijit.startup();
-    }
-
-    function destroyRow(id, target) {
-        var item;
-
-        for( i = 0; i < phoneNumberId.length; i++ ) {
-            if( phoneNumberId[i] === id ) {
-                id = i;
-                break;
-            }
-        }
-
-        phoneNumberId.splice(id, 1);
-        item = typeSelect.splice(id, 1);
-        item[0].destroyRecursive();
-        domConstruct.destroy(target);
-        item = numberInput.splice(id, 1);
-        item[0].destroyRecursive();
-        domConstruct.destroy(target);
-        item = commentInput.splice(id, 1);
-        item[0].destroyRecursive();
-        domConstruct.destroy(target);
-    }
-
     function run() {
 
         var base, select, data, storeData, d, memoryStore;
+        var dataPrototype, prototypeNode, prototypeContent;
+        var store;
+        var phoneNumberId = [], typeSelect = [], numberInput = [], commentInput = [];
+        var divIdInUse = null, iteration = 0;
+        var addOneMoreControl = null;
+
+        function getDivId() {
+            return divIdInUse;
+        }
+
+        function setDivId(divId) {
+            divIdInUse = divId + '_phones';
+        }
+
+        function cloneNewNode() {
+            prototypeContent = dataPrototype.replace(/__phone__/g, numberInput.length);
+            domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
+        }
+
+        function createDijits() {
+            var dijit;
+            var base = getDivId() + '_' + numberInput.length + '_';
+            phoneNumberId.push(null);
+            dijit = new Select({
+                store: store,
+                placeholder: core.type,
+                required: true
+            }, base + "type");
+            typeSelect.push(dijit);
+            dijit.startup();
+            dijit = new ValidationTextBox({
+                placeholder: core.phone_number,
+                trim: true,
+                pattern: "[0-9x\.\,\ \+\(\)-]{2,24}",
+                required: true
+            }, base + "phoneNumber");
+            numberInput.push(dijit);
+            dijit.startup();
+            dijit = new ValidationTextBox({
+                placeholder: core.comment,
+                trim: true,
+                required: false
+            }, base + "comment");
+            commentInput.push(dijit);
+            dijit.startup();
+        }
+
+        function destroyRow(id, target) {
+            var item;
+
+            for( i = 0; i < phoneNumberId.length; i++ ) {
+                if( phoneNumberId[i] === id ) {
+                    id = i;
+                    break;
+                }
+            }
+
+            phoneNumberId.splice(id, 1);
+            item = typeSelect.splice(id, 1);
+            item[0].destroyRecursive();
+            domConstruct.destroy(target);
+            item = numberInput.splice(id, 1);
+            item[0].destroyRecursive();
+            domConstruct.destroy(target);
+            item = commentInput.splice(id, 1);
+            item[0].destroyRecursive();
+            domConstruct.destroy(target);
+        }
+
+
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
 
+        if( arguments.length > 1 ) {
+            iteration = arguments[1];
+        }
+
         prototypeNode = dom.byId(getDivId());
         if( prototypeNode === null ) {
-            setDivId(arguments[0] + '_0');
+            setDivId(arguments[0] + '_' + iteration);
             prototypeNode = dom.byId(getDivId());
         }
 
@@ -151,58 +156,60 @@ define([
                 addOneMoreControl.removeClass("hidden");
             }
         });
-    }
 
-    function getData() {
-        var i, returnData = [], phone;
-        for( i = 0; i < numberInput.length; i++ ) {
-            phone = numberInput[i].get('value').trim();
-            if (phone !== "") {
-                returnData.push(
-                    {
-                        "id": phoneNumberId[i],
-                        "type": parseInt(typeSelect[i].get('value')),
-                        "phoneNumber": phone,
-                        "comment": commentInput[i].get('value')
-                    });
+
+        function getData() {
+            var i, returnData = [], phone;
+            for( i = 0; i < numberInput.length; i++ ) {
+                phone = numberInput[i].get('value').trim();
+                if( phone !== "" ) {
+                    returnData.push(
+                            {
+                                "id": phoneNumberId[i],
+                                "type": parseInt(typeSelect[i].get('value')),
+                                "phoneNumber": phone,
+                                "comment": commentInput[i].get('value')
+                            });
+                }
+            }
+            return returnData.length > 0 ? returnData : null;
+        }
+        function setData(phones) {
+            var i, obj;
+
+            query(".form-row.phone-number").forEach(function (node, index) {
+                if( index !== 0 ) {
+                    destroyRow(index, node);
+                }
+            });
+
+            if( typeof phones === "object" && phones !== null && phones.length > 0 ) {
+
+                for( i = 0; i < phones.length; i++ ) {
+                    if( i !== 0 ) {
+                        cloneNewNode();
+                        createDijits();
+                    }
+                    obj = phones[i];
+                    phoneNumberId[i] = obj.id;
+                    typeSelect[i].set('value', obj.type.id);
+                    numberInput[i].set('value', obj.phoneNumber);
+                    commentInput[i].set('value', obj.comment);
+                }
+            } else {
+                phoneNumberId[0] = null;
+                typeSelect[0].set('value', "");
+                numberInput[0].set('value', "");
+                commentInput[0].set('value', "");
             }
         }
-        return returnData.length > 0 ? returnData : null;
-    }
-
-    function setData(phones) {
-        var i, obj;
-
-        query(".form-row.phone-number").forEach(function (node, index) {
-            if( index !== 0 ) {
-                destroyRow(index, node);
-            }
-        });
-
-        if( typeof phones === "object" && phones !== null && phones.length > 0 ) {
-
-            for( i = 0; i < phones.length; i++ ) {
-                if( i !== 0 ) {
-                    cloneNewNode();
-                    createDijits();
-                }
-                obj = phones[i];
-                phoneNumberId[i] = obj.id;
-                typeSelect[i].set('value', obj.type.id);
-                numberInput[i].set('value', obj.phoneNumber);
-                commentInput[i].set('value', obj.comment);
-            }
-        } else {
-            phoneNumberId[0] = null;
-            typeSelect[0].set('value', "");
-            numberInput[0].set('value', "");
-            commentInput[0].set('value', "");
+        return {
+            getData: getData,
+            setData: setData
         }
     }
 
     return {
-        run: run,
-        getData: getData,
-        setData: setData
+        run: run
     }
 });

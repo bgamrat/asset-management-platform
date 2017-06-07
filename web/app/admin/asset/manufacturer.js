@@ -34,7 +34,7 @@ define([
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, brands, lib, libGrid, core) {
+        xperson, brands, lib, libGrid, core) {
     //"use strict";
     function run() {
         var action = null;
@@ -304,7 +304,7 @@ define([
             }));
         });
 
-        person.run('manufacturer_contacts');
+        person = xperson.run('manufacturer_contacts');
         brands.run('manufacturer');
 
         lib.pageReady();

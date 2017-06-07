@@ -32,7 +32,7 @@ define([
         registry, Form, TextBox, ValidationTextBox, CheckBox, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person,
+        xperson,
         lib, libGrid, core) {
     //"use strict";
     function run() {
@@ -382,7 +382,7 @@ define([
             }));
         });
 
-        person.run('user_person');
+        person = xperson.run('user_person');
         lib.pageReady();
     }
     return {
