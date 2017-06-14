@@ -60,24 +60,6 @@ services:
         class: AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false
-        
-    app.admin.field.type.category:
-        class: AppBundle\Form\Admin\Asset\Type\CategoryType
-        arguments: ['@app.form.data_transformer.category']
-        tags:
-            - { name: form.type, alias: 'app_category_type' }
-
-    app.admin.field.type.contract:
-        class: AppBundle\Form\Admin\Client\Type\ContractType
-        arguments: ['@app.form.data_transformer.contract']
-        tags:
-            - { name: form.type, alias: 'app_client_contract_type' }
-
-    app.admin.field.type.model_relationship:
-        class: AppBundle\Form\Admin\Asset\Type\ModelRelationshipType
-        arguments: ['@app.form.data_transformer.model']
-        tags:
-            - { name: form.type, alias: 'app_model_relationship_type' }
 
     app.admin.form.type.asset:
         class: AppBundle\Form\Admin\Asset\AssetType
@@ -95,7 +77,13 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_asset_location_type' }
-    
+
+    app.admin.field.type.category:
+        class: AppBundle\Form\Admin\Asset\Type\CategoryType
+        arguments: ['@app.form.data_transformer.category']
+        tags:
+            - { name: form.type, alias: 'app_category_type' }
+
     app.admin.form.type.category_quantity:
         class: AppBundle\Form\Admin\Client\CategoryQuantityType
         arguments: ['@doctrine.orm.entity_manager']
@@ -108,6 +96,11 @@ services:
         tags:
             - { name: form.type, alias: 'app_contact_type' }
 
+    app.admin.field.type.contract:
+        class: AppBundle\Form\Admin\Client\Type\ContractType
+        arguments: ['@app.form.data_transformer.contract']
+        tags:
+            - { name: form.type, alias: 'app_client_contract_type' }
     app.admin.form.type.event:
         class: AppBundle\Form\Admin\Schedule\EventType
         arguments: ['@doctrine.orm.entity_manager']
@@ -131,7 +124,13 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_model_type' }
-        
+
+    app.admin.field.type.model_relationship:
+        class: AppBundle\Form\Admin\Asset\Type\ModelRelationshipType
+        arguments: ['@app.form.data_transformer.model']
+        tags:
+            - { name: form.type, alias: 'app_model_relationship_type' }
+
     app.admin.form.type.person:
         class: AppBundle\Form\Common\PersonType
         arguments: ['@doctrine.orm.entity_manager']

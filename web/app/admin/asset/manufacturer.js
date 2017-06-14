@@ -39,6 +39,7 @@ define([
     function run() {
         var action = null;
         var manufacturerId = null;
+        var person;
 
         var manufacturerViewDialog = new Dialog({
             title: core.view,

@@ -29,19 +29,23 @@ class AddressType extends AbstractType
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
-                    'label' => 'common.type',
+                    'label' => false, //'common.type',
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'street1', TextType::class, ['label' => 'common.street'] )
-                ->add( 'street2', TextType::class, ['label' => 'common.street2'] )
-                ->add( 'city', TextType::class, ['label' => 'common.city'] )
+                ->add( 'street1', TextType::class, ['label' => false //'common.street'
+                ] )
+                ->add( 'street2', TextType::class, ['label' => false // 'common.street2'
+                ] )
+                ->add( 'city', TextType::class, ['label' => false // 'common.city'
+                ] )
                 ->add( 'state_province', TextType::class, [
-                    'label' => 'common.state_province'
+                    'label' => false //'common.state_province'
                 ] )
                 ->add( 'postal_code', TextType::class, [
-                    'label' => 'common.postal_code'
+                    'label' => false//'common.postal_code'
                 ] )
-                ->add( 'country', ChoiceType::class, ['label' => 'common.country',
+                ->add( 'country', ChoiceType::class, [
+                    'label' => false, //'common.country',
                     'choices' => ['US' => 'US', 'CA' => 'CA', 'MX' => 'MX']] )
                 ->add( 'comment', TextareaType::class, [
                     'required' => false,

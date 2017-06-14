@@ -1,0 +1,95 @@
+{% block title %}{{ 'common.venue'|trans }} {{'common.admin'|trans }}{% endblock %}
+
+{% extends 'admin.base.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets 
+            '@admin_venue_css'
+            filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% form_theme venue_form _self %}
+
+{% block _venue_contacts_entry_row %}
+    <div class="form-row contacts">
+        {% include 'common/person.html.twig' with {'legend': 'common.contact'} %}
+    </div>
+{% endblock %}
+
+{% block _venue_contacts_entry_addresses_entry_row %}
+    {{ block('_address_entry_row') }}
+{% endblock %}
+
+{% block _venue_contacts_entry_emails_entry_row %}
+    {{ block('_emails_entry_row') }}
+{% endblock %}
+
+{% block _venue_contacts_entry_phones_entry_row %}
+    {{ block('_phones_entry_row') }}
+{% endblock %}
+
+{% block admin_content %}
+    <div id="venue-wrapper">
+        <h1>{{ 'common.venue'|trans }} {{'common.admin'|trans }}</h1>
+        <div class="grid-controls">
+            <div>
+                <button id="venue-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            </div>
+            <div>
+                <form id="venue-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="venue-filter-input">
+                </form>
+            </div>
+            <button id="venue-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+        </div>
+        <div id="venue-grid">
+        </div>
+        <div id="venue-view-dialog">
+            {{form_start(venue_form)}}
+            <div class="text-right">
+                <button id="venue-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="venue">
+                <fieldset class="name-active">
+                    <legend>{{'common.venue'|trans}}</legend>
+                    <div class="justify">
+                        <span class="venue-name">
+                            {{form_widget(venue_form.name)}}
+                        </span>
+                        <span class="venue-active">
+                            {{form_widget(venue_form.active)}}
+                            {{form_label(venue_form.active)}}
+                        </span>
+                    </div>
+                    {{form_row(venue_form.comment)}}
+                </fieldset>
+                <div id="venue-view-tabs">
+                    <div id="venue-view-address-tab">
+                        {{form_row(venue_form.address,{"attr":{"class":"address"}})}}
+                    </div>
+                    <div id="venue-view-contacts-tab">
+                        <fieldset class="contacts">
+                            {{form_row(venue_form.contacts)}}
+                            {% if venue_form.contacts.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div id="venue-view-history-tab">
+                    </div>
+                </div>
+            </div>
+            {{ form_end(venue_form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/venue/venue"], function (venue) {
+            venue.run();
+        });
+    </script>
+{% endblock %}

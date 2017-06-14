@@ -82,3 +82,9 @@ app_admin_users_invitations:
     resource: AppBundle\Controller\Api\Admin\User\InvitationsController
     name_prefix: app_admin_api_user_invitation_
     prefix: /api
+
+app_admin_venue_venues:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Venue\VenuesController
+    name_prefix:   app_admin_api_venue_
+    prefix: /api

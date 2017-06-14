@@ -37,6 +37,7 @@ define([
     //"use strict";
     function run() {
         var action = null;
+        var person;
 
         var vendorId;
 

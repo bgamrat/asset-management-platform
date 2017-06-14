@@ -24,78 +24,73 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/common/person",
-    "app/admin/asset/carrier_service",
+    "app/common/address",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
-    "dojo/i18n!app/nls/asset",
+    "dojo/i18n!app/nls/venue",
     "dojo/domReady!"
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson, carrierService, lib, libGrid, core, asset) {
+        xperson, xaddress, lib, libGrid, core, venue) {
     //"use strict";
     function run() {
         var action = null;
-        var person;
+        var person, address;
 
-        var carrierId;
+        var venueId;
 
-        var carrierViewDialog = new Dialog({
+        var venueViewDialog = new Dialog({
             title: core.view
-        }, "carrier-view-dialog");
-        carrierViewDialog.startup();
-        carrierViewDialog.on("cancel", function (event) {
+        }, "venue-view-dialog");
+        venueViewDialog.startup();
+        venueViewDialog.on("cancel", function (event) {
             grid.clearSelection();
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 535px; width: 900px;"
-        }, "carrier-view-tabs");
+            style: "height: 525px; width: 100%;"
+        }, "venue-view-tabs");
+
+        var addressContentPane = new ContentPane({
+            title: core.address},
+        "venue-view-address-tab"
+                );
+        tabContainer.addChild(addressContentPane);
 
         var contactsContentPane = new ContentPane({
             title: core.contacts},
-        "carrier-view-contacts-tab"
+        "venue-view-contacts-tab"
                 );
         tabContainer.addChild(contactsContentPane);
 
-        var accountContentPane = new ContentPane({
-            title: core.account},
-        "carrier-view-account-tab"
-                );
-        tabContainer.addChild(accountContentPane);
-
-        var servicesContentPane = new ContentPane({
-            title: core.services},
-        "carrier-view-services-tab"
-                );
-        tabContainer.addChild(servicesContentPane);
-
         var historyContentPane = new ContentPane({
             title: core.history},
-        "carrier-view-history-tab"
+        "venue-view-history-tab"
                 );
         tabContainer.addChild(historyContentPane);
         tabContainer.startup();
 
         var newBtn = new Button({
             label: core["new"]
-        }, 'carrier-new-btn');
+        }, 'venue-new-btn');
         newBtn.startup();
         newBtn.on("click", function (event) {
-            carrierId = null;
+            venueId = null;
             nameInput.set("value", "");
             activeCheckBox.set("checked", true);
-            carrierViewDialog.set("title", core["new"]).show();
+            person.setData(null);
+            venueViewDialog.set("title", core["new"]).show();
             action = "new";
         });
 
         var removeBtn = new Button({
             label: core.remove
-        }, 'carrier-remove-btn');
+        }, 'venue-remove-btn');
         removeBtn.startup();
         removeBtn.on("click", function (event) {
-            var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "carrier-grid");
+            var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "venue-grid");
             if( markedForDeletion.length > 0 ) {
                 lib.confirmAction(core.areyousure, function () {
                     markedForDeletion.forEach(function (node) {
@@ -109,52 +104,40 @@ define([
         var nameInput = new ValidationTextBox({
             trim: true,
             pattern: "[A-Za-z\.\,\ \'-]{2,64}"
-        }, "carrier_name");
+        }, "venue_name");
         nameInput.startup();
 
-        var activeCheckBox = new CheckBox({}, "carrier_active");
+        var activeCheckBox = new CheckBox({}, "venue_active");
         activeCheckBox.startup();
 
         var commentInput = new SimpleTextarea({
             placeholder: core.comment,
             trim: true,
             required: false
-        }, "carrier_comment");
+        }, "venue_comment");
         commentInput.startup();
 
-        var accountInformationInput = new SimpleTextarea({
-            placeholder: core.account_information,
-            trim: true,
-            required: false,
-            "class": "account-information"
-        }, "carrier_account_information");
-        accountInformationInput.startup();
-
-        var carrierForm = new Form({}, '[name="carrier"]');
-        carrierForm.startup();
+        var venueForm = new Form({}, '[name="venue"]');
+        venueForm.startup();
 
         var saveBtn = new Button({
             label: core.save
-        }, 'carrier-save-btn');
+        }, 'venue-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
             var beforeNameFilter, filter;
-            if( carrierForm.validate() ) {
+            if( venueForm.validate() ) {
                 var data = {
-                    "id": carrierId,
+                    "id": venueId,
                     "name": nameInput.get("value"),
-                    "contacts": person.getData(),
-                    "services": carrierService.getData(),
                     "active": activeCheckBox.get("checked"),
+                    "address": address.getData(),
                     "comment": commentInput.get("value"),
-                    // For the server
-                    "accountInformation": accountInformationInput.get("value"),
-                    // For the grid
-                    "account_information": accountInformationInput.get("value")
+                    "contacts": person.getData()
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
-                        carrierViewDialog.hide();
+                        venueViewDialog.hide();
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();
@@ -163,7 +146,7 @@ define([
                         var beforeId;
                         beforeId = (results.length > 0) ? results[0].id : null;
                         grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            carrierViewDialog.hide();
+                            venueViewDialog.hide();
                             store.fetch();
                             grid.refresh();
                         }, lib.xhrError);
@@ -174,11 +157,11 @@ define([
             }
         });
 
-        var filterInput = new TextBox({placeHolder: core.filter}, "carrier-filter-input");
+        var filterInput = new TextBox({placeHolder: core.filter}, "venue-filter-input");
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/carriers', useRangeHeaders: true, idProperty: 'id'});
+        var store = new TrackableRest({target: '/api/venues', useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
@@ -187,16 +170,17 @@ define([
                     label: core.id
                 },
                 name: {
-                    label: core.carrier,
+                    label: core.venue,
                     renderCell: function (object, value, td) {
                         put(td, "pre.name", object.name);
                         libGrid.renderContacts(object, object, td);
                     }
                 },
-                account_information: {
-                    label: core.account_information,
+                address: {
+                    label: core.address,
                     renderCell: function (object, value, td) {
-                        put(td, "pre", object.accountInformation);
+                        put(td, "pre.name", object.name);
+                        libGrid.renderAddress(object, object, td);
                     }
                 },
                 comment: {
@@ -209,6 +193,7 @@ define([
                     sortable: false,
                     renderCell: libGrid.renderGridCheckbox
                 },
+
                 remove: {
                     editor: CheckBox,
                     label: core.remove,
@@ -228,7 +213,7 @@ define([
                 return rowElement;
             },
             selectionMode: "none"
-        }, 'carrier-grid');
+        }, 'venue-grid');
         grid.startup();
         grid.collection.track();
 
@@ -243,17 +228,16 @@ define([
                     grid.clearSelection();
                 }
                 grid.select(row);
-                grid.collection.get(id).then(function (carrier) {
+                grid.collection.get(id).then(function (venue) {
                     var r;
                     action = "view";
-                    carrierId = carrier.id;
-                    nameInput.set("value", carrier.name);
-                    activeCheckBox.set("checked", carrier.active === true);
-                    person.setData(carrier.contacts);
-                    carrierService.setData(carrier.services);
-                    commentInput.set("value", carrier.comment);
-                    accountInformationInput.set("value", carrier.account_information);
-                    carrierViewDialog.show();
+                    venueId = venue.id;
+                    nameInput.set("value", venue.name);
+                    activeCheckBox.set("checked", venue.active === true);
+                    commentInput.set("value", venue.comment);
+                    person.setData(venue.contacts);
+                    address.setData(venue.address);
+                    venueViewDialog.show();
                 }, lib.xhrError);
             }
         });
@@ -267,7 +251,7 @@ define([
             switch( field ) {
                 case "active":
                 case "locked":
-                    xhr("/api/carriers/" + name, {
+                    xhr("/api/venues/" + name, {
                         method: "PATCH",
                         handleAs: "json",
                         headers: {'Content-Type': 'application/json'},
@@ -282,7 +266,7 @@ define([
         cbAll.startup();
         cbAll.on("click", function (event) {
             var state = this.checked;
-            query(".dgrid-row .remove-cb", "carrier-grid").forEach(function (node) {
+            query(".dgrid-row .remove-cb", "venue-grid").forEach(function (node) {
                 registry.findWidgets(node)[0].set("checked", state);
             });
         });
@@ -299,7 +283,7 @@ define([
             }
         });
 
-        on(dom.byId('carrier-grid-filter-form'), 'submit', function (event) {
+        on(dom.byId('venue-grid-filter-form'), 'submit', function (event) {
             event.preventDefault();
             grid.set('collection', store.filter({
                 // Pass a RegExp to Memory's filter method
@@ -309,8 +293,8 @@ define([
             }));
         });
 
-        person = xperson.run('carrier_contacts');
-        carrierService.run();
+        person = xperson.run('venue_contacts');
+        address = xaddress.run('venue');
 
         lib.pageReady();
     }

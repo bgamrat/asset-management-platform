@@ -285,6 +285,8 @@ common:
         Value
     venue:
         Venue
+    venues:
+        Venues
         
 error:
     cannot_be_null:
