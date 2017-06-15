@@ -41,6 +41,18 @@ class Venue
      */
     private $address;
     /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $directions;
+    /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $parking;
+    /**
      * @var boolean
      * @Gedmo\Versioned
      * @ORM\Column(name="active", type="boolean")
@@ -50,7 +62,7 @@ class Venue
     /**
      * @var string
      * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=64, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $comment;
     /**
@@ -182,6 +194,54 @@ class Venue
     public function getComment()
     {
         return $this->comment;
+    }
+
+    /**
+     * Set directions
+     *
+     * @param string $directions
+     *
+     * @return Venue
+     */
+    public function setDirections( $directions )
+    {
+        $this->directions = $directions;
+
+        return $this;
+    }
+
+    /**
+     * Get directions
+     *
+     * @return string
+     */
+    public function getDirections()
+    {
+        return $this->directions;
+    }
+
+    /**
+     * Set parking
+     *
+     * @param string $parking
+     *
+     * @return Venue
+     */
+    public function setParking( $parking )
+    {
+        $this->parking = $parking;
+
+        return $this;
+    }
+
+    /**
+     * Get parking
+     *
+     * @return string
+     */
+    public function getParking()
+    {
+        return $this->parking;
     }
 
     public function getContacts()

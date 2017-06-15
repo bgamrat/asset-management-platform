@@ -30,6 +30,14 @@ class VenueType extends AbstractType
                     'required' => true,
                     'label' => false
                 ] )
+                ->add( 'directions', TextareaType::class, [
+                    'label' => false,
+                    'required' => false
+                ] )
+                ->add( 'parking', TextareaType::class, [
+                    'label' => false,
+                    'required' => false
+                ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'comment', TextareaType::class, [
                     'label' => false,

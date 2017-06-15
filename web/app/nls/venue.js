@@ -1,6 +1,8 @@
 define({
     root: ({
-       "venue": "Venue",
-       "venues": "Venues"
+        "directions": "Directions",
+        "parking": "Parking",
+        "venue": "Venue",
+        "venues": "Venues"
     })
 });

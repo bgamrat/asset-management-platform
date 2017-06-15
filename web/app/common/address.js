@@ -119,7 +119,7 @@ define([
         stateProvinceInput.startup();
         postalCodeInput = new ValidationTextBox({
             trim: true,
-            pattern: "[0-9A-Z-]{2,12}",
+            pattern: "^[0-9A-Z-]{2,12}$",
             required: false,
             uppercase: true,
             placeholder: core.postal_code
@@ -144,18 +144,18 @@ define([
             if( cityInput.get("value") !== "" ) {
                 returnData =
                         {
-                            "id": addressId[i],
-                            "type": parseInt(typeSelect[i].get('value')),
-                            "street1": street1Input[i].get('value'),
-                            "street2": street2Input[i].get('value'),
-                            "city": cityInput[i].get('value'),
+                            "id": addressId,
+                            "type": parseInt(typeSelect.get('value')),
+                            "street1": street1Input.get('value'),
+                            "street2": street2Input.get('value'),
+                            "city": cityInput.get('value'),
                             // Address the duality of names between the forms and objects with two properties
-                            "state_province": stateProvinceInput[i].get('value'),
-                            "stateProvince": stateProvinceInput[i].get('value'),
-                            "postal_code": postalCodeInput[i].get('value'),
-                            "postalCode": postalCodeInput[i].get('value'),
-                            "country": countrySelect[i].get('value'),
-                            "comment": commentInput[i].get('value')
+                            "state_province": stateProvinceInput.get('value'),
+                            "stateProvince": stateProvinceInput.get('value'),
+                            "postal_code": postalCodeInput.get('value'),
+                            "postalCode": postalCodeInput.get('value'),
+                            "country": countrySelect.get('value'),
+                            "comment": commentInput.get('value')
                         };
             }
             return returnData;

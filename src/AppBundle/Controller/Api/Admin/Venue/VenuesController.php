@@ -66,12 +66,13 @@ class VenuesController extends FOSRestController
             $item = [
                 'id' => $v->getId(),
                 'name' => $v->getName(),
+                'address' => $v->getAddress(),
                 'contacts' => $v->getContacts(false),
                 'active' => $v->isActive(),
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
-                $item['deleted_at'] = $c->getDeletedAt();
+                $item['deleted_at'] = $v->getDeletedAt();
             }
             $data[] = $item;
         }
@@ -97,6 +98,9 @@ class VenuesController extends FOSRestController
                 'id' => $venue->getId(),
                 'name' => $venue->getName(),
                 'active' => $venue->isActive(),
+                'address' => $venue->getAddress(),
+                'directions' => $venue->getDirections(),
+                'parking' => $venue->getParking(),
                 'comment' => $venue->getComment(),
                 'contacts' => $venue->getContacts( false )
             ];

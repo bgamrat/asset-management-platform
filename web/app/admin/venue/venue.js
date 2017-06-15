@@ -117,6 +117,20 @@ define([
         }, "venue_comment");
         commentInput.startup();
 
+        var directionsInput = new SimpleTextarea({
+            placeholder: venue.directions,
+            trim: true,
+            required: false
+        }, "venue_directions");
+        directionsInput.startup();
+
+        var parkingInput = new SimpleTextarea({
+            placeholder: venue.parking,
+            trim: true,
+            required: false
+        }, "venue_parking");
+        parkingInput.startup();
+
         var venueForm = new Form({}, '[name="venue"]');
         venueForm.startup();
 
@@ -133,6 +147,8 @@ define([
                     "active": activeCheckBox.get("checked"),
                     "address": address.getData(),
                     "comment": commentInput.get("value"),
+                    "directions": directionsInput.get("value"),
+                    "parking": parkingInput.get("value"),
                     "contacts": person.getData()
                 };
                 if( action === "view" ) {
@@ -179,8 +195,7 @@ define([
                 address: {
                     label: core.address,
                     renderCell: function (object, value, td) {
-                        put(td, "pre.name", object.name);
-                        libGrid.renderAddress(object, object, td);
+                        libGrid.renderAddress(object, [value], td);
                     }
                 },
                 comment: {
@@ -193,7 +208,6 @@ define([
                     sortable: false,
                     renderCell: libGrid.renderGridCheckbox
                 },
-
                 remove: {
                     editor: CheckBox,
                     label: core.remove,
@@ -234,6 +248,8 @@ define([
                     venueId = venue.id;
                     nameInput.set("value", venue.name);
                     activeCheckBox.set("checked", venue.active === true);
+                    directionsInput.set("value", venue.directions);
+                    parkingInput.set("value", venue.parking);
                     commentInput.set("value", venue.comment);
                     person.setData(venue.contacts);
                     address.setData(venue.address);

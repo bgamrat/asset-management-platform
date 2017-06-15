@@ -32,7 +32,13 @@
 .address > * {
     margin: 3px;
 }
-.address .dijitTextBox.dijitTextArea {
-    width: 100%;
+.directions,
+.parking {
+    margin: 6px;
+}
+.address .dijitTextBox.dijitTextArea,
+.directions .dijitTextBox.dijitTextArea,
+.parking .dijitTextBox.dijitTextArea {
+    width: 720px;
     height: 150px;
 }
