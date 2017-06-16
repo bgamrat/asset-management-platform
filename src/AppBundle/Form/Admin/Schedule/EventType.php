@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Client\DataTransformer\ClientToIdTransformer;
+use AppBundle\Form\Admin\Venue\DataTransformer\VenueToIdTransformer;
 use AppBundle\Form\Admin\Client\Type\ContractType;
 use AppBundle\Form\Common\PersonType;
 
@@ -70,6 +71,9 @@ class EventType extends AbstractType
                 ->add( 'client', TextType::class, [
                     'label' => 'common.client'
                 ] )
+                ->add( 'venue', TextType::class, [
+                    'label' => 'common.venue'
+                ] )
                 ->add( 'contracts', CollectionType::class, [
                     'entry_type' => ContractType::class,
                     'required' => false,
@@ -103,6 +107,8 @@ class EventType extends AbstractType
         ;
         $builder->get( 'client' )
                 ->addModelTransformer( new ClientToIdTransformer( $this->em ) );
+        $builder->get( 'venue' )
+                ->addModelTransformer( new VenueToIdTransformer( $this->em ) );
     }
 
     /**

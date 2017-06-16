@@ -31,8 +31,12 @@ class EventsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['e'] )
+        $queryBuilder = $em->createQueryBuilder()->select( ['e.id', 'e.name',
+            'e.tentative', 'e.billable', 'e.canceled', 'e.start', 'e.end', 'e.deletedAt',
+            'c.name AS client_name', 'v.name AS venue_name'] )
                 ->from( 'AppBundle\Entity\Schedule\Event', 'e' )
+                ->leftJoin('e.client','c')
+                ->leftJoin('e.venue','v')
                 ->orderBy( 'e.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -63,24 +67,24 @@ class EventsController extends FOSRestController
         $data = [];
         foreach( $eventCollection as $e )
         {
-            $cl = $e->getClient();
-            $client_text = !empty( $cl ) ? $cl->getName() : null;
-            $st = $e->getStart();
-            $en = $e->getEnd();
+            $client_text = $e['client_name'];
+            $venue_text = $e['venue_name'];
+            $st = $e['start'];
+            $en = $e['end'];
             $item = [
-                'id' => $e->getId(),
-                'name' => $e->getName(),
-                'client' => $client_text,
-                'contacts' => $e->getContacts( false ),
-                'tentative' => $e->isTentative(),
-                'billable' => $e->isBillable(),
-                'canceled' => $e->isCanceled(),
+                'id' => $e['id'],
+                'name' => $e['name'],
+                'client_text' => $client_text,
+                'venue_text' => $venue_text,
+                'tentative' => $e['tentative'],
+                'billable' => $e['billable'],
+                'canceled' => $e['canceled'],
                 'start' => !empty( $st ) ? $st->format( 'Y-m-d' ) : null,
                 'end' => !empty( $en ) ? $en->format( 'Y-m-d' ) : null
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
             {
-                $item['deleted_at'] = $e->getDeletedAt();
+                $item['deleted_at'] = $e['deletedAt'];
             }
             $data[] = $item;
         }
@@ -103,6 +107,7 @@ class EventsController extends FOSRestController
         if( $event !== null )
         {
             $client_text = !empty( $event->getClient() ) ? $event->getClient()->getName() : null;
+            $venue_text = !empty( $event->getVenue() ) ? $event->getVenue()->getName() : null;
             $st = $event->getStart();
             $en = $event->getEnd();
             $data = [
@@ -110,6 +115,8 @@ class EventsController extends FOSRestController
                 'name' => $event->getName(),
                 'client' => $event->getClient(),
                 'client_text' => $client_text,
+                'venue' => $event->getVenue(),
+                'venue_text' => $venue_text,
                 'contacts' => $event->getContacts( false ),
                 'tentative' => $event->isTentative(),
                 'billable' => $event->isBillable(),
@@ -150,7 +157,7 @@ class EventsController extends FOSRestController
         }
         else
         {
-            $event = $em->getRepository( 'AppBundle\Entity\Event\Event' )->find( $id );
+            $event = $em->getRepository( 'AppBundle\Entity\Schedule\Event' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'event' . $event->getId(), $event->getUpdated() ) === false )
             {

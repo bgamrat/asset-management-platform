@@ -195,7 +195,7 @@ define([
                 address: {
                     label: core.address,
                     renderCell: function (object, value, td) {
-                        libGrid.renderAddress(object, [value], td);
+                        libGrid.renderAddress(object, value, td);
                     }
                 },
                 comment: {
@@ -253,6 +253,7 @@ define([
                     commentInput.set("value", venue.comment);
                     person.setData(venue.contacts);
                     address.setData(venue.address);
+                    lib.showHistory(historyContentPane, venue.history);
                     venueViewDialog.show();
                 }, lib.xhrError);
             }
@@ -309,6 +310,7 @@ define([
             }));
         });
 
+        lib.getAddressTypes();
         person = xperson.run('venue_contacts');
         address = xaddress.run('venue');
 

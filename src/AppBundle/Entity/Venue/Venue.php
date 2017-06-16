@@ -14,7 +14,7 @@ use AppBundle\Entity\Common\Address;
  *
  * @ORM\Table(name="venue")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VenueRepository")
- * @Gedmo\Loggable
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Venue\VenueLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Venue

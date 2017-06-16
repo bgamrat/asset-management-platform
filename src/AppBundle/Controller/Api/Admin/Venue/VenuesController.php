@@ -67,7 +67,7 @@ class VenuesController extends FOSRestController
                 'id' => $v->getId(),
                 'name' => $v->getName(),
                 'address' => $v->getAddress(),
-                'contacts' => $v->getContacts(false),
+                'comment' => $v->getComment(),
                 'active' => $v->isActive(),
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -106,6 +106,9 @@ class VenuesController extends FOSRestController
             ];
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdated() );
+            $logUtil = $this->get( 'app.util.log' );
+            $logUtil->getLog( 'AppBundle\Entity\Venue\VenueLog', $id );
+            $data['history'] = $logUtil->translateIdsToText();
             return $data;
         }
         else

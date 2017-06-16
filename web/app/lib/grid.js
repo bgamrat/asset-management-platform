@@ -17,6 +17,9 @@ define([
     function renderAddress(object, value, td) {
         var a, i, l, segments, content = [], address_lines, address_segments;
         var address;
+        if (typeof value[0] === "undefined") {
+            value = [value];
+        }
         if( typeof value === "object" && value !== null && value.length !== 0 ) {
             address_lines = ['street1', 'street2'];
             address_segments = ['city', 'stateProvince', 'postalCode', 'country'];

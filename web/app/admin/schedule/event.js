@@ -43,7 +43,7 @@ define([
         lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
-        var action = null, d;
+        var action = null, d, person;
 
         var eventId;
 
@@ -186,6 +186,19 @@ define([
         }, "event_client");
         clientFilteringSelect.startup();
 
+        var venueStore = new JsonRest({
+            target: '/api/store/venues',
+            useRangeHeaders: false,
+            idProperty: 'id'});
+        var venueFilteringSelect = new FilteringSelect({
+            store: venueStore,
+            labelAttr: "name",
+            searchAttr: "name",
+            pageSize: 25,
+            placeholder: core.venue
+        }, "event_venue");
+        venueFilteringSelect.startup();
+
         var descriptionInput = new SimpleTextarea({
             placeholder: core.description,
             trim: true,
@@ -215,6 +228,9 @@ define([
                     "canceled": canceledCheckBox.get("checked"),
                     "contacts": person.getData(),
                     "client": parseInt(clientFilteringSelect.get("value")),
+                    "venue": parseInt(venueFilteringSelect.get("value")),
+                    "client_text": clientFilteringSelect.get("displayedValue"),
+                    "venue_text": venueFilteringSelect.get("displayedValue"),
                     "description": descriptionInput.get("value")
                 };
                 if( action === "view" ) {
@@ -254,8 +270,11 @@ define([
                 name: {
                     label: core.name
                 },
-                client: {
+                client_text: {
                     label: core.client
+                },
+                venue_text: {
+                    label: core.venue
                 },
                 dates: {
                     label: core.dates,
@@ -338,6 +357,7 @@ define([
                     billableCheckBox.set("checked", event.billable === true);
                     canceledCheckBox.set("checked", event.canceled === true);
                     clientFilteringSelect.set('displayedValue', event.client_text);
+                    venueFilteringSelect.set('displayedValue', event.venue_text);
                     descriptionInput.set("value", event.comment);
                     person.setData(event.contacts);
                     eventViewDialog.show();

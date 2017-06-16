@@ -10,6 +10,7 @@ use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Client\Contract;
 use AppBundle\Entity\Client\Trailer;
 use AppBundle\Entity\Schedule\TimeSpan;
+use AppBundle\Entity\Venue\Venue;
 
 /**
  * Event
@@ -77,6 +78,12 @@ class Event
      * @Gedmo\Versioned
      */
     private $client;
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Venue\Venue")
+     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
+     * @Gedmo\Versioned
+     */
+    private $venue;
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="event_contact",
@@ -303,6 +310,30 @@ class Event
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * Set venue
+     *
+     * @param string $venue
+     *
+     * @return Event
+     */
+    public function setVenue( $venue )
+    {
+        $this->venue = $venue;
+
+        return $this;
+    }
+
+    /**
+     * Get venue
+     *
+     * @return string
+     */
+    public function getVenue()
+    {
+        return $this->venue;
     }
 
     public function getContacts()
