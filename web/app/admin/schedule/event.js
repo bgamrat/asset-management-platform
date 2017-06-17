@@ -57,7 +57,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 525px; width: 100%;"
+            style: "height: 525px; width: 860px;"
         }, "event-view-tabs");
 
         var detailsContentPane = new ContentPane({
@@ -198,6 +198,14 @@ define([
             placeholder: core.venue
         }, "event_venue");
         venueFilteringSelect.startup();
+        venueFilteringSelect.on("change", function (evt) {
+            var id = parseInt(this.id.replace(/\D/g, ''));
+            var item = this.get('item');
+            document.getElementById('venue-address').textContent = item.address.address;
+            document.getElementById('venue-comment').textContent = item.comment;
+            document.getElementById('venue-directions').textContent = item.directions;
+            document.getElementById('venue-parking').textContent = item.parking;
+        });
 
         var descriptionInput = new SimpleTextarea({
             placeholder: core.description,

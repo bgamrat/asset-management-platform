@@ -155,6 +155,8 @@ common:
         Current
     default:
         Default
+    directions:
+        Directions
     email:
         Email
     enabled:

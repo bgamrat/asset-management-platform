@@ -16,6 +16,16 @@
     -webkit-justify-content: space-between;
     margin: 5px;
 }
+.justify.left {
+   -webkit-flex-direction: row; 
+   flex-direction: row;
+   -webkit-justify-content: flex-start;
+   justify-content: flex-start;
+}
+.justify span {
+   margin-left: 5px;
+   padding-left: 5px;
+}
 .loading {
     height: 500px;
     width: 100%;

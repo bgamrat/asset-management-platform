@@ -155,7 +155,29 @@
                     <div id="event-view-venue-tab">
                         <fieldset class="event venue">
                             <legend>{{'common.venue'|trans}}</legend>
-                            {{form_row(event_form.venue)}}
+                            <div class="justify left">
+                                <span>
+                                    {{form_row(event_form.venue)}}
+                                </span>
+                                <span class="venue-info">
+                                    <div class="label">{{ 'common.address'|trans }}</div>
+                                    <pre id="venue-address"></pre>
+                                </span>
+                            </div>
+                            <div class="justify">
+                                <span class="venue-info">
+                                    <div class="label">{{ 'common.comment'|trans }}</div>
+                                    <div id="venue-comment"></div>
+                                </span>
+                                <span class="venue-info">
+                                    <div class="label">{{ 'common.directions'|trans }}</div>
+                                    <div id="venue-directions"></div>
+                                </span>
+                                <span class="venue-info">
+                                    <div class="label">{{ 'common.address'|trans }}</div>
+                                    <div id="venue-parking"></div>
+                                </span>
+                            </div>
                         </fieldset>
                     </div>
                     <div id="event-view-times-tab">
