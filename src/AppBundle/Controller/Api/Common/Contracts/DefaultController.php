@@ -21,18 +21,11 @@ class DefaultController extends FOSRestController
         $name = $request->get( 'name' );
         if( !empty( $name ) )
         {
-            $clientContract = '%' . str_replace( '*', '%', $name );
-
             $em = $this->getDoctrine()->getManager();
-
-            $queryBuilder = $em->createQueryBuilder()->select( ['ct.id', "CONCAT(CONCAT(cl.name, ' '), ct.name) AS name"] )
-                    ->from( 'AppBundle\Entity\Client\Contract', 'ct' )
-                    ->innerJoin( 'ct.client', 'cl' )
-                    ->where( "LOWER(CONCAT(CONCAT(cl.name, ' '), ct.name)) LIKE :client_contract" )
-                    ->orderBy( 'name' )
-                    ->setParameter( 'client_contract', strtolower( $clientContract ) );
-
-            $data = $queryBuilder->getQuery()->getResult();
+            $data = $em->getRepository( 'AppBundle\Entity\Client\Contract' )->findByNameLike( $name );
+            foreach ($data as $c) {
+                $c->setName($c->getClient()->getName().' '.$c->getName());
+            }
         }
         else
         {

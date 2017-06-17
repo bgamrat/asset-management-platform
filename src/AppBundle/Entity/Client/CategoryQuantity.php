@@ -53,7 +53,16 @@ class CategoryQuantity
      * @Gedmo\Versioned
      */
     private $comment;
-
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
     /**
      * Get id
      *

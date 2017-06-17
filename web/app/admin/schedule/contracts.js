@@ -41,36 +41,42 @@ define([
         }, base);
         dijit.startup();
         contractFilteringSelect.push(dijit);
-        dijit.on("change", function () {
-            var selectedContract = this;
+        dijit.on("change", function (evt) {
+            var id = parseInt(this.id.replace(/\D/g, ''));
+            var item = this.get('item');
+            var templateContract;
+            var i, l, reqd = [], avail = [], t;
+            var equipmentLink = dom.byId("contract-equipment-link-event_contracts_" + id);
+            l = item.requiresTrailers.length;
+            for( i = 0; i < l; i++ ) {
+                t = item.requiresTrailers[i];
+                reqd.push(t.trailer.name);
+            }
+            l = item.availableTrailers.length;
+            for( i = 0; i < l; i++ ) {
+                t = item.availableTrailers[i];
+                reqd.push(t.trailer.name);
+            }
+            // TODO: Fix this so that both the dt and dd are updated properly
 
-            contractTrailersStore.get(selectedContract.value).then(function (data) {
-                var templateContract;
-                var i, l, reqd = [], avail = [];
-                var equipmentLink = dom.byId("contract-equipment-link-" + selectedContract.id);
-                l = data.required.length;
-                for( i = 0; i < l; i++ ) {
-                    reqd.push(data.required[i].name);
-                }
-                l = data.available.length;
-                for( i = 0; i < l; i++ ) {
-                    avail.push(data.available[i].name);
-                }
-                // Backticks won't work with the old Chrome browser
-                templateContract = '<dt data-contract-id="' + data.id + '" class="term">' + selectedContract.displayedValue + '</dt>' +
-                        '<dd>';
-                if( reqd.length > 0 ) {
-                    templateContract += '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>';
-                }
-                if( avail.length > 0 ) {
-                    '<span class="label">&nbsp;' + core.available + '</span>' + avail.join();
-                }
-                templateContract += '</dd>';
+            // Backticks won't work with the old Chrome browser
+            templateContract = '<dt id="contract-equipment-list-' + id + '" data-contract-id="' + item.id + '" class="term">' + item.name + '</dt>' +
+                    '<dd>';
+            if( reqd.length > 0 ) {
+                templateContract += '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>';
+            }
+            if( avail.length > 0 ) {
+                '<span class="label">&nbsp;' + core.available + '</span>' + avail.join();
+            }
+            templateContract += '</dd>';
 
+            if( dom.byId("contract-equipment-list-" + id) === null ) {
                 domConstruct.place(templateContract, dom.byId("trailers-required-by-contracts"), "last");
+            } else {
+                domConstruct.place(templateContract, dom.byId("contract-equipment-list-" + id), "replace");
+            }
 
-                equipmentLink.href = '/admin/contract/' + data.id + '/equipment';
-            });
+            equipmentLink.href = '/admin/contract/' + item.id + '/equipment';
         });
     }
 
@@ -79,6 +85,9 @@ define([
         if( id !== null ) {
             item = contractFilteringSelect.splice(id, 1);
             item[0].destroyRecursive();
+
+            // TODO: Fix this to destroy both dt and dd
+            domConstruct.destroy("contract-equipment-list-" + id);
         } else {
             contractFilteringSelect.pop().destroyRecursive();
         }

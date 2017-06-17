@@ -22,8 +22,8 @@
     text-decoration: line-through;
 }
 fieldset > div {
-    margin: 5px;
-    padding: 3px;
+    margin: 5px 5px 5px 0;
+    padding: 3px 3px 3px 0;
 }
 fieldset label, label {
     font-weight: bold;

@@ -7,12 +7,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Entity\Client\Trailer;
 
 /**
  * Contract
  *
  * @ORM\Table(name="contract")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ContractRepository")
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Client\ContractLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
