@@ -77,6 +77,7 @@ define({
         "title": "Title",
         "to": "To",
         "tracking_number": "Tracking Number",
+        "trailers": "Trailers",
         "type": "Type",
         "url": "URL",
         "user": "User",

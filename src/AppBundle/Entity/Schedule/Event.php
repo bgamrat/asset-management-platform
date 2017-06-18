@@ -356,23 +356,7 @@ class Event
 
     public function getContracts()
     {
-        $return = [];
-
-        foreach( $this->contracts as $c )
-        {
-            $ct = [];
-            $ct['id'] = $c->getId();
-            $ct['name'] = $c->getName();
-            $ct['comment'] = $c->getComment();
-            $ct['active'] = $c->isActive();
-            $dt = $c->getStart();
-            $ct['start'] = !empty( $dt ) ? $dt->format( 'Y-m-d' ) : null;
-            $dt = $c->getEnd();
-            $ct['end'] = !empty( $dt ) ? $dt->format( 'Y-m-d' ) : null;
-            $ct['value'] = $c->getValue();
-            $return[] = $ct;
-        }
-        return $return;
+        return $this->contracts->toArray();
     }
 
     public function addContract( Contract $contract )
@@ -380,7 +364,6 @@ class Event
         if( !$this->contracts->contains( $contract ) )
         {
             $this->contracts->add( $contract );
-            $contract->setClient( $this );
         }
         return $this;
     }

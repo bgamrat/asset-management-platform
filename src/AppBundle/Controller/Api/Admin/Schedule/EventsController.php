@@ -118,6 +118,7 @@ class EventsController extends FOSRestController
                 'venue' => $event->getVenue(),
                 'venue_text' => $venue_text,
                 'contacts' => $event->getContacts( false ),
+                'contracts' => $event->getContracts( false ),
                 'tentative' => $event->isTentative(),
                 'billable' => $event->isBillable(),
                 'canceled' => $event->isCanceled(),

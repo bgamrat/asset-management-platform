@@ -23,6 +23,7 @@ define([
     'dstore/SimpleQuery',
     'dstore/Trackable',
     'dgrid/OnDemandGrid',
+    "dgrid/extensions/ColumnHider",
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
@@ -38,7 +39,7 @@ define([
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
-        Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
+        Rest, SimpleQuery, Trackable, OnDemandGrid, ColumnHider, Selection, Editor, put,
         xperson, contracts, trailers, timeSpans,
         lib, libGrid, core, schedule) {
     //"use strict";
@@ -235,6 +236,7 @@ define([
                     "billable": billableCheckBox.get("checked"),
                     "canceled": canceledCheckBox.get("checked"),
                     "contacts": person.getData(),
+                    "contracts": contracts.getData(),
                     "client": parseInt(clientFilteringSelect.get("value")),
                     "venue": parseInt(venueFilteringSelect.get("value")),
                     "client_text": clientFilteringSelect.get("displayedValue"),
@@ -268,7 +270,7 @@ define([
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
         var store = new TrackableRest({target: '/api/events', useRangeHeaders: true, idProperty: 'id'});
-        var grid = new (declare([OnDemandGrid, Selection, Editor]))({
+        var grid = new (declare([OnDemandGrid, Selection, Editor, ColumnHider]))({
             collection: store,
             className: "dgrid-autoheight",
             columns: {
@@ -284,6 +286,9 @@ define([
                 venue_text: {
                     label: core.venue
                 },
+                trailers: {
+                    label: core.trailers
+                },
                 dates: {
                     label: core.dates,
                     formatter: function (data, object) {
@@ -294,7 +299,7 @@ define([
                         if( object.end !== null ) {
                             en = object.end;
                         }
-                        datesList = en + "-" + st;
+                        datesList = en + "-<br>" + st;
                         html = '<span class="date-span">' + datesList + '</span><br>';
                         return html;
                     }
@@ -367,6 +372,7 @@ define([
                     clientFilteringSelect.set('displayedValue', event.client_text);
                     venueFilteringSelect.set('displayedValue', event.venue_text);
                     descriptionInput.set("value", event.comment);
+                    contracts.setData(event.contracts);
                     person.setData(event.contacts);
                     eventViewDialog.show();
                 }, lib.xhrError);
@@ -428,21 +434,6 @@ define([
             var dijit;
             dijit = new CheckBox({}, node.id);
             dijit.startup();
-        });
-
-        var scheduleGridControlDialog = new Dialog({
-            title: core.view,
-            style: "height:700px;width:700px"
-        }, "schedule-grid-control-dialog");
-        scheduleGridControlDialog.startup();
-
-        var showGridControlsBtn = new Button({
-            label: core.grid_controls,
-            "class": "right"
-        }, "show-grid-controls-btn");
-        showGridControlsBtn.startup();
-        showGridControlsBtn.on("click", function (event) {
-            scheduleGridControlDialog.show();
         });
 
         person = xperson.run('event_contacts');

@@ -48,6 +48,9 @@ fieldset ul {
     list-style-position: inside;
     padding-left: 4px;
 }
+fieldset ul.unstyled {
+    list-style-type: none;
+}
 .add-one-more-row {
     text-decoration: underline;
     cursor: pointer;

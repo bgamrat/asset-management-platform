@@ -133,6 +133,8 @@ common:
         City
     client_billable:
         Client Billable
+    client:
+        Client
     clients:
         Clients
     comment:
@@ -153,6 +155,8 @@ common:
         Created
     current:
         Current
+    dates:
+        Dates
     default:
         Default
     description:
@@ -253,6 +257,8 @@ common:
         Save
     schedule:
         Schedule
+    select_columns:
+            Select the columns to display
     send:
         Send
     service:

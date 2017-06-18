@@ -40,8 +40,8 @@ class ContactType extends AbstractType
                 ->add( 'name', HiddenType::class )
                 ->add( 'address_id', HiddenType::class, [ 'required' => false, 'property_path' => 'address'] )
         ;
-        //$builder->get( 'contact_id' )
-        //      ->addModelTransformer( new ContactToIdTransformer( $this->em ) );
+        $builder->get( 'contact_id' )
+              ->addModelTransformer( new ContactToIdTransformer( $this->em ) );
         $builder->get( 'contact_type' )
                 ->addModelTransformer( new ContactTypeToIdTransformer( $this->em ) );
         $builder->get( 'person_id' )

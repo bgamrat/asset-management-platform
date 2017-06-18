@@ -185,6 +185,7 @@
 }
 .account-information.dijitTextBox {
     height: 360px;
+    width: 700px;
 }
 #transfer-grid .field-id,
 #transfer-grid .dgrid-column-id {

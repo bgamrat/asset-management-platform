@@ -69,9 +69,6 @@
 {% block admin_content %}
     <div id="event-wrapper">
         <h1>{{ block('title') }}</h1>
-        <div class="additional-grid-controls">
-            <button id="show-grid-controls-btn" class="right" type="button">{{ 'common.grid_controls'|trans }}</button>
-        </div>
         <div class="grid-controls">
             <div>
                 <button id="event-new-btn" type="button">{{ 'common.new'|trans }}</button>
@@ -206,9 +203,6 @@
                 </div>
             </div>
             {{ form_end(event_form) }}
-        </div>
-        <div id="schedule-grid-control-dialog">
-            <label for="show-tentative"><input type="checkbox" id="show-tentative">{{'event.tentative'|trans}}</label>
         </div>
     </div>
 {% endblock %}

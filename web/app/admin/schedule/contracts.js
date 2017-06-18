@@ -141,24 +141,24 @@ define([
 
     }
 
-    function getData(relationship) {
+    function getData() {
         var i, returnData = [];
-        for( i = 0; i < contractsFilteringSelect.length; i++ ) {
+        for( i = 0; i < contractFilteringSelect.length; i++ ) {
             returnData.push(
-                    parseInt(contractsFilteringSelect[i].get("value")));
+                    parseInt(contractFilteringSelect[i].get("value")));
         }
         return returnData;
     }
 
-    function setData(relationship, models) {
+    function setData(contracts) {
         var i;
 
         query(".form-row.contract", prototypeNode.parentNode).forEach(function (node, index) {
             destroyRow(null, node);
         });
 
-        if( typeof models === "object" && models !== null && models.length > 0 ) {
-            for( i = 0; i < models.length; i++ ) {
+        if( typeof contracts === "object" && contracts !== null && contracts.length > 0 ) {
+            for( i = 0; i < contracts.length; i++ ) {
                 cloneNewNode();
                 createDijit();
                 contractFilteringSelect[i].set("value", contracts[i].id);

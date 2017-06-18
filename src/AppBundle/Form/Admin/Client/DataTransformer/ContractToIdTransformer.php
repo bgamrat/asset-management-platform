@@ -26,8 +26,11 @@ class ContractToIdTransformer implements DataTransformerInterface
         if (null === $contract) {
             return '';
         }
-
-        return $contract->getId();
+        if (is_object($contract )) {
+            return $contract->getId();
+        } else {
+            return $contract['id'];
+        }
     }
 
     /**
@@ -45,14 +48,14 @@ class ContractToIdTransformer implements DataTransformerInterface
         }
 
         $contract = $this->em
-            ->getRepository('AppBundle\Entity\Asset\Contract')
-            ->find($contractName)
+            ->getRepository('AppBundle\Entity\Client\Contract')
+            ->find($contractId)
         ;
 
         if (null === $contract) {
             throw new TransformationFailedException(sprintf(
                 'An contract with name "%s" does not exist!',
-                $contractName
+                $contractId
             ));
         }
         return $contract;

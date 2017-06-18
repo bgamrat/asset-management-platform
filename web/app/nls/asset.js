@@ -28,6 +28,7 @@ define({
         "summary": "Summary",
         "supports": "Supports",
         "trailer": "Trailer",
+        "trailers": "Trailers",
         "type": "Type"
     })
 });
