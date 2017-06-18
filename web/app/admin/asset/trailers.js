@@ -395,6 +395,7 @@ define([
                     trailerViewDialog.show();
                     action = "view";
                     trailerId = trailer.id;
+                    nameInput.set("value", trailer.name);
                     modelFilteringSelect.set('displayedValue', trailer.model_text);
                     statusSelect.set("displayedValue", trailer.status_text);
                     purchasedInput.set("value", trailer.purchased);
@@ -412,7 +413,6 @@ define([
                         locationFilteringSelect.set('displayedValue', trailer.location_text);
                         locationFilteringSelect.set("readOnly", true);
                     }
-                    nameInput.set('value', core.name);
                     serialNumberInput.set('value', trailer.serial_number);
                     descriptionInput.set('value', trailer.description);
                     activeCheckBox.set('checked', trailer.active);

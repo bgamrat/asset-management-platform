@@ -69,6 +69,9 @@
 {% block admin_content %}
     <div id="event-wrapper">
         <h1>{{ block('title') }}</h1>
+        <div class="additional-grid-controls">
+            <button id="show-grid-controls-btn" class="right" type="button">{{ 'common.grid_controls'|trans }}</button>
+        </div>
         <div class="grid-controls">
             <div>
                 <button id="event-new-btn" type="button">{{ 'common.new'|trans }}</button>
@@ -134,8 +137,8 @@
                             <fieldset class="trailers">
                                 <legend>{{'asset.trailers'|trans}}</legend>
                                 <h2>{{'client.contract'|trans}} {{'asset.required'|trans}} / {{'common.available'|trans}}</h2>
-                                <dl id="trailers-required-by-contracts">
-                                </dl>
+                                <ul id="trailers-required-by-contracts">
+                                </ul>
                                 <h2>{{'common.additional'|trans}}</h2>
                                 {{form_row(event_form.trailers)}}
                                 {% if event_form.trailers.vars.allow_add %}
@@ -203,6 +206,9 @@
                 </div>
             </div>
             {{ form_end(event_form) }}
+        </div>
+        <div id="schedule-grid-control-dialog">
+            <label for="show-tentative"><input type="checkbox" id="show-tentative">{{'event.tentative'|trans}}</label>
         </div>
     </div>
 {% endblock %}

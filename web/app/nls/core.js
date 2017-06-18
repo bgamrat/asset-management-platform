@@ -35,6 +35,7 @@ define({
         "filter": "Filter",
         "firstname": "First name",
         "from": "From",
+        "grid_controls": "Grid Controls",
         "groups": "Groups",
         "history": "History",
         "id": "Id",

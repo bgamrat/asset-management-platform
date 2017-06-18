@@ -155,6 +155,8 @@ common:
         Current
     default:
         Default
+    description:
+        Description
     directions:
         Directions
     email:
@@ -173,6 +175,8 @@ common:
         Filter
     from:
         From
+    grid_controls:
+        Grid Controls
     group:
         Group
     groups:

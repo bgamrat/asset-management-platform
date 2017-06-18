@@ -45,7 +45,7 @@ define([
             var id = parseInt(this.id.replace(/\D/g, ''));
             var item = this.get('item');
             var templateContract;
-            var i, l, reqd = [], avail = [], t;
+            var i, l, reqd = [], avail = [], t, hidden;
             var equipmentLink = dom.byId("contract-equipment-link-event_contracts_" + id);
             l = item.requiresTrailers.length;
             for( i = 0; i < l; i++ ) {
@@ -57,18 +57,18 @@ define([
                 t = item.availableTrailers[i];
                 reqd.push(t.trailer.name);
             }
-            // TODO: Fix this so that both the dt and dd are updated properly
+
+            hidden = (reqd.length === 0 && avail.length === 0) ? 'class="hidden"' : "";
 
             // Backticks won't work with the old Chrome browser
-            templateContract = '<dt id="contract-equipment-list-' + id + '" data-contract-id="' + item.id + '" class="term">' + item.name + '</dt>' +
-                    '<dd>';
+            templateContract = '<li id="contract-equipment-list-' + id + '" data-contract-id="' + item.id + '" ' + hidden + '><span class="term">' + item.name + '</span>';
             if( reqd.length > 0 ) {
                 templateContract += '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>';
             }
             if( avail.length > 0 ) {
                 '<span class="label">&nbsp;' + core.available + '</span>' + avail.join();
             }
-            templateContract += '</dd>';
+            templateContract += '</li>';
 
             if( dom.byId("contract-equipment-list-" + id) === null ) {
                 domConstruct.place(templateContract, dom.byId("trailers-required-by-contracts"), "last");
@@ -85,8 +85,6 @@ define([
         if( id !== null ) {
             item = contractFilteringSelect.splice(id, 1);
             item[0].destroyRecursive();
-
-            // TODO: Fix this to destroy both dt and dd
             domConstruct.destroy("contract-equipment-list-" + id);
         } else {
             contractFilteringSelect.pop().destroyRecursive();

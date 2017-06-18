@@ -424,6 +424,27 @@ define([
             }));
         });
 
+        query('#schedule-grid-control-dialog [type="checkbox"]').forEach(function (node) {
+            var dijit;
+            dijit = new CheckBox({}, node.id);
+            dijit.startup();
+        });
+
+        var scheduleGridControlDialog = new Dialog({
+            title: core.view,
+            style: "height:700px;width:700px"
+        }, "schedule-grid-control-dialog");
+        scheduleGridControlDialog.startup();
+
+        var showGridControlsBtn = new Button({
+            label: core.grid_controls,
+            "class": "right"
+        }, "show-grid-controls-btn");
+        showGridControlsBtn.startup();
+        showGridControlsBtn.on("click", function (event) {
+            scheduleGridControlDialog.show();
+        });
+
         person = xperson.run('event_contacts');
         contracts.run('event_contracts');
         trailers.run('event_trailers');

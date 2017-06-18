@@ -43,6 +43,11 @@ fieldset .sub-form-legend {
     border-bottom: 1px solid #ddd;
     display: inline-block;
 }
+fieldset ul {
+    list-style-type: square;
+    list-style-position: inside;
+    padding-left: 4px;
+}
 .add-one-more-row {
     text-decoration: underline;
     cursor: pointer;
@@ -140,4 +145,7 @@ fieldset .sub-form-legend {
 .field-id,
 .dgrid-column-id {
     display: none;
+}
+.trailer-data .description {
+    margin: 20px 0;
 }

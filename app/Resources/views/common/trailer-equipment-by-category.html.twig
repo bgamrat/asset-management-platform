@@ -3,7 +3,7 @@
 {% extends 'admin.base.html.twig' %}
 
 {% block stylesheets %}
-    {% stylesheets 
+    {% stylesheets
             '@admin_client_css'
             filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
@@ -15,7 +15,7 @@
         <h1>{{ block ('title') }}</h1>
         <div class="trailer">
             <div class="trailer-data">
-                <div class="name-value-active">   
+                <!--div class="name-value-active">
                     <span class="trailer name">
                         {{trailer.name}}
                     </span>
@@ -23,13 +23,13 @@
                         {% if trailer.active %}
                             {{'common.active'|trans}}
                         {% else %}
-                            {{'common.not_active'|trans}}  
+                            {{'common.not_active'|trans}}
                         {%endif%}
                     </span>
-                </div>
+                </div-->
                 <div class="description">
-                    <div class="label">{{'common.description'|trans}}</div>
-                    {{trailer.description}}		    
+                    <!--div class="label">{{'common.description'|trans}}</div-->
+                    {{trailer.description}}
                 </div>
             </div>
             <section>
