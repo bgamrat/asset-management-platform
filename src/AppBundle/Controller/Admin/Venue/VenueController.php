@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin\Venue;
 
 use AppBundle\Form\Admin\Venue\VenueType;
 use AppBundle\Form\Admin\Venue\ContractType;
+
 ;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -36,6 +37,27 @@ class VenueController extends Controller
                     'venue_form' => $form->createView(),
                     'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
+    }
+
+    /**
+     * @Route("/admin/venue/{id}/equipment")
+     * @Method("GET")
+     */
+    public function viewVenueEquipmentAction( $id )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+
+        $em = $this->getDoctrine()->getManager();
+        $venue = $em->getRepository( 'AppBundle\Entity\Venue\Venue' )->find( $id );
+        $locationType = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findBy( ['name' => 'Venue'] )[0];
+        $venueEquipment = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $locationType->getId(), $id );
+
+        return $this->render( 'admin/venue/venue-equipment.html.twig', array(
+                    'venue' => $venue,
+                    'venue_equipment' => $venueEquipment,
+                    'no_hide' => true,
+                    'omit_menu' => true)
+        );
     }
 
 }

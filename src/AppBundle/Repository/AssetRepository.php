@@ -17,14 +17,14 @@ class AssetRepository extends \Doctrine\ORM\EntityRepository
     {
         if( !empty( $barcodeId ) )
         {
-            
+
             $em = $this->getEntityManager();
 
-            $queryBuilder = $em->createQueryBuilder()->select( ['a' ])
+            $queryBuilder = $em->createQueryBuilder()->select( ['a'] )
                     ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                     ->join( 'a.barcodes', 'b' )
                     ->where( "b.id = :barcode_id" )
-                    ->setMaxResults(1)
+                    ->setMaxResults( 1 )
                     ->setParameter( 'barcode_id', strtolower( $barcodeId ) );
 
             $data = $queryBuilder->getQuery()->getResult();
@@ -35,13 +35,13 @@ class AssetRepository extends \Doctrine\ORM\EntityRepository
         }
         return $data;
     }
-    
+
     public function findByBarcode( $barcode )
     {
         if( !empty( $barcode ) )
-        {          
+        {
             $em = $this->getEntityManager();
-            $queryBuilder = $em->createQueryBuilder()->select( ['a' ])
+            $queryBuilder = $em->createQueryBuilder()->select( ['a'] )
                     ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                     ->join( 'a.barcodes', 'b' )
                     ->where( "LOWER(b.barcode) LIKE :barcode" )
@@ -54,4 +54,25 @@ class AssetRepository extends \Doctrine\ORM\EntityRepository
         }
         return $data;
     }
+
+    public function findByLocation( $locationType, $locationId )
+    {
+        if( !empty( $locationType ) )
+        {
+            $em = $this->getEntityManager();
+            $queryBuilder = $em->createQueryBuilder()->select( ['a'] )
+                    ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
+                    ->join( 'a.location', 'l' )
+                    ->where( 'l.type = :location_type' )
+                    ->andWhere( 'l.entity = :location_id' )
+                    ->setParameters( ['location_type' => $locationType, 'location_id' => $locationId] );
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
+        return $data;
+    }
+
 }

@@ -202,6 +202,7 @@ define([
         venueFilteringSelect.on("change", function (evt) {
             var id = parseInt(this.id.replace(/\D/g, ''));
             var item = this.get('item');
+            document.getElementById('venue-equipment-link').href = '/admin/venue/' + item.id + '/equipment';
             document.getElementById('venue-address').textContent = item.address.address;
             document.getElementById('venue-comment').textContent = item.comment;
             document.getElementById('venue-directions').textContent = item.directions;
@@ -428,12 +429,6 @@ define([
                 // characters that have special meaning in RegExps
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
-        });
-
-        query('#schedule-grid-control-dialog [type="checkbox"]').forEach(function (node) {
-            var dijit;
-            dijit = new CheckBox({}, node.id);
-            dijit.startup();
         });
 
         person = xperson.run('event_contacts');

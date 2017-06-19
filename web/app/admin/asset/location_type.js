@@ -72,11 +72,10 @@ define([
             name: "location_types[types][" + index + "][active]"}, base + "active");
         activeCheckBox.push(dijit);
         dijit.startup();
-        if( dom.byId(base + "default").checked === true ) {
-            checked = true;
-        }
+        checked = dom.byId(base + "default").checked === true;
         dijit.startup();
         dijit = new RadioButton({
+            name: "location_types[types][" + index + "][default]"
         }, base + "default");
         dijit.set("checked", checked);
         dijit.startup();

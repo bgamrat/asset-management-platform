@@ -1,0 +1,48 @@
+{% block title %}{{ venue.name }} {{'common.equipment'|trans }}{% endblock %}
+
+{% extends 'admin.base.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets 
+            '@admin_client_css'
+            filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block admin_content %}
+    <div id="venue-equipment-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="venue">
+            <div class="venue-data">
+                <div class="name-value-active">   
+                    <span class="venue name">
+                        {{venue.name}}
+                    </span>
+                </div>
+            </div>
+            <section>
+                {% if venue_equipment is not empty %}
+                    <article class="venue available">
+                        <h2>{{'asset.equipment'|trans}}</h2>
+                        <ul class="requires-available-list">
+                            {% for equipment in venue_equipment%}
+                                <li class="justify">
+                                    <span class="item">{{equipment.model.name}}</span>
+                                    {% for barcode in equipment.barcodes %}
+                                        {% if barcode.active %}
+                                            <span class="item">{{barcode.barcode}}</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {%if equipment.serialNumber is not empty %}
+                                        <span class="item">#{{equipment.serialNumber}}</span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </article>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+{% endblock %}
