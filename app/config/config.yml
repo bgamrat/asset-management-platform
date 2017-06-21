@@ -197,6 +197,9 @@ fos_user:
     registration:
         form:
             type: AppBundle\Form\User\RegistrationFormType
+    from_email:
+        address: 'bgamrat@localhost'
+        sender_name: BGamrat
 
 fos_rest:
     disable_csrf_role: ROLE_API

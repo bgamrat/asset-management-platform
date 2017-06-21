@@ -89,7 +89,7 @@ define([
         tabContainer.addChild(requiresContentPane);
 
         var extendsContentPane = new ContentPane({
-            title: asset.extends},
+            title: asset["extends"]},
         "trailer-view-extends-tab"
                 );
         tabContainer.addChild(extendsContentPane);
@@ -148,7 +148,7 @@ define([
             placeholder: core.name,
             trim: true,
             pattern: "[a-zA-Z0-9x\.\,\ \+\(\)\'\"-]{2,24}",
-            required: true,
+            required: true
         }, "trailer_name");
         nameInput.startup();
 
@@ -294,7 +294,7 @@ define([
                     "requires": trailerRelationships.getData("requires"),
                     "extended_by": trailerRelationships.getData("extended_by"),
                     "required_by": trailerRelationships.getData("required_by"),
-                    "description": descriptionInput.get("value"),
+                    "description": descriptionInput.get("value")
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {

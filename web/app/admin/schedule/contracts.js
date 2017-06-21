@@ -66,7 +66,7 @@ define([
                 templateContract += '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>';
             }
             if( avail.length > 0 ) {
-                '<span class="label">&nbsp;' + core.available + '</span>' + avail.join();
+                templateContract += '<span class="label">&nbsp;' + core.available + '</span>' + avail.join();
             }
             templateContract += '</li>';
 

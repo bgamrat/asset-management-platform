@@ -72,10 +72,10 @@
         }, {
             "type": "package",
             "package": {
-                "name": "persrv/rql",
+                "name": "persvr/rql",
                 "version": "0.3.3",
                 "dist": {
-                    "type": "tar",
+                    "type": "zip",
                     "url": "https://github.com/persvr/rql/archive/master.zip"
                 }
             }
@@ -177,7 +177,7 @@
             "@mvFontAwesome"
         ],
         "post-package-uninstall": [
-            "@rmAllDojo"
+            "@rmAllJS"
         ]
     },
     "extra": {

@@ -66,7 +66,7 @@ define([
                     label: core.locked,
                     sortable: false,
                     renderCell: libGrid.renderGridCheckbox
-                },
+                }
             },
             selectionMode: "none"
         }, 'user-grid');

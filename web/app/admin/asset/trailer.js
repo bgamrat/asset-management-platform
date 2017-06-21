@@ -55,10 +55,10 @@ define([
                     label: asset.barcode
                 },
                 model_text: {
-                    label: asset.model,
+                    label: asset.model
                 },
                 serial_number: {
-                    label: asset.serial_number,
+                    label: asset.serial_number
                 },
                 status_text: {                 
                     label: core.status

@@ -25,7 +25,7 @@ define([
                 return object.has_children;
             }, getRoot: function (onItem) {
                 this.store.get("admin").then(onItem);
-            },
+            }
         });
         // Create the Tree.
         var tree = new Tree({

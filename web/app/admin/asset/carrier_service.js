@@ -136,7 +136,7 @@ define([
                         "default": defaultRadioButton[i].get('value'),
                         "name": nameInput[i].get('value'),
                         "comment": commentInput[i].get('value'),
-                        "active": activeCheckBox[i].get("checked"),
+                        "active": activeCheckBox[i].get("checked")
                     });
         }
         return returnData;
@@ -158,7 +158,7 @@ define([
                 nameInput[i].set('value', obj.name);
                 commentInput[i].set('value', obj.comment);
                 activeCheckBox[i].set('value', obj.active);
-                defaultRadioButton[i].set('checked', obj.default);
+                defaultRadioButton[i].set('checked', obj["default"]);
             }
         }
     }

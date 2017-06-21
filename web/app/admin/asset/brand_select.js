@@ -119,7 +119,7 @@ define([
             returnData.push(
                     {
                         "id": brandFilteringSelect[i].get("value"),
-                        "name": brandFilteringSelect[i].get('displayedValue'),
+                        "name": brandFilteringSelect[i].get('displayedValue')
                     });
         }
         return returnData;

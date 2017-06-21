@@ -81,7 +81,7 @@ define([
                 maxLength: 64,
                 required: false,
                 "class": "name",
-                placeholder: core.middlename,
+                placeholder: core.middlename
             }, base + "middlename");
             dijit.startup();
             middlenameInput.push(dijit);

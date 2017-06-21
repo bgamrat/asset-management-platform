@@ -28,7 +28,7 @@ define([
 
     var trailerObjs = {
         "requires_trailers": null,
-        "available_trailers": null,
+        "available_trailers": null
     };
 
     var trailerStore;

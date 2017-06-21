@@ -28,7 +28,7 @@ define([
 
     var categoryQuantityObjs = {
         "requires_category_quantities": null,
-        "available_category_quantities": null,
+        "available_category_quantities": null
     };
 
     var categoryStore;

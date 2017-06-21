@@ -126,7 +126,7 @@ define([
                         "id": barcodeId[i],
                         "barcode": barcodeInput[i].get('value'),
                         "comment": commentInput[i].get('value'),
-                        "active": activeRadioButton[i].get("checked"),
+                        "active": activeRadioButton[i].get("checked")
                     });
         }
         return returnData;

@@ -12,7 +12,7 @@ define([
     "dijit/form/CheckBox",
     "dijit/form/RadioButton",
     "dijit/form/Button",
-    "lib/common",
+    "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/NodeList-dom",
     "dojo/NodeList-traverse",

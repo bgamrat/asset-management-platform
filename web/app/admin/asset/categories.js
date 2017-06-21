@@ -47,7 +47,7 @@ define([
             (new Tree({
                 model: model,
                 showRoot: false,
-                persist: true,
+                persist: true
             })).placeAt("category-tree").startup();
 
         }, function (err) {

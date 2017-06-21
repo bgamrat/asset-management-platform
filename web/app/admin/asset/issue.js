@@ -180,7 +180,7 @@ define([
         trailerSelect.startup();
 
         issueSelect = dom.byId('issue_type');
-        d, data = JSON.parse(domAttr.get(issueSelect, "data-options"));
+        var d, data = JSON.parse(domAttr.get(issueSelect, "data-options"));
         // Convert the data to an array of objects
         storeData = [];
         for( d in data ) {
@@ -346,10 +346,10 @@ define([
                     label: asset.priority
                 },
                 type_text: {
-                    label: asset.type,
+                    label: asset.type
                 },
                 status_text: {
-                    label: asset.status,
+                    label: asset.status
                 },
                 summary: {
                     label: asset.summary

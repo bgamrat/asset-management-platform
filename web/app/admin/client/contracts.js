@@ -159,7 +159,7 @@ define([
                             "active": activeCheckBox[i].get("checked"),
                             "start": st === null ? "" : st,
                             "end": en === null ? "" : en,
-                            "value": valueInput[i].get('value'),
+                            "value": valueInput[i].get('value')
                         });
             }
         }

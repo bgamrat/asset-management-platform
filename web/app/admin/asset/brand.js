@@ -72,7 +72,7 @@ define([
                 );
         tabContainer.addChild(requiresContentPane);
         var extendsContentPane = new ContentPane({
-            title: asset.extends},
+            title: asset["extends"]},
         "model-view-extends-tab"
                 );
         tabContainer.addChild(extendsContentPane);
@@ -143,7 +143,7 @@ define([
             placeholder: core.name,
             trim: true,
             pattern: "[a-zA-Z0-9x\.\,\ \+\(\)\'\"-]{2,24}",
-            required: true,
+            required: true
         }, "model_name");
         nameInput.startup();
         var containerCheckBox = new CheckBox({}, "model_container");
@@ -225,7 +225,7 @@ define([
                     label: asset.category
                 },
                 name: {
-                    label: asset.model,
+                    label: asset.model
                 },
                 container: {
                     label: asset.container,
