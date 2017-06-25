@@ -96,6 +96,10 @@
             {{ form_end(asset_form) }}
         </div>
     </div>
+    {% javascripts '@app_admin_asset_equipment_js' %}
+    <script data-dojo-config="async:true"
+    src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block javascripts %}

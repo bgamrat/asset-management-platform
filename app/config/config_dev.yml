@@ -51,12 +51,9 @@ assetic:
         main_js:
             inputs:
                 - 'app/main.js'
-        admin_js:
+        app_admin_asset_equipment_js:
             inputs:
-               # - 'app/admin/menu.js'
-               # - 'app/admin/user.js'
-               # - 'app/admin/invitation.js'
-        
+                - 'app/admin/asset/equipment.js'
 
 #swiftmailer:
 #    delivery_address: me@example.com

@@ -36,21 +36,25 @@
     {% endblock %}
 </div>
 
-{% include 'admin/parts/page_footer_script.html.twig' %}
+{% if app.environment == 'dev' %}
+    {% include 'admin/parts/page_footer_script.html.twig' %}
+{% else %}
+    <script
+    src="/vendor/release/dojo/dojo.js"></script>
+{% endif %}
 
-{% block javascripts %}
-    {% javascripts '@admin_js' %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+{% block page_js %}
 {% endblock %}
+
 {% if omit_menu is not defined %}
-    <script>
+    {% if app.environment == 'prod' %}
+        <script src="/vendor/release/app/admin/menu.js"></script>
+    {% endif %}
+    <script defer>
         require([
-            "app/admin/menu",
-            "dojo/domReady!"
-        ], function (menu) {
-            //"use strict";
-            menu.run();
+            "dojo/ready","app/admin/menu"
+        ], function (ready,menu) {
+            ready(function(){menu.run()});
         });
     </script>
 {% endif %}

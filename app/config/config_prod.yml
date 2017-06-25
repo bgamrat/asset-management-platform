@@ -43,9 +43,15 @@ assetic:
         main_js:
             inputs:
                 - 'vendor/release/app/main.js'
+        app_admin_menu_js:
+            inputs:
+                - 'vendor/release/app/admin/menu.js'
+        app_admin_asset_equipment_js:
+            inputs:
+                - 'vendor/release/app/admin/asset/equipment.js'
         admin_user_js:
             inputs:
                 - 'vendor/release/app/admin/user.js'
-        admin_invitation_js:
+        test_js:
             inputs:
-                - 'vendor/release/app/admin/invitation.js'
+                - 'vendor/release/app/test.js'

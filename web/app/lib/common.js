@@ -59,7 +59,9 @@ define([
     }
 
     function pageReady() {
-        document.querySelector(".loading").classList.add("hidden");
+        if( document.querySelector(".loading") !== null ) {
+            document.querySelector(".loading").classList.add("hidden");
+        }
         var i, nodes = document.querySelectorAll(".hide-on-load");
         for( i = 0; i < nodes.length; i++ ) {
             nodes[i].classList.remove("hide-on-load");
