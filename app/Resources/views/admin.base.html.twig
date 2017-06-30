@@ -39,11 +39,11 @@
 {% if app.environment == 'dev' %}
     {% include 'admin/parts/page_footer_script.html.twig' %}
 {% else %}
-    <script
-    src="/vendor/release/dojo/dojo.js"></script>
+    <script data-dojo-config="async:1" src="/vendor/release/dojo/dojo.js"></script>
 {% endif %}
 
-{% block page_js %}
+{% block javascripts %}
+
 {% endblock %}
 
 {% if omit_menu is not defined %}
@@ -52,11 +52,14 @@
     {% endif %}
     <script defer>
         require([
-            "dojo/ready","app/admin/menu"
-        ], function (ready,menu) {
-            ready(function(){menu.run()});
+            "app/admin/menu",
+            "dojo/domReady!"
+        ], function (menu) {
+            menu.run();
         });
     </script>
 {% endif %}
+{% block page_js %}
+{% endblock %}
 </body>
 </html>

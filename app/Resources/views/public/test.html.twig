@@ -22,9 +22,11 @@
             src="{{js_file}}"></script>
         {% endfor %}
     {% endif %}
+    {% for name, js_file in js %}
     <script>
-        require(["dojo/ready","app/test"], function (ready,test) {
-            ready(function(){test.run();});
+        require(["dojo/ready","app/{{name}}"], function (ready,test) {
+            ready(function(){ {{name}}.run();});
         });
     </script>
+    {% endfor %}
 {% endblock %}

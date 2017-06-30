@@ -17,6 +17,7 @@ web/vendor/bootstrap-7-col
 web/vendor/Font-Awesome
 web/vendor/fonts
 web/vendor/dojo*
+web/vendor/menu*
 web/vendor/release
 web/vendor/release/*.js*
 !web/vendor

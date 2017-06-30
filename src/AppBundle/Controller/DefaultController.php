@@ -22,6 +22,6 @@ class DefaultController extends Controller
      */
     public function testAction(Request $request)
     {
-        return $this->render('public/test.html.twig', ['no_hide' => true, 'js' => ['/vendor/release/app/test.js']]);
+        return $this->render('public/test.html.twig', ['no_hide' => true, 'js' => ['test' => '/vendor/release/app/test.js']]);
     }
 }
