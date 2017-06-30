@@ -277,6 +277,8 @@ common:
         ' '
     success:
         Success
+    test:
+        Test
     to:
         To
     type:

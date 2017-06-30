@@ -17,4 +17,11 @@ class DefaultController extends Controller
         return $this->render('public/index.html.twig');
     }
    
+    /**
+     * @Route("/test")
+     */
+    public function testAction(Request $request)
+    {
+        return $this->render('public/test.html.twig', ['no_hide' => true, 'js' => ['test' => '/vendor/release/app/test.js']]);
+    }
 }

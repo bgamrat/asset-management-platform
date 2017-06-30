@@ -78,7 +78,8 @@ var profile = {
 			// a bunch of stuff we do not want or need. We want the initial script load to be as small and quick to
 			// load as possible, so we configure it as a custom, bootable base.
 			boot: true,
-			customBase: true
+			customBase: true,
+                        include: [ "dojo/has","dojo/ready","dojo/domReady!"]
 		},
 
 		// In this demo application, we load `app/main` on the client-side, so here we build a separate layer containing
@@ -86,35 +87,22 @@ var profile = {
 		// but this helps provide a basic illustration of how multi-layer builds work.) Note that when you create a new
 		// layer, the module referenced by the layer is always included in the layer (in this case, `app/main`), so it
 		// does not need to be explicitly defined in the `include` array.
-                'app/main': {
-                    include: [
-                        "dojo/dojo",
-                        "dojo/_base/declare",
-                        "dojo/dom",
-                        "dojo/dom-attr",
-                        "dojo/dom-construct",
-                        "dojo/on",
-                        "dojo/request/xhr",
-                        "dojo/json",
-                        "dojo/aspect",
-                        "dojo/query",
-                        "dijit/registry",
-                        "dijit/form/ValidationTextBox",
-                        "dijit/form/CheckBox",
-                        "dijit/form/Button",
-                        "dijit/Dialog",
-                        'dstore/RequestMemory',
-                        'dgrid/OnDemandGrid',
-                        "dgrid/Selection",
-                        'dgrid/Editor',
-                        "app/nls/core",
-                        "dijit/nls/common",
-                        "app/lib/common"]
-                },
-                
-                "app/admin/user": {
-                    include: ["app/main"]
-                }
+            'app/main': {
+                include: [
+                    "app/admin/main"]
+            },
+            "app/admin/asset/equipment": {
+                include: ["app/admin/asset/equipment"]
+            },
+            "app/admin/menu": {
+                include: ["app/admin/menu"]
+            },
+            "app/test": {
+                include: ["app/test"]
+            },
+            "app/admin/user": {
+                include: ["app/main"]
+            }
 	},
 
 	// Providing hints to the build system allows code to be conditionally removed on a more granular level than simple

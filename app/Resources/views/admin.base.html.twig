@@ -36,12 +36,14 @@
     {% endblock %}
 </div>
 
-{% include 'admin/parts/page_footer_script.html.twig' %}
+{% if app.environment == 'dev' %}
+    {% include 'admin/parts/page_footer_script.html.twig' %}
+{% else %}
+    <script data-dojo-config="async:1" src="/vendor/release/dojo/dojo.js"></script>
+{% endif %}
 
 {% block javascripts %}
-    {% javascripts '@admin_js' %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+
 {% endblock %}
 {% if omit_menu is not defined %}
     <script>
@@ -49,10 +51,11 @@
             "app/admin/menu",
             "dojo/domReady!"
         ], function (menu) {
-            //"use strict";
             menu.run();
         });
     </script>
 {% endif %}
+{% block page_js %}
+{% endblock %}
 </body>
 </html>
