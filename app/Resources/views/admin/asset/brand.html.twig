@@ -53,9 +53,6 @@
                 <fieldset class="name-active">
                     <legend>{{'asset.model'|trans}}</legend>
                     <div class="justify">
-                        <span class="model-category">
-                            {{form_widget(model_form.category)}}
-                        </span>
                         <span class="model-name">
                             {{form_widget(model_form.name)}}
                         </span>
@@ -64,9 +61,17 @@
                             {{form_label(model_form.active)}}
                         </span>
                     </div>
-                    <div class="model-container">
-                        {{form_widget(model_form.container)}}
-                        {{form_label(model_form.container)}}
+                    <div class="justify">
+                        <span class="model-category">
+                            {{form_widget(model_form.category)}}
+                        </span>
+                        <div class="model-container">
+                            {{form_widget(model_form.container)}}
+                            {{form_label(model_form.container)}}
+                        </div>
+                        <div class="model-weight">
+                            {{form_widget(model_form.weight)}}
+                        </div>
                     </div>
                     {{form_row(model_form.comment)}}
                 </fieldset>

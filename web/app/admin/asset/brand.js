@@ -14,6 +14,7 @@ define([
     "dijit/form/CurrencyTextBox",
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
+    "dijit/form/NumberTextBox",
     "dijit/form/CheckBox",
     "dijit/form/FilteringSelect",
     "dijit/form/SimpleTextarea",
@@ -38,7 +39,8 @@ define([
     "dojo/domReady!"
 ], function (declare, dom, domAttr, domConstruct, on,
         xhr, aspect, query, ObjectStore, Memory,
-        registry, Form, CurrencyTextBox, TextBox, ValidationTextBox, CheckBox, FilteringSelect, SimpleTextarea, Button,
+        registry, Form, CurrencyTextBox, TextBox, ValidationTextBox, NumberTextBox,
+        CheckBox, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
@@ -148,6 +150,12 @@ define([
         nameInput.startup();
         var containerCheckBox = new CheckBox({}, "model_container");
         containerCheckBox.startup();
+        var weightInput = new NumberTextBox({
+            placeholder: asset.weight,
+            trim: true,
+            required: false
+        }, "model_weight");
+        weightInput.startup();
         var defaultContractValueInput = new CurrencyTextBox({
             placeholder: core.value,
             trim: true,
@@ -184,6 +192,7 @@ define([
                     "category": parseInt(categoryFilteringSelect.get("value")),
                     "name": nameInput.get("value"),
                     "container": containerCheckBox.get("checked"),
+                    "weight": weightInput.get("value"),
                     "default_contract_value": parseFloat(defaultContractValueInput.get("value")),
                     "default_event_value": parseFloat(defaultEventValueInput.get("value")),
                     "active": activeCheckBox.get("checked"),
@@ -280,6 +289,7 @@ define([
                     categoryFilteringSelect.set('displayedValue', model.category_text);
                     nameInput.set('value', model.name);
                     containerCheckBox.set('checked', model.container);
+                    weightInput.set("value", model.weight);
                     commentInput.set('value', model.comment);
                     activeCheckBox.set('checked', model.active);
                     defaultContractValueInput.set('value', model.default_contract_value);

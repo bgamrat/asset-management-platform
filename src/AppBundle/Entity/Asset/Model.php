@@ -59,6 +59,12 @@ class Model
     /**
      * @var float
      * @Gedmo\Versioned
+     * @ORM\Column(type="float", nullable=true, unique=false)
+     */
+    private $weight;
+    /**
+     * @var float
+     * @Gedmo\Versioned
      * @ORM\Column(name="default_contract_value", type="float", nullable=true, unique=false)
      */
     private $defaultContractValue = 0.0;
@@ -214,6 +220,30 @@ class Model
     public function isContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Set weight
+     *
+     * @param float $weight
+     *
+     * @return Model
+     */
+    public function setWeight( $weight )
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * Get weight
+     *
+     * @return string
+     */
+    public function getWeight()
+    {
+        return $this->weight;
     }
 
     /**
@@ -451,8 +481,7 @@ class Model
     {
         $this->requires->removeElement( $model );
     }
-    
-    
+
     public function setSatisfies( $categories )
     {
         foreach( $categories as $c )

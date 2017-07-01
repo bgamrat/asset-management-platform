@@ -131,6 +131,9 @@
 .dijitSelect .dijitButtonContents {
     width: 100px;
 }
+.dijitNumberTextBox{
+    width: 100px;
+}
 .field-emails ul {
     list-style-type: none;
     list-style-position: outside;
