@@ -116,7 +116,6 @@ define([
             for( i = 0; i < models.length; i++ ) {
                 cloneNewNode.call(rObj);
                 createDijit.call(rObj);
-                rObj.modelFilteringSelect[i].set("value", models[i].id);
                 rObj.modelFilteringSelect[i].set("displayedValue", models[i].name);
             }
         }

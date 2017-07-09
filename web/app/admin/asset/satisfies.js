@@ -18,7 +18,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var categoryId = [], categoryStore, categoryFilteringSelect = [];
+    var categoryStore, categoryFilteringSelect = [];
     var divIdInUse = 'model_satisfies';
     var addOneMoreControl = null;
 
@@ -27,8 +27,7 @@ define([
     }
 
     function cloneNewNode() {
-        categoryId.push(null);
-        prototypeContent = dataPrototype.replace(/__satisfies__/g, categoryId.length);
+        prototypeContent = dataPrototype.replace(/__satisfies__/g, categoryFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
@@ -39,21 +38,13 @@ define([
             labelAttr: "name",
             searchAttr: "name",
             pageSize: 25
-        }, getDivId() + '_' + categoryId.length);
+        }, getDivId() + '_' + categoryFilteringSelect.length);
         dijit.startup();
         categoryFilteringSelect.push(dijit);
     }
 
     function destroyRow(id, target) {
-        var i, l = categoryId.length, item;
-
-        for( i = 0; i < l; i++ ) {
-            if( categoryId[i] === id ) {
-                id = i;
-                break;
-            }
-        }
-        categoryId.splice(id, 1);
+        var item;
         item = categoryFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
         domConstruct.destroy(target);
@@ -63,7 +54,7 @@ define([
 
         prototypeNode = dom.byId(getDivId());
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__satisfies__/g, categoryId.length);
+        prototypeContent = dataPrototype.replace(/__satisfies__/g, categoryFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
         categoryStore = new JsonRest({
@@ -89,14 +80,12 @@ define([
     }
 
     function getData() {
-        var i, l = categoryId.length, returnData = [];
+        var i, l = categoryFilteringSelect.length, returnData = [];
         for( i = 0; i < l; i++ ) {
-            if( categoryInput[i].get('value') !== "" ) {
+            if( categoryFilteringSelect[i].get('value') !== "" ) {
                 returnData.push(
-                        {
-                            "id": categoryId[i],
-                            "category": categoryInput[i].get('value')
-                        });
+                        categoryFilteringSelect[i].get('value')
+                        );
             }
         }
         return returnData.length > 0 ? returnData : null;
@@ -110,19 +99,17 @@ define([
                 destroyRow(index, node);
             }
         });
-
+        categoryFilteringSelect[0].set('displayedValue', '');
         if( typeof categories === "object" && categories !== null ) {
             l = categories.length;
             for( i = 0; i < l; i++ ) {
-                cloneNewNode();
-                createDijits(true);
+                if (i !== 0) {
+                    cloneNewNode();
+                    createDijits();
+                }
                 obj = categories[i];
-                categoryId[i] = obj.id;
-                categoryInput[i].set('value', obj.category);
-            }
-        } else {
-            categoryId[0] = null;
-            categoryFilteringSelect[0].set('value', '');
+                categoryFilteringSelect[i].set('displayedValue', obj.name);
+            } 
         }
     }
 

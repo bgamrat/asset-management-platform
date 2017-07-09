@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
- * Description of AssetController
+ * Description of TrailerController
  *
  * @author bgamrat
  */
@@ -39,26 +39,15 @@ class TrailerController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/trailer/index", name="app_admin_asset_trailer_index")
-     * @Method("GET")
-     */
-    public function adminIndexAction( Request $request )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-
-        $trailerForm = $this->createForm( TrailerType::class, null, [] );
-
-        return $this->render( 'admin/asset/trailers.html.twig', array(
-                    'trailer_form' => $trailerForm->createView()
-                ) );
-    }
-
-    /**
-     * @Route("/admin/asset/trailer/{name}", name="app_admin_asset_trailer_view")
+     * @Route("/admin/asset/trailer/{name}", name="app_admin_asset_trailer_view", defaults={"name": "index"})
      * @Method("GET")
      */
     public function viewAction( $name )
     {
+        if ($name === 'index') {
+            $this->redirect($this->generateUrl('app_admin_api_trailer_index'));
+        }
+        
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $trailer = $em->getRepository( 'AppBundle\Entity\Asset\Trailer' )->findOneByName( $name );
@@ -78,16 +67,15 @@ class TrailerController extends Controller
         $trailer = $em->getRepository( 'AppBundle\Entity\Asset\Trailer' )->findOneByName( $name );
         return $this->render( 'common/trailer-equipment-by-category.html.twig', array(
                     'trailer' => $trailer,
-                    'equipment' => $this->getTrailerEquipment( $name ),
+                    'equipment' => $this->getTrailerEquipment( $trailer ),
                     'no_hide' => true,
                     'omit_menu' => true)
         );
     }
 
-    private function getTrailerEquipment( $name )
+    private function getTrailerEquipment( $trailer )
     {
         $em = $this->getDoctrine()->getManager();
-        $trailer = $em->getRepository( 'AppBundle\Entity\Asset\Trailer' )->findOneByName( $name );
         $queryBuilder = $em->createQueryBuilder()->select( 'c.fullName', 'COUNT(c.id) AS quantity' )
                 ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                 ->join( 'a.model', 'm' )

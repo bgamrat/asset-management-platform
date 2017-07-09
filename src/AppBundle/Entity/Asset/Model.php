@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\CustomAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -31,6 +32,11 @@ class Model
      * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
      */
     private $id;
+    /**
+     * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models")
+     * @Gedmo\Versioned
+     */
+    private $brand;
     /**
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
@@ -63,6 +69,12 @@ class Model
      */
     private $weight;
     /**
+     * @var json
+     * @Gedmo\Versioned 
+     * @ORM\Column(type="json_document", options={"jsonb": true}, name="custom_attributes", nullable=true, unique=false)
+     */
+    public $customAttributes;
+    /**
      * @var float
      * @Gedmo\Versioned
      * @ORM\Column(name="default_contract_value", type="float", nullable=true, unique=false)
@@ -81,17 +93,6 @@ class Model
      * @Gedmo\Versioned
      */
     private $comment;
-    /**
-     * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models")
-     * @Gedmo\Versioned
-     */
-    private $brand;
-    /**
-     * @var boolean
-     * @Gedmo\Versioned
-     * @ORM\Column(name="active", type="boolean")
-     */
-    private $active = true;
     /**
      * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends", fetch="LAZY")
      */
@@ -120,6 +121,17 @@ class Model
      * @ORM\ManyToMany(targetEntity="Category")
      */
     private $satisfies;
+    /**
+     * @var float
+     * @ORM\Column(name="carnet_value", type="float", nullable=true, unique=false) 
+     */
+    private $carnetValue;
+    /**
+     * @var boolean
+     * @Gedmo\Versioned
+     * @ORM\Column(name="active", type="boolean")
+     */
+    private $active = true;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
@@ -162,6 +174,25 @@ class Model
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get brand
+     *
+     * @return Brand
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    public function setBrand( $brand )
+    {
+        $this->brand = $brand;
+
+        $brand->addModel( $this );
+
+        return $this;
     }
 
     /**
@@ -247,6 +278,30 @@ class Model
     }
 
     /**
+     * Set customAttributes
+     *
+     * @param array $customAttributes
+     *
+     * @return Model
+     */
+    public function setCustomAttributes( $customAttributes )
+    {
+        $this->customAttributes = $customAttributes;
+
+        return $this;
+    }
+
+    /**
+     * Get customAttributes
+     *
+     * @return json
+     */
+    public function getCustomAttributes()
+    {
+        return $this->customAttributes;
+    }
+
+    /**
      * Set defaultContractValue
      *
      * @param float $defaultContractValue
@@ -316,35 +371,6 @@ class Model
     public function getComment()
     {
         return $this->comment;
-    }
-
-    /**
-     * Get brand
-     *
-     * @return Brand
-     */
-    public function getBrand()
-    {
-        return $this->brand;
-    }
-
-    public function setBrand( $brand )
-    {
-        $this->brand = $brand;
-
-        $brand->addModel( $this );
-
-        return $this;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
     public function getRelationships( $relationship, $full )
@@ -509,6 +535,26 @@ class Model
         $this->satisfies->removeElement( $category );
     }
 
+    public function setCarnetValue( $value )
+    {
+        $this->carnetValue = $value;
+    }
+
+    public function getCarnetValue()
+    {
+        return $this->carnetValue;
+    }
+
+    public function setActive( $active )
+    {
+        $this->active = $active;
+    }
+
+    public function isActive()
+    {
+        return $this->active;
+    }
+
     public function getUpdated()
     {
         return $this->updated;
@@ -537,10 +583,12 @@ class Model
             'category' => $this->getCategory(),
             'name' => $this->getName(),
             'container' => $this->isContainer(),
+            'custom_attributes' => $this->getCustomAttributes(),
             'default_contract_value' => $this->getDefaultContractValue(),
             'default_event_value' => $this->getDefaultEventValue(),
             'comment' => $this->getComment(),
             'active' => $this->isActive(),
+            'satisfies' => $this->getSatisfies(),
             'extends' => $this->getExtends( false ),
             'extended_by' => $this->getExtendedBy( false ),
             'requires' => $this->getRequires( false ),

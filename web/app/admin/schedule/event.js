@@ -361,7 +361,7 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (event) {
-                    var r;
+                    var r, equipmentLink;
                     action = "view";
                     eventId = event.id;
                     nameInput.set("value", event.name);
@@ -373,6 +373,8 @@ define([
                     clientFilteringSelect.set('displayedValue', event.client_text);
                     venueFilteringSelect.set('displayedValue', event.venue_text);
                     descriptionInput.set("value", event.comment);
+                    equipmentLink = document.getElementById("full-equipment-link")
+                    equipmentLink.href = equipmentLink.href.replace(/(__ID__|\d+)/, event.id);
                     contracts.setData(event.contracts);
                     person.setData(event.contacts);
                     eventViewDialog.show();

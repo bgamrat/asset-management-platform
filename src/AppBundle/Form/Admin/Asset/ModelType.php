@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Form\Admin\Asset\Type\ModelRelationshipType;
 use AppBundle\Form\Admin\Asset\Type\CategoryType;
+use AppBundle\Form\Admin\Asset\CustomAttributeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
@@ -44,8 +45,19 @@ class ModelType extends AbstractType
                     'label' => 'asset.container'] )
                 ->add( 'weight', NumberType::class, [
                     'label' => false, 'required' => false] )
+                ->add( 'custom_attributes', CollectionType::class, [
+                    'entry_type' => CustomAttributeType::class,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'property_path' => 'customAttributes'
+                ] )
                 ->add( 'default_contract_value', MoneyType::class, ['label' => 'asset.default_contract_value', 'currency' => 'USD'] )
                 ->add( 'default_event_value', MoneyType::class, ['label' => 'asset.default_event_value', 'currency' => 'USD'] )
+                ->add( 'carnet_value', MoneyType::class, ['label' => 'asset.carnet_value', 'currency' => 'USD'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false, 'required' => false
                 ] )

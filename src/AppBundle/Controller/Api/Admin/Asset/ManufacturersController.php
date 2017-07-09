@@ -316,9 +316,12 @@ class ManufacturersController extends FOSRestController
             $modelData = $model->toArray();
             $modelData['category'] = $model->getCategory()->getId();
             $modelData['category_text'] = $model->getCategory()->getName();
-            $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'AppBundle\Entity\Asset\ModelLog', $model->getId() );
-            $modelData['history'] = $logUtil->translateIdsToText();
+            /*
+             * @TODO - Resolve the serialization issue related to custom attributes
+             */
+            //$logUtil = $this->get( 'app.util.log' );
+            //$logUtil->getLog( 'AppBundle\Entity\Asset\ModelLog', $model->getId() );
+            //$modelData['history'] = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'model' . $model->getId(), $model->getUpdated() );
             return $modelData;

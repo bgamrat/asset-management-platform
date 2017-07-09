@@ -30,6 +30,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
+    "app/admin/asset/custom_attributes",
     "app/admin/asset/satisfies",
     "app/admin/asset/model_relationships",
     "app/lib/common",
@@ -44,7 +45,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        satisfies, modelRelationships, lib, libGrid, core, asset) {
+        customAttributes, satisfies, modelRelationships, lib, libGrid, core, asset) {
 //"use strict";
     function run() {
 
@@ -63,11 +64,18 @@ define([
             style: "height: 300px; width: 100%;"
         }, "model-view-tabs");
 
+        var attributesContentPane = new ContentPane({
+            title: core.attributes},
+        "model-view-attributes-tab"
+                );
+        tabContainer.addChild(attributesContentPane);
+
         var satisfiesContentPane = new ContentPane({
             title: core.satisfies},
         "model-view-satisfies-tab"
                 );
         tabContainer.addChild(satisfiesContentPane);
+
         var requiresContentPane = new ContentPane({
             title: asset.requires},
         "model-view-requires-tab"
@@ -156,6 +164,12 @@ define([
             required: false
         }, "model_weight");
         weightInput.startup();
+        var carnetValueInput = new CurrencyTextBox({
+            placeholder: core.value,
+            trim: true,
+            required: false
+        }, "model_carnet_value");
+        carnetValueInput.startup();
         var defaultContractValueInput = new CurrencyTextBox({
             placeholder: core.value,
             trim: true,
@@ -192,7 +206,9 @@ define([
                     "category": parseInt(categoryFilteringSelect.get("value")),
                     "name": nameInput.get("value"),
                     "container": containerCheckBox.get("checked"),
+                    "custom_attributes": customAttributes.getData(),
                     "weight": weightInput.get("value"),
+                    "carnet_value": parseFloat(carnetValueInput.get("value")),
                     "default_contract_value": parseFloat(defaultContractValueInput.get("value")),
                     "default_event_value": parseFloat(defaultEventValueInput.get("value")),
                     "active": activeCheckBox.get("checked"),
@@ -291,7 +307,9 @@ define([
                     containerCheckBox.set('checked', model.container);
                     weightInput.set("value", model.weight);
                     commentInput.set('value', model.comment);
+                    customAttributes.setData(model.custom_attributes);
                     activeCheckBox.set('checked', model.active);
+                    carnetValueInput.set('value', model.carnet_value);
                     defaultContractValueInput.set('value', model.default_contract_value);
                     defaultEventValueInput.set('value', model.default_event_value);
                     satisfies.setData(model.satisfies);
@@ -352,6 +370,7 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
+        customAttributes.run();
         satisfies.run();
         modelRelationships.run();
         lib.pageReady();

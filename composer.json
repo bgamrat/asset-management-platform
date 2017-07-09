@@ -133,7 +133,8 @@
         "persrv/rql": "^0.3.3",
         "FortAwesome/Font-Awesome": "^4.7",
         "twbs/bootstrap": "^3.3",
-        "kriszyp/xstyle": "^0.3.2"
+        "kriszyp/xstyle": "^0.3.2",
+        "dunglas/doctrine-json-odm": "^0.1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

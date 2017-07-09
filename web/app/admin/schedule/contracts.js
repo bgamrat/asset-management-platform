@@ -50,18 +50,18 @@ define([
             l = item.requiresTrailers.length;
             for( i = 0; i < l; i++ ) {
                 t = item.requiresTrailers[i];
-                reqd.push(t.trailer.name);
+                reqd.push('<a target="_blank" href="/admin/trailer/'+t.trailer.name+'/equipment-by-category">'+t.trailer.name+'</a>');
             }
             l = item.availableTrailers.length;
             for( i = 0; i < l; i++ ) {
                 t = item.availableTrailers[i];
-                reqd.push(t.trailer.name);
+                avail.push('<a target="_blank" href="/admin/trailer/'+t.trailer.name+'/equipment-by-category">'+t.trailer.name+'</a>');
             }
 
             hidden = (reqd.length === 0 && avail.length === 0) ? 'class="hidden"' : "";
 
             // Backticks won't work with the old Chrome browser
-            templateContract = '<li id="contract-equipment-list-' + id + '" data-contract-id="' + item.id + '" ' + hidden + '><span class="term">' + item.name + '</span>';
+            templateContract = '<li id="contract-equipment-list-' + id + '" data-contract-id="' + item.id + '" ' + hidden + '><span>' + item.name + '</span>';
             if( reqd.length > 0 ) {
                 templateContract += '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>';
             }

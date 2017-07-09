@@ -9,6 +9,8 @@ asset:
         Brand
     brands:
         Brands
+    carnet_value:
+        Carnet Value
     categories:
         Categories
     category:
@@ -195,6 +197,8 @@ common:
         Issues
     item:
         Item
+    key:
+        Key
     locations:
         Locations
     locked:
