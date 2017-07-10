@@ -18,7 +18,7 @@
     <span class="comment">{{ form_widget(form.comment) }}</span>
     <span class="active">{{ form_widget(form.active) }}</span>
     {% if form.parent.vars.allow_delete is defined %}
-        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__{{type}}__"><i class="fa fa-remove"></i></span>
+        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__name__"><i class="fa fa-remove"></i></span>
         {% endif %}
 </div>{% endspaceless %}{% endmacro %}
 

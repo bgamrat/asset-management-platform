@@ -9,7 +9,7 @@
         <div class="form-row custom-attribute">
             <span class="name">{{ form_widget(form.key) }}</span>
             <span class="value">{{ form_widget(form.value) }}</span>
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="custom-attribute-__custom_attribute__"><i class="fa fa-remove"></i></span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="custom-attribute-__name__"><i class="fa fa-remove"></i></span>
         </div>
     {% endspaceless %}
 {% endblock %}
@@ -25,7 +25,7 @@
             <span class="name">{{ form_widget(form.name) }}</span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
             <span class="active">{{ form_widget(form.active) }}</span>
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="model-__model__"><i class="fa fa-remove"></i></span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="model-__name__"><i class="fa fa-remove"></i></span>
         </div>
 {% endspaceless %}{% endblock %}
 
@@ -33,7 +33,7 @@
     {% spaceless %}
         <div class="form-row satisfies">
             <span class="satisfies">{{ form_widget(form) }}</span>
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="satisfies-__satisfies__"><i class="fa fa-remove"></i></span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="satisfies-__name__"><i class="fa fa-remove"></i></span>
         </div>
     {% endspaceless %}
 {% endblock %}

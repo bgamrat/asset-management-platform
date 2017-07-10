@@ -70,7 +70,6 @@ class Model
     private $weight;
     /**
      * @var json
-     * @Gedmo\Versioned 
      * @ORM\Column(type="json_document", options={"jsonb": true}, name="custom_attributes", nullable=true, unique=false)
      */
     public $customAttributes;

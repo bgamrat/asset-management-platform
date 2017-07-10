@@ -17,7 +17,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var keyInput = [], valueInput = [];
+    var maxInputId, keyInput = [], valueInput = [];
     var divIdInUse = 'model_custom_attributes';
     var addOneMoreControl = null;
 
@@ -26,13 +26,13 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__name__/g, keyInput.length);
+        prototypeContent = dataPrototype.replace(/__name__/g, maxInputId);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "first");
     }
 
     function createDijits() {
         var dijit;
-        var base = getDivId() + '_' + keyInput.length + '_';
+        var base = getDivId() + '_' + maxInputId + '_';
         dijit = new ValidationTextBox({
             placeholder: core.key,
             trim: true,
@@ -47,9 +47,19 @@ define([
         }, base + "value");
         valueInput.push(dijit);
         dijit.startup();
+        maxInputId++;
     }
 
     function destroyRow(id, target) {
+        var i, l, item, kid;
+        l = keyInput.length;
+        for( i = 0; i < l; i++ ) {
+            kid = keyInput[i].id.replace(/\D/g, '');
+            if( kid == id ) {
+                id = i;
+                break;
+            }
+        }
         item = keyInput.splice(id, 1);
         item[0].destroyRecursive();
         item = valueInput.splice(id, 1);
@@ -63,6 +73,7 @@ define([
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__name__/g, 0);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "first");
+        maxInputId = 0;
 
         createDijits();
 
@@ -96,20 +107,19 @@ define([
     }
 
     function setData(attributes) {
-        var i, l, keys;
+        var i, l;
 
         query(".form-row.custom-attribute", prototypeNode.parentNode).forEach(function (node, index) {
-            destroyRow(index, node);
+            destroyRow(0, node);
         });
 
         if( typeof attributes === "object" && attributes !== null ) {
-            keys = attributes.keys();
-            l = keys.length;
+            l = attributes.length;
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits(true);
-                keyInput[i].set('value', keys[i]);
-                valueInput[i].set('value', attributes[keys[i]]);
+                keyInput[i].set('value', attributes[i].key);
+                valueInput[i].set('value', attributes[i].value);
             }
         }
     }
