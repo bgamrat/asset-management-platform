@@ -370,7 +370,8 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
-        customAttributes.run();
+
+        customAttributes.run('model');
         satisfies.run();
         modelRelationships.run();
         lib.pageReady();

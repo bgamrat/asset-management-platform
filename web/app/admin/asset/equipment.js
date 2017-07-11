@@ -35,6 +35,7 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/admin/asset/barcodes",
+    "app/admin/asset/custom_attributes",
     "app/admin/asset/common",
     "app/lib/common",
     "app/lib/grid",
@@ -47,7 +48,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        barcodes, assetCommon, lib, libGrid, core, asset) {
+        barcodes, customAttributes, assetCommon, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -70,6 +71,11 @@ define([
             style: "height: 300px; width: 100%;"
         }, "asset-view-tabs");
 
+        var attributesContentPane = new ContentPane({
+            title: core.attributes},
+        "asset-view-attributes-tab"
+                );
+        tabContainer.addChild(attributesContentPane);
 
         var locationContentPane = new ContentPane({
             title: asset.location},
@@ -318,6 +324,7 @@ define([
                     "barcodes": barcodes.getData(),
                     "serial_number": serialNumberInput.get("value"),
                     "active": activeCheckBox.get("checked"),
+                    "custom_attributes": customAttributes.getData(),
                     "comment": commentInput.get("value")
                 };
                 if( action === "view" ) {
@@ -445,6 +452,7 @@ define([
                         locationFilteringSelect.set("readOnly", true);
                     }
                     serialNumberInput.set('value', asset.serial_number);
+                    customAttributes.setData(asset.custom_attributes);
                     commentInput.set('value', asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {
                         barcodes.setData(asset.barcodes);
@@ -530,8 +538,9 @@ define([
             }
         }
 
-        lib.pageReady();
         barcodes.run('asset');
+        customAttributes.run('asset');
+        lib.pageReady();
     }
     return {
         run: run

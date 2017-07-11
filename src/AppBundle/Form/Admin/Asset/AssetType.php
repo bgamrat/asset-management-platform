@@ -12,10 +12,13 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
 use AppBundle\Form\Admin\Asset\AssetLocationType;
+use AppBundle\Form\Common\CustomAttributeType;
 
 class AssetType extends AbstractType
 {
@@ -74,6 +77,17 @@ class AssetType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true,
                     'prototype_name' => '__barcode__'
+                ] )
+                ->add( 'custom_attributes', CollectionType::class, [
+                    'entry_type' => CustomAttributeType::class,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'by_reference' => false,
+                    'property_path' => 'customAttributes'
                 ] )
                 ->add( 'comment', TextType::class, [
                     'label' => false

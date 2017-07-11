@@ -4,15 +4,7 @@
 
 {% form_theme model_form _self %}
 
-{% block _model_custom_attributes_entry_row %}
-    {% spaceless %}
-        <div class="form-row custom-attribute">
-            <span class="name">{{ form_widget(form.key) }}</span>
-            <span class="value">{{ form_widget(form.value) }}</span>
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="custom-attribute-__name__"><i class="fa fa-remove"></i></span>
-        </div>
-    {% endspaceless %}
-{% endblock %}
+{% block _model_custom_attributes_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.custom_attributes_entry_row(form,false) }}{% endblock %}
 
 {% block _model_extends_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('extends',form) }}{% endblock %}
 {% block _model_extended_by_entry_row %}{% import 'form/macros.html.twig' as form_macros %}{{ form_macros.model_relationship_entry_row('extended_by',form) }}{% endblock %}

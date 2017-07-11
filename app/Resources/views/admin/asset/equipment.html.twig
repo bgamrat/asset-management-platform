@@ -21,6 +21,8 @@
     {{ block('_barcodes_entry_row') }}
 {% endblock %}
 
+{% block _asset_custom_attributes_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.custom_attributes_entry_row(form,true) }}{% endblock %}
+
 {% block admin_content %}
     <div id="asset-wrapper">
         <h1>{{ block ('title') }}</h1>
@@ -63,6 +65,12 @@
                     {{form_row(asset_form.comment)}}
                 </fieldset>
                 <div id="asset-view-tabs">
+                    <div id="asset-view-attributes-tab">
+                        {{form_row(asset_form.custom_attributes)}}
+                        {% if asset_form.custom_attributes.vars.allow_add %}
+                            <span class="custom-attributes add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                        {% endif %}
+                    </div>
                     <div id="asset-view-location-tab">
                         <div class="justify">
                             {{form_row(asset_form.location.id)}}

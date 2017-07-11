@@ -92,6 +92,11 @@ class Asset
      */
     protected $barcodes;
     /**
+     * @var json
+     * @ORM\Column(type="json_document", options={"jsonb": true}, name="custom_attributes", nullable=true, unique=false)
+     */
+    public $customAttributes;
+    /**
      * @var string
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=64, nullable=true)
@@ -374,6 +379,30 @@ class Asset
     public function removeBarcode( Barcode $barcode )
     {
         $this->barcodes->removeElement( $barcode );
+    }
+
+    /**
+     * Set customAttributes
+     *
+     * @param array $customAttributes
+     *
+     * @return Model
+     */
+    public function setCustomAttributes( $customAttributes )
+    {
+        $this->customAttributes = $customAttributes;
+
+        return $this;
+    }
+
+    /**
+     * Get customAttributes
+     *
+     * @return json
+     */
+    public function getCustomAttributes()
+    {
+        return $this->customAttributes;
     }
 
     /**

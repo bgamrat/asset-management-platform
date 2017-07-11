@@ -146,6 +146,7 @@ class AssetsController extends FOSRestController
                 'status_text' => $status->getName(),
                 'status' => $status->getId(),
                 'barcodes' => $asset->getBarcodes(),
+                'custom_attributes' => $asset->getCustomAttributes(),
                 'comment' => $asset->getComment(),
                 'purchased' => $asset->getPurchased()->format('Y-m-d'),
                 'cost' => $asset->getCost(),

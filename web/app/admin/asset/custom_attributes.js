@@ -21,6 +21,10 @@ define([
     var divIdInUse = 'model_custom_attributes';
     var addOneMoreControl = null;
 
+    function setDivId(divId) {
+        divIdInUse = divId + '_custom_attributes';
+    }
+
     function getDivId() {
         return divIdInUse;
     }
@@ -36,7 +40,8 @@ define([
         dijit = new ValidationTextBox({
             placeholder: core.key,
             trim: true,
-            required: true
+            required: true,
+            disabled: document.getElementById(base + "key").disabled
         }, base + "key");
         keyInput.push(dijit);
         dijit.startup();
@@ -68,6 +73,10 @@ define([
     }
 
     function run() {
+
+        if( arguments.length > 0 ) {
+            setDivId(arguments[0]);
+        }
 
         prototypeNode = dom.byId(getDivId());
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");

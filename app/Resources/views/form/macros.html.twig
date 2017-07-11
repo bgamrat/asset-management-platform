@@ -1,33 +1,43 @@
-{% macro model_relationship_entry_row(type,form) %}{% spaceless %}
-    <div class="form-row {{type}}">
-        <span class="model">{{ form_widget(form) }}</span>
-        {% if form.parent.vars.allow_delete %}
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__name__"><i class="fa fa-remove"></i></span>
-        {% endif %}
+
+{% macro custom_attributes_entry_row(form,disable_key) %}{% spaceless %}
+    {% if disable_key is not defined %}{% set disabled = false %}{% else %}{% set disabled = disable_key %}{% endif %}
+    <div class="form-row custom-attribute">
+        <span class="name">{{ form_widget(form.key,{ "attr": { "disabled": disabled } }) }}</span>
+        <span class="value">{{ form_widget(form.value) }}</span>
+        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="custom-attribute-__name__"><i class="fa fa-remove"></i></span>
     </div>
+{% endspaceless %}{% endmacro %}
+
+{% macro model_relationship_entry_row(type,form) %}{% spaceless %}
+        <div class="form-row {{type}}">
+            <span class="model">{{ form_widget(form) }}</span>
+            {% if form.parent.vars.allow_delete %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__name__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>
 {%endspaceless%}{%endmacro%}
 
 {% macro name_comment_active_entry_row(type,form,default_rb) %}{% spaceless %}
     {% if type is not defined %}{% set type = '' %}{% endif %}
-<div class="form-row {{ type }}">
-    {% if default_rb is defined and default_rb == true %}
-    <span class="default">{{ form_widget(form.default)}}</span>
-    {% endif %}
-    <span class="id">{{ form_widget(form.id) }}</span>
-    <span class="name">{{ form_widget(form.name) }}</span>
-    <span class="comment">{{ form_widget(form.comment) }}</span>
-    <span class="active">{{ form_widget(form.active) }}</span>
-    {% if form.parent.vars.allow_delete is defined %}
-        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__name__"><i class="fa fa-remove"></i></span>
+    <div class="form-row {{ type }}">
+        {% if default_rb is defined and default_rb == true %}
+            <span class="default">{{ form_widget(form.default)}}</span>
         {% endif %}
-</div>{% endspaceless %}{% endmacro %}
-
-{%macro relation(title,type,form) %}{%spaceless%}
-        <div id="{{type}}" class="{{type}}">
-            <h3>{{title}}</h3>
-            {{form_row(form)}}
-            {% if form.vars.allow_add %}
-                <div data-type="{{type}}" class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+        <span class="id">{{ form_widget(form.id) }}</span>
+        <span class="name">{{ form_widget(form.name) }}</span>
+        <span class="comment">{{ form_widget(form.comment) }}</span>
+        <span class="active">{{ form_widget(form.active) }}</span>
+        {% if form.parent.vars.allow_delete is defined %}
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__name__"><i class="fa fa-remove"></i></span>
             {% endif %}
-        </div>
-{%endspaceless%}{%endmacro %}
+    </div>{% endspaceless %}{% endmacro %}
+
+    {%macro relation(title,type,form) %}{%spaceless%}
+            <div id="{{type}}" class="{{type}}">
+                <h3>{{title}}</h3>
+                {{form_row(form)}}
+                {% if form.vars.allow_add %}
+                    <div data-type="{{type}}" class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                {% endif %}
+            </div>
+    {%endspaceless%}{%endmacro %}
