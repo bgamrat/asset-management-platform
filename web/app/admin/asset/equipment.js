@@ -124,6 +124,7 @@ define([
             locationFilteringSelect.set("displayedValue", locationTypeLabels[id]);
             locationFilteringSelect.set("readOnly", true);
             barcodes.setData(null);
+            customAttributes.setData(null);
             serialNumberInput.set("value", "");
             costInput.set("value", null);
             commentInput.set("value", "");
@@ -149,7 +150,7 @@ define([
         });
 
         var modelStore = new JsonRest({
-            target: '/api/store/models',
+            target: '/api/store/models?ca',
             useRangeHeaders: false,
             idProperty: 'id'});
         var modelFilteringSelect = new FilteringSelect({
@@ -159,6 +160,10 @@ define([
             pageSize: 25
         }, "asset_model");
         modelFilteringSelect.startup();
+        modelFilteringSelect.on("change", function (evt) {
+            var item = this.get('item');
+            customAttributes.setData(item.customAttributes);
+        });
 
         var serialNumberInput = new ValidationTextBox({
             trim: true,

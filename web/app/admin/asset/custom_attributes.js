@@ -88,10 +88,12 @@ define([
 
         addOneMoreControl = query('.custom-attributes.add-one-more-row');
 
-        addOneMoreControl.on("click", function (event) {
-            cloneNewNode();
-            createDijits();
-        });
+        if (addOneMoreControl !== null) {
+            addOneMoreControl.on("click", function (event) {
+                cloneNewNode();
+                createDijits();
+            });
+        }
 
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;

@@ -67,9 +67,6 @@
                 <div id="asset-view-tabs">
                     <div id="asset-view-attributes-tab">
                         {{form_row(asset_form.custom_attributes)}}
-                        {% if asset_form.custom_attributes.vars.allow_add %}
-                            <span class="custom-attributes add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                        {% endif %}
                     </div>
                     <div id="asset-view-location-tab">
                         <div class="justify">
@@ -104,14 +101,10 @@
             {{ form_end(asset_form) }}
         </div>
     </div>
-    {% javascripts '@app_admin_asset_equipment_js' %}
-    <script data-dojo-config="async:true"
-    src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 {% endblock %}
 
 {% block javascripts %}
-    <script>
+    <script defer>
         require(["app/admin/asset/equipment"], function (equipment) {
             equipment.run();
         });

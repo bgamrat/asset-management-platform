@@ -113,6 +113,7 @@ define([
             modelRelationships.setData("requires", null);
             modelRelationships.setData("extended_by", null);
             modelRelationships.setData("required_by", null);
+            customAttributes.setData(null);
             action = "new";
             modelId = null;
             modelViewDialog.set("title", core["new"]).show();

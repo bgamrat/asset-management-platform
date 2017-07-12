@@ -19,18 +19,24 @@ class DefaultController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $name = $request->get( 'name' );
+        $ca = $request->get( 'ca' );
         if( !empty( $name ) )
         {
             $brandModel = '%' . str_replace( '*', '%', $name );
 
             $em = $this->getDoctrine()->getManager();
-
-            $queryBuilder = $em->createQueryBuilder()->select( ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"] )
+            $select = ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"];
+            if( $ca !== null )
+            {
+                $select[] = 'm.customAttributes';
+            }
+            $queryBuilder = $em->createQueryBuilder()->select( $select )
                     ->from( 'AppBundle\Entity\Asset\Model', 'm' )
                     ->innerJoin( 'm.brand', 'b' )
                     ->where( "LOWER(CONCAT(CONCAT(b.name, ' '), m.name)) LIKE :brand_model" )
                     ->orderBy( 'name' )
                     ->setParameter( 'brand_model', strtolower( $brandModel ) );
+
 
             $data = $queryBuilder->getQuery()->getResult();
         }
@@ -40,4 +46,5 @@ class DefaultController extends FOSRestController
         }
         return $data;
     }
+
 }
