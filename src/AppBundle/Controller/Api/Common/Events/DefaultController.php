@@ -29,14 +29,13 @@ class DefaultController extends FOSRestController
 
             $queryBuilder = $em->createQueryBuilder()->select( ['e.id', "e.name"] )
                     ->from( 'AppBundle\Entity\Schedule\Event', 'e' )
-                    ->innerJoin( 'e.client', 'cl' )
-                    //->leftJoin( 'e.venue', 'v' )
-                    //->where( "LOWER(e.name) LIKE :event_name AND (cl.id = :client_id/* OR v.id = :venue_id*/)" )
-                    ->where( "LOWER(e.name) LIKE :event_name AND (cl.id = :client_id)" )
+                    ->leftJoin( 'e.client', 'cl' )
+                    ->leftJoin( 'e.venue', 'v' )
+                    ->where( "LOWER(e.name) LIKE :event_name AND (cl.id = :client_id OR v.id = :venue_id)" )
                     ->orderBy( 'e.name' )
                     ->setParameter( 'event_name', strtolower( $eventName ) )
                     ->setParameter( 'client_id', $contactId )
-                    //->setParameter( 'venue_id', $venueId )
+                    ->setParameter( 'venue_id', $venueId )
                     ;
             $data = $queryBuilder->getQuery()->getResult();
         }

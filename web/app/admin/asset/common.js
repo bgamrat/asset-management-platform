@@ -5,17 +5,31 @@ define([
 ], function (core, asset) {
     "use strict";
 
-    function relationshipLists(listContentPane, relationships) {
-        var i, listContent, listHtml = "", r;
-        for (r in relationships) {
-            listHtml += "<h4>" + asset[r] + "</h4>";
+    function relationshipLists(listContentPane, relationships, satisfies) {
+        var i, listContent, listHtml = "", r, s;
+        listHtml += '<div class="justify">';
+        if (Object.keys(satisfies).length > 0) {
+            listHtml += "<div>";
+            listHtml += "<h4>" + asset.satisfies + "</h4>";
             listHtml += "<ul>";
-            listContent = relationships[r];
-            for( i = 0; i < listContent.length; i++ ) {
-                listHtml += "<li>" + listContent[i].name + "</li>";
+            for( s in satisfies ) {
+                listHtml += "<li>" + satisfies[s].fullName + "</li>";
             }
-            listHtml += "</ul>";
         }
+        listHtml += "</ul></div>";
+        listHtml += "<div>";
+        for( r in relationships ) {
+            listContent = relationships[r];
+            if (listContent.length > 0) {
+                listHtml += "<h4>" + asset[r] + "</h4>";
+                listHtml += "<ul>";
+                for( i = 0; i < listContent.length; i++ ) {
+                    listHtml += "<li>" + listContent[i].name + "</li>";
+                }
+                listHtml += "</ul>";
+            }
+        }
+        listHtml += "</div>";
         if( listHtml.length > 0 ) {
             listContentPane.set("content", listHtml);
         } else {

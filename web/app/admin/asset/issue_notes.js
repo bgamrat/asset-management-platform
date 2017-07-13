@@ -52,15 +52,19 @@ define([
     }
 
     function destroyRow(id, target) {
-        var i, l = noteId.length, item;
+        var i, l, item, kid;
 
+        l = noteInput.length;
         for( i = 0; i < l; i++ ) {
-            if( noteId[i] === id ) {
+            kid = noteInput[i].id.replace(/\D/g, '');
+            if( kid == id ) {
                 id = i;
                 break;
             }
         }
+
         noteId.splice(id, 1);
+
         item = noteInput.splice(id, 1);
         item[0].destroyRecursive();
         item = updatedInput.splice(id, 1);
@@ -82,19 +86,13 @@ define([
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
             createDijits(false);
-            if( noteInput.length >= lib.constant.MAX_NOTES ) {
-                addOneMoreControl.addClass("hidden");
-            }
         });
 
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
-            destroyRow(id, targetParent.parentNode);
-            if( noteInput.length <= lib.constant.MAX_NOTES ) {
-                addOneMoreControl.removeClass("hidden");
-            }
+            destroyRow(id, target.closest(".form-row.issue-note"));
         });
     }
 
@@ -116,7 +114,7 @@ define([
         var i, l, timestamp, obj;
 
         query(".form-row.issue-note", prototypeNode.parentNode).forEach(function (node, index) {
-                destroyRow(noteId[index], node);
+            destroyRow(0, node);
         });
 
         timestamp = new Date();

@@ -130,6 +130,7 @@
 .issue-summary .dijitTextBox {
     width: 250px;
 }
+.amount .dijitTextBox,
 .issue-status .dijitSelect,
 .issue-type .dijitSelect {
     width: 100px;

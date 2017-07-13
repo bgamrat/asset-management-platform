@@ -161,8 +161,13 @@ define([
         }, "asset_model");
         modelFilteringSelect.startup();
         modelFilteringSelect.on("change", function (evt) {
-            var item = this.get('item');
-            customAttributes.setData(item.customAttributes);
+            var item;
+            if( action === "new" ) {
+                item = this.get('item');
+                if (item !== null) {
+                    customAttributes.setData(item.customAttributes);
+                }
+            }
         });
 
         var serialNumberInput = new ValidationTextBox({
@@ -465,7 +470,7 @@ define([
                         barcodes.setData(null);
                     }
                     activeCheckBox.set('checked', asset.active);
-                    assetCommon.relationshipLists(modelRelationshipsContentPane, asset.model_relationships);
+                    assetCommon.relationshipLists(modelRelationshipsContentPane, asset.model_relationships, asset.satisfies);
                     lib.showHistory(historyContentPane, asset.history);
                 }, lib.xhrError);
             }

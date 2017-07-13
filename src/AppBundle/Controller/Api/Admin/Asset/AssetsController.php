@@ -139,6 +139,7 @@ class AssetsController extends FOSRestController
                 'id' => $id,
                 'model_text' => $brand->getName() . ' ' . $model->getName(),
                 'model' => $model->getId(),
+                'satisfies' => $model->getSatisfies(),
                 'model_relationships' => $relationships,
                 'serial_number' => $asset->getSerialNumber(),
                 'location_text' => $asset->getLocationText(),

@@ -21,6 +21,7 @@ define({
         "required_by": "Required By",
         "rma": "RMA",
         "rma_required": "RMA Required",
+        "satisfies": "Satisfies",
         "serial_number": "Serial Number",
         "service": "Service",
         "service_instructions": "Service Instructions",

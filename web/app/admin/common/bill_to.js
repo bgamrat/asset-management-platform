@@ -150,7 +150,7 @@ define([
             var target = event.target;
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
-            destroyRow(id, targetParent.parentNode);
+            destroyRow(id, target.closest(".form-row.bill-to"));
         });
     }
 
@@ -175,7 +175,7 @@ define([
 
         nodes = query(".form-row.bill-to", "bill-tos");
         nodes.forEach(function (node, index) {
-            destroyRow(index, node);
+            destroyRow(0, node);
         });
         l = items.length;
         if( typeof items === "object" && items.length !== 0 ) {
