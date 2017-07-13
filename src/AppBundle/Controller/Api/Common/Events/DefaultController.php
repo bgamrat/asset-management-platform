@@ -19,7 +19,7 @@ class DefaultController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $eventName = $request->get( 'name' );
-        $contactId = $request->get( 'client' );
+        $clientId = $request->get( 'client' );
         $venueId = $request->get( 'venue' );
         if( !empty( $eventName ) )
         {
@@ -31,12 +31,25 @@ class DefaultController extends FOSRestController
                     ->from( 'AppBundle\Entity\Schedule\Event', 'e' )
                     ->leftJoin( 'e.client', 'cl' )
                     ->leftJoin( 'e.venue', 'v' )
-                    ->where( "LOWER(e.name) LIKE :event_name AND (cl.id = :client_id OR v.id = :venue_id)" )
+                    ->where( "LOWER(e.name) LIKE :event_name" )
                     ->orderBy( 'e.name' )
-                    ->setParameter( 'event_name', strtolower( $eventName ) )
-                    ->setParameter( 'client_id', $contactId )
-                    ->setParameter( 'venue_id', $venueId )
-                    ;
+                    ->setParameter( 'event_name', strtolower( $eventName ) );
+
+            $andWhere = [];
+            if( $clientId !== null )
+            {
+                $andWhere[] = 'cl.id = :client_id';
+                $queryBuilder->setParameter( 'client_id', $clientId );
+            }
+            if( $venueId !== null )
+            {
+                $andWhere[] = 'v.id = :venue_id';
+                $queryBuilder->setParameter( 'venue_id', $venueId );
+            }
+            if( count( $andWhere ) > 0 )
+            {
+                $queryBuilder->andWhere( '(' . implode( ' OR ', $andWhere ) . ')' );
+            }
             $data = $queryBuilder->getQuery()->getResult();
         }
         else

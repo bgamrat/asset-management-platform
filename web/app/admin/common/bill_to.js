@@ -46,10 +46,10 @@ define([
     function createDijits() {
         var dijit;
         var base = prototypeNode.id + "_" + contactFilteringSelect.length + "_";
+
         dijit = new FilteringSelect({
             store: contactStore,
             labelAttr: "name",
-            labelType: "html",
             searchAttr: "name",
             placeholder: core.contact,
             required: false,
@@ -130,10 +130,10 @@ define([
         contactStore = new JsonRest({
             target: '/api/store/contacts?client&venue',
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: 'person_id'});
 
         eventStore = new JsonRest({
-            target: '/api/store/events?contact=',
+            target: '/api/store/events',
             useRangeHeaders: false,
             idProperty: 'id'});
 

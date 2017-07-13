@@ -7,7 +7,7 @@
         <div class="form-row issue-item">
             <div class="justify">
                 <span class="item">{{ form_widget(form.item) }}</span>
-                <span class="status">{{ form_widget(form.status) }}</span>
+                <span class="status">{{ form_row(form.status) }}</span>
                 <span class="remove-form-row" title="{{'common.remove'|trans}}" id="issue_item-__item__"><i class="fa fa-remove"></i></span>
             </div>
             <div  class="comment">
@@ -85,7 +85,7 @@
                             {{form_widget(issue_form.trailer)}}
                         </span>
                         <span class="issue-priority">
-                            {{form_widget(issue_form.priority)}}
+                            {{form_row(issue_form.priority)}}
                         </span>
                         <span class="issue-status">
                             {{form_widget(issue_form.status)}}

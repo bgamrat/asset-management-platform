@@ -38,7 +38,7 @@ class IssueItemType extends AbstractType
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
-                    'label' => false,
+                    'label' => 'common.status',
                     'preferred_choices' => function($status, $key, $index)
                     {
                         return $status->isActive();
