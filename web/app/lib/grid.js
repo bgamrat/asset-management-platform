@@ -17,7 +17,7 @@ define([
     function renderAddress(object, value, td) {
         var a, i, l, segments, content = [], address_lines, address_segments;
         var address;
-        if (typeof value[0] === "undefined") {
+        if( typeof value[0] === "undefined" ) {
             value = [value];
         }
         if( typeof value === "object" && value !== null && value.length !== 0 ) {
@@ -25,10 +25,14 @@ define([
             address_segments = ['city', 'stateProvince', 'postalCode', 'country'];
             for( a in value ) {
                 address = value[a];
-                if( isNaN(address['type']) ) {
-                    content.push(address['type']['type']);
+                if( typeof address['type'] === "undefined" ) {
+                    continue;
                 } else {
-                    content.push(lib.addressTypes[address['type']]);
+                    if( isNaN(address['type']) ) {
+                        content.push(address['type']['type']);
+                    } else {
+                        content.push(lib.addressTypes[address['type']]);
+                    }
                 }
                 l = address_lines.length;
                 for( i = 0; i < l; i++ ) {
@@ -56,7 +60,7 @@ define([
     ;
     function renderContacts(object, value, td) {
         var i, l;
-        if (typeof object.contacts !== "undefined" && object.contacts !== null) {
+        if( typeof object.contacts !== "undefined" && object.contacts !== null ) {
             l = object.contacts.length;
             for( i = 0; i < l; i++ ) {
                 this.renderPerson(object.contacts[i], object.contacts[i].name, td);
@@ -102,7 +106,7 @@ define([
     ;
     function renderPerson(object, value, td) {
         var type_text;
-        if (typeof object.type_text === "undefined") {
+        if( typeof object.type_text === "undefined" ) {
             type_text = object.type.type;
         } else {
             type_text = object.type_text;
