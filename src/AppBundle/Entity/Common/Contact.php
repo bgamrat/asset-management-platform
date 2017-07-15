@@ -1,7 +1,5 @@
 <?php
 
-/* Be sure to create the In Transit and Unknown locations */
-
 namespace AppBundle\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -11,6 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Contact
+ *
+ * Contacts support BillTos by associating a specific address for a person with an
+ * entity such as a client or venue
  *
  * @ORM\Table(name="contact") * 
  * @ORM\Entity()
@@ -235,14 +236,15 @@ class Contact
     {
         return $this->active;
     }
-    
+
     // Must match the one in Person
-    public function getHash() {
+    public function getHash()
+    {
         $entityType = $this->getType()->getEntity();
         $entityId = $this->getEntity();
         $personId = $this->getPerson()->getId();
         $addressId = ($this->getAddress() !== null) ? $this->getAddress()->getId() : null;
-        return ($entityType.'/'.$entityId.'/'.$personId.'/'.$addressId);
+        return ($entityType . '/' . $entityId . '/' . $personId . '/' . $addressId);
     }
 
     public function getUpdated()

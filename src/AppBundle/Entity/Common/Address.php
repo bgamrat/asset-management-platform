@@ -65,6 +65,7 @@ class Address
     private $postal_code;
     /**
      * @var string
+     * @Assert\Country()
      * @Gedmo\Versioned
      * @ORM\Column(name="country", type="string", length=2, nullable=true)
      */

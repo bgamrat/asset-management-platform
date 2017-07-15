@@ -58,12 +58,13 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
         $contactName = '%' . str_replace( '*', '%', strtolower( $contactName ) );
 
         $em = $this->getEntityManager();
-        $queryBuilder = $em->createQueryBuilder()->select( 'p.id' )
-                ->where( self::CONCAT_NAME_LIKE )
-                ->setParameter( 'name', $contactName );
 
+        $entityContacts = [];
         foreach( $entities as $e )
         {
+            $queryBuilder = $em->createQueryBuilder()->select( ['p.id'] )
+                    ->where( self::CONCAT_NAME_LIKE )
+                    ->setParameter( 'name', $contactName );
             switch( $e )
             {
                 case 'client':
@@ -72,10 +73,15 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
                             ->leftJoin( 'c.contacts', 'p' )
                             ->orWhere( "LOWER(c.name) LIKE :name" );
                     break;
+                case 'venue':
+                    $queryBuilder->from( 'AppBundle\Entity\Venue\Venue', 'v' )
+                            ->addSelect( ['v.id AS venue_id', 'v.name AS venue_name', "'venue' AS entity"] )
+                            ->leftJoin( 'v.contacts', 'p' )
+                            ->orWhere( "LOWER(v.name) LIKE :name" );
+                    break;
             }
+            $entityContacts = array_merge($entityContacts,$queryBuilder->getQuery()->getResult());
         }
-
-        $entityContacts = $queryBuilder->getQuery()->getResult();
 
         if( !empty( $entityContacts ) )
         {
