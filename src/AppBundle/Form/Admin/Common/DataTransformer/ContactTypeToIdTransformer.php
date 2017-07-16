@@ -28,7 +28,7 @@ class ContactTypeToIdTransformer implements DataTransformerInterface
         {
             return null;
         }
-        return $contactType->getEntity();
+        return $contactType->getId();
     }
 
     /**
@@ -38,17 +38,17 @@ class ContactTypeToIdTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (contactType) is not found.
      */
-    public function reverseTransform( $contactEntityName )
+    public function reverseTransform( $contactTypeId )
     {
         // no contactType id? It's optional, so that's ok
-        if( !$contactEntityName )
+        if( !$contactTypeId )
         {
             return;
         }
 
         $contactType = $this->em
                 ->getRepository( 'AppBundle\Entity\Common\ContactType' )
-                ->findOneBy( ['entity' => $contactEntityName] )
+                ->find( $contactTypeId )
         ;
 
         if( null === $contactType )

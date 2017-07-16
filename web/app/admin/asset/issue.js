@@ -89,12 +89,6 @@ define([
         tabContainer.addChild(expensesContentPane);
         tabContainer.startup();
 
-        var billToContentPane = new ContentPane({
-            title: core.bill_to},
-        "issue-view-bill-to-tab"
-                );
-        tabContainer.addChild(billToContentPane);
-
         var historyContentPane = new ContentPane({
             title: core.history},
         "issue-view-history-tab"

@@ -50,6 +50,7 @@ define([
         dijit = new FilteringSelect({
             store: contactStore,
             labelAttr: "name",
+            labelType: "html",
             searchAttr: "name",
             placeholder: core.contact,
             required: false,
@@ -133,7 +134,7 @@ define([
             idProperty: 'person_id'});
 
         eventStore = new JsonRest({
-            target: '/api/store/events',
+            target: '/api/store/events?contact=',
             useRangeHeaders: false,
             idProperty: 'id'});
 
@@ -155,13 +156,27 @@ define([
     }
 
     function getData() {
-        var i, l = billToId.length, contact, returnData = [];
+        var i, l = billToId.length, contact, contactData, contactValue, returnData = [];
         for( i = 0; i < l; i++ ) {
             contact = contactFilteringSelect[i].get('item');
+            contactValue = contactFilteringSelect[i].get('value');
+            contactData = {
+                id: contact.id,
+                "contact_entity_id": contact.entity,
+                "contact_type": contact.type.id,
+                "person_id": contact.person.id,
+                "name": contact.name
+            };
+            if( typeof contact.address_id !== "undefined" ) {
+                contactData.address_id = contact.address_id;
+            } else {
+                contactData.address_id = null;
+            };
+
             returnData.push(
                     {
                         "id": billToId[i],
-                        "contact": contact,
+                        "contact": contactData,
                         "event": eventFilteringSelect[i].get('value'),
                         "amount": parseFloat(amountInput[i].get("value")),
                         "comment": commentInput[i].get('value')

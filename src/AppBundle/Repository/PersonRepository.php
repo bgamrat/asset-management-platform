@@ -2,6 +2,10 @@
 
 namespace AppBundle\Repository;
 
+use \AppBundle\Entity\Common\Contact;
+
+use \Doctrine\ORM\Mapping\ClassMetadata;
+
 /**
  * PersonRepository
  */
@@ -10,6 +14,21 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
 
     const CONCAT_NAME = "CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname) AS name";
     const CONCAT_NAME_LIKE = "LOWER(CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname)) LIKE :name OR LOWER(p.title) LIKE :name";
+
+    private $contactTypes = [];
+
+    public function __construct( $em, ClassMetadata $class )
+    {
+        parent::__construct( $em, $class );
+        $queryBuilder = $em->createQueryBuilder();
+        $queryBuilder->select( 'ct' )
+                ->from( 'AppBundle\Entity\Common\ContactType', 'ct' );
+        $contactTypeData = $queryBuilder->getQuery()->getResult();
+        foreach( $contactTypeData as $ct )
+        {
+            $this->contactTypes[$ct->getEntity()] = $ct;
+        }
+    }
 
     public function findByNameLike( $name )
     {
@@ -35,22 +54,7 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
                 ->where( "LOWER(c.name) LIKE :name AND e.entity IN (:types)" )
                 ->setParameter( 'name', $contactName )
                 ->setParameter( 'types', $entityTypes );
-        $fullContacts = $queryBuilder->getQuery()->getResult();
-        if( !empty( $fullContacts ) )
-        {
-            $contacts = [];
-            foreach( $fullContacts as $c )
-            {
-                $p = $c->getPerson();
-                $p->setContactId( $c->getId() );
-                $p->setContactName( $c->getName() );
-                $p->setContactEntityType( $c->getType()->getEntity() );
-                $p->setContactEntityId( $c->getEntity() );
-                $contacts[$c->getHash()] = $p;
-            }
-            return $contacts;
-        }
-        return [];
+        return $queryBuilder->getQuery()->getResult();
     }
 
     public function findByEntityContactNameLike( $contactName, $entities )
@@ -80,7 +84,7 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
                             ->orWhere( "LOWER(v.name) LIKE :name" );
                     break;
             }
-            $entityContacts = array_merge($entityContacts,$queryBuilder->getQuery()->getResult());
+            $entityContacts = array_merge( $entityContacts, $queryBuilder->getQuery()->getResult() );
         }
 
         if( !empty( $entityContacts ) )
@@ -95,19 +99,21 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
             $queryBuilder->select( 'p' )
                     ->from( 'AppBundle\Entity\Common\Person', 'p' )
                     ->where( $queryBuilder->expr()->in( 'p.id', array_keys( $contactIds ) ) );
-
             $people = $queryBuilder->getQuery()->getResult();
+
             $contacts = [];
             foreach( $people as $p )
             {
                 $id = $p->getId();
                 $entityStr = $contactIds[$id]['entity'];
                 // This is a new contact created from the client list
-                $p->setContactId( null );
-                $p->setContactName( $contactIds[$id][$entityStr . '_name'] . ' - ' . $p->getFullName() );
-                $p->setContactEntityType( $entityStr );
-                $p->setContactEntityId( $contactIds[$id][$entityStr . '_id'] );
-                $contacts[] = $p;
+                $contact = new Contact;
+                $contact->setId( null );
+                $contact->setPerson($p);
+                $contact->setName( $contactIds[$id][$entityStr . '_name'] . ' - ' . $p->getFullName() );
+                $contact->setType( $this->contactTypes[$entityStr] );
+                $contact->setEntity( $contactIds[$id][$entityStr . '_id'] );
+                $contacts[] = $contact;
             }
             return $contacts;
         }

@@ -121,6 +121,8 @@ common:
         Assets
     available:
         Available
+    bill_to:
+        Bill To
     calendar:
         Calendar
     carrier:

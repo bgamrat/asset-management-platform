@@ -128,9 +128,8 @@
                         <div id="expenses">
                             {{form_row(issue_form.cost)}}
                         </div>
-                    </div>
-                    <div id="issue-view-bill-to-tab">
                         <div id="bill-tos" class="bill-tos">
+                            <h3>{{'common.bill_to'|trans}}</h3>
                             {{form_row(issue_form.bill_tos)}}
                             {% if issue_form.bill_tos.vars.allow_add %}
                                 <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>

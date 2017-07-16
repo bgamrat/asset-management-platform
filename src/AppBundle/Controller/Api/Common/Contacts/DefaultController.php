@@ -26,35 +26,12 @@ class DefaultController extends FOSRestController
 
             $em = $this->getDoctrine()->getManager();
 
-            // Get existing contacts of the requested types
+            // Get existing people of the requested contact types
             $contacts = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByContactNameLike( $name, array_keys( $contactTypes ) );
-            $data = [];
-            if( !empty( $contacts ) )
-            {
-                foreach( $contacts as $c )
-                {
-                    $data = array_merge( $data, $c->getContactDetails() );
-                }
-            }
 
             $people = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByEntityContactNameLike( $name, array_keys( $contactTypes ) );
 
-            if( !empty( $people ) )
-            {
-                foreach( $people as $p )
-                {
-                    $personContactDetails = $p->getContactDetails();
-                    foreach( $personContactDetails as $pd )
-                    {
-                        if( !isset( $contacts[$pd['hash']] ) )
-                        {
-                            $data = array_merge( $data, $personContactDetails );
-                        }
-                    }
-                }
-                return array_values( $data );
-            }
-            return null;
+            return array_merge($contacts,$people);
         }
     }
 

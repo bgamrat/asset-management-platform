@@ -13,7 +13,7 @@ class ContactTypeRepository extends \Doctrine\ORM\EntityRepository
 
     public function findAll()
     {
-        return $this->findBy( [], ['name' => 'ASC'] );
+        return $this->findBy( [], ['entity' => 'ASC'] );
     }
 
 }

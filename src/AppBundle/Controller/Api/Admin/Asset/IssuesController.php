@@ -139,6 +139,7 @@ class IssuesController extends FOSRestController
      */
     public function getIssueAction( $id )
     {
+
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -147,6 +148,7 @@ class IssuesController extends FOSRestController
         }
         $issue = $this->getDoctrine()
                         ->getRepository( 'AppBundle\Entity\Asset\Issue' )->find( $id );
+
         if( $issue !== null )
         {
             $data = [
@@ -167,7 +169,6 @@ class IssuesController extends FOSRestController
                 'created' => $issue->getCreated()->format( 'Y-m-d H:i:s' ),
                 'updated' => $issue->getUpdated()->format( 'Y-m-d H:i:s' )
             ];
-
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle\Entity\Asset\IssueLog', $id );
             $data['history'] = $logUtil->translateIdsToText();
@@ -219,8 +220,9 @@ class IssuesController extends FOSRestController
             {
                 $issue = $form->getData();
                 $issueItems = $issue->getItems();
-                foreach ($issueItems as $i => $item) {
-                    $item->getAsset()->setStatus($form['items'][$i]['status']->getData());
+                foreach( $issueItems as $i => $item )
+                {
+                    $item->getAsset()->setStatus( $form['items'][$i]['status']->getData() );
                 }
                 $em->persist( $issue );
                 $em->flush();
