@@ -30,7 +30,6 @@ class IssueItemType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'item', TextType::class, ['label' => false, 'property_path' => 'asset'] )
                 ->add( 'status', EntityType::class, [
                     'class' => 'AppBundle\Entity\Asset\AssetStatus',

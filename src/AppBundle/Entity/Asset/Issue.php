@@ -62,7 +62,7 @@ class Issue
     private $details;
     /**
      * @var ArrayCollection $notes
-     * @ORM\ManyToMany(targetEntity="IssueNote", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="IssueNote", cascade={"persist"}, orphanRemoval=true)
      * @ORM\OrderBy({"id" = "ASC"})
      */
     protected $notes;
@@ -74,8 +74,8 @@ class Issue
     private $trailer = null;
     /**
      * @var ArrayCollection $items
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Asset\IssueItem", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Asset\IssueItem", cascade={"persist","remove"}, orphanRemoval=true)
      * @ORM\JoinTable(name="issue_item_item",
      *      joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id", unique=false, nullable=true)}
@@ -107,7 +107,7 @@ class Issue
     private $cost = 0.0;
     /**
      * @var ArrayCollection $bill_tos
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\BillTo", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\BillTo", cascade={"persist"}, orphanRemoval=true)
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\JoinTable(name="issue_bill_to",
      *      joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},
@@ -115,6 +115,7 @@ class Issue
      *      )
      */
     private $bill_tos;
+    private $history;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
@@ -135,6 +136,7 @@ class Issue
     {
         $this->items = new ArrayCollection();
         $this->bill_tos = new ArrayCollection();
+        $this->notes = new ArrayCollection();
     }
 
     /**
@@ -317,7 +319,7 @@ class Issue
 
     public function getItems()
     {
-        return $this->items->toArray();
+        return $this->items;
     }
 
     public function addItem( IssueItem $item )
@@ -330,6 +332,11 @@ class Issue
 
     public function removeItem( IssueItem $item )
     {
+        if( !$this->items->contains( $item ) )
+        {
+            return;
+        }
+
         $this->items->removeElement( $item );
     }
 
@@ -426,6 +433,16 @@ class Issue
         {
             $this->bill_tos->add( $bill_to );
         }
+    }
+
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    public function setHistory( $history )
+    {
+        $this->history = $history;
     }
 
     public function getCreated()

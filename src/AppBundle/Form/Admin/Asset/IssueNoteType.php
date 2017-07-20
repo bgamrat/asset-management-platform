@@ -20,14 +20,12 @@ class IssueNoteType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'updated', DateTimeType::class, [
                     'label' => 'common.updated',
                     'widget' => 'single_text',
                     'format' => 'yyyy-MM-dd HH:mm:ss',
                     'required' => false,
                     'disabled' => true,
-                    //'data' => new \DateTime()
                 ] )
                 ->add( 'note', TextType::class, [
                     'label' => false

@@ -4,6 +4,7 @@ namespace AppBundle\Form\Admin\Asset;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -94,7 +95,7 @@ class IssueType extends AbstractType
                 ->add( 'replaced', CheckboxType::class, ['label' => 'issue.replaced'] )
                 ->add( 'client_billable', CheckboxType::class, ['label' => 'common.client_billable'] )
                 ->add( 'summary', TextType::class, ['label' => false] )
-                ->add( 'details', TextType::class, [
+                ->add( 'details', TextareaType::class, [
                     'label' => false
                 ] )
                 ->add( 'notes', CollectionType::class, [
@@ -131,6 +132,7 @@ class IssueType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__bill_to__'
                 ] )
+                
         ;
         $builder->get( 'assigned_to' )
                 ->addModelTransformer( new PersonToIdTransformer( $this->em ) );

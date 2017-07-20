@@ -6,7 +6,9 @@ use AppBundle\Util\DStore;
 use AppBundle\Entity\Asset\Issue;
 use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Common\Person;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use AppBundle\Form\Admin\Asset\IssueType;
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,17 +86,18 @@ class IssuesController extends FOSRestController
 
         $columns = ['i.id', 'i.priority', 'tr.name AS trailer_text', 'i.summary', 's.status AS status_text', 't.type AS type_text',
             "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to_text",
-            'b.barcode'];
+        ];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Issue', 'i' )
-                ->join( 'i.status', 's' )
-                ->join( 'i.type', 't' )
+                ->innerJoin( 'i.status', 's' )
+                ->innerJoin( 'i.type', 't' )
                 ->leftJoin( 'i.trailer', 'tr' )
                 ->leftJoin( 'i.assignedTo', 'p' )
                 ->leftJoin( 'i.items', 'ii' )
                 ->leftJoin( 'ii.asset', 'a' )
                 ->leftJoin( 'a.barcodes', 'b' )
-                ->orderBy( $sortField, $dstore['sort-direction'] );
+                ->orderBy( $sortField, $dstore['sort-direction'] )
+                ->distinct();
 
         if( $dstore['limit'] !== null )
         {
@@ -151,30 +154,16 @@ class IssuesController extends FOSRestController
 
         if( $issue !== null )
         {
-            $data = [
-                'id' => $id,
-                'priority' => $issue->getPriority(),
-                'type' => $issue->getType(),
-                'status' => $issue->getStatus(),
-                'assigned_to' => $issue->getAssignedTo(),
-                'summary' => $issue->getSummary(),
-                'details' => $issue->getDetails(),
-                'items' => $issue->getItems(),
-                'notes' => $issue->getNotes(),
-                'client_billable' => $issue->isClientBillable(),
-                'bill_to' => $issue->getBillTos(),
-                'cost' => $issue->getCost(),
-                'trailer' => $issue->getTrailer(),
-                'replaced' => $issue->isReplaced(),
-                'created' => $issue->getCreated()->format( 'Y-m-d H:i:s' ),
-                'updated' => $issue->getUpdated()->format( 'Y-m-d H:i:s' )
-            ];
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle\Entity\Asset\IssueLog', $id );
-            $data['history'] = $logUtil->translateIdsToText();
+            $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'issue' . $issue->getId(), $issue->getUpdated() );
-            return $data;
+
+            $form = $this->createForm( IssueType::class, $issue, ['allow_extra_fields' => true] );
+            $issue->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
         }
         else
         {
@@ -206,6 +195,11 @@ class IssuesController extends FOSRestController
         else
         {
             $issue = $em->getRepository( 'AppBundle\Entity\Asset\Issue' )->find( $id );
+            $originalItems = new ArrayCollection();
+            foreach( $issue->getItems() as $item )
+            {
+                $originalItems->add( $item );
+            }
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'issue' . $issue->getId(), $issue->getUpdated() ) === false )
             {
@@ -215,15 +209,24 @@ class IssuesController extends FOSRestController
         $form = $this->createForm( IssueType::class, $issue, ['allow_extra_fields' => true] );
         try
         {
-            $form->submit( $data );
+            $form->submit( $data, true );
             if( $form->isValid() )
             {
                 $issue = $form->getData();
                 $issueItems = $issue->getItems();
+
                 foreach( $issueItems as $i => $item )
                 {
                     $item->getAsset()->setStatus( $form['items'][$i]['status']->getData() );
                 }
+                foreach( $originalItems as $item )
+                {
+                    if( false === $issueItems->contains( $item ) )
+                    {
+                        $issue->removeItem( $item );
+                    }
+                }
+
                 $em->persist( $issue );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );

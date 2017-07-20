@@ -171,7 +171,8 @@ define([
                 contactData.address_id = contact.address_id;
             } else {
                 contactData.address_id = null;
-            };
+            }
+            ;
 
             returnData.push(
                     {
@@ -192,8 +193,9 @@ define([
         nodes.forEach(function (node, index) {
             destroyRow(0, node);
         });
-        l = items.length;
+
         if( typeof items === "object" && items.length !== 0 ) {
+            l = items.length;
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits();

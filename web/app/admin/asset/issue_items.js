@@ -9,7 +9,7 @@ define([
     'dojo/store/JsonRest',
     "dijit/form/ValidationTextBox",
     "dijit/form/FilteringSelect",
-        "dijit/form/Select",
+    "dijit/form/Select",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/asset",
     "dojo/NodeList-dom",
@@ -34,7 +34,7 @@ define([
 
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__item__/g, itemFilteringSelect.length);
-        domConstruct.place(prototypeContent, prototypeNode, "after");
+        domConstruct.place(prototypeContent, prototypeNode, "last");
         itemId.push(null);
     }
 
@@ -67,14 +67,17 @@ define([
     }
 
     function destroyRow(id, target) {
-        var i, item;
+        var i, l, item, kid;
 
-        for( i = 0; i < itemFilteringSelect.length; i++ ) {
-            if( itemFilteringSelect[i].get("id").indexOf(id) !== -1 ) {
+        l = itemFilteringSelect.length;
+        for( i = 0; i < l; i++ ) {
+            kid = itemFilteringSelect[i].id.replace(/\D/g, '');
+            if( kid == id ) {
                 id = i;
                 break;
             }
         }
+
         itemId.splice(id, 1);
         item = itemFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
@@ -93,7 +96,7 @@ define([
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__item__/g, '0');
 
-        domConstruct.place(prototypeContent, prototypeNode, "after");
+        domConstruct.place(prototypeContent, prototypeNode, "last");
 
         itemStore = new JsonRest({
             target: '/api/store/barcodes',
@@ -124,7 +127,7 @@ define([
             var target = event.target;
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
-            destroyRow(id, targetParent.parentNode);
+            destroyRow(id, target.closest(".form-row.issue-item"));
         });
     }
 
@@ -133,7 +136,7 @@ define([
         for( i = 0; i < l; i++ ) {
             returnData.push(
                     {
-                        "id": itemId[i],
+                        //"id": itemId[i],
                         "item": itemFilteringSelect[i].get('value'),
                         "status": statusSelect[i].get('value'),
                         "comment": commentInput[i].get('value')
@@ -147,10 +150,9 @@ define([
 
         nodes = query(".form-row.issue-item", "items");
         nodes.forEach(function (node, index) {
-            destroyRow(index, node);
+            destroyRow(0, node);
         });
-        
-        if( typeof items === "object" && items !== null && l > 0 ) {
+        if( typeof items === "object" && items !== null ) {
             l = items.length;
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();

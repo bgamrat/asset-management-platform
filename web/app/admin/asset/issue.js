@@ -11,6 +11,7 @@ define([
     "dojo/query",
     "dojo/data/ObjectStore",
     "dojo/store/Memory",
+    "dojo/date/locale",
     "dijit/registry",
     "dijit/form/Form",
     "dijit/form/CurrencyTextBox",
@@ -43,7 +44,7 @@ define([
     "dojo/i18n!app/nls/asset",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
-        xhr, aspect, query, ObjectStore, Memory,
+        xhr, aspect, query, ObjectStore, Memory, locale,
         registry, Form, CurrencyTextBox, DateTextBox, TextBox, ValidationTextBox, CheckBox, RadioButton, Select, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
@@ -393,6 +394,7 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (issue) {
+                    var t, f;
                     issueViewDialog.show();
                     action = "view";
                     issueId = issue.id;
@@ -400,18 +402,28 @@ define([
                     typeSelect.set("value", issue.type.id);
                     statusSelect.set("value", issue.status.id);
                     trailerSelect.set("value", issue.trailer.id);
-                    if (issue.assigned_to !== null) {
-                        assignedToFilteringSelect.set("displayedValue", issue.assigned_to.fullName);
+                    if( issue.assignedTo !== null ) {
+                        assignedToFilteringSelect.set("displayedValue", issue.assignedTo.fullName);
                     }
                     summaryInput.set("value", issue.summary);
                     detailsInput.set("value", issue.details);
                     issueItems.setData(issue.items);
                     issueNotes.setData(issue.notes);
-                    updatedInput.set("value", issue.updated);
-                    createdInput.set("value", issue.created);
-                    clientBillableCheckBox.set("checked", issue.client_billable === true);
+                    f = null;
+                    if( typeof issue.updated !== "undefined" ) {
+                        t = new Date(issue.updated.timestamp * 1000);
+                        f = locale.format(t);
+                    }
+                    updatedInput.set("value", f);
+                    f = null;
+                    if( typeof issue.created !== "undefined" ) {
+                        t = new Date(issue.created.timestamp * 1000);
+                        f = locale.format(t);
+                    }
+                    createdInput.set("value", f);
+                    clientBillableCheckBox.set("checked", issue.clientBillable === true);
                     replacedCheckBox.set("checked", issue.replaced === true);
-                    billTo.setData(issue.bill_to);
+                    billTo.setData(issue.billTo);
                     lib.showHistory(historyContentPane, issue.history);
                 }, lib.xhrError);
             }

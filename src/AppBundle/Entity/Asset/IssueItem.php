@@ -97,7 +97,7 @@ class IssueItem
     public function setAsset( $asset )
     {
         $this->asset = $asset;
-        
+
         $name = '';
         if( !empty( $asset ) )
         {
@@ -108,12 +108,12 @@ class IssueItem
                 {
                     if( $b->isActive() )
                     {
-                        $name = $b->getBarcode().' - ';
+                        $name = $b->getBarcode() . ' - ';
                     }
                 }
             }
             $model = $asset->getModel();
-            $name .= $model->getBrand()->getName().' '.$asset->getModel()->getName();
+            $name .= $model->getBrand()->getName() . ' ' . $asset->getModel()->getName();
         }
         $this->name = $name;
 
