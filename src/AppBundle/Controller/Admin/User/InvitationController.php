@@ -20,8 +20,6 @@ class InvitationController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
       
-        return $this->render( 'admin/user/invitation/index.html.twig', array(
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                ) );
+        return $this->render( 'admin/user/invitation/index.html.twig' );
     }
 }

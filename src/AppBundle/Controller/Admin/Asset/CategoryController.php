@@ -33,8 +33,7 @@ class CategoryController extends Controller
         $categories['categories'] = $em->getRepository( 'AppBundle\Entity\Asset\Category' )->findAll();
         $categoriesForm = $this->createForm( CategoriesType::class, $categories, [ 'action' => $this->generateUrl( 'app_admin_asset_category_save' )] );
         return $this->render( 'admin/asset/categories.html.twig', array(
-                    'categories_form' => $categoriesForm->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
+                    'categories_form' => $categoriesForm->createView()
                 ) );
     }
 
@@ -86,9 +85,7 @@ class CategoryController extends Controller
                 }
             }
             return $this->render( 'admin/asset/categories.html.twig', array(
-                        'categories_form' => $form->createView(),
-                        'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                    ) );
+                        'categories_form' => $form->createView()) );
         }
     }
 

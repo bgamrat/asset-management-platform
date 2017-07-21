@@ -78,18 +78,12 @@ class CarriersController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Asset\Carrier' )->find( $id );
         if( $carrier !== null )
         {
-            $data = [
-                'id' => $carrier->getId(),
-                'name' => $carrier->getName(),
-                'contacts' => $carrier->getContacts( false ),
-                'services' => $carrier->getServices(),
-                'active' => $carrier->isActive(),
-                'comment' => $carrier->getComment(),
-                'account_information' => $carrier->getAccountInformation(),
-            ];
+
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdated() );
-            return $data;
+            $form = $this->createForm( CarrierType::class, $carrier, ['allow_extra_fields' => true] );
+
+            return $form->getViewData();
         }
         else
         {

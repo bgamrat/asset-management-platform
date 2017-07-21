@@ -270,8 +270,6 @@ services:
         
     session.memcached:
         class: Memcached
-        arguments:
-            persistent_id: %session_memcached_prefix%
         calls:
             - [ addServer, [ '%session_memcached_host%', '%session_memcached_port%' ]]
 

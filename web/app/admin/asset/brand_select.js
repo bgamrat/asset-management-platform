@@ -51,10 +51,12 @@ define([
     }
 
     function destroyRow(id, target) {
-        var i, item;
+        var i, l, item, kid;
 
-        for( i = 0; i < brandFilteringSelect.length; i++ ) {
-            if( brandFilteringSelect[i].get("id").indexOf(id) !== -1 ) {
+        l = brandFilteringSelect.length;
+        for( i = 0; i < l; i++ ) {
+            kid = brandFilteringSelect[i].id.replace(/\D/g, '');
+            if( kid == id ) {
                 id = i;
                 break;
             }

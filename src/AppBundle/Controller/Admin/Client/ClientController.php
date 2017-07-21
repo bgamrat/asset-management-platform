@@ -33,9 +33,7 @@ class ClientController extends Controller
         $form = $this->createForm( ClientType::class, null, [] );
 
         return $this->render( 'admin/client/client.html.twig', array(
-                    'client_form' => $form->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                ) );
+                    'client_form' => $form->createView()) );
     }
 
     /**
@@ -83,9 +81,7 @@ class ClientController extends Controller
 
             return $this->render( 'admin/client/contract.html.twig', array(
                         'contract' => $clientContract,
-                        'contract_form' => $contractForm->createView(),
-                        'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                    ) );
+                        'contract_form' => $contractForm->createView()) );
         }
     }
 
@@ -130,9 +126,7 @@ class ClientController extends Controller
             {
                 return $this->render( 'admin/client/contract.html.twig', array(
                             'contract' => $clientContract,
-                            'contract_form' => $form->createView(),
-                            'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                        ) );
+                            'contract_form' => $form->createView()) );
             }
         }
     }

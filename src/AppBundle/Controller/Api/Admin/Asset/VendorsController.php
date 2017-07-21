@@ -26,6 +26,15 @@ class VendorsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
 
+        switch( $dstore['sort-field'] )
+        {
+            case 'brand_data':
+                $sortField = 'b.name';
+                break;
+            default:
+                $sortField = 'v.'.$dstore['sort-field'];
+        }
+        
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
@@ -33,7 +42,8 @@ class VendorsController extends FOSRestController
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['v'] )
                 ->from( 'AppBundle\Entity\Asset\Vendor', 'v' )
-                ->orderBy( 'v.' . $dstore['sort-field'], $dstore['sort-direction'] );
+                ->leftJoin( 'v.brands', 'b')
+                ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -93,19 +103,12 @@ class VendorsController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Asset\Vendor' )->find( $id );
         if( $vendor !== null )
         {
-            $data = [
-                'id' => $vendor->getId(),
-                'name' => $vendor->getName(),
-                'contacts' => $vendor->getContacts( false ),
-                'brand_data' => $vendor->getBrandData(),
-                'active' => $vendor->isActive(),
-                'comment' => $vendor->getComment(),
-                'rma_required' => $vendor->isRmaRequired(),
-                'service_instructions' => $vendor->getserviceInstructions(),
-            ];
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdated() );
-            return $data;
+
+            $form = $this->createForm( VendorType::class, $vendor, ['allow_extra_fields' => true] );
+            
+            return $form->getViewData();
         }
         else
         {

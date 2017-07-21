@@ -28,9 +28,7 @@ class VendorController extends Controller
         $form = $this->createForm( VendorType::class, null, [] );
 
         return $this->render( 'admin/asset/vendor.html.twig', array(
-                    'vendor_form' => $form->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                ) );
+                    'vendor_form' => $form->createView()) );
     }
 
 }

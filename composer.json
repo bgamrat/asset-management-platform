@@ -104,7 +104,7 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "symfony/symfony": "3.0.*",
+        "symfony/symfony": "3.3.*",
         "doctrine/orm": "^2.5",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
@@ -145,7 +145,7 @@
         "mvDojo": "cp -rf vendor/sitepen/dojo/* web/vendor/dojo; rm -rf vendor/sitepen/dojo",
         "mvDgridDstore": "cp -rf vendor/sitepen/* web/vendor/dojo; rm -rf vendor/sitepen/dgrid vendor/sitepen/dstore",
         "mvZyp": "cp -rf vendor/kriszyp/* web/vendor/dojo; rm -rf vendor/kriszyp",
-        "mvRql": "cp -rf vendor/persrv/* web/vendor/dojo; rm -rf vendor/persrv",
+        "mvRql": "cp -rf vendor/persvr/* web/vendor/dojo; rm -rf vendor/persvr",
         "mvBootstrap": "cp -rf vendor/twbs/* web/vendor; rm -rf vendor/twbs",
         "mvFontAwesome": "cp -rf vendor/FortAwesome/Font-Awesome web/vendor; cp -rf vendor/FortAwesome/Font-Awesome/fonts web/vendor; rm -rf vendor/FortAwesome",
         "rmAllJS": "rm -rf web/vendor/dojo web/vendor/bootstrap web/vendor/fonts",

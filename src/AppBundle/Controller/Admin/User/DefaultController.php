@@ -36,9 +36,7 @@ class DefaultController extends Controller
         return $this->render( 'admin/user/index.html.twig', array(
                     'user_form' => $user_form->createView(),
                     'invitation_form' => $invitation_form->createView(),
-                    'outstanding_invitations' => $outstandingInvitations,
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                ) );
+                    'outstanding_invitations' => $outstandingInvitations) );
     }
 
     /**

@@ -77,9 +77,7 @@ class LocationTypeController extends Controller
                 }
             }
             return $this->render( 'admin/asset/location-types.html.twig', array(
-                        'location_types_form' => $form->createView(),
-                        'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                    ) );
+                        'location_types_form' => $form->createView()) );
         }
     }
 

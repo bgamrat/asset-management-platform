@@ -29,7 +29,6 @@ class CarrierController extends Controller
 
         return $this->render( 'admin/asset/carrier.html.twig', array(
                     'carrier_form' => $form->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
                 ) );
     }
 

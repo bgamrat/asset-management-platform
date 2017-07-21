@@ -70,9 +70,7 @@ class TransferStatusController extends Controller
         else
         {
             return $this->render( 'admin/asset/transfer-statuses.html.twig', array(
-                        'statuses_form' => $form->createView(),
-                        'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                    ) );
+                        'statuses_form' => $form->createView()) );
         }
     }
 

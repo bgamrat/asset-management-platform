@@ -256,7 +256,7 @@ define([
                     action = "view";
                     vendorId = vendor.id;
                     nameInput.set("value", vendor.name);
-                    brandSelect.setData(vendor.brand_data);
+                    brandSelect.setData(vendor.brandData);
                     activeCheckBox.set("checked", vendor.active === true);
                     person.setData(vendor.contacts);
                     commentInput.set("value", vendor.comment);

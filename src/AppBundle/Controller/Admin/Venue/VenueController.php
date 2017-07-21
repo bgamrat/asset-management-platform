@@ -34,9 +34,7 @@ class VenueController extends Controller
         $form = $this->createForm( VenueType::class, null, [] );
 
         return $this->render( 'admin/venue/venue.html.twig', array(
-                    'venue_form' => $form->createView(),
-                    'base_dir' => realpath( $this->container->getParameter( 'kernel.root_dir' ) . '/..' ),
-                ) );
+                    'venue_form' => $form->createView()) );
     }
 
     /**
