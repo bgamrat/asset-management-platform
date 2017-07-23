@@ -64,7 +64,8 @@ class VendorType extends AbstractType
                 ->add( 'rma_required', CheckboxType::class, ['label' => 'asset.rma_required'] )
                 ->add( 'service_instructions', TextareaType::class, [
                     'label' => false,
-                    'required' => false
+                    'required' => false,
+                    'property_path' => 'serviceInstructions'
                 ] )
         ;
         $builder->get( 'brands' )

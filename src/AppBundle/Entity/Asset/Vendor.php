@@ -238,7 +238,7 @@ class Vendor
      *
      * @return Vendor
      */
-    public function setServiceInstructions( $sServiceInstructions )
+    public function setServiceInstructions( $serviceInstructions )
     {
         $this->serviceInstructions = $serviceInstructions;
 

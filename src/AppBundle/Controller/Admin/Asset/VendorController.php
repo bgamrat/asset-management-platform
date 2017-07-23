@@ -19,15 +19,27 @@ class VendorController extends Controller
 
     /**
      * @Route("/admin/asset/vendor")
+     * @Route("/admin/asset/vendor/{name}", name="app_admin_asset_vendor_get")
      * @Method("GET")
      */
-    public function indexAction( Request $request )
+    public function indexAction( $name )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $form = $this->createForm( VendorType::class, null, [] );
+        if( $name !== null )
+        {
+            $vendor = $this->getDoctrine()->getEntityManager()->getRepository( 'AppBundle\Entity\Asset\Vendor' )->findOneBy( ['name' => $name] );
+            $vendorId = $vendor->getId();
+        }
+        else
+        {
+            $vendorId = null;
+        }
+
+        $form = $this->createForm( VendorType::class, $vendor, [] );
 
         return $this->render( 'admin/asset/vendor.html.twig', array(
+                    'vendor_id' => $vendorId,
                     'vendor_form' => $form->createView()) );
     }
 

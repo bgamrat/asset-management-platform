@@ -61,9 +61,11 @@ define([
                 break;
             }
         }
-        brandFilteringSelect.splice(id, 1);
         item = brandFilteringSelect.splice(id, 1);
-        domConstruct.destroy(target);
+        if (item.length > 0) {
+            item[0].destroyRecursive();
+            domConstruct.destroy(target);
+        }
     }
 
     function run() {
@@ -132,7 +134,7 @@ define([
 
         query(".form-row.brand", prototypeNode.parentNode).forEach(function (node, index) {
             if( index !== 0 ) {
-                destroyRow(index, node);
+                destroyRow(1, node);
             }
         });
 

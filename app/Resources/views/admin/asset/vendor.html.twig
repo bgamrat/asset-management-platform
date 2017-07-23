@@ -96,6 +96,7 @@
 
 {% block javascripts %}
     <script>
+        var loadVendorId = {{ vendor_id }};
         require(["app/admin/asset/vendor"], function (vendor) {
             vendor.run();
         });

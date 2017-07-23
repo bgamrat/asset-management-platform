@@ -235,8 +235,8 @@ class MenuStoreController extends FOSRestController
             {
                 $children[$i]['has_children'] = false;
                 $children[$i]['children'] = null;
-               // $children[$i]['uri'] = $this->generateUrl(
-               //         'app_admin_asset_vendor_view', ['name' => $children[$i]['name']], true ); // absolute
+                $children[$i]['uri'] = $this->generateUrl(
+                        'app_admin_asset_vendor_get', ['name' => $children[$i]['name']], true ); // absolute
             }
         }
         $menu['children'] = $children;

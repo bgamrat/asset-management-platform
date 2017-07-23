@@ -240,6 +240,20 @@ define([
         grid.startup();
         grid.collection.track();
 
+        function load(vendor) {
+            var r;
+            action = "view";
+            vendorId = vendor.id;
+            nameInput.set("value", vendor.name);
+            brandSelect.setData(vendor.brandData);
+            activeCheckBox.set("checked", vendor.active === true);
+            person.setData(vendor.contacts);
+            commentInput.set("value", vendor.comment);
+            rmaRequiredCheckBox.set("checked", vendor.rma_required === true);
+            serviceInstructionsInput.set("value", vendor.service_instructions);
+            vendorViewDialog.show();
+        }
+
         grid.on(".dgrid-row:click", function (event) {
             var checkBoxes = ["active", "remove"];
             var row = grid.row(event);
@@ -251,19 +265,7 @@ define([
                     grid.clearSelection();
                 }
                 grid.select(row);
-                grid.collection.get(id).then(function (vendor) {
-                    var r;
-                    action = "view";
-                    vendorId = vendor.id;
-                    nameInput.set("value", vendor.name);
-                    brandSelect.setData(vendor.brandData);
-                    activeCheckBox.set("checked", vendor.active === true);
-                    person.setData(vendor.contacts);
-                    commentInput.set("value", vendor.comment);
-                    rmaRequiredCheckBox.set("checked", vendor.rma_required === true);
-                    serviceInstructionsInput.set("value", vendor.service_instructions);
-                    vendorViewDialog.show();
-                }, lib.xhrError);
+                grid.collection.get(id).then(load, lib.xhrError);
             }
         });
 
@@ -320,7 +322,9 @@ define([
 
         person = xperson.run('vendor_contacts');
         brandSelect.run('vendor');
-
+        if( typeof loadVendorId !== "undefined" && loadVendorId !== null ) {
+            grid.collection.get(loadVendorId).then(load, lib.xhrError);
+        }
         lib.pageReady();
     }
     return {
