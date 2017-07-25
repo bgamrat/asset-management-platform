@@ -62,7 +62,7 @@ define([
             }
         }
         item = brandFilteringSelect.splice(id, 1);
-        if (item.length > 0) {
+        if( item.length > 0 ) {
             item[0].destroyRecursive();
             domConstruct.destroy(target);
         }
@@ -86,7 +86,7 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__brand__/g, brandFilteringSelect.length);
+        prototypeContent = dataPrototype.replace(/__brand__/g, '0');
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
         brandStore = new JsonRest({
@@ -130,7 +130,7 @@ define([
     }
 
     function setData(brands) {
-        var i, p, obj;
+        var i, l, p, obj;
 
         query(".form-row.brand", prototypeNode.parentNode).forEach(function (node, index) {
             if( index !== 0 ) {
@@ -139,8 +139,8 @@ define([
         });
 
         if( typeof brands === "object" && brands !== null && brands.length > 0 ) {
-
-            for( i = 0; i < brands.length; i++ ) {
+            l = brands.length;
+            for( i = 0; i < l; i++ ) {
                 if( i !== 0 ) {
                     cloneNewNode();
                     createDijits();

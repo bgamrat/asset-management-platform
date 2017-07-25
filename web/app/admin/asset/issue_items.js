@@ -136,7 +136,6 @@ define([
         for( i = 0; i < l; i++ ) {
             returnData.push(
                     {
-                        //"id": itemId[i],
                         "item": itemFilteringSelect[i].get('value'),
                         "status": statusSelect[i].get('value'),
                         "comment": commentInput[i].get('value')

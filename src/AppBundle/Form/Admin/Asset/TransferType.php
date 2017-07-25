@@ -67,11 +67,11 @@ class TransferType extends AbstractType
                 ] )
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
                 ->add( 'from', TextType::class, ['label' => 'common.from'] )
-                ->add( 'source_location', AssetLocationType::class )
-                ->add( 'source_location_text', HiddenType::class )
+                ->add( 'source_location', AssetLocationType::class, [ 'property_path' => 'sourceLocation'])
+                ->add( 'source_location_text', HiddenType::class, [ 'property_path' => 'sourceLocationText'] )
                 ->add( 'to', TextType::class, ['label' => 'common.to'] )
-                ->add( 'destination_location', AssetLocationType::class )
-                ->add( 'destination_location_text', HiddenType::class )
+                ->add( 'destination_location', AssetLocationType::class, [ 'property_path' => 'destinationLocation'] )
+                ->add( 'destination_location_text', HiddenType::class, [ 'property_path' => 'destinationLocationText'] )
                 ->add( 'carrier', EntityType::class, [
                     'class' => 'AppBundle\Entity\Asset\Carrier',
                     'choice_label' => 'name',
@@ -85,8 +85,8 @@ class TransferType extends AbstractType
                     },
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'carrier_service', TextType::class, ['label' => 'common.service'] )
-                ->add( 'tracking_number', TextType::class, ['label' => 'common.from'] )
+                ->add( 'carrier_service', TextType::class, ['label' => 'common.service', 'property_path' => 'carrierService'] )
+                ->add( 'tracking_number', TextType::class, ['label' => 'common.from', 'property_path' => 'trackingNumber'] )
                 ->add( 'instructions', TextType::class, ['label' => false] )
                 ->add( 'items', CollectionType::class, [
                     'entry_type' => TransferItemType::class,
@@ -108,7 +108,8 @@ class TransferType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'prototype_name' => '__bill_to__'
+                    'prototype_name' => '__bill_to__',
+                    'property_path' => 'billTos'
                 ] )
         ;
         $builder->get( 'from' )

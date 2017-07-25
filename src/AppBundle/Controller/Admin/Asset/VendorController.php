@@ -36,7 +36,7 @@ class VendorController extends Controller
             $vendorId = null;
         }
 
-        $form = $this->createForm( VendorType::class, $vendor, [] );
+        $form = $this->createForm( VendorType::class, null, [] );
 
         return $this->render( 'admin/asset/vendor.html.twig', array(
                     'vendor_id' => $vendorId,

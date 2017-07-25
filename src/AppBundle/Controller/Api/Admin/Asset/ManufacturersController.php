@@ -61,7 +61,7 @@ class ManufacturersController extends FOSRestController
                             $queryBuilder->expr()->gt( 'LOWER(m.name)', '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
+            $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
         $manufacturers = $queryBuilder->getQuery()->getResult();
         return $manufacturers;
@@ -78,17 +78,12 @@ class ManufacturersController extends FOSRestController
         $manufacturer = $repository->find( $id );
         if( $manufacturer !== null )
         {
-            $data = [
-                'id' => $manufacturer->getId(),
-                'name' => $manufacturer->getName(),
-                'comment' => $manufacturer->getComment(),
-                'brands' => $manufacturer->getBrands(false),
-                'contacts' => $manufacturer->getContacts(false),
-                'active' => $manufacturer->isActive()
-            ];
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdated() );
-            return $data;
+
+            $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
+
+            return $form->getViewData();
         }
         else
         {
@@ -141,7 +136,7 @@ class ManufacturersController extends FOSRestController
 
             return $response;
         }
-        
+
         $response->setStatusCode( 400 );
 
         return $form;

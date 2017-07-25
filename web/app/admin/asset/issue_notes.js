@@ -102,7 +102,6 @@ define([
             if( noteInput[i].get('value') !== "" ) {
                 returnData.push(
                         {
-                            "id": noteId[i],
                             "note": noteInput[i].get('value')
                         });
             }
