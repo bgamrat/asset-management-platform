@@ -137,6 +137,7 @@ class Transfer
      * @Gedmo\Versioned
      */
     private $deletedAt;
+    private $history;
 
     public function __construct()
     {
@@ -437,8 +438,7 @@ class Transfer
     {
         return $this->carrier;
     }
-    
-    
+
     /**
      * Set carrier_service
      *
@@ -535,6 +535,16 @@ class Transfer
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
+    }
+
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    public function setHistory( $history )
+    {
+        $this->history = $history;
     }
 
 }

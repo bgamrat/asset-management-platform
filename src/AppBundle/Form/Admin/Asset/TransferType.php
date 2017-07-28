@@ -65,13 +65,19 @@ class TransferType extends AbstractType
                     'data' => $defaultStatus !== null ? $this->em->getReference( 'AppBundle\Entity\Asset\TransferStatus', $defaultStatus->getId() ) : '',
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
-                ->add( 'from', TextType::class, ['label' => 'common.from'] )
-                ->add( 'source_location', AssetLocationType::class, [ 'property_path' => 'sourceLocation'])
-                ->add( 'source_location_text', HiddenType::class, [ 'property_path' => 'sourceLocationText'] )
+                ->add( 'cost', MoneyType::class, [
+                    'label' => 'common.cost', 'currency' => 'USD'] )
+                ->add( 'from', TextType::class, [
+                    'label' => 'common.from'] )
+                ->add( 'source_location', AssetLocationType::class, [
+                    'property_path' => 'sourceLocation'] )
+                ->add( 'source_location_text', HiddenType::class, [
+                    'property_path' => 'sourceLocationText'] )
                 ->add( 'to', TextType::class, ['label' => 'common.to'] )
-                ->add( 'destination_location', AssetLocationType::class, [ 'property_path' => 'destinationLocation'] )
-                ->add( 'destination_location_text', HiddenType::class, [ 'property_path' => 'destinationLocationText'] )
+                ->add( 'destination_location', AssetLocationType::class, [
+                    'property_path' => 'destinationLocation'] )
+                ->add( 'destination_location_text', HiddenType::class, [
+                    'property_path' => 'destinationLocationText'] )
                 ->add( 'carrier', EntityType::class, [
                     'class' => 'AppBundle\Entity\Asset\Carrier',
                     'choice_label' => 'name',

@@ -23,11 +23,10 @@ define([
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var billToId = [], contactId = [], contactFilteringSelect = [], eventFilteringSelect = [], amountInput = [], commentInput = [];
-    var contactStore, currentContact, eventStore;
+    var billToId = [], contactFilteringSelect = [], eventFilteringSelect = [], amountInput = [], commentInput = [];
+    var contactStore, eventStore;
     var divIdInUse = null;
     var addOneMoreControl = null;
-    var currentContact;
 
     function getDivId() {
         return divIdInUse;

@@ -8,6 +8,7 @@ use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Asset\Location;
 use AppBundle\Form\Admin\Asset\TransferType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -142,31 +143,16 @@ class TransfersController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Asset\Transfer' )->find( $id );
         if( $transfer !== null )
         {
-            $data = [
-                'id' => $id,
-                'status' => $transfer->getStatus(),
-                'items' => $transfer->getItems(),
-                'from' => $transfer->getFrom(),
-                'source_location' => $transfer->getSourceLocation(),
-                'to' => $transfer->getTo(),
-                'destination_location' => $transfer->getDestinationLocation(),
-                'carrier' => $transfer->getCarrier(),
-                'carrier_service' => $transfer->getCarrierService(),
-                'tracking_number' => $transfer->getTrackingNumber(),
-                'bill_to' => $transfer->getBillTos(),
-                'cost' => $transfer->getCost(),
-                'instructions' => $transfer->getInstructions(),
-                'cost' => $transfer->getCost(),
-                'created' => $transfer->getCreated()->format( 'Y-m-d H:i:s' ),
-                'updated' => $transfer->getUpdated()->format( 'Y-m-d H:i:s' )
-            ];
-
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle\Entity\Asset\TransferLog', $id );
-            $data['history'] = $logUtil->translateIdsToText();
+            $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'transfer' . $transfer->getId(), $transfer->getUpdated() );
-            return $data;
+
+            $form = $this->createForm( TransferType::class, $transfer, ['allow_extra_fields' => true] );
+            $transfer->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
         }
         else
         {

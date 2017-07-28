@@ -22,8 +22,13 @@ class DefaultController extends FOSRestController
         if( !empty( $name ) )
         {
             $em = $this->getDoctrine()->getManager();
-            $data = $em->getRepository( 'AppBundle\Entity\Venue\Venue' )->findByNameLike( $name );
-        }
+                        // Get existing people of the requested contact types
+            $contacts = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByContactNameLike( $name, [ 'venue' ] );
+
+            $people = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByEntityContactNameLike( $name, [ 'venue' ]);
+
+            $data = array_merge( $contacts, $people );
+            }
         else
         {
             $data = null;

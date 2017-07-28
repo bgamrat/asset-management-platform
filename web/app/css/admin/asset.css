@@ -197,10 +197,20 @@
 .transfer-details > div {
     margin: 5px;
 }
-.transfer-details .carrier,
+.transfer-details .carrier .dijitTextBox,
+.transfer-details .carrier-service .dijitTextBox,
+.transfer-details .tracking-number .dijitTextBox,
+.transfer-details .cost .dijitTextBox {
+    width: 120px;
+}
+.transfer-details .carrier > div,
+.transfer-details .carrier-service > div,
 .transfer-details .tracking-number,
 .transfer-details .cost {
-    text-align: right;
+    display:flex;
+    display: -webkit-flex;
+    justify-content: right;
+    -webkit-justify-content: right;
 }
 .transfer-details .instructions .dijitTextArea {
     height: 250px;

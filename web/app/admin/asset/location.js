@@ -12,17 +12,19 @@ define([
     "dijit/form/FilteringSelect",
     'dojo/store/JsonRest',
     "dojo/aspect",
+    "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domConstruct, on,
         query, ObjectStore, Memory,
         RadioButton, FilteringSelect,
-        JsonRest, aspect) {
+        JsonRest, aspect,
+        core) {
 
 
     function run() {
         //"use strict";
         var currentLabel = '';
-        
+
         var divIdInUse = 'location';
 
         function getDivId() {
@@ -96,10 +98,10 @@ define([
 
         var locationStore = new JsonRest({
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: 'person_id'});
         aspect.after(locationStore, "query", function (deferred) {
             return deferred.then(function (response) {
-                if (response !== null && response.length === 1) {
+                if( response !== null && response.length === 1 ) {
                     currentLabel = response[0].label;
                 }
                 return response;
@@ -107,12 +109,14 @@ define([
         });
 
         locationFilteringSelect = new FilteringSelect({
-            store: null,
-            labelAttr: "label",
+            store: locationStore,
+            labelAttr: "name",
             labelType: "html",
             searchAttr: "name",
+            placeholder: core.contact,
+            required: false,
             pageSize: 25,
-            readOnly: true,
+            intermediateChanges: true,
             "class": 'location-filtering-select'
         }, formName + "_" + id + "_entity");
         locationFilteringSelect.startup();

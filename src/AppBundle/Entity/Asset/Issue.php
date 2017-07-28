@@ -115,7 +115,6 @@ class Issue
      *      )
      */
     private $bill_tos;
-    private $history;
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
@@ -131,6 +130,7 @@ class Issue
      * @Gedmo\Versioned
      */
     private $deletedAt;
+    private $history;
 
     public function __construct()
     {
@@ -435,16 +435,6 @@ class Issue
         }
     }
 
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    public function setHistory( $history )
-    {
-        $this->history = $history;
-    }
-
     public function getCreated()
     {
         return $this->created;
@@ -474,6 +464,16 @@ class Issue
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
+    }
+
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    public function setHistory( $history )
+    {
+        $this->history = $history;
     }
 
 }

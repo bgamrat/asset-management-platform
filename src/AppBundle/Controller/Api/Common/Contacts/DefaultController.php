@@ -21,6 +21,8 @@ class DefaultController extends FOSRestController
         $name = $request->get( 'name' );
         if( !empty( $name ) )
         {
+            $contactTypes = null;
+
             parse_str( $request->getQueryString(), $contactTypes );
             unset( $contactTypes['name'] );
 
@@ -31,7 +33,14 @@ class DefaultController extends FOSRestController
 
             $people = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByEntityContactNameLike( $name, array_keys( $contactTypes ) );
 
-            return array_merge($contacts,$people);
+            // Remove any people who are already contacts
+            foreach( $contacts as $c )
+            {
+                $hash = $c->getHash();
+                unset( $people[$hash] );
+            }
+
+            return array_merge( $contacts, $people );
         }
     }
 

@@ -77,6 +77,12 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
                             ->leftJoin( 'c.contacts', 'p' )
                             ->orWhere( "LOWER(c.name) LIKE :name" );
                     break;
+                case 'manufacturer':
+                    $queryBuilder->from( 'AppBundle\Entity\Asset\Manufacturer', 'm' )
+                            ->addSelect( ['m.id AS manufacturer_id', 'm.name AS manufacturer_name', "'manufacturer' AS entity"] )
+                            ->leftJoin( 'm.contacts', 'p' )
+                            ->orWhere( "LOWER(m.name) LIKE :name" );
+                    break;
                 case 'venue':
                     $queryBuilder->from( 'AppBundle\Entity\Venue\Venue', 'v' )
                             ->addSelect( ['v.id AS venue_id', 'v.name AS venue_name', "'venue' AS entity"] )
@@ -92,7 +98,9 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
             $contactIds = [];
             foreach( $entityContacts as $ec )
             {
-                $contactIds[$ec['id']] = $ec;
+                if (!empty($ec['id'])) {
+                    $contactIds[$ec['id']] = $ec;
+                }
             }
 
             $queryBuilder = $em->createQueryBuilder();
@@ -106,14 +114,14 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
             {
                 $id = $p->getId();
                 $entityStr = $contactIds[$id]['entity'];
-                // This is a new contact created from the client list
+                // This is a new contact
                 $contact = new Contact;
                 $contact->setId( null );
                 $contact->setPerson($p);
                 $contact->setName( $contactIds[$id][$entityStr . '_name'] . ' - ' . $p->getFullName() );
                 $contact->setType( $this->contactTypes[$entityStr] );
                 $contact->setEntity( $contactIds[$id][$entityStr . '_id'] );
-                $contacts[] = $contact;
+                $contacts[$contact->getHash()] = $contact;
             }
             return $contacts;
         }
