@@ -113,17 +113,21 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
             foreach( $people as $p )
             {
                 $id = $p->getId();
+                $addresses = $p->getAddresses();
                 $entityStr = $contactIds[$id]['entity'];
-                // This is a new contact
-                $contact = new Contact;
-                $contact->setId( null );
-                $contact->setPerson($p);
-                $contact->setName( $contactIds[$id][$entityStr . '_name'] . ' - ' . $p->getFullName() );
-                $contact->setType( $this->contactTypes[$entityStr] );
-                $contact->setEntity( $contactIds[$id][$entityStr . '_id'] );
-                $contacts[$contact->getHash()] = $contact;
+                foreach ($addresses as $a) {
+                    // This is a new contact
+                    $contact = new Contact;
+                    $contact->setId( null );
+                    $contact->setPerson($p);
+                    $contact->setName( $contactIds[$id][$entityStr . '_name'] . ' - ' . $p->getFullName() );
+                    $contact->setType( $this->contactTypes[$entityStr] );
+                    $contact->setAddress($a);
+                    $contact->setEntity( $contactIds[$id][$entityStr . '_id'] );
+                    $contacts[$contact->getHash()] = $contact;
+                }
             }
-            return $contacts;
+            return array_values($contacts);
         }
         return [];
     }

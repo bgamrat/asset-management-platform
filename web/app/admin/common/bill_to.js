@@ -23,7 +23,7 @@ define([
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var billToId = [], contactFilteringSelect = [], eventFilteringSelect = [], amountInput = [], commentInput = [];
+    var contactFilteringSelect = [], eventFilteringSelect = [], amountInput = [], commentInput = [];
     var contactStore, eventStore;
     var divIdInUse = null;
     var addOneMoreControl = null;
@@ -39,7 +39,6 @@ define([
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__bill_to__/g, contactFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode, "after");
-        billToId.push(null);
     }
 
     function createDijits() {
@@ -48,13 +47,13 @@ define([
 
         dijit = new FilteringSelect({
             store: contactStore,
-            labelAttr: "name",
+            labelAttr: "html",
             labelType: "html",
             searchAttr: "name",
             placeholder: core.contact,
             required: false,
-            pageSize: 25,
-            intermediateChanges: true
+            pageSize: 25
+            //intermediateChanges: true
         }, base + "contact");
         dijit.startup();
         dijit.on("change", function (evt) {
@@ -91,16 +90,17 @@ define([
     }
 
     function destroyRow(id, target) {
-        var i, item;
+        var i, l, kid, item;
 
-        for( i = 0; i < billToId.length; i++ ) {
-            if( billToId[i] === id ) {
+        l = contactFilteringSelect.length;
+        for( i = 0; i < l; i++ ) {
+            kid = contactFilteringSelect[i].id.replace(/\D/g, '');
+            if( kid == id ) {
                 id = i;
                 break;
             }
         }
 
-        billToId.splice(id, 1);
         item = contactFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
         item = eventFilteringSelect.splice(id, 1);
@@ -130,7 +130,7 @@ define([
         contactStore = new JsonRest({
             target: '/api/store/contacts?client&venue',
             useRangeHeaders: false,
-            idProperty: 'person_id'});
+            idProperty: 'hash'});
 
         eventStore = new JsonRest({
             target: '/api/store/events?contact=',
@@ -155,10 +155,9 @@ define([
     }
 
     function getData() {
-        var i, l = billToId.length, contact, contactData, contactValue, returnData = [];
+        var i, l = contactFilteringSelect.length, contact, contactData, returnData = [];
         for( i = 0; i < l; i++ ) {
             contact = contactFilteringSelect[i].get('item');
-            contactValue = contactFilteringSelect[i].get('value');
             contactData = {
                 id: contact.id,
                 "contact_entity_id": contact.entity,
@@ -175,7 +174,6 @@ define([
 
             returnData.push(
                     {
-                        "id": billToId[i],
                         "contact": contactData,
                         "event": eventFilteringSelect[i].get('value'),
                         "amount": parseFloat(amountInput[i].get("value")),
@@ -199,7 +197,6 @@ define([
                 cloneNewNode();
                 createDijits();
                 obj = items[i];
-                billToId[i] = obj.id;
                 contactFilteringSelect[i].set('item', obj.contact);
                 amountInput[i].set("value", obj.amount);
                 commentInput[i].set('value', obj.comment);

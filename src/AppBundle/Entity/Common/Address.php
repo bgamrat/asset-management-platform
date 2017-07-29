@@ -312,5 +312,4 @@ class Address
         }
         return implode( PHP_EOL, $addr );
     }
-
 }

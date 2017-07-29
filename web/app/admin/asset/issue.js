@@ -423,7 +423,8 @@ define([
                     createdInput.set("value", f);
                     clientBillableCheckBox.set("checked", issue.clientBillable === true);
                     replacedCheckBox.set("checked", issue.replaced === true);
-                    billTo.setData(issue.billTo);
+                    costInput.set("value", issue.cost);
+                    billTo.setData(issue.billTos);
                     lib.showHistory(historyContentPane, issue.history);
                 }, lib.xhrError);
             }

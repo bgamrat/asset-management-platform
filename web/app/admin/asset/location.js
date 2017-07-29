@@ -91,14 +91,13 @@ define([
         });
 
         var textLocationMemoryStore = new Memory({
-            idProperty: "id",
+            idProperty: "hash",
             data: []});
         var textLocationStore = new ObjectStore({objectStore: textLocationMemoryStore});
 
-
         var locationStore = new JsonRest({
             useRangeHeaders: false,
-            idProperty: 'person_id'});
+            idProperty: 'hash'});
         aspect.after(locationStore, "query", function (deferred) {
             return deferred.then(function (response) {
                 if( response !== null && response.length === 1 ) {
