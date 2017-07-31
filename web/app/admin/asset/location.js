@@ -24,7 +24,7 @@ define([
     function run() {
         //"use strict";
         var currentLabel = '';
-
+        var locationId = null;
         var divIdInUse = 'location';
 
         function getDivId() {
@@ -100,8 +100,22 @@ define([
             idProperty: 'hash'});
         aspect.after(locationStore, "query", function (deferred) {
             return deferred.then(function (response) {
-                if( response !== null && response.length === 1 ) {
-                    currentLabel = response[0].label;
+                console.log(response);
+                var s, locationType, hash, i, l, item;
+                if( response !== null) {
+                    s = locationStore.target.split('/');
+                    if (s.length === 4) {
+                        locationType = s[3];
+                    }
+                    if (response.length > 0) {
+                        l = response.length;
+                        for (i = 0; i < l; i++) {
+                            item = response[i];
+                            if (typeof item.hash === "undefined") {
+                                item.hash = locationType + "/" + item.id;
+                            }
+                        }
+                    }
                 }
                 return response;
             });
@@ -109,7 +123,7 @@ define([
 
         locationFilteringSelect = new FilteringSelect({
             store: locationStore,
-            labelAttr: "name",
+            labelAttr: "label",
             labelType: "html",
             searchAttr: "name",
             placeholder: core.contact,
@@ -148,16 +162,32 @@ define([
         return {
             getData: function () {
                 var locationType = getLocationType();
-                var locationId = parseInt(dom.byId(getFormName() + "_" + getDivId() + "_id").value);
+                var hash = locationFilteringSelect.get("value");
+                var entityId;
+
+                if( !isNaN(locationType) ) {
+                    locationType = parseInt(locationType);
+                } else {
+                    locationType = null;
+                }
+                entityId = null;
+                if( hash !== null ) {
+                    if( typeof hash.length !== "undefined" && hash.length > 2 ) {
+                        hash = hash.split('/');
+                        entityId = parseInt(hash[hash.length-1]);
+                    }
+                }
                 return{
-                    "id": isNaN(locationId) ? null : locationId,
-                    "type": parseInt(locationType),
-                    "entity": parseInt(locationFilteringSelect.get("value"))
-                };
+                    "id": locationId,
+                    "type": locationType,
+                    "entity": entityId
+                }
+                ;
             },
             setData: function (obj, location_text) {
                 if( typeof obj !== "undefined" && obj !== null ) {
                     dom.byId(getFormName() + "_" + getDivId() + "_id").value = obj.id;
+                    locationId = obj.id;
                     setLocationType(obj.type.id);
                     if( obj.type.url !== null ) {
                         locationStore.target = obj.type.url;

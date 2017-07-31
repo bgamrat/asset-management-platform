@@ -47,13 +47,13 @@ define([
 
         dijit = new FilteringSelect({
             store: contactStore,
-            labelAttr: "html",
+            labelAttr: "label",
             labelType: "html",
             searchAttr: "name",
             placeholder: core.contact,
             required: false,
             pageSize: 25
-            //intermediateChanges: true
+                    //intermediateChanges: true
         }, base + "contact");
         dijit.startup();
         dijit.on("change", function (evt) {
@@ -157,28 +157,30 @@ define([
     function getData() {
         var i, l = contactFilteringSelect.length, contact, contactData, returnData = [];
         for( i = 0; i < l; i++ ) {
-            contact = contactFilteringSelect[i].get('item');
-            contactData = {
-                id: contact.id,
-                "contact_entity_id": contact.entity,
-                "contact_type": contact.type.id,
-                "person_id": contact.person.id,
-                "name": contact.name
-            };
-            if( typeof contact.address_id !== "undefined" ) {
-                contactData.address_id = contact.address_id;
-            } else {
-                contactData.address_id = null;
-            }
-            ;
 
-            returnData.push(
-                    {
-                        "contact": contactData,
-                        "event": eventFilteringSelect[i].get('value'),
-                        "amount": parseFloat(amountInput[i].get("value")),
-                        "comment": commentInput[i].get('value')
-                    });
+            contact = contactFilteringSelect[i].get('item');
+            if( contact !== null ) {
+                contactData = {
+                    "contact_entity_id": contact.entity,
+                    "contact_type": contact.type.id,
+                    "person_id": contact.person.id,
+                    "name": contact.name
+                };
+                if( typeof contact.address_id !== "undefined" ) {
+                    contactData.address_id = contact.address_id;
+                } else {
+                    contactData.address_id = null;
+                }
+                ;
+
+                returnData.push(
+                        {
+                            "contact": contactData,
+                            "event": eventFilteringSelect[i].get('value'),
+                            "amount": parseFloat(amountInput[i].get("value")),
+                            "comment": commentInput[i].get('value')
+                        });
+            }
         }
         return returnData;
     }

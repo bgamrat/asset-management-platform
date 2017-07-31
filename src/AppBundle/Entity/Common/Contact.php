@@ -227,7 +227,7 @@ class Contact
         return $this->address;
     }
 
-    public function getHtml()
+    public function getLabel()
     {
         return '<hr>' . (!empty($this->address) ? nl2br($this->name.PHP_EOL.$this->address->getAddress()) : $this->name);
     }

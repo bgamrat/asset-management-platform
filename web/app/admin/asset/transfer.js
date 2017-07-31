@@ -359,10 +359,10 @@ define([
                     transferViewDialog.show();
                     action = "view";
                     transferId = transfer.id;
-                    statusSelect.set("displayedValue", transfer.status_text);
+                    statusSelect.set("value", transfer.status.id);
                     costInput.set("value", transfer.cost);
                     transferItems.setData(transfer.items);
-                    if( typeof transfer.carrier !== "undefined" && typeof transfer.carrier.id !== "undefined" ) {
+                    if( typeof transfer.carrier !== "undefined" && transfer.carrier !== null && typeof transfer.carrier.id !== "undefined" ) {
                         carrierServiceStore.target = carrierServiceStore.target.replace(/\d*$/, transfer.carrier.id);
                         carrierServiceSelect.set('displayedValue', transfer.carrier_service.name);
                         carrierSelect.set("value", transfer.carrier.id);
@@ -372,10 +372,16 @@ define([
                     }
                     trackingNumberInput.set("value", transfer.tracking_number);
                     billTo.setData(transfer.bill_to);
-                    fromFilteringSelect.set("displayedValue",transfer.from.fullName);
-                    sourceLocation.setData(transfer.source_location, transfer.source_location_text);
-                    toFilteringSelect.set("displayedValue",transfer.to.fullName);
-                    destinationLocation.setData(transfer.destination_location, transfer.destination_location_text);
+                    fromFilteringSelect.set("value", null);
+                    if( transfer.from !== null && typeof transfer.from.fullName !== "undefined" ) {
+                        fromFilteringSelect.set("displayedValue", transfer.from.fullName);
+                    }
+                    sourceLocation.setData(transfer.sourceLocation, transfer.sourceLocationText);
+                    toFilteringSelect.set("value", null);
+                    if( transfer.to !== null && typeof transfer.to.fullName !== "undefined" ) {
+                        toFilteringSelect.set("displayedValue", transfer.to.fullName);
+                    }
+                    destinationLocation.setData(transfer.destinationLocation, transfer.destinationLocationText);
                     updatedInput.set("value", transfer.updated);
                     createdInput.set("value", transfer.created);
                     lib.showHistory(historyContentPane, transfer["history"]);

@@ -24,7 +24,7 @@ class LocationTypeType extends AbstractType
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
                 ->add( 'entity', ChoiceType::class, ['choices' =>
-                    ["Asset" => 'asset', "Manufacturer" => 'manufacturer', 
+                    ["Asset" => 'asset', "Client" => "client", "Contact" => "contact", "Manufacturer" => 'manufacturer', 
                         "Other" => 'other', "Shop" => 'shop', "Trailer" => 'trailer', "Vendor" => 'vendor',
                         "Venue" => 'venue']] )
                 ->add( 'url', TextType::class )

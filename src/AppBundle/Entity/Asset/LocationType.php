@@ -43,7 +43,7 @@ class LocationType
     /**
      * @var string
      *
-     * @Assert\Choice({"asset", "client", "manufacturer", "other", "shop", "trailer", "vendor", "venue"})
+     * @Assert\Choice({"asset", "client", "contact", "manufacturer", "other", "shop", "trailer", "vendor", "venue"})
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $entity;
