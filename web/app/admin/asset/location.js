@@ -26,6 +26,7 @@ define([
         var currentLabel = '';
         var locationId = null;
         var divIdInUse = 'location';
+        var namesAndUrls = [];
 
         function getDivId() {
             return divIdInUse;
@@ -62,8 +63,13 @@ define([
 
         query('[name="' + formName + '[' + id + '][ctype]"]').forEach(function (node) {
             var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
+            namesAndUrls.push(
+                    {
+                        "value": parseInt(node.value),
+                        "data-url": domAttr.get(node, "data-url"),
+                        "data-type": domAttr.get(node, "data-type"),
+                        "data-location-type-id": node.value});
             dijit.set("data-url", domAttr.get(node, "data-url"));
-            dijit.set("data-location-type-id", node.value);
             dijit.startup();
             locationTypeRadioButton.push(dijit);
         });
@@ -100,19 +106,15 @@ define([
             idProperty: 'hash'});
         aspect.after(locationStore, "query", function (deferred) {
             return deferred.then(function (response) {
-                console.log(response);
-                var s, locationType, hash, i, l, item;
-                if( response !== null) {
-                    s = locationStore.target.split('/');
-                    if (s.length === 4) {
-                        locationType = s[3];
-                    }
-                    if (response.length > 0) {
+                var s, locationType, i, l, item;
+                if( response !== null ) {
+                    locationType = namesAndUrls[getLocationType()]["data-type"];
+                    if( response.length > 0 ) {
                         l = response.length;
-                        for (i = 0; i < l; i++) {
+                        for( i = 0; i < l; i++ ) {
                             item = response[i];
-                            if (typeof item.hash === "undefined") {
-                                item.hash = locationType + "/" + item.id;
+                            if( typeof item.hash === "undefined" ) {
+                                response[i].hash = locationType + "/" + item.id;
                             }
                         }
                     }
@@ -139,20 +141,20 @@ define([
         });
 
         function getLocationType() {
-            var i, locationTypeSet = false;
-            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
+            var i, l;
+            l = locationTypeRadioButton.length;
+            for( i = 0; i < l; i++ ) {
                 if( locationTypeRadioButton[i].get("checked") === true ) {
-                    locationTypeSet = true;
-                    break;
+                    return i;
                 }
             }
-            return locationTypeSet ? locationTypeRadioButton[i].get("value") : null;
+            return null;
         }
 
         function setLocationType(locationType) {
-            var i;
-            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
-                if( parseInt(locationTypeRadioButton[i].get("data-location-type-id")) === locationType ) {
+            var i, l = locationTypeRadioButton.length;
+            for( i = 0; i < l; i++ ) {
+                if( parseInt(locationTypeRadioButton[i].value) === locationType ) {
                     locationTypeRadioButton[i].set("checked", true);
                     break;
                 }
@@ -161,7 +163,7 @@ define([
 
         return {
             getData: function () {
-                var locationType = getLocationType();
+                var locationType = namesAndUrls[getLocationType()].value;
                 var hash = locationFilteringSelect.get("value");
                 var entityId;
 
@@ -174,7 +176,7 @@ define([
                 if( hash !== null ) {
                     if( typeof hash.length !== "undefined" && hash.length > 2 ) {
                         hash = hash.split('/');
-                        entityId = parseInt(hash[hash.length-1]);
+                        entityId = parseInt(hash[hash.length - 1]);
                     }
                 }
                 return{
@@ -193,7 +195,7 @@ define([
                         locationStore.target = obj.type.url;
                         locationFilteringSelect.set("store", locationStore);
                         locationFilteringSelect.set("readOnly", false);
-                        locationFilteringSelect.set('displayedValue', location_text);
+                        locationFilteringSelect.set('displayedValue', 'TODO');
                     } else {
                         textLocationMemoryStore.data = [{name: locationTypeLabels[obj.type.id], id: 0}];
                         locationFilteringSelect.set("store", textLocationStore);

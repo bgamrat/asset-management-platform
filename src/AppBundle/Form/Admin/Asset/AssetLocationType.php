@@ -30,7 +30,7 @@ class AssetLocationType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $defaultLocationType = $this->em->getRepository('AppBundle\Entity\Asset\LocationType')->findOneBy(['default' => true]);
+        $defaultLocationType = $this->em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneBy( ['default' => true] );
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'ctype', EntityType::class, [
@@ -40,40 +40,43 @@ class AssetLocationType extends AbstractType
                     {
                         if( $val->getUrl() !== '' )
                         {
-                            return ['data-url' => $val->getUrl()];
+                            return ['data-url' => $val->getUrl(), 'data-type' => strtolower( $val->getName() )];
+                        }
+                        else
+                        {
+                            return ['data-type' => strtolower( $val->getName() )];
                         }
                     },
-                    'data' => $this->em->getReference('AppBundle\Entity\Asset\LocationType', $defaultLocationType->getId()),
-                    'multiple' => false,
-                    'expanded' => true,
-                    'required' => true,
-                    'label' => 'asset.location_type',
-                    'property_path' => 'type',
-                    'choice_translation_domain' => false,
-                    'mapped' => false
-                ] )
-                ->add( 'type', HiddenType::class )
-                ->add( 'entity', IntegerType::class )
-        ;
-        $builder->get( 'type' )
-            ->addModelTransformer( new LocationTypeToIdTransformer( $this->em ) );
+                            'data' => $this->em->getReference( 'AppBundle\Entity\Asset\LocationType', $defaultLocationType->getId() ),
+                            'multiple' => false,
+                            'expanded' => true,
+                            'required' => true,
+                            'label' => 'asset.location_type',
+                            'property_path' => 'type',
+                            'choice_translation_domain' => false,
+                            'mapped' => false
+                        ] )
+                        ->add( 'type', HiddenType::class )
+                        ->add( 'entity', IntegerType::class )
+                ;
+                $builder->get( 'type' )
+                        ->addModelTransformer( new LocationTypeToIdTransformer( $this->em ) );
+            }
 
-    }
+            /**
+             * @param OptionsResolver $resolver
+             */
+            public function configureOptions( OptionsResolver $resolver )
+            {
+                $resolver->setDefaults( ['label' => false,
+                    'data_class' => 'AppBundle\Entity\Asset\Location',
+                    'allow_extra_fields' => true
+                ] );
+            }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions( OptionsResolver $resolver )
-    {
-        $resolver->setDefaults( ['label' => false,
-            'data_class' => 'AppBundle\Entity\Asset\Location',
-            'allow_extra_fields' => true
-        ] );
-    }
+            public function getName()
+            {
+                return 'location';
+            }
 
-    public function getName()
-    {
-        return 'location';
-    }
-
-}
+        }
