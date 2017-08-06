@@ -97,7 +97,7 @@ define([
         });
 
         var textLocationMemoryStore = new Memory({
-            idProperty: "hash",
+            idProperty: "id",
             data: []});
         var textLocationStore = new ObjectStore({objectStore: textLocationMemoryStore});
 
@@ -136,10 +136,6 @@ define([
         }, formName + "_" + id + "_entity");
         locationFilteringSelect.startup();
 
-        on(locationFilteringSelect, "change", function (evt) {
-            domConstruct.place(currentLabel, this.id.replace("entity", "echo"), "only");
-        });
-
         function getLocationType() {
             var i, l;
             l = locationTypeRadioButton.length;
@@ -164,8 +160,8 @@ define([
         return {
             getData: function () {
                 var locationType = namesAndUrls[getLocationType()].value;
-                var hash = locationFilteringSelect.get("value");
-                var entityId;
+                var item = locationFilteringSelect.get("item");
+                var entityId, hash;
 
                 if( !isNaN(locationType) ) {
                     locationType = parseInt(locationType);
@@ -173,7 +169,8 @@ define([
                     locationType = null;
                 }
                 entityId = null;
-                if( hash !== null ) {
+                if( item.hash !== null ) {
+                    hash = item.hash;
                     if( typeof hash.length !== "undefined" && hash.length > 2 ) {
                         hash = hash.split('/');
                         entityId = parseInt(hash[hash.length - 1]);
@@ -195,7 +192,9 @@ define([
                         locationStore.target = obj.type.url;
                         locationFilteringSelect.set("store", locationStore);
                         locationFilteringSelect.set("readOnly", false);
-                        locationFilteringSelect.set('displayedValue', 'TODO');
+                        if (obj.entityData !== null) {
+                            locationFilteringSelect.set('value', obj.entityData.hash);
+                        }
                     } else {
                         textLocationMemoryStore.data = [{name: locationTypeLabels[obj.type.id], id: 0}];
                         locationFilteringSelect.set("store", textLocationStore);

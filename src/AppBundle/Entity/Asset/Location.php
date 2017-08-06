@@ -18,6 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Location
 {
+
     /**
      * @var int
      *
@@ -63,6 +64,7 @@ class Location
      * @Gedmo\Versioned
      */
     private $deletedAt;
+    private $entityData;
 
     public function __construct()
     {
@@ -152,21 +154,20 @@ class Location
         foreach( $assets as $a )
         {
             $this->addAssets( $a );
-            $a->setLocation($this);
+            $a->setLocation( $this );
         }
         return $this;
     }
 
- 
     public function addAsset( Model $asset )
     {
         if( !$this->extends->contains( $asset ) )
         {
             $this->extends->add( $asset );
-            $a->setLocation($this);
+            $a->setLocation( $this );
         }
     }
-    
+
     public function setActive( $active )
     {
         $this->active = $active;
@@ -176,8 +177,9 @@ class Location
     {
         return $this->active;
     }
-        
-    public function getUpdated() {
+
+    public function getUpdated()
+    {
         return $this->updated;
     }
 
@@ -190,6 +192,30 @@ class Location
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
+    }
+
+    /**
+     * Set entityData
+     *
+     * @param int $entityData_id
+     *
+     * @return Location
+     */
+    public function setEntityData( $entityData )
+    {
+        $this->entityData = $entityData;
+
+        return $this;
+    }
+
+    /**
+     * Get entityData
+     *
+     * @return int
+     */
+    public function getEntityData()
+    {
+        return $this->entityData;
     }
 
 }

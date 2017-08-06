@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Form\Admin\Asset\DataTransformer\LocationTypeToIdTransformer;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Form\FormEvent;
 
 class AssetLocationType extends AbstractType
 {
@@ -31,6 +32,7 @@ class AssetLocationType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $defaultLocationType = $this->em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneBy( ['default' => true] );
+
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'ctype', EntityType::class, [
@@ -61,6 +63,39 @@ class AssetLocationType extends AbstractType
                 ;
                 $builder->get( 'type' )
                         ->addModelTransformer( new LocationTypeToIdTransformer( $this->em ) );
+                $builder->addEventListener( FormEvents::POST_SET_DATA, function (FormEvent $event)
+                {
+                    $location = $event->getData();
+                    $form = $event->getForm();
+                    $class = null;
+                    if( !empty( $location ) )
+                    {
+                        $entityId = $location->getEntity();
+                        if( !empty( $entityId ) )
+                        {
+
+                            switch( $location->getType()->getEntity() )
+                            {
+                                case 'contact':
+                                    $class = 'AppBundle\Entity\Common\Contact';
+                                    break;
+                                case 'venue':
+                                    $class = 'AppBundle\Entity\Venue\Venue';
+                                    break;
+                            }
+                        }
+                    }
+                    if( $class !== null )
+                    {
+                        $form->add( 'entity_data', EntityType::class, [
+                            'class' => $class, 'data' => $this->em->getRepository( 'AppBundle\Entity\Venue\Venue' )->find( $location->getEntity() )]
+                        );
+                    }
+                    else
+                    {
+                        $form->add( 'entity_data', HiddenType::class, ['data' => null] );
+                    }
+                } );
             }
 
             /**
@@ -80,3 +115,4 @@ class AssetLocationType extends AbstractType
             }
 
         }
+        

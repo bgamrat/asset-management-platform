@@ -227,11 +227,6 @@ class Contact
         return $this->address;
     }
 
-    public function getLabel()
-    {
-        return '<hr>' . (!empty($this->address) ? nl2br($this->name.PHP_EOL.$this->address->getAddress()) : $this->name);
-    }
-
     public function setActive( $active )
     {
         $this->active = $active;
@@ -240,16 +235,6 @@ class Contact
     public function isActive()
     {
         return $this->active;
-    }
-
-    // Must match the one in Person
-    public function getHash()
-    {
-        $entityType = $this->getType()->getEntity();
-        $entityId = $this->getEntity();
-        $personId = $this->getPerson()->getId();
-        $addressId = ($this->getAddress() !== null) ? $this->getAddress()->getId() : null;
-        return ($entityType . '/' . $entityId . '/' . $personId . '/' . $addressId);
     }
 
     public function getUpdated()
@@ -266,6 +251,20 @@ class Contact
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
+    }
+
+    public function getLabel()
+    {
+        return '<hr>' . (!empty( $this->address ) ? nl2br( $this->name . PHP_EOL . $this->address->getAddress() ) : $this->name);
+    }
+
+    public function getHash()
+    {
+        $entityType = $this->getType()->getEntity();
+        $entityId = $this->getEntity();
+        $personId = $this->getPerson()->getId();
+        $addressId = ($this->getAddress() !== null) ? $this->getAddress()->getId() : null;
+        return ($entityType . '/' . $entityId . '/' . $personId . '/' . $addressId);
     }
 
 }
