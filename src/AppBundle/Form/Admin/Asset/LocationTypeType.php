@@ -14,6 +14,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class LocationTypeType extends AbstractType
 {
 
+    private $entities;
+
+    public function __construct( $entities )
+    {
+        $this->entities = [];
+        foreach ($entities as $e => $ent) {
+            $this->entities[ucfirst($e)] = $e;
+        }
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -23,11 +33,8 @@ class LocationTypeType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
-                ->add( 'entity', ChoiceType::class, ['choices' =>
-                    ["Asset" => 'asset', "Client" => "client", "Contact" => "contact", "Manufacturer" => 'manufacturer',
-                        "Other" => 'other', "Shop" => 'shop', "Trailer" => 'trailer', "Vendor" => 'vendor',
-                        "Venue" => 'venue']
-                ] )
+                ->add( 'entity', ChoiceType::class, ['choices' => $this->entities]
+                )
                 ->add( 'url', TextType::class )
                 ->add( 'active', CheckboxType::class )
                 ->add( 'default', CheckBoxType::class );

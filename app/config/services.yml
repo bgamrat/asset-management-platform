@@ -4,9 +4,20 @@ imports:
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
-    entity_menus: 
+    entity_menus:
         [ clients, manufacturers, vendors, trailers ]
-    
+
+    location_type.entities:
+            asset: 'AppBundle\Entity\Asset\Asset'
+            client: 'AppBundle\Entity\Client\Client'
+            contact: 'AppBundle\Entity\Common\Contact'
+            manufacturer: 'AppBundle\Entity\Common\Contact'
+            other:
+            shop:
+            trailer: 'AppBundle\Entity\Asset\Trailer'
+            vendor: 'AppBundle\Entity\Asset\Vendor'
+            venue: 'AppBundle\Entity\Common\Contact'
+
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
@@ -35,7 +46,7 @@ services:
         class: AppBundle\Form\Admin\Asset\DataTransformer\CategoryToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false
-        
+
     app.form.data_transformer.contact:
         class: AppBundle\Form\Admin\Common\DataTransformer\ContactToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
@@ -71,10 +82,10 @@ services:
         class: AppBundle\Form\Admin\Asset\BarcodeType
         tags:
             - { name: form.type, alias: 'app_barcode_type' }
-            
+
     app.admin.form.type.asset_location_type_type:
         class: AppBundle\Form\Admin\Asset\AssetLocationType
-        arguments: ['@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.entity_manager','%location_type.entities%']
         tags:
             - { name: form.type, alias: 'app_asset_location_type' }
 
@@ -106,18 +117,24 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_schedule_event_type' }
-           
+
     app.admin.form.type.issue:
         class: AppBundle\Form\Admin\Asset\IssueType
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_admin_asset_issue_type' }
-            
+
     app.admin.form.type.issue_item:
         class: AppBundle\Form\Admin\Asset\IssueItemType
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_admin_asset_issue_item_type' }
+
+    app.admin.form.type.location_type:
+        class: AppBundle\Form\Admin\Asset\LocationTypeType
+        arguments: ['%location_type.entities%']
+        tags:
+            - { name: form.type, alias: 'app_admin_asset_location_type_type' }
 
     app.admin.form.type.model:
         class: AppBundle\Form\Admin\Asset\ModelType
@@ -190,13 +207,13 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
-            
+
     app.admin.menu_store_controller:
         class: AppBundle\Controller\Api\Admin\Common\MenuStoreController
         arguments: ['%entity_menus%']
         calls:
             - [setContainer, ["@service_container"]]
-        
+
     app.form.invitation:
         class: AppBundle\Form\User\InvitationFormType
         arguments: ['@app.form.data_transformer.invitation']
@@ -207,7 +224,7 @@ services:
         class: AppBundle\Form\Common\PersonFormType
         tags:
             - { name: "form.type", alias: "app_common_person" }
-    
+
     app.form.registration:
         class: AppBundle\Form\User\RegistrationFormType
         tags:
@@ -222,7 +239,7 @@ services:
             - user                             # alias of the form type
             - null                             # data to bind, this is where your entity could go if you have that defined as a service
             - { validation_groups: [Registration] } # validation groups
-               
+
     app.menu_builder:
         class: AppBundle\Menu\MenuBuilder
         arguments: ["@knp_menu.factory"]
@@ -243,31 +260,31 @@ services:
         tags:
             # The alias is what is used to retrieve the menu
             - { name: knp_menu.renderer, alias: json }
-            
+
     app.menu_voter_request:
         class: AppBundle\Menu\RequestVoter
         arguments: ["@request_stack"]
         tags:
             - { name: knp_menu.voter }
-            
+
     app.util.dstore:
         class: AppBundle\Util\DStore
-                   
+
     app.util.form:
         class: AppBundle\Util\Form
         arguments: ['@session.handler.memcached']
-        
+
     app.util.log:
         class: AppBundle\Util\Log
         arguments: ['@doctrine.orm.entity_manager']
-        
+
     app.util.user:
         class: AppBundle\Util\User
         arguments: ["@fos_user.group_manager"]
 
     fos_user.doctrine_registry:
         alias: doctrine
-        
+
     session.memcached:
         class: Memcached
         calls:

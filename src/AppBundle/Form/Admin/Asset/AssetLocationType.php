@@ -18,11 +18,12 @@ use Symfony\Component\Form\FormEvent;
 class AssetLocationType extends AbstractType
 {
 
-    private $em;
+    private $em, $entities;
 
-    public function __construct( EntityManager $em )
+    public function __construct( EntityManager $em, $entities )
     {
         $this->em = $em;
+        $this->entities = $entities;
     }
 
     /**
@@ -68,27 +69,23 @@ class AssetLocationType extends AbstractType
                     $location = $event->getData();
                     $form = $event->getForm();
                     $class = null;
+                    $entityId = null;
                     if( !empty( $location ) )
                     {
                         $entityId = $location->getEntity();
                         if( !empty( $entityId ) )
                         {
-
-                            switch( $location->getType()->getEntity() )
+                            if( isset( $this->entities[$location->getType()->getEntity()] ) )
                             {
-                                case 'contact':
-                                    $class = 'AppBundle\Entity\Common\Contact';
-                                    break;
-                                case 'venue':
-                                    $class = 'AppBundle\Entity\Venue\Venue';
-                                    break;
+                                $class = $this->entities[$location->getType()->getEntity()];
                             }
                         }
                     }
-                    if( $class !== null )
+                    if( $class !== null && $entityId !== null)
                     {
+
                         $form->add( 'entity_data', EntityType::class, [
-                            'class' => $class, 'data' => $this->em->getRepository( 'AppBundle\Entity\Venue\Venue' )->find( $location->getEntity() )]
+                            'class' => $class, 'data' => $this->em->getRepository( $class )->find( $entityId )]
                         );
                     }
                     else
@@ -115,4 +112,3 @@ class AssetLocationType extends AbstractType
             }
 
         }
-        

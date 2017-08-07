@@ -43,7 +43,6 @@ class LocationType
     /**
      * @var string
      *
-     * @Assert\Choice({"asset", "client", "contact", "manufacturer", "other", "shop", "trailer", "vendor", "venue"})
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $entity;
@@ -57,14 +56,14 @@ class LocationType
      * @var boolean
      *
      * @ORM\Column(name="active", type="boolean")
-     * 
+     *
      */
     private $active = true;
     /**
      * @var boolean
      *
      * @ORM\Column(name="default_value", type="boolean", nullable=true)
-     * 
+     *
      */
     private $default = false;
 
