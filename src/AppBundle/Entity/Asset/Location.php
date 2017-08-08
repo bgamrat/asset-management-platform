@@ -39,6 +39,13 @@ class Location
      */
     private $entity = null;
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="address", type="boolean")
+     *
+     */
+    private $address = false;
+    /**
      * @ORM\OneToMany(targetEntity="Asset", mappedBy="location")
      */
     private $assets;
@@ -113,6 +120,16 @@ class Location
     public function getEntity()
     {
         return $this->entity;
+    }
+
+    public function setAddress( $address )
+    {
+        $this->address = $address;
+    }
+
+    public function isAddress()
+    {
+        return $this->address;
     }
 
     /**

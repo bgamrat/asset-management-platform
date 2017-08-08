@@ -5,6 +5,7 @@ namespace AppBundle\Form\Admin\Asset;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -61,6 +62,7 @@ class AssetLocationType extends AbstractType
                         ] )
                         ->add( 'type', HiddenType::class )
                         ->add( 'entity', IntegerType::class )
+                        ->add( 'address', CheckboxType::class )
                 ;
                 $builder->get( 'type' )
                         ->addModelTransformer( new LocationTypeToIdTransformer( $this->em ) );
@@ -81,11 +83,22 @@ class AssetLocationType extends AbstractType
                             }
                         }
                     }
-                    if( $class !== null && $entityId !== null)
+
+                    if( $class !== null && $entityId !== null )
                     {
 
+                        if( $location->isAddress() )
+                        {
+                            $contactData = $this->em->getRepository( $class )->findOneByAddress( $entityId );
+                            $data = $this->em->getReference( $class, $contactData->getId() );
+                        }
+                        else
+                        {
+                            $data = $this->em->getReference( $class, $entityId );
+                        }
+                        $location->setEntityData( $data );
                         $form->add( 'entity_data', EntityType::class, [
-                            'class' => $class, 'data' => $this->em->getRepository( $class )->find( $entityId )]
+                            'class' => $class, 'data' => $data]
                         );
                     }
                     else

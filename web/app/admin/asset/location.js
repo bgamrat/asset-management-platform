@@ -161,7 +161,7 @@ define([
             getData: function () {
                 var locationType = namesAndUrls[getLocationType()].value;
                 var item = locationFilteringSelect.get("item");
-                var entityId, hash;
+                var entityId, address = null, hash, returnObj;
 
                 if( !isNaN(locationType) ) {
                     locationType = parseInt(locationType);
@@ -174,14 +174,19 @@ define([
                     if( typeof hash.length !== "undefined" && hash.length > 2 ) {
                         hash = hash.split('/');
                         entityId = parseInt(hash[hash.length - 1]);
+                        address = hash.length > 3 ? "on" : null;
                     }
                 }
-                return{
+                returnObj = {
                     "id": locationId,
                     "type": locationType,
                     "entity": entityId
+                };
+                if (address !== null) {
+                    returnObj.address = address;
                 }
-                ;
+                return returnObj;
+
             },
             setData: function (obj, location_text) {
                 if( typeof obj !== "undefined" && obj !== null ) {
@@ -192,8 +197,11 @@ define([
                         locationStore.target = obj.type.url;
                         locationFilteringSelect.set("store", locationStore);
                         locationFilteringSelect.set("readOnly", false);
-                        if (obj.entityData !== null) {
+                        if (obj.address === true && obj.entityData !== null) {
+                            locationFilteringSelect.set('item', obj.entityData);
                             locationFilteringSelect.set('value', obj.entityData.hash);
+                        } else {
+                            locationFilteringSelect.set('displayedValue', obj.entityData.name);
                         }
                     } else {
                         textLocationMemoryStore.data = [{name: locationTypeLabels[obj.type.id], id: 0}];

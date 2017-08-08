@@ -69,6 +69,7 @@
                                 {{form_row(transfer_form.source_location.id)}}
                                 {{form_row(transfer_form.source_location.ctype)}}
                                 {{form_row(transfer_form.source_location.entity)}}
+                                {{form_row(transfer_form.source_location.address,{"attr":{"class":"hidden"}})}}
                                 <div id="transfer_source_location_echo"></div>
                             </div>
                             <div class="location">
@@ -77,15 +78,16 @@
                                 {{form_row(transfer_form.destination_location.id)}}
                                 {{form_row(transfer_form.destination_location.ctype)}}
                                 {{form_row(transfer_form.destination_location.entity)}}
-                                 <div id="transfer_destination_location_echo"></div>
+                                {{form_row(transfer_form.destination_location.address,{"attr":{"class":"hidden"}})}}
+                                <div id="transfer_destination_location_echo"></div>
                             </div>
                             <div class="transfer-details">
                                 <div class="carrier">
                                     {{form_row(transfer_form.carrier)}}
-                                </div> 
+                                </div>
                                 <div class="carrier-service">
                                     {{form_row(transfer_form.carrier_service)}}
-                                </div> 
+                                </div>
                                 <div class="tracking-number">
                                     {{form_widget(transfer_form.tracking_number)}}
                                 </div>
