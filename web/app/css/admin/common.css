@@ -136,6 +136,12 @@
 .dijitNumberTextBox{
     width: 100px;
 }
+.dijitMenuItem {
+    border-bottom: 1px solid #000;
+}
+.dijitMenuItem:last-of-type {
+    border-bottom: none;
+}
 .field-emails ul {
     list-style-type: none;
     list-style-position: outside;

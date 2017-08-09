@@ -75,7 +75,7 @@ class TransfersController extends FOSRestController
             }
         }
 
-        $columns = ['t.id', 't.instructions', 's.name AS status_text',
+        $columns = ['t.id', 't.instructions', 's.name AS status_text', 't.source_location_text', 't.destination_location_text',
             'b.barcode', 'c.name AS carrier', 't.tracking_number'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Transfer', 't' )

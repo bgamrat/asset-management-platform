@@ -267,8 +267,10 @@ define([
                     "bill_to": billTo.getData(),
                     "from": fromFilteringSelect.get("value"),
                     "source_location": sourceLocation.getData(),
+                    "source_location_text": sourceLocation.getText(),
                     "to": toFilteringSelect.get("value"),
-                    "destination_location": destinationLocation.getData()
+                    "destination_location": destinationLocation.getData(),
+                    "destination_location_text": destinationLocation.getText(),
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -308,11 +310,17 @@ define([
                 status_text: {
                     label: core.status
                 },
-                from_text: {
-                    label: core.from
+                source_location_text: {
+                    label: core.from,
+                    formatter: function (item) {
+                        return item;
+                    }
                 },
-                to_text: {
-                    label: core.to
+                destination_location_text: {
+                    label: core.to,
+                    formatter: function (item) {
+                        return item;
+                    }
                 },
                 carrier: {
                     label: core.carrier
@@ -349,6 +357,7 @@ define([
             var cell = grid.cell(event);
             var field = cell.column.field;
             var id = row.data.id;
+            var timestamp;
             if( checkBoxes.indexOf(field) === -1 ) {
                 if( typeof grid.selection[0] !== "undefined" ) {
                     grid.clearSelection();
@@ -382,8 +391,11 @@ define([
                         toFilteringSelect.set("displayedValue", transfer.to.fullName);
                     }
                     destinationLocation.setData(transfer.destinationLocation, transfer.destinationLocationText);
-                    updatedInput.set("value", transfer.updated);
-                    createdInput.set("value", transfer.created);
+                    timestamp = new Date();
+                    timestamp.setTime(transfer.updated.timestamp * 1000);
+                    updatedInput.set('value', timestamp.toLocaleString());
+                    timestamp.setTime(transfer.updated.timestamp * 1000);
+                    createdInput.set("value", timestamp.toLocaleString());
                     lib.showHistory(historyContentPane, transfer["history"]);
                 }, lib.xhrError);
             }

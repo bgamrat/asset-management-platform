@@ -60,7 +60,7 @@ class Transfer
     /**
      * @var string
      * @Gedmo\Versioned
-     * @ORM\Column(name="source_location_text", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="source_location_text", type="string", nullable=true, unique=false)
      */
     protected $source_location_text = null;
     /**
@@ -79,7 +79,7 @@ class Transfer
     /**
      * @var string
      * @Gedmo\Versioned
-     * @ORM\Column(name="destination_location_text", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="destination_location_text", type="string", nullable=true, unique=false)
      */
     protected $destination_location_text = null;
     /**

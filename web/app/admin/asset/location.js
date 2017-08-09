@@ -23,7 +23,6 @@ define([
 
     function run() {
         //"use strict";
-        var currentLabel = '';
         var locationId = null;
         var divIdInUse = 'location';
         var namesAndUrls = [];
@@ -77,7 +76,7 @@ define([
             locationTypeLabels[domAttr.get(node, "for").replace(/\D/g, '')] = node.textContent;
         });
 
-        on(dom.byId(formName + "_" + id + '_ctype'), "click", function (event) {
+        on(dom.byId(formName + "_" + id + '_ctype'), on.selector("label, input", "click"), function (event) {
             var target = event.target, targetId;
             if( target.tagName === 'LABEL' ) {
                 target = dom.byId(domAttr.get(target, "for"));
@@ -188,6 +187,10 @@ define([
                 return returnObj;
 
             },
+            getText: function () {
+                var item = locationFilteringSelect.get("item");
+                return (typeof item.label !== "undefined") ? item.label : item.name;
+            },
             setData: function (obj, location_text) {
                 if( typeof obj !== "undefined" && obj !== null ) {
                     dom.byId(getFormName() + "_" + getDivId() + "_id").value = obj.id;
@@ -199,7 +202,6 @@ define([
                         locationFilteringSelect.set("readOnly", false);
                         if (obj.address === true && obj.entityData !== null) {
                             locationFilteringSelect.set('item', obj.entityData);
-                            locationFilteringSelect.set('value', obj.entityData.hash);
                         } else {
                             locationFilteringSelect.set('displayedValue', obj.entityData.name);
                         }

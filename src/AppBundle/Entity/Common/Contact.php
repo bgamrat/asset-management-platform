@@ -255,7 +255,7 @@ class Contact
 
     public function getLabel()
     {
-        return '<hr>' . (!empty( $this->address ) ? nl2br( $this->name . PHP_EOL . $this->address->getAddress() ) : $this->name);
+        return (!empty( $this->address ) ? nl2br( $this->name . PHP_EOL . $this->address->getAddress() ) : $this->name);
     }
 
     public function getHash()
