@@ -43,7 +43,7 @@ class IssuesController extends FOSRestController
                 $sortField = 'tr.name';
                 break;
             case 'assigned_to_text':
-                $sortField = 'p.lastname';
+                $sortField = 'assigned_to_text';
                 break;
             default:
                 $sortField = 'i.' . $dstore['sort-field'];
@@ -85,7 +85,7 @@ class IssuesController extends FOSRestController
         }
 
         $columns = ['i.id', 'i.priority', 'tr.name AS trailer_text', 'i.summary', 's.status AS status_text', 't.type AS type_text',
-            "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to_text",
+            "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to_text", 'i.billable'
         ];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Issue', 'i' )
@@ -188,6 +188,7 @@ class IssuesController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $data = $request->request->all();
+        $originalItems = null;
         if( $id === "null" )
         {
             $issue = new Issue();
@@ -219,11 +220,14 @@ class IssuesController extends FOSRestController
                 {
                     $item->getAsset()->setStatus( $form['items'][$i]['status']->getData() );
                 }
-                foreach( $originalItems as $item )
+                if( !empty( $originalItems ) )
                 {
-                    if( false === $issueItems->contains( $item ) )
+                    foreach( $originalItems as $item )
                     {
-                        $issue->removeItem( $item );
+                        if( false === $issueItems->contains( $item ) )
+                        {
+                            $issue->removeItem( $item );
+                        }
                     }
                 }
 

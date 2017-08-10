@@ -260,6 +260,7 @@ define([
                     "status": parseInt(statusSelect.get("value")),
                     "cost": parseFloat(costInput.get("value")),
                     "carrier": carrierSelect.get("value"),
+                    "carrier_text": carrierSelect.get("displayedValue"),
                     "carrier_service": carrierServiceSelect.get("value"),
                     "tracking_number": trackingNumberInput.get("value"),
                     "instructions": instructionsInput.get("value"),
@@ -322,7 +323,7 @@ define([
                         return item;
                     }
                 },
-                carrier: {
+                carrier_text: {
                     label: core.carrier
                 },
                 tracking_number: {
@@ -373,13 +374,14 @@ define([
                     transferItems.setData(transfer.items);
                     if( typeof transfer.carrier !== "undefined" && transfer.carrier !== null && typeof transfer.carrier.id !== "undefined" ) {
                         carrierServiceStore.target = carrierServiceStore.target.replace(/\d*$/, transfer.carrier.id);
-                        carrierServiceSelect.set('displayedValue', transfer.carrier_service.name);
+                        carrierServiceSelect.set('displayedValue', transfer.carrierService.name);
                         carrierSelect.set("value", transfer.carrier.id);
-                        carrierSelect.set("displayedValue", transfer.carrier_name_text);
+                        carrierSelect.set("displayedValue", transfer.carrier_name);
                     } else {
                         carrierSelect.reset();
                     }
-                    trackingNumberInput.set("value", transfer.tracking_number);
+                    trackingNumberInput.set("value", transfer.trackingNumber);
+                    instructionsInput.set("value", transfer.instructions);
                     billTo.setData(transfer.bill_to);
                     fromFilteringSelect.set("value", null);
                     if( transfer.from !== null && typeof transfer.from.fullName !== "undefined" ) {

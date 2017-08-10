@@ -112,7 +112,7 @@ define([
             issueNotes.setData(null);
             issueItems.setData(null);
             costInput.set("value", null);
-            clientBillableCheckBox.set("checked", false);
+            billableCheckBox.set("checked", false);
             replacedCheckBox.set("checked", false);
             issueViewDialog.set("title", core["new"]).show();
             updatedInput.set("value", null);
@@ -217,8 +217,8 @@ define([
         var replacedCheckBox = new CheckBox({}, "issue_replaced");
         replacedCheckBox.startup();
 
-        var clientBillableCheckBox = new CheckBox({}, "issue_client_billable");
-        clientBillableCheckBox.startup();
+        var billableCheckBox = new CheckBox({}, "issue_billable");
+        billableCheckBox.startup();
 
         var select = "issue_status";
 
@@ -280,6 +280,7 @@ define([
                     "type": parseInt(typeSelect.get("value")),
                     "status": parseInt(statusSelect.get("value")),
                     "assigned_to_text": assignedToFilteringSelect.get("displayedValue"),
+                    "billable": billableCheckBox.get("checked"),
                     "type_text": typeSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
                     "purchased": purchased === null ? "" : purchased,
@@ -352,8 +353,8 @@ define([
                 assigned_to_text: {
                     label: asset.assigned_to
                 },
-                client_billable: {
-                    label: asset.client_billable,
+                billable: {
+                    label: core.billable,
                     editor: CheckBox,
                     editOn: "click",
                     sortable: false,
@@ -421,7 +422,7 @@ define([
                         f = locale.format(t);
                     }
                     createdInput.set("value", f);
-                    clientBillableCheckBox.set("checked", issue.clientBillable === true);
+                    billableCheckBox.set("checked", issue.billable === true);
                     replacedCheckBox.set("checked", issue.replaced === true);
                     costInput.set("value", issue.cost);
                     billTo.setData(issue.billTos);

@@ -123,6 +123,8 @@ common:
         Available
     bill_to:
         Bill To
+    billable:
+        Billable
     calendar:
         Calendar
     carrier:

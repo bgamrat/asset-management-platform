@@ -10,6 +10,7 @@ define({
         "attributes": "Attributes",
         "available": "Available",
         "bill_to": "Bill To",
+        "billable": "Billable",
         "brands": "Brands",
         "cancel": "Cancel",
         "carrier": "Carrier",

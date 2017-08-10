@@ -34,7 +34,10 @@ class TransfersController extends FOSRestController
                 $sortField = 'bc.barcode';
                 break;
             case 'status_text':
-                $sortField = 's.status';
+                $sortField = 's.name';
+                break;
+            case 'carrier_text':
+                $sortField = 'c.name';
                 break;
             default:
                 $sortField = 't.' . $dstore['sort-field'];
@@ -76,7 +79,7 @@ class TransfersController extends FOSRestController
         }
 
         $columns = ['t.id', 't.instructions', 's.name AS status_text', 't.source_location_text', 't.destination_location_text',
-            'b.barcode', 'c.name AS carrier', 't.tracking_number'];
+            'b.barcode', 'c.name AS carrier_text', 't.tracking_number'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
                 ->join( 't.status', 's' )

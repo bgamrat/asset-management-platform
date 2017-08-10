@@ -93,7 +93,7 @@ class IssueType extends AbstractType
                 ] )
                 ->add( 'assigned_to', TextType::class, ['label' => 'issue.assigned_to'] )
                 ->add( 'replaced', CheckboxType::class, ['label' => 'issue.replaced'] )
-                ->add( 'client_billable', CheckboxType::class, ['label' => 'common.client_billable'] )
+                ->add( 'billable', CheckboxType::class, ['label' => 'common.billable'] )
                 ->add( 'summary', TextType::class, ['label' => false] )
                 ->add( 'details', TextareaType::class, [
                     'label' => false

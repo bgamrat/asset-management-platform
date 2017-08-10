@@ -96,9 +96,9 @@ class Issue
     private $replaced = true;
     /**
      * @var boolean
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(name="billable", type="boolean")
      */
-    private $clientBillable = true;
+    private $billable = true;
     /**
      * @var float
      * @Gedmo\Versioned
@@ -374,14 +374,14 @@ class Issue
         return $this->replaced;
     }
 
-    public function setClientBillable( $clientBillable )
+    public function setBillable( $billable )
     {
-        $this->clientBillable = $clientBillable;
+        $this->billable = $billable;
     }
 
-    public function isClientBillable()
+    public function isBillable()
     {
-        return $this->clientBillable;
+        return $this->billable;
     }
 
     /**
