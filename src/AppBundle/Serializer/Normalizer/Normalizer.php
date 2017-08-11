@@ -4,17 +4,23 @@ namespace AppBundle\Serializer\Normalizer;
 
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 
 /**
  * Description of Default
  *
  * @author bgamrat
+ *
+ * Thanks to: https://stackoverflow.com/questions/43569313/symfony3-serializing-nested-entities/43569381s
  */
-class Normalizer extends SerializerAwareNormalizer implements NormalizerInterface
+class Normalizer implements NormalizerInterface, NormalizerAwareInterface
 {
+
+    use NormalizerAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -22,24 +28,32 @@ class Normalizer extends SerializerAwareNormalizer implements NormalizerInterfac
     public function normalize( $object, $format = null, array $context = array() )
     {
         $encoder = new JsonEncoder();
+
         $normalizer = new ObjectNormalizer();
 
         $normalizer->setCircularReferenceHandler( function ($object)
         {
-            if (method_exists($object,'getName')) {
+            if( method_exists( $object, 'getName' ) )
+            {
                 return $object->getName();
-            } else {
-                if (method_exists($object,'getType')) {
+            }
+            else
+            {
+                if( method_exists( $object, 'getType' ) )
+                {
                     return $object->getType();
-                } else {
-                    if (method_exists($object,'getStatus')) {
+                }
+                else
+                {
+                    if( method_exists( $object, 'getStatus' ) )
+                    {
                         return $object->getStatus();
                     }
                 }
             }
         } );
 
-        $serializer = new Serializer( array($normalizer), array($encoder) );
+        $serializer = new Serializer( array($this->normalizer), array($encoder) );
 
         return $serializer->normalize( $object );
     }

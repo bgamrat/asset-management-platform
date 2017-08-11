@@ -4,7 +4,7 @@
 /nbproject
 /composer.phar
 /vendor
-*.log
+/var
 autoload.php
 composer
 var

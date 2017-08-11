@@ -230,10 +230,11 @@ services:
         tags:
             - { name: "form.type", alias: "app_user_registration" }
 
+    Symfony\Component\Form\Form: ~
+
     app.form.user:
-        factory_method: createNamed
-        factory_service: form.factory
-        class: Symfony\Component\Form\Form
+        factory: 'Symfony\Component\Form\Form:createNamed'
+        class: 'Symfony\Component\Form\Form'
         arguments:
             - user_form                        # name of the form
             - user                             # alias of the form type
