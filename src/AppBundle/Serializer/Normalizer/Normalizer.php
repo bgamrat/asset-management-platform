@@ -9,7 +9,6 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-
 /**
  * Description of Default
  *
@@ -37,23 +36,17 @@ class Normalizer implements NormalizerInterface, NormalizerAwareInterface
             {
                 return $object->getName();
             }
-            else
+            if( method_exists( $object, 'getType' ) )
             {
-                if( method_exists( $object, 'getType' ) )
-                {
-                    return $object->getType();
-                }
-                else
-                {
-                    if( method_exists( $object, 'getStatus' ) )
-                    {
-                        return $object->getStatus();
-                    }
-                }
+                return $object->getType();
+            }
+            if( method_exists( $object, 'getStatus' ) )
+            {
+                return $object->getStatus();
             }
         } );
 
-        $serializer = new Serializer( array($this->normalizer), array($encoder) );
+        $serializer = new Serializer( array($normalizer), array($encoder) );
 
         return $serializer->normalize( $object );
     }

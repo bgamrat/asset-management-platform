@@ -32,11 +32,11 @@ class EventsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['e.id', 'e.name',
-            'e.tentative', 'e.billable', 'e.canceled', 'e.start', 'e.end', 'e.deletedAt',
-            'c.name AS client_name', 'v.name AS venue_name'] )
+                    'e.tentative', 'e.billable', 'e.canceled', 'e.start', 'e.end', 'e.deletedAt',
+                    'c.name AS client_name', 'v.name AS venue_name'] )
                 ->from( 'AppBundle\Entity\Schedule\Event', 'e' )
-                ->leftJoin('e.client','c')
-                ->leftJoin('e.venue','v')
+                ->leftJoin( 'e.client', 'c' )
+                ->leftJoin( 'e.venue', 'v' )
                 ->orderBy( 'e.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -103,31 +103,13 @@ class EventsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $event = $this->getDoctrine()
-                    ->getRepository( 'AppBundle\Entity\Schedule\Event' )->find( $id );
+                        ->getRepository( 'AppBundle\Entity\Schedule\Event' )->find( $id );
         if( $event !== null )
         {
-            $client_text = !empty( $event->getClient() ) ? $event->getClient()->getName() : null;
-            $venue_text = !empty( $event->getVenue() ) ? $event->getVenue()->getName() : null;
-            $st = $event->getStart();
-            $en = $event->getEnd();
-            $data = [
-                'id' => $event->getId(),
-                'name' => $event->getName(),
-                'client' => $event->getClient(),
-                'client_text' => $client_text,
-                'venue' => $event->getVenue(),
-                'venue_text' => $venue_text,
-                'contacts' => $event->getContacts( false ),
-                'contracts' => $event->getContracts( false ),
-                'tentative' => $event->isTentative(),
-                'billable' => $event->isBillable(),
-                'canceled' => $event->isCanceled(),
-                'start' => !empty( $st ) ? $st->format( 'Y-m-d' ) : null,
-                'end' => !empty( $en ) ? $en->format( 'Y-m-d' ) : null
-            ];
+            $form = $this->createForm( EventType::class, $event, ['allow_extra_fields' => true] );
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'event' . $event->getId(), $event->getUpdated() );
-            return $data;
+            return $form->getViewData();
         }
         else
         {
