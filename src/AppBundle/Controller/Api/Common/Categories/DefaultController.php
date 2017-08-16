@@ -26,7 +26,8 @@ class DefaultController extends FOSRestController
 
             $queryBuilder = $em->createQueryBuilder()->select( ['c.id', "c.fullName AS name"] )
                     ->from( 'AppBundle\Entity\Asset\Category', 'c' )
-                    ->where( "LOWER(c.name) LIKE :category_name" )
+                    
+                    ->where("c.name != 'top'")->andWhere( "LOWER(c.name) LIKE :category_name" )
                     ->setParameter( 'category_name', strtolower( $name ) );
 
             $data = $queryBuilder->getQuery()->getResult();

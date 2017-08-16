@@ -36,7 +36,8 @@ class ModelType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['required' => false, 'mapped' => false] )
                 ->add( 'category', TextType::class, [
-                    'label' => 'asset.category'
+                    'label' => 'asset.category',
+                    'required' => true
                 ] )
                 ->add( 'name', TextType::class, [
                     'label' => false, 'required' => true] )

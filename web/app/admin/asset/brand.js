@@ -147,7 +147,8 @@ define([
             store: categoryStore,
             labelAttr: "name",
             searchAttr: "name",
-            pageSize: 25
+            pageSize: 25,
+            required: true
         }, select);
         categoryFilteringSelect.startup();
         var nameInput = new ValidationTextBox({

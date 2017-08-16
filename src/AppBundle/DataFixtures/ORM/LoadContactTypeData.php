@@ -4,9 +4,9 @@ namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use AppBundle\Entity\Asset\Model;
+use AppBundle\Entity\Common\ContactType;
 
-class LoadCustomAttributeData implements FixtureInterface
+class LoadContactTypeData implements FixtureInterface
 {
 
     public function load( ObjectManager $manager )

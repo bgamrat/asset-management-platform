@@ -68,7 +68,6 @@ class IssueStatus
      */
     private $active = true;
     /**
-     * Many Users have Many Groups.
      * @ORM\ManyToMany(targetEntity="IssueStatus")
      * @ORM\JoinTable(name="issue_status_next",
      *      joinColumns={@ORM\JoinColumn(name="next_id", referencedColumnName="id")},
