@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Common\Email;
-use AppBundle\Entity\Common\PhoneNumber;
+use AppBundle\Entity\Common\Phone;
 use AppBundle\Entity\Common\Address;
 use AppBundle\Entity\Common\PersonLog;
 
@@ -108,14 +108,14 @@ class Person
      */
     private $comment;
     /**
-     * @var ArrayCollection $phoneNumbers
-     * @ORM\ManyToMany(targetEntity="PhoneNumber", cascade={"persist"})
-     * @ORM\JoinTable(name="person_phone_number",
+     * @var ArrayCollection $phones
+     * @ORM\ManyToMany(targetEntity="Phone", cascade={"persist"})
+     * @ORM\JoinTable(name="person_phone",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="phone_number_id", referencedColumnName="id", unique=true, nullable=false)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="phone_id", referencedColumnName="id", unique=true, nullable=false)}
      *      )
      */
-    private $phoneNumbers;
+    private $phones;
     /**
      * @var ArrayCollection $emails
      * @ORM\ManyToMany(targetEntity="Email", cascade={"persist"})
@@ -165,7 +165,7 @@ class Person
 
     public function __construct()
     {
-        $this->phoneNumbers = new ArrayCollection();
+        $this->phones = new ArrayCollection();
         $this->emails = new ArrayCollection();
         $this->addresses = new ArrayCollection();
     }
@@ -407,20 +407,20 @@ class Person
 
     public function getPhones()
     {
-        return $this->phoneNumbers->toArray();
+        return $this->phones->toArray();
     }
 
-    public function addPhone( PhoneNumber $phoneNumber )
+    public function addPhone( Phone $phone )
     {
-        if( !$this->phoneNumbers->contains( $phoneNumber ) )
+        if( !$this->phones->contains( $phone ) )
         {
-            $this->phoneNumbers->add( $phoneNumber );
+            $this->phones->add( $phone );
         }
     }
 
-    public function removePhone( PhoneNumber $phoneNumber )
+    public function removePhone( Phone $phone )
     {
-        $this->phoneNumbers->removeElement( $phoneNumber );
+        $this->phones->removeElement( $phone );
     }
 
     public function getPhoneLines()
@@ -429,7 +429,7 @@ class Person
         $phoneLines = [];
         foreach( $phones as $p )
         {
-            $phoneLines[] = $p->getType()->getType() . ' ' . $p->getPhoneNumber();
+            $phoneLines[] = $p->getType()->getType() . ' ' . $p->getPhone();
         }
         return $phoneLines;
     }

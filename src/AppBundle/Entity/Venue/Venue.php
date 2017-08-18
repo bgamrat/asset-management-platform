@@ -88,6 +88,7 @@ class Venue
      * @Gedmo\Versioned
      */
     private $deletedAt;
+    private $history;
 
     public function __construct()
     {
@@ -278,4 +279,13 @@ class Venue
         $this->setActive( false );
     }
 
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    public function setHistory( $history )
+    {
+        $this->history = $history;
+    }
 }

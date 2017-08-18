@@ -239,9 +239,9 @@ common:
         People
     person:
         Person
-    phone_number:
+    phone:
         Phone Number
-    phone_numbers:
+    phones:
         Phone Numbers
     position:
         Position

@@ -2,7 +2,7 @@
 
 namespace AppBundle\Entity\Common;
 
-use AppBundle\Entity\Common\PhoneNumberType;
+use AppBundle\Entity\Common\PhoneType;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -10,10 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="phone_number")
+ * @ORM\Table(name="phone")
  * @Gedmo\Loggable
  */
-class PhoneNumber
+class Phone
 {
 
     /**
@@ -23,7 +23,7 @@ class PhoneNumber
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="PhoneNumberType")
+     * @ORM\ManyToOne(targetEntity="PhoneType")
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      * @ORM\OrderBy({"type" = "ASC"})
      */
@@ -31,9 +31,9 @@ class PhoneNumber
     /**
      * @Assert\NotBlank()
      * @Assert\Regex(pattern="/^[0-9x\.\,\ \+\(\)-]{2,24}$/", message="error.invalid_phone_number")
-     * @ORM\Column(type="string", length=24, name="phone_number", nullable=false)
+     * @ORM\Column(type="string", length=24, name="phone", nullable=false)
      */
-    private $phone_number;
+    private $phone;
     /**
      * @ORM\Column(type="string", length=24, nullable=true)
      */
@@ -64,7 +64,7 @@ class PhoneNumber
      *
      * @param int $type
      *
-     * @return PhoneNumber
+     * @return Phone
      */
     public function setType( $type )
     {
@@ -84,27 +84,27 @@ class PhoneNumber
     }
 
     /**
-     * Set phoneNumber
+     * Set phone
      *
-     * @param string $phoneNumber
+     * @param string $phone
      *
-     * @return PhoneNumber
+     * @return Phone
      */
-    public function setPhoneNumber( $phoneNumber )
+    public function setPhone( $phone )
     {
-        $this->phone_number = $phoneNumber;
+        $this->phone = $phone;
 
         return $this;
     }
 
     /**
-     * Get phoneNumber
+     * Get phone
      *
      * @return string
      */
-    public function getPhoneNumber()
+    public function getPhone()
     {
-        return $this->phone_number;
+        return $this->phone;
     }
 
     /**
@@ -112,7 +112,7 @@ class PhoneNumber
      *
      * @param string $comment
      *
-     * @return PhoneNumber
+     * @return Phone
      */
     public function setComment( $comment )
     {

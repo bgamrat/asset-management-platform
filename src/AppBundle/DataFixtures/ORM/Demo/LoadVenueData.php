@@ -15,6 +15,7 @@ class LoadVenueData implements FixtureInterface
         $td = new Venue();
         $td->setName( 'TD Garden' );
         $address = new Address();
+        $address->setType($manager->getRepository('AppBundle\Entity\Common\AddressType')->findOneByType( 'venue' ) );
         $address->setStreet1( '100 Legends Way' );
         $address->setCity( 'Boston' );
         $address->setStateProvince( 'MA' );

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="phone_number_type")
  */
-class PhoneNumberType
+class PhoneType
 {
     /**
      * @ORM\Column(type="integer")
@@ -38,7 +38,7 @@ class PhoneNumberType
      *
      * @param string $type
      *
-     * @return PhoneNumberType
+     * @return PhoneType
      */
     public function setType($type)
     {

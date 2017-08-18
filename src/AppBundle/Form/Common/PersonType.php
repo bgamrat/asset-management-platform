@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use AppBundle\Form\Common\PhoneNumberType;
+use AppBundle\Form\Common\PhoneType;
 use AppBundle\Form\Common\AppEmailType; // Named to avoid conflicts with Symfony EmailType
 use AppBundle\Form\Common\AddressType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -38,7 +38,7 @@ class PersonType extends AbstractType
                 ->add( 'lastname', TextType::class, ['label' => 'person.lastname'] )
                 ->add( 'title', TextType::class, ['label' => 'person.title'] )
                 ->add( 'phones', CollectionType::class, [
-                    'entry_type' => PhoneNumberType::class,
+                    'entry_type' => PhoneType::class,
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,

@@ -6,6 +6,7 @@ use AppBundle\Entity\Venue\Venue;
 use AppBundle\Util\DStore;
 use AppBundle\Form\Admin\Venue\VenueType;
 use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,22 +95,16 @@ class VenuesController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Venue\Venue' )->find( $id );
         if( $venue !== null )
         {
-            $data = [
-                'id' => $venue->getId(),
-                'name' => $venue->getName(),
-                'active' => $venue->isActive(),
-                'address' => $venue->getAddress(),
-                'directions' => $venue->getDirections(),
-                'parking' => $venue->getParking(),
-                'comment' => $venue->getComment(),
-                'contacts' => $venue->getContacts( false )
-            ];
-            $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdated() );
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle\Entity\Venue\VenueLog', $id );
-            $data['history'] = $logUtil->translateIdsToText();
-            return $data;
+            $history = $logUtil->translateIdsToText();
+            $formUtil = $this->get( 'app.util.form' );
+            $formUtil->saveDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdated() );
+
+            $form = $this->createForm( VenueType::class, $venue, ['allow_extra_fields' => true] );
+            $venue->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
         }
         else
         {

@@ -88,9 +88,9 @@
 
 {% block _phones_entry_row %}
     {% spaceless %}
-        <div class="form-row phone-number">
+        <div class="form-row phone">
             <span class="type-select">{{ form_widget(form.type) }}</span>
-            <span class="input">{{ form_widget(form.phoneNumber) }}</span>
+            <span class="input">{{ form_widget(form.phone) }}</span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
             <span class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-phone-__phone__"><i class="fa fa-remove"></i></span>
         </div>

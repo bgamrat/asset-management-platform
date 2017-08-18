@@ -300,7 +300,12 @@ class Address
 
     public function getAddress()
     {
-        $addr = [$this->getType()->getType(), $this->street1];
+        $type = $this->getType();
+        $addr = [];
+        if (!empty($type)) {
+            $addr[] = $type->getType();
+        }
+        $addr[] = $this->street1;
         if( !empty( $this->street2 ) )
         {
             $addr[] = $this->street2;

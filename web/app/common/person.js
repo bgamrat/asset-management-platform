@@ -11,7 +11,7 @@ define([
     "dojo/data/ObjectStore",
     "dojo/store/Memory",
     "app/common/emails",
-    "app/common/phoneNumbers",
+    "app/common/phones",
     "app/common/addresses",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
@@ -19,7 +19,7 @@ define([
 ], function (lang, dom, domAttr, domConstruct, on, query,
         ValidationTextBox, Textarea, Select,
         ObjectStore, Memory,
-        xemails, xphoneNumbers, xaddresses,
+        xemails, xphones, xaddresses,
         lib, core) {
 
     function run() {
@@ -35,7 +35,7 @@ define([
         var base, d, data;
         var select, storeData, memoryStore;
         var addOneMoreControl;
-        var emails = [], phoneNumbers = [], addresses = [];
+        var emails = [], phones = [], addresses = [];
         var divId;
 
         function setDivId(divId) {
@@ -170,7 +170,7 @@ define([
                 var idNumber = personId.length;
                 cloneNewNode();
                 createDijits();
-                phoneNumbers[idNumber] = xphoneNumbers.run(divId,idNumber);
+                phones[idNumber] = xphones.run(divId,idNumber);
                 emails[idNumber] = xemails.run(divId,idNumber);
                 addresses[idNumber] = xaddresses.run(divId,idNumber);
                 if( personId.length >= lib.constant.MAX_CONTACTS ) {
@@ -182,7 +182,7 @@ define([
         divId = getDivId();
         emails[0] = xemails.run(divId,0);
         addresses[0] = xaddresses.run(divId,0);
-        phoneNumbers[0] = xphoneNumbers.run(divId,0);
+        phones[0] = xphones.run(divId,0);
 
         function getData() {
             var i, returnData = [];
@@ -199,7 +199,7 @@ define([
                         "name": firstnameInput[i].get('value') + " " + middlenameInput[i].get('value') + " " + lastnameInput[i].get('value'),
                         "comment": commentInput[i].get('value'),
                         "emails": emails[i].getData(),
-                        "phones": phoneNumbers[i].getData(),
+                        "phones": phones[i].getData(),
                         "addresses": addresses[i].getData()
                     });
                 }
@@ -234,9 +234,9 @@ define([
                     lastnameInput[i].set('value', obj.lastname);
                     commentInput[i].set('value', obj.comment);
                     if( typeof obj.phones !== "undefined" ) {
-                        phoneNumbers[i].setData(obj.phones);
+                        phones[i].setData(obj.phones);
                     } else {
-                        phoneNumbers[i].setData(null);
+                        phones[i].setData(null);
                     }
                     if( typeof obj.emails !== "undefined" ) {
                         emails[i].setData(obj.emails);
@@ -257,7 +257,7 @@ define([
                 middlenameInput[0].set('value', '');
                 lastnameInput[0].set('value', '');
                 commentInput[0].set('value', '');
-                phoneNumbers[0].setData(null);
+                phones[0].setData(null);
                 emails[0].setData(null);
                 addresses[0].setData(null);
             }

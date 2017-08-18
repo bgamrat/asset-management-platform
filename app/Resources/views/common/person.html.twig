@@ -12,6 +12,6 @@
         {{form_widget(form.comment)}}
     </div>
     {% include 'common/emails.html.twig' with {'form': form.emails } %}
-    {% include 'common/phone_numbers.html.twig' with {'form': form.phones } %}
+    {% include 'common/phones.html.twig' with {'form': form.phones } %}
     {% include 'common/addresses.html.twig' with { 'form' : form.addresses } %}
 </fieldset>

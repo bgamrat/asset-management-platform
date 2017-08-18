@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 
-class PhoneNumberType extends AbstractType
+class PhoneType extends AbstractType
 {
 
     /**
@@ -23,14 +23,14 @@ class PhoneNumberType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
-                    'class' => 'AppBundle\Entity\Common\PhoneNumberType',
+                    'class' => 'AppBundle\Entity\Common\PhoneType',
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
                     'choice_translation_domain' => false
                 ] )
-                ->add( 'phoneNumber', TextType::class, [
+                ->add( 'phone', TextType::class, [
                 ] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
@@ -44,7 +44,7 @@ class PhoneNumberType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Common\PhoneNumber'
+            'data_class' => 'AppBundle\Entity\Common\Phone'
         ) );
     }
 
