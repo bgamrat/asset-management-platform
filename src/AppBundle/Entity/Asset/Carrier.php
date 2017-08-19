@@ -48,7 +48,7 @@ class Carrier
      */
     private $comment;
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Contact", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="carrier_contact",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="carrier_id", referencedColumnName="id", unique=true)}

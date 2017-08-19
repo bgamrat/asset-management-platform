@@ -194,7 +194,7 @@ define([
                         libGrid.renderContacts(object, object, td);
                     }
                 },
-                account_information: {
+                accountInformation: {
                     label: core.account_information,
                     renderCell: function (object, value, td) {
                         put(td, "pre", object.accountInformation);
@@ -253,7 +253,7 @@ define([
                     person.setData(carrier.contacts);
                     carrierService.setData(carrier.services);
                     commentInput.set("value", carrier.comment);
-                    accountInformationInput.set("value", carrier.account_information);
+                    accountInformationInput.set("value", carrier.accountInformation);
                     carrierViewDialog.show();
                 }, lib.xhrError);
             }

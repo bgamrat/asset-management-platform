@@ -17,6 +17,9 @@ define([
     function renderAddress(object, value, td) {
         var a, i, l, segments, content = [], address_lines, address_segments;
         var address;
+        if (object === null) {
+            return;
+        }
         if( typeof value[0] === "undefined" ) {
             value = [value];
         }
@@ -74,6 +77,9 @@ define([
     function renderEmail(object, value, td) {
         var e;
         var email, ul = null, li, t, link, c;
+        if (object === null) {
+            return;
+        }
         if( typeof value === "object" && value !== null && value.length !== 0 ) {
             ul = document.createElement("ul");
             for( e in value ) {
@@ -106,6 +112,9 @@ define([
     ;
     function renderPerson(object, value, td) {
         var type_text;
+        if (object === null) {
+            return;
+        }
         if( typeof object.type_text === "undefined" ) {
             type_text = object.type.type;
         } else {
@@ -117,6 +126,9 @@ define([
     function renderPhone(object, value, td) {
         var i, l, p, content = [], phone_lines;
         var phone, row;
+        if (object === null) {
+            return;
+        }
         if( typeof value === "object" && value !== null && value.length !== 0 ) {
             phone_lines = ['phoneNumber', 'comment'];
             l = phone_lines.length;

@@ -42,7 +42,8 @@ class CarrierType extends AbstractType
                 ] )
                 ->add( 'account_information', TextareaType::class, [
                     'label' => false,
-                    'required' => false
+                    'required' => false,
+                    'property_path' => 'accountInformation'
                 ] )
                 ->add( 'services', CollectionType::class, [
                     'entry_type' =>CarrierServiceType::class,

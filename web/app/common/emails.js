@@ -110,7 +110,7 @@ define([
         data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
         storeData = [];
-        storeData.push({value: "", label: core.type.toLowerCase()});
+
         for( d in data ) {
             storeData.push(data[d]);
         }
