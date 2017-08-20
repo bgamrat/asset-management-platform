@@ -35,7 +35,7 @@ define([
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         xperson, xaddress, lib, libGrid, core, venue) {
     //"use strict";
-    function run() {
+    function run(id) {
         var action = null;
         var person, address;
 
@@ -242,23 +242,23 @@ define([
                     grid.clearSelection();
                 }
                 grid.select(row);
-                grid.collection.get(id).then(function (venue) {
-                    var r;
-                    action = "view";
-                    venueId = venue.id;
-                    nameInput.set("value", venue.name);
-                    activeCheckBox.set("checked", venue.active === true);
-                    directionsInput.set("value", venue.directions);
-                    parkingInput.set("value", venue.parking);
-                    commentInput.set("value", venue.comment);
-                    person.setData(venue.contacts);
-                    address.setData(venue.address);
-                    lib.showHistory(historyContentPane, venue.history);
-                    venueViewDialog.show();
-                }, lib.xhrError);
+                grid.collection.get(id).then(display(venue), lib.xhrError);
             }
         });
-
+        function display(venue) {
+            var r;
+            action = "view";
+            venueId = venue.id;
+            nameInput.set("value", venue.name);
+            activeCheckBox.set("checked", venue.active === true);
+            directionsInput.set("value", venue.directions);
+            parkingInput.set("value", venue.parking);
+            commentInput.set("value", venue.comment);
+            person.setData(venue.contacts);
+            address.setData(venue.address);
+            lib.showHistory(historyContentPane, venue.history);
+            venueViewDialog.show();
+        }
         grid.on('.field-active:dgrid-datachange, .field-locked:dgrid-datachange', function (event) {
             var row = grid.row(event);
             var cell = grid.cell(event);
@@ -315,6 +315,10 @@ define([
         address = xaddress.run('venue');
 
         lib.pageReady();
+
+        if( typeof id !== "undefined" && id !== null ) {
+            grid.collection.get(id).then(display, lib.xhrError);
+        }
     }
     return {
         run: run

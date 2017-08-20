@@ -254,12 +254,12 @@ class MenuStoreController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder();
         $queryBuilder
-                ->select( ["CONCAT('venue-',v.id) AS id", 'v.name', "'venue' AS parent"] )
+                ->select( ["v.id", 'v.name', "'venue' AS parent"] )
                 ->from( 'AppBundle\Entity\Venue\Venue', 'v' )
                 ->orderBy( 'v.name' )
                 ->setFirstResult( 0 )
                 ->setMaxResults( $limit );
-        $menu = $renderer->render( $adminMenu['admin']['admin-venues'] );
+        $menu = $renderer->render( $adminMenu['admin']['admin-venues']['venues'] );
         $children = $queryBuilder->getQuery()->getResult();
         $l = count( $children );
         if( $l < $limit )
@@ -269,7 +269,7 @@ class MenuStoreController extends FOSRestController
                 $children[$i]['has_children'] = false;
                 $children[$i]['children'] = null;
                 $children[$i]['uri'] = $this->generateUrl(
-                        'app_admin_venue_venue_get', ['name' => $children[$i]['name']], true ); // absolute
+                        'app_admin_venue_venue_index', ['id' => $children[$i]['id']], true ); // absolute
             }
         }
         $menu['children'] = $children;

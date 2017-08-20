@@ -91,7 +91,7 @@
 {% block javascripts %}
     <script>
         require(["app/admin/venue/venue"], function (venue) {
-            venue.run();
+            venue.run({{id}});
         });
     </script>
 {% endblock %}

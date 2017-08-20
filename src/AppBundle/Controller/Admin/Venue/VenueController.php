@@ -33,8 +33,10 @@ class VenueController extends Controller
 
         $form = $this->createForm( VenueType::class, null, [] );
 
+        $id = $request->get( 'id' );
+
         return $this->render( 'admin/venue/venue.html.twig', array(
-                    'venue_form' => $form->createView()) );
+                    'venue_form' => $form->createView(), 'id' => $id) );
     }
 
     /**

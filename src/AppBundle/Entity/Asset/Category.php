@@ -87,6 +87,7 @@ class Category
     public function setId( $id )
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -253,6 +254,7 @@ class Category
     public function setActive( $active )
     {
         $this->active = $active;
+        return $this;
     }
 
     public function isActive()
