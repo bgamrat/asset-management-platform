@@ -70,6 +70,7 @@ define([
                 this.renderPhone(object.contacts[i].phones, object.contacts[i].phones, td);
                 this.renderEmail(object.contacts[i].emails, object.contacts[i].emails, td);
                 this.renderAddress(object.contacts[i].addresses, object.contacts[i].addresses, td);
+                put(td,'hr');
             }
         }
     }
@@ -120,7 +121,7 @@ define([
         } else {
             type_text = object.type_text;
         }
-        put(td, "span", value + " (" + type_text + ")");
+        put(td, "em", value + " (" + type_text + ")");
     }
 
     function renderPhone(object, value, td) {

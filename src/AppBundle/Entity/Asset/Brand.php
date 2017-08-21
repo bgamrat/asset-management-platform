@@ -193,7 +193,7 @@ class Brand
         {
             if( $model->getBrand() !== $this )
             {
-                $model->setBrand = $this;
+                $model->setBrand( $this );
             }
             $this->models->add( $model );
         }
