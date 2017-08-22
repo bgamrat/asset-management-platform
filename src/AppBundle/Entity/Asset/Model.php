@@ -146,6 +146,7 @@ class Model
      * @Gedmo\Versioned
      */
     private $deletedAt;
+    private $history;
 
     public function __construct()
     {
@@ -575,24 +576,14 @@ class Model
         return $this->getBrand()->getName() . ' ' . $this->getName();
     }
 
-    public function toArray()
+    public function getHistory()
     {
-        return [
-            'id' => $this->getId(),
-            'category' => $this->getCategory(),
-            'name' => $this->getName(),
-            'container' => $this->isContainer(),
-            'custom_attributes' => $this->getCustomAttributes(),
-            'default_contract_value' => $this->getDefaultContractValue(),
-            'default_event_value' => $this->getDefaultEventValue(),
-            'comment' => $this->getComment(),
-            'active' => $this->isActive(),
-            'satisfies' => $this->getSatisfies(),
-            'extends' => $this->getExtends( false ),
-            'extended_by' => $this->getExtendedBy( false ),
-            'requires' => $this->getRequires( false ),
-            'required_by' => $this->getRequiredBy( false )
-        ];
+        return $this->history;
+    }
+
+    public function setHistory( $history )
+    {
+        $this->history = $history;
     }
 
 }

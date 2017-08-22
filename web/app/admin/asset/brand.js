@@ -253,6 +253,8 @@ define([
                 },
                 name: {
                     label: asset.model
+                },category_text: {
+                    label: asset.category
                 },
                 container: {
                     label: asset.container,
@@ -304,16 +306,16 @@ define([
                 grid.collection.get(name).then(function (model) {
                     action = "view";
                     modelId = model.id;
-                    categoryFilteringSelect.set('displayedValue', model.category_text);
+                    categoryFilteringSelect.set('displayedValue', model.category.name);
                     nameInput.set('value', model.name);
                     containerCheckBox.set('checked', model.container);
                     weightInput.set("value", model.weight);
                     commentInput.set('value', model.comment);
-                    customAttributes.setData(model.custom_attributes);
+                    customAttributes.setData(model.customAttributes);
                     activeCheckBox.set('checked', model.active);
-                    carnetValueInput.set('value', model.carnet_value);
-                    defaultContractValueInput.set('value', model.default_contract_value);
-                    defaultEventValueInput.set('value', model.default_event_value);
+                    carnetValueInput.set('value', model.carnetValue);
+                    defaultContractValueInput.set('value', model.defaultContractValue);
+                    defaultEventValueInput.set('value', model.defaultEventValue);
                     satisfies.setData(model.satisfies);
                     modelRelationships.setData("extends", model['extends']);
                     modelRelationships.setData("requires", model['requires']);

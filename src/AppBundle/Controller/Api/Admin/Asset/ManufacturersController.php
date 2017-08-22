@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use AppBundle\Repository\BrandRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ManufacturersController extends FOSRestController
 {
@@ -307,16 +307,19 @@ class ManufacturersController extends FOSRestController
 
         if( !empty( $data ) )
         {
-            $model = $em->getRepository( 'AppBundle\Entity\Asset\Model' )->find( $data[0]['model_id'] );
-            $modelData = $model->toArray();
-            $modelData['category'] = $model->getCategory()->getId();
-            $modelData['category_text'] = $model->getCategory()->getName();
+            $id = $data[0]['model_id'];
+            $model = $em->getRepository( 'AppBundle\Entity\Asset\Model' )->find( $id );
+
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'AppBundle\Entity\Asset\ModelLog', $model->getId() );
-            $modelData['history'] = $logUtil->translateIdsToText();
+            $logUtil->getLog( 'AppBundle\Entity\Asset\ModelLog', $id );
+            $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'model' . $model->getId(), $model->getUpdated() );
-            return $modelData;
+
+            $form = $this->createForm( ModelType::class, $model, ['allow_extra_fields' => true] );
+            $model->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
         }
         else
         {
