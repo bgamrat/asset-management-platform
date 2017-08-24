@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\DataFixtures\ORM\Demo;
+namespace AppBundle\DataFixtures\Demo;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;

@@ -6,6 +6,7 @@
     {% if error %}
         <div class="row">
             <div class="col-xs-12 text-warning">
+                {{dump(error)}}
                 <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
             </div>
         </div>

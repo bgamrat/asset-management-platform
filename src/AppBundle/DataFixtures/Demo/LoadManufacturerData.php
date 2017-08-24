@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\DataFixtures\ORM\Demo;
+namespace AppBundle\DataFixtures\Demo;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -117,9 +117,14 @@ class LoadManufacturerData implements FixtureInterface
         $rocket->addModel( $baz );
 
         $baz->addExtend( $foo );
+        $baz->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
+        $baz->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
         $bar->addExtend( $foo );
+        $bar->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
         $wingding->addRequire( $foo );
+        $wingding->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
         $gadget->addRequire( $baz );
+        $gadget->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
 
         $manager->persist( $baz );
         $manager->persist( $bar );
@@ -134,6 +139,34 @@ class LoadManufacturerData implements FixtureInterface
         $manager->persist( $shazam );
 
         $manager->persist( $acme );
+
+        $highPoint = new Manufacturer();
+        $highPoint->setName( 'High Point' );
+
+        $zoomer = new Brand();
+        $zoomer->setName( 'Zoomer' );
+        $highPoint->addBrand( $zoomer );
+
+        $gadget = new Model();
+        $gadget->setCategory( $categories[rand( 0, count( $categories ) - 1 )] );
+        $gadget->setName( 'Gadget' );
+        $gadget->setContainer( false );
+        $gadget->setCarnetValue( 5000 );
+        $gadget->setDefaultContractValue( 1000 );
+        $gadget->setDefaultEventValue( 200 );
+        $zoomer->addModel( $gadget );
+        $manager->persist( $gadget );
+
+        $wingding = new Model();
+        $wingding->setCategory( $categories[rand( 0, count( $categories ) - 1 )] );
+        $wingding->setName( 'Wingding' );
+        $wingding->setContainer( false );
+        $wingding->setCarnetValue( 15000 );
+        $wingding->setDefaultContractValue( 1000 );
+        $wingding->setDefaultEventValue( 600 );
+        $zoomer->addModel( $wingding );
+        $manager->persist( $highPoint );
+
         $manager->flush();
     }
 
