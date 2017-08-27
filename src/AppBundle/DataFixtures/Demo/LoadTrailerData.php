@@ -42,7 +42,7 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
 
     public function getOrder()
     {
-        return 1010;
+        return 500;
     }
 
 }

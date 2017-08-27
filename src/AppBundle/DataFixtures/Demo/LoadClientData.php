@@ -12,6 +12,7 @@ use AppBundle\Entity\Common\Email;
 use AppBundle\Entity\Common\Address;
 use AppBundle\Entity\Client\Contract;
 use AppBundle\Entity\Client\CategoryQuantity;
+use AppBundle\Entity\Client\Trailer as ClientTrailer;
 
 class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -68,6 +69,9 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         $contract = new Contract();
         $contract->setActive( true );
         $contract->setName( 'Benson - 2018' );
+        $contract->setStart( new \DateTime( '2018-01-01' ) );
+        $contract->setEnd( new \DateTime( '2018-12-31' ) );
+
         $categoryQuantity = new CategoryQuantity();
         $categoryQuantity->setCategory( $categories[rand( 0, $categoryCount )] );
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
@@ -91,6 +95,12 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
         $categoryQuantity->setValue( 6430 );
         $contract->addAvailableCategoryQuantity( $categoryQuantity );
+
+        $clientTrailer = new ClientTrailer();
+        $clientTrailer->setTrailer( $manager->getRepository( 'AppBundle\Entity\Asset\Trailer' )->findOneByName( 'Box' ) );
+
+        $contract->addRequiresTrailers( $clientTrailer );
+
         $hTv->addContract( $contract );
 
         $hTv->addContact( $contact );
@@ -105,7 +115,7 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
 
     public function getOrder()
     {
-        return 1000;
+        return 600;
     }
 
 }

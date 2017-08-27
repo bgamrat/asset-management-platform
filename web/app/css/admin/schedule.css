@@ -33,6 +33,9 @@
 .event .end .dijitTextBox {
     width: 100px;
 }
+.event.venue .justify > span {
+    margin: 5px;
+}
 pre#venue-address {
     padding-left: 0;
     margin: 0;
@@ -40,7 +43,6 @@ pre#venue-address {
     border: 0;
     background-color: #fff;
 }
-
 .venue-info {
     border: 1px solid #eee;
     width: 100%;

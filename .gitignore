@@ -25,3 +25,4 @@ web/vendor/release/*.js*
 !web/vendor/profiles
 !web/vendor/profiles/app.profile.js
 !web/vendor/build.sh
+src/AppBundle/DataFixtures/Demo/LoadUserData.php
