@@ -2,7 +2,8 @@
 
 namespace AppBundle\DataFixtures\Demo;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\CommonException;
 use AppBundle\Entity\Asset\Brand;
@@ -13,7 +14,7 @@ use AppBundle\Entity\Common\Email;
 use AppBundle\Entity\Common\Phone;
 use AppBundle\Entity\Common\Address;
 
-class LoadManufacturerData implements FixtureInterface
+class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInterface
 {
 
     public function load( ObjectManager $manager )
@@ -24,6 +25,7 @@ class LoadManufacturerData implements FixtureInterface
         {
             throw CommonException( "There are no category types defined (load them before running this)" );
         }
+        $categoryCount = count( $categories ) - 1;
 
         $acme = new Manufacturer();
         $acme->setName( 'Acme' );
@@ -71,7 +73,7 @@ class LoadManufacturerData implements FixtureInterface
         $acme->addBrand( $rocket );
 
         $gadget = new Model();
-        $gadget->setCategory( $categories[rand( 0, count( $categories ) - 1 )] );
+        $gadget->setCategory( $categories[rand( 0, $categoryCount )] );
         $gadget->setName( 'Gadget' );
         $gadget->setContainer( false );
         $gadget->setCarnetValue( 5000 );
@@ -81,7 +83,7 @@ class LoadManufacturerData implements FixtureInterface
         $manager->persist( $gadget );
 
         $wingding = new Model();
-        $wingding->setCategory( $categories[rand( 0, count( $categories ) - 1 )] );
+        $wingding->setCategory( $categories[rand( 0, $categoryCount )] );
         $wingding->setName( 'Wingding' );
         $wingding->setContainer( false );
         $wingding->setCarnetValue( 15000 );
@@ -90,7 +92,7 @@ class LoadManufacturerData implements FixtureInterface
         $rocket->addModel( $wingding );
 
         $foo = new Model();
-        $foo->setCategory( $categories[rand( 0, count( $categories ) - 1 )] );
+        $foo->setCategory( $categories[rand( 0, $categoryCount )] );
         $foo->setName( 'Foo' );
         $foo->setContainer( false );
         $foo->setCarnetValue( 105000 );
@@ -99,7 +101,7 @@ class LoadManufacturerData implements FixtureInterface
         $rocket->addModel( $foo );
 
         $bar = new Model();
-        $bar->setCategory( $categories[rand( 0, count( $categories ) - 1 )] );
+        $bar->setCategory( $categories[rand( 0, $categoryCount )] );
         $bar->setName( 'Bar' );
         $bar->setContainer( false );
         $bar->setCarnetValue( 75000 );
@@ -108,7 +110,7 @@ class LoadManufacturerData implements FixtureInterface
         $rocket->addModel( $bar );
 
         $baz = new Model();
-        $baz->setCategory( $categories[rand( 0, count( $categories ) - 1 )] );
+        $baz->setCategory( $categories[rand( 0, $categoryCount )] );
         $baz->setName( 'Baz' );
         $baz->setContainer( false );
         $baz->setCarnetValue( 10500 );
@@ -117,14 +119,14 @@ class LoadManufacturerData implements FixtureInterface
         $rocket->addModel( $baz );
 
         $baz->addExtend( $foo );
-        $baz->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
-        $baz->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
+        $baz->addSatisfies( $categories[rand( 0, $categoryCount )] );
+        $baz->addSatisfies( $categories[rand( 0, $categoryCount )] );
         $bar->addExtend( $foo );
-        $bar->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
+        $bar->addSatisfies( $categories[rand( 0, $categoryCount )] );
         $wingding->addRequire( $foo );
-        $wingding->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
+        $wingding->addSatisfies( $categories[rand( 0, $categoryCount )] );
         $gadget->addRequire( $baz );
-        $gadget->addSatisfies( $categories[rand( 0, count( $categories ) - 1 )] );
+        $gadget->addSatisfies( $categories[rand( 0, $categoryCount )] );
 
         $manager->persist( $baz );
         $manager->persist( $bar );
@@ -148,7 +150,7 @@ class LoadManufacturerData implements FixtureInterface
         $highPoint->addBrand( $zoomer );
 
         $gadget = new Model();
-        $gadget->setCategory( $categories[rand( 0, count( $categories ) - 1 )] );
+        $gadget->setCategory( $categories[rand( 0, $categoryCount )] );
         $gadget->setName( 'Gadget' );
         $gadget->setContainer( false );
         $gadget->setCarnetValue( 5000 );
@@ -158,7 +160,7 @@ class LoadManufacturerData implements FixtureInterface
         $manager->persist( $gadget );
 
         $wingding = new Model();
-        $wingding->setCategory( $categories[rand( 0, count( $categories ) - 1 )] );
+        $wingding->setCategory( $categories[rand( 0, $categoryCount )] );
         $wingding->setName( 'Wingding' );
         $wingding->setContainer( false );
         $wingding->setCarnetValue( 15000 );
@@ -167,7 +169,39 @@ class LoadManufacturerData implements FixtureInterface
         $zoomer->addModel( $wingding );
         $manager->persist( $highPoint );
 
+        $boxesWithWheels = new Manufacturer();
+        $boxesWithWheels->setName( 'Boxes With Wheels' );
+        $boxes = new Brand();
+        $boxes->setName( 'Boxes' );
+        $boxesWithWheels->addBrand( $boxes );
+
+        $box = new Model();
+        $box->setCategory( $manager->getRepository( 'AppBundle\Entity\Asset\Category' )->findOneByName( 'trailer' ) );
+        $box->setName( 'Box' );
+        $box->setContainer( false );
+        $box->setCarnetValue( 4400000 );
+        $box->setDefaultContractValue( 21000 );
+        $box->setDefaultEventValue( 1600 );
+        $boxes->addModel( $box );
+
+        $box = new Model();
+        $box->setCategory( $manager->getRepository( 'AppBundle\Entity\Asset\Category' )->findOneByName( 'trailer' ) );
+        $box->setName( 'Main-Box' );
+        $box->setContainer( false );
+        $box->setCarnetValue( 7500000 );
+        $box->setDefaultContractValue( 410000 );
+        $box->setDefaultEventValue( 16000 );
+        $boxes->addModel( $box );
+
+        $manager->persist( $boxes );
+        $manager->persist( $boxesWithWheels );
+
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 200;
     }
 
 }

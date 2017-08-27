@@ -2,27 +2,32 @@
 
 namespace AppBundle\DataFixtures\Demo;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\Asset\Category;
 
-class LoadCategoryData implements FixtureInterface
+class LoadCategoryData extends AbstractFixture implements OrderedFixtureInterface
 {
 
     public function load( ObjectManager $manager )
     {
         $top = $manager->getRepository( 'AppBundle\Entity\Asset\Category' )->findOneByName( 'top' );
 
+        $trailer = new Category();
+        $trailer->setName( 'trailer' )->setActive( true )->setPosition( 0 )->setParent( $top )->setFullName();
+        $manager->persist( $trailer );
+
         $bundle = new Category();
-        $bundle->setName( 'bundle' )->setActive( true )->setPosition( 0 )->setParent( $top )->setFullName();
+        $bundle->setName( 'bundle' )->setActive( true )->setPosition( 1 )->setParent( $top )->setFullName();
         $manager->persist( $bundle );
 
         $set = new Category();
-        $set->setName( 'set' )->setActive( true )->setPosition( 1 )->setParent( $top )->setFullName();
+        $set->setName( 'set' )->setActive( true )->setPosition( 2 )->setParent( $top )->setFullName();
         $manager->persist( $set );
 
         $thingies = new Category();
-        $thingies->setName( 'thingies' )->setActive( true )->setPosition( 2 )->setParent( $top )->setFullName();
+        $thingies->setName( 'thingies' )->setActive( true )->setPosition( 3 )->setParent( $top )->setFullName();
         $manager->persist( $thingies );
 
         $widget = new Category();
@@ -58,6 +63,11 @@ class LoadCategoryData implements FixtureInterface
         $manager->persist( $addon );
 
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 100;
     }
 
 }

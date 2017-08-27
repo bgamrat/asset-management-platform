@@ -2,12 +2,13 @@
 
 namespace AppBundle\DataFixtures\Demo;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadUserData implements FixtureInterface, ContainerAwareInterface
+class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
 
     /**
@@ -32,12 +33,17 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
         $adminUser->setEmail( 'demo@example.com' );
         $adminUser->addRole( 'ROLE_API' );
         $adminUser->addRole( 'ROLE_SUPER_ADMIN' );
-        $adminUser->setPlainPassword( '5min128max' );
-        $adminUser->setEnabled( true );
+        /* Password must be set and account enabled on the command line */
+        $adminUser->setEnabled( false );
         $adminUser->setConfirmationToken( 'whatnot' );
 
         // Update the user
         $userManager->updateUser( $adminUser, true );
+    }
+
+    public function getOrder()
+    {
+        return 1001;
     }
 
 }

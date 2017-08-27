@@ -269,9 +269,12 @@ class Trailer
      */
     public function setPurchased( $purchased )
     {
-        if (!empty($purchased)) {
+        if( !empty( $purchased ) )
+        {
             $this->purchased = $purchased;
-        } else {
+        }
+        else
+        {
             $this->purchased = null;
         }
 
@@ -418,9 +421,9 @@ class Trailer
         return $relationships;
     }
 
-    public function setExtends( $models )
+    public function setExtends( $trailers )
     {
-        foreach( $models as $m )
+        foreach( $trailers as $m )
         {
             $this->addExtends( $m );
         }
@@ -432,22 +435,22 @@ class Trailer
         return $this->getRelationships( 'extends', $full );
     }
 
-    public function addExtend( Model $model )
+    public function addExtend( Trailer $trailer )
     {
-        if( !$this->extends->contains( $model ) )
+        if( !$this->extends->contains( $trailer ) )
         {
-            $this->extends->add( $model );
+            $this->extends->add( $trailer );
         }
     }
 
-    public function removeExtend( Model $model )
+    public function removeExtend( Trailer $trailer )
     {
-        $this->extends->removeElement( $model );
+        $this->extends->removeElement( $trailer );
     }
 
-    public function setExtendedBy( $models )
+    public function setExtendedBy( $trailers )
     {
-        foreach( $models as $m )
+        foreach( $trailers as $m )
         {
             $this->addExtendedBy( $m );
         }
@@ -459,25 +462,25 @@ class Trailer
         return $this->getRelationships( 'extended_by', $full );
     }
 
-    public function addExtendedBy( Model $model )
+    public function addExtendedBy( Trailer $trailer )
     {
-        if( !$this->extended_by->contains( $model ) )
+        if( !$this->extended_by->contains( $trailer ) )
         {
-            $this->extended_by->add( $model );
+            $this->extended_by->add( $trailer );
         }
         return $this;
     }
 
-    public function removeExtendedBy( Model $model )
+    public function removeExtendedBy( Trailer $trailer )
     {
-        $this->extends->removeElement( $model );
+        $this->extends->removeElement( $trailer );
         return $this;
     }
 
-    public function setRequires( $models )
+    public function setRequires( $trailers )
     {
         $this->requires->clear();
-        foreach( $models as $m )
+        foreach( $trailers as $m )
         {
             $this->addRequires( $m );
         }
@@ -489,22 +492,22 @@ class Trailer
         return $this->getRelationships( 'requires', $full );
     }
 
-    public function addRequire( Model $model )
+    public function addRequire( Trailer $trailer )
     {
-        if( !$this->requires->contains( $model ) )
+        if( !$this->requires->contains( $trailer ) )
         {
-            $this->requires->add( $model );
+            $this->requires->add( $trailer );
         }
     }
 
-    public function removeRequire( Model $model )
+    public function removeRequire( Trailer $trailer )
     {
-        $this->requires->removeElement( $model );
+        $this->requires->removeElement( $trailer );
     }
 
-    public function setRequiredBy( $models )
+    public function setRequiredBy( $trailers )
     {
-        foreach( $models as $m )
+        foreach( $trailers as $m )
         {
             $this->addRequiredBy( $m );
         }
@@ -516,17 +519,17 @@ class Trailer
         return $this->getRelationships( 'required_by', $full );
     }
 
-    public function addRequiredBy( Model $model )
+    public function addRequiredBy( Trailer $trailer )
     {
-        if( !$this->required_by->contains( $model ) )
+        if( !$this->required_by->contains( $trailer ) )
         {
-            $this->required_by->add( $model );
+            $this->required_by->add( $trailer );
         }
     }
 
-    public function removeRequiredBy( Model $model )
+    public function removeRequiredBy( Trailer $trailer )
     {
-        $this->requires->removeElement( $model );
+        $this->requires->removeElement( $trailer );
     }
 
     public function getUpdated()
