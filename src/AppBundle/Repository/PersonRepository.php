@@ -106,7 +106,8 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
             $queryBuilder = $em->createQueryBuilder();
             $queryBuilder->select( 'p' )
                     ->from( 'AppBundle\Entity\Common\Person', 'p' )
-                    ->where( $queryBuilder->expr()->in( 'p.id', array_keys( $contactIds ) ) );
+                    ->where( $queryBuilder->expr()->in( 'p.id', '?1'));
+            $queryBuilder->setParameter(1,array_keys( $contactIds ) ) ;
             $people = $queryBuilder->getQuery()->getResult();
 
             $contacts = [];

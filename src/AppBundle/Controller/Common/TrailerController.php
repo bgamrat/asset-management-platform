@@ -29,7 +29,7 @@ class TrailerController extends Controller
         $equipment = [];
         foreach( $trailers as $trailer )
         {
-            $equipment[$trailer->getName()] = $this->getTrailerEquipment( $trailer->getName() );
+            $equipment[$trailer->getName()] = $this->getTrailerEquipment( $trailer );
         }
 
         return $this->render( 'public/trailers/index.html.twig', array(

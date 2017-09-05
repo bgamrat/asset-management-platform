@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\Asset\AssetStatus;
 
-class LoadCustomAttributeData implements FixtureInterface
+class LoadAssetStatusData implements FixtureInterface
 {
 
     public function load( ObjectManager $manager )

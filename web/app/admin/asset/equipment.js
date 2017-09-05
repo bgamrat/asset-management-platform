@@ -127,6 +127,7 @@ define([
             customAttributes.setData(null);
             serialNumberInput.set("value", "");
             costInput.set("value", null);
+            valueInput.set("value", null);
             commentInput.set("value", "");
             activeCheckBox.set("checked", true);
             assetViewDialog.set("title", core["new"]).show();
@@ -446,7 +447,7 @@ define([
                     statusSelect.set("displayedValue", asset.status_text);
                     purchasedInput.set("value", asset.purchased);
                     costInput.set("value", asset.cost);
-                    valueInput.get("value", asset.value);
+                    valueInput.set("value", asset.value);
                     dom.byId("asset_location_id").value = asset.location.id;
                     setLocationType(asset.location.type.id);
                     if( asset.location.type.url !== null ) {

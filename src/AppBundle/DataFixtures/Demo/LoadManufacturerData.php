@@ -79,6 +79,11 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $gadget->setCarnetValue( 5000 );
         $gadget->setDefaultContractValue( 1000 );
         $gadget->setDefaultEventValue( 200 );
+        $channels = new \stdClass();
+        $channels->channels = 6;
+        $resolution = new \stdClass();
+        $resolution->resolution = 'HD';
+        $gadget->setCustomAttributes( [$channels, $resolution] );
         $rocket->addModel( $gadget );
         $manager->persist( $gadget );
 
@@ -89,6 +94,13 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $wingding->setCarnetValue( 15000 );
         $wingding->setDefaultContractValue( 1000 );
         $wingding->setDefaultEventValue( 600 );
+        $expiration = new \stdClass();
+        $expiration->expiration = '';
+        $channels = new \stdClass();
+        $channels->channels = 12;
+        $resolution = new \stdClass();
+        $resolution->resolution = '4K';
+        $wingding->setCustomAttributes( [$expiration, $channels, $resolution] );
         $rocket->addModel( $wingding );
 
         $foo = new Model();
@@ -98,6 +110,11 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $foo->setCarnetValue( 105000 );
         $foo->setDefaultContractValue( 21000 );
         $foo->setDefaultEventValue( 1600 );
+        $expiration = new \stdClass();
+        $expiration->expiration = '';
+        $channels = new \stdClass();
+        $channels->channels = 4;
+        $foo->setCustomAttributes( [$expiration, $channels] );
         $rocket->addModel( $foo );
 
         $bar = new Model();

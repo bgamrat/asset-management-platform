@@ -7,6 +7,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\CommonException;
 use AppBundle\Entity\Asset\Trailer;
+use AppBundle\Entity\Asset\Location;
 
 class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -19,12 +20,12 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
             throw new CommonException( "There are no locations defined (load them before running this)" );
         }
         $location = $locations[rand( 0, count( $locations ) - 1 )];
-        $trailer = new Trailer();
-        $trailer->setName( 'Main' );
-        $trailer->setCost( 19000000 );
-        $trailer->setDescription( 'Big trailer of stuff' );
-        $trailer->setLocation( $location );
-        $trailer->setModel( $manager->getRepository( 'AppBundle\Entity\Asset\Model' )->findOneByName( 'Main-Box' ) );
+        $main = new Trailer();
+        $main->setName( 'Main' );
+        $main->setCost( 19000000 );
+        $main->setDescription( 'Big trailer of stuff' );
+        $main->setLocation( $location );
+        $main->setModel( $manager->getRepository( 'AppBundle\Entity\Asset\Model' )->findOneByName( 'Main-Box' ) );
 
         $box = new Trailer();
         $box->setName( 'Box' );
@@ -34,9 +35,22 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
         $box->setModel( $manager->getRepository( 'AppBundle\Entity\Asset\Model' )->findOneByName( 'Box' ) );
         $manager->persist( $box );
 
-        $trailer->addRequire( $box );
-        $trailer->setActive( true );
-        $manager->persist( $trailer );
+        $main->addRequire( $box );
+        $main->setActive( true );
+        $manager->persist( $main );
+
+        $trailerLocationType = $manager->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
+
+        $location = new Location();
+        $location->setEntity( $main->getId() );
+        $location->setType( $trailerLocationType );
+        $manager->persist( $location );
+
+        $location = new Location();
+        $location->setEntity( $box->getId() );
+        $location->setType( $trailerLocationType );
+        $manager->persist( $location );
+
         $manager->flush();
     }
 
