@@ -14,6 +14,7 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PeopleController extends FOSRestController
 {
@@ -68,13 +69,14 @@ class PeopleController extends FOSRestController
                             $queryBuilder->expr()->gt( 'LOWER(p.lastname)', '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
+            $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
 
         $ids = $queryBuilder->getQuery()->getResult();
-        
+
         $data = [];
-        foreach ($ids as $i => $row) {
+        foreach( $ids as $i => $row )
+        {
             $person = $em->getRepository( 'AppBundle\Entity\Common\Person' )->find( $row['id'] );
             $p = ['id' => $row['id'],
                 'name' => $person->getFullName(),
@@ -103,23 +105,18 @@ class PeopleController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Common\Person' )->find( $id );
         if( $person !== null )
         {
-            $data = [
-                'id' => $person->getId(),
-                'firstname' => $person->getFirstname(),
-                'middlename' => $person->getMiddlename(),
-                'lastname' => $person->getLastname(),
-                'emails' => $person->getEmails(),
-                'addresses' => $person->getAddresses(),
-                'phones' => $person->getPhones(),
-                'active' => $person->isActive()
-            ];
+            $formUtil = $this->get( 'app.util.form' );
+            $formUtil->saveDataTimestamp( 'person' . $person->getId(), $person->getUpdated() );
+
+            $form = $this->createForm( PersonType::class, $person, ['allow_extra_fields' => true] );
 
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle\Entity\Common\PersonLog', $id );
-            $data['history'] = $logUtil->translateIdsToText();
-            $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'person' . $person->getId(), $person->getUpdated() );
-            return $data;
+            $history = $logUtil->translateIdsToText();
+
+            $person->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
         }
         else
         {
@@ -160,7 +157,7 @@ class PeopleController extends FOSRestController
         $form = $this->createForm( PersonType::class, $person, ['allow_extra_fields' => true] );
         try
         {
-            $form->submit($data);
+            $form->submit( $data );
             if( $form->isValid() )
             {
                 $person = $form->getData();

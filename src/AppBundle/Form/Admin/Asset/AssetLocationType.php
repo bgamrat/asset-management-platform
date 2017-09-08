@@ -51,18 +51,18 @@ class AssetLocationType extends AbstractType
                             return ['data-type' => strtolower( $val->getName() )];
                         }
                     },
-                    'data' => $this->em->getReference( 'AppBundle\Entity\Asset\LocationType', $defaultLocationType->getId() ),
-                    'multiple' => false,
-                    'expanded' => true,
-                    'required' => true,
-                    'label' => 'asset.location_type',
-                    'property_path' => 'type',
-                    'choice_translation_domain' => false,
-                    'mapped' => false
-                ] )
-                ->add( 'type', HiddenType::class )
-                ->add( 'entity', IntegerType::class )
-                ->add( 'address', CheckboxType::class )
+                            'data' => $this->em->getReference( 'AppBundle\Entity\Asset\LocationType', $defaultLocationType->getId() ),
+                            'multiple' => false,
+                            'expanded' => true,
+                            'required' => true,
+                            'label' => 'asset.location_type',
+                            'property_path' => 'type',
+                            'choice_translation_domain' => false,
+                            'mapped' => false
+                        ] )
+                        ->add( 'type', HiddenType::class )
+                        ->add( 'entity', IntegerType::class )
+                        ->add( 'address', CheckboxType::class )
                 ;
                 $builder->get( 'type' )
                         ->addModelTransformer( new LocationTypeToIdTransformer( $this->em ) );
@@ -125,3 +125,4 @@ class AssetLocationType extends AbstractType
             }
 
         }
+        

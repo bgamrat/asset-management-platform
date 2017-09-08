@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * CustomAttribute
  *
@@ -15,7 +17,7 @@ class CustomAttribute
 
     public function setKey( $key )
     {
-        $this->key = $key;
+        $this->key = strtolower( $key );
         return $this;
     }
 
@@ -33,6 +35,18 @@ class CustomAttribute
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @Assert\IsTrue(message = "error.invalid_expiration_date")
+     */
+    public function isValueValidExpiration()
+    {
+        if( $this->key === 'expiration' )
+        {
+            return preg_match( '/^\d{4}-\d{1,2}-\d{1,2}$/', $this->value ) === 1;
+        }
+        return true;
     }
 
 }

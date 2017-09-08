@@ -131,7 +131,7 @@ define([
             return;
         }
         if( typeof value === "object" && value !== null && value.length !== 0 ) {
-            phone_lines = ['phoneNumber', 'comment'];
+            phone_lines = ['phone', 'comment'];
             l = phone_lines.length;
             for( p in value ) {
                 phone = value[p];

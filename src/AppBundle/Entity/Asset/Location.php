@@ -214,7 +214,7 @@ class Location
     /**
      * Set entityData
      *
-     * @param int $entityData_id
+     * @param object $entityData
      *
      * @return Location
      */
@@ -228,7 +228,7 @@ class Location
     /**
      * Get entityData
      *
-     * @return int
+     * @return mixed
      */
     public function getEntityData()
     {

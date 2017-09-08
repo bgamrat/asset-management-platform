@@ -162,6 +162,7 @@ class Person
      * @Gedmo\Versioned
      */
     private $deletedAt;
+    private $history;
 
     public function __construct()
     {
@@ -500,4 +501,15 @@ class Person
             $this->user->setLocked( true );
         }
     }
+
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    public function setHistory( $history )
+    {
+        $this->history = $history;
+    }
+
 }

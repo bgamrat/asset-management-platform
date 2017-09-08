@@ -317,6 +317,8 @@ error:
         must be at least
     must_be_less_than_or_equal_to:
         must be less than or equal to
+    invalid_expiration_date:
+        Expiration dates must be formatted as YYYY-MM-DD
     invalid_phone_number:
         Phone numbers can contain digits, lowercase x (for extension), periods, commas, parentheses, dashes and plus signs
     password_short:

@@ -51,7 +51,7 @@ class LoadLocationTypeData implements FixtureInterface
 
         $trailerLocation = new LocationType();
         $trailerLocation->setName( 'Trailer' );
-        $trailerLocation->setEntity( 'contact' );
+        $trailerLocation->setEntity( 'trailer' );
         $trailerLocation->setUrl( '/api/store/trailers' );
         $trailerLocation->setActive( true );
         $trailerLocation->setDefault( false );

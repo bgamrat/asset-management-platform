@@ -66,6 +66,15 @@ define([
             dijit.startup();
             typeSelect.push(dijit);
             dijit = new ValidationTextBox({
+                required: false,
+                trim: true,
+                pattern: "[A-Za-z\.\,\ \'-]{2,64}",
+                "class": "name",
+                placeholder: core.title
+            }, base + "title");
+            dijit.startup();
+            titleInput.push(dijit);
+            dijit = new ValidationTextBox({
                 trim: true,
                 properCase: true,
                 pattern: "[A-Za-z\.\,\ \'-]{2,64}",
@@ -94,15 +103,6 @@ define([
             }, base + "lastname");
             dijit.startup();
             lastnameInput.push(dijit);
-            dijit = new ValidationTextBox({
-                required: true,
-                trim: true,
-                pattern: "[A-Za-z\.\,\ \'-]{2,64}",
-                "class": "name",
-                placeholder: core.title
-            }, base + "title");
-            dijit.startup();
-            titleInput.push(dijit);
             dijit = new Textarea({
                 placeholder: core.comment,
                 trim: true,
@@ -116,6 +116,8 @@ define([
             var item;
             personId.splice(id, 1);
             item = typeSelect.splice(id, 1);
+            item[0].destroyRecursive();
+            item = titleInput.splice(id, 1);
             item[0].destroyRecursive();
             item = firstnameInput.splice(id, 1);
             item[0].destroyRecursive();
@@ -227,7 +229,7 @@ define([
                     }
                     obj = person[i];
                     personId[i] = obj.id;
-                    typeSelect[i].set('value', obj.type);
+                    typeSelect[i].set('value', obj.type.id);
                     titleInput[i].set('value', obj.title);
                     firstnameInput[i].set('value', obj.firstname);
                     middlenameInput[i].set('value', obj.middlename);
