@@ -340,7 +340,9 @@ define([
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
-                        assetViewDialog.hide();
+                        if (lib.checkForFormErrors(data) === false) {
+                            assetViewDialog.hide();
+                        }
                     }, lib.xhrError);
                 } else {
                     filter = new store.Filter();

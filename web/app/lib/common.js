@@ -35,10 +35,27 @@ define([
             return true;
         }
     }
+
+    function checkForFormErrors(data) {
+        var i, l, errorText = "";
+        if( typeof data !== "undefined" && typeof data[0] !== "undefined" ) {
+            l = data.length;
+            for( i = 0; i < l; i++ ) {
+                errorText += data[i].message + "<br>";
+            }
+            errorDialog.set("title", core.error);
+            errorDialog.set("content", errorText);
+            errorDialog.show();
+            return true;
+        }
+        return false;
+    }
+
     function textError(msg) {
         errorDialog.set("content", msg);
         errorDialog.show();
     }
+
     function xhrError(err) {
         var errObj = JSON.parse(err.response.text);
         if( typeof errObj.error !== "undefined" && errObj.error !== null ) {
@@ -170,6 +187,7 @@ define([
         personTypes: personTypes,
         phoneTypes: phoneTypes,
         showHistory: showHistory,
+        checkForFormErrors: checkForFormErrors,
         textError: textError,
         xhrError: xhrError,
         constant: {

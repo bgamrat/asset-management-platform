@@ -5,20 +5,18 @@ namespace AppBundle\Form\Admin\Asset;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
 use AppBundle\Form\Admin\Asset\AssetLocationType;
 use AppBundle\Form\Common\CustomAttributeType;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class AssetType extends AbstractType
 {
@@ -87,7 +85,8 @@ class AssetType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true,
                     'by_reference' => false,
-                    'property_path' => 'customAttributes'
+                    'property_path' => 'customAttributes',
+                    'constraints' => [new Valid()]
                 ] )
                 ->add( 'comment', TextType::class, [
                     'label' => false

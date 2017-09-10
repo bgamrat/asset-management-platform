@@ -44,8 +44,8 @@ class TrailerController extends Controller
      */
     public function viewAction( $name )
     {
-        if ($name === 'index') {
-            $this->redirect($this->generateUrl('app_admin_api_trailer_index'));
+        if (empty($name) || $name === 'index') {
+            $this->redirect($this->generateUrl('trailers'));
         }
         
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );

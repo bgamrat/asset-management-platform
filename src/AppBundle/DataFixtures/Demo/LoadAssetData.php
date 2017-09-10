@@ -36,35 +36,41 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
             throw new CommonException( "There are no locations defined (load them before running this)" );
         }
         $locationCount = count( $locations ) - 1;
+        $durations = ['+1 week', '+1 month', '+2 months', '+3 months', '+4 months', '+6 months', '+1 year'];
+        $durationCount = count( $durations ) - 1;
 
-        $one = new Asset();
-        $one->setModel( $models[rand( 0, $modelCount )] );
-        $one->setCost( (float) rand( 1000, 50000 ) );
+        for( $i = 0; $i < 25; $i++ )
+        {
+            $location = $locations[rand( 0, $locationCount )];
+            $entityData = $manager->getReference( 'AppBundle\Entity\Asset\Trailer', $location->getEntity() );
+            $location->setEntityData( $entityData );
 
-        $location = $locations[rand( 0, $locationCount )];
+            $item = new Asset();
+            $item->setModel( $models[rand( 0, $modelCount )] );
+            $item->setCost( (float) rand( 1000, 150000 ) );
+            $item->setLocation( $location );
+            $item->setLocationText( $location->getEntityData()->getName() );
+            $numberFormatter = new \NumberFormatter( 'en_US', \NumberFormatter::ORDINAL );
+            $n = $numberFormatter->format( $i);
+            $item->setComment( 'This is the ' . $n . ' item' );
+            $item->setStatus( $assetStatuses[rand( 0, $assetStatusCount )] );
+            $item->setSerialNumber( preg_replace( '/\D/', '', md5( rand( 0, 10000 ) ) ) );
+            $item->setValue( (float) rand( 1000, 30000 ) );
+            $item->setPurchased( new \DateTime( '-' . rand( 0, 5 ) . ' years' ) );
 
-        $entityData = $manager->getReference( 'AppBundle\Entity\Asset\Trailer', $location->getEntity() );
-        $location->setEntityData( $entityData );
+            $duration = new \DateTime( $durations[rand( 0, $durationCount )] );
+            $expiration = new CustomAttribute();
+            $expiration->setKey( 'expiration' )->setValue( $duration->format( 'Y-m-d' ) );
+            $channels = new CustomAttribute();
+            $channels->setKey( 'channels' )->setValue( rand( 3, 16 ) );
+            $item->setCustomAttributes( [ $expiration, $channels] );
 
-        $one->setLocation( $location );
-        $one->setLocationText( $location->getEntityData()->getName() );
-        $one->setComment( 'This is the first item' );
-        $one->setStatus( $assetStatuses[rand( 0, $assetStatusCount )] );
-        $one->setSerialNumber( preg_replace( '/\D/', '', md5( rand( 0, 10000 ) ) ) );
-        $one->setValue( (float) rand( 1000, 30000 ) );
-        $one->setPurchased( new \DateTime( '-2 years' ) );
+            $barcode = new Barcode();
+            $barcode->setBarcode( str_pad( (string) rand( 0, 99999 ), 5, '0', STR_PAD_LEFT ) );
+            $item->addBarcode( $barcode );
+            $manager->persist( $item );
+        }
 
-        $oneYear = new \DateTime( '+1 year' );
-        $expiration = new CustomAttribute();
-        $expiration->setKey( 'expiration' )->setValue( $oneYear->format( 'Y-m-d' ) );
-        $channels = new CustomAttribute();
-        $channels->setKey( 'channels' )->setValue( 4 );
-        $one->setCustomAttributes( [ $expiration, $channels] );
-
-        $barcode = new Barcode();
-        $barcode->setBarcode( str_pad( (string) rand( 0, 99999 ), 5, '0', STR_PAD_LEFT ) );
-        $one->addBarcode( $barcode );
-        $manager->persist( $one );
         $manager->flush();
     }
 

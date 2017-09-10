@@ -14,6 +14,8 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
 
     public function load( ObjectManager $manager )
     {
+        $operational = $manager->getRepository( 'AppBundle\Entity\Asset\AssetStatus' )->findOneByName( 'Operational' );
+
         $locations = $manager->getRepository( 'AppBundle\Entity\Asset\Location' )->findAll();
         if( empty( $locations ) )
         {
@@ -25,6 +27,7 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
         $main->setCost( 19000000 );
         $main->setDescription( 'Big trailer of stuff' );
         $main->setLocation( $location );
+        $main->setStatus( $operational );
         $main->setModel( $manager->getRepository( 'AppBundle\Entity\Asset\Model' )->findOneByName( 'Main-Box' ) );
 
         $box = new Trailer();
@@ -32,6 +35,7 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
         $box->setCost( 5200000 );
         $box->setActive( true );
         $box->setLocation( $location );
+        $box->setStatus( $operational );
         $box->setModel( $manager->getRepository( 'AppBundle\Entity\Asset\Model' )->findOneByName( 'Box' ) );
         $manager->persist( $box );
 

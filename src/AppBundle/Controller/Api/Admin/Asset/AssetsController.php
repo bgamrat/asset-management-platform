@@ -7,13 +7,9 @@ use AppBundle\Entity\Asset\Asset;
 use AppBundle\Entity\Asset\Location;
 use AppBundle\Form\Admin\Asset\AssetType;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class AssetsController extends FOSRestController
 {
@@ -219,14 +215,15 @@ class AssetsController extends FOSRestController
             }
             else
             {
-                return $form;
+                return $form->getErrors();
             }
         }
         catch( Exception $e )
         {
+            $translator = $this->container->get( 'translator' )->getLocale();
             $response->setStatusCode( 400 );
             $response->setContent( json_encode(
-                            ['message' => 'errors', 'errors' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()]
+                            ['message' => 'errors', 'errors' => $translator->translate($e->getMessage()), 'file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()]
             ) );
         }
         return $response;
