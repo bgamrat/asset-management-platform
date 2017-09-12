@@ -31,7 +31,7 @@ class TrailerType extends AbstractType
     {
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'trailer', TextType::class, [
+                ->add( 'trailer', TextType::class, [ 'data'=> 'banana',
                     'label' => 'asset.trailer'
                 ] )
                 ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
@@ -39,8 +39,8 @@ class TrailerType extends AbstractType
                     'label' => false
                 ] )
         ;
-        $builder->get( 'trailer' )
-                ->addModelTransformer( new TrailerToIdTransformer( $this->em ) );
+        //$builder->get( 'trailer' )
+          //      ->addModelTransformer( new TrailerToIdTransformer( $this->em ) );
     }
 
     /**

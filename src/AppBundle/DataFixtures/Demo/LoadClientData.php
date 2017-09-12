@@ -24,6 +24,12 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         {
             throw new CommonException( "There are no category types defined (load them before running this)" );
         }
+        foreach ($categories as $i => $c) {
+            if ($c->getName() === 'top') {
+                unset($categories[$i]);
+                break;
+            }
+        }
         $categoryCount = count( $categories ) - 1;
 
         $hTv = new Client();
@@ -115,7 +121,7 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
 
     public function getOrder()
     {
-        return 400;
+        return 1200;
     }
 
 }

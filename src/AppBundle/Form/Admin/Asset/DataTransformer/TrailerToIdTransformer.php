@@ -30,7 +30,7 @@ class TrailerToIdTransformer implements DataTransformerInterface
         if (is_string($trailer)) {
             return $trailer;
         }
-        
+
         return $trailer->getName();
     }
 
@@ -50,7 +50,7 @@ class TrailerToIdTransformer implements DataTransformerInterface
 
         $trailer = $this->em
             ->getRepository('AppBundle\Entity\Asset\Trailer')
-            ->find($trailerName)
+            ->findByName($trailerName)
         ;
 
         if (null === $trailer) {
