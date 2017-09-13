@@ -30,14 +30,15 @@
         {% if form.parent.vars.allow_delete is defined %}
             <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__name__"><i class="fa fa-remove"></i></span>
             {% endif %}
-    </div>{% endspaceless %}{% endmacro %}
+    </div>
+{% endspaceless %}{% endmacro %}
 
-    {%macro relation(title,type,form) %}{%spaceless%}
-            <div id="{{type}}" class="{{type}}">
-                <h3>{{title}}</h3>
-                {{form_row(form)}}
-                {% if form.vars.allow_add %}
-                    <div data-type="{{type}}" class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
-                {% endif %}
-            </div>
-    {%endspaceless%}{%endmacro %}
+{%macro relation(title,type,form) %}{%spaceless%}
+    <div id="{{type}}" class="{{type}}">
+        <h3>{{title}}</h3>
+        {{form_row(form)}}
+        {% if form.vars.allow_add %}
+            <div data-type="{{type}}" class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+        {% endif %}
+    </div>
+{%endspaceless%}{%endmacro %}

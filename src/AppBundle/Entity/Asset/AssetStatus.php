@@ -42,24 +42,31 @@ class AssetStatus
     private $name;
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $comment;
     /**
      * @var boolean
      *
-     * @ORM\Column(name="active", type="boolean")
-     * 
+     * @ORM\Column(name="default_value", type="boolean", nullable=true)
+     *
      */
-    private $active = true;
+    private $default = false;
     /**
      * @var boolean
      *
-     * @ORM\Column(name="default_value", type="boolean", nullable=true)
-     * 
+     * @ORM\Column(type="boolean")
+     *
      */
-    private $default = false;
+    private $available = true;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean")
+     *
+     */
+    private $active = true;
 
     /**
      * Set id
@@ -129,16 +136,6 @@ class AssetStatus
         return $this->comment;
     }
 
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
     public function setDefault( $default )
     {
         $this->default = $default;
@@ -147,6 +144,26 @@ class AssetStatus
     public function isDefault()
     {
         return $this->default;
+    }
+
+    public function setAvailable( $available )
+    {
+        $this->available = $available;
+    }
+
+    public function isAvailable()
+    {
+        return $this->available;
+    }
+
+    public function setActive( $active )
+    {
+        $this->active = $active;
+    }
+
+    public function isActive()
+    {
+        return $this->active;
     }
 
 }

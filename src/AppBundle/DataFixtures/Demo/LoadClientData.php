@@ -24,9 +24,11 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         {
             throw new CommonException( "There are no category types defined (load them before running this)" );
         }
-        foreach ($categories as $i => $c) {
-            if ($c->getName() === 'top') {
-                unset($categories[$i]);
+        foreach( $categories as $i => $c )
+        {
+            if( $c->getName() === 'top' )
+            {
+                unset( $categories[$i] );
                 break;
             }
         }
@@ -104,6 +106,7 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
 
         $clientTrailer = new ClientTrailer();
         $clientTrailer->setTrailer( $manager->getRepository( 'AppBundle\Entity\Asset\Trailer' )->findOneByName( 'Box' ) );
+        $manager->persist( $clientTrailer );
 
         $contract->addRequiresTrailers( $clientTrailer );
 

@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use AppBundle\Form\Admin\Asset\DataTransformer\TrailerToIdTransformer;
+use AppBundle\Form\Admin\Client\DataTransformer\TrailerToIdTransformer;
 
 class TrailerType extends AbstractType
 {
@@ -31,16 +31,14 @@ class TrailerType extends AbstractType
     {
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'trailer', TextType::class, [ 'data'=> 'banana',
-                    'label' => 'asset.trailer'
-                ] )
+                ->add( 'trailer', TextType::class, [ 'label' => 'asset.trailer'] )
                 ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
         ;
-        //$builder->get( 'trailer' )
-          //      ->addModelTransformer( new TrailerToIdTransformer( $this->em ) );
+        $builder->get( 'trailer' )
+              ->addModelTransformer( new TrailerToIdTransformer( $this->em ) );
     }
 
     /**

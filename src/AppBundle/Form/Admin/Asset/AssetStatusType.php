@@ -20,12 +20,13 @@ class AssetStatusType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $builder
+        $builder->add( 'default', CheckBoxType::class )
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
                 ->add( 'comment', TextType::class )
+                ->add( 'available', CheckboxType::class )
                 ->add( 'active', CheckboxType::class )
-                ->add( 'default', CheckBoxType::class )
+
         ;
     }
 

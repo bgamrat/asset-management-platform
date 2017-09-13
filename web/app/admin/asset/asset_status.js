@@ -20,7 +20,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var nameInput = [], commentInput = [], activeCheckBox = [], defaultRadioButton = [];
+    var availableCheckBox = [], nameInput = [], commentInput = [], activeCheckBox = [], defaultRadioButton = [];
     var addOneMoreControl = null;
     var divId = "asset_statuses_statuses";
 
@@ -33,6 +33,10 @@ define([
         var dijit, index = nameInput.length;
         var base = divId + '_' + index + '_';
         var checked = false;
+        dijit = new CheckBox({'checked': document.getElementById(base + "available").checked,
+            name: "asset_statuses[statuses][" + index + "][available]"}, base + "available");
+        availableCheckBox.push(dijit);
+        dijit.startup();
         dijit = new ValidationTextBox({
             placeholder: core.name,
             trim: true,

@@ -71,7 +71,7 @@ fieldset ul.unstyled {
 }
 .form-row.header .url,
 .form-row.header .name {
-    width: 15em;
+    width: 8em;
     display: inline-block;
 }
 .form-row.header .comment {
@@ -79,7 +79,11 @@ fieldset ul.unstyled {
     display: inline-block;
 }
 .form-row.header .active,
-.form-row .active {
+.form-row .active,
+.form-row.header .available,
+.form-row .available,
+.form-row.header .default,
+.form-row .default{
     display: inline-block;
     text-align: center;
     width: 65px;
