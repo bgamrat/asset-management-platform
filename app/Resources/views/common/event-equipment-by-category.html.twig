@@ -15,23 +15,41 @@
         <h1>{{ block ('title') }}</h1>
         <div class="event">
             <div class="event-data">
-                <!--div class="name-value-active">
-                    <span class="event name">
-                        {{event.name}}
-                    </span>
-                    <span class="event active">
-                        {% if event.active %}
-                            {{'common.active'|trans}}
+                <div>
+                    <span class="tentative">
+                        {% if event.tentative %}
+                            {{'event.tentative'|trans}}
                         {% else %}
-                            {{'common.not_active'|trans}}
+                            {{'event.firm'|trans}}
                         {%endif%}
                     </span>
-                </div-->
-                <div class="description">
-                    <!--div class="label">{{'common.description'|trans}}</div-->
-                    {{event.description}}
+                    <span class="billable">
+                        {% if event.billable %}
+                            {{'common.billable'|trans}}
+                        {% else %}
+                            {{'common.not_billable'|trans}}
+                        {%endif%}
+                    </span>
+                    <span class="canceled">
+                        {% if event.canceled %}
+                            {{'common.canceled'|trans}}
+                        {%endif%}
+                    </span>
                 </div>
+                {% if event.description is not empty %}
+                    <div class="description">
+                        <div class="label">{{'common.description'|trans}}</div>
+                        {{event.description}}
+                    </div>
+                {% endif %}
             </div>
+            <section>
+                {% if event.contracts is not empty %}
+                    {% for contract in event.contracts %}
+                        {% include 'common/parts/contract-details.html.twig' %}
+                    {% endfor %}
+                {% endif %}
+            </section>
             <section>
                 {% if equipment is not empty %}
                     <article class="event equipment">

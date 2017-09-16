@@ -36,7 +36,8 @@ define([
             store: trailerStore,
             labelAttr: "name",
             searchAttr: "name",
-            pageSize: 25
+            pageSize: 25,
+            required: false
         }, base);
         dijit.startup();
         trailerFilteringSelect.push(dijit);
@@ -89,7 +90,6 @@ define([
         addOneMoreControl = query('.trailers .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
-            var dataType = domAttr.get(event.target, "data-type");
             cloneNewNode();
             createDijit();
         });

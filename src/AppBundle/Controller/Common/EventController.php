@@ -26,6 +26,52 @@ class EventController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository( 'AppBundle\Entity\Schedule\Event' )->find( $id );
+
+        $contracts = $event->getContracts();
+
+        $requiresTrailers = $availableTrailers = $requiresCategoryQuantities = $availableCategoryQuantities = [];
+        foreach( $contracts as $contract )
+        {
+            foreach( $contract->getRequiresCategoryQuantities() as $rcq )
+            {
+                $categoryId = $rcq->getCategory()->getId();
+                if( !isset( $requiresCategoryQuantities[$categoryId] ) )
+                {
+                    $requiresCategoryQuantities[$categoryId] = $rcq;
+                }
+                else
+                {
+                    $requiresCategoryQuantities[$categoryId]->addQuantity( $rcq->getQuantity() );
+                }
+            }
+
+            $trailers = $contract->getRequiresTrailers( true );
+            $assets = $trailerNames = [];
+            $locationType = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
+            foreach( $trailers as $t )
+            {
+                $trailer = $t->getTrailer();
+                $trailerId = $trailer->getId();
+                $assets[$trailerId] = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $locationType, $trailerId );
+                $trailerNames[$trailerId] = $trailer->getName();
+            }
+        }
+
+        foreach( $assets as $trailerId => $trailerAssets )
+        {
+            foreach( $trailerAssets as $a )
+            {
+                $categoryId = $a->getModel()->getCategory()->getId();
+                if( isset( $requiresCategoryQuantities[$categoryId] ) )
+                {
+                    $requiresCategoryQuantities[$categoryId]
+                            ->subtractQuantity( 1 );
+                }
+            }
+        }
+        dump( $assets, $requiresCategoryQuantities );
+        die;
+
         return $this->render( 'common/event-equipment-by-category.html.twig', array(
                     'event' => $event,
                     'equipment' => $this->getEventEquipment( $event ),
@@ -39,7 +85,8 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $trailers = $event->getTrailers();
         $trailerIds = [];
-        foreach ($trailers as $t) {
+        foreach( $trailers as $t )
+        {
             $trailerIds[] = $t->getId();
         }
         $queryBuilder = $em->createQueryBuilder()->select( 'c.fullName', 'COUNT(c.id) AS quantity' )

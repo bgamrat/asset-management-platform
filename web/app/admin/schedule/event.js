@@ -121,6 +121,7 @@ define([
             person.setData(null);
             contracts.setData(null);
             trailers.setData(null);
+            document.getElementById("full-equipment-link").classList.add("hidden");
             eventViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -373,8 +374,9 @@ define([
                     clientFilteringSelect.set('displayedValue', event.client_text);
                     venueFilteringSelect.set('displayedValue', event.venue_text);
                     descriptionInput.set("value", event.comment);
-                    equipmentLink = document.getElementById("full-equipment-link")
+                    equipmentLink = document.getElementById("full-equipment-link");
                     equipmentLink.href = equipmentLink.href.replace(/(__ID__|\d+)/, event.id);
+                    equipmentLink.classList.remove("hidden");
                     contracts.setData(event.contracts);
                     person.setData(event.contacts);
                     eventViewDialog.show();

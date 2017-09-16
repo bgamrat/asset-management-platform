@@ -81,25 +81,33 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         $contract->setEnd( new \DateTime( '2018-12-31' ) );
 
         $categoryQuantity = new CategoryQuantity();
-        $categoryQuantity->setCategory( $categories[rand( 0, $categoryCount )] );
+        $category = rand( 0, $categoryCount );
+        $categoryQuantity->setCategory( $categories[$category] );
+        unset( $categories[$category] );
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
         $categoryQuantity->setValue( 4000 );
         $contract->addRequiresCategoryQuantity( $categoryQuantity );
 
         $categoryQuantity = new CategoryQuantity();
-        $categoryQuantity->setCategory( $categories[rand( 0, $categoryCount )] );
+        $category = rand( 0, $categoryCount );
+        $categoryQuantity->setCategory( $categories[$category] );
+        unset( $categories[$category] );
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
         $categoryQuantity->setValue( 3000 );
         $contract->addRequiresCategoryQuantity( $categoryQuantity );
 
         $categoryQuantity = new CategoryQuantity();
-        $categoryQuantity->setCategory( $categories[rand( 0, $categoryCount )] );
+        $category = rand( 0, $categoryCount );
+        $categoryQuantity->setCategory( $categories[$category] );
+        unset( $categories[$category] );
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
         $categoryQuantity->setValue( 430 );
         $contract->addRequiresCategoryQuantity( $categoryQuantity );
 
         $categoryQuantity = new CategoryQuantity();
-        $categoryQuantity->setCategory( $categories[rand( 0, $categoryCount )] );
+        $category = rand( 0, $categoryCount );
+        $categoryQuantity->setCategory( $categories[$category] );
+        unset( $categories[$category] );
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
         $categoryQuantity->setValue( 6430 );
         $contract->addAvailableCategoryQuantity( $categoryQuantity );

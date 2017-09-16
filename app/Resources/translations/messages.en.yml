@@ -329,6 +329,8 @@ event:
         Billable
     canceled:
         Canceled
+    firm:
+        Firm
     staff:
         Staff
     tentative:

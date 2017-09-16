@@ -63,6 +63,7 @@ class CategoryQuantity
      * @Gedmo\Timestampable(on="update")
      */
     private $updated;
+
     /**
      * Get id
      *
@@ -112,6 +113,20 @@ class CategoryQuantity
     public function setQuantity( $quantity )
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function addQuantity( $quantity )
+    {
+        $this->quantity += $quantity;
+
+        return $this;
+    }
+
+    public function subtractQuantity( $quantity )
+    {
+        $this->quantity -= $quantity;
 
         return $this;
     }

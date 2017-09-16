@@ -338,7 +338,7 @@ class Event
 
     public function getContacts()
     {
-        return $this->contacts->toArray();
+        return empty($this->contacts) ? [] : $this->contacts->toArray();
     }
 
     public function addContact( Person $contact )
@@ -356,7 +356,7 @@ class Event
 
     public function getContracts()
     {
-        return $this->contracts->toArray();
+        return empty($this->contracts) ? [] : $this->contracts->toArray();
     }
 
     public function addContract( Contract $contract )
@@ -404,7 +404,7 @@ class Event
 
     public function getTimeSpans()
     {
-        return $this->timespans->toArray();
+        return empty($this->timespans) ? [] : $this->timespans->toArray();
     }
 
     public function addTimeSpan( TimeSpan $timespan )

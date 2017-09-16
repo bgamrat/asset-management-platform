@@ -98,7 +98,7 @@ define([
         contractStore = new JsonRest({
             target: '/api/store/contracts',
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: 'name'});
 
         contractTrailersStore = new JsonRest({
             target: '/api/store/contracttrailers',
@@ -161,7 +161,6 @@ define([
             for( i = 0; i < contracts.length; i++ ) {
                 cloneNewNode();
                 createDijit();
-                contractFilteringSelect[i].set("value", contracts[i].id);
                 contractFilteringSelect[i].set("displayedValue", contracts[i].name);
             }
         } else {
