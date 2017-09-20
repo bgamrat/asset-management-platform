@@ -86,9 +86,15 @@ define([
 
     }
 
-    function formatDate(value) {
+    function formatDate(value,unix) {
         var date = new Date(), year, month, day;
-        date.setTime(value * 1000);
+        if (typeof unix === "undefined") {
+            unix = true;
+        }
+        if (unix === true) {
+            value *= 1000;
+        }
+        date.setTime(value);
         year = date.getFullYear();
         month = date.getMonth() + 1,
                 day = date.getDate();

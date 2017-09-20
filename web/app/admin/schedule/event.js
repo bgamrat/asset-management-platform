@@ -294,14 +294,20 @@ define([
                 dates: {
                     label: core.dates,
                     formatter: function (data, object) {
-                        var html = "", datesList = "", st = "", en = "";
+                        var html = "", datesList = "", st = "", en = "", ts = new Date();
                         if( object.start !== null ) {
                             st = object.start;
+                            if( st instanceof Date ) {
+                                st = lib.formatDate(st,false);
+                            }
                         }
                         if( object.end !== null ) {
                             en = object.end;
+                            if( en instanceof Date ) {
+                                en = lib.formatDate(en,false);
+                            }
                         }
-                        datesList = en + "-<br>" + st;
+                        datesList = st + "-<br>" + en;
                         html = '<span class="date-span">' + datesList + '</span><br>';
                         return html;
                     }
@@ -362,22 +368,32 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (event) {
-                    var r, equipmentLink;
+                    var r, equipmentLink, timestamp = new Date();
                     action = "view";
                     eventId = event.id;
                     nameInput.set("value", event.name);
-                    startInput.set('value', event.start);
-                    endInput.set('value', event.end);
+                    if( event.start !== null ) {
+                        timestamp.setTime(event.start.timestamp * 1000);
+                        startInput.set('value', timestamp);
+                    } else {
+                        startInput.set('value', null);
+                    }
+                    if( event.end !== null ) {
+                        timestamp.setTime(event.end.timestamp * 1000);
+                        endInput.set('value', timestamp);
+                    } else {
+                        endInput.set('value', null);
+                    }
                     tentativeCheckBox.set("checked", event.tentative === true);
                     billableCheckBox.set("checked", event.billable === true);
                     canceledCheckBox.set("checked", event.canceled === true);
-                    clientFilteringSelect.set('displayedValue', event.client_text);
-                    venueFilteringSelect.set('displayedValue', event.venue_text);
+                    clientFilteringSelect.set('displayedValue', (event.client !== null) ? event.client.name : null);
+                    venueFilteringSelect.set('displayedValue', (event.venue !== null) ? event.venue.name : null);
                     descriptionInput.set("value", event.comment);
                     equipmentLink = document.getElementById("full-equipment-link");
                     equipmentLink.href = equipmentLink.href.replace(/(__ID__|\d+)/, event.id);
                     equipmentLink.classList.remove("hidden");
-                    contracts.setData(event.contracts);
+                    contracts.setData(event.client.contracts);
                     person.setData(event.contacts);
                     eventViewDialog.show();
                 }, lib.xhrError);

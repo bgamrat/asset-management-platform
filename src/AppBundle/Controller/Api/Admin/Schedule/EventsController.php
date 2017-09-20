@@ -67,6 +67,21 @@ class EventsController extends FOSRestController
         $data = [];
         foreach( $eventCollection as $e )
         {
+            $event = $em->getRepository('AppBundle\Entity\Schedule\Event')->find($e['id']);
+            $trailers = $event->getTrailers();
+            $trailerList = array_column($trailers, 'name');
+            $contracts = $event->getContracts();
+            dump($contracts);die;
+            foreach ($contracts as $c) {
+                dump($c);
+                foreach ($c->getTrailers('requiresTrailers',false) as $t) {
+                    dump($t);die;
+                    $trailerList[] = $t->getTrailer()->getName();
+                }
+            }
+            $contractList = array_column($contracts,'id');
+            $contractTrailers = $em->getRepository('AppBundle\Entity\Client\Contract')
+                    ->findBy(['id' => $contractList]);
             $client_text = $e['client_name'];
             $venue_text = $e['venue_name'];
             $st = $e['start'];
@@ -76,6 +91,7 @@ class EventsController extends FOSRestController
                 'name' => $e['name'],
                 'client_text' => $client_text,
                 'venue_text' => $venue_text,
+                'trailers' => implode(',',$trailerList),
                 'tentative' => $e['tentative'],
                 'billable' => $e['billable'],
                 'canceled' => $e['canceled'],

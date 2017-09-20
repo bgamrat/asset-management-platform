@@ -67,6 +67,10 @@ class EventController extends Controller
                     $requiresCategoryQuantities[$categoryId]
                             ->subtractQuantity( 1 );
                 }
+                $satisfies = $a->getModel()->getSatisfies();
+                dump($satisfies);
+
+                
             }
         }
         dump( $assets, $requiresCategoryQuantities );

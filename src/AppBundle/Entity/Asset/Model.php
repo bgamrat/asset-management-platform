@@ -117,7 +117,11 @@ class Model
      */
     private $requires;
     /**
-     * @ORM\ManyToMany(targetEntity="Category")
+     * @ORM\ManyToMany(targetEntity="Category", fetch="LAZY")
+     * @ORM\JoinTable(name="model_satisfy",
+     *      joinColumns={@ORM\JoinColumn(name="satisfy_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id")}
+     *      )
      */
     private $satisfies;
     /**
