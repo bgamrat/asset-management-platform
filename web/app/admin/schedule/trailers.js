@@ -105,9 +105,9 @@ define([
 
     function getData(relationship) {
         var i, returnData = [];
-        for( i = 0; i < trailersFilteringSelect.length; i++ ) {
+        for( i = 0; i < trailerFilteringSelect.length; i++ ) {
             returnData.push(
-                    parseInt(trailersFilteringSelect[i].get("value")));
+                    parseInt(trailerFilteringSelect[i].get("value")));
         }
         return returnData;
     }

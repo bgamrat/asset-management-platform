@@ -71,12 +71,9 @@ class EventsController extends FOSRestController
             $trailers = $event->getTrailers();
             $trailerList = array_column($trailers, 'name');
             $contracts = $event->getContracts();
-            dump($contracts);die;
             foreach ($contracts as $c) {
-                dump($c);
                 foreach ($c->getTrailers('requiresTrailers',false) as $t) {
-                    dump($t);die;
-                    $trailerList[] = $t->getTrailer()->getName();
+                    $trailerList[] = $t['name'];
                 }
             }
             $contractList = array_column($contracts,'id');

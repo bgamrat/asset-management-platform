@@ -98,7 +98,7 @@ define([
         contractStore = new JsonRest({
             target: '/api/store/contracts',
             useRangeHeaders: false,
-            idProperty: 'name'});
+            idProperty: 'id'});
 
         contractTrailersStore = new JsonRest({
             target: '/api/store/contracttrailers',

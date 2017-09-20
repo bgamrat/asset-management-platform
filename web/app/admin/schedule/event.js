@@ -393,7 +393,7 @@ define([
                     equipmentLink = document.getElementById("full-equipment-link");
                     equipmentLink.href = equipmentLink.href.replace(/(__ID__|\d+)/, event.id);
                     equipmentLink.classList.remove("hidden");
-                    contracts.setData(event.client.contracts);
+                    contracts.setData(event.contracts);
                     person.setData(event.contacts);
                     eventViewDialog.show();
                 }, lib.xhrError);
