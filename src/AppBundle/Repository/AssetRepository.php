@@ -60,9 +60,10 @@ class AssetRepository extends \Doctrine\ORM\EntityRepository
         if( !empty( $locationType ) )
         {
             $em = $this->getEntityManager();
-            $queryBuilder = $em->createQueryBuilder()->select( ['a'] )
+            $queryBuilder = $em->createQueryBuilder()->select( ['a', 'm'] )
                     ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                     ->join( 'a.location', 'l' )
+                    ->join( 'a.model', 'm' )
                     ->where( 'l.type = :location_type' )
                     ->andWhere( 'l.entity = :location_id' )
                     ->setParameters( ['location_type' => $locationType, 'location_id' => $locationId] );

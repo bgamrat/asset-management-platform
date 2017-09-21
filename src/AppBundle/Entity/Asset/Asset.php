@@ -386,7 +386,7 @@ class Asset
      *
      * @param array $customAttributes
      *
-     * @return Model
+     * @return CustomAttributes
      */
     public function setCustomAttributes( $customAttributes )
     {

@@ -54,7 +54,8 @@ class ModelType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true,
                     'by_reference' => false,
-                    'property_path' => 'customAttributes'
+                    'property_path' => 'customAttributes',
+                    'constraints' => [new Valid()]
                 ] )
                 ->add( 'default_contract_value', MoneyType::class, ['label' => 'asset.default_contract_value', 'currency' => 'USD'] )
                 ->add( 'default_event_value', MoneyType::class, ['label' => 'asset.default_event_value', 'currency' => 'USD'] )

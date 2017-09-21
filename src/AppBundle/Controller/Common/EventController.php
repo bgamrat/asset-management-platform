@@ -57,23 +57,70 @@ class EventController extends Controller
             }
         }
 
+        $satisfies = [];
+        $assetCollection = [];
+        $dependencies = [];
         foreach( $assets as $trailerId => $trailerAssets )
         {
             foreach( $trailerAssets as $a )
             {
-                $categoryId = $a->getModel()->getCategory()->getId();
-                if( isset( $requiresCategoryQuantities[$categoryId] ) )
+                $model = $a->getModel();
+                $modelId = $model->getId();
+                $modelSatisfies = $model->getSatisfies();
+                if( !empty( $modelSatisfies ) )
                 {
-                    $requiresCategoryQuantities[$categoryId]
-                            ->subtractQuantity( 1 );
+                    foreach( $modelSatisfies as $s )
+                    {
+                        $categoryId = $s->getId();
+                        if( !isset( $satisfies[$categoryId] ) )
+                        {
+                            $satisfies[$categoryId] = 0;
+                        }
+                        $satisfies[$categoryId] ++;
+                    }
                 }
-                $satisfies = $a->getModel()->getSatisfies();
-                dump($satisfies);
-
-                
+                if( !isset( $assetCollection[$modelId] ) )
+                {
+                    $assetCollection[$modelId] = 0;
+                }
+                $assetCollection[$modelId] ++;
+                $modelDependencies = $this->getDependencies( $a->getModel() );
+                if( !empty( $modelDependencies ) )
+                {
+                    foreach( $modelDependencies as $md )
+                    {
+                        if( !isset( $dependencies[$modelId] ) )
+                        {
+                            $dependencies[$modelId] = 0;
+                        }
+                        $dependencies[$modelId] ++;
+                    }
+                }
             }
         }
-        dump( $assets, $requiresCategoryQuantities );
+
+        foreach( $assetCollection as $modelId => $ac )
+        {
+            if( isset( $dependencies[$modelId] ) )
+            {
+                $assetCollection[$modelId] -= $dependencies[$modelId];
+            }
+        }
+
+        $assetBalance = [];
+        foreach( $requiresCategoryQuantities as $categoryId => $rcq )
+        {
+            if( isset( $satisfies[$categoryId] ) )
+            {
+                $assetBalance[$categoryId] = $satisfies[$categoryId] - $rcq->getQuantity();
+            }
+            else
+            {
+                $assetBalance[$categoryId] = - $rcq->getQuantity();
+            }
+        }
+
+        dump( $assetCollection, $dependencies, $satisfies, $requiresCategoryQuantities, $assetBalance );
         die;
 
         return $this->render( 'common/event-equipment-by-category.html.twig', array(
@@ -107,6 +154,19 @@ class EventController extends Controller
         ) );
         $queryBuilder->setParameter( 1, $trailerIds );
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    private function getDependencies( $model )
+    {
+        $result = $model->getRequires();
+        if( !empty( $requires ) )
+        {
+            foreach( $requires as $item )
+            {
+                $result = $this->getDependencies( $item );
+            }
+        }
+        return $result;
     }
 
 }
