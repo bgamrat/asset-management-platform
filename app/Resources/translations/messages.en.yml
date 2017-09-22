@@ -3,6 +3,10 @@ asset:
         Asset
     asset_statuses:
         Asset Statuses
+    balance:
+        Balance
+    balance_note:
+        The asset balance lists the equipment categories which are not on the assigned trailers or at the venue
     barcode:
         Barcode
     brand:

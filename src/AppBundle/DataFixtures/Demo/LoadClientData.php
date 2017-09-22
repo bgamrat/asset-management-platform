@@ -19,7 +19,7 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
 
     public function load( ObjectManager $manager )
     {
-        $categories = $manager->getRepository( 'AppBundle\Entity\Asset\Category' )->findAll();
+        $categories = $manager->getRepository( 'AppBundle\Entity\Asset\Category' )->findAll( false );
         if( empty( $categories ) )
         {
             throw new CommonException( "There are no category types defined (load them before running this)" );
@@ -32,6 +32,8 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
                 break;
             }
         }
+        $categories = array_values( $categories );
+        shuffle( $categories );
         $categoryCount = count( $categories ) - 1;
 
         $hTv = new Client();
@@ -81,33 +83,25 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         $contract->setEnd( new \DateTime( '2018-12-31' ) );
 
         $categoryQuantity = new CategoryQuantity();
-        $category = rand( 0, $categoryCount );
-        $categoryQuantity->setCategory( $categories[$category] );
-        unset( $categories[$category] );
+        $categoryQuantity->setCategory( array_pop( $categories ) );
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
         $categoryQuantity->setValue( 4000 );
         $contract->addRequiresCategoryQuantity( $categoryQuantity );
 
         $categoryQuantity = new CategoryQuantity();
-        $category = rand( 0, $categoryCount );
-        $categoryQuantity->setCategory( $categories[$category] );
-        unset( $categories[$category] );
+        $categoryQuantity->setCategory( array_pop( $categories ) );
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
         $categoryQuantity->setValue( 3000 );
         $contract->addRequiresCategoryQuantity( $categoryQuantity );
 
         $categoryQuantity = new CategoryQuantity();
-        $category = rand( 0, $categoryCount );
-        $categoryQuantity->setCategory( $categories[$category] );
-        unset( $categories[$category] );
+        $categoryQuantity->setCategory( array_pop( $categories ) );
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
         $categoryQuantity->setValue( 430 );
         $contract->addRequiresCategoryQuantity( $categoryQuantity );
 
         $categoryQuantity = new CategoryQuantity();
-        $category = rand( 0, $categoryCount );
-        $categoryQuantity->setCategory( $categories[$category] );
-        unset( $categories[$category] );
+        $categoryQuantity->setCategory( array_pop( $categories ) );
         $categoryQuantity->setQuantity( rand( 1, 3 ) );
         $categoryQuantity->setValue( 6430 );
         $contract->addAvailableCategoryQuantity( $categoryQuantity );

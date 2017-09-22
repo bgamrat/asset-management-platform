@@ -1,0 +1,13 @@
+{% if categoryQuantities is not empty %}
+    <article class="contract {{type}} ">
+        <h2>{{type|trans}} {{'asset.equipment'|trans}}</h2>
+        <ul class="requires-available-list">
+            {% for category_quantity in categoryQuantities%}
+                <li class="justify">
+                    <span class="category">{{category_quantity.category.fullName}}</span>
+                    <span class="quantity">{{category_quantity.quantity}}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </article>
+{% endif %}

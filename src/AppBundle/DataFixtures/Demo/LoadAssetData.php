@@ -39,7 +39,7 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
         $durations = ['+1 week', '+1 month', '+2 months', '+3 months', '+4 months', '+6 months', '+1 year'];
         $durationCount = count( $durations ) - 1;
 
-        for( $i = 0; $i < 25; $i++ )
+        for( $i = 0; $i < 256; $i++ )
         {
             $location = $locations[rand( 0, $locationCount )];
             $entityData = $manager->getReference( 'AppBundle\Entity\Asset\Trailer', $location->getEntity() );
@@ -51,7 +51,7 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
             $item->setLocation( $location );
             $item->setLocationText( $location->getEntityData()->getName() );
             $numberFormatter = new \NumberFormatter( 'en_US', \NumberFormatter::ORDINAL );
-            $n = $numberFormatter->format( $i);
+            $n = $numberFormatter->format( $i );
             $item->setComment( 'This is the ' . $n . ' item' );
             $item->setStatus( $assetStatuses[rand( 0, $assetStatusCount )] );
             $item->setSerialNumber( preg_replace( '/\D/', '', md5( rand( 0, 10000 ) ) ) );

@@ -166,3 +166,6 @@
 .dgrid-column-name.field-name pre.name {
     font-weight: 700;
 }
+.deficit {
+    color: #f00;
+}

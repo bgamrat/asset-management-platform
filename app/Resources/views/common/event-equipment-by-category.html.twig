@@ -51,19 +51,7 @@
                 {% endif %}
             </section>
             <section>
-                {% if equipment is not empty %}
-                    <article class="event equipment">
-                        <h2>{{'common.available'|trans}} {{'asset.equipment'|trans}}</h2>
-                        <ul class="available-list">
-                            {% for category in equipment %}
-                                <li class="justify">
-                                    <span class="category">{{category.fullName}}</span>
-                                    <span class="quantity">{{category.quantity}}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </article>
-                {% endif %}
+                {% include 'common/parts/asset-balance.html.twig' %}
             </section>
         </div>
     </div>

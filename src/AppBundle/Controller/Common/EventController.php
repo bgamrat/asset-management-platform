@@ -47,31 +47,42 @@ class EventController extends Controller
 
             $trailers = $contract->getRequiresTrailers( true );
             $assets = $trailerNames = [];
-            $locationType = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
+            $trailerLocationType = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
             foreach( $trailers as $t )
             {
                 $trailer = $t->getTrailer();
                 $trailerId = $trailer->getId();
-                $assets[$trailerId] = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $locationType, $trailerId );
+                $trailerAssets[$trailerId] = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $trailerLocationType, $trailerId );
                 $trailerNames[$trailerId] = $trailer->getName();
             }
+        }
+
+        $venueAssets = [];
+        if( !empty( $event->getVenue() ) )
+        {
+            $venueLocationType = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Venue' );
+            $venueAssets = [$em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $venueLocationType, $event->getVenue()->getId() )];
         }
 
         $satisfies = [];
         $assetCollection = [];
         $dependencies = [];
-        foreach( $assets as $trailerId => $trailerAssets )
+        $requirements = array_keys( $requiresCategoryQuantities );
+        $locationAssetCollection = array_merge( $trailerAssets, $venueAssets );
+        foreach( $locationAssetCollection as $locationId => $locationAssets )
         {
-            foreach( $trailerAssets as $a )
+            foreach( $locationAssets as $a )
             {
                 $model = $a->getModel();
                 $modelId = $model->getId();
                 $modelSatisfies = $model->getSatisfies();
+                $itemSatisifies = [];
                 if( !empty( $modelSatisfies ) )
                 {
                     foreach( $modelSatisfies as $s )
                     {
                         $categoryId = $s->getId();
+                        $itemSatisfies[] = $categoryId;
                         if( !isset( $satisfies[$categoryId] ) )
                         {
                             $satisfies[$categoryId] = 0;
@@ -79,21 +90,24 @@ class EventController extends Controller
                         $satisfies[$categoryId] ++;
                     }
                 }
-                if( !isset( $assetCollection[$modelId] ) )
+                if( count( array_intersect( $requirements, $itemSatisfies ) ) > 0 )
                 {
-                    $assetCollection[$modelId] = 0;
-                }
-                $assetCollection[$modelId] ++;
-                $modelDependencies = $this->getDependencies( $a->getModel() );
-                if( !empty( $modelDependencies ) )
-                {
-                    foreach( $modelDependencies as $md )
+                    if( !isset( $assetCollection[$modelId] ) )
                     {
-                        if( !isset( $dependencies[$modelId] ) )
+                        $assetCollection[$modelId] = 0;
+                    }
+                    $assetCollection[$modelId] ++;
+                    $modelDependencies = $this->getDependencies( $a->getModel() );
+                    if( !empty( $modelDependencies ) )
+                    {
+                        foreach( $modelDependencies as $md )
                         {
-                            $dependencies[$modelId] = 0;
+                            if( !isset( $dependencies[$modelId] ) )
+                            {
+                                $dependencies[$modelId] = 0;
+                            }
+                            $dependencies[$modelId] ++;
                         }
-                        $dependencies[$modelId] ++;
                     }
                 }
             }
@@ -110,50 +124,19 @@ class EventController extends Controller
         $assetBalance = [];
         foreach( $requiresCategoryQuantities as $categoryId => $rcq )
         {
+            $assetBalance[$categoryId] = clone($rcq);
             if( isset( $satisfies[$categoryId] ) )
             {
-                $assetBalance[$categoryId] = $satisfies[$categoryId] - $rcq->getQuantity();
-            }
-            else
-            {
-                $assetBalance[$categoryId] = - $rcq->getQuantity();
+                $assetBalance[$categoryId]->subtractQuantity( $satisfies[$categoryId] );
             }
         }
-
-        dump( $assetCollection, $dependencies, $satisfies, $requiresCategoryQuantities, $assetBalance );
-        die;
 
         return $this->render( 'common/event-equipment-by-category.html.twig', array(
                     'event' => $event,
-                    'equipment' => $this->getEventEquipment( $event ),
+                    'asset_balance' => $assetBalance,
                     'no_hide' => true,
                     'omit_menu' => true)
         );
-    }
-
-    private function getEventEquipment( $event )
-    {
-        $em = $this->getDoctrine()->getManager();
-        $trailers = $event->getTrailers();
-        $trailerIds = [];
-        foreach( $trailers as $t )
-        {
-            $trailerIds[] = $t->getId();
-        }
-        $queryBuilder = $em->createQueryBuilder()->select( 'c.fullName', 'COUNT(c.id) AS quantity' )
-                ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
-                ->join( 'a.model', 'm' )
-                ->join( 'm.category', 'c' )
-                ->innerJoin( 'a.location', 'l' )
-                ->innerJoin( 'l.type', 'lt' )
-                ->groupBy( 'c.id' )
-                ->orderBy( 'c.fullName' );
-        $queryBuilder->where(
-                $queryBuilder->expr()->andX(
-                        $queryBuilder->expr()->eq( 'lt.entity', "'trailer'" ), $queryBuilder->expr()->in( 'l.entity', '?1' )
-        ) );
-        $queryBuilder->setParameter( 1, $trailerIds );
-        return $queryBuilder->getQuery()->getResult();
     }
 
     private function getDependencies( $model )

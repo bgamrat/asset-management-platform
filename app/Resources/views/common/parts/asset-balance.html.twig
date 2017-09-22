@@ -1,0 +1,16 @@
+{% if asset_balance is not empty %}
+    <article class="asset-balance">
+        <h2>{{'asset.balance'|trans}}</h2>
+        <p>{{'asset.balance_note'|trans}}</p>
+        <ul class="requires-available-list">
+            {% for category_quantity in asset_balance %}
+                {% if category_quantity.quantity != 0 %}
+                    <li class="justify">
+                        <span class="category">{{category_quantity.category.fullName}}</span>
+                        <span class="quantity{% if category_quantity.quantity > 0 %} deficit{% endif %}">{{category_quantity.quantity}}</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </article>
+{% endif %}

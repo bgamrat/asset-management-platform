@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Asset\DataTransformer\CategoryToIdTransformer;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class ModelType extends AbstractType
 {
