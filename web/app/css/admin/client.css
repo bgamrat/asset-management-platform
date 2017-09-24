@@ -81,3 +81,6 @@
 .requires-available-list .quantity {
     font-weight: 700;
 }
+.available-list.wide {
+    width: 95%;
+}

@@ -44,10 +44,11 @@ class TrailerController extends Controller
      */
     public function viewAction( $name )
     {
-        if (empty($name) || $name === 'index') {
-            $this->redirect($this->generateUrl('trailers'));
+        if( empty( $name ) || $name === 'index' )
+        {
+            $this->redirect( $this->generateUrl( 'trailers' ) );
         }
-        
+
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $trailer = $em->getRepository( 'AppBundle\Entity\Asset\Trailer' )->findOneByName( $name );
@@ -68,6 +69,7 @@ class TrailerController extends Controller
         return $this->render( 'common/trailer-equipment-by-category.html.twig', array(
                     'trailer' => $trailer,
                     'equipment' => $this->getTrailerEquipment( $trailer ),
+                    'model_counts' => $this->getTrailerEquipmentModelCounts( $trailer ),
                     'no_hide' => true,
                     'omit_menu' => true)
         );
@@ -76,20 +78,39 @@ class TrailerController extends Controller
     private function getTrailerEquipment( $trailer )
     {
         $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder()->select( 'c.fullName', 'COUNT(c.id) AS quantity' )
+        $trailerLocationType = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
+        $assets = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $trailerLocationType, $trailer->getId() );
+        $lastModelId = null;
+        foreach( $assets as $i => $a )
+        {
+            if( $a->getModel()->getId() === $lastModelId )
+            {
+                unset( $assets[$i] );
+            }
+            else
+            {
+                $lastModelId = $a->getModel()->getId();
+            }
+        }
+        return $assets;
+    }
+
+    private function getTrailerEquipmentModelCounts( $trailer )
+    {
+        $em = $this->getDoctrine()->getManager();
+        $queryBuilder = $em->createQueryBuilder()->select( 'm.id', 'COUNT(m.id) AS quantity' )
                 ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                 ->join( 'a.model', 'm' )
-                ->join( 'm.category', 'c' )
                 ->innerJoin( 'a.location', 'l' )
                 ->innerJoin( 'l.type', 'lt' )
-                ->groupBy( 'c.id' )
-                ->orderBy( 'c.fullName' );
+                ->groupBy( 'm.id' )
+                ->orderBy( 'm.name' );
         $queryBuilder->where(
                 $queryBuilder->expr()->andX(
                         $queryBuilder->expr()->eq( 'lt.entity', "'trailer'" ), $queryBuilder->expr()->eq( 'l.entity', '?1' )
         ) );
         $queryBuilder->setParameter( 1, $trailer->getId() );
-        return $queryBuilder->getQuery()->getResult();
+        return array_column( $queryBuilder->getQuery()->getResult(), 'quantity', 'id' );
     }
 
 }

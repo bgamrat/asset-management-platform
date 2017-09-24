@@ -62,6 +62,12 @@ class Carrier
      */
     private $account_information = null;
     /**
+     * @var string
+     * @Gedmo\Versioned
+     * @ORM\Column(type="string", length=256, nullable=true)
+     */
+    private $tracking_url;
+    /**
      * @var ArrayCollection $services
      * @ORM\OneToMany(targetEntity="CarrierService", mappedBy="carrier", cascade={"persist"})
      */
@@ -208,6 +214,30 @@ class Carrier
         return $this->account_information;
     }
 
+    /**
+     * Set TrackingUrl
+     *
+     * @param string $trackingUrl
+     *
+     * @return Carrier
+     */
+    public function setTrackingUrl( $trackingUrl )
+    {
+        $this->tracking_url = $trackingUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get TrackingUrl
+     *
+     * @return string
+     */
+    public function getTrackingUrl()
+    {
+        return $this->tracking_url;
+    }
+
     public function getServices()
     {
         return $this->services->toArray();
@@ -218,7 +248,7 @@ class Carrier
         if( !$this->services->contains( $service ) )
         {
             $this->services->add( $service );
-            $service->setCarrier($this);
+            $service->setCarrier( $this );
         }
     }
 

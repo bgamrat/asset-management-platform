@@ -43,7 +43,7 @@ define([
 
         var carrierViewDialog = new Dialog({
             title: core.view,
-            style: "width: 745px"
+            style: "width: 800px"
         }, "carrier-view-dialog");
         carrierViewDialog.startup();
         carrierViewDialog.on("cancel", function (event) {
@@ -51,7 +51,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 535px; width: 100%;"
+            style: "width: 100%; height: 300px "
         }, "carrier-view-tabs");
 
         var contactsContentPane = new ContentPane({
@@ -245,7 +245,6 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (carrier) {
-                    var r;
                     action = "view";
                     carrierId = carrier.id;
                     nameInput.set("value", carrier.name);

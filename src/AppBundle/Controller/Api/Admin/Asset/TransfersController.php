@@ -85,8 +85,8 @@ class TransfersController extends FOSRestController
                 ->join( 't.status', 's' )
                 ->leftJoin( 't.items', 'ti' )
                 ->leftJoin( 't.carrier', 'c' )
-                ->join( 'ti.asset', 'a' )
-                ->join( 'a.barcodes', 'b' )
+                ->leftJoin( 'ti.asset', 'a' )
+                ->leftJoin( 'a.barcodes', 'b' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
 
         if( $dstore['limit'] !== null )

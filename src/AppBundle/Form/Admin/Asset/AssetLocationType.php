@@ -62,7 +62,7 @@ class AssetLocationType extends AbstractType
                         ] )
                         ->add( 'type', HiddenType::class )
                         ->add( 'entity', IntegerType::class )
-                        ->add( 'address', CheckboxType::class )
+                        ->add( 'address', CheckboxType::class, ['label' => 'common.address',] )
                 ;
                 $builder->get( 'type' )
                         ->addModelTransformer( new LocationTypeToIdTransformer( $this->em ) );

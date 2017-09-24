@@ -87,7 +87,6 @@ define([
     }
 
     function run() {
-
         prototypeNode = dom.byId(divId);
         if( prototypeNode === null ) {
             prototypeNode = dom.byId(divId + '_0');

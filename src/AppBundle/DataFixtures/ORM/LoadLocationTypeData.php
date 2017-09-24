@@ -54,7 +54,7 @@ class LoadLocationTypeData implements FixtureInterface
         $trailerLocation->setEntity( 'trailer' );
         $trailerLocation->setUrl( '/api/store/trailers' );
         $trailerLocation->setActive( true );
-        $trailerLocation->setDefault( false );
+        $trailerLocation->setDefault( true );
         $manager->persist( $trailerLocation );
 
         $vendorLocation = new LocationType();
@@ -62,7 +62,7 @@ class LoadLocationTypeData implements FixtureInterface
         $vendorLocation->setEntity( 'contact' );
         $vendorLocation->setUrl( '/api/store/contacts?vendor' );
         $vendorLocation->setActive( true );
-        $vendorLocation->setDefault( true );
+        $vendorLocation->setDefault( false );
         $manager->persist( $vendorLocation );
 
         $venueLocation = new LocationType();

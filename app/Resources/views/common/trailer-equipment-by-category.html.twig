@@ -17,16 +17,16 @@
             <div class="trailer-data">
                 <!--div class="name-value-active">
                     <span class="trailer name">
-                        {{trailer.name}}
-                    </span>
-                    <span class="trailer active">
-                        {% if trailer.active %}
-                            {{'common.active'|trans}}
-                        {% else %}
-                            {{'common.not_active'|trans}}
-                        {%endif%}
-                    </span>
-                </div-->
+                {{trailer.name}}
+            </span>
+            <span class="trailer active">
+                {% if trailer.active %}
+                    {{'common.active'|trans}}
+                {% else %}
+                    {{'common.not_active'|trans}}
+                {%endif%}
+            </span>
+        </div-->
                 <div class="description">
                     <!--div class="label">{{'common.description'|trans}}</div-->
                     {{trailer.description}}
@@ -35,15 +35,33 @@
             <section>
                 {% if equipment is not empty %}
                     <article class="trailer equipment">
-                        <h2>{{'common.available'|trans}} {{'asset.equipment'|trans}}</h2>
-                        <ul class="available-list">
-                            {% for category in equipment %}
-                                <li class="justify">
-                                    <span class="category">{{category.fullName}}</span>
-                                    <span class="quantity">{{category.quantity}}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        <h2>{{'common.satisfies'|trans}}</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>{{'asset.model'|trans}}</th>
+                                    <th>{{'asset.category'|trans}}</th>
+                                    <th>{{'asset.model'|trans}}</th>
+                                    <th>{{'asset.model'|trans}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for asset in equipment %}
+                                    <tr>
+                                        <td class="model-name">{{asset.model.name}} ({{asset.model.id}})</span>
+                                        <td class="model-fullname">{{asset.model.category.fullName}}</span>
+                                        <td>
+                                            <ul>
+                                                {%for satisfies in asset.model.satisfies%}
+                                                    <li>{{satisfies.fullName}}</li>
+                                                    {%endfor %}
+                                            </ul>
+                                        </td>
+                                        <td class="quantity">{{model_counts[asset.model.id]}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </article>
                 {% endif %}
             </section>

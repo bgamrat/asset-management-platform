@@ -140,7 +140,9 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $baz->addSatisfies( $categories[rand( 0, $categoryCount )] );
         $bar->addExtend( $foo );
         $bar->addSatisfies( $categories[rand( 0, $categoryCount )] );
+        $wingding->addRequire( $foo );
         $wingding->addSatisfies( $categories[rand( 0, $categoryCount )] );
+        $gadget->addRequire( $baz );
         $gadget->addSatisfies( $categories[rand( 0, $categoryCount )] );
 
         $manager->persist( $baz );

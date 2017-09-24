@@ -39,7 +39,7 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
         $durations = ['+1 week', '+1 month', '+2 months', '+3 months', '+4 months', '+6 months', '+1 year'];
         $durationCount = count( $durations ) - 1;
 
-        for( $i = 0; $i < 25; $i++ )
+        for( $i = 0; $i < 256; $i++ )
         {
             $location = $locations[rand( 0, $locationCount )];
             $entityData = $manager->getReference( 'AppBundle\Entity\Asset\Trailer', $location->getEntity() );

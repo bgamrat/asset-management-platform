@@ -72,7 +72,7 @@ define([
             dijit.startup();
             locationTypeRadioButton.push(dijit);
         });
-        query('label[for^="' + id + '_ctype_"]').forEach(function (node) {
+        query('label[for^="' + formName + "_" + id + '_ctype_"]').forEach(function (node) {
             locationTypeLabels[domAttr.get(node, "for").replace(/\D/g, '')] = node.textContent;
         });
 
@@ -91,7 +91,8 @@ define([
                 textLocationMemoryStore.data = [{name: locationTypeLabels[targetId], id: 0}];
                 locationFilteringSelect.set("store", textLocationStore);
                 locationFilteringSelect.set("displayedValue", locationTypeLabels[targetId]);
-                locationFilteringSelect.set("readOnly", true);
+                // @TODO - uncomment this line when Firefox stops crashing under CentOS
+                // locationFilteringSelect.set("readOnly", true);
             }
         });
 
@@ -168,9 +169,9 @@ define([
                     locationType = null;
                 }
                 entityId = null;
-                if( item.hash !== null ) {
+                if( typeof item.hash !== "undefined" && item.hash !== null ) {
                     hash = item.hash;
-                    if( typeof hash.length !== "undefined" && hash.length > 2 ) {
+                    if( hash.length > 2 ) {
                         hash = hash.split('/');
                         entityId = parseInt(hash[hash.length - 1]);
                         address = hash.length > 3 ? "on" : null;

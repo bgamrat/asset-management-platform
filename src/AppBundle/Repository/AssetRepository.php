@@ -66,6 +66,8 @@ class AssetRepository extends \Doctrine\ORM\EntityRepository
                     ->join( 'a.model', 'm' )
                     ->where( 'l.type = :location_type' )
                     ->andWhere( 'l.entity = :location_id' )
+                    ->orderBy( 'm.name' )
+                    ->addOrderBy( 'm.id' )
                     ->setParameters( ['location_type' => $locationType, 'location_id' => $locationId] );
             $data = $queryBuilder->getQuery()->getResult();
         }

@@ -56,7 +56,11 @@ class CustomAttribute
     {
         if( $this->key === 'channels' )
         {
-            return is_integer( $this->value );
+            if (is_numeric( $this->value )) {
+                $this->value = intval($this->value);
+                return true;
+            }
+            return false;
         }
         return true;
     }

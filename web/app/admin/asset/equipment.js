@@ -60,7 +60,7 @@ define([
 
         var assetViewDialog = new Dialog({
             title: core.view,
-            style: "width:500px"
+            style: "width:800px"
         }, "asset-view-dialog");
         assetViewDialog.startup();
         assetViewDialog.on("cancel", function (event) {
@@ -68,7 +68,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 300px; width: 100%;"
+            style: "height: 400px; width: 100%;"
         }, "asset-view-tabs");
 
         var attributesContentPane = new ContentPane({
@@ -165,7 +165,7 @@ define([
             var item;
             if( action === "new" ) {
                 item = this.get('item');
-                if (item !== null) {
+                if( item !== null ) {
                     customAttributes.setData(item.customAttributes);
                 }
             }
@@ -207,6 +207,10 @@ define([
                 locationFilteringSelect.set("readOnly", true);
             }
         });
+
+        var addressCheckBox = new CheckBox({
+        }, "asset_location_address");
+        addressCheckBox.startup();
 
         var textLocationMemoryStore = new Memory({
             idProperty: "id",
@@ -340,7 +344,7 @@ define([
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
-                        if (lib.checkForFormErrors(data) === false) {
+                        if( lib.checkForFormErrors(data) === false ) {
                             assetViewDialog.hide();
                         }
                     }, lib.xhrError);

@@ -76,7 +76,7 @@ class EventController extends Controller
                 $model = $a->getModel();
                 $modelId = $model->getId();
                 $modelSatisfies = $model->getSatisfies();
-                $itemSatisifies = [];
+                $itemSatisfies = [];
                 if( !empty( $modelSatisfies ) )
                 {
                     foreach( $modelSatisfies as $s )
@@ -89,24 +89,25 @@ class EventController extends Controller
                         }
                         $satisfies[$categoryId] ++;
                     }
-                }
-                if( count( array_intersect( $requirements, $itemSatisfies ) ) > 0 )
-                {
-                    if( !isset( $assetCollection[$modelId] ) )
+
+                    if( count( array_intersect( $requirements, $itemSatisfies ) ) > 0 )
                     {
-                        $assetCollection[$modelId] = 0;
-                    }
-                    $assetCollection[$modelId] ++;
-                    $modelDependencies = $this->getDependencies( $a->getModel() );
-                    if( !empty( $modelDependencies ) )
-                    {
-                        foreach( $modelDependencies as $md )
+                        if( !isset( $assetCollection[$modelId] ) )
                         {
-                            if( !isset( $dependencies[$modelId] ) )
+                            $assetCollection[$modelId] = 0;
+                        }
+                        $assetCollection[$modelId] ++;
+                        $modelDependencies = $this->getDependencies( $a->getModel() );
+                        if( !empty( $modelDependencies ) )
+                        {
+                            foreach( $modelDependencies as $md )
                             {
-                                $dependencies[$modelId] = 0;
+                                if( !isset( $dependencies[$modelId] ) )
+                                {
+                                    $dependencies[$modelId] = 0;
+                                }
+                                $dependencies[$modelId] ++;
                             }
-                            $dependencies[$modelId] ++;
                         }
                     }
                 }
