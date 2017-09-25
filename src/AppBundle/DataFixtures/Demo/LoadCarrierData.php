@@ -22,8 +22,9 @@ class LoadCarrierData implements FixtureInterface
         $phone = new Phone();
         $phone->setPhone( '1(800)-555-4377' );
         $phone->setType( $manager->getRepository( 'AppBundle\Entity\Common\PhoneType' )->findOneByType( 'office' ) );
+        $manager->persist( $phone );
         $contact->addPhone( $phone );
-        $manager->persist($contact);
+        $manager->persist( $contact );
 
         $speedyShip = new Carrier();
         $speedyShip->setName( 'SpeedyShip' );
@@ -35,7 +36,7 @@ class LoadCarrierData implements FixtureInterface
         {
             $serviceType = new CarrierService();
             $serviceType->setName( $s );
-            $manager->persist($serviceType);
+            $manager->persist( $serviceType );
             $speedyShip->addService( $serviceType );
         }
 
@@ -48,8 +49,9 @@ class LoadCarrierData implements FixtureInterface
         $phone = new Phone();
         $phone->setPhone( '1(800)-555-9861' );
         $phone->setType( $manager->getRepository( 'AppBundle\Entity\Common\PhoneType' )->findOneByType( 'office' ) );
+        $manager->persist( $phone );
         $contact->addPhone( $phone );
-        $manager->persist($contact);
+        $manager->persist( $contact );
 
         $superTruck = new Carrier();
         $superTruck->setName( 'SuperTruck' );
@@ -61,7 +63,7 @@ class LoadCarrierData implements FixtureInterface
         {
             $serviceType = new CarrierService();
             $serviceType->setName( $s );
-            $manager->persist($serviceType);
+            $manager->persist( $serviceType );
             $superTruck->addService( $serviceType );
         }
 

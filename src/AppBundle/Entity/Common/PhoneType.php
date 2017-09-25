@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="phone_number_type")
+ * @ORM\Table(name="phone_type")
  */
 class PhoneType
 {

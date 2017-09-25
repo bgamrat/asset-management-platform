@@ -86,7 +86,6 @@ class AssetLocationType extends AbstractType
 
                     if( $class !== null && $entityId !== null )
                     {
-
                         if( $location->isAddress() )
                         {
                             $contactData = $this->em->getRepository( $class )->findOneByAddress( $entityId );

@@ -131,6 +131,12 @@ define([
         }, "carrier_account_information");
         accountInformationInput.startup();
 
+        var trackingUrlInput = new ValidationTextBox({
+            trim: true,
+            pattern: "https?://[A-Za-z0-9:/\., '_%#@&+?-]{2,64}"
+        }, "carrier_tracking_url");
+        trackingUrlInput.startup();
+
         var carrierForm = new Form({}, '[name="carrier"]');
         carrierForm.startup();
 
@@ -151,7 +157,8 @@ define([
                     // For the server
                     "accountInformation": accountInformationInput.get("value"),
                     // For the grid
-                    "account_information": accountInformationInput.get("value")
+                    "account_information": accountInformationInput.get("value"),
+                    "tracking_url": trackingUrlInput.get("value")
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -253,6 +260,7 @@ define([
                     carrierService.setData(carrier.services);
                     commentInput.set("value", carrier.comment);
                     accountInformationInput.set("value", carrier.accountInformation);
+                    trackingUrlInput.set("value",carrier.trackingUrl)
                     carrierViewDialog.show();
                 }, lib.xhrError);
             }

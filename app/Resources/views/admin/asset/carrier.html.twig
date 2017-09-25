@@ -35,7 +35,7 @@
             <span class="active">{{ form_widget(form.active) }}</span>
             {% if form.parent.vars.allow_delete is defined %}
                 <span class="remove-form-row" title="{{'common.remove'|trans}}" id="carrier_service-__services__"><i class="fa fa-remove"></i></span>
-            {% endif %}
+                {% endif %}
         </div>
     {% endspaceless %}
 {% endblock %}
@@ -88,6 +88,8 @@
                         <fieldset class="account-information">
                             <legend>{{'common.account_information'|trans}}</legend>
                             {{form_row(carrier_form.account_information)}}
+                            {{form_row(carrier_form.tracking_url)}}
+                            <p>{{'asset.tracking_url_note'|trans}}</p>
                         </fieldset>
                     </div>
                     <div id="carrier-view-services-tab">

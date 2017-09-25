@@ -138,7 +138,7 @@ define([
         }, "transfer_updated");
         updatedInput.startup();
 
-        transferStatusSelect = dom.byId('transfer_status');
+        var transferStatusSelect = dom.byId('transfer_status');
         data = JSON.parse(domAttr.get(transferStatusSelect, "data-options"));
         // Convert the data to an array of objects
         storeData = [];
@@ -327,7 +327,18 @@ define([
                     label: core.carrier
                 },
                 tracking_number: {
-                    label: core.tracking_number
+                    label: core.tracking_number,
+                    formatter: function (data, object) {
+                        var html;
+                        if (object.tracking_url !== null && object.tracking_url !== "") {
+                            if( data !== null && data !== "" ) {
+                                html = '<a href="' + object.tracking_url.replace("__ID__",data) + '" target="_blank">' + data + '</a>';
+                            }
+                        } else {
+                            html = data;
+                        }
+                        return html;
+                    }
                 },
                 remove: {
                     editor: CheckBox,

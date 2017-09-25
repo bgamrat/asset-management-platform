@@ -77,6 +77,10 @@ asset:
         Status
     statuses:
         Statuses
+    tracking_url:
+        Tracking URL
+    tracking_url_note:
+        Enter the tracking URL with __ID__ to indicate where the tracking number should be 
     trailer:
         Trailer
     trailers:

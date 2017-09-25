@@ -79,7 +79,7 @@ class TransfersController extends FOSRestController
         }
 
         $columns = ['t.id', 't.instructions', 's.name AS status_text', 't.source_location_text', 't.destination_location_text',
-            'b.barcode', 'c.name AS carrier_text', 't.tracking_number'];
+            'b.barcode', 'c.name AS carrier_text', 't.tracking_number', 'c.tracking_url'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
                 ->join( 't.status', 's' )

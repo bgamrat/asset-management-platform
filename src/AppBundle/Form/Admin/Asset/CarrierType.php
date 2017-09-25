@@ -45,8 +45,9 @@ class CarrierType extends AbstractType
                     'required' => false,
                     'property_path' => 'accountInformation'
                 ] )
+                ->add( 'tracking_url', TextType::class, ['label' => 'asset.tracking_url'] )
                 ->add( 'services', CollectionType::class, [
-                    'entry_type' =>CarrierServiceType::class,
+                    'entry_type' => CarrierServiceType::class,
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,
