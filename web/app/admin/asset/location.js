@@ -161,28 +161,33 @@ define([
             getData: function () {
                 var locationType = namesAndUrls[getLocationType()].value;
                 var item = locationFilteringSelect.get("item");
-                var entityId, address = null, hash, returnObj;
+                var entityId, personId, addressId, address = null, hash, returnObj;
 
                 if( !isNaN(locationType) ) {
                     locationType = parseInt(locationType);
                 } else {
                     locationType = null;
                 }
-                entityId = null;
+                entityId = personId = addressId = null;
                 if( typeof item.hash !== "undefined" && item.hash !== null ) {
                     hash = item.hash;
+                    hash = hash.split('/');
+                    entityId = parseInt(hash[1]);
                     if( hash.length > 2 ) {
-                        hash = hash.split('/');
-                        entityId = parseInt(hash[hash.length - 1]);
+                        personId = parseInt(hash[2]);
+                        addressId = parseInt(hash[3]);
                         address = hash.length > 3 ? "on" : null;
                     }
                 }
                 returnObj = {
                     "id": locationId,
-                    "type": locationType,
-                    "entity": entityId
+                    "entity": entityId,
+                    "person_id": personId,
+                    "address_id" : addressId,
+                    "address": address,
+                    "type": locationType
                 };
-                if (address !== null) {
+                if( address !== null ) {
                     returnObj.address = address;
                 }
                 return returnObj;
@@ -202,6 +207,7 @@ define([
                         locationFilteringSelect.set("store", locationStore);
                         locationFilteringSelect.set("readOnly", false);
                         if (obj.address === true && obj.entityData !== null) {
+                            obj.entityData.label = location_text;
                             locationFilteringSelect.set('item', obj.entityData);
                         } else {
                             locationFilteringSelect.set('displayedValue', obj.entityData.name);

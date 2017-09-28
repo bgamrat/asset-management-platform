@@ -16,4 +16,16 @@ class ContactTypeRepository extends \Doctrine\ORM\EntityRepository
         return $this->findBy( [], ['entity' => 'ASC'] );
     }
 
+    public function findOneByAddress( $addressId )
+    {
+        return $this->getEntityManager()
+                        ->createQueryBuilder()->select( ['p'] )
+                        ->from( 'AppBundle\Entity\Common\Contact', 'c' )
+                        ->innerJoin( 'c.address_id', 'a' )
+                        ->where( 'a.id = :address_id' )
+                        ->limit( 1 )
+                        ->setParameter( 'address_id', $addressId )
+                        ->getQuery()
+                        ->getResult();
+    }
 }

@@ -51,6 +51,12 @@ class LocationType
      *
      * @ORM\Column(type="string", length=64, nullable=true)
      */
+    private $location;
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
     private $url;
     /**
      * @var boolean
@@ -116,7 +122,7 @@ class LocationType
      *
      * @param string $entity
      *
-     * @return Email
+     * @return LocationType
      */
     public function setEntity( $entity )
     {
@@ -133,6 +139,30 @@ class LocationType
     public function getEntity()
     {
         return $this->entity;
+    }
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     *
+     * @return LocationType
+     */
+    public function setLocation( $location )
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 
     /**

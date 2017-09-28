@@ -34,10 +34,17 @@ class DefaultController extends FOSRestController
             $people = $em->getRepository( 'AppBundle\Entity\Common\Person' )->findByEntityContactNameLike( $name, array_keys( $contactTypes ) );
 
             // Remove any people who are already contacts
-            foreach( $contacts as $c )
+            $peopleHashes = [];
+            foreach( $people as $p )
             {
-                $hash = $c->getHash();
-                unset( $people[$hash] );
+                $peopleHashes[] = $p->getHash();
+            }
+            foreach( $contacts as $i => $c )
+            {
+                if( in_array( $c->getHash(), $peopleHashes ) )
+                {
+                    unset( $contacts[$i] );
+                }
             }
 
             return array_merge( $contacts, $people );

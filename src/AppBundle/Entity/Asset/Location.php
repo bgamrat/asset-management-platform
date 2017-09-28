@@ -39,12 +39,12 @@ class Location
      */
     private $entity = null;
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="address", type="boolean")
+     * @ORM\Column(type="integer", nullable=true)
      *
      */
-    private $address = false;
+    private $address_id = null;
     /**
      * @ORM\OneToMany(targetEntity="Asset", mappedBy="location")
      */
@@ -122,14 +122,20 @@ class Location
         return $this->entity;
     }
 
-    public function setAddress( $address )
+    public function setAddressId( $address_id )
     {
-        $this->address = $address;
+        $this->address_id = $address_id;
+        return $this;
+    }
+
+    public function getAddressId()
+    {
+        return $this->address_id;
     }
 
     public function isAddress()
     {
-        return $this->address;
+        return $this->address_id !== null;
     }
 
     /**

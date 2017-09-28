@@ -8,15 +8,15 @@ parameters:
         [ clients, manufacturers, trailers, vendors, venues ]
 
     location_type.entities:
-            asset: 'AppBundle\Entity\Asset\Asset'
-            client: 'AppBundle\Entity\Client\Client'
-            contact: 'AppBundle\Entity\Common\Contact'
-            manufacturer: 'AppBundle\Entity\Common\Contact'
-            other:
-            shop:
-            trailer: 'AppBundle\Entity\Asset\Trailer'
-            vendor: 'AppBundle\Entity\Asset\Vendor'
-            venue: 'AppBundle\Entity\Common\Contact'
+        asset: 'AppBundle\Entity\Asset\Asset'
+        client: 'AppBundle\Entity\Client\Client'
+        contact: 'AppBundle\Entity\Common\Contact'
+        manufacturer: 'AppBundle\Entity\Common\Contact'
+        other:
+        shop:
+        trailer: 'AppBundle\Entity\Asset\Trailer'
+        vendor: 'AppBundle\Entity\Asset\Vendor'
+        venue: 'AppBundle\Entity\Common\Contact'
 
 #    service_name:
 #        class: AppBundle\Directory\ClassName

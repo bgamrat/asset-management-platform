@@ -27,6 +27,7 @@ class LoadLocationTypeData implements FixtureInterface
 
         $caseLocation = new LocationType();
         $caseLocation->setName( 'Case' );
+        $caseLocation->setLocation( 'asset' );
         $caseLocation->setEntity( 'asset' );
         $caseLocation->setUrl( '/api/store/cases' );
         $caseLocation->setActive( true );
@@ -35,6 +36,7 @@ class LoadLocationTypeData implements FixtureInterface
 
         $manufacturerLocation = new LocationType();
         $manufacturerLocation->setName( 'Manufacturer' );
+        $manufacturerLocation->setLocation( 'manufacturer' );
         $manufacturerLocation->setEntity( 'contact' );
         $manufacturerLocation->setUrl( '/api/store/contacts?manufacturer' );
         $manufacturerLocation->setActive( true );
@@ -51,6 +53,7 @@ class LoadLocationTypeData implements FixtureInterface
 
         $trailerLocation = new LocationType();
         $trailerLocation->setName( 'Trailer' );
+        $trailerLocation->setLocation( 'trailer' );
         $trailerLocation->setEntity( 'trailer' );
         $trailerLocation->setUrl( '/api/store/trailers' );
         $trailerLocation->setActive( true );
@@ -59,6 +62,7 @@ class LoadLocationTypeData implements FixtureInterface
 
         $vendorLocation = new LocationType();
         $vendorLocation->setName( 'Vendor' );
+        $vendorLocation->setLocation( 'vendor' );
         $vendorLocation->setEntity( 'contact' );
         $vendorLocation->setUrl( '/api/store/contacts?vendor' );
         $vendorLocation->setActive( true );
@@ -67,6 +71,7 @@ class LoadLocationTypeData implements FixtureInterface
 
         $venueLocation = new LocationType();
         $venueLocation->setName( 'Venue' );
+        $venueLocation->setLocation( 'venue' );
         $venueLocation->setEntity( 'contact' );
         $venueLocation->setUrl( '/api/store/contacts?venue' );
         $venueLocation->setActive( true );
