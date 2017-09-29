@@ -46,7 +46,7 @@
             <section>
                 {% if event.contracts is not empty %}
                     {% for contract in event.contracts %}
-                        {% include 'common/parts/contract-details.html.twig' %}
+                        {% include 'common/parts/contract-details.html.twig' with { 'event':true } %}
                     {% endfor %}
                 {% endif %}
             </section>

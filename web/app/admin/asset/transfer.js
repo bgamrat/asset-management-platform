@@ -335,7 +335,7 @@ define([
                                 html = '<a href="' + object.tracking_url.replace("__ID__",data) + '" target="_blank">' + data + '</a>';
                             }
                         } else {
-                            html = data;
+                            html = (typeof data !== "undefined" && data !== null) ? data : "";
                         }
                         return html;
                     }

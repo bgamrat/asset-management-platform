@@ -26,6 +26,7 @@ define([
         var locationId = null;
         var divIdInUse = 'location';
         var namesAndUrls = [];
+        var locationEcho;
 
         function getDivId() {
             return divIdInUse;
@@ -59,6 +60,7 @@ define([
 
         var id = getDivId();
         var formName = getFormName();
+        locationEcho = formNameInUse + "_" + id + "_echo";
 
         query('[name="' + formName + '[' + id + '][ctype]"]').forEach(function (node) {
             var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
@@ -82,6 +84,7 @@ define([
                 target = dom.byId(domAttr.get(target, "for"));
             }
             var dataUrl = domAttr.get(target, "data-url");
+            document.getElementById(locationEcho).innerHTML = "";
             if( dataUrl !== null && dataUrl !== "" ) {
                 locationFilteringSelect.set("readOnly", false);
                 locationStore.target = dataUrl;
@@ -202,6 +205,7 @@ define([
                     dom.byId(getFormName() + "_" + getDivId() + "_id").value = obj.id;
                     locationId = obj.id;
                     setLocationType(obj.type.id);
+                    document.getElementById(locationEcho).innerHTML = "";
                     if( obj.type.url !== null ) {
                         locationStore.target = obj.type.url;
                         locationFilteringSelect.set("store", locationStore);
@@ -209,6 +213,7 @@ define([
                         if (obj.address === true && obj.entityData !== null) {
                             obj.entityData.label = location_text;
                             locationFilteringSelect.set('item', obj.entityData);
+                            document.getElementById(locationEcho).innerHTML = obj.entityData.label;
                         } else {
                             locationFilteringSelect.set('displayedValue', obj.entityData.name);
                         }

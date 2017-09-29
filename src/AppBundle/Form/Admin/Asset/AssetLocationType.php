@@ -61,8 +61,8 @@ class AssetLocationType extends AbstractType
                         ] )
                         ->add( 'type', HiddenType::class )
                         ->add( 'entity', IntegerType::class )
-                        ->add( 'person_id', IntegerType::class, [ 'mapped' => false] )
-                        ->add( 'address_id', IntegerType::class, ['mapped' => false] )
+                        ->add( 'person_id', HiddenType::class, [ 'mapped' => false] )
+                        ->add( 'address_id', HiddenType::class, ['mapped' => false] )
                         ->add( 'address', CheckBoxType::class, ['label' => 'common.address', 'mapped' => false] )
                 ;
                 $builder->get( 'type' )
@@ -101,7 +101,7 @@ class AssetLocationType extends AbstractType
                         }
                         $location->setEntityData( $data );
                         $form->add( 'entity_data', EntityType::class, [
-                            'class' => $class, 'data' => $data]
+                            'class' => $class, 'data' => $data, 'attr' => [ 'class' => 'hidden' ]]
                         );
                     }
                     else
@@ -161,7 +161,7 @@ class AssetLocationType extends AbstractType
                         $location->setAddressId($addressId);
                         $location->setEntityData( $data );
                         $form->add( 'entity_data', EntityType::class, [
-                            'class' => $class, 'data' => $data]
+                            'class' => $class, 'data' => $data, 'attr' => [ 'class' => 'hidden' ]]
                         );
                     }
                     else

@@ -1,0 +1,32 @@
+{% if categoryQuantities is not empty %}
+    <article class="contract {{type}} ">
+        <h2>{{type|trans}} {{'asset.equipment'|trans}}</h2>
+        <table class="requires-available-list">
+            <thead>
+                <tr>
+                    <th>{{'asset.category'|trans}}</th>
+                    <th>{{'common.quantity'|trans}}</th>
+                    {% for name, l in location_names %}
+                        <th>{{name}}</th>
+                    {% endfor %}
+                    <th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for category_quantity in categoryQuantities%}
+                <tr>
+                    <td class="category">{{category_quantity.category.fullName}}</td>
+                    <td class="quantity">{{category_quantity.quantity}}</td>
+                    {% if event_assets[category_quantity.category.id] is defined %}
+                        {% for name, asset_count in event_assets[category_quantity.category.id] %}
+                            <td class="quantity available">
+                                {{asset_count}}
+                            </td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </article>
+{% endif %}

@@ -99,6 +99,9 @@
 .not-operational {
     background-color: lightpink;
 }
+.disposed {
+    text-decoration: line-through;
+}
 .service-instructions.dijitTextBox.dijitTextArea {
     height: 150px;
     width: 100%;

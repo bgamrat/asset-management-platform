@@ -52,24 +52,28 @@ class EventController extends Controller
             {
                 $trailer = $t->getTrailer();
                 $trailerId = $trailer->getId();
-                $trailerAssets[$trailerId] = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $trailerLocationType, $trailerId );
+                $trailerName = $trailer->getName();
+                $trailerAssets[$trailerName] = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $trailerLocationType, $trailerId );
                 $trailerNames[$trailerId] = $trailer->getName();
             }
         }
 
         $venueAssets = [];
-        if( !empty( $event->getVenue() ) )
+        $venue = $event->getVenue();
+        if( !empty( $venue ) )
         {
             $venueLocationType = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Venue' );
-            $venueAssets = [$em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $venueLocationType, $event->getVenue()->getId() )];
+            $venueAssets[$venue->getName()] = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $venueLocationType, $venue->getId() );
         }
 
         $satisfies = [];
         $assetCollection = [];
+        $eventAssets = [];
+        $locationNames = [];
         $dependencies = [];
         $requirements = array_keys( $requiresCategoryQuantities );
         $locationAssetCollection = array_merge( $trailerAssets, $venueAssets );
-        foreach( $locationAssetCollection as $locationId => $locationAssets )
+        foreach( $locationAssetCollection as $locationName => $locationAssets )
         {
             foreach( $locationAssets as $a )
             {
@@ -77,11 +81,22 @@ class EventController extends Controller
                 $modelId = $model->getId();
                 $modelSatisfies = $model->getSatisfies();
                 $itemSatisfies = [];
-                if( !empty( $modelSatisfies ) )
+                if( $a->getStatus()->isAvailable() && !empty( $modelSatisfies ) )
                 {
+                    $locationNames[$locationName] = true;
                     foreach( $modelSatisfies as $s )
                     {
                         $categoryId = $s->getId();
+                        if( !isset( $eventAssets[$categoryId] ) )
+                        {
+                            $eventAssets[$categoryId] = [];
+                        }
+                        if( !isset( $eventAssets[$categoryId][$locationName] ) )
+                        {
+                            $eventAssets[$categoryId][$locationName] = 0;
+                        }
+                        $eventAssets[$categoryId][$locationName] ++;
+
                         $itemSatisfies[] = $categoryId;
                         if( !isset( $satisfies[$categoryId] ) )
                         {
@@ -132,11 +147,13 @@ class EventController extends Controller
             }
         }
 
-        return $this->render( 'common/event-equipment-by-category.html.twig', array(
+        return $this->render( 'common/event-equipment-by-category.html.twig', [
                     'event' => $event,
+                    'event_assets' => $eventAssets,
+                    'location_names' => $locationNames,
                     'asset_balance' => $assetBalance,
                     'no_hide' => true,
-                    'omit_menu' => true)
+                    'omit_menu' => true]
         );
     }
 

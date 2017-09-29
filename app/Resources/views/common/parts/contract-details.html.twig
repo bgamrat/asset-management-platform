@@ -49,9 +49,14 @@
             </article>
         {% endif %}
 
-        {% include 'common/parts/category-quantities.html.twig' with {'type':'common.requires','categoryQuantities':contract.requiresCategoryQuantities} %}
-
-        {% include 'common/parts/category-quantities.html.twig' with {'type':'common.available','categoryQuantities':contract.availableCategoryQuantities} %}
-
+        {% if event is not defined %}
+            {% set event = false %}
+        {% endif %}
+        {% if event == false %}
+            {% include 'common/parts/category-quantities.html.twig' with {'type':'common.requires','categoryQuantities':contract.requiresCategoryQuantities} %}
+            {% include 'common/parts/category-quantities.html.twig' with {'type':'common.available','categoryQuantities':contract.availableCategoryQuantities} %}
+        {% else %}
+            {% include 'common/parts/event-category-quantities.html.twig' with {'type':'common.requires','categoryQuantities':contract.requiresCategoryQuantities} %}
+        {% endif %}
     </section>
 </div>
