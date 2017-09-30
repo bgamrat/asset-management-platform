@@ -71,11 +71,10 @@
                     <div id="asset-view-location-tab">
                         <div class="justify">
                             {{form_row(asset_form.location.id)}}
-                            <div>
-                                {{form_row(asset_form.location.ctype)}}
-                                {{form_row(asset_form.location.address)}}
-                            </div>
+                            {{form_row(asset_form.location.ctype)}}
                             {{form_row(asset_form.location.entity)}}
+                            {{form_row(asset_form.location.address,{"attr":{"class":"hidden"}})}}
+                            <div id="asset_location_echo"></div>
                         </div>
                     </div>
                     <div id="asset-view-expenses-tab">

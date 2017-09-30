@@ -108,6 +108,7 @@ class AssetsController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
         if( $asset !== null )
         {
+            // @TODO - switch this over to use a proper form
             $model = $asset->getModel();
             $brand = $model->getBrand();
             $location = $asset->getLocation();

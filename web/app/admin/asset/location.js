@@ -33,7 +33,10 @@ define([
         }
 
         function setDivId(divId) {
-            divIdInUse = divId + '_location';
+            if (divId !== "") {
+                divId += "_";
+                divIdInUse += divId;
+            }
         }
 
         //"use strict";

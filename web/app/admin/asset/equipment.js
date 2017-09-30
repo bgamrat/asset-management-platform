@@ -36,6 +36,7 @@ define([
     'put-selector/put',
     "app/admin/asset/barcodes",
     "app/admin/asset/custom_attributes",
+    "app/admin/asset/location",
     "app/admin/asset/common",
     "app/lib/common",
     "app/lib/grid",
@@ -48,11 +49,9 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        barcodes, customAttributes, assetCommon, lib, libGrid, core, asset) {
+        barcodes, customAttributes, xlocation, assetCommon, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
-
-        var defaultLocationType, defaultLocationTypeId, defaultLocationMemoryStore;
 
         var assetId = null;
 
@@ -117,12 +116,7 @@ define([
             var id;
             modelFilteringSelect.set("value", "");
             statusSelect.reset();
-            defaultLocationType.set("checked", true);
-            id = defaultLocationTypeId;
-            locationFilteringSelect.set("readOnly", false);
-            locationFilteringSelect.set("store", defaultLocationMemoryStore);
-            locationFilteringSelect.set("displayedValue", locationTypeLabels[id]);
-            locationFilteringSelect.set("readOnly", true);
+            location.setData(null);
             barcodes.setData(null);
             customAttributes.setData(null);
             serialNumberInput.set("value", "");
@@ -188,76 +182,7 @@ define([
             return;
         }
 
-        on(dom.byId('asset_location_ctype'), "click", function (event) {
-            var target = event.target, targetId;
-            if( target.tagName === 'LABEL' ) {
-                target = dom.byId(domAttr.get(target, "for"));
-            }
-            var dataUrl = domAttr.get(target, "data-url");
-            if( dataUrl !== null && dataUrl !== "" ) {
-                locationFilteringSelect.set("readOnly", false);
-                locationStore.target = dataUrl;
-                locationFilteringSelect.set("store", locationStore);
-            } else {
-                targetId = target.id.replace(/\D/g, '');
-                textLocationMemoryStore.data = [{name: locationTypeLabels[targetId], id: 0}];
-                locationFilteringSelect.set("readOnly", false);
-                locationFilteringSelect.set("store", textLocationStore);
-                locationFilteringSelect.set("displayedValue", locationTypeLabels[targetId]);
-                locationFilteringSelect.set("readOnly", true);
-            }
-        });
-
-        var addressCheckBox = new CheckBox({
-        }, "asset_location_address");
-        addressCheckBox.startup();
-
-        var textLocationMemoryStore = new Memory({
-            idProperty: "id",
-            data: []});
-        var textLocationStore = new ObjectStore({objectStore: textLocationMemoryStore});
-
-        var locationStore = new JsonRest({
-            useRangeHeaders: false,
-            idProperty: 'id'});
-        var locationFilteringSelect = new FilteringSelect({
-            store: null,
-            labelAttr: "name",
-            searchAttr: "name",
-            pageSize: 25,
-            readOnly: true,
-            "class": 'location-filtering-select'
-        }, "asset_location_entity");
-        locationFilteringSelect.startup();
-
-        var locationTypeLabels = {};
-        query('label[for^="asset_location_ctype_"]').forEach(function (node) {
-            locationTypeLabels[domAttr.get(node, "for").replace(/\D/g, '')] = node.textContent;
-        });
-
-        var locationTypeRadioButton = [];
-
-        query('[name="asset[location][ctype]"]').forEach(function (node) {
-            var id;
-            var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
-            if( node.checked ) {
-                dijit.set("checked", true);
-                defaultLocationType = dijit;
-                id = node.id.replace(/\D/g, '');
-                defaultLocationTypeId = id;
-                textLocationMemoryStore.data = [{"name": locationTypeLabels[id], id: 0}];
-                defaultLocationMemoryStore = lang.clone(textLocationMemoryStore);
-                locationFilteringSelect.set("readOnly", false);
-                locationFilteringSelect.set("store", textLocationMemoryStore);
-                locationFilteringSelect.set("displayedValue", locationTypeLabels[id]);
-                locationFilteringSelect.set("value", id);
-                locationFilteringSelect.set("readOnly", true);
-            }
-            dijit.set("data-url", domAttr.get(node, "data-url"));
-            dijit.set("data-location-type-id", node.value);
-            dijit.startup();
-            locationTypeRadioButton.push(dijit);
-        });
+        var location = xlocation.run("", "asset");
 
         var data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
@@ -314,15 +239,9 @@ define([
         }, 'asset-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeModelTextFilter, filter, data, locationId, locationData, purchased;
+            var beforeModelTextFilter, filter, data, purchased;
             grid.clearSelection();
             if( assetForm.validate() ) {
-                locationId = parseInt(dom.byId("asset_location_id").value);
-                locationData = {
-                    "id": isNaN(locationId) ? null : locationId,
-                    "type": parseInt(getLocationType()),
-                    "entity": parseInt(locationFilteringSelect.get("value"))
-                };
                 purchased = purchasedInput.get("value");
                 data = {
                     "id": assetId,
@@ -333,8 +252,8 @@ define([
                     "cost": parseFloat(costInput.get("value")),
                     "value": parseFloat(valueInput.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
-                    "location": locationData,
-                    "location_text": locationFilteringSelect.get("displayedValue"),
+                    "location": location.getData(),
+                    "location_text": location.getText(),
                     "barcode": barcodes.getActive(),
                     "barcodes": barcodes.getData(),
                     "serial_number": serialNumberInput.get("value"),
@@ -454,20 +373,7 @@ define([
                     purchasedInput.set("value", asset.purchased);
                     costInput.set("value", asset.cost);
                     valueInput.set("value", asset.value);
-                    dom.byId("asset_location_id").value = asset.location.id;
-                    setLocationType(asset.location.type.id);
-                    if( asset.location.type.url !== null ) {
-                        locationStore.target = asset.location.type.url;
-                        locationFilteringSelect.set("store", locationStore);
-                        locationFilteringSelect.set("readOnly", false);
-                        locationFilteringSelect.set('displayedValue', asset.location_text);
-                    } else {
-                        textLocationMemoryStore.data = [{name: locationTypeLabels[asset.location.type.id], id: 0}];
-                        locationFilteringSelect.set("store", textLocationStore);
-                        locationFilteringSelect.set("readOnly", false);
-                        locationFilteringSelect.set('displayedValue', asset.location_text);
-                        locationFilteringSelect.set("readOnly", true);
-                    }
+                    location.setData(asset.location, asset.location_text);
                     serialNumberInput.set('value', asset.serial_number);
                     customAttributes.setData(asset.custom_attributes);
                     commentInput.set('value', asset.comment);
@@ -533,27 +439,6 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
             }));
         });
-
-        function getLocationType() {
-            var i, locationTypeSet = false;
-            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
-                if( locationTypeRadioButton[i].get("checked") === true ) {
-                    locationTypeSet = true;
-                    break;
-                }
-            }
-            return locationTypeSet ? locationTypeRadioButton[i].get("value") : null;
-        }
-
-        function setLocationType(locationType) {
-            var i;
-            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
-                if( parseInt(locationTypeRadioButton[i].get("data-location-type-id")) === locationType ) {
-                    locationTypeRadioButton[i].set("checked", true);
-                    break;
-                }
-            }
-        }
 
         barcodes.run('asset');
         customAttributes.run('asset');
