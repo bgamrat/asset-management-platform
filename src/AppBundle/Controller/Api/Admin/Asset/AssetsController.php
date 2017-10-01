@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AssetsController extends FOSRestController
 {
@@ -108,56 +109,16 @@ class AssetsController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
         if( $asset !== null )
         {
-            // @TODO - switch this over to use a proper form
-            $model = $asset->getModel();
-            $brand = $model->getBrand();
-            $location = $asset->getLocation();
-            if( $location === null )
-            {
-                $location = new Location();
-                $locationId = $locationType = null;
-            }
-            else
-            {
-                $locationId = $location->getId();
-                $locationTypeId = $location->getType();
-                $locationType = $this->getDoctrine()
-                                ->getRepository( 'AppBundle\Entity\Asset\LocationType' )->find( $locationTypeId );
-                ;
-            }
-            $relationships = [
-                'extends' => $model->getExtends( false ),
-                'requires' => $model->getRequires( false ),
-                'extended_by' => $model->getExtendedBy( false ),
-                'required_by' => $model->getRequiredBy( false )
-            ];
-            $status = $asset->getStatus();
-            $data = [
-                'id' => $id,
-                'model_text' => $brand->getName() . ' ' . $model->getName(),
-                'model' => $model->getId(),
-                'satisfies' => $model->getSatisfies(),
-                'model_relationships' => $relationships,
-                'serial_number' => $asset->getSerialNumber(),
-                'location_text' => $asset->getLocationText(),
-                'location' => [ 'id' => $locationId, 'entity' => $location->getEntity(), 'type' => $locationType],
-                'status_text' => $status->getName(),
-                'status' => $status->getId(),
-                'barcodes' => $asset->getBarcodes(),
-                'custom_attributes' => $asset->getCustomAttributes(),
-                'comment' => $asset->getComment(),
-                'purchased' => $asset->getPurchased()->format('Y-m-d'),
-                'cost' => $asset->getCost(),
-                'value' => $asset->getValue(),
-                'active' => $asset->isActive()
-            ];
-
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle\Entity\Asset\AssetLog', $id );
-            $data['history'] = $logUtil->translateIdsToText();
+            $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdated() );
-            return $data;
+
+            $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
+            $asset->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
         }
         else
         {

@@ -20,7 +20,6 @@ define([
         JsonRest, aspect,
         core) {
 
-
     function run() {
         //"use strict";
         var locationId = null;

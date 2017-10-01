@@ -358,7 +358,7 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (asset) {
-                    var titleBarcode;
+                    var titleBarcode, timestamp;
                     if( typeof asset.barcodes[0] !== "undefined" && typeof asset.barcodes[0].barcode !== "undefined" ) {
                         titleBarcode = asset.barcodes[0].barcode;
                     } else {
@@ -368,14 +368,16 @@ define([
                     assetViewDialog.show();
                     action = "view";
                     assetId = asset.id;
-                    modelFilteringSelect.set('displayedValue', asset.model_text);
-                    statusSelect.set("displayedValue", asset.status_text);
-                    purchasedInput.set("value", asset.purchased);
+                    modelFilteringSelect.set('displayedValue', asset.model.brandModelName);
+                    statusSelect.set("displayedValue", asset.status.name);
+                    timestamp = new Date();
+                    timestamp.setTime(asset.purchased.timestamp * 1000);
+                    purchasedInput.set('value', timestamp);
                     costInput.set("value", asset.cost);
                     valueInput.set("value", asset.value);
-                    location.setData(asset.location, asset.location_text);
-                    serialNumberInput.set('value', asset.serial_number);
-                    customAttributes.setData(asset.custom_attributes);
+                    location.setData(asset.location, asset.locationText);
+                    serialNumberInput.set('value', asset.serialNumber);
+                    customAttributes.setData(asset.customAttributes);
                     commentInput.set('value', asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {
                         barcodes.setData(asset.barcodes);
@@ -383,7 +385,11 @@ define([
                         barcodes.setData(null);
                     }
                     activeCheckBox.set('checked', asset.active);
-                    assetCommon.relationshipLists(modelRelationshipsContentPane, asset.model_relationships, asset.satisfies);
+                    assetCommon.relationshipLists(modelRelationshipsContentPane,
+                            {"requires": asset.model.requires,
+                                "required_by": asset.model.requiredBy,
+                                "extends": asset.model.extends,
+                                "extended_by": asset.model.extendedBy}, asset.model.satisfies);
                     lib.showHistory(historyContentPane, asset.history);
                 }, lib.xhrError);
             }

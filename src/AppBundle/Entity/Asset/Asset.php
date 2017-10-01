@@ -124,6 +124,7 @@ class Asset
      * @Gedmo\Versioned
      */
     private $deletedAt;
+    private $history;
 
     public function __construct()
     {
@@ -453,6 +454,15 @@ class Asset
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
+    }
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    public function setHistory( $history )
+    {
+        $this->history = $history;
     }
 
 }

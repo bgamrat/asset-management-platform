@@ -37,7 +37,7 @@ class AssetType extends AbstractType
         $defaultStatus = $this->em->getRepository( 'AppBundle\Entity\Asset\AssetStatus' )->findOneBy( ['default' => true] );
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'serial_number', TextType::class, ['label' => false] )
+                ->add( 'serial_number', TextType::class, ['label' => false ] )
                 ->add( 'model', TextType::class, [
                     'label' => 'common.model'
                 ] )
