@@ -80,6 +80,7 @@
 .available-list .quantity,
 .requires-available-list .quantity {
     font-weight: 700;
+    text-align: right;
 }
 .available-list.wide {
     width: 95%;

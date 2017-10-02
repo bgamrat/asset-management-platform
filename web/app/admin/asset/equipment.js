@@ -311,7 +311,10 @@ define([
                     label: core.status
                 },
                 location_text: {
-                    label: asset.location
+                    label: asset.location,
+                    formatter: function(item) {
+                        return item.replace(/\n/g,"<br>");
+                    }
                 },
                 comment: {
                     label: core.comment

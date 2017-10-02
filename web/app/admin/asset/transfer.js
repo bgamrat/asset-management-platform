@@ -313,14 +313,14 @@ define([
                 },
                 source_location_text: {
                     label: core.from,
-                    formatter: function (item) {
-                        return item;
+                    formatter: function(item) {
+                        return item.replace(/\n/g,"<br>");
                     }
                 },
                 destination_location_text: {
                     label: core.to,
-                    formatter: function (item) {
-                        return item;
+                    formatter: function(item) {
+                        return item.replace(/\n/g,"<br>");
                     }
                 },
                 carrier_text: {

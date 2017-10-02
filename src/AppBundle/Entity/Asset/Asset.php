@@ -76,9 +76,9 @@ class Asset
      */
     protected $location = null;
     /**
-     * @var string
+     * @var text
      * @Gedmo\Versioned
-     * @ORM\Column(name="location_text", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="location_text", type="text", nullable=true, unique=false)
      */
     protected $location_text = null;
     /**
@@ -344,12 +344,12 @@ class Asset
      * Set LocationText
      *
      * @param string $location_text
-     *
+     * s
      * @return Asset
      */
     public function setLocationText( $location_text )
     {
-        $this->location_text = $location_text;
+        $this->location_text = str_replace( ['<br />', '<br>'], PHP_EOL, $location_text );
 
         return $this;
     }
@@ -455,6 +455,7 @@ class Asset
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
     }
+
     public function getHistory()
     {
         return $this->history;

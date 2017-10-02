@@ -172,7 +172,7 @@ class Transfer
      *
      * @param int $status
      *
-     * @return Asset
+     * @return Transfer
      */
     public function setStatus( $status )
     {
@@ -196,7 +196,7 @@ class Transfer
      *
      * @param float $cost
      *
-     * @return Asset
+     * @return Transfer
      */
     public function setCost( $cost )
     {
@@ -220,7 +220,7 @@ class Transfer
      *
      * @param string $from
      *
-     * @return Issue
+     * @return Transfer
      */
     public function setFrom( Person $from )
     {
@@ -244,7 +244,7 @@ class Transfer
      *
      * @param int $source_location
      *
-     * @return Asset
+     * @return Transfer
      */
     public function setSourceLocation( $source_location )
     {
@@ -268,11 +268,11 @@ class Transfer
      *
      * @param string $source_location_text
      *
-     * @return Asset
+     * @return Transfer
      */
     public function setSourceLocationText( $source_location_text )
     {
-        $this->source_location_text = $source_location_text;
+        $this->source_location_text = str_replace(['<br />','<br>'],PHP_EOL,$source_location_text);
 
         return $this;
     }
@@ -292,7 +292,7 @@ class Transfer
      *
      * @param string $to
      *
-     * @return Issue
+     * @return Transfer
      */
     public function setTo( Person $to )
     {
@@ -344,7 +344,7 @@ class Transfer
      */
     public function setDestinationLocationText( $destination_location_text )
     {
-        $this->destination_location_text = $destination_location_text;
+        $this->destination_location_text = str_replace(['<br />','<br>'],PHP_EOL,$destination_location_text);
 
         return $this;
     }

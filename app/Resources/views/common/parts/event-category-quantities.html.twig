@@ -1,7 +1,7 @@
 {% if categoryQuantities is not empty %}
     <article class="contract {{type}} ">
         <h2>{{type|trans}} {{'asset.equipment'|trans}}</h2>
-        <table class="requires-available-list">
+        <table class="equipment-overview">
             <thead>
                 <tr>
                     <th>{{'asset.category'|trans}}</th>
@@ -9,23 +9,45 @@
                     {% for name, l in location_names %}
                         <th>{{name}}</th>
                     {% endfor %}
-                    <th>
+                    <th>{{'common.rental'|trans}}</th>
+                    <th>{{'asset.balance'|trans}}</th>
                 </tr>
             </thead>
             <tbody>
-            {% for category_quantity in categoryQuantities%}
-                <tr>
-                    <td class="category">{{category_quantity.category.fullName}}</td>
-                    <td class="quantity">{{category_quantity.quantity}}</td>
-                    {% if event_assets[category_quantity.category.id] is defined %}
-                        {% for name, asset_count in event_assets[category_quantity.category.id] %}
+                {% for category_quantity in categoryQuantities%}
+                    {% set row_balance = category_quantity.quantity %}
+                    <tr>
+                        <td class="category">{{category_quantity.category.fullName}}</td>
+                        <td class="quantity">{{category_quantity.quantity}}</td>
+                        {% if event_assets[category_quantity.category.id] is defined %}
+                            {% for name, l in location_names %}
+                                {% if event_assets[category_quantity.category.id][name] is defined %}
+                                    <td class="quantity available">
+                                        {{event_assets[category_quantity.category.id][name]}}
+                                    </td>
+                                    {% set row_balance = row_balance - event_assets[category_quantity.category.id][name] %}
+                                {%else %}
+                                    <td></td>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% for name, l in location_names %}
+                                <td></td>
+                            {% endfor %}
+                        {% endif %}
+                        {% if rental[category_quantity.category.id] is defined %}
                             <td class="quantity available">
-                                {{asset_count}}
+                                {{rental[category_quantity.category.id]}}
+                                {% set row_balance = row_balance - rental[category_quantity.category.id] %}
                             </td>
-                        {% endfor %}
-                    {% endif %}
-                </tr>
-            {% endfor %}
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        <td class="quantity balance {% if row_balance > 0 %}deficit{% endif %}">
+                            {{row_balance}}
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </article>

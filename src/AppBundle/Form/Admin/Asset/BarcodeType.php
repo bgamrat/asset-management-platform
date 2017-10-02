@@ -20,14 +20,13 @@ class BarcodeType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'updated', HiddenType::class, ['label' => false, 'disabled' => true] )
                 ->add( 'barcode', TextType::class, [
                 ] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
+                ->add( 'updated', HiddenType::class, ['label' => false, 'disabled' => true] )
         ;
     }
 

@@ -123,7 +123,6 @@ define([
         for( i = 0; i < barcodeInput.length; i++ ) {
             returnData.push(
                     {
-                        "id": barcodeId[i],
                         "barcode": barcodeInput[i].get('value'),
                         "comment": commentInput[i].get('value'),
                         "active": activeRadioButton[i].get("checked")
