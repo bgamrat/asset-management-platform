@@ -19,18 +19,29 @@ class DefaultController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $name = $request->get( 'name' );
+        $last = $request->get( 'last' );
         if( !empty( $name ) )
         {
-            $name = '%' . str_replace( '*', '%', $name );
-
             $em = $this->getDoctrine()->getManager();
-
-            $queryBuilder = $em->createQueryBuilder()->select( ['p.id',
-                "CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname) AS name"] )
-                    ->from( 'AppBundle\Entity\Common\Person', 'p' )
-                    ->where( "LOWER(CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname)) LIKE :name" )
-                    ->orderBy( 'name' )
-                    ->setParameter( 'name', strtolower( $name ) );
+            $name = '%' . str_replace( '*', '%', $name );
+            if( $last === '' )
+            {
+                $queryBuilder = $em->createQueryBuilder()->select( ['p.id',
+                            'p.lastname AS name'] )
+                        ->from( 'AppBundle\Entity\Common\Person', 'p' )
+                        ->where( "LOWER(p.lastname) LIKE :name" )
+                        ->orderBy( 'name' )
+                        ->setParameter( 'name', strtolower( $name ) );
+            }
+            else
+            {
+                $queryBuilder = $em->createQueryBuilder()->select( ['p.id',
+                            "CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname) AS name"] )
+                        ->from( 'AppBundle\Entity\Common\Person', 'p' )
+                        ->where( "LOWER(CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname)) LIKE :name" )
+                        ->orderBy( 'name' )
+                        ->setParameter( 'name', strtolower( $name ) );
+            }
             $data = $queryBuilder->getQuery()->getResult();
         }
         else
@@ -39,4 +50,5 @@ class DefaultController extends FOSRestController
         }
         return $data;
     }
+
 }

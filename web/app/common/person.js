@@ -8,8 +8,10 @@ define([
     "dijit/form/ValidationTextBox",
     "dijit/form/Textarea",
     "dijit/form/Select",
+    "dijit/form/ComboBox",
     "dojo/data/ObjectStore",
     "dojo/store/Memory",
+    'dojo/store/JsonRest',
     "app/common/emails",
     "app/common/phones",
     "app/common/addresses",
@@ -17,8 +19,8 @@ define([
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (lang, dom, domAttr, domConstruct, on, query,
-        ValidationTextBox, Textarea, Select,
-        ObjectStore, Memory,
+        ValidationTextBox, Textarea, Select, ComboBox,
+        ObjectStore, Memory, JsonRest,
         xemails, xphones, xaddresses,
         lib, core) {
 
@@ -37,6 +39,7 @@ define([
         var addOneMoreControl;
         var emails = [], phones = [], addresses = [];
         var divId;
+        var personStore;
 
         function setDivId(divId) {
             divIdInUse = divId;
@@ -94,11 +97,13 @@ define([
             }, base + "middlename");
             dijit.startup();
             middlenameInput.push(dijit);
-            dijit = new ValidationTextBox({
+            dijit = new ComboBox({
                 required: true,
                 trim: true,
                 pattern: "[A-Za-z\.\,\ \'-]{2,64}",
                 "class": "name",
+                store: personStore,
+                searchAttr: "name",
                 placeholder: core.lastname
             }, base + "lastname");
             dijit.startup();
@@ -163,6 +168,11 @@ define([
             data: storeData});
         store = new ObjectStore({objectStore: memoryStore});
 
+        personStore = new JsonRest({
+            target: '/api/store/people?last',
+            useRangeHeaders: false,
+            idProperty: 'id'});
+
         createDijits();
 
         addOneMoreControl = query('.contacts .add-one-more-row');
@@ -172,9 +182,9 @@ define([
                 var idNumber = personId.length;
                 cloneNewNode();
                 createDijits();
-                phones[idNumber] = xphones.run(divId,idNumber);
-                emails[idNumber] = xemails.run(divId,idNumber);
-                addresses[idNumber] = xaddresses.run(divId,idNumber);
+                phones[idNumber] = xphones.run(divId, idNumber);
+                emails[idNumber] = xemails.run(divId, idNumber);
+                addresses[idNumber] = xaddresses.run(divId, idNumber);
                 if( personId.length >= lib.constant.MAX_CONTACTS ) {
                     addOneMoreControl.addClass("hidden");
                 }
@@ -182,9 +192,9 @@ define([
         }
 
         divId = getDivId();
-        emails[0] = xemails.run(divId,0);
-        addresses[0] = xaddresses.run(divId,0);
-        phones[0] = xphones.run(divId,0);
+        emails[0] = xemails.run(divId, 0);
+        addresses[0] = xaddresses.run(divId, 0);
+        phones[0] = xphones.run(divId, 0);
 
         function getData() {
             var i, returnData = [];
