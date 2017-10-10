@@ -18,31 +18,18 @@ class CalendarController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_USER', null, 'Unable to access this page!' );
 
         $today = new \DateTime();
-        $daysOfTheWeek = [];
-        $day = new \DateTime( 'last Sunday' );
-        $oneDay = new \DateInterval( 'P1D' );
-        for( $i = 0; $i < 7; $i++ )
-        {
-            $daysOfTheWeek[] = $day;
-            $day->add( $oneDay );
-        }
 
         $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder()->select( ['e'] )
-                ->from( 'AppBundle\Entity\Schedule\Event', 'e' )
-                ->join( 'e.client', 'c' )
-                ->orderBy( 'e.start,c.name' );
-        $queryBuilder->where( $queryBuilder->expr()->between(
-                        ':now', 'e.start', 'e.end'
-                )
-        );
-        $queryBuilder->setParameters( array('now' => date('Y/m/d') ));
-
+        $queryBuilder = $em->createQueryBuilder()->select( ['e.id'] )
+                ->from( 'AppBundle\Entity\Schedule\Event', 'e' );
+        $queryBuilder->where( $queryBuilder->expr()->lt( ':now', 'e.end' ) );
+        $queryBuilder->setParameters( ['now' => date( 'Y/m/d' )] );
         $events = $queryBuilder->getQuery()->getResult();
+        $ids = array_column($events,'id');
+        $events = $em->getRepository( 'AppBundle\Entity\Schedule\Event' )->findBy( ['id' => $ids] );
 
         return $this->render( 'user/calendar/index.html.twig', array(
                     'date' => $today,
-                    'days_of_the_week' => $daysOfTheWeek,
                     'events' => $events
                 ) );
     }

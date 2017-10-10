@@ -389,7 +389,7 @@ define([
                     canceledCheckBox.set("checked", event.canceled === true);
                     clientFilteringSelect.set('displayedValue', (event.client !== null) ? event.client.name : null);
                     venueFilteringSelect.set('displayedValue', (event.venue !== null) ? event.venue.name : null);
-                    descriptionInput.set("value", event.comment);
+                    descriptionInput.set("value", event.description);
                     equipmentLink = document.getElementById("full-equipment-link");
                     equipmentLink.href = equipmentLink.href.replace(/(__ID__|\d+)/, event.id);
                     equipmentLink.classList.remove("hidden");

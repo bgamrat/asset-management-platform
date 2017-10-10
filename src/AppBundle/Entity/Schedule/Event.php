@@ -41,7 +41,7 @@ class Event
     /**
      * @var string
      * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=256, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
     /**
