@@ -1,58 +1,119 @@
 {% block title %}{{ event.name }} {{'common.equipment'|trans }}{% endblock %}
 
-{% extends 'admin.base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block stylesheets %}
+{% block extrastylesheets %}
     {% stylesheets
-            '@admin_client_css'
-            filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+            '@event_css'
+            filter='cssrewrite' output='css/compiled/eec.css'  %}
+    <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
 {% endblock %}
 
-{% block admin_content %}
+{% block body %}
     <div id="event-equipment-wrapper">
-        <h1>{{ block ('title') }}</h1>
-        <div class="event">
-            <div class="event-data">
-                <div>
-                    <span class="tentative">
-                        {% if event.tentative %}
-                            {{'event.tentative'|trans}}
-                        {% else %}
-                            {{'event.firm'|trans}}
-                        {%endif%}
-                    </span>
-                    <span class="billable">
-                        {% if event.billable %}
-                            {{'common.billable'|trans}}
-                        {% else %}
-                            {{'common.not_billable'|trans}}
-                        {%endif%}
-                    </span>
-                    <span class="canceled">
-                        {% if event.canceled %}
-                            {{'common.canceled'|trans}}
-                        {%endif%}
-                    </span>
-                </div>
-                {% if event.description is not empty %}
-                    <div class="description">
-                        <div class="label">{{'common.description'|trans}}</div>
-                        {{event.description}}
-                    </div>
-                {% endif %}
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>{{ block('title') }}
+                    <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
+                </h1>
             </div>
-            <section>
-                {% if event.contracts is not empty %}
-                    {% for contract in event.contracts %}
-                        {% include 'common/parts/contract-details.html.twig' with { 'event':true } %}
-                    {% endfor %}
-                {% endif %}
-            </section>
-            <section>
-                {% include 'common/parts/asset-balance.html.twig' %}
-            </section>
+        </div>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="identification-heading">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#identification" aria-expanded="true" aria-controls="identification">
+                            {{'common.identification'|trans}}
+                        </a>
+                    </h4>
+                </div>
+                <div id="identification" class="panel-collapse collapse in" role="tabpanel">
+                    <div class="row event">
+                        <div class="col-sm-6 event-data">
+                            <div>
+                                <span class="tentative">
+                                    {% if event.tentative %}
+                                        {{'event.tentative'|trans}}
+                                    {% else %}
+                                        {{'event.firm'|trans}}
+                                    {%endif%}
+                                </span>
+                                <span class="billable">
+                                    {% if event.billable %}
+                                        {{'common.billable'|trans}}
+                                    {% else %}
+                                        {{'common.not_billable'|trans}}
+                                    {%endif%}
+                                </span>
+                                <span class="canceled">
+                                    {% if event.canceled %}
+                                        {{'common.canceled'|trans}}
+                                    {%endif%}
+                                </span>
+                            </div>
+                            {% if event.description is not empty %}
+                                <div class="description">
+                                    <div class="label">{{'common.description'|trans}}</div>
+                                    {{event.description}}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="contracts-heading">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#contracts" aria-expanded="false" aria-controls="contracts">
+                            {{'client.contracts'|trans}}
+                        </a>
+                    </h4>
+                </div>
+                <div id="contracts" class="panel-collapse collapse" role="tabpanel">
+                    {% if event.contracts is not empty %}
+                        {% for contract in event.contracts %}
+                            {% include 'common/parts/contract-details.html.twig' with { 'event':true } %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="assets-needed-heading">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse collapse" data-parent="#accordion" href="#assets-needed" aria-expanded="false" aria-controls="assets-needed">
+                            {{'event.assets_needed'|trans}}
+                        </a>
+                    </h4>
+                </div>
+                <div id="assets-needed" class="panel-collapse" role="tabpanel">
+                    {% include 'common/parts/asset-balance.html.twig' %}
+                </div>
+            </div>
         </div>
     </div>
+
+    <div id="display-controls" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{'common.controls'|trans}}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Words here ...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success">{{ 'common.apply'|trans}}</button>
+                    <button type="button" class="btn btn-primary">{{ 'common.save'|trans}}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 {% endblock %}
+
+{% javascripts
+    '@bootstrap_js'
+%}
+{% endjavascripts %}

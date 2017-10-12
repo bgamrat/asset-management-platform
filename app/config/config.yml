@@ -98,6 +98,9 @@ assetic:
                 - 'vendor/release/dojo/resources/dojo.css'
                 - 'vendor/release/dojo/resources/dnd.css'
                 - 'vendor/release/dijit/themes/tundra/tundra.css'
+        event_css:
+            inputs:
+                - 'app/css/common/event.css'
         # User side - common CSS
         main_css:
             inputs:

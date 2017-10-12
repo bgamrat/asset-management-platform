@@ -161,6 +161,8 @@ common:
         Contact
     contacts:
         Contacts
+    controls:
+        Controls
     cost:
         Cost
     country:
@@ -201,6 +203,8 @@ common:
         Groups
     home:
         Home
+    identification:
+        Identification
     invalid:
         invalid
     invite:
@@ -335,6 +339,8 @@ error:
         Password must not be longer than 4096 characters
 
 event:
+    assets_needed:
+        Assets Needed
     billable:
         Billable
     canceled:
