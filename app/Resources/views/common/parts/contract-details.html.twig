@@ -1,39 +1,37 @@
 <div class="contract">
     <div class="contract-data">
-        <div class="name-value-active">   
-            <span class="contract name">
-                {{contract.name}}
-            </span>
-            <span class="contract start">
+        <h3>
+            {{contract.name}}
+        </h3>
+        <div class="row">
+            <span class="col-sm-4">
                 {{contract.start|date('m/d/Y')}}
-            </span>
-            &dash;
-            <span class="contract end">
+                &dash;
                 {{contract.end|date('m/d/Y')}}
             </span>
-            <span class="contract active">
+            <span class="col-sm-4">
                 {% if contract.active %}
                     {{'common.active'|trans}}
                 {% else %}
-                    {{'common.not_active'|trans}}  
+                    {{'common.not_active'|trans}}
                 {%endif%}
             </span>
-            <span class="container">
+            <span class="col-sm-4">
                 {% if contract.container %}
                     {{'asset.container'|trans}}
                 {% endif %}
-            </span> 
+            </span>
         </div>
-        <div class="comment">
+        <div class="row comment">
             <div class="label">{{'common.comment'|trans}}</div>
-            {{contract.comment}}		    
+            {{contract.comment}}
         </div>
     </div>
 
     <section>
         {% if contract.requiresTrailers is not empty %}
             <article class="contract requires">
-                <h2>{{'common.requires'|trans}} {{'asset.trailers'|trans}}</h2>
+                <h3>{{'common.requires'|trans}} {{'asset.trailers'|trans}}</h3>
                 {% for trailer in contract.requiresTrailers %}
                     {{trailer.trailer.name}}
                 {% endfor %}
@@ -42,7 +40,7 @@
 
         {% if contract.availableTrailers is not empty %}
             <article class="contract available">
-                <h2>{{'common.available'|trans}} {{'asset.trailers'|trans}}</h2>
+                <h3>{{'common.available'|trans}} {{'asset.trailers'|trans}}</h3>
                 {% for trailer in contract.availableTrailers %}
                     {{trailer.trailer.name}}
                 {% endfor %}

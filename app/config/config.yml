@@ -100,6 +100,7 @@ assetic:
                 - 'vendor/release/dijit/themes/tundra/tundra.css'
         event_css:
             inputs:
+                - 'app/css/common/common.css'
                 - 'app/css/common/event.css'
         # User side - common CSS
         main_css:

@@ -1,0 +1,22 @@
+.available-list,
+.requires-available-list {
+    list-style-type: none;
+    padding: 3px;
+    margin: 1px;
+}
+.available-list  li:nth-child(odd),
+.requires-available-list li:nth-child(odd),
+.trailer.equipment tbody tr:nth-child(even) {
+    background-color: #ddd;
+}
+.available-list .quantity,
+.requires-available-list .quantity {
+    font-weight: 700;
+    text-align: right;
+}
+.available-list.wide {
+    width: 95%;
+}
+.trailer.equipment ul {
+    list-style-type: none;
+}

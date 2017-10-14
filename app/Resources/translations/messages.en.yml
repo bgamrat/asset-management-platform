@@ -177,6 +177,8 @@ common:
         Default
     description:
         Description
+    details:
+        Details
     directions:
         Directions
     email:

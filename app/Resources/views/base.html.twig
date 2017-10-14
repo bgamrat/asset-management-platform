@@ -6,33 +6,62 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
-        {% stylesheets
+            {% stylesheets
             '@bootstrap_css'
             '@main_css'
             filter='cssrewrite' output='css/compiled/app.css' %}
-        <link rel="stylesheet" href="{{ asset_url }}">
-        {% endstylesheets %}
-    {% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body role="document">
-
-    {% include 'user/parts/nav.html.twig' %}
-
-    <div class="container content" role="main">
-        {% block body %}
+            <link rel="stylesheet" href="{{ asset_url }}">
+            {% endstylesheets %}
+            {% block additional_stylesheets %}
+            {% endblock %}
         {% endblock %}
-        {% block fos_user_content %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body role="document">
+
+        {% include 'user/parts/nav.html.twig' %}
+
+        <div class="container content" role="main">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1>{{ block('title') }}
+                        <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
+                    </h1>
+                </div>
+            </div>
+            {% block body %}
+            {% endblock %}
+            {% block fos_user_content %}
+            {% endblock %}
+        </div>
+
+        <div id="display-controls" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{'common.controls'|trans}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% block modal_text %}
+                        {% endblock %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success">{{ 'common.apply'|trans}}</button>
+                        <button type="button" class="btn btn-primary">{{ 'common.save'|trans}}</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        {% block footer %}
+            {% include 'user/parts/page_footer_script.html.twig' %}
         {% endblock %}
-    </div>
-        
-{% block footer %}
-{% include 'user/parts/page_footer_script.html.twig' %}
-{% endblock %}
-{% block javascripts %}{% endblock %}
+    {% block javascripts %}{% endblock %}
 </body>
 </html>
