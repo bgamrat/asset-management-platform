@@ -18,10 +18,10 @@ class EventController extends Controller
 {
 
     /**
-     * @Route("/admin/schedule/event/{id}/equipment-by-category")
+     * @Route("/admin/schedule/event/{id}")
      * @Method("GET")
      */
-    public function viewEventEquipmentAction( $id )
+    public function viewAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
@@ -147,7 +147,7 @@ class EventController extends Controller
             }
         }
 
-        return $this->render( 'common/event-equipment-by-category.html.twig', [
+        return $this->render( 'common/event-view.html.twig', [
                     'event' => $event,
                     'event_assets' => $eventAssets,
                     'location_names' => $locationNames,

@@ -8,8 +8,8 @@
             '@main_css'
             '@calendar_css'
             filter='cssrewrite' output='css/compiled/cal.css' %}
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">  
-    {% endstylesheets %}  
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
 {% endblock %}
 
 {% block body %}
@@ -27,7 +27,10 @@
                         {% if event.start != event.end %}
                             - <span class="end">{{ event.end|date('D m/d') }}</span>
                         {% endif %}
-                        <h3 class="panel-title name"><small>{{event.id}}</small> {{ event.name }}</h3>
+                        <h3 class="panel-title name {% if event.tentative %}tentative{% endif %} {% if event.canceled %}canceled{% endif %}">
+                            <small>{{event.id}}</small>
+                            <a target="_blank" href="{{url('app_common_event_view',{'id':event.id})}}">{{ event.name }}</a>
+                        </h3>
                     </div>
                     <div class="panel-body">
                         {{ macros.display_event(event) }}

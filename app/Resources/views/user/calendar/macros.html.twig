@@ -1,14 +1,9 @@
 {% macro display_event(event) %}
     <div class="event">
-        <div class="full-equipment-link">
-            <a target="_blank" href="{{url('app_common_event_vieweventequipment',{'id':event.id})}}">{{'asset.equipment'|trans}}</a>
-        </div>
         <span class="client">{{event.client.name}}</span>
-        <span class="description">{{ event.description }}</span>
         {% if event.contracts is not empty %}
             {% for contract in event.contracts %}
                 {% if contract.requiresTrailers is not empty %}
-                    <span class="requires trailers">{{'common.requires'|trans}} {{'asset.trailers'|trans}}</span>
                     <ul class="list-unstyled">
                         {% for t in contract.requiresTrailers %}
                             <li>
@@ -30,9 +25,5 @@
                 </ul>
             </div>
         {%endif %}
-
-        {% if event.tentative %}{{'event.tentative'|trans}}{% endif %}
-        {% if event.canceled %}{{'event.canceled'|trans}}{% endif %}
-
     </div>
 {% endmacro %}

@@ -123,6 +123,8 @@ common:
         Address
     admin:
         Admin
+    app_name:
+        Mobile Asset Management Platform
     apply:
         Apply
     assets:

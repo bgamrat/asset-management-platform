@@ -29,7 +29,9 @@
             <div class="row">
                 <div class="col-xs-12">
                     <h1>{{ block('title') }}
-                        <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
+                        {% if no_settings is not defined %}
+                            <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
+                        {% endif %}
                     </h1>
                 </div>
             </div>

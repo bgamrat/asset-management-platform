@@ -124,7 +124,7 @@
                     </div>
                     <div id="event-view-equipment-tab"> 
                         <div class="justify right">
-                            <a class="hidden" target="_blank" id="full-equipment-link" href="{{url('app_common_event_vieweventequipment',{'id':'__ID__'})}}">{{'asset.equipment'|trans}}</a>                        </div>
+                            <a class="hidden" target="_blank" id="full-equipment-link" href="{{url('app_common_event_view',{'id':'__ID__'})}}">{{'asset.equipment'|trans}}</a>                        </div>
                         <div class="justify">
                             <fieldset class="contracts">
                                 <legend>{{'client.contracts'|trans}}</legend>
@@ -189,8 +189,8 @@
                         </fieldset>
                     </div>
                     <div id="event-view-times-tab">
-                        <fieldset class="event times">
-                            <legend>{{'event.times'|trans}}</legend>
+                        <fieldset class="event time_spans">
+                            <legend>{{'common.schedule'|trans}}</legend>
                             {{form_row(event_form.time_spans)}}
                             {% if event_form.time_spans.vars.allow_add %}
                                 <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>

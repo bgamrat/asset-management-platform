@@ -34,14 +34,13 @@ define([
     }
 
     function cloneNewNode() {
-        var prototypeContent = dataPrototype.replace(/__time_span__/g, timeSpanId.length);
+        var prototypeContent = dataPrototype.replace(/__time_span__/g, timeSpanFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-        timeSpanId.push(null);
     }
 
-    function createDijit() {
+    function createDijits() {
         var d, index = timeSpanId.length;
-        var base = prototypeNode.id + "_" + timeSpanId.length;
+        var base = prototypeNode.id + "_" + timeSpanFilteringSelect.length;
         var dijit = new FilteringSelect({
             store: timeSpanStore,
             labelAttr: "name",
@@ -51,44 +50,36 @@ define([
         dijit.startup();
         timeSpanFilteringSelect.push(dijit);
 
-        d = document.getElementById(base + "_start").value;
         dijit = new DateTextBox({
             placeholder: schedule.start_date,
             trim: true,
             required: true,
-            name: "time_span[" + index + "][start]",
-            value: (d === "") ? null : d
+            name: "time_span[" + index + "][start]"
         }, base + "_start");
         dijit.startup();
         startInput.push(dijit);
 
-        d = document.getElementById(base + "-start-time").value;
         dijit = new TimeTextBox({
             placeholder: schedule.start_time,
             trim: true,
-            required: false,
-            value: (d === "") ? null : d
+            required: false
         }, base + "-start-time");
         dijit.startup();
         startTimeInput.push(dijit);
 
-        d = document.getElementById(base + "_end").value;
         dijit = new DateTextBox({
             placeholder: schedule.end_date,
             trim: true,
             required: true,
-            name: "time_span[" + index + "][end]",
-            value: (d === "") ? null : d
+            name: "time_span[" + index + "][end]"
         }, base + "_end");
         dijit.startup();
         endInput.push(dijit);
 
-        d = document.getElementById(base + "-end-time").value;
         dijit = new TimeTextBox({
             placeholder: schedule.end_time,
             trim: true,
-            required: false,
-            value: (d === "") ? null : d
+            required: false
         }, base + "-end-time");
         dijit.startup();
         endTimeInput.push(dijit);
@@ -97,8 +88,7 @@ define([
             placeholder: core.comment,
             trim: true,
             required: false,
-            name: "time_span[" + index + "][comment]",
-            value: document.getElementById(base + "_comment").value
+            name: "time_span[" + index + "][comment]"
         }, base + "_comment");
         commentInput.push(dijit);
         dijit.startup();
@@ -106,7 +96,7 @@ define([
 
     function destroyRow(id, target) {
         var item;
-        contractId.splice(id, 1);
+        timeSpanId.splice(id, 1);
         item = nameInput.splice(id, 1);
         item[0].destroyRecursive();
         item = commentInput.splice(id, 1);
@@ -149,14 +139,13 @@ define([
         prototypeContent = dataPrototype.replace(/__time_span__/g, timeSpanId.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
-        createDijit();
+        createDijits();
 
         addOneMoreControl = query('.time_spans .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
-            var dataType = domAttr.get(event.target, "data-type");
             cloneNewNode();
-            createDijit();
+            createDijits();
         });
 
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
@@ -170,9 +159,9 @@ define([
 
     function getData(relationship) {
         var i, returnData = [];
-        for( i = 0; i < time_spansFilteringSelect.length; i++ ) {
+        for( i = 0; i < timespanFilteringSelect.length; i++ ) {
             returnData.push(
-                    parseInt(time_spansFilteringSelect[i].get("value")));
+                    parseInt(timespanFilteringSelect[i].get("value")));
         }
         return returnData;
     }
@@ -187,13 +176,13 @@ define([
         if( typeof models === "object" && models !== null && models.length > 0 ) {
             for( i = 0; i < models.length; i++ ) {
                 cloneNewNode();
-                createDijit();
-                timeSpanFilteringSelect[i].set("value", time_spans[i].id);
-                timeSpanFilteringSelect[i].set("displayedValue", time_spans[i].name);
+                createDijits();
+                timeSpanFilteringSelect[i].set("value", timespan[i].id);
+                timeSpanFilteringSelect[i].set("displayedValue", timespan[i].name);
             }
         } else {
             cloneNewNode();
-            createDijit();
+            createDijits();
         }
     }
 

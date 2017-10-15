@@ -86,7 +86,7 @@ define([
         tabContainer.addChild(venueContentPane);
 
         var timesContentPane = new ContentPane({
-            title: schedule.times},
+            title: schedule.schedule},
         "event-view-times-tab"
                 );
         tabContainer.addChild(timesContentPane);
