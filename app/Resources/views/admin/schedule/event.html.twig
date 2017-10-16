@@ -61,7 +61,7 @@
             </span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
             {% if form.parent.vars.allow_delete %}
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="trailer-__trailer__"><i class="fa fa-remove"></i></span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="time-span-__time_span__"><i class="fa fa-remove"></i></span>
                 {% endif %}
         </div>
 {% endspaceless %}{% endblock %}      
@@ -189,7 +189,7 @@
                         </fieldset>
                     </div>
                     <div id="event-view-times-tab">
-                        <fieldset class="event time_spans">
+                        <fieldset class="event time-spans">
                             <legend>{{'common.schedule'|trans}}</legend>
                             {{form_row(event_form.time_spans)}}
                             {% if event_form.time_spans.vars.allow_add %}

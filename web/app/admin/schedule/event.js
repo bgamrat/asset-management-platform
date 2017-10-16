@@ -243,6 +243,7 @@ define([
                     "venue": parseInt(venueFilteringSelect.get("value")),
                     "client_text": clientFilteringSelect.get("displayedValue"),
                     "venue_text": venueFilteringSelect.get("displayedValue"),
+                    "time_spans": timeSpans.getData(),
                     "description": descriptionInput.get("value")
                 };
                 if( action === "view" ) {
@@ -395,6 +396,7 @@ define([
                     equipmentLink.classList.remove("hidden");
                     contracts.setData(event.contracts);
                     person.setData(event.contacts);
+                    timeSpans.setData(event.timeSpans);
                     eventViewDialog.show();
                 }, lib.xhrError);
             }

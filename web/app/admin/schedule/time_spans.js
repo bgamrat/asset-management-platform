@@ -22,7 +22,7 @@ define([
 
     var dataPrototype, prototypeNode, prototypeContent;
     var divIdInUse, timeSpanStore;
-    var timeSpanId = [], timeSpanFilteringSelect = [];
+    var timeSpanFilteringSelect = [];
     var startInput = [], startTimeInput = [], endInput = [], endTimeInput = [], commentInput = [];
 
     function getDivId() {
@@ -39,7 +39,7 @@ define([
     }
 
     function createDijits() {
-        var d, index = timeSpanId.length;
+        var d, index = timeSpanFilteringSelect.length;
         var base = prototypeNode.id + "_" + timeSpanFilteringSelect.length;
         var dijit = new FilteringSelect({
             store: timeSpanStore,
@@ -58,6 +58,9 @@ define([
         }, base + "_start");
         dijit.startup();
         startInput.push(dijit);
+        startInput[index].on("change", function (evt) {
+            endInput[index].set('value', this.value);
+        });
 
         dijit = new TimeTextBox({
             placeholder: schedule.start_time,
@@ -66,6 +69,9 @@ define([
         }, base + "-start-time");
         dijit.startup();
         startTimeInput.push(dijit);
+        startTimeInput[index].on("change", function (evt) {
+            endTimeInput[index].set('value', this.value);
+        });
 
         dijit = new DateTextBox({
             placeholder: schedule.end_date,
@@ -96,19 +102,27 @@ define([
 
     function destroyRow(id, target) {
         var item;
-        timeSpanId.splice(id, 1);
-        item = nameInput.splice(id, 1);
-        item[0].destroyRecursive();
-        item = commentInput.splice(id, 1);
-        item[0].destroyRecursive();
-        item = activeCheckBox.splice(id, 1);
-        item[0].destroyRecursive();
-        item = startInput.splice(id, 1);
-        item[0].destroyRecursive();
-        item = endInput.splice(id, 1);
-        item[0].destroyRecursive();
-        item = valueInput.splice(id, 1);
-        item[0].destroyRecursive();
+        if( id !== null ) {
+            item = timeSpanFilteringSelect.splice(id, 1);
+            item[0].destroyRecursive();
+            item = startInput.splice(id, 1);
+            item[0].destroyRecursive();
+            item = startTimeInput.splice(id, 1);
+            item[0].destroyRecursive();
+            item = endInput.splice(id, 1);
+            item[0].destroyRecursive();
+            item = endTimeInput.splice(id, 1);
+            item[0].destroyRecursive();
+            item = commentInput.splice(id, 1);
+            item[0].destroyRecursive();
+        } else {
+            timeSpanFilteringSelect.pop().destroyRecursive();
+            startInput.pop().destroyRecursive();
+            startTimeInput.pop().destroyRecursive();
+            endInput.pop().destroyRecursive();
+            endTimeInput.pop().destroyRecursive();
+            commentInput.pop().destroyRecursive();
+        }
         domConstruct.destroy(target);
     }
 
@@ -136,12 +150,12 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__time_span__/g, timeSpanId.length);
+        prototypeContent = dataPrototype.replace(/__time_span__/g, timeSpanFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
         createDijits();
 
-        addOneMoreControl = query('.time_spans .add-one-more-row');
+        addOneMoreControl = query('.time-spans .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -151,34 +165,59 @@ define([
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
-            var idPieces = targetParent.id.split('-');
-            destroyRow(idPieces[1], targetParent.parentNode);
+            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            destroyRow(id, target.closest(".form-row.time-span"));
         });
 
     }
 
     function getData(relationship) {
-        var i, returnData = [];
-        for( i = 0; i < timespanFilteringSelect.length; i++ ) {
+        var i, returnData = [], st, en;
+        for( i = 0; i < timeSpanFilteringSelect.length; i++ ) {
+            st = startInput[i].get('value') + startTimeInput[i].get('value').toString().replace(/.*1970\s(\S+).*/,'T$1');
+            en = endInput[i].get('value') + endTimeInput[i].get('value').toString().replace(/.*1970\s(\S+).*/,'T$1');
             returnData.push(
-                    parseInt(timespanFilteringSelect[i].get("value")));
+                    {
+                        "type": parseInt(timeSpanFilteringSelect[i].get("value")),
+                        "start": st === null ? "" : st,
+                        "end": en === null ? "" : en,
+                        "comment": commentInput[i].get('value')
+                    });
+
         }
         return returnData;
     }
 
-    function setData(relationship, models) {
-        var i;
+    function setData(timeSpans) {
+        var i, timestamp;
 
-        query(".form-row.time_span", prototypeNode.parentNode).forEach(function (node, index) {
+        query(".form-row.time-span", prototypeNode.parentNode).forEach(function (node, index) {
             destroyRow(null, node);
         });
 
-        if( typeof models === "object" && models !== null && models.length > 0 ) {
-            for( i = 0; i < models.length; i++ ) {
+        if( typeof timeSpans === "object" && timeSpans !== null && timeSpans.length > 0 ) {
+            for( i = 0; i < timeSpans.length; i++ ) {
                 cloneNewNode();
                 createDijits();
-                timeSpanFilteringSelect[i].set("value", timespan[i].id);
-                timeSpanFilteringSelect[i].set("displayedValue", timespan[i].name);
+                timeSpanFilteringSelect[i].set("displayedValue", timeSpans[i].name);
+                if( timeSpans[i].start !== null ) {
+                    timestamp.setTime(timeSpans[i].start.timestamp * 1000);
+                    startInput.set('value', timestamp);
+                    startTimeInput.set('value', timestamp);
+                } else {
+                    startInput.set('value', null);
+                    startTimeInput.set('value', null);
+                }
+                if( timeSpans[i].end !== null ) {
+                    timestamp.setTime(timeSpans[i].end.timestamp * 1000);
+                    endInput.set('value', timestamp);
+                    endTimeInput.set('value', timestamp);
+                } else {
+                    endInput.set('value', null);
+                    endTimeInput.set('value', null);
+                }
+                commentInput[i].set('value', timeSpans[i].comment);
+
             }
         } else {
             cloneNewNode();
