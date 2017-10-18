@@ -28,7 +28,7 @@ class TimeSpanType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class )
+                //->add( 'id', HiddenType::class )
                 ->add( 'type', TextType::class, [
                     'label' => 'common.type'] )
                 ->add( 'start', DateTimeType::class, [
@@ -40,7 +40,7 @@ class TimeSpanType extends AbstractType
                 ->add( 'end', DateTimeType::class, [
                     'label' => 'common.end',
                     'widget' => 'single_text',
-                    'format' => 'yyyy-MM-dd THH:MM:SS',
+                    'format' => 'yyyy-MM-ddTHH:MM:SS',
                     'required' => false
                 ] )
                 ->add( 'comment', TextType::class, [

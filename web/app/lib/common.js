@@ -101,6 +101,12 @@ define([
         return year + '-' + month + '-' + day;
     }
 
+    function addTimeToDate(date,time) {
+        date.setHours(time.getHours());
+        date.setMinutes(time.getMinutes());
+        date.setSeconds(time.getSeconds());
+    }
+
     function showHistory(historyContentPane, historyLog) {
         var i, date, dateText, d, dataText, h, historyHtml;
         date = new Date();
@@ -181,6 +187,7 @@ define([
 
     return {
         addressTypes: addressTypes,
+        addTimeToDate: addTimeToDate,
         confirmAction: confirmAction,
         emailTypes: emailTypes,
         formatDate: formatDate,

@@ -84,14 +84,14 @@
             </div>
         </div>
         <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="contracts-heading">
+            <div class="panel-heading" role="tab" id="schedule-heading">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#contracts" aria-expanded="false" aria-controls="contracts">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#schedule" aria-expanded="false" aria-controls="contracts">
                         {{'common.schedule'|trans}}
                     </a>
                 </h4>
             </div>
-            <div id="contracts" class="panel-collapse collapse" role="tabpanel">
+            <div id="schedule" class="panel-collapse collapse" role="tabpanel">
                 <div class="panel-body">
                     {% if event.timespans is not empty %}
                         {% for timespan in event.timespans %}

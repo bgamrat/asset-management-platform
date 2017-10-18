@@ -121,6 +121,7 @@ define([
             person.setData(null);
             contracts.setData(null);
             trailers.setData(null);
+            timeSpans.setData(null);
             document.getElementById("full-equipment-link").classList.add("hidden");
             eventViewDialog.set("title", core["new"]).show();
             action = "new";

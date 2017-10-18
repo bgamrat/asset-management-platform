@@ -171,11 +171,15 @@ define([
 
     }
 
-    function getData(relationship) {
-        var i, returnData = [], st, en;
+    function getData() {
+        var i, returnData = [], st, stt, en, ent;
         for( i = 0; i < timeSpanFilteringSelect.length; i++ ) {
-            st = startInput[i].get('value') + startTimeInput[i].get('value').toString().replace(/.*1970\s(\S+).*/,'T$1');
-            en = endInput[i].get('value') + endTimeInput[i].get('value').toString().replace(/.*1970\s(\S+).*/,'T$1');
+            stt = startTimeInput[i].get('value');
+            st = startInput[i].get('value');
+            lib.addTimeToDate(st,stt);
+            ent = endTimeInput[i].get('value');
+            en = endInput[i].get('value');
+            lib.addTimeToDate(en,ent);
             returnData.push(
                     {
                         "type": parseInt(timeSpanFilteringSelect[i].get("value")),
