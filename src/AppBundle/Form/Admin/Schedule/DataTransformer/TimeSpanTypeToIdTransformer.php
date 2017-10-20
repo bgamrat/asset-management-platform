@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class TimeSpanToIdTransformer implements DataTransformerInterface
+class TimeSpanTypeToIdTransformer implements DataTransformerInterface
 {
     private $em;
 
@@ -21,13 +21,13 @@ class TimeSpanToIdTransformer implements DataTransformerInterface
      * @param  Issue|null $timeSpan
      * @return string
      */
-    public function transform($timeSpan)
+    public function transform($timeSpanType)
     {
-        if (null === $timeSpan) {
+        if (null === $timeSpanType) {
             return '';
         }
 
-        return $timeSpan->getName();
+        return $timeSpanType->getName();
     }
 
     /**
@@ -37,24 +37,24 @@ class TimeSpanToIdTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (timeSpan) is not found.
      */
-    public function reverseTransform($timeSpanId)
+    public function reverseTransform($timeSpanTypeId)
     {
         // no timeSpan id? It's optional, so that's ok
-        if (!$timeSpanId) {
+        if (!$timeSpanTypeId) {
             return;
         }
 
-        $timeSpan = $this->em
-            ->getRepository('AppBundle\Entity\Schedule\TimeSpan')
-            ->find($timeSpanId)
+        $timeSpanType = $this->em
+            ->getRepository('AppBundle\Entity\Schedule\TimeSpanType')
+            ->find($timeSpanTypeId)
         ;
 
-        if (null === $timeSpan) {
+        if (null === $timeSpanType) {
             throw new TransformationFailedException(sprintf(
-                'An timeSpan with id "%s" does not exist!',
-                $timeSpanId
+                'An time span type with id "%s" does not exist!',
+                $timeSpanTypeId
             ));
         }
-        return $timeSpan;
+        return $timeSpanType;
     }
 }

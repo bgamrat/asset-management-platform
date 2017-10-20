@@ -18,13 +18,25 @@ class DefaultController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $em = $this->getDoctrine()->getManager();
+        $name = $request->get( 'name' );
+        if( !empty( $name ) )
+        {
+            $name = str_replace( '*', '%', $name );
 
-        $queryBuilder = $em->createQueryBuilder()->select( ['ts.id', 'ts.name'] )
-                ->from( 'AppBundle\Entity\Schedule\TimeSpanType', 'ts' )
-                ->orderBy( 'ts.name' );
-        $data = $queryBuilder->getQuery()->getResult();
+            $em = $this->getDoctrine()->getManager();
 
+            $queryBuilder = $em->createQueryBuilder()->select( ['ts.id', "ts.name"] )
+                    ->from( 'AppBundle\Entity\Schedule\TimeSpanType', 'ts' )
+                    ->where( 'LOWER(ts.name) LIKE :time_span_name' )
+                    ->orderBy( 'ts.name')
+                    ->setParameter( 'time_span_name', strtolower( $name ) );
+
+            $data = $queryBuilder->getQuery()->getResult();
+        }
+        else
+        {
+            $data = null;
+        }
         return $data;
     }
 

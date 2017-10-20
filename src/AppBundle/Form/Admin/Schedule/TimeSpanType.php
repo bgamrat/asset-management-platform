@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
-use AppBundle\Form\Admin\Schedule\DataTransformer\TimeSpanToIdTransformer;
+use AppBundle\Form\Admin\Schedule\DataTransformer\TimeSpanTypeToIdTransformer;
 
 class TimeSpanType extends AbstractType
 {
@@ -34,13 +34,11 @@ class TimeSpanType extends AbstractType
                 ->add( 'start', DateTimeType::class, [
                     'label' => 'common.start',
                     'widget' => 'single_text',
-                    'format' => 'yyyy-MM-dd THH:MM:SS',
                     'required' => false
                 ] )
                 ->add( 'end', DateTimeType::class, [
                     'label' => 'common.end',
                     'widget' => 'single_text',
-                    'format' => 'yyyy-MM-ddTHH:MM:SS',
                     'required' => false
                 ] )
                 ->add( 'comment', TextType::class, [
@@ -49,7 +47,7 @@ class TimeSpanType extends AbstractType
 
         ;
         $builder->get( 'type' )
-                ->addModelTransformer( new TimeSpanToIdTransformer( $this->em ) );
+                ->addModelTransformer( new TimeSpanTypeToIdTransformer( $this->em ) );
     }
 
     /**

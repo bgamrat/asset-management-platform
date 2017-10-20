@@ -407,6 +407,16 @@ class Event
         return empty($this->timespans) ? [] : $this->timespans->toArray();
     }
 
+
+    public function setTimeSpans( $time_spans )
+    {
+        foreach( $time_spans as $t )
+        {
+            $this->addTimeSpan( $t );
+        }
+        return $this;
+    }
+
     public function addTimeSpan( TimeSpan $timespan )
     {
         if( !$this->timespans->contains( $timespan ) )

@@ -193,7 +193,7 @@ define([
     }
 
     function setData(timeSpans) {
-        var i, timestamp;
+        var i, timestamp = new Date();
 
         query(".form-row.time-span", prototypeNode.parentNode).forEach(function (node, index) {
             destroyRow(null, node);
@@ -203,22 +203,22 @@ define([
             for( i = 0; i < timeSpans.length; i++ ) {
                 cloneNewNode();
                 createDijits();
-                timeSpanFilteringSelect[i].set("displayedValue", timeSpans[i].name);
+                timeSpanFilteringSelect[i].set("displayedValue", timeSpans[i].type.name);
                 if( timeSpans[i].start !== null ) {
                     timestamp.setTime(timeSpans[i].start.timestamp * 1000);
-                    startInput.set('value', timestamp);
-                    startTimeInput.set('value', timestamp);
+                    startInput[i].set('value', timestamp);
+                    startTimeInput[i].set('value', timestamp);
                 } else {
-                    startInput.set('value', null);
-                    startTimeInput.set('value', null);
+                    startInput[i].set('value', null);
+                    startTimeInput[i].set('value', null);
                 }
                 if( timeSpans[i].end !== null ) {
                     timestamp.setTime(timeSpans[i].end.timestamp * 1000);
-                    endInput.set('value', timestamp);
-                    endTimeInput.set('value', timestamp);
+                    endInput[i].set('value', timestamp);
+                    endTimeInput[i].set('value', timestamp);
                 } else {
-                    endInput.set('value', null);
-                    endTimeInput.set('value', null);
+                    endInput[i].set('value', null);
+                    endTimeInput[i].set('value', null);
                 }
                 commentInput[i].set('value', timeSpans[i].comment);
 

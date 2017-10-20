@@ -96,6 +96,7 @@ class EventType extends AbstractType
                 ] )
                 ->add( 'time_spans', CollectionType::class, [
                     'entry_type' => TimeSpanType::class,
+                    //'property_path' => 'timespans',
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
