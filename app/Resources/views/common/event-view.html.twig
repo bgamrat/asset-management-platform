@@ -93,11 +93,7 @@
             </div>
             <div id="schedule" class="panel-collapse collapse" role="tabpanel">
                 <div class="panel-body">
-                    {% if event.timespans is not empty %}
-                        {% for timespan in event.timespans %}
-                            {% include 'common/parts/event-timespans.html.twig' with { 'event':true } %}
-                        {% endfor %}
-                    {% endif %}
+                    {% include 'common/parts/event-timespans.html.twig' %}
                 </div>
             </div>
         </div>

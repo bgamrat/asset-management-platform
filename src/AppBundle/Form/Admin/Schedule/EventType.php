@@ -16,6 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Client\DataTransformer\ClientToIdTransformer;
 use AppBundle\Form\Admin\Venue\DataTransformer\VenueToIdTransformer;
+use AppBundle\Form\Admin\Schedule\Type\TrailerType;
 use AppBundle\Form\Admin\Client\Type\ContractType;
 use AppBundle\Form\Common\PersonType;
 
@@ -85,7 +86,7 @@ class EventType extends AbstractType
                     'prototype_name' => '__contract__'
                 ] )
                 ->add( 'trailers', CollectionType::class, [
-                    'entry_type' => TextType::class,
+                    'entry_type' => TrailerType::class,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
@@ -96,7 +97,6 @@ class EventType extends AbstractType
                 ] )
                 ->add( 'time_spans', CollectionType::class, [
                     'entry_type' => TimeSpanType::class,
-                    //'property_path' => 'timespans',
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,

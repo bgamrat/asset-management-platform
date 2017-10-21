@@ -61,7 +61,7 @@ define([
             hidden = (reqd.length === 0 && avail.length === 0) ? 'class="hidden"' : "";
 
             // Backticks won't work with the old Chrome browser
-            templateContract = '<li id="contract-equipment-list-' + id + '" data-contract-id="' + item.id + '" ' + hidden + '><span>' + item.name + '</span>';
+            templateContract = '<li class="contract-equipment-list" id="contract-equipment-list-' + id + '" data-contract-id="' + item.id + '" ' + hidden + '><span>' + item.name + '</span>';
             if( reqd.length > 0 ) {
                 templateContract += '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>';
             }
@@ -156,7 +156,10 @@ define([
         query(".form-row.contract", prototypeNode.parentNode).forEach(function (node, index) {
             destroyRow(null, node);
         });
-
+        query(".contract-equipment-list").forEach(function (node, index) {
+            domConstruct.destroy(node);
+        });
+        
         if( typeof contracts === "object" && contracts !== null && contracts.length > 0 ) {
             for( i = 0; i < contracts.length; i++ ) {
                 cloneNewNode();

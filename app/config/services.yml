@@ -57,6 +57,11 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         public: false
 
+    app.form.data_transformer.event_trailer:
+        class: AppBundle\Form\Admin\Client\DataTransformer\TrailerToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
     app.form.data_transformer.invitation:
         class: AppBundle\Form\User\DataTransformer\InvitationToCodeTransformer
         arguments: ['@doctrine.orm.entity_manager']
@@ -71,6 +76,7 @@ services:
         class: AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false
+
 
     app.admin.form.type.asset:
         class: AppBundle\Form\Admin\Asset\AssetType
@@ -112,11 +118,18 @@ services:
         arguments: ['@app.form.data_transformer.contract']
         tags:
             - { name: form.type, alias: 'app_client_contract_type' }
+            
     app.admin.form.type.event:
         class: AppBundle\Form\Admin\Schedule\EventType
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type, alias: 'app_schedule_event_type' }
+
+    app.admin.field.type.event_trailer:
+        class: AppBundle\Form\Admin\Schedule\Type\TrailerType
+        arguments: ['@app.form.data_transformer.event_trailer']
+        tags:
+            - { name: form.type, alias: 'app_event_trailer_type' }
 
     app.admin.form.type.issue:
         class: AppBundle\Form\Admin\Asset\IssueType
