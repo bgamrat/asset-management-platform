@@ -5,6 +5,9 @@ define([
     "dojo/dom-construct",
     "dojo/on",
     "dojo/query",
+    "dijit/registry",
+    "dijit/layout/AccordionContainer",
+    "dijit/layout/ContentPane",
     "dijit/form/ValidationTextBox",
     "dijit/form/Textarea",
     "dijit/form/Select",
@@ -18,7 +21,8 @@ define([
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (lang, dom, domAttr, domConstruct, on, query,
+], function (lang, dom, domAttr, domConstruct, on, query, registry,
+        AccordionContainer, ContentPane,
         ValidationTextBox, Textarea, Select, ComboBox,
         ObjectStore, Memory, JsonRest,
         xemails, xphones, xaddresses,
@@ -40,6 +44,7 @@ define([
         var emails = [], phones = [], addresses = [];
         var divId;
         var personStore;
+        var a, aContainer, contentPanes = [];
 
         function setDivId(divId) {
             divIdInUse = divId;
@@ -50,8 +55,31 @@ define([
         }
 
         function cloneNewNode() {
+            var block, cp, dijit;
+
             prototypeContent = dataPrototype.replace(/__person__/g, personId.length);
-            domConstruct.place(prototypeContent, prototypeNode, "after");
+            block = domConstruct.place(prototypeContent, prototypeNode, "after");
+            block = block.parentNode;
+            cp = query(".content-pane", block);
+            dijit = new ContentPane({
+                title: core.new,
+                content: cp[cp.length - 1],
+            });
+            dijit.on("change", function (evt) {
+                var cp = registry.byId(this.id);
+                var first, middle, last;
+                first = query("input[id$='firstname']",this);
+                first = registry.byId(first[0].id);
+                middle = query("input[id$='middlename']",this);
+                middle = registry.byId(middle[0].id);
+                last = query("input[id$='lastname']",this);
+                last = registry.byId(last[0].id);
+                cp.set("title", first.get("value") + " "
+                        + middle.get("value") + " "
+                        + last.get("value"));
+            });
+            contentPanes.push(dijit);
+            aContainer.addChild(dijit);
         }
 
         function createDijits() {
@@ -118,8 +146,20 @@ define([
         }
 
         function destroyRow(id, target) {
-            var item;
+
+            var i, l, item, kid;
+
+            l = typeSelect.length;
+            for( i = 0; i < l; i++ ) {
+                kid = typeSelect[i].id.replace(/\D/g, '');
+                if( kid == id ) {
+                    id = i;
+                    break;
+                }
+            }
             personId.splice(id, 1);
+            item = contentPane.splice(id, 1);
+            item[0].destroyRecursive();
             item = typeSelect.splice(id, 1);
             item[0].destroyRecursive();
             item = titleInput.splice(id, 1);
@@ -132,13 +172,18 @@ define([
             item[0].destroyRecursive();
             item = commentInput.splice(id, 1);
             item[0].destroyRecursive();
-            //domConstruct.destroy(target);
+            domConstruct.destroy(target);
         }
 
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
         base = getDivId();
+
+        a = query("." + base + ".accordion");
+        aContainer = new AccordionContainer({style: "height: 500px; overflow-y: auto;"}, a[0]);
+        aContainer.startup();
+
         prototypeNode = dom.byId(getDivId());
         if( prototypeNode !== null ) {
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
@@ -244,6 +289,7 @@ define([
                     firstnameInput[i].set('value', obj.firstname);
                     middlenameInput[i].set('value', obj.middlename);
                     lastnameInput[i].set('value', obj.lastname);
+                    contentPane[i].set('title', obj.firstname + " " + obj.middlename + " " + obj.lastname);
                     commentInput[i].set('value', obj.comment);
                     if( typeof obj.phones !== "undefined" ) {
                         phones[i].setData(obj.phones);

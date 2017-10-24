@@ -1,6 +1,5 @@
-<fieldset class="person inline-block">
-    {% if legend is not defined %}{% set legend = 'common.person' %}{% endif %}
-    <legend>{{legend|trans}}</legend>
+<div class="person inline-block">
+<div class="content-pane">
     <div class="name">
         {{form_widget(form.type)}}
         {{form_widget(form.title)}}
@@ -14,4 +13,5 @@
     {% include 'common/emails.html.twig' with {'form': form.emails } %}
     {% include 'common/phones.html.twig' with {'form': form.phones } %}
     {% include 'common/addresses.html.twig' with { 'form' : form.addresses } %}
-</fieldset>
+</div>
+</div>

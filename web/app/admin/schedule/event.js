@@ -246,6 +246,7 @@ define([
                     "venue_text": venueFilteringSelect.get("displayedValue"),
                     "time_spans": timeSpans.getData(),
                     "trailers": trailers.getData(),
+                    "trailer_text": trailers.getText(),
                     "description": descriptionInput.get("value")
                 };
                 if( action === "view" ) {
