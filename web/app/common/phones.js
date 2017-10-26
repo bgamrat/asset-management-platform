@@ -70,7 +70,7 @@ define([
         }
 
         function destroyRow(id, target) {
-            var item;
+            var i, item;
 
             for( i = 0; i < phoneId.length; i++ ) {
                 if( phoneId[i] === id ) {
@@ -177,7 +177,7 @@ define([
         function setData(phones) {
             var i, obj;
 
-            query(".form-row.phone-number").forEach(function (node, index) {
+            query(".form-row.phone").forEach(function (node, index) {
                 if( index !== 0 ) {
                     destroyRow(index, node);
                 }
@@ -203,9 +203,18 @@ define([
                 commentInput[0].set('value', "");
             }
         }
+        function destroy(node) {
+            var p;
+            query(".form-row.phone",node).forEach(function (node, index) {
+                destroyRow(index, node);
+            });
+            p = query(".phones",node);
+            domConstruct.destroy(p[0]);
+        }
         return {
+            setData: setData,
             getData: getData,
-            setData: setData
+            destroy: destroy
         }
     }
 

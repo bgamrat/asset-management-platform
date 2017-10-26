@@ -44,7 +44,7 @@ define([
         var emails = [], phones = [], addresses = [];
         var divId;
         var personStore;
-        var a, aContainer, contentPanes = [];
+        var a, aContainer, contentPane = [];
 
         function setDivId(divId) {
             divIdInUse = divId;
@@ -78,7 +78,7 @@ define([
                         + middle.get("value") + " "
                         + last.get("value"));
             });
-            contentPanes.push(dijit);
+            contentPane.push(dijit);
             aContainer.addChild(dijit);
         }
 
@@ -147,7 +147,7 @@ define([
 
         function destroyRow(id, target) {
 
-            var i, l, item, kid;
+            var i, l, item, kid, cp;
 
             l = typeSelect.length;
             for( i = 0; i < l; i++ ) {
@@ -158,8 +158,6 @@ define([
                 }
             }
             personId.splice(id, 1);
-            item = contentPane.splice(id, 1);
-            item[0].destroyRecursive();
             item = typeSelect.splice(id, 1);
             item[0].destroyRecursive();
             item = titleInput.splice(id, 1);
@@ -172,6 +170,14 @@ define([
             item[0].destroyRecursive();
             item = commentInput.splice(id, 1);
             item[0].destroyRecursive();
+            cp = contentPane.splice(id, 1);
+            emails[id].destroy(target);
+            phones[id].destroy(target);
+            addresses[id].destroy(target);
+            aContainer.removeChild(cp[0]);
+            cp[0].destroyDescendants(false);
+            cp[0].destroyRendering(false);
+            cp[0].destroyRecursive();
             domConstruct.destroy(target);
         }
 
@@ -235,6 +241,16 @@ define([
                 }
             });
         }
+
+        on(aContainer, ".remove-form-row:click", function (event) {
+            var target = event.target;
+            var targetParent = target.parentNode;
+            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            while (!targetParent.classList.contains("content-pane")) {
+                targetParent = targetParent.parentNode;
+            }
+            destroyRow(id, targetParent);
+        });
 
         divId = getDivId();
         emails[0] = xemails.run(divId, 0);

@@ -1,17 +1,18 @@
 <div class="person inline-block">
-<div class="content-pane">
-    <div class="name">
-        {{form_widget(form.type)}}
-        {{form_widget(form.title)}}
-        {{form_widget(form.firstname)}}
-        {{form_widget(form.middlename)}}
-        {{form_widget(form.lastname)}}
+    <div class="content-pane">
+        <div class="name-block">
+            {{form_widget(form.type)}}
+            {{form_widget(form.title)}}
+            {{form_widget(form.firstname)}}
+            {{form_widget(form.middlename)}}
+            {{form_widget(form.lastname)}}
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="contract-__person__"><i class="fa fa-remove"></i></span>
+        </div>
+        <div class="comment">
+            {{form_widget(form.comment)}}
+        </div>
+        {% include 'common/emails.html.twig' with {'form': form.emails } %}
+        {% include 'common/phones.html.twig' with {'form': form.phones } %}
+        {% include 'common/addresses.html.twig' with { 'form' : form.addresses } %}
     </div>
-    <div class="comment">
-        {{form_widget(form.comment)}}
-    </div>
-    {% include 'common/emails.html.twig' with {'form': form.emails } %}
-    {% include 'common/phones.html.twig' with {'form': form.phones } %}
-    {% include 'common/addresses.html.twig' with { 'form' : form.addresses } %}
-</div>
 </div>

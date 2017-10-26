@@ -285,9 +285,18 @@ define([
                 commentInput[0].set('value', "");
             }
         }
+        function destroy(node) {
+            var a;
+            query(".form-row.address",node).forEach(function (node, index) {
+                destroyRow(index, node);
+            });
+            a = query(".addresses",node);
+            domConstruct.destroy(a[0]);
+        }
         return {
             setData: setData,
-            getData: getData
+            getData: getData,
+            destroy: destroy
         }
     }
 

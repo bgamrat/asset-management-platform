@@ -41,12 +41,12 @@ define([
         function cloneNewNode() {
             prototypeContent = dataPrototype.replace(/__email__/g, emailInput.length);
             domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-            emailId.push(null);
         }
 
         function createDijits() {
             var dijit;
             var base = prototypeNode.id + "_" + emailInput.length + "_";
+            emailId.push(null);
             dijit = new Select({
                 store: store,
                 placeholder: core.type,
@@ -81,6 +81,8 @@ define([
                 }
             }
             emailId.splice(id, 1);
+            item = typeSelect.splice(id, 1);
+            item[0].destroyRecursive();
             item = emailInput.splice(id, 1);
             item[0].destroyRecursive();
             item = commentInput.splice(id, 1);
@@ -187,9 +189,18 @@ define([
                 commentInput[0].set('value', "");
             }
         }
+        function destroy(node) {
+            var e;
+            query(".form-row.email", node).forEach(function (node, index) {
+                destroyRow(index, node);
+            });
+            e = query(".emails", node);
+            domConstruct.destroy(e[0]);
+        }
         return {
             setData: setData,
-            getData: getData
+            getData: getData,
+            destroy: destroy
         }
     }
 

@@ -117,17 +117,26 @@ fieldset ul.unstyled {
     display: inline-block;
     width: 290px;
 }
-.name .dijitTextBox {
-    width: 100px;
+.name-block {
+    margin: 15px 0 7px 0;
+    font-weight: 600;
 }
-.name .title .dijitTextBox {
+.name.dijitTextBox {
+    width: 135px;
+}
+.name.title.dijitTextBox {
     margin: 0 10px;
 }
 .contacts .type,
 .contacts .email,
 .contacts .person,
 .contacts .comment {
-    vertical-align: top
+    vertical-align: top;
+}
+.contacts .emails,
+.contacts .addresses,
+.contacts .phones {
+    margin: 17px 0;
 }
 .flash-notice {
     background-color: lightcyan;

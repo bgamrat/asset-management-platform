@@ -14,7 +14,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('public/index.html.twig');
+        return $this->render('public/index.html.twig', ['no_settings' => true]);
     }
    
     /**
