@@ -6,6 +6,7 @@ define([
     "dojo/on",
     "dojo/query",
     "dijit/registry",
+    "dojo/request/xhr",
     "dijit/layout/AccordionContainer",
     "dijit/layout/ContentPane",
     "dijit/form/ValidationTextBox",
@@ -21,7 +22,7 @@ define([
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (lang, dom, domAttr, domConstruct, on, query, registry,
+], function (lang, dom, domAttr, domConstruct, on, query, registry, xhr,
         AccordionContainer, ContentPane,
         ValidationTextBox, Textarea, Select, ComboBox,
         ObjectStore, Memory, JsonRest,
@@ -68,11 +69,11 @@ define([
             dijit.on("change", function (evt) {
                 var cp = registry.byId(this.id);
                 var first, middle, last;
-                first = query("input[id$='firstname']",this);
+                first = query("input[id$='firstname']", this);
                 first = registry.byId(first[0].id);
-                middle = query("input[id$='middlename']",this);
+                middle = query("input[id$='middlename']", this);
                 middle = registry.byId(middle[0].id);
-                last = query("input[id$='lastname']",this);
+                last = query("input[id$='lastname']", this);
                 last = registry.byId(last[0].id);
                 cp.set("title", first.get("value") + " "
                         + middle.get("value") + " "
@@ -135,6 +136,7 @@ define([
                 placeholder: core.lastname
             }, base + "lastname");
             dijit.startup();
+            dijit.on("change", loadPerson);
             lastnameInput.push(dijit);
             dijit = new Textarea({
                 placeholder: core.comment,
@@ -143,6 +145,51 @@ define([
             }, base + "comment");
             dijit.startup();
             commentInput.push(dijit);
+        }
+
+        function setPersonValues(obj, i) {
+            personId[i] = obj.id;
+            typeSelect[i].set('value', obj.type.id);
+            titleInput[i].set('value', obj.title);
+            firstnameInput[i].set('value', obj.firstname);
+            middlenameInput[i].set('value', obj.middlename);
+            lastnameInput[i].set('value', obj.lastname);
+            contentPane[i].set('title', obj.firstname + " " + obj.middlename + " " + obj.lastname);
+            commentInput[i].set('value', obj.comment);
+            if( typeof obj.phones !== "undefined" ) {
+                phones[i].setData(obj.phones);
+            } else {
+                phones[i].setData(null);
+            }
+            if( typeof obj.emails !== "undefined" ) {
+                emails[i].setData(obj.emails);
+            } else {
+                emails[i].setData(null);
+            }
+            if( typeof obj.addresses !== "undefined" ) {
+                addresses[i].setData(obj.addresses);
+            } else {
+                addresses[i].setData(null);
+            }
+        }
+
+        function loadPerson(evt) {
+            var item = this.get("item");
+            var id = item.id;
+            var idx = this.id.replace(/\D/g,'');
+            xhr.get('/api/people/' + id, {
+                handleAs: "json"
+            }).then(function (data) {
+                var i, l, kid, cp;
+                l = lastnameInput.length;
+                for( i = 0; i < l; i++ ) {
+                    kid = lastnameInput[i].id.replace(/\D/g, '');
+                    if( kid == idx ) {
+                        setPersonValues(data,i);
+                        break;
+                    }
+                }
+            });
         }
 
         function destroyRow(id, target) {
@@ -187,7 +234,7 @@ define([
         base = getDivId();
 
         a = query("." + base + ".accordion");
-        aContainer = new AccordionContainer({style: "height: 500px; overflow-y: auto;"}, a[0]);
+        aContainer = new AccordionContainer({style: "overflow-y: auto;"}, a[0]);
         aContainer.startup();
 
         prototypeNode = dom.byId(getDivId());
@@ -246,7 +293,7 @@ define([
             var target = event.target;
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
-            while (!targetParent.classList.contains("content-pane")) {
+            while( !targetParent.classList.contains("content-pane") ) {
                 targetParent = targetParent.parentNode;
             }
             destroyRow(id, targetParent);
@@ -299,29 +346,7 @@ define([
                         createDijits();
                     }
                     obj = person[i];
-                    personId[i] = obj.id;
-                    typeSelect[i].set('value', obj.type.id);
-                    titleInput[i].set('value', obj.title);
-                    firstnameInput[i].set('value', obj.firstname);
-                    middlenameInput[i].set('value', obj.middlename);
-                    lastnameInput[i].set('value', obj.lastname);
-                    contentPane[i].set('title', obj.firstname + " " + obj.middlename + " " + obj.lastname);
-                    commentInput[i].set('value', obj.comment);
-                    if( typeof obj.phones !== "undefined" ) {
-                        phones[i].setData(obj.phones);
-                    } else {
-                        phones[i].setData(null);
-                    }
-                    if( typeof obj.emails !== "undefined" ) {
-                        emails[i].setData(obj.emails);
-                    } else {
-                        emails[i].setData(null);
-                    }
-                    if( typeof obj.addresses !== "undefined" ) {
-                        addresses[i].setData(obj.addresses);
-                    } else {
-                        addresses[i].setData(null);
-                    }
+                    setPersonValues(obj,i);
                 }
             } else {
                 personId[0] = null;
