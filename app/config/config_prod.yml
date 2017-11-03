@@ -2,11 +2,11 @@ imports:
     - { resource: config.yml }
     - { resource: parameters_prod.yml }
 
-#framework:
+framework:
 #    validation:
 #        cache: validator.mapping.cache.apc
-#    serializer:
-#        cache: serializer.mapping.cache.apc
+    serializer:
+        cache: serializer.mapping.cache.apc
 
 #doctrine:
 #    orm:
@@ -49,6 +49,9 @@ assetic:
         app_admin_asset_equipment_js:
             inputs:
                 - 'vendor/release/app/admin/asset/equipment.js'
+        app_admin_asset_carriers_js:
+            inputs:
+                - 'vendor/release/app/admin/asset/carrier.js'
         admin_user_js:
             inputs:
                 - 'vendor/release/app/admin/user.js'

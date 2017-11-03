@@ -77,7 +77,6 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         public: false
 
-
     app.admin.form.type.asset:
         class: AppBundle\Form\Admin\Asset\AssetType
         arguments: ['@doctrine.orm.entity_manager']
