@@ -1,0 +1,17 @@
+Build started: Sun Nov 05 2017 19:45:16 GMT-0500 (EST)
+Build application version: 1.12.1 (9f04d31)
+Messages:
+info(107) Package Version:
+	package: app; version: 0.1.0
+warn(225) A directory that was scheduled to be read during discovery did not exist.
+	directory: /var/www/html/symfony-dev/web/vendor/app
+	directory: /var/www/html/symfony-dev/web/vendor/app
+warn(226) A package without a profile could throw errors or warnings.
+	package: app
+Layer Contents:
+
+
+Process finished normally
+	errors: 0
+	warnings: 3
+	build time: 0.688 seconds

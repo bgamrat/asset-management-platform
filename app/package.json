@@ -1,0 +1,12 @@
+{
+    "name": "app",
+    "description": "Mobile Asset Management Platform",
+    "version": "0.1.0",
+    "keywords": [],
+    "maintainers": [{
+        "name": "Betsy Gamrat"
+    }],
+    "contributors": [{
+        "name": "Betsy Gamrat"
+    }]
+}

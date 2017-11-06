@@ -40,9 +40,6 @@ assetic:
         dojo_js:
             inputs:
                 - 'vendor/release/dojo/dojo.js'
-        main_js:
-            inputs:
-                - 'vendor/release/app/main.js'
         app_admin_menu_js:
             inputs:
                 - 'vendor/release/app/admin/menu.js'

@@ -20,7 +20,7 @@ define([
 
     var dataPrototype, prototypeNode, prototypeContent;
     var serviceId = [], nameInput = [], commentInput = [], activeCheckBox = [], defaultRadioButton = [];
-    var addOneMoreControl = null;
+    var addOneMoreControl = null, newRow;
     var divId = "carrier_services";
 
     function cloneNewNode() {
@@ -166,5 +166,5 @@ define([
         run: run,
         getData: getData,
         setData: setData
-    }
+    };
 });

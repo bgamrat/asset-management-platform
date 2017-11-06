@@ -64,7 +64,7 @@ define([
             cp = query(".content-pane", block);
             dijit = new ContentPane({
                 title: core.new,
-                content: cp[cp.length - 1],
+                content: cp[cp.length - 1]
             });
             dijit.on("change", function (evt) {
                 var cp = registry.byId(this.id);
@@ -364,11 +364,11 @@ define([
         return {
             getData: getData,
             setData: setData
-        }
+        };
 
     }
     return {
         run: run
-    }
+    };
 }
 );

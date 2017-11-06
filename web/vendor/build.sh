@@ -1,1 +1,1 @@
-dojo/util/buildscripts/build.sh --profile profiles/app.profile.js -r
+dojo/util/buildscripts/build.sh --bin node --profile profiles/app.profile.js -r

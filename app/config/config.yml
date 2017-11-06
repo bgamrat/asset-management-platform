@@ -107,10 +107,6 @@ assetic:
             inputs:
                 - 'app/css/user/common.css'
         # JavaScript
-        # Admin JavaScript
-        main_js:
-            inputs:
-                - 'app/admin/main.js'
         bootstrap_js:
             inputs:
                 - 'vendor/bootstrap/js/bootstrap.js'

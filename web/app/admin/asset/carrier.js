@@ -28,13 +28,12 @@ define([
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
-    "dojo/i18n!app/nls/asset",
     "dojo/domReady!"
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson, carrierService, lib, libGrid, core, asset) {
-    //"use strict";
+        xperson, carrierService, lib, libGrid, core) {
+    // "use strict";
     function run() {
         var action = null;
         var person;
@@ -178,7 +177,7 @@ define([
                     });
                 }
             } else {
-                lib.textError(core.invalid_form)
+                lib.textError(core.invalid_form);
             }
         });
 
@@ -260,7 +259,7 @@ define([
                     carrierService.setData(carrier.services);
                     commentInput.set("value", carrier.comment);
                     accountInformationInput.set("value", carrier.accountInformation);
-                    trackingUrlInput.set("value",carrier.trackingUrl)
+                    trackingUrlInput.set("value",carrier.trackingUrl);
                     carrierViewDialog.show();
                 }, lib.xhrError);
             }
@@ -324,5 +323,5 @@ define([
     }
     return {
         run: run
-    }
+    };
 });
