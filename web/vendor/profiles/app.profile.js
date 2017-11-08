@@ -70,8 +70,20 @@ var profile = (function () {
             "app/test": {
                 include: ["app/test"]
             },
+            "app/admin/asset/asset_status": {
+                include: ["app/admin/asset/asset_status"]
+            },
+            "app/admin/asset/brand": {
+                include: ["app/admin/asset/brand"]
+            },
             "app/admin/asset/carrier": {
                 include: ["app/admin/asset/carrier" ]
+            },
+            "app/admin/asset/categories": {
+                include: ["app/admin/asset/categories"]
+            },
+            "app/admin/asset/category": {
+                include: ["app/admin/asset/category"]
             },
             "app/admin/asset/equipment": {
                 include: ["app/admin/asset/equipment"]
@@ -79,8 +91,56 @@ var profile = (function () {
             "app/admin/asset/issue": {
                 include: ["app/admin/asset/issue"]
             },
+            "app/admin/asset/issue_status": {
+                include: ["app/admin/asset/issue_status"]
+            },
+            "app/admin/asset/issue_type": {
+                include: ["app/admin/asset/issue_type"]
+            },
+            "app/admin/asset/issue_workflow": {
+                include: ["app/admin/asset/issue_workflow"]
+            },
+            "app/admin/asset/location_type": {
+                include: ["app/admin/asset/location_type"]
+            },
+            "app/admin/asset/manufacturer": {
+                include: ["app/admin/asset/manufacturer"]
+            },
+            "app/admin/asset/trailer": {
+                include: ["app/admin/asset/trailer"]
+            },
+            "app/admin/asset/trailers": {
+                include: ["app/admin/asset/trailers"]
+            },
+            "app/admin/asset/transfer_status": {
+                include: ["app/admin/asset/transfer_status"]
+            },
+            "app/admin/asset/transfer": {
+                include: ["app/admin/asset/transfer"]
+            },
+            "app/admin/asset/vendor": {
+                include: ["app/admin/asset/vendor"]
+            },
+            "app/admin/client/client": {
+                include: ["app/admin/client/client"]
+            },
+            "app/admin/client/contract": {
+                include: ["app/admin/client/contract"]
+            },
+            "app/admin/common/people": {
+                include: ["app/admin/common/people"]
+            },
             "app/admin/menu": {
                 include: ["app/admin/menu"]
+            },
+            "app/admin/schedule/event": {
+                include: ["app/admin/schedule/event"]
+            },
+            "app/admin/schedule/time_span_type": {
+                include: ["app/admin/schedule/time_span_type"]
+            },
+            "app/admin/venue/venue": {
+                include: ["app/admin/venue/venue"]
             }
         },
         resourceTags: {

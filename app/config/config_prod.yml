@@ -40,16 +40,4 @@ assetic:
         dojo_js:
             inputs:
                 - 'vendor/release/dojo/dojo.js'
-        app_admin_menu_js:
-            inputs:
-                - 'vendor/release/app/admin/menu.js'
-        app_admin_asset_equipment_js:
-            inputs:
-                - 'vendor/release/app/admin/asset/equipment.js'
-        app_admin_asset_carriers_js:
-            inputs:
-                - 'vendor/release/app/admin/asset/carrier.js'
-        admin_user_js:
-            inputs:
-                - 'vendor/release/app/admin/user.js'
 

@@ -105,8 +105,8 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}
-    <script defer>
+{% block page_js %}
+    <script>
         require(["app/admin/asset/equipment"], function (equipment) {
             equipment.run();
         });
