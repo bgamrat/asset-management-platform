@@ -1,7 +1,7 @@
 var profile = (function () {
     return {
         basePath: "../../vendor/dojo",
-        releaseDir: "release",
+        releaseDir: "../../release",
         action: "release",
         layerOptimize: "closure",
         optimize: "closure",
@@ -27,7 +27,7 @@ var profile = (function () {
             "dojo-combo-api": 0,
             "dojo-config-api": 1,
             "dojo-config-require": 0,
-            "dojo-debug-messages": 0,
+            "dojo-debug-messages": 1,
             "dojo-dom-ready-api": 1,
             "dojo-firebug": 0,
             "dojo-guarantee-console": 1,
@@ -51,7 +51,7 @@ var profile = (function () {
             "extend-dojo": 1
         },
         packages: [
-            {name: 'app', location: '../../../app'},
+            {name: 'app', location: '../../app'},
             'dojo',
             'dijit',
             'dojox',
@@ -67,23 +67,38 @@ var profile = (function () {
                 customBase: true,
                 boot: true
             },
+            "app/lib/common": {
+                include: ["app/lib/common"]
+            },
+            "app/admin/menu": {
+                include: ["app/admin/menu"]
+            },
             "app/test": {
                 include: ["app/test"]
             },
             "app/admin/asset/asset_status": {
                 include: ["app/admin/asset/asset_status"]
             },
+            "app/admin/asset/barcodes": {
+                include: ["app/admin/asset/barcodes"]
+            },
             "app/admin/asset/brand": {
                 include: ["app/admin/asset/brand"]
             },
             "app/admin/asset/carrier": {
-                include: ["app/admin/asset/carrier" ]
+                include: ["app/admin/asset/carrier"]
             },
             "app/admin/asset/categories": {
                 include: ["app/admin/asset/categories"]
             },
             "app/admin/asset/category": {
                 include: ["app/admin/asset/category"]
+            },
+            "app/admin/asset/common": {
+                include: ["app/admin/asset/common"]
+            },
+            "app/admin/asset/custom_attributes": {
+                include: ["app/admin/asset/custom_attributes"]
             },
             "app/admin/asset/equipment": {
                 include: ["app/admin/asset/equipment"]
@@ -99,6 +114,9 @@ var profile = (function () {
             },
             "app/admin/asset/issue_workflow": {
                 include: ["app/admin/asset/issue_workflow"]
+            },
+            "app/admin/asset/location": {
+                include: ["app/admin/asset/location"]
             },
             "app/admin/asset/location_type": {
                 include: ["app/admin/asset/location_type"]
@@ -141,6 +159,12 @@ var profile = (function () {
             },
             "app/admin/venue/venue": {
                 include: ["app/admin/venue/venue"]
+            },
+            "app/lib/common": {
+                include: ["app/lib/common"]
+            },
+            "app/lib/grid": {
+                include: ["app/lib/grid"]
             }
         },
         resourceTags: {

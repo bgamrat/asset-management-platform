@@ -135,7 +135,8 @@
         "twbs/bootstrap": "^3.3",
         "kriszyp/xstyle": "^0.3.2",
         "symfony/dependency-injection": "^3.3",
-        "symfony/yaml": "^3.3"
+        "symfony/yaml": "^3.3",
+        "dunglas/doctrine-json-odm": "^0.1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

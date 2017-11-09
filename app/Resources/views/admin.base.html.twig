@@ -39,7 +39,7 @@
 {% if app.environment == 'dev' %}
     {% include 'admin/parts/page_footer_script.html.twig' %}
 {% else %}
-    <script data-dojo-config="async:1" src="/vendor/release/dojo/dojo.js"></script>
+    <script data-dojo-config="async:1" src="/release/dojo/dojo.js"></script>
 {% endif %}
 
 {% block javascripts %}
@@ -47,7 +47,7 @@
 
 {% if omit_menu is not defined %}
     {% if app.environment == 'prod' %}
-        <script src="/vendor/release/app/admin/menu.js"></script>
+        <script src="/release/app/admin/menu.js"></script>
     {% endif %}
     <script>
         require([

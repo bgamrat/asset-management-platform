@@ -1,3 +1,23 @@
 {
-    "test": "app/test"
+    "name": "app",
+    "description": "My Application.",
+    "version": "1.0",
+    "keywords": ["JavaScript", "Dojo", "Toolkit", "DojoX"],
+    "maintainers": [{
+        "name": "Betsy Gamrat"
+    }],
+    "bugs": "https://github.com/example/issues",
+    "repositories": [{
+        "type": "git",
+        "url": "http://github.com/example.git",
+        "path": "packages/app"
+    }],
+    "dependencies": {
+        "dojo": "~1.10.4",
+        "dijit": "~1.10.4",
+        "dojox": "~1.10.4"
+    },
+    "main": "src",
+    "homepage": "http://example.com/",
+    "dojoBuild": "../vendor/profiles/app.profile.js"
 }

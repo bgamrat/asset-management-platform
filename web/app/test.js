@@ -19,6 +19,9 @@ define([
             label: 'Test',
             type: "submit"
         }, 'test-btn');
+        testBtn.on("click",function(evt){
+            lib.textError("Yay!"); 
+        });
         testBtn.startup();
         lib.pageReady();
     }

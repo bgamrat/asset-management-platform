@@ -281,7 +281,7 @@ define([
                     });
                 }
             } else {
-                lib.textError(core.invalid_form)
+                lib.textError(core.invalid_form);
             }
         });
 
@@ -391,7 +391,7 @@ define([
                     assetCommon.relationshipLists(modelRelationshipsContentPane,
                             {"requires": asset.model.requires,
                                 "required_by": asset.model.requiredBy,
-                                "extends": asset.model.extends,
+                                "extends": asset.model["extends"],
                                 "extended_by": asset.model.extendedBy}, asset.model.satisfies);
                     lib.showHistory(historyContentPane, asset.history);
                 }, lib.xhrError);
@@ -455,5 +455,5 @@ define([
     }
     return {
         run: run
-    }
+    };
 });

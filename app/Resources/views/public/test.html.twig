@@ -17,16 +17,12 @@
 {% endblock %}  
 {% block page_js %}
     {% if app.environment == 'prod' %}
-        {% for js_file in js %}
-            <script
-            src="{{js_file}}"></script>
-        {% endfor %}
+        <script src="/release/app/test.js"></script>
     {% endif %}
-    {% for name, js_file in js %}
     <script>
-        require(["dojo/ready","app/{{name}}"], function (ready,test) {
-            ready(function(){ {{name}}.run();});
+        require(["app/test",
+            "dojo/domReady!"], function (test) {
+            test.run();
         });
     </script>
-    {% endfor %}
 {% endblock %}

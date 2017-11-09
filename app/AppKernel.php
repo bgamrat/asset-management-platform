@@ -22,7 +22,8 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new AppBundle\AppBundle(),
             new LegacyBridgeBundle\LegacyBridgeBundle(),
-            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle()
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new Dunglas\DoctrineJsonOdm\Bundle\DunglasDoctrineJsonOdmBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

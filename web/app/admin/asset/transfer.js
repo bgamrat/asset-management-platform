@@ -271,7 +271,7 @@ define([
                     "source_location_text": sourceLocation.getText(),
                     "to": toFilteringSelect.get("value"),
                     "destination_location": destinationLocation.getData(),
-                    "destination_location_text": destinationLocation.getText(),
+                    "destination_location_text": destinationLocation.getText()
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {

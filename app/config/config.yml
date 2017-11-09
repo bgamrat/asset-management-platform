@@ -91,13 +91,13 @@ assetic:
                 - 'app/css/user/calendar.css'
         dgrid_css:
             inputs:
-                - 'vendor/release/dgrid/css/dgrid.css'
-                - 'vendor/release/dgrid/css/skins/tundra.css'
+                - 'release/dgrid/css/dgrid.css'
+                - 'release/dgrid/css/skins/tundra.css'
         dojo_dijit_css:
             inputs:
-                - 'vendor/release/dojo/resources/dojo.css'
-                - 'vendor/release/dojo/resources/dnd.css'
-                - 'vendor/release/dijit/themes/tundra/tundra.css'
+                - 'release/dojo/resources/dojo.css'
+                - 'release/dojo/resources/dnd.css'
+                - 'release/dijit/themes/tundra/tundra.css'
         event_css:
             inputs:
                 - 'app/css/common/common.css'

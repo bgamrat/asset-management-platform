@@ -107,7 +107,8 @@
 
 {% block page_js %}
     <script>
-        require(["app/admin/asset/equipment"], function (equipment) {
+        require(["app/admin/asset/equipment",
+            "dojo/domReady!"], function (equipment) {
             equipment.run();
         });
     </script>
