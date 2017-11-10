@@ -246,7 +246,7 @@ define([
                     "venue_text": venueFilteringSelect.get("displayedValue"),
                     "time_spans": timeSpans.getData(),
                     "trailers": trailers.getData(),
-                    "trailer_text": trailers.getText(),
+                    "trailer_text":[contracts.getTrailerText(),trailers.getText()].join(', '),
                     "description": descriptionInput.get("value")
                 };
                 if( action === "view" ) {
@@ -292,7 +292,7 @@ define([
                 venue_text: {
                     label: core.venue
                 },
-                trailers: {
+                trailer_text: {
                     label: core.trailers
                 },
                 dates: {

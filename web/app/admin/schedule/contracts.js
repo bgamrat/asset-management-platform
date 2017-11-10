@@ -17,6 +17,7 @@ define([
 
     var dataPrototype, prototypeNode, prototypeContent;
     var divIdInUse, contractStore, contractFilteringSelect = [], contractTrailersStore;
+    var trailerText = {};
 
     function getDivId() {
         return divIdInUse;
@@ -48,14 +49,17 @@ define([
             var i, l, reqd = [], avail = [], t, hidden;
             var equipmentLink = dom.byId("contract-equipment-link-event_contracts_" + id);
             l = item.requiresTrailers.length;
+            trailerText[id] = [];
             for( i = 0; i < l; i++ ) {
                 t = item.requiresTrailers[i];
                 reqd.push('<a target="_blank" href="/admin/trailer/'+t.trailer.name+'/equipment-by-category">'+t.trailer.name+'</a>');
+                trailerText[id].push(t.trailer.name);
             }
             l = item.availableTrailers.length;
             for( i = 0; i < l; i++ ) {
                 t = item.availableTrailers[i];
                 avail.push('<a target="_blank" href="/admin/trailer/'+t.trailer.name+'/equipment-by-category">'+t.trailer.name+'</a>');
+                trailerText[id].push(t.trailer.name + "?")
             }
 
             hidden = (reqd.length === 0 && avail.length === 0) ? 'class="hidden"' : "";
@@ -85,6 +89,7 @@ define([
         if( id !== null ) {
             item = contractFilteringSelect.splice(id, 1);
             item[0].destroyRecursive();
+            delete trailerText[id];
             domConstruct.destroy("contract-equipment-list-" + id);
         } else {
             contractFilteringSelect.pop().destroyRecursive();
@@ -150,6 +155,17 @@ define([
         return returnData;
     }
 
+
+    function getTrailerText() {
+        var t, returnData = [];
+        for( t in trailerText ) {
+            returnData.push(
+                    trailerText[t].join(', '));
+        }
+        return returnData.join(', ');
+    }
+
+
     function setData(contracts) {
         var i;
 
@@ -175,6 +191,7 @@ define([
     return {
         run: run,
         getData: getData,
+        getTrailerText: getTrailerText,
         setData: setData
     }
 }

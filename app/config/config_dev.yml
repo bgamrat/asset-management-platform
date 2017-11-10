@@ -48,9 +48,6 @@ assetic:
         dojo_js:
             inputs:
                 - 'vendor/dojo/dojo/dojo.js'
-        app_admin_asset_equipment_js:
-            inputs:
-                - 'app/admin/asset/equipment.js'
 
 #swiftmailer:
 #    delivery_address: me@example.com

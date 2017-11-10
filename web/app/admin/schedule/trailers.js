@@ -112,15 +112,24 @@ define([
         return returnData;
     }
 
-    function setData(relationship, models) {
+    function getText() {
+        var i, returnData = [];
+        for( i = 0; i < trailerFilteringSelect.length; i++ ) {
+            returnData.push(
+                    trailerFilteringSelect[i].get("displayedValue"));
+        }
+        return returnData.join(', ');
+    }
+
+    function setData(relationship, trailers) {
         var i;
 
         query(".form-row.trailer", prototypeNode.parentNode).forEach(function (node, index) {
             destroyRow(null, node);
         });
 
-        if( typeof models === "object" && models !== null && models.length > 0 ) {
-            for( i = 0; i < models.length; i++ ) {
+        if( typeof trailers === "object" && trailers !== null && trailers.length > 0 ) {
+            for( i = 0; i < trailers.length; i++ ) {
                 cloneNewNode();
                 createDijit();
                 trailerFilteringSelect[i].set("value", trailers[i].id);
@@ -135,6 +144,7 @@ define([
     return {
         run: run,
         getData: getData,
+        getText: getText,
         setData: setData
     }
 }

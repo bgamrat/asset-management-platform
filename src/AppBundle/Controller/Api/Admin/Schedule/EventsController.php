@@ -88,7 +88,7 @@ class EventsController extends FOSRestController
                 'name' => $e['name'],
                 'client_text' => $client_text,
                 'venue_text' => $venue_text,
-                'trailers' => implode(',',$trailerList),
+                'trailer_text' => implode(',',$trailerList),
                 'tentative' => $e['tentative'],
                 'billable' => $e['billable'],
                 'canceled' => $e['canceled'],
