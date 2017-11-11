@@ -107,7 +107,7 @@ define([
         var i, returnData = [];
         for( i = 0; i < trailerFilteringSelect.length; i++ ) {
             returnData.push(
-                    parseInt(trailerFilteringSelect[i].get("value")));
+                    trailerFilteringSelect[i].get("displayedValue"));
         }
         return returnData;
     }
@@ -121,7 +121,7 @@ define([
         return returnData.join(', ');
     }
 
-    function setData(relationship, trailers) {
+    function setData(trailers) {
         var i;
 
         query(".form-row.trailer", prototypeNode.parentNode).forEach(function (node, index) {

@@ -45,7 +45,7 @@ class TrailerToIdTransformer implements DataTransformerInterface
 
         $trailer = $this->em
             ->getRepository('AppBundle\Entity\Asset\Trailer')
-            ->findByName($trailerName)
+            ->findOneBy(['name' => $trailerName])
         ;
 
         if (null === $trailer) {

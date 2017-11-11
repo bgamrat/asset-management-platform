@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Client\Contract;
-use AppBundle\Entity\Client\Trailer;
+use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Schedule\TimeSpan;
 use AppBundle\Entity\Venue\Venue;
 
@@ -103,7 +103,7 @@ class Event
     protected $contracts = null;
     /**
      * @var ArrayCollection $trailers
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Client\Trailer", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Asset\Trailer", cascade={"persist"})
      * @ORM\JoinTable(name="event_trailer",
      *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="trailer_id", referencedColumnName="id", onDelete="CASCADE", unique=true, nullable=false)}
@@ -338,7 +338,7 @@ class Event
 
     public function getContacts()
     {
-        return empty($this->contacts) ? [] : $this->contacts->toArray();
+        return empty( $this->contacts ) ? [] : $this->contacts->toArray();
     }
 
     public function addContact( Person $contact )
@@ -356,7 +356,7 @@ class Event
 
     public function getContracts()
     {
-        return empty($this->contracts) ? [] : $this->contracts->toArray();
+        return empty( $this->contracts ) ? [] : $this->contracts->toArray();
     }
 
     public function addContract( Contract $contract )
@@ -392,7 +392,6 @@ class Event
         if( !$this->trailers->contains( $trailer ) )
         {
             $this->trailers->add( $trailer );
-            $trailer->setClient( $this );
         }
         return $this;
     }
@@ -404,9 +403,8 @@ class Event
 
     public function getTimeSpans()
     {
-        return empty($this->timespans) ? [] : $this->timespans->toArray();
+        return empty( $this->timespans ) ? [] : $this->timespans->toArray();
     }
-
 
     public function setTimeSpans( $time_spans )
     {
