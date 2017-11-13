@@ -397,6 +397,7 @@ define([
                     equipmentLink = document.getElementById("full-equipment-link");
                     equipmentLink.href = equipmentLink.href.replace(/(__ID__|\d+)/, event.id);
                     equipmentLink.classList.remove("hidden");
+                    trailers.setData(event.trailers);
                     contracts.setData(event.contracts);
                     person.setData(event.contacts);
                     timeSpans.setData(event.timeSpans);

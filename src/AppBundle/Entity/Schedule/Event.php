@@ -17,7 +17,7 @@ use AppBundle\Entity\Venue\Venue;
  *
  * @ORM\Table(name="event")
  * @ORM\Entity()
- * @Gedmo\Loggable
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Schedule\EventLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Event

@@ -8,9 +8,10 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class TrailerToIdTransformer implements DataTransformerInterface
 {
+
     private $em;
 
-    public function __construct(EntityManager $em)
+    public function __construct( EntityManager $em )
     {
         $this->em = $em;
     }
@@ -21,12 +22,14 @@ class TrailerToIdTransformer implements DataTransformerInterface
      * @param  Issue|null $trailer
      * @return string
      */
-    public function transform($trailer)
+    public function transform( $trailer )
     {
-        if (null === $trailer) {
+        if( null === $trailer )
+        {
             return '';
         }
-        return $trailer->getName();
+
+        return $trailer['name'];
     }
 
     /**
@@ -36,24 +39,26 @@ class TrailerToIdTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (trailer) is not found.
      */
-    public function reverseTransform($trailerName = null)
+    public function reverseTransform( $trailerName = null )
     {
         // no trailer id? It's optional, so that's ok
-        if (!$trailerName) {
+        if( !$trailerName )
+        {
             return;
         }
 
         $trailer = $this->em
-            ->getRepository('AppBundle\Entity\Asset\Trailer')
-            ->findOneBy(['name' => $trailerName])
+                ->getRepository( 'AppBundle\Entity\Asset\Trailer' )
+                ->findOneBy( ['name' => $trailerName] )
         ;
 
-        if (null === $trailer) {
-            throw new TransformationFailedException(sprintf(
-                'An trailer with name "%s" does not exist!',
-                $trailerName
-            ));
+        if( null === $trailer )
+        {
+            throw new TransformationFailedException( sprintf(
+                    'An trailer with name "%s" does not exist!', $trailerName
+            ) );
         }
         return $trailer;
     }
+
 }

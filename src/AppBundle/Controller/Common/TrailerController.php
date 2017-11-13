@@ -29,7 +29,7 @@ class TrailerController extends Controller
         $equipment = [];
         foreach( $trailers as $trailer )
         {
-            $equipment[$trailer->getName()] = $this->getTrailerEquipment( $trailer );
+            $equipment[$trailer->getName()] = $this->getTrailerEquipmentModelCounts( $trailer );
         }
 
         return $this->render( 'public/trailers/index.html.twig', array(
@@ -98,7 +98,7 @@ class TrailerController extends Controller
     private function getTrailerEquipmentModelCounts( $trailer )
     {
         $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder()->select( 'm.id', 'COUNT(m.id) AS quantity' )
+        $queryBuilder = $em->createQueryBuilder()->select( 'm.id', 'm.name', 'COUNT(m.id) AS quantity' )
                 ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                 ->join( 'a.model', 'm' )
                 ->innerJoin( 'a.location', 'l' )
@@ -110,7 +110,7 @@ class TrailerController extends Controller
                         $queryBuilder->expr()->eq( 'lt.entity', "'trailer'" ), $queryBuilder->expr()->eq( 'l.entity', '?1' )
         ) );
         $queryBuilder->setParameter( 1, $trailer->getId() );
-        return array_column( $queryBuilder->getQuery()->getResult(), 'quantity', 'id' );
+        return array_column( $queryBuilder->getQuery()->getResult(), 'quantity', 'name' );
     }
 
 }

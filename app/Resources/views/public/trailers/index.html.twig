@@ -13,14 +13,6 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-sm-6">
-            <h1>{{ block('title') }}
-                <small data-toggle="modal" data-target="#trailer-controls"><i class="fa fa-gears"></i></small>
-            </h1>
-        </div>
-    </div>
-
-    <div class="row">
         {% for trailer in trailers %}
             <div class="col-sm-4">
                 <div class="panel panel-default">
@@ -79,10 +71,10 @@
                             {% if equipment[trailer.name] is not empty %}
                                 <h4>{{'common.available'|trans}} {{'asset.equipment'|trans}}</h4>
                                 <ul class="list-unstyled">
-                                    {% for category in equipment[trailer.name] %}
+                                    {% for name,quantity in equipment[trailer.name] %}
                                         <li class="justify">
-                                            <span class="category">{{category.fullName}}</span>
-                                            <span class="quantity">{{category.quantity}}</span>
+                                            <span class="category">{{name}}</span>
+                                            <span class="quantity">{{quantity}}</span>
                                         </li>
                                     {% endfor %}
                                 </ul>

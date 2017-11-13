@@ -103,11 +103,11 @@ define([
 
     }
 
-    function getData(relationship) {
+    function getData() {
         var i, returnData = [];
         for( i = 0; i < trailerFilteringSelect.length; i++ ) {
             returnData.push(
-                    trailerFilteringSelect[i].get("displayedValue"));
+                    trailerFilteringSelect[i].get("value"));
         }
         return returnData;
     }
@@ -132,7 +132,6 @@ define([
             for( i = 0; i < trailers.length; i++ ) {
                 cloneNewNode();
                 createDijit();
-                trailerFilteringSelect[i].set("value", trailers[i].id);
                 trailerFilteringSelect[i].set("displayedValue", trailers[i].name);
             }
         } else {
