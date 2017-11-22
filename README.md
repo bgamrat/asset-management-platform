@@ -1,6 +1,10 @@
 # mobile-asset-management-platform
 ---
 
+## Overview
+
+A system intended to help manage assets which are on tractor-trailers.
+
 ## Project Status
 
 Proof of concept - not fully operational
@@ -17,6 +21,8 @@ I don't have time to test right now.  AppBundle was built with Postgres.
     - MySQL? Same question as Postgres, although the LegacyBridgeBundle code was built using MySQL
 - PHP 5.5+
 - composer
+- node / java to build JavaScript (Dojo)
+- web server - this was built on Apache
 
 ## Installation
 

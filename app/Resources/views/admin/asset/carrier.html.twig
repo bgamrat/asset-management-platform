@@ -78,6 +78,7 @@
                 <div id="carrier-view-tabs">
                     <div id="carrier-view-contacts-tab">
                         <fieldset class="contacts">
+                            <div class="carrier_contacts accordion"></div>
                             {{form_row(carrier_form.contacts)}}
                             {% if carrier_form.contacts.vars.allow_add %}
                                 <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>

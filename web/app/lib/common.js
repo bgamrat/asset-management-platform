@@ -52,7 +52,6 @@ define([
     }
 
     function textError(msg) {
-        console.log("textError");
         errorDialog.set("content", msg);
         errorDialog.show();
     }

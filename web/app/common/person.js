@@ -45,7 +45,7 @@ define([
         var emails = [], phones = [], addresses = [];
         var divId;
         var personStore;
-        var a, aContainer, contentPane = [];
+        var aContainer, contentPane = [];
 
         function setDivId(divId) {
             divIdInUse = divId;
@@ -59,24 +59,27 @@ define([
             var block, cp, dijit;
 
             prototypeContent = dataPrototype.replace(/__person__/g, personId.length);
-            block = domConstruct.place(prototypeContent, prototypeNode, "after");
-            block = block.parentNode;
+            block = domConstruct.toDom(prototypeContent);
             cp = query(".content-pane", block);
             dijit = new ContentPane({
                 title: core.new,
-                content: cp[cp.length - 1]
+                content: cp[0]
             });
             dijit.on("change", function (evt) {
                 var cp = registry.byId(this.id);
-                var first, middle, last;
+                var first, middle, middleName, last;
                 first = query("input[id$='firstname']", this);
                 first = registry.byId(first[0].id);
                 middle = query("input[id$='middlename']", this);
                 middle = registry.byId(middle[0].id);
+                middleName = middle.get("value");
+                if (middleName === "") {
+                    middleName = "";
+                }
                 last = query("input[id$='lastname']", this);
                 last = registry.byId(last[0].id);
                 cp.set("title", first.get("value") + " "
-                        + middle.get("value") + " "
+                        + middleName + " "
                         + last.get("value"));
             });
             contentPane.push(dijit);
@@ -148,13 +151,15 @@ define([
         }
 
         function setPersonValues(obj, i) {
+
             personId[i] = obj.id;
             typeSelect[i].set('value', obj.type.id);
             titleInput[i].set('value', obj.title);
             firstnameInput[i].set('value', obj.firstname);
             middlenameInput[i].set('value', obj.middlename);
             lastnameInput[i].set('value', obj.lastname);
-            contentPane[i].set('title', obj.firstname + " " + obj.middlename + " " + obj.lastname);
+
+            contentPane[i].set('title', obj.firstname + " " + ((obj.middlename === null) ? "" : obj.middlename) + " " + obj.lastname);
             commentInput[i].set('value', obj.comment);
             if( typeof obj.phones !== "undefined" ) {
                 phones[i].setData(obj.phones);
@@ -175,8 +180,12 @@ define([
 
         function loadPerson(evt) {
             var item = this.get("item");
-            var id = item.id;
-            var idx = this.id.replace(/\D/g,'');
+            var id, idx;
+            if (item === null) {
+                return;
+            }
+            id = item.id;
+            idx = this.id.replace(/\D/g,'');
             xhr.get('/api/people/' + id, {
                 handleAs: "json"
             }).then(function (data) {
@@ -233,8 +242,7 @@ define([
         }
         base = getDivId();
 
-        a = query("." + base + ".accordion");
-        aContainer = new AccordionContainer({style: "overflow-y: auto;"}, a[0]);
+        aContainer = new AccordionContainer({style: "overflow-y: auto;"}, domConstruct.place("<div>",dom.byId(base),"first"));
         aContainer.startup();
 
         prototypeNode = dom.byId(getDivId());
