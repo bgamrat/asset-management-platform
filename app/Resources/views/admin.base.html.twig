@@ -46,9 +46,6 @@
 {% endblock %}
 
 {% if omit_menu is not defined %}
-    {% if app.environment == 'prod' %}
-        <script src="/release/app/admin/menu.js"></script>
-    {% endif %}
     <script>
         require([
             "app/admin/menu",
@@ -58,7 +55,6 @@
         });
     </script>
 {% endif %}
-{% block page_js %}
-{% endblock %}
+
 </body>
 </html>

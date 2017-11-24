@@ -43,100 +43,100 @@
 {% block _contract_requires_category_quantities_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('requires_category_quantities',form) }}{% endblock %}
 {% block _contract_available_category_quantities_entry_row %}{% import _self as form_macros %}{{ form_macros.category_quantity_entry_row('available_category_quantities',form) }}{% endblock %}
 
-    {% block admin_content %}
-        <div id="contract-wrapper">
-            <h1>{{ block ('title') }}</h1>
-            <div class="contract">
-                {% for flash_message in app.session.flashBag.get('notice') %}
-                    <div class="flash-notice">
-                        {{ flash_message|trans }}
-                    </div>
-                {% endfor %}
-                {% if not contract_form.vars.valid %}
-                    <div class="form-errors contract">
-                        {% for contract in contract_form %}
-                            {% if not contract.vars.valid %}
-                                {{form_errors(contract_form)}}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {{form_start(contract_form)}}
-                <span class="id">{{ form_widget(contract_form.id) }}</span>
-                <div class="text-right">
-                    <button id="contract-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+{% block admin_content %}
+    <div id="contract-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="contract">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
                 </div>
-                <div class="contract-data">
-                    <div class="name-value-active">   
-                        <span class="contract name">
-                            {{form_label(contract_form.name)}}
-                            {{form_widget(contract_form.name)}}
-                        </span>
-                        <span class="contract value">
-                            {{form_label(contract_form.value)}}
-                            {{form_widget(contract_form.value)}}
-                        </span>
-                        <span class="contract start">
-                            {{form_label(contract_form.start)}}
-                            {{form_widget(contract_form.start)}}
-                        </span>
-                        <span class="contract end">
-                            {{form_label(contract_form.end)}}
-                            {{form_widget(contract_form.end)}}
-                        </span>
-                        <span class="contract active">
-                            {{form_label(contract_form.active)}}
-                            {{form_widget(contract_form.active)}}
-                        </span>
-                    </div>
-                    <div class="container">
-                        {{form_label(contract_form.container)}}
-                        {{form_widget(contract_form.container)}}		    
-                    </div>
-                    <div class="comment">
-                        {{form_widget(contract_form.comment)}}		    
-                    </div>
+            {% endfor %}
+            {% if not contract_form.vars.valid %}
+                <div class="form-errors contract">
+                    {% for contract in contract_form %}
+                        {% if not contract.vars.valid %}
+                            {{form_errors(contract_form)}}
+                        {% endif %}
+                    {% endfor %}
                 </div>
-
-                <fieldset id="contract-requires_trailers" class="contract requires">
-                    <legend>{{'common.requires'|trans}} {{'asset.trailers'|trans}}</legend>
-                    {{form_row(contract_form.requires_trailers)}}
-                    {% if contract_form.requires_trailers.vars.allow_add %}
-                        <span data-type="requires_trailers" class="requires_trailers add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                    {% endif %}
-                </fieldset>
-
-                <fieldset id="contract-available_trailers" class="contract available">
-                    <legend>{{'common.available'|trans}} {{'asset.trailers'|trans}}</legend>
-                    {{form_row(contract_form.available_trailers)}}
-                    {% if contract_form.available_trailers.vars.allow_add %}
-                        <span data-type="available_trailers" class="available_trailers add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                    {% endif %}
-                </fieldset>
-                <fieldset id="contract-requires_category_quantities" class="contract requires">
-                    <legend>{{'common.requires'|trans}} {{'asset.equipment'|trans}}</legend>
-                    {{form_row(contract_form.requires_category_quantities)}}
-                    {% if contract_form.requires_category_quantities.vars.allow_add %}
-                        <span data-type="requires_category_quantities" class="requires_category_quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                    {% endif %}
-                </fieldset>
-
-                <fieldset id="contract-available_category_quantities" class="contract available">
-                    <legend>{{'common.available'|trans}} {{'asset.equipment'|trans}}</legend>
-                    {{form_row(contract_form.available_category_quantities)}}
-                    {% if contract_form.available_category_quantities.vars.allow_add %}
-                        <span data-type="available_category_quantities" class="available_category_quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                    {% endif %}
-                </fieldset>
-                {{form_end(contract_form)}}
+            {% endif %}
+            {{form_start(contract_form)}}
+            <span class="id">{{ form_widget(contract_form.id) }}</span>
+            <div class="text-right">
+                <button id="contract-save-btn" type="submit">{{ 'common.save'|trans }}</button>
             </div>
-        </div>
-    {% endblock %}
+            <div class="contract-data">
+                <div class="name-value-active">   
+                    <span class="contract name">
+                        {{form_label(contract_form.name)}}
+                        {{form_widget(contract_form.name)}}
+                    </span>
+                    <span class="contract value">
+                        {{form_label(contract_form.value)}}
+                        {{form_widget(contract_form.value)}}
+                    </span>
+                    <span class="contract start">
+                        {{form_label(contract_form.start)}}
+                        {{form_widget(contract_form.start)}}
+                    </span>
+                    <span class="contract end">
+                        {{form_label(contract_form.end)}}
+                        {{form_widget(contract_form.end)}}
+                    </span>
+                    <span class="contract active">
+                        {{form_label(contract_form.active)}}
+                        {{form_widget(contract_form.active)}}
+                    </span>
+                </div>
+                <div class="container">
+                    {{form_label(contract_form.container)}}
+                    {{form_widget(contract_form.container)}}		    
+                </div>
+                <div class="comment">
+                    {{form_widget(contract_form.comment)}}		    
+                </div>
+            </div>
 
-    {% block javascripts %}
-        <script>
-            require(["app/admin/client/contract"], function (contract) {
-                contract.run();
-            });
-        </script>
-    {% endblock %}
+            <fieldset id="contract-requires_trailers" class="contract requires">
+                <legend>{{'common.requires'|trans}} {{'asset.trailers'|trans}}</legend>
+                {{form_row(contract_form.requires_trailers)}}
+                {% if contract_form.requires_trailers.vars.allow_add %}
+                    <span data-type="requires_trailers" class="requires_trailers add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                {% endif %}
+            </fieldset>
+
+            <fieldset id="contract-available_trailers" class="contract available">
+                <legend>{{'common.available'|trans}} {{'asset.trailers'|trans}}</legend>
+                {{form_row(contract_form.available_trailers)}}
+                {% if contract_form.available_trailers.vars.allow_add %}
+                    <span data-type="available_trailers" class="available_trailers add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                {% endif %}
+            </fieldset>
+            <fieldset id="contract-requires_category_quantities" class="contract requires">
+                <legend>{{'common.requires'|trans}} {{'asset.equipment'|trans}}</legend>
+                {{form_row(contract_form.requires_category_quantities)}}
+                {% if contract_form.requires_category_quantities.vars.allow_add %}
+                    <span data-type="requires_category_quantities" class="requires_category_quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                {% endif %}
+            </fieldset>
+
+            <fieldset id="contract-available_category_quantities" class="contract available">
+                <legend>{{'common.available'|trans}} {{'asset.equipment'|trans}}</legend>
+                {{form_row(contract_form.available_category_quantities)}}
+                {% if contract_form.available_category_quantities.vars.allow_add %}
+                    <span data-type="available_category_quantities" class="available_category_quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                {% endif %}
+            </fieldset>
+            {{form_end(contract_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/client/contract"], function (contract) {
+            contract.run();
+        });
+    </script>
+{% endblock %}

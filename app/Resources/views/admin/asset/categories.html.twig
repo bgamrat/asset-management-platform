@@ -68,13 +68,14 @@
                 </div>   
             </div>  
         </div>
-    {% endblock %}
+    </div>
+{% endblock %}
 
-    {% block javascripts %}
-        <script>
-            require(["app/admin/asset/categories", "app/admin/asset/category"], function (categories, category) {
-                categories.run();
-                category.run();
-            });
-        </script>
-    {% endblock %}
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/categories", "app/admin/asset/category"], function (categories, category) {
+            categories.run();
+            category.run();
+        });
+    </script>
+{% endblock %}

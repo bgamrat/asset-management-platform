@@ -2,8 +2,6 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\Asset\Category;
-
 /**
  * ManufacturerRepository
  *
@@ -15,11 +13,22 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
 
     public function findAll()
     {
-        return $this->getEntityManager()
-                        ->createQuery(
-                                "SELECT c, p FROM AppBundle\Entity\Asset\Category c LEFT JOIN c.parent p ORDER BY c.position ASC"
-                        )
-                        ->getResult();
+        $data = $this->getEntityManager()
+                ->createQuery(
+                        "SELECT c, p FROM AppBundle\Entity\Asset\Category c LEFT JOIN c.parent p ORDER BY c.position ASC, p.name"
+                )
+                ->getResult();
+        // This moves the top category to the beginning of the array
+        foreach( $data as $i => $d )
+        {
+            if( $d->getParent() === null )
+            {
+                $top = array_splice( $data, $i, 1 );
+                array_unshift( $data, $top[0] );
+                break;
+            }
+        }
+        return $data;
     }
 
     public function findChildren()

@@ -34,7 +34,7 @@ define([
     function createDijits(newRow) {
         var dijit, index = nameInput.length;
         var base = divId + '_' + index + '_';
-        var readOnly = (index === 0);
+        var readOnly = document.getElementById(base + "parent").getAttribute("data-selected") === "";
         dijit = new ValidationTextBox({
             trim: true,
             readOnly: readOnly,

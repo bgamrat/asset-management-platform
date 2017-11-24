@@ -21,59 +21,59 @@
         <span class="active">{{ form_widget(form.active) }}</span>
         {% if form.parent.vars.allow_delete is defined %}
             <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__{{type}}__"><i class="fa fa-remove"></i></span>
-            {% endif %}
+        {% endif %}
     </div>{% endspaceless %}
-    {% endmacro %}
+{% endmacro %}
 
-        {% block admin_content %}
-            <div id="status-wrapper">
-                <h1>{{ block ('title') }}</h1>
-                <div class="statuses">
-                    {% for flash_message in app.session.flashBag.get('notice') %}
-                        <div class="flash-notice">
-                            {{ flash_message|trans }}
-                        </div>
-                    {% endfor %}
-                    {% if not statuses_form.vars.valid %}
-                        <div class="form-errors statuses">
-                            {% for status in statuses_form.statuses %}
-                                {% if not status.vars.valid %}
-                                    {{form_errors(status.name)}}
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    {{form_start(statuses_form, {'attr': { 'id': 'status-type-form'}})}}
-                    <div class="text-right">
-                        <button id="statuses-save-btn" type="submit">{{ 'common.save'|trans }}</button>
-                    </div>
-                    <div class="form-row status-header">
-                        <span class="default">{{ 'common.default'|trans }}</span>
-                        <span class="name">{{ 'common.name'|trans }}</span>
-                        <span class="comment">{{ 'common.comment'|trans }}</span>
-                        <span class="none">{{ 'common.none'|trans }}</span>
-                        <span class="in-transit">{{ 'asset.in_transit'|trans }}</span>
-                        <span class="location-destination">{{ 'asset.location_destination'|trans }}</span>
-                        <span class="location-unknown">{{ 'asset.location_unknown'|trans }}</span>
-                        <span class="active">{{ 'common.active'|trans }}</span>
-                    </div>
-                    {{form_row(statuses_form)}}
-                    {% for status in statuses_form.statuses %}
-                        {{form_row(status)}}
-                    {% endfor %}
-
-                    {% if statuses_form.statuses.vars.allow_add %}
-                        <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                    {% endif %}
-                    {{form_end(statuses_form)}}
+{% block admin_content %}
+    <div id="status-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="statuses">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
                 </div>
+            {% endfor %}
+            {% if not statuses_form.vars.valid %}
+                <div class="form-errors statuses">
+                    {% for status in statuses_form.statuses %}
+                        {% if not status.vars.valid %}
+                            {{form_errors(status.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form_start(statuses_form, {'attr': { 'id': 'status-type-form'}})}}
+            <div class="text-right">
+                <button id="statuses-save-btn" type="submit">{{ 'common.save'|trans }}</button>
             </div>
-        {% endblock %}
+            <div class="form-row status-header">
+                <span class="default">{{ 'common.default'|trans }}</span>
+                <span class="name">{{ 'common.name'|trans }}</span>
+                <span class="comment">{{ 'common.comment'|trans }}</span>
+                <span class="none">{{ 'common.none'|trans }}</span>
+                <span class="in-transit">{{ 'asset.in_transit'|trans }}</span>
+                <span class="location-destination">{{ 'asset.location_destination'|trans }}</span>
+                <span class="location-unknown">{{ 'asset.location_unknown'|trans }}</span>
+                <span class="active">{{ 'common.active'|trans }}</span>
+            </div>
+            {{form_row(statuses_form)}}
+            {% for status in statuses_form.statuses %}
+                {{form_row(status)}}
+            {% endfor %}
 
-        {% block javascripts %}
-            <script>
-                require(["app/admin/asset/transfer_status"], function (status) {
-                    status.run();
-                });
-            </script>
-        {% endblock %}
+            {% if statuses_form.statuses.vars.allow_add %}
+                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+            {% endif %}
+            {{form_end(statuses_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/asset/transfer_status"], function (status) {
+            status.run();
+        });
+    </script>
+{% endblock %}

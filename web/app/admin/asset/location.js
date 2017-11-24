@@ -34,7 +34,9 @@ define([
         function setDivId(divId) {
             if (divId !== "") {
                 divId += "_";
-                divIdInUse += divId;
+                divIdInUse = divId + divIdInUse;
+            } else {
+                divIdInUse = divId;
             }
         }
 
