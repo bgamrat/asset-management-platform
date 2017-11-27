@@ -30,6 +30,7 @@ define([
     "app/common/person",
     "app/admin/schedule/contracts",
     "app/admin/schedule/trailers",
+    "app/admin/schedule/category_quantities",
     "app/admin/schedule/time_spans",
     "app/lib/common",
     "app/lib/grid",
@@ -40,7 +41,7 @@ define([
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, ColumnHider, Selection, Editor, put,
-        xperson, contracts, trailers, timeSpans,
+        xperson, contracts, trailers, categoryQuantities, timeSpans,
         lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
@@ -58,7 +59,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 525px; width: 860px;"
+            style: "height: 525px; width: 978px;"
         }, "event-view-tabs");
 
         var detailsContentPane = new ContentPane({
@@ -121,6 +122,7 @@ define([
             person.setData(null);
             contracts.setData(null);
             trailers.setData(null);
+            categoryQuantities.setData(null);
             timeSpans.setData(null);
             document.getElementById("full-equipment-link").classList.add("hidden");
             eventViewDialog.set("title", core["new"]).show();
@@ -246,7 +248,8 @@ define([
                     "venue_text": venueFilteringSelect.get("displayedValue"),
                     "time_spans": timeSpans.getData(),
                     "trailers": trailers.getData(),
-                    "trailer_text":[contracts.getTrailerText(),trailers.getText()].join(', '),
+                    "category_quantities": categoryQuantities.getData(),
+                    "trailer_text": [contracts.getTrailerText(), trailers.getText()].join(', '),
                     "description": descriptionInput.get("value")
                 };
                 if( action === "view" ) {
@@ -302,13 +305,13 @@ define([
                         if( object.start !== null ) {
                             st = object.start;
                             if( st instanceof Date ) {
-                                st = lib.formatDate(st,false);
+                                st = lib.formatDate(st, false);
                             }
                         }
                         if( object.end !== null ) {
                             en = object.end;
                             if( en instanceof Date ) {
-                                en = lib.formatDate(en,false);
+                                en = lib.formatDate(en, false);
                             }
                         }
                         datesList = st + "-<br>" + en;
@@ -398,6 +401,7 @@ define([
                     equipmentLink.href = equipmentLink.href.replace(/(__ID__|\d+)/, event.id);
                     equipmentLink.classList.remove("hidden");
                     trailers.setData(event.trailers);
+                    categoryQuantities.setData(event.categoryQuantities);
                     contracts.setData(event.contracts);
                     person.setData(event.contacts);
                     timeSpans.setData(event.timeSpans);
@@ -460,6 +464,7 @@ define([
         person = xperson.run('event_contacts');
         contracts.run('event_contracts');
         trailers.run('event_trailers');
+        categoryQuantities.run();
         timeSpans.run('event_time_spans');
         lib.pageReady();
     }

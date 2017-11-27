@@ -35,8 +35,6 @@ define([
             if (divId !== "") {
                 divId += "_";
                 divIdInUse = divId + divIdInUse;
-            } else {
-                divIdInUse = divId;
             }
         }
 

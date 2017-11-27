@@ -6,8 +6,6 @@
         baseUrl: '/release',
         paths: {"lib": "/app/lib",
             "nls": "/app/nls"},
-        // Disable debugging
-        isDebug: false,
         // Register the packages we are going to be using. These same packages should be defined in the
         // build profile in `app.profile.js`.
         packages: [
@@ -26,8 +24,7 @@
         // instead of the legacy Dojo resolution method (relative to the parent directory of `baseUrl`)
         tlmSiblingOfDojo: false,
         has: {
-            "dojo-firebug": true,
-            "dojo-debug-messages": true
+            "dojo-trace-api": false
         }
     };
     //# sourceURL=admin-twig

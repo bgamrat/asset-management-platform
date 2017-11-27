@@ -50,7 +50,7 @@ class Contract
     private $name;
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(type="string", length=64, nullable=true)
      * @Gedmo\Versioned
      */
@@ -92,14 +92,14 @@ class Contract
      */
     private $availableTrailers;
     /**
-     * @ORM\ManyToMany(targetEntity="CategoryQuantity", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\CategoryQuantity", cascade={"persist"})
      * @ORM\JoinTable(name="contract_category_quantity_required",
      *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")}
      *      )
      */
     private $requiresCategoryQuantities;
     /**
-     * @ORM\ManyToMany(targetEntity="CategoryQuantity", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\CategoryQuantity", cascade={"persist"})
      * @ORM\JoinTable(name="contract_category_quantity_available",
      *      joinColumns={@ORM\JoinColumn(name="available_id", referencedColumnName="id")}
      *      )
@@ -109,7 +109,7 @@ class Contract
      * @var boolean
      * @Gedmo\Versioned
      * @ORM\Column(name="active", type="boolean")
-     * 
+     *
      */
     private $active = true;
     /**
@@ -138,7 +138,7 @@ class Contract
 
     /**
      * Set id
-     * 
+     *
      * @return Contract
      */
     public function setId( $id )

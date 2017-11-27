@@ -119,6 +119,13 @@ class Event
      */
     private $timespans = null;
     /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\CategoryQuantity", cascade={"persist"})
+     * @ORM\JoinTable(name="event_category_quantity",
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")}
+     *      )
+     */
+    private $categoryQuantities;
+    /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -399,6 +406,54 @@ class Event
     public function removeTrailer( Trailer $trailer )
     {
         $this->trailers->removeElement( $trailer );
+    }
+
+    public function setCategoryQuantities( $categoryQuantities )
+    {
+        $this->categoryQuantities->clear();
+        foreach( $categoryQuantities as $m )
+        {
+            $this->addCategoryQuantities( $m );
+        }
+        return $this;
+    }
+
+    public function getCategoryQuantities( $full = true )
+    {
+        $categoryQuantities = [];
+        if( count( $this->categoryQuantities ) > 0 )
+        {
+            if( $full === false )
+            {
+                foreach( $this->categoryQuantities as $cq )
+                {
+                    $categoryQuantities[] = ['id' => $cq->getId(),
+                        'category' => $cq->getName(),
+                        'quantity' => $cq->getQuantity()];
+                }
+            }
+            else
+            {
+                foreach( $this->categoryQuantities as $cq )
+                {
+                    $categoryQuantities[] = $cq;
+                }
+            }
+        }
+        return $categoryQuantities;
+    }
+
+    public function addCategoryQuantity( CategoryQuantity $categoryQuantity )
+    {
+        if( !$this->categoryQuantities->contains( $categoryQuantity ) )
+        {
+            $this->categoryQuantities->add( $categoryQuantity );
+        }
+    }
+
+    public function removeCategoryQuantity( CategoryQuantity $categoryQuantity )
+    {
+        $this->categoryQuantities->removeElement( $categoryQuantity );
     }
 
     public function getTimeSpans()

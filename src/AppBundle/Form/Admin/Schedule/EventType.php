@@ -95,6 +95,15 @@ class EventType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__trailer__'
                 ] )
+                ->add( 'category_quantities', CollectionType::class, [
+                    'entry_type' => CategoryQuantityType::class,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true
+                ] )
                 ->add( 'time_spans', CollectionType::class, [
                     'entry_type' => TimeSpanType::class,
                     'required' => false,

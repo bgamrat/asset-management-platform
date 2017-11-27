@@ -1,20 +1,26 @@
 {% block title %}{{ 'common.test'|trans }}{% endblock %}
 {% extends '/admin.base.html.twig' %}
 
+
+{#% form_theme test_form _self %}
+
+{% block money_widget %}
+    Money Widget
+    {{dump(form)}}
+    {{form}}
+{% endblock %#}
+
 {% block admin_content %}
 
     <h1>{{ block ('title') }}</h1>
 
     <button id="test-btn">Test</button>
 
-    {#% javascripts '@test_js' %}
-    <script data-dojo-config="async:true"
-    src="{{ asset_url }}"></script>
-    {% endjavascripts %#}
+    {{form_start(test_form)}}
+    {{form_widget(test_form.money)}}
+    {{form_end(test_form)}}
 
-
-
-{% endblock %}  
+{% endblock %}
 {% block page_js %}
     {% if app.environment == 'prod' %}
         <script src="/release/app/test.js"></script>
