@@ -17,7 +17,7 @@
     height: 150px;
 }
 .event .contract .name .dijitTextBox {
-    width: 150px;
+    width: 250px;
 }
 #event-times-and-staff-tab .justify fieldset, 
 #event-view-equipment-tab .justify fieldset {
@@ -47,4 +47,7 @@ pre#venue-address {
     border: 1px solid #eee;
     width: 100%;
     display: block;
+}
+.form-row .comment .dijitTextBox {
+    width: 250px;
 }

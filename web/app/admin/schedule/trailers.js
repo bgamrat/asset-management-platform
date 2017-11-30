@@ -107,7 +107,7 @@ define([
         var i, returnData = [];
         for( i = 0; i < trailerFilteringSelect.length; i++ ) {
             returnData.push(
-                    trailerFilteringSelect[i].get("value"));
+                    trailerFilteringSelect[i].get("displayedValue"));
         }
         return returnData;
     }

@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Client\Contract;
+use AppBundle\Entity\Common\CategoryQuantity;
 use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Schedule\TimeSpan;
 use AppBundle\Entity\Venue\Venue;
@@ -394,26 +395,22 @@ class Event
         return $return;
     }
 
-    public function addTrailer( Trailer $trailer )
+    public function setTrailers( $trailers )
     {
-        if( !$this->trailers->contains( $trailer ) )
+        $this->trailers->clear();
+        foreach( $trailers as $t )
         {
-            $this->trailers->add( $trailer );
+            $this->trailers->add( $t );
         }
         return $this;
-    }
-
-    public function removeTrailer( Trailer $trailer )
-    {
-        $this->trailers->removeElement( $trailer );
     }
 
     public function setCategoryQuantities( $categoryQuantities )
     {
         $this->categoryQuantities->clear();
-        foreach( $categoryQuantities as $m )
+        foreach( $categoryQuantities as $cq )
         {
-            $this->addCategoryQuantities( $m );
+            $this->addCategoryQuantities( $cq );
         }
         return $this;
     }

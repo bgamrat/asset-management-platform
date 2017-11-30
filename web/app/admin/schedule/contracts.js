@@ -67,10 +67,10 @@ define([
             // Backticks won't work with the old Chrome browser
             templateContract = '<li class="contract-equipment-list" id="contract-equipment-list-' + id + '" data-contract-id="' + item.id + '" ' + hidden + '><span>' + item.name + '</span>';
             if( reqd.length > 0 ) {
-                templateContract += '<span class="label">&nbsp;' + core.requires + '</span>' + reqd.join() + '<br>';
+                templateContract += '<span class="label">&nbsp;' + core.requires + '</span>&nbsp;' + reqd.join() + '<br>';
             }
             if( avail.length > 0 ) {
-                templateContract += '<span class="label">&nbsp;' + core.available + '</span>' + avail.join();
+                templateContract += '<span class="label">&nbsp;' + core.available + '</span>&nbsp;' + avail.join();
             }
             templateContract += '</li>';
 

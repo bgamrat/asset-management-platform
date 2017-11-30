@@ -29,7 +29,7 @@ class TrailerToIdTransformer implements DataTransformerInterface
             return '';
         }
 
-        return $trailer['name'];
+        return $trailer->getName();
     }
 
     /**

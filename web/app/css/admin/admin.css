@@ -165,3 +165,18 @@ fieldset ul.unstyled {
 .trailer-data .description {
     margin: 20px 0;
 }
+.form-row .category, .form-row .quantity, .form-row .value, .form-row .comment {
+    margin: 5px 3px;
+    display: inline-block;
+}
+.form-row .quantity .dijitTextBox {
+    width: 50px;
+}
+.form-row .quantity .dijitInputInner {
+    text-align: right;
+}
+.value .dijitTextBox,
+.start .dijitTextBox,
+.end .dijitTextBox {
+    width: 100px;
+}

@@ -121,20 +121,21 @@ define([
     }
 
     function setData(categoryQuantities) {
-        var i;
+        var i,l;
 
         query(".form-row.category-quantity", prototypeNode.parentNode).forEach(function (node, index) {
             destroyRow(null, node);
         });
 
         if( typeof categoryQuantities === "object" && categoryQuantities !== null && categoryQuantities.length > 0 ) {
-            for( i = 0; i < categoryQuantities.length; i++ ) {
+            l = categoryQuantities.length;
+            for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits();
-                categoryFilteringSelect[i].set("displayedValue", categoryQuantities[i].name);
-                quantityInput[i].set("value", quantityInput[i].name);
-                valueInput[i].set("value", valueInput[i].name);
-                commentInput[i].set("value", commentInput[i].name);
+                categoryFilteringSelect[i].set("displayedValue", categoryQuantities[i].category.fullName);
+                quantityInput[i].set("value", categoryQuantities[i].quantity);
+                valueInput[i].set("value", categoryQuantities[i].value);
+                commentInput[i].set("value", categoryQuantities[i].comment);
             }
         }
     }
