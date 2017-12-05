@@ -32,7 +32,7 @@ define([
         }
 
         function setDivId(divId) {
-            if (divId !== "") {
+            if( divId !== "" ) {
                 divId += "_";
                 divIdInUse = divId + divIdInUse;
             }
@@ -164,9 +164,11 @@ define([
 
         return {
             getData: function () {
-                var locationType = namesAndUrls[getLocationType()].value;
-                var item = locationFilteringSelect.get("item");
+                var locationType, item;
                 var entityId, personId, addressId, address = null, hash, returnObj;
+
+                locationType = namesAndUrls[getLocationType()].value;
+                item = locationFilteringSelect.get("item");
 
                 if( !isNaN(locationType) ) {
                     locationType = parseInt(locationType);
@@ -188,7 +190,7 @@ define([
                     "id": locationId,
                     "entity": entityId,
                     "person_id": personId,
-                    "address_id" : addressId,
+                    "address_id": addressId,
                     "address": address,
                     "type": locationType
                 };
@@ -200,7 +202,7 @@ define([
             },
             getText: function () {
                 var item = locationFilteringSelect.get("item");
-                return (typeof item.label !== "undefined") ? item.label : item.name;
+                return (typeof item.label !== "undefined") ? item.label : item.name.replace(/\n+/g, "\n");
             },
             setData: function (obj, location_text) {
                 if( typeof obj !== "undefined" && obj !== null ) {
@@ -212,10 +214,10 @@ define([
                         locationStore.target = obj.type.url;
                         locationFilteringSelect.set("store", locationStore);
                         locationFilteringSelect.set("readOnly", false);
-                        if (obj.address === true && obj.entityData !== null) {
+                        if( obj.address === true && obj.entityData !== null ) {
                             obj.entityData.label = location_text;
                             locationFilteringSelect.set('item', obj.entityData);
-                            document.getElementById(locationEcho).innerHTML = obj.entityData.label;
+                            document.getElementById(locationEcho).innerHTML = obj.entityData.label.replace(/\n/g, '<br>');
                         } else {
                             locationFilteringSelect.set('displayedValue', obj.entityData.name);
                         }

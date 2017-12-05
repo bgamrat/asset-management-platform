@@ -124,6 +124,7 @@ define([
             valueInput.set("value", null);
             commentInput.set("value", "");
             activeCheckBox.set("checked", true);
+            ownerFilteringSelect.set('value', null);
             assetViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -152,7 +153,8 @@ define([
             store: modelStore,
             labelAttr: "name",
             searchAttr: "name",
-            pageSize: 25
+            pageSize: 25,
+            required: true
         }, "asset_model");
         modelFilteringSelect.startup();
         modelFilteringSelect.on("change", function (evt) {
@@ -164,6 +166,18 @@ define([
                 }
             }
         });
+
+        var ownerStore = new JsonRest({
+            target: '/api/store/vendors',
+            useRangeHeaders: false,
+            idProperty: 'id'});
+        var ownerFilteringSelect = new FilteringSelect({
+            store: ownerStore,
+            labelAttr: "name",
+            searchAttr: "name",
+            pageSize: 25
+        }, "asset_owner");
+        ownerFilteringSelect.startup();
 
         var serialNumberInput = new ValidationTextBox({
             trim: true,
@@ -251,6 +265,7 @@ define([
                     "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
                     "value": parseFloat(valueInput.get("value")),
+                    "owner": parseInt(ownerFilteringSelect.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "location": location.getData(),
                     "location_text": location.getText(),
@@ -312,8 +327,8 @@ define([
                 },
                 location_text: {
                     label: asset.location,
-                    formatter: function(item) {
-                        return item.replace(/\n/g,"<br>");
+                    formatter: function (item) {
+                        return item.replace(/\n+/g, "<br>");
                     }
                 },
                 comment: {
@@ -378,6 +393,11 @@ define([
                     purchasedInput.set('value', timestamp);
                     costInput.set("value", asset.cost);
                     valueInput.set("value", asset.value);
+                    if( typeof asset.owner !== "undefined" ) {
+                        ownerFilteringSelect.set("displayedValue", asset.owner.name);
+                    } else {
+                        ownerFilteringSelect.set("displayedValue", "");
+                    }
                     location.setData(asset.location, asset.locationText);
                     serialNumberInput.set('value', asset.serialNumber);
                     customAttributes.setData(asset.customAttributes);

@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Api\Admin\Asset;
 
-use AppBundle\Entity\Vendor;
+use AppBundle\Entity\Asset\Vendor;
 use AppBundle\Util\DStore;
 use AppBundle\Form\Admin\Asset\VendorType;
 use FOS\RestBundle\Controller\FOSRestController;

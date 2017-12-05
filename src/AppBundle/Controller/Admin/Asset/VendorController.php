@@ -22,7 +22,7 @@ class VendorController extends Controller
      * @Route("/admin/asset/vendor/{name}", name="app_admin_asset_vendor_get")
      * @Method("GET")
      */
-    public function indexAction( $name )
+    public function indexAction( $name = null )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 

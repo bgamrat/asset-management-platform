@@ -96,7 +96,7 @@
 
 {% block javascripts %}
     <script>
-        var loadVendorId = {{ vendor_id }};
+        var loadVendorId = {% if vendor_id == null %}null{% else %}{{ vendor_id }}{% endif %};
         require(["app/admin/asset/vendor"], function (vendor) {
             vendor.run();
         });

@@ -16,6 +16,7 @@ define({
         "model": "Model",
         "model_relationships": "Model Relationships",
         "no_barcode": "No barcode",
+        "owner": "Owner",
         "priority": "Priority",
         "requires": "Requires",
         "required_by": "Required By",

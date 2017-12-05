@@ -37,6 +37,9 @@ class AssetsController extends FOSRestController
             case 'model_text':
                 $sortField = 'm.name';
                 break;
+            case 'status_text':
+                $sortField = 's.name';
+                break;
             default:
                 $sortField = 'a.' . $dstore['sort-field'];
         }

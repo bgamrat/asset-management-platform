@@ -6,7 +6,6 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\View;
-use AppBundle\Controller\Api\Common\Common;
 
 class DefaultController extends FOSRestController
 {
@@ -23,9 +22,7 @@ class DefaultController extends FOSRestController
         if( !empty( $name ) )
         {
             $em = $this->getDoctrine()->getManager();
-            $vendors = $em->getRepository( 'AppBundle\Entity\Asset\Vendor' )->findByNameLike( $name );
-            $common = new Common;
-            $data = $common->getContacts($vendors);
+            $data = $em->getRepository( 'AppBundle\Entity\Asset\Vendor' )->findByNameLike( $name );
         }
         else
         {

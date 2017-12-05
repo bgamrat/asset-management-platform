@@ -14,6 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
+use AppBundle\Form\Admin\Asset\DataTransformer\VendorToIdTransformer;
 use AppBundle\Form\Admin\Asset\AssetLocationType;
 use AppBundle\Form\Common\CustomAttributeType;
 use Symfony\Component\Validator\Constraints\Valid;
@@ -37,7 +38,7 @@ class AssetType extends AbstractType
         $defaultStatus = $this->em->getRepository( 'AppBundle\Entity\Asset\AssetStatus' )->findOneBy( ['default' => true] );
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'serial_number', TextType::class, ['label' => false ] )
+                ->add( 'serial_number', TextType::class, ['label' => false] )
                 ->add( 'model', TextType::class, [
                     'label' => 'common.model'
                 ] )
@@ -63,6 +64,9 @@ class AssetType extends AbstractType
                 ] )
                 ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
                 ->add( 'value', MoneyType::class, ['label' => 'common.value', 'currency' => 'USD'] )
+                ->add( 'owner', TextType::class, [
+                    'label' => 'asset.owner'
+                ] )
                 ->add( 'location', AssetLocationType::class )
                 ->add( 'location_text', HiddenType::class )
                 ->add( 'barcodes', CollectionType::class, [
@@ -95,6 +99,8 @@ class AssetType extends AbstractType
         ;
         $builder->get( 'model' )
                 ->addModelTransformer( new ModelToIdTransformer( $this->em ) );
+        $builder->get( 'owner' )
+                ->addModelTransformer( new VendorToIdTransformer( $this->em ) );
     }
 
     /**

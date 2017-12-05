@@ -59,6 +59,8 @@ asset:
         Model
     models:
         Models
+    owner:
+        Owner
     parent:
         Parent
     requirements:

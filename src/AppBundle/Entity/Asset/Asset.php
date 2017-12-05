@@ -70,6 +70,14 @@ class Asset
     private $value = 0.0;
     /**
      * @var int
+     * @Gedmo\Versioned
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\ManyToOne(targetEntity="Vendor")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
+     */
+    protected $owner = null;
+    /**
+     * @var int
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets", cascade={"persist"})
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
@@ -317,6 +325,30 @@ class Asset
     }
 
     /**
+     * Set owner
+     *
+     * @param int $owner
+     *
+     * @return Asset
+     */
+    public function setOwner( $owner )
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return int
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
      * Set location
      *
      * @param int $location
@@ -349,7 +381,7 @@ class Asset
      */
     public function setLocationText( $location_text )
     {
-        $this->location_text = str_replace( ['<br />', '<br>'], PHP_EOL, $location_text );
+        $this->location_text = preg_replace( '/\n+/', PHP_EOL, str_replace( ['<br />', '<br>'], PHP_EOL, $location_text ) );
 
         return $this;
     }
