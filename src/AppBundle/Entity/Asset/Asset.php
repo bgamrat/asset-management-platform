@@ -393,7 +393,7 @@ class Asset
      */
     public function getLocationText()
     {
-        return $this->location_text;
+        return str_replace(PHP_EOL,'<br>',$this->location_text);
     }
 
     public function getBarcodes()

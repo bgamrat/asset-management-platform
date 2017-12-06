@@ -393,7 +393,7 @@ define([
                     purchasedInput.set('value', timestamp);
                     costInput.set("value", asset.cost);
                     valueInput.set("value", asset.value);
-                    if( typeof asset.owner !== "undefined" ) {
+                    if( asset.owner !== null ) {
                         ownerFilteringSelect.set("displayedValue", asset.owner.name);
                     } else {
                         ownerFilteringSelect.set("displayedValue", "");

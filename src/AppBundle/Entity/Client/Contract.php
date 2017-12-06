@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\Client\Trailer;
+use AppBundle\Entity\Common\CategoryQuantity;
 
 /**
  * Contract

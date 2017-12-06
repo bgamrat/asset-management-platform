@@ -11,7 +11,7 @@ use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Common\Email;
 use AppBundle\Entity\Common\Address;
 use AppBundle\Entity\Client\Contract;
-use AppBundle\Entity\Client\CategoryQuantity;
+use AppBundle\Entity\Common\CategoryQuantity;
 use AppBundle\Entity\Client\Trailer as ClientTrailer;
 
 class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
