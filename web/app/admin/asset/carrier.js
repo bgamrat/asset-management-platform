@@ -159,23 +159,11 @@ define([
                     "account_information": accountInformationInput.get("value"),
                     "tracking_url": trackingUrlInput.get("value")
                 };
-                if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
-                        carrierViewDialog.hide();
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeNameFilter = filter.gt('name', data.name);
-                    store.filter(beforeNameFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        var beforeId;
-                        beforeId = (results.length > 0) ? results[0].id : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            carrierViewDialog.hide();
-                            store.fetch();
-                            grid.refresh();
-                        }, lib.xhrError);
-                    });
-                }
+                grid.collection.put(data).then(function (data) {
+                    carrierViewDialog.hide();
+                    store.fetch();
+                    grid.refresh();
+                }, lib.xhrError);
             } else {
                 lib.textError(core.invalid_form);
             }
@@ -259,7 +247,7 @@ define([
                     carrierService.setData(carrier.services);
                     commentInput.set("value", carrier.comment);
                     accountInformationInput.set("value", carrier.accountInformation);
-                    trackingUrlInput.set("value",carrier.trackingUrl);
+                    trackingUrlInput.set("value", carrier.trackingUrl);
                     carrierViewDialog.show();
                 }, lib.xhrError);
             }

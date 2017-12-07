@@ -16,7 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
-use AppBundle\Form\Admin\Asset\DataTransformer\TrailerToIdTransformer;
 use AppBundle\Form\Admin\Common\BillToType;
 
 class IssueType extends AbstractType
@@ -56,6 +55,7 @@ class IssueType extends AbstractType
                 ->add( 'trailer', EntityType::class, [
                     'class' => 'AppBundle\Entity\Asset\Trailer',
                     'choice_label' => 'name',
+                    'choice_value' => 'name',
                     'multiple' => false,
                     'expanded' => false,
                     'required' => false,
@@ -136,8 +136,6 @@ class IssueType extends AbstractType
         ;
         $builder->get( 'assigned_to' )
                 ->addModelTransformer( new PersonToIdTransformer( $this->em ) );
-        $builder->get( 'trailer' )
-                ->addModelTransformer( new TrailerToIdTransformer( $this->em ) );
     }
 
     /**

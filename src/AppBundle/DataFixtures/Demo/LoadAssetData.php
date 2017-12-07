@@ -49,7 +49,7 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
             $item->setModel( $models[rand( 0, $modelCount )] );
             $item->setCost( (float) rand( 1000, 150000 ) );
             $item->setLocation( $location );
-            $item->setLocationText( $location->getEntityData()->getName() );
+            $item->setLocationText( $entityData->getName() );
             $numberFormatter = new \NumberFormatter( 'en_US', \NumberFormatter::ORDINAL );
             $n = $numberFormatter->format( $i );
             $item->setComment( 'This is the ' . $n . ' item' );

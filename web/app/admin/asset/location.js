@@ -202,7 +202,7 @@ define([
             },
             getText: function () {
                 var item = locationFilteringSelect.get("item");
-                return (typeof item.label !== "undefined") ? item.label : item.name.replace(/\n+/g, "\n");
+                return (typeof item.label !== "undefined") ? item.label : item.name;
             },
             setData: function (obj, location_text) {
                 if( typeof obj !== "undefined" && obj !== null ) {

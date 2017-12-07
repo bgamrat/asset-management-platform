@@ -272,7 +272,7 @@ class Transfer
      */
     public function setSourceLocationText( $source_location_text )
     {
-        $this->source_location_text = str_replace(['<br />','<br>'],PHP_EOL,$source_location_text);
+        $this->source_location_text = preg_replace( '/\n+/', PHP_EOL, str_replace( ['<br />', '<br>'], PHP_EOL, $source_location_text ) );
 
         return $this;
     }
@@ -344,7 +344,7 @@ class Transfer
      */
     public function setDestinationLocationText( $destination_location_text )
     {
-        $this->destination_location_text = str_replace(['<br />','<br>'],PHP_EOL,$destination_location_text);
+        $this->destination_location_text = preg_replace( '/\n+/', PHP_EOL, str_replace( ['<br />', '<br>'], PHP_EOL, $destination_location_text ) );
 
         return $this;
     }

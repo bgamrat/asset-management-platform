@@ -175,6 +175,7 @@ define([
             store: ownerStore,
             labelAttr: "name",
             searchAttr: "name",
+            "required": false,
             pageSize: 25
         }, "asset_owner");
         ownerFilteringSelect.startup();
@@ -268,7 +269,7 @@ define([
                     "owner": parseInt(ownerFilteringSelect.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "location": location.getData(),
-                    "location_text": location.getText(),
+                    "location_text": location.getText().replace(/<br( \/)?>/, "\n"),
                     "barcode": barcodes.getActive(),
                     "barcodes": barcodes.getData(),
                     "serial_number": serialNumberInput.get("value"),
@@ -276,25 +277,11 @@ define([
                     "custom_attributes": customAttributes.getData(),
                     "comment": commentInput.get("value")
                 };
-                if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
-                        if( lib.checkForFormErrors(data) === false ) {
-                            assetViewDialog.hide();
-                        }
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeModelTextFilter = filter.gt('model_text', data.model_text);
-                    store.filter(beforeModelTextFilter).sort('model_text').fetchRange({start: 0, end: 1}).then(function (results) {
-                        var beforeId;
-                        beforeId = (results.length > 0) ? results[0].id : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            assetViewDialog.hide();
-                            store.fetch();
-                            grid.refresh();
-                        }, lib.xhrError);
-                    });
-                }
+                grid.collection.put(data).then(function (data) {
+                    assetViewDialog.hide();
+                    store.fetch();
+                    grid.refresh();
+                }, lib.xhrError);
             } else {
                 lib.textError(core.invalid_form);
             }
@@ -328,7 +315,7 @@ define([
                 location_text: {
                     label: asset.location,
                     formatter: function (item) {
-                        return item.replace(/\n+/g, "<br>");
+                        return "<pre>" + item + "</pre>";
                     }
                 },
                 comment: {
@@ -396,7 +383,7 @@ define([
                     if( asset.owner !== null ) {
                         ownerFilteringSelect.set("displayedValue", asset.owner.name);
                     } else {
-                        ownerFilteringSelect.set("displayedValue", "");
+                        ownerFilteringSelect.set("value", null);
                     }
                     location.setData(asset.location, asset.locationText);
                     serialNumberInput.set('value', asset.serialNumber);

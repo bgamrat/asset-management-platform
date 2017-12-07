@@ -163,14 +163,15 @@ define([
             storeData.push(data[d]);
         }
         var memoryStore = new Memory({
-            idProperty: "value",
+            idProperty: "label",
             data: storeData});
         var trailerStore = new ObjectStore({objectStore: memoryStore});
         var trailerSelect = new Select({
             store: trailerStore,
             placeholder: asset.trailer,
             required: true,
-            "class": "asset-trailer"
+            "class": "asset-trailer",
+            "searchAttr": "label"
         }, "issue_trailer");
         trailerSelect.startup();
 
@@ -285,7 +286,7 @@ define([
                     "status_text": statusSelect.get("displayedValue"),
                     "purchased": purchased === null ? "" : purchased,
                     "cost": parseFloat(costInput.get("value")),
-                    "trailer": parseInt(trailerSelect.get("value")),
+                    "trailer": trailerSelect.get("displayedValue"),
                     "trailer_text": trailerSelect.get("displayedValue"),
                     "items": issueItems.getData(),
                     "notes": issueNotes.getData(),
@@ -294,23 +295,11 @@ define([
                     "details": detailsInput.get("value"),
                     "replaced": replacedCheckBox.get("checked")
                 };
-                if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
-                        issueViewDialog.hide();
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeModelTextFilter = filter.lt('priority', data.priority);
-                    store.filter(beforeModelTextFilter).sort('priority').fetchRange({start: 0, end: 1}).then(function (results) {
-                        var beforeId;
-                        beforeId = (results.length > 0) ? results[0].id : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            issueViewDialog.hide();
-                            store.fetch();
-                            grid.refresh();
-                        }, lib.xhrError);
-                    });
-                }
+                grid.collection.put(data).then(function (data) {
+                    issueViewDialog.hide();
+                    store.fetch();
+                    grid.refresh();
+                }, lib.xhrError);
             } else {
                 lib.textError(core.invalid_form)
             }
@@ -402,9 +391,11 @@ define([
                     priorityInput.set("value", issue.priority);
                     typeSelect.set("value", issue.type.id);
                     statusSelect.set("value", issue.status.id);
-                    trailerSelect.set("value", issue.trailer.id);
+                    trailerSelect.set("value", issue.trailer.name);
                     if( issue.assignedTo !== null ) {
-                        assignedToFilteringSelect.set("displayedValue", issue.assignedTo.fullName);
+                        assignedToFilteringSelect.set("value", issue.assignedTo.id);
+                    } else {
+                        assignedToFilteringSelect.set("value", null);
                     }
                     summaryInput.set("value", issue.summary);
                     detailsInput.set("value", issue.details);

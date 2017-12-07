@@ -31,7 +31,7 @@ class CarrierServiceToIdTransformer implements DataTransformerInterface
             return $carrierService;
         }
         
-        return $carrierService->getName();
+        return $carrierService->getId();
     }
 
     /**
@@ -41,22 +41,22 @@ class CarrierServiceToIdTransformer implements DataTransformerInterface
      * @return Issue|null
      * @throws TransformationFailedException if object (carrierService) is not found.
      */
-    public function reverseTransform($carrierServiceName = null)
+    public function reverseTransform($carrierServiceId = null)
     {
         // no carrierService id? It's optional, so that's ok
-        if (!$carrierServiceName) {
+        if (!$carrierServiceId) {
             return;
         }
 
         $carrierService = $this->em
             ->getRepository('AppBundle\Entity\Asset\carrierService')
-            ->find($carrierServiceName)
+            ->find($carrierServiceId)
         ;
 
         if (null === $carrierService) {
             throw new TransformationFailedException(sprintf(
-                'An carrierService with name "%s" does not exist!',
-                $carrierServiceName
+                'An carrierService with id "%s" does not exist!',
+                $carrierServiceId
             ));
         }
         return $carrierService;

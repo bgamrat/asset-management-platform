@@ -261,37 +261,25 @@ define([
                     "cost": parseFloat(costInput.get("value")),
                     "carrier": carrierSelect.get("value"),
                     "carrier_text": carrierSelect.get("displayedValue"),
-                    "carrier_service": carrierServiceSelect.get("value"),
+                    "carrier_service": parseInt(carrierServiceSelect.get("value")),
                     "tracking_number": trackingNumberInput.get("value"),
                     "instructions": instructionsInput.get("value"),
                     "items": transferItems.getData(),
                     "bill_to": billTo.getData(),
                     "from": fromFilteringSelect.get("value"),
                     "source_location": sourceLocation.getData(),
-                    "source_location_text": sourceLocation.getText(),
+                    "source_location_text": sourceLocation.getText().replace(/<br( \/)?>/, "\n"),
                     "to": toFilteringSelect.get("value"),
                     "destination_location": destinationLocation.getData(),
-                    "destination_location_text": destinationLocation.getText()
+                    "destination_location_text": destinationLocation.getText().replace(/<br( \/)?>/, "\n")
                 };
-                if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
-                        transferViewDialog.hide();
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeTransferTextFilter = filter.gt('id', data.id);
-                    store.filter(beforeTransferTextFilter).sort('id').fetchRange({start: 0, end: 1}).then(function (results) {
-                        var beforeId;
-                        beforeId = (results.length > 0) ? results[0].id : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            transferViewDialog.hide();
-                            store.fetch();
-                            grid.refresh();
-                        }, lib.xhrError);
-                    });
-                }
+                grid.collection.put(data).then(function (data) {
+                    transferViewDialog.hide();
+                    store.fetch();
+                    grid.refresh();
+                }, lib.xhrError);
             } else {
-                lib.textError(core.invalid_form)
+                lib.textError(core.invalid_form);
             }
         });
 
@@ -313,14 +301,14 @@ define([
                 },
                 source_location_text: {
                     label: core.from,
-                    formatter: function(item) {
-                        return item.replace(/\n/g,"<br>");
+                    formatter: function (item) {
+                        return "<pre>" + item + "</pre>";
                     }
                 },
                 destination_location_text: {
                     label: core.to,
-                    formatter: function(item) {
-                        return item.replace(/\n/g,"<br>");
+                    formatter: function (item) {
+                        return "<pre>" + item + "</pre>";
                     }
                 },
                 carrier_text: {
@@ -330,9 +318,9 @@ define([
                     label: core.tracking_number,
                     formatter: function (data, object) {
                         var html;
-                        if (object.tracking_url !== null && object.tracking_url !== "") {
+                        if( object.tracking_url !== null && object.tracking_url !== "" ) {
                             if( data !== null && data !== "" ) {
-                                html = '<a href="' + object.tracking_url.replace("__ID__",data) + '" target="_blank">' + data + '</a>';
+                                html = '<a href="' + object.tracking_url.replace("__ID__", data) + '" target="_blank">' + data + '</a>';
                             }
                         } else {
                             html = (typeof data !== "undefined" && data !== null) ? data : "";
