@@ -71,14 +71,14 @@ class Trailer
     /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Location", inversedBy="trailers", cascade={"persist"})
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     protected $location = null;
     /**
      * @var string
      * @Gedmo\Versioned
-     * @ORM\Column(name="location_text", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="location_text", type="text", nullable=true, unique=false)
      */
     protected $location_text = null;
     /**
@@ -133,6 +133,7 @@ class Trailer
      * @Gedmo\Versioned
      */
     private $deletedAt;
+    private $history;
 
     public function __construct()
     {
@@ -343,12 +344,12 @@ class Trailer
      * Set LocationText
      *
      * @param string $location_text
-     *
+     * s
      * @return Asset
      */
     public function setLocationText( $location_text )
     {
-        $this->location_text = $location_text;
+        $this->location_text = preg_replace( '/\n+/', PHP_EOL, str_replace( ['<br />', '<br>'], PHP_EOL, $location_text ) );
 
         return $this;
     }
@@ -360,7 +361,7 @@ class Trailer
      */
     public function getLocationText()
     {
-        return $this->location_text;
+        return str_replace(PHP_EOL,'<br>',$this->location_text);
     }
 
     /**
@@ -548,4 +549,13 @@ class Trailer
         $this->setActive( false );
     }
 
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    public function setHistory( $history )
+    {
+        $this->history = $history;
+    }
 }

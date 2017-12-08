@@ -34,6 +34,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
+    "app/admin/asset/location",
     "app/admin/asset/trailer_relationships",
     "app/admin/asset/common",
     "app/lib/common",
@@ -47,7 +48,7 @@ define([
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        trailerRelationships, assetCommon, lib, libGrid, core, asset) {
+        xlocation, trailerRelationships, assetCommon, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
 
@@ -108,7 +109,7 @@ define([
         newBtn.on("click", function (event) {
             modelFilteringSelect.set("value", "");
             statusSelect.set("value", "");
-            locationFilteringSelect.set("value", "");
+            location.setData(null);
             serialNumberInput.set("value", "");
             descriptionInput.set("value", "");
             activeCheckBox.set("checked", true);
@@ -169,56 +170,7 @@ define([
             return;
         }
 
-        var locationTypeRadioButton = [];
-        var locationTypeLabels = {};
-        query('[name="trailer[location][ctype]"]').forEach(function (node) {
-            var dijit = new RadioButton({"value": node.value, "name": node.name}, node);
-            dijit.set("data-url", domAttr.get(node, "data-url"));
-            dijit.set("data-location-type-id", node.value);
-            dijit.startup();
-            locationTypeRadioButton.push(dijit);
-        });
-        query('label[for^="trailer_location_ctype_"]').forEach(function (node) {
-            locationTypeLabels[domAttr.get(node, "for").replace(/\D/g, '')] = node.textContent;
-        });
-
-        on(dom.byId('trailer_location_ctype'), "click", function (event) {
-            var target = event.target, targetId;
-            if( target.tagName === 'LABEL' ) {
-                target = dom.byId(domAttr.get(target, "for"));
-            }
-            var dataUrl = domAttr.get(target, "data-url");
-            if( dataUrl !== null && dataUrl !== "" ) {
-                locationFilteringSelect.set("readOnly", false);
-                locationStore.target = dataUrl;
-                locationFilteringSelect.set("store", locationStore);
-            } else {
-                targetId = target.id.replace(/\D/g, '');
-                textLocationMemoryStore.data = [{name: locationTypeLabels[targetId], id: 0}];
-                locationFilteringSelect.set("store", textLocationStore);
-                locationFilteringSelect.set("displayedValue", locationTypeLabels[targetId]);
-                locationFilteringSelect.set("readOnly", true);
-            }
-        });
-
-
-        var textLocationMemoryStore = new Memory({
-            idProperty: "id",
-            data: []});
-        var textLocationStore = new ObjectStore({objectStore: textLocationMemoryStore});
-
-        var locationStore = new JsonRest({
-            useRangeHeaders: false,
-            idProperty: 'id'});
-        var locationFilteringSelect = new FilteringSelect({
-            store: null,
-            labelAttr: "name",
-            searchAttr: "name",
-            pageSize: 25,
-            readOnly: true,
-            "class": 'location-filtering-select'
-        }, "trailer_location_entity");
-        locationFilteringSelect.startup();
+        var location = xlocation.run("", "trailer");
 
         var data = JSON.parse(domAttr.get(select, "data-options"));
         // Convert the data to an array of objects
@@ -267,15 +219,9 @@ define([
         }, 'trailer-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeTrailerTextFilter, filter, data, locationId, locationData, purchased;
+            var data, purchased;
             grid.clearSelection();
             if( trailerForm.validate() ) {
-                locationId = parseInt(dom.byId("trailer_location_id").value);
-                locationData = {
-                    "id": isNaN(locationId) ? null : locationId,
-                    "type": parseInt(getLocationType()),
-                    "entity": parseInt(locationFilteringSelect.get("value"))
-                };
                 purchased = purchasedInput.get("value");
                 data = {
                     "id": trailerId,
@@ -286,8 +232,8 @@ define([
                     "cost": parseFloat(costInput.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "name": nameInput.get("value"),
-                    "location": locationData,
-                    "location_text": locationFilteringSelect.get("displayedValue"),
+                    "location": location.getData(),
+                    "location_text": location.getText().replace(/<br( \/)?>/, "\n"),
                     "serial_number": serialNumberInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "extends": trailerRelationships.getData("extends"),
@@ -296,23 +242,11 @@ define([
                     "required_by": trailerRelationships.getData("required_by"),
                     "description": descriptionInput.get("value")
                 };
-                if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
-                        trailerViewDialog.hide();
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeTrailerTextFilter = filter.gt('name', data.name);
-                    store.filter(beforeTrailerTextFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        var beforeId;
-                        beforeId = (results.length > 0) ? results[0].id : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            trailerViewDialog.hide();
-                            store.fetch();
-                            grid.refresh();
-                        }, lib.xhrError);
-                    });
-                }
+                grid.collection.put(data).then(function (data) {
+                    trailerViewDialog.hide();
+                    store.fetch();
+                    grid.refresh();
+                }, lib.xhrError);
             } else {
                 lib.textError(core.invalid_form)
             }
@@ -344,7 +278,10 @@ define([
                     label: core.status
                 },
                 location_text: {
-                    label: asset.location
+                    label: asset.location,
+                    formatter: function (item) {
+                        return "<pre>" + item + "</pre>";
+                    }
                 },
                 description: {
                     label: core.description
@@ -396,24 +333,12 @@ define([
                     action = "view";
                     trailerId = trailer.id;
                     nameInput.set("value", trailer.name);
-                    modelFilteringSelect.set('displayedValue', trailer.model_text);
-                    statusSelect.set("displayedValue", trailer.status_text);
+                    modelFilteringSelect.set('displayedValue', trailer.model.name);
+                    statusSelect.set("displayedValue", trailer.status.name);
                     purchasedInput.set("value", trailer.purchased);
                     costInput.set("value", trailer.cost);
-                    dom.byId("trailer_location_id").value = trailer.location.id;
-                    setLocationType(trailer.location.type.id);
-                    if( trailer.location.type.url !== null ) {
-                        locationStore.target = trailer.location.type.url;
-                        locationFilteringSelect.set("store", locationStore);
-                        locationFilteringSelect.set("readOnly", false);
-                        locationFilteringSelect.set('displayedValue', trailer.location_text);
-                    } else {
-                        textLocationMemoryStore.data = [{name: locationTypeLabels[trailer.location.type.id], id: 0}];
-                        locationFilteringSelect.set("store", textLocationStore);
-                        locationFilteringSelect.set('displayedValue', trailer.location_text);
-                        locationFilteringSelect.set("readOnly", true);
-                    }
-                    serialNumberInput.set('value', trailer.serial_number);
+                    location.setData(trailer.location, trailer.locationText);
+                    serialNumberInput.set('value', trailer.serialNumber);
                     descriptionInput.set('value', trailer.description);
                     activeCheckBox.set('checked', trailer.active);
                     trailerRelationships.setData("extends", trailer['extends']);
@@ -476,26 +401,6 @@ define([
             }));
         });
 
-        function getLocationType() {
-            var i, locationTypeSet = false;
-            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
-                if( locationTypeRadioButton[i].get("checked") === true ) {
-                    locationTypeSet = true;
-                    break;
-                }
-            }
-            return locationTypeSet ? locationTypeRadioButton[i].get("value") : null;
-        }
-
-        function setLocationType(locationType) {
-            var i;
-            for( i = 0; i < locationTypeRadioButton.length; i++ ) {
-                if( parseInt(locationTypeRadioButton[i].get("data-location-type-id")) === locationType ) {
-                    locationTypeRadioButton[i].set("checked", true);
-                    break;
-                }
-            }
-        }
         trailerRelationships.run();
         lib.pageReady();
     }

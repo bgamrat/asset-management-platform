@@ -42,13 +42,6 @@ monolog:
         #    type:   chromephp
         #    level:  info
 
-assetic:
-    use_controller: true
-    assets:
-        dojo_js:
-            inputs:
-                - 'vendor/dojo/dojo/dojo.js'
-
 #swiftmailer:
 #    delivery_address: me@example.com
 

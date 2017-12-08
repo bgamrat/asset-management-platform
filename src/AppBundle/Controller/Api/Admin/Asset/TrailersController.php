@@ -14,6 +14,7 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class TrailersController extends FOSRestController
 {
@@ -105,52 +106,16 @@ class TrailersController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Asset\Trailer' )->find( $id );
         if( $trailer !== null )
         {
-            $model = $trailer->getModel();
-            $brand = $model->getBrand();
-            $location = $trailer->getLocation();
-            if( $location === null )
-            {
-                $location = new Location();
-                $locationId = $locationType = null;
-            }
-            else
-            {
-                $locationId = $location->getId();
-                $locationTypeId = $location->getType();
-                $locationType = $this->getDoctrine()
-                                ->getRepository( 'AppBundle\Entity\Asset\LocationType' )->find( $locationTypeId );
-                ;
-            }
-            $relationships = [
-                'extends' => $trailer->getExtends( false ),
-                'requires' => $trailer->getRequires( false ),
-                'extended_by' => $trailer->getExtendedBy( false ),
-                'required_by' => $trailer->getRequiredBy( false )
-            ];
-            $status = $trailer->getStatus();
-            $data = [
-                'id' => $id,
-                'model_text' => $brand->getName() . ' ' . $model->getName(),
-                'model' => $model->getId(),
-                'trailer_relationships' => $relationships,
-                'serial_number' => $trailer->getSerialNumber(),
-                'location_text' => $trailer->getLocationText(),
-                'location' => [ 'id' => $locationId, 'entity' => $location->getEntity(), 'type' => $locationType],
-                'status_text' => $status->getName(),
-                'status' => $status->getId(),
-                'name' => $trailer->getName(),
-                'description' => $trailer->getDescription(),
-                'purchased' => $trailer->getPurchased()->format( 'Y-m-d' ),
-                'cost' => $trailer->getCost(),
-                'active' => $trailer->isActive()
-            ];
-
             $logUtil = $this->get( 'app.util.log' );
             $logUtil->getLog( 'AppBundle\Entity\Asset\TrailerLog', $id );
-            $data['history'] = $logUtil->translateIdsToText();
+            $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'trailer' . $trailer->getId(), $trailer->getUpdated() );
-            return $data;
+
+            $form = $this->createForm( TrailerType::class, $trailer, ['allow_extra_fields' => true] );
+            $trailer->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
         }
         else
         {

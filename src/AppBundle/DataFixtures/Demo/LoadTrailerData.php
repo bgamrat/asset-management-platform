@@ -16,12 +16,13 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
     {
         $operational = $manager->getRepository( 'AppBundle\Entity\Asset\AssetStatus' )->findOneByName( 'Operational' );
 
-        $locations = $manager->getRepository( 'AppBundle\Entity\Asset\Location' )->findAll();
-        if( empty( $locations ) )
+        $shop = $manager->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName('Shop');
+        $location = $manager->getRepository('AppBundle\Entity\Asset\Location')->findOneByType($shop->getId());
+
+        if( empty( $location ) )
         {
             throw new CommonException( "There are no locations defined (load them before running this)" );
         }
-        $location = $locations[rand( 0, count( $locations ) - 1 )];
         $main = new Trailer();
         $main->setName( 'Main' );
         $main->setCost( 19000000 );
