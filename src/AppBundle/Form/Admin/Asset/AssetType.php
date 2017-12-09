@@ -68,7 +68,7 @@ class AssetType extends AbstractType
                     'label' => 'asset.owner'
                 ] )
                 ->add( 'location', AssetLocationType::class )
-                ->add( 'location_text', HiddenType::class )
+                ->add( 'location_text', HiddenType::class, ['empty_data' => ''] )
                 ->add( 'barcodes', CollectionType::class, [
                     'entry_type' => BarcodeType::class,
                     'by_reference' => false,

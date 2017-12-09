@@ -4,6 +4,7 @@ namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use AppBundle\Entity\Asset\Location;
 use AppBundle\Entity\Asset\LocationType;
 
 class LoadLocationTypeData implements FixtureInterface
@@ -18,12 +19,20 @@ class LoadLocationTypeData implements FixtureInterface
         $inTransitLocation->setDefault( false );
         $manager->persist( $inTransitLocation );
 
+        $location = new Location();
+        $location->setType( $inTransitLocation );
+        $manager->persist( $location );
+
         $unknownLocation = new LocationType();
         $unknownLocation->setName( 'Unknown' );
         $unknownLocation->setEntity( 'other' );
         $unknownLocation->setActive( true );
         $unknownLocation->setDefault( false );
         $manager->persist( $unknownLocation );
+
+        $location = new Location();
+        $location->setType( $unknownLocation );
+        $manager->persist( $location );
 
         $caseLocation = new LocationType();
         $caseLocation->setName( 'Case' );
@@ -50,6 +59,10 @@ class LoadLocationTypeData implements FixtureInterface
         $shopLocation->setActive( true );
         $shopLocation->setDefault( false );
         $manager->persist( $shopLocation );
+
+        $location = new Location();
+        $location->setType( $shopLocation );
+        $manager->persist( $location );
 
         $trailerLocation = new LocationType();
         $trailerLocation->setName( 'Trailer' );

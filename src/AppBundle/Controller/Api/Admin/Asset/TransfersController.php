@@ -204,7 +204,10 @@ class TransfersController extends FOSRestController
                 {
                     foreach( $transferItems as $t )
                     {
-                        $t->getAsset()->setLocation( $transfer->getDestinationLocation() );
+                        $location = $transfer->getDestinationLocation();
+                        $locationEntity = $location->getEntity();
+                        $locationText = $locationEntity !== null ? $locationEntity->getName() : $location->getType()->getName();
+                        $t->getAsset()->setLocation( $location )->setLocationText($locationText);
                     }
                 }
                 else
@@ -217,10 +220,13 @@ class TransfersController extends FOSRestController
                                 ->join( 'l.type', 't' )
                                 ->where( 't.name = :type' )
                                 ->setParameter( 'type', $inTransit );
-                        $data = $queryBuilder->getQuery()->getResult()[0];
-                        foreach( $transferItems as $t )
+                        $data = $queryBuilder->getQuery()->getResult();
+                        if( !empty( $data ) )
                         {
-                            $t->getAsset()->setLocation( $data );
+                            foreach( $transferItems as $t )
+                            {
+                                $t->getAsset()->setLocation( $data[0] )->setLocationText( $inTransit );
+                            }
                         }
                     }
                     else
@@ -229,14 +235,17 @@ class TransfersController extends FOSRestController
                         {
                             $unknown = $this->get( 'translator' )->trans( 'common.unknown' );
                             $queryBuilder = $em->createQueryBuilder()->select( ['l'] )
-                                            ->from( 'AppBundle\Entity\Asset\Location', 'l' )
-                                            ->join( 'l.type', 't' )
-                                            ->where( 't.name = :type' )
-                                            ->setParameter( 'type', $unknown )[0];
+                                    ->from( 'AppBundle\Entity\Asset\Location', 'l' )
+                                    ->join( 'l.type', 't' )
+                                    ->where( 't.name = :type' )
+                                    ->setParameter( 'type', $unknown );
                             $data = $queryBuilder->getQuery()->getResult();
-                            foreach( $transferItems as $t )
+                            if( !empty( $data ) )
                             {
-                                $t->getAsset()->setLocation( $data );
+                                foreach( $transferItems as $t )
+                                {
+                                    $t->getAsset()->setLocation( $data[0] )->setLocationText( $unknown );
+                                }
                             }
                         }
                     }

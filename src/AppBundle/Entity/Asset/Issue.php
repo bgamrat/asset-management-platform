@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Asset\IssueItem;
 use AppBundle\Entity\Common\BillTo;
+use AppBundle\Entity\Traits\History;
+use AppBundle\Entity\Traits\TimeStamp;
 
 /**
  * Issue
@@ -20,6 +22,8 @@ use AppBundle\Entity\Common\BillTo;
  */
 class Issue
 {
+    use History;
+    use TimeStamp;
 
     /**
      * @var int
@@ -115,22 +119,6 @@ class Issue
      *      )
      */
     private $bill_tos;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-    private $history;
 
     public function __construct()
     {
@@ -435,45 +423,9 @@ class Issue
         }
     }
 
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    public function setCreated( $created )
-    {
-        $this->created = $created;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function setUpdated( $updated )
-    {
-        $this->updated = $updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
     public function setDeletedAt( $deletedAt )
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
     }
-
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    public function setHistory( $history )
-    {
-        $this->history = $history;
-    }
-
 }

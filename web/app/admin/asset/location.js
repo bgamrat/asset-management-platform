@@ -227,6 +227,9 @@ define([
                         locationFilteringSelect.set('displayedValue', location_text);
                         locationFilteringSelect.set("readOnly", true);
                     }
+                } else {
+                    locationFilteringSelect.set('value', null);
+                    locationFilteringSelect.set("readOnly", true);
                 }
             }
         }

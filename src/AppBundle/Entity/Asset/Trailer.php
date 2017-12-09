@@ -71,7 +71,7 @@ class Trailer
     /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Location", inversedBy="trailers", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets", cascade={"persist"})
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     protected $location = null;

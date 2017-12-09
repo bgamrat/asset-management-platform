@@ -237,7 +237,8 @@ define([
             labelAttr: "name",
             searchAttr: "name",
             placeholder: asset.assigned_to,
-            pageSize: 25
+            pageSize: 25,
+            required: true
         }, "issue_assigned_to");
         assignedToFilteringSelect.startup();
 
@@ -393,7 +394,7 @@ define([
                     statusSelect.set("value", issue.status.id);
                     trailerSelect.set("value", issue.trailer.name);
                     if( issue.assignedTo !== null ) {
-                        assignedToFilteringSelect.set("value", issue.assignedTo.id);
+                        assignedToFilteringSelect.set("displayedValue", issue.assignedTo.fullName);
                     } else {
                         assignedToFilteringSelect.set("value", null);
                     }

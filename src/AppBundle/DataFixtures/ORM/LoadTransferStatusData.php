@@ -19,9 +19,9 @@ class LoadTransferStatusData implements FixtureInterface
             $transferStatus->setName( $s );
             $transferStatus->setActive( true );
             $transferStatus->setDefault( $s === 'None' );
-            $transferStatus->isInTransit( in_array( $s, ['Delayed', 'In Transit', 'Rerouted'] ) );
-            $transferStatus->isLocationDestination( in_array( $s, ['Delivered'] ) );
-            $transferStatus->isLocationUnknown( in_array( $s, ['Lost', 'Unknown'] ) );
+            $transferStatus->setInTransit( in_array( $s, ['Delayed', 'In Transit', 'Rerouted'] ) );
+            $transferStatus->setLocationDestination( in_array( $s, ['Delivered'] ) );
+            $transferStatus->setLocationUnknown( in_array( $s, ['Lost', 'Unknown'] ) );
             $manager->persist( $transferStatus );
         }
 

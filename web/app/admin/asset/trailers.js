@@ -280,7 +280,7 @@ define([
                 location_text: {
                     label: asset.location,
                     formatter: function (item) {
-                        return "<pre>" + item + "</pre>";
+                        return (item === null) ? "" : "<pre>" + item + "</pre>";
                     }
                 },
                 description: {

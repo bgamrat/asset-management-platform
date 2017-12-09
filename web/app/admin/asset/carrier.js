@@ -190,6 +190,7 @@ define([
                 },
                 accountInformation: {
                     label: core.account_information,
+                    sortable: false,
                     renderCell: function (object, value, td) {
                         put(td, "pre", object.accountInformation);
                     }

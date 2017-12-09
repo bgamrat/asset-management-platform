@@ -61,9 +61,11 @@
                         <div class="justify">
                             {{form_row(trailer_form.location.id)}}
                             {{form_row(trailer_form.location.ctype)}}
-                            {{form_row(trailer_form.location.entity)}}
+                            <div>
+                                {{form_row(trailer_form.location.entity)}}
+                                <div id="trailer_location_echo"></div>
+                            </div>
                             {{form_row(trailer_form.location.address,{"attr":{"class":"hidden"}})}}
-                            <div id="trailer_location_echo"></div>
                         </div>
                     </div>
                     <div id="trailer-view-expenses-tab">
