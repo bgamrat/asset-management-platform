@@ -3,10 +3,12 @@
 namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Active;
+use AppBundle\Entity\Traits\Comment;
+use AppBundle\Entity\Traits\Name;
+use AppBundle\Entity\Traits\XDefault;
 
 /**
  * Status
@@ -19,6 +21,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 class AssetStatus
 {
 
+    use Active,
+        Comment,
+        Name,
+        XDefault;
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -28,45 +35,10 @@ class AssetStatus
      */
     private $id;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
-     * @Assert\NotBlank(
-     *     message = "blank.name")
-     * @Assert\Regex(
-     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$/",
-     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$",
-     *     message = "invalid.name {{ value }}",
-     *     match=true)
-     */
-    private $name;
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
-    /**
      * @var boolean
-     *
-     * @ORM\Column(name="default_value", type="boolean", nullable=true)
-     *
-     */
-    private $default = false;
-    /**
-     * @var boolean
-     *
      * @ORM\Column(type="boolean")
-     *
      */
     private $available = true;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     *
-     */
-    private $active = true;
 
     /**
      * Set id
@@ -88,64 +60,6 @@ class AssetStatus
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Status
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    public function setDefault( $default )
-    {
-        $this->default = $default;
-    }
-
-    public function isDefault()
-    {
-        return $this->default;
-    }
-
     public function setAvailable( $available )
     {
         $this->available = $available;
@@ -154,16 +68,6 @@ class AssetStatus
     public function isAvailable()
     {
         return $this->available;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
 }

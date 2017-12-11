@@ -4,9 +4,14 @@ namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\Versioned\Value;
 
 /**
  * Category
@@ -20,6 +25,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Category
 {
 
+    use Active,
+        Comment,
+        Name,
+        Value;
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -30,29 +40,10 @@ class Category
     private $id;
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=false, unique=false)
-     * @Assert\NotBlank(
-     *     message = "blank.name")
-     * @Assert\Regex(
-     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$/",
-     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$",
-     *     message = "invalid.name {{ value }}",
-     *     match=true)
-     */
-    private $name;
-    /**
-     * @var string
      *   
      * @ORM\Column(name="full_name", type="string", nullable=true, unique=true)
      */
     private $fullName;
-    /**
-     * @var float
-
-     * @ORM\Column(name="value", type="float", nullable=true, unique=false)
-     */
-    private $value = 0.0;
     /**
      * @var integer
      * 
@@ -65,19 +56,6 @@ class Category
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent = null;
-    /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
 
     /**
      * Set id
@@ -98,30 +76,6 @@ class Category
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Category
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -153,30 +107,6 @@ class Category
     public function getFullName()
     {
         return $this->fullName;
-    }
-
-    /**
-     * Set value
-     *
-     * @param float $value
-     *
-     * @return Category
-     */
-    public function setValue( $value )
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return float
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 
     /**
@@ -225,41 +155,6 @@ class Category
     public function getParent()
     {
         return $this->parent;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-        return $this;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
 }

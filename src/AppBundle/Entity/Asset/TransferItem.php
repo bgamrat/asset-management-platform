@@ -4,10 +4,13 @@ Namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use AppBundle\Entity\Traits\Versioned\Comment;
 
 /**
  * TransferItem
@@ -19,6 +22,10 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class TransferItem
 {
+
+    use Comment,
+        TimestampableEntity,
+        SoftDeleteableEntity;
 
     /**
      * @var int
@@ -37,39 +44,10 @@ class TransferItem
     private $asset = null;
     /**
      * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=false)
-     * @Gedmo\Versioned
-     */
-    private $name;
-    /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $comment;
-    /**
-     * @var string
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $rma;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
 
     /**
      * Get id
@@ -137,30 +115,6 @@ class TransferItem
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return TransferItem
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * Set rma
      *
      * @param string $rma
@@ -182,46 +136,6 @@ class TransferItem
     public function getRma()
     {
         return $this->rma;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return TransferItem
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
-    public function setDeletedAt( $deletedAt )
-    {
-        $this->deletedAt = $deletedAt;
-        $this->setActive( false );
     }
 
 }

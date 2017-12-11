@@ -4,6 +4,8 @@ namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -18,6 +20,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Location
 {
+
+    use TimestampableEntity,
+        SoftDeleteableEntity;
 
     /**
      * @var int
@@ -49,28 +54,6 @@ class Location
      * @ORM\OneToMany(targetEntity="Asset", mappedBy="location")
      */
     private $assets;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
     private $entityData;
 
     public function __construct()
@@ -189,32 +172,6 @@ class Location
             $this->extends->add( $asset );
             $a->setLocation( $this );
         }
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
-    public function setDeletedAt( $deletedAt )
-    {
-        $this->deletedAt = $deletedAt;
-        $this->setActive( false );
     }
 
     /**

@@ -4,13 +4,15 @@ Namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Asset\IssueItem;
 use AppBundle\Entity\Common\BillTo;
+use AppBundle\Entity\Traits\Versioned\Cost;
 use AppBundle\Entity\Traits\History;
-use AppBundle\Entity\Traits\TimeStamp;
 
 /**
  * Issue
@@ -22,8 +24,7 @@ use AppBundle\Entity\Traits\TimeStamp;
  */
 class Issue
 {
-    use History;
-    use TimeStamp;
+    use Cost,TimeStampableEntity, SoftDeleteableEntity, History;
 
     /**
      * @var int
@@ -103,12 +104,6 @@ class Issue
      * @ORM\Column(name="billable", type="boolean")
      */
     private $billable = true;
-    /**
-     * @var float
-     * @Gedmo\Versioned
-     * @ORM\Column(name="cost", type="float", nullable=true, unique=false)
-     */
-    private $cost = 0.0;
     /**
      * @var ArrayCollection $bill_tos
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\BillTo", cascade={"persist"}, orphanRemoval=true)

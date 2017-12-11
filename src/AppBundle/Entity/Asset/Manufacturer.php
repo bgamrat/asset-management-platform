@@ -4,10 +4,15 @@ namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Asset\Brand;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Name;
 
 /**
  * Manufacturer
@@ -20,6 +25,12 @@ use AppBundle\Entity\Asset\Brand;
 class Manufacturer
 {
 
+    use Active,
+        Comment,
+        Name,
+        TimestampableEntity,
+        SoftDeleteableEntity;
+
     /**
      * @var int
      *
@@ -28,26 +39,6 @@ class Manufacturer
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=true)
-     * @Gedmo\Versioned
-     */
-    private $name;
-    /**
-     * @var boolean
-     * @Gedmo\Versioned
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="manufacturer_contact",
@@ -65,24 +56,13 @@ class Manufacturer
      *      )
      */
     protected $brands = null;
+
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-
     public function __construct()
-    {  
+    {
         $this->contacts = new ArrayCollection();
         $this->brands = new ArrayCollection();
     }
@@ -107,70 +87,15 @@ class Manufacturer
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Manufacturer
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    public function getBrands($deep = true)
+    public function getBrands( $deep = true )
     {
         $return = [];
-        if ($deep === true) {
+        if( $deep === true )
+        {
             $return = $this->brands->toArray();
-        } else {
+        }
+        else
+        {
             foreach( $this->brands as $b )
             {
                 $br = [];
@@ -189,7 +114,7 @@ class Manufacturer
         if( !$this->brands->contains( $brand ) )
         {
             $this->brands->add( $brand );
-            $brand->setManufacturer($this);
+            $brand->setManufacturer( $this );
         }
         return $this;
     }
@@ -216,16 +141,6 @@ class Manufacturer
     public function removeContact( Person $contact )
     {
         $this->contacts->removeElement( $contact );
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
     }
 
     public function setDeletedAt( $deletedAt )

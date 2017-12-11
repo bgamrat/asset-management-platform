@@ -4,8 +4,15 @@ namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\CustomAttributes;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\History;
 
 /**
  * Brand
@@ -14,10 +21,17 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity()
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * 
  */
 class Brand
 {
+
+    use Active,
+        Comment,
+        CustomAttributes,
+        Name,
+        TimestampableEntity,
+        SoftDeleteableEntity,
+        History;
 
     /**
      * @var int
@@ -27,25 +41,6 @@ class Brand
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
-     */
-    private $name;
-    /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
     /**
      * @ORM\ManyToOne(targetEntity="Manufacturer")
      */
@@ -68,22 +63,11 @@ class Brand
      *      )
      */
     protected $vendors = null;
+
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-
     public function __construct()
     {
         $this->models = new ArrayCollection();
@@ -108,54 +92,6 @@ class Brand
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Brand
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 
     /**
@@ -225,26 +161,6 @@ class Brand
     {
         $vendor->removeBrand( $this );
         $this->vendors->removeElement( $vendor );
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
     }
 
     public function setDeletedAt( $deletedAt )

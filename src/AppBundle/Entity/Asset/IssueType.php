@@ -7,6 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\XDefault;
 
 /**
  * Status
@@ -19,6 +22,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class IssueType
 {
+
+    use Comment,
+        XDefault,
+        Active;
 
     /**
      * @var int
@@ -41,26 +48,6 @@ class IssueType
      *     match=true)
      */
     private $type;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="default_value", type="boolean", nullable=true)
-     * 
-     */
-    private $default = false;
-    /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
 
     /**
      * Set id
@@ -104,50 +91,6 @@ class IssueType
     public function getType()
     {
         return $this->type;
-    }
-
-    public function setDefault( $default )
-    {
-        $this->default = $default;
-    }
-
-    public function isDefault()
-    {
-        return $this->default;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
 }

@@ -7,6 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Active;
+use AppBundle\Entity\Traits\Name;
+use AppBundle\Entity\Traits\XDefault;
 
 /**
  * Location
@@ -19,6 +22,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 class LocationType
 {
 
+    use Active,
+        Name,
+        XDefault;
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -27,19 +34,6 @@ class LocationType
      * @ORM\OneToMany(targetEntity="Location", mappedBy="id")
      */
     private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=true)
-     * @Assert\NotBlank(
-     *     message = "blank.name")
-     * @Assert\Regex(
-     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$/",
-     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$",
-     *     message = "invalid.name {{ value }}",
-     *     match=true)
-     */
-    private $name;
     /**
      * @var string
      *
@@ -58,20 +52,6 @@ class LocationType
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $url;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     *
-     */
-    private $active = true;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="default_value", type="boolean", nullable=true)
-     *
-     */
-    private $default = false;
 
     /**
      * Set id
@@ -91,30 +71,6 @@ class LocationType
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Location
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -187,26 +143,6 @@ class LocationType
     public function getUrl()
     {
         return $this->url;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    public function setDefault( $default )
-    {
-        $this->default = $default;
-    }
-
-    public function isDefault()
-    {
-        return $this->default;
     }
 
 }

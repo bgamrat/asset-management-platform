@@ -7,6 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\XDefault;
 
 /**
  * Status
@@ -19,6 +22,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class IssueStatus
 {
+
+    use Comment,
+        XDefault,
+        Active;
 
     /**
      * @var int
@@ -47,26 +54,6 @@ class IssueStatus
      *     match=true)
      */
     private $status;
-    /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="default_value", type="boolean", nullable=true)
-     * 
-     */
-    private $default = false;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
     /**
      * @ORM\ManyToMany(targetEntity="IssueStatus")
      * @ORM\JoinTable(name="issue_status_next",
@@ -99,16 +86,6 @@ class IssueStatus
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setDefault( $default )
-    {
-        $this->default = $default;
-    }
-
-    public function isDefault()
-    {
-        return $this->default;
     }
 
     /**
@@ -158,33 +135,10 @@ class IssueStatus
     {
         return $this->status;
     }
-    
-    public function getName() {
+
+    public function getName()
+    {
         return $this->status;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 
     public function setNext( $statuses )
@@ -228,16 +182,6 @@ class IssueStatus
     public function removeNext( IssueStatus $status )
     {
         $this->next->removeElement( $status );
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
 }

@@ -13,6 +13,4 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BarcodeLog Extends LogEntry
 {
-    //put your code here
-
 }

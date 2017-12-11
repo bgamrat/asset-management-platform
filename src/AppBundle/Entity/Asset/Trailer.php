@@ -4,10 +4,18 @@ Namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Cost;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\Versioned\Value;
+use AppBundle\Entity\Traits\History;
 
 /**
  * Asset
@@ -20,6 +28,15 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class Trailer
 {
+
+    use Active,
+        Comment,
+        Cost,
+        Name,
+        Value,
+        TimestampableEntity,
+        SoftDeleteableEntity,
+        History;
 
     /**
      * @var int
@@ -40,12 +57,6 @@ class Trailer
     /**
      * @var string
      * @Gedmo\Versioned
-     * @ORM\Column(name="name", type="string", length=64, nullable=false, unique=true)
-     */
-    private $name;
-    /**
-     * @var string
-     * @Gedmo\Versioned
      * @ORM\Column(name="serial_number", type="string", length=64, nullable=true, unique=false)
      */
     protected $serial_number;
@@ -62,12 +73,6 @@ class Trailer
      * @ORM\Column(name="purchased", type="date", nullable=true, unique=false)
      */
     private $purchased = null;
-    /**
-     * @var float
-     * @Gedmo\Versioned
-     * @ORM\Column(name="cost", type="float", nullable=true, unique=false)
-     */
-    private $cost = 0.0;
     /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
@@ -87,13 +92,6 @@ class Trailer
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $description;
-    /**
-     * @var boolean
-     * @Gedmo\Versioned
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
     /**
      * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends", fetch="LAZY")
      */
@@ -118,22 +116,6 @@ class Trailer
      *      )
      */
     private $requires;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-    private $history;
 
     public function __construct()
     {
@@ -187,30 +169,6 @@ class Trailer
     public function getModel()
     {
         return $this->model;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Trailer
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -293,30 +251,6 @@ class Trailer
     }
 
     /**
-     * Set cost
-     *
-     * @param float $cost
-     *
-     * @return Asset
-     */
-    public function setCost( $cost )
-    {
-        $this->cost = $cost;
-
-        return $this;
-    }
-
-    /**
-     * Get cost
-     *
-     * @return float
-     */
-    public function getCost()
-    {
-        return $this->cost;
-    }
-
-    /**
      * Set location
      *
      * @param int $location
@@ -361,7 +295,7 @@ class Trailer
      */
     public function getLocationText()
     {
-        return str_replace(PHP_EOL,'<br>',$this->location_text);
+        return str_replace( PHP_EOL, '<br>', $this->location_text );
     }
 
     /**
@@ -386,16 +320,6 @@ class Trailer
     public function getDescription()
     {
         return $this->description;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
     public function getRelationships( $relationship, $full )
@@ -533,16 +457,6 @@ class Trailer
         $this->requires->removeElement( $trailer );
     }
 
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
     public function setDeletedAt( $deletedAt )
     {
         $this->deletedAt = $deletedAt;
@@ -558,4 +472,5 @@ class Trailer
     {
         $this->history = $history;
     }
+
 }

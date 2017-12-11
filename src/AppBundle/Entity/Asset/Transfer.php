@@ -4,11 +4,15 @@ Namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Common\Person;
+use AppBundle\Entity\Traits\Versioned\Cost;
+use AppBundle\Entity\Traits\History;
 
 /**
  * Transfer
@@ -21,6 +25,11 @@ use AppBundle\Entity\Common\Person;
  */
 class Transfer
 {
+
+    use Cost,
+        TimestampableEntity,
+        SoftDeleteableEntity,
+        History;
 
     /**
      * @var int
@@ -38,12 +47,6 @@ class Transfer
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected $status = null;
-    /**
-     * @var float
-     * @Gedmo\Versioned
-     * @ORM\Column(name="cost", type="float", nullable=true, unique=false)
-     */
-    private $cost = 0.0;
     /**
      * @var int
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Person")
@@ -122,22 +125,6 @@ class Transfer
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $instructions;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-    private $history;
 
     public function __construct()
     {
@@ -189,30 +176,6 @@ class Transfer
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Set cost
-     *
-     * @param float $cost
-     *
-     * @return Transfer
-     */
-    public function setCost( $cost )
-    {
-        $this->cost = $cost;
-
-        return $this;
-    }
-
-    /**
-     * Get cost
-     *
-     * @return float
-     */
-    public function getCost()
-    {
-        return $this->cost;
     }
 
     /**
@@ -509,42 +472,6 @@ class Transfer
     public function getInstructions()
     {
         return $this->instructions;
-    }
-
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    public function setCreated( $created )
-    {
-        $this->created = $created;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
-    public function setDeletedAt( $deletedAt )
-    {
-        $this->deletedAt = $deletedAt;
-        $this->setActive( false );
-    }
-
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    public function setHistory( $history )
-    {
-        $this->history = $history;
     }
 
 }

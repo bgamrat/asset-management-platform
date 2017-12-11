@@ -4,10 +4,12 @@ namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Traits\TimeStamp;
+use AppBundle\Entity\Traits\Versioned\Active;
 
 /**
  * Tractor
@@ -21,7 +23,9 @@ use AppBundle\Entity\Traits\TimeStamp;
 class Tractor
 {
 
-    use TimeStamp;
+    use Active,
+        TimestampableEntity,
+        SoftDeleteableEntity;
 
     /**
      * @var int
@@ -31,39 +35,6 @@ class Tractor
      * @ORM\OneToMany(targetEntity="Transfer", mappedBy="id")
      */
     private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
-     * @Assert\NotBlank(
-     *     message = "blank.name")
-     * @Assert\Regex(
-     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$/",
-     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)-]{2,32}$",
-     *     message = "invalid.name {{ value }}",
-     *     match=true)
-     */
-    private $name;
-    /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="default_value", type="boolean", nullable=true)
-     * 
-     */
 
     /**
      * Set id
@@ -83,64 +54,6 @@ class Tractor
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Status
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
 }

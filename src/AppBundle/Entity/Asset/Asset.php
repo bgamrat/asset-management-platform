@@ -4,10 +4,19 @@ Namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Cost;
+use AppBundle\Entity\Traits\Versioned\CustomAttributes;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\Versioned\Value;
+use AppBundle\Entity\Traits\History;
 
 /**
  * Asset
@@ -20,6 +29,16 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class Asset
 {
+
+    use Active,
+        Comment,
+        Cost,
+        CustomAttributes,
+        Name,
+        Value,
+        TimestampableEntity,
+        SoftDeleteableEntity,
+        History;
 
     /**
      * @var int
@@ -57,18 +76,6 @@ class Asset
      */
     private $purchased = null;
     /**
-     * @var float
-     * @Gedmo\Versioned
-     * @ORM\Column(name="cost", type="float", nullable=true, unique=false)
-     */
-    private $cost = 0.0;
-    /**
-     * @var float
-     * @Gedmo\Versioned
-     * @ORM\Column(name="value", type="float", nullable=true, unique=false)
-     */
-    private $value = 0.0;
-    /**
      * @var int
      * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
@@ -99,40 +106,6 @@ class Asset
      *      )
      */
     protected $barcodes;
-    /**
-     * @var json
-     * @ORM\Column(type="json_document", options={"jsonb": true}, name="custom_attributes", nullable=true, unique=false)
-     */
-    public $customAttributes;
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
-    /**
-     * @var boolean
-     * @Gedmo\Versioned
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-    private $history;
 
     public function __construct()
     {
@@ -277,54 +250,6 @@ class Asset
     }
 
     /**
-     * Set cost
-     *
-     * @param float $cost
-     *
-     * @return Asset
-     */
-    public function setCost( $cost )
-    {
-        $this->cost = $cost;
-
-        return $this;
-    }
-
-    /**
-     * Get cost
-     *
-     * @return float
-     */
-    public function getCost()
-    {
-        return $this->cost;
-    }
-
-    /**
-     * Set value
-     *
-     * @param float $value
-     *
-     * @return Asset
-     */
-    public function setValue( $value )
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return float
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
      * Set owner
      *
      * @param int $owner
@@ -393,7 +318,7 @@ class Asset
      */
     public function getLocationText()
     {
-        return str_replace(PHP_EOL,'<br>',$this->location_text);
+        return str_replace( PHP_EOL, '<br>', $this->location_text );
     }
 
     public function getBarcodes()
@@ -414,88 +339,10 @@ class Asset
         $this->barcodes->removeElement( $barcode );
     }
 
-    /**
-     * Set customAttributes
-     *
-     * @param array $customAttributes
-     *
-     * @return CustomAttributes
-     */
-    public function setCustomAttributes( $customAttributes )
-    {
-        $this->customAttributes = $customAttributes;
-
-        return $this;
-    }
-
-    /**
-     * Get customAttributes
-     *
-     * @return json
-     */
-    public function getCustomAttributes()
-    {
-        return $this->customAttributes;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Asset
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
     public function setDeletedAt( $deletedAt )
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
-    }
-
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    public function setHistory( $history )
-    {
-        $this->history = $history;
     }
 
 }

@@ -4,10 +4,17 @@ namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\CustomAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\CustomAttributes;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\History;
 
 /**
  * Model
@@ -22,6 +29,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Model
 {
+
+    use Active,
+        Comment,
+        CustomAttributes,
+        Name,
+        TimestampableEntity,
+        SoftDeleteableEntity,
+        History;
 
     /**
      * @var int
@@ -44,19 +59,6 @@ class Model
      */
     private $category;
     /**
-     * @var string
-     * @Assert\NotBlank(
-     *     message = "blank.name")
-     * @Assert\Regex(
-     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)\'\x22-]{2,32}$/",
-     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)\'\x22-]{2,32}$",
-     *     message = "invalid.name {{ value }}",
-     *     match=true)
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
-     * @Gedmo\Versioned
-     */
-    private $name;
-    /**
      * @var boolean
      * @Gedmo\Versioned
      * @ORM\Column(name="container", type="boolean", options={"default":false})
@@ -69,11 +71,6 @@ class Model
      */
     private $weight;
     /**
-     * @var json
-     * @ORM\Column(type="json_document", options={"jsonb": true}, name="custom_attributes", nullable=true, unique=false)
-     */
-    public $customAttributes;
-    /**
      * @var float
      * @Gedmo\Versioned
      * @ORM\Column(name="default_contract_value", type="float", nullable=true, unique=false)
@@ -85,13 +82,6 @@ class Model
      * @ORM\Column(name="default_event_value", type="float", nullable=true, unique=false)
      */
     private $defaultEventValue = 0.0;
-    /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $comment;
     /**
      * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends", fetch="LAZY")
      */
@@ -129,28 +119,6 @@ class Model
      * @ORM\Column(name="carnet_value", type="float", nullable=true, unique=false) 
      */
     private $carnetValue;
-    /**
-     * @var boolean
-     * @Gedmo\Versioned
-     * @ORM\Column(name="active", type="boolean")
-     */
-    private $active = true;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-    private $history;
 
     public function __construct()
     {
@@ -221,30 +189,6 @@ class Model
     public function getCategory()
     {
         return $this->category;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Model
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     public function setContainer( $container )
@@ -351,30 +295,6 @@ class Model
     public function getDefaultEventValue()
     {
         return $this->defaultEventValue;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Comment
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 
     public function getRelationships( $relationship, $full )
@@ -549,45 +469,15 @@ class Model
         return $this->carnetValue;
     }
 
-    public function setActive( $active )
+    public function getBrandModelName()
     {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
+        return $this->getBrand()->getName() . ' ' . $this->getName();
     }
 
     public function setDeletedAt( $deletedAt )
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
-    }
-
-    public function getBrandModelName()
-    {
-        return $this->getBrand()->getName() . ' ' . $this->getName();
-    }
-
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    public function setHistory( $history )
-    {
-        $this->history = $history;
     }
 
 }

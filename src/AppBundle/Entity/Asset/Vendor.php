@@ -4,9 +4,15 @@ namespace AppBundle\Entity\Asset;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\History;
 
 /**
  * Vendor
@@ -19,6 +25,12 @@ use AppBundle\Entity\Common\Person;
 class Vendor
 {
 
+    use Active,
+        Comment,
+        Name,
+        TimestampableEntity,
+        SoftDeleteableEntity;
+
     /**
      * @var int
      *
@@ -27,25 +39,6 @@ class Vendor
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=true)
-     * @Gedmo\Versioned
-     */
-    private $name;
-    /**
-     * @var boolean
-     * @Gedmo\Versioned
-     * @ORM\Column(name="active", type="boolean") 
-     */
-    private $active = true;
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=256, nullable=true)
-     */
-    private $comment;
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="vendor_contact",
@@ -75,21 +68,6 @@ class Vendor
      * @ORM\Column(type="string", length=256, nullable=true)
      */
     private $serviceInstructions = null;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
 
     public function __construct()
     {
