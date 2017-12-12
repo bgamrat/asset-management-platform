@@ -10,7 +10,10 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use AppBundle\Entity\Traits\History;
 
 /**
  * @ORM\Entity
@@ -21,6 +24,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class User extends BaseUser
 {
+
+    use TimestampableEntity,
+        SoftDeleteableEntity,
+        History;
 
     const ROLE_API = 'ROLE_API';
 
@@ -59,21 +66,6 @@ class User extends BaseUser
      */
     protected $groups;
     /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-    /**
      * @Assert\Choice(multiple=true, 
      *  min=0, 
      *  choices = {"ROLE_API",
@@ -100,7 +92,6 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        // your own logic
     }
 
     /*
@@ -141,11 +132,6 @@ class User extends BaseUser
     public function getPerson()
     {
         return $this->person;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
     }
 
     public function setDeletedAt( $deletedAt )

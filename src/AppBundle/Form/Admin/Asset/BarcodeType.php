@@ -26,7 +26,7 @@ class BarcodeType extends AbstractType
                     'label' => false
                 ] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
-                ->add( 'updated', HiddenType::class, ['label' => false, 'disabled' => true] )
+                ->add( 'updated_at', HiddenType::class, ['label' => false, 'disabled' => true] )
         ;
     }
 

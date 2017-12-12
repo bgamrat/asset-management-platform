@@ -80,7 +80,7 @@ class CarriersController extends FOSRestController
         {
 
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdated() );
+            $formUtil->saveDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdatedAt() );
             $form = $this->createForm( CarrierType::class, $carrier, ['allow_extra_fields' => true] );
 
             return $form->getViewData();
@@ -116,7 +116,7 @@ class CarriersController extends FOSRestController
         {
             $carrier = $em->getRepository( 'AppBundle\Entity\Asset\Carrier' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }

@@ -12,7 +12,6 @@ use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\Name;
-use AppBundle\Entity\Traits\History;
 
 /**
  * Vendor
@@ -231,16 +230,6 @@ class Vendor
     public function getServiceInstructions()
     {
         return $this->serviceInstructions;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
     }
 
     public function setDeletedAt( $deletedAt )

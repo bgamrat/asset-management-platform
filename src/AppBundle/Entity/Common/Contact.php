@@ -4,8 +4,12 @@ namespace AppBundle\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Name;
 
 /**
  * Contact
@@ -21,6 +25,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Contact
 {
+
+    use Active,
+        Name,
+        TimestampableEntity,
+        SoftDeleteableEntity;
 
     /**
      * @var int
@@ -42,13 +51,6 @@ class Contact
      */
     private $entity = null;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=false, unique=false)
-     * @Gedmo\Versioned
-     */
-    private $name;
-    /**
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumn(name="person", referencedColumnName="id")
      * @ORM\OrderBy({"type" = "ASC"})
@@ -59,28 +61,6 @@ class Contact
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $address;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
 
     public function __construct()
     {
@@ -180,30 +160,6 @@ class Contact
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Contact
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * Set address
      *
      * @param int $address
@@ -225,26 +181,6 @@ class Contact
     public function getAddress()
     {
         return $this->address;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
     }
 
     public function setDeletedAt( $deletedAt )

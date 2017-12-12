@@ -102,7 +102,7 @@ class ClientsController extends FOSRestController
                 'contracts' => $client->getContracts( false ),
             ];
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'client' . $client->getId(), $client->getUpdated() );
+            $formUtil->saveDataTimestamp( 'client' . $client->getId(), $client->getUpdatedAt() );
             return $data;
         }
         else
@@ -136,7 +136,7 @@ class ClientsController extends FOSRestController
         {
             $client = $em->getRepository( 'AppBundle\Entity\Client\Client' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'client' . $client->getId(), $client->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'client' . $client->getId(), $client->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }

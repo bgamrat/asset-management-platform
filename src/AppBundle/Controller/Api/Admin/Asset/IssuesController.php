@@ -158,7 +158,7 @@ class IssuesController extends FOSRestController
             $logUtil->getLog( 'AppBundle\Entity\Asset\IssueLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'issue' . $issue->getId(), $issue->getUpdated() );
+            $formUtil->saveDataTimestamp( 'issue' . $issue->getId(), $issue->getUpdatedAt() );
 
             $form = $this->createForm( IssueType::class, $issue, ['allow_extra_fields' => true] );
             $issue->setHistory( $history );
@@ -202,7 +202,7 @@ class IssuesController extends FOSRestController
                 $originalItems->add( $item );
             }
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'issue' . $issue->getId(), $issue->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'issue' . $issue->getId(), $issue->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }

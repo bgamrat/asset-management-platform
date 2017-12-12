@@ -5,6 +5,8 @@ namespace AppBundle\Entity\Common;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\User;
@@ -12,6 +14,13 @@ use AppBundle\Entity\Common\Email;
 use AppBundle\Entity\Common\Phone;
 use AppBundle\Entity\Common\Address;
 use AppBundle\Entity\Common\PersonLog;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Cost;
+use AppBundle\Entity\Traits\Versioned\CustomAttributes;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\Versioned\Value;
+use AppBundle\Entity\Traits\History;
 
 /**
  * Person
@@ -24,6 +33,12 @@ use AppBundle\Entity\Common\PersonLog;
  */
 class Person
 {
+
+    use Active,
+        Comment,
+        TimestampableEntity,
+        SoftDeleteableEntity,
+        History;
 
     /**
      * @var int
@@ -101,13 +116,6 @@ class Person
      */
     private $title;
     /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $comment;
-    /**
      * @var ArrayCollection $phones
      * @ORM\ManyToMany(targetEntity="Phone", cascade={"persist"})
      * @ORM\JoinTable(name="person_phone",
@@ -135,34 +143,11 @@ class Person
      */
     private $addresses;
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * @Gedmo\Versioned
-     */
-    private $active = true;
-    /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="person", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=true, nullable=true)
      * @Gedmo\Versioned
      */
     private $user = null;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-    private $history;
 
     public function __construct()
     {
@@ -346,30 +331,6 @@ class Person
     }
 
     /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    /**
      * Set fosUserId
      *
      * @param int $user
@@ -394,16 +355,6 @@ class Person
     public function getUser( $deliver = false )
     {
         return ($deliver === false) ? null : $this->user;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
     public function getPhones()
@@ -482,16 +433,6 @@ class Person
         $this->addresses->removeElement( $address );
     }
 
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
     public function setDeletedAt( $deletedAt )
     {
         $this->deletedAt = $deletedAt;
@@ -500,16 +441,6 @@ class Person
             $this->user->setEnabled( false );
             $this->user->setLocked( true );
         }
-    }
-
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    public function setHistory( $history )
-    {
-        $this->history = $history;
     }
 
 }

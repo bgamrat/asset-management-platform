@@ -79,7 +79,7 @@ class ManufacturersController extends FOSRestController
         if( $manufacturer !== null )
         {
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdated() );
+            $formUtil->saveDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdatedAt() );
 
             $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
 
@@ -115,7 +115,7 @@ class ManufacturersController extends FOSRestController
         {
             $manufacturer = $em->getRepository( 'AppBundle\Entity\Asset\Manufacturer' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }
@@ -314,7 +314,7 @@ class ManufacturersController extends FOSRestController
             $logUtil->getLog( 'AppBundle\Entity\Asset\ModelLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'model' . $model->getId(), $model->getUpdated() );
+            $formUtil->saveDataTimestamp( 'model' . $model->getId(), $model->getUpdatedAt() );
 
             $form = $this->createForm( ModelType::class, $model, ['allow_extra_fields' => true] );
             $model->setHistory( $history );
@@ -374,7 +374,7 @@ class ManufacturersController extends FOSRestController
             {
                 $model = $em->getRepository( 'AppBundle\Entity\Asset\Model' )->find( $modelData[0]['model_id'] );
                 $formUtil = $this->get( 'app.util.form' );
-                if( $formUtil->checkDataTimestamp( 'model' . $model->getId(), $model->getUpdated() ) === false )
+                if( $formUtil->checkDataTimestamp( 'model' . $model->getId(), $model->getUpdatedAt() ) === false )
                 {
                     throw new \Exception( "data.outdated", 400 );
                 }

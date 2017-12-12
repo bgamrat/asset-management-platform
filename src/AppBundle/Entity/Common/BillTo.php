@@ -4,10 +4,16 @@ Namespace AppBundle\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\Versioned\Value;
 
 /**
  * BillTo
@@ -19,6 +25,13 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class BillTo
 {
+
+    use Active,
+        Comment,
+        Name,
+        Value,
+        TimestampableEntity,
+        SoftDeleteableEntity;
 
     /**
      * @var int
@@ -44,33 +57,11 @@ class BillTo
      */
     private $event;
     /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $comment;
-    /**
      * @var float
      * @Gedmo\Versioned
      * @ORM\Column(name="amount", type="float", nullable=true, unique=false)
      */
     private $amount = 0.0;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
 
     /**
      * Get id
@@ -143,30 +134,6 @@ class BillTo
     }
 
     /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return BillTo
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    /**
      * Set amount
      *
      * @param float $amount
@@ -188,16 +155,6 @@ class BillTo
     public function getAmount()
     {
         return $this->amount;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
     }
 
     public function setDeletedAt( $deletedAt )

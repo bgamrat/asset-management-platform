@@ -7,9 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Comment;
 
 /**
- * Status
+ * TimeSpan
  *
  * @ORM\Table(name="time_span")
  * @ORM\Entity()
@@ -17,6 +18,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class TimeSpan
 {
+
+    use Comment;
 
     /**
      * @var int
@@ -40,12 +43,6 @@ class TimeSpan
      * @ORM\Column(name="enddate", type="datetime", nullable=true, unique=false)
      */
     private $end = null;
-    /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
 
     /**
      * Set id
@@ -137,30 +134,6 @@ class TimeSpan
     public function getEnd()
     {
         return $this->end;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return TimeSpan
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 
 }

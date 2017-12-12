@@ -226,30 +226,6 @@ class Model
     }
 
     /**
-     * Set customAttributes
-     *
-     * @param array $customAttributes
-     *
-     * @return CustomAttributes
-     */
-    public function setCustomAttributes( $customAttributes )
-    {
-        $this->customAttributes = $customAttributes;
-
-        return $this;
-    }
-
-    /**
-     * Get customAttributes
-     *
-     * @return json
-     */
-    public function getCustomAttributes()
-    {
-        return $this->customAttributes;
-    }
-
-    /**
      * Set defaultContractValue
      *
      * @param float $defaultContractValue

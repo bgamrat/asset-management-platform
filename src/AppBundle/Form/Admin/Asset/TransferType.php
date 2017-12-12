@@ -37,14 +37,14 @@ class TransferType extends AbstractType
         $defaultStatus = $this->em->getRepository( 'AppBundle\Entity\Asset\TransferStatus' )->findOneBy( ['default' => true] );
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
-                ->add( 'created', DateTimeType::class, [
+                ->add( 'created_at', DateTimeType::class, [
                     'label' => 'common.created',
                     'widget' => 'single_text',
                     'format' => 'yyyy-MM-dd HH:mm:ss',
                     'required' => false,
                     'disabled' => true
                 ] )
-                ->add( 'updated', DateTimeType::class, [
+                ->add( 'updated_at', DateTimeType::class, [
                     'label' => 'common.updated',
                     'widget' => 'single_text',
                     'format' => 'yyyy-MM-dd HH:mm:ss',

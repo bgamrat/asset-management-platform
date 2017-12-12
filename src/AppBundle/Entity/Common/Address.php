@@ -5,7 +5,9 @@ namespace AppBundle\Entity\Common;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Entity\Traits\Versioned\Comment;
 
 /**
  * Address
@@ -16,6 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Address
 {
+
+    use Comment,
+        TimestampableEntity;
 
     /**
      * @var int
@@ -70,22 +75,6 @@ class Address
      * @ORM\Column(name="country", type="string", length=2, nullable=true)
      */
     private $country;
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=64, nullable=true)
-     */
-    private $comment;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
 
     /**
      * Set id
@@ -274,35 +263,12 @@ class Address
         return $this->country;
     }
 
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
     public function getAddress()
     {
         $type = $this->getType();
         $addr = [];
-        if (!empty($type)) {
+        if( !empty( $type ) )
+        {
             $addr[] = $type->getType();
         }
         $addr[] = $this->street1;
@@ -317,4 +283,5 @@ class Address
         }
         return implode( PHP_EOL, $addr );
     }
+
 }

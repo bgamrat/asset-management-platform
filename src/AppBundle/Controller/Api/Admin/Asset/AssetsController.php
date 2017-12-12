@@ -48,7 +48,7 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['a.id', 'a.location_text', 'bc.barcode', 'bc.updated AS barcode_updated',
+        $columns = ['a.id', 'a.location_text', 'bc.barcode', 'bc.updatedAt AS barcode_updated',
             "CONCAT(CONCAT(b.name,' '),m.name) AS model_text", 'm.id AS model', 'a.serial_number',
             's.name AS status_text', 's.id AS status',
             'a.comment', 'a.active'];
@@ -116,7 +116,7 @@ class AssetsController extends FOSRestController
             $logUtil->getLog( 'AppBundle\Entity\Asset\AssetLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdated() );
+            $formUtil->saveDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdatedAt() );
 
             $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
             $asset->setHistory( $history );
@@ -154,7 +154,7 @@ class AssetsController extends FOSRestController
         {
             $asset = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }
