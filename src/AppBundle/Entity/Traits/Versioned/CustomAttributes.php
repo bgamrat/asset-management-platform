@@ -3,14 +3,12 @@
 Namespace AppBundle\Entity\Traits\Versioned;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 trait CustomAttributes
 {
     /**
      * @var json
      * @ORM\Column(type="json_document", options={"jsonb": true}, name="custom_attributes", nullable=true, unique=false)
-     * @Gedmo\Versioned
      */
     private $custom_attributes;
 

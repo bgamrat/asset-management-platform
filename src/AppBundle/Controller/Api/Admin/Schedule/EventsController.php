@@ -121,7 +121,7 @@ class EventsController extends FOSRestController
         {
             $form = $this->createForm( EventType::class, $event, ['allow_extra_fields' => true] );
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'event' . $event->getId(), $event->getUpdated() );
+            $formUtil->saveDataTimestamp( 'event' . $event->getId(), $event->getUpdatedAt() );
             return $form->getViewData();
         }
         else
@@ -155,7 +155,7 @@ class EventsController extends FOSRestController
         {
             $event = $em->getRepository( 'AppBundle\Entity\Schedule\Event' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'event' . $event->getId(), $event->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'event' . $event->getId(), $event->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }

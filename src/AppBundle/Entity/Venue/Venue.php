@@ -4,10 +4,16 @@ namespace AppBundle\Entity\Venue;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Common\Address;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\History;
 
 /**
  * Venue
@@ -20,6 +26,13 @@ use AppBundle\Entity\Common\Address;
 class Venue
 {
 
+    use Active,
+        Comment,
+        Name,
+        TimestampableEntity,
+        SoftDeleteableEntity,
+        History;
+
     /**
      * @var int
      *
@@ -28,13 +41,6 @@ class Venue
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=true)
-     * @Gedmo\Versioned
-     */
-    private $name;
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Address", cascade={"persist"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="CASCADE")
@@ -53,19 +59,6 @@ class Venue
      */
     private $parking;
     /**
-     * @var boolean
-     * @Gedmo\Versioned
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $comment;
-    /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="venue_contact",
      *      joinColumns={@ORM\JoinColumn(name="venue_id", referencedColumnName="id", onDelete="CASCADE")},
@@ -73,22 +66,6 @@ class Venue
      *      )
      */
     private $contacts = null;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
-    private $history;
 
     public function __construct()
     {
@@ -116,35 +93,6 @@ class Venue
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Venue
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    /**
      * Set address
      *
      * @param int $address
@@ -166,35 +114,6 @@ class Venue
     public function getAddress()
     {
         return $this->address;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 
     /**
@@ -263,29 +182,10 @@ class Venue
         $this->contacts->removeElement( $contact );
     }
 
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
     public function setDeletedAt( $deletedAt )
     {
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
     }
 
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    public function setHistory( $history )
-    {
-        $this->history = $history;
-    }
 }

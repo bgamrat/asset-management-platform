@@ -4,6 +4,8 @@ namespace AppBundle\Entity\Schedule;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
@@ -12,6 +14,12 @@ use AppBundle\Entity\Common\CategoryQuantity;
 use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Schedule\TimeSpan;
 use AppBundle\Entity\Venue\Venue;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Cost;
+use AppBundle\Entity\Traits\Versioned\CustomAttributes;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\Versioned\Value;
+use AppBundle\Entity\Traits\History;
 
 /**
  * Event
@@ -24,6 +32,14 @@ use AppBundle\Entity\Venue\Venue;
 class Event
 {
 
+    use Comment,
+        Cost,
+        Name,
+        Value,
+        TimestampableEntity,
+        SoftDeleteableEntity,
+        History;
+
     /**
      * @var int
      *
@@ -32,13 +48,6 @@ class Event
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=true)
-     * @Gedmo\Versioned
-     */
-    private $name;
     /**
      * @var string
      * @Gedmo\Versioned
@@ -126,21 +135,6 @@ class Event
      *      )
      */
     private $categoryQuantities;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
 
     public function __construct()
     {
@@ -168,30 +162,6 @@ class Event
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Event
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -478,22 +448,6 @@ class Event
     public function removeTimeSpan( TimeSpan $timespan )
     {
         $this->timespans->removeElement( $timespan );
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
-    public function setDeletedAt( $deletedAt )
-    {
-        $this->deletedAt = $deletedAt;
-        $this->setActive( false );
     }
 
 }

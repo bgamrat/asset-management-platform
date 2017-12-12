@@ -8,6 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use AppBundle\Entity\Traits\Comment;
 
 /**
  * @ORM\Entity
@@ -17,6 +18,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Email
 {
+
+    use Comment;
 
     /**
      * @ORM\Column(type="integer")
@@ -36,10 +39,6 @@ class Email
      * @ORM\Column(type="string", length=24, name="email", nullable=false)
      */
     private $email;
-    /**
-     * @ORM\Column(type="string", length=24, nullable=true)
-     */
-    private $comment;
 
     /**
      * Set id
@@ -107,30 +106,6 @@ class Email
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Email
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 
 }

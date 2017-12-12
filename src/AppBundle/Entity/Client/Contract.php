@@ -4,11 +4,17 @@ namespace AppBundle\Entity\Client;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\Client\Trailer;
 use AppBundle\Entity\Common\CategoryQuantity;
+use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\Versioned\Value;
 
 /**
  * Contract
@@ -20,6 +26,13 @@ use AppBundle\Entity\Common\CategoryQuantity;
  */
 class Contract
 {
+
+    use Active,
+        Comment,
+        Name,
+        Value,
+        TimestampableEntity,
+        SoftDeleteableEntity;
 
     /**
      * @var int
@@ -37,26 +50,6 @@ class Contract
      */
     private $client;
     /**
-     * @var string
-     * @Assert\NotBlank(
-     *     message = "blank.name")
-     * @Assert\Regex(
-     *     pattern="/^[a-zA-Z0-9x\.\,\ \+\(\)\'\x22-]{2,32}$/",
-     *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)\'\x22-]{2,32}$",
-     *     message = "invalid.name {{ value }}",
-     *     match=true)
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
-     * @Gedmo\Versioned
-     */
-    private $name;
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=64, nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $comment;
-    /**
      * @var boolean
      * @Gedmo\Versioned
      * @ORM\Column(name="container", type="boolean")
@@ -72,12 +65,6 @@ class Contract
      * @ORM\Column(name="enddate", type="datetime", nullable=true, unique=false)
      */
     private $end = null;
-    /**
-     * @var float
-     * @Gedmo\Versioned
-     * @ORM\Column(name="value", type="float", nullable=true, unique=false)
-     */
-    private $value = 0.0;
     /**
      * @ORM\ManyToMany(targetEntity="Trailer", cascade={"persist"})
      * @ORM\JoinTable(name="contract_trailer_required",
@@ -106,28 +93,6 @@ class Contract
      *      )
      */
     private $availableCategoryQuantities;
-    /**
-     * @var boolean
-     * @Gedmo\Versioned
-     * @ORM\Column(name="active", type="boolean")
-     *
-     */
-    private $active = true;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $created;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $updated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Versioned
-     */
-    private $deletedAt;
 
     public function __construct()
     {
@@ -181,54 +146,6 @@ class Contract
     public function getClient()
     {
         return $this->client;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Contract
-     */
-    public function setName( $name )
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set comment
-     *
-     * @param string $comment
-     *
-     * @return Contract
-     */
-    public function setComment( $comment )
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 
     public function setContainer( $container )
@@ -288,40 +205,6 @@ class Contract
     public function getEnd()
     {
         return $this->end;
-    }
-
-    /**
-     * Set value
-     *
-     * @param float $value
-     *
-     * @return Contract
-     */
-    public function setValue( $value )
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return float
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
     public function getTrailers( $trailer, $full )
@@ -482,16 +365,6 @@ class Contract
     public function removeAvailableCategoryQuantity( CategoryQuantity $categoryQuantity )
     {
         $this->availableCategoryQuantities->removeElement( $categoryQuantity );
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
     }
 
     public function setDeletedAt( $deletedAt )

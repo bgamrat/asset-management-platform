@@ -104,7 +104,7 @@ class VendorsController extends FOSRestController
         if( $vendor !== null )
         {
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdated() );
+            $formUtil->saveDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdatedAt() );
 
             $form = $this->createForm( VendorType::class, $vendor, ['allow_extra_fields' => true] );
             
@@ -141,7 +141,7 @@ class VendorsController extends FOSRestController
         {
             $vendor = $em->getRepository( 'AppBundle\Entity\Asset\Vendor' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }

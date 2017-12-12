@@ -106,7 +106,7 @@ class PeopleController extends FOSRestController
         if( $person !== null )
         {
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'person' . $person->getId(), $person->getUpdated() );
+            $formUtil->saveDataTimestamp( 'person' . $person->getId(), $person->getUpdatedAt() );
 
             $form = $this->createForm( PersonType::class, $person, ['allow_extra_fields' => true] );
 
@@ -149,7 +149,7 @@ class PeopleController extends FOSRestController
         {
             $person = $em->getRepository( 'AppBundle\Entity\Common\Person' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'person' . $person->getId(), $person->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'person' . $person->getId(), $person->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }

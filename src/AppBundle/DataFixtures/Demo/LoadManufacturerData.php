@@ -95,7 +95,7 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $wingding->setDefaultContractValue( 1000 );
         $wingding->setDefaultEventValue( 600 );
         $expiration = new \stdClass();
-        $expiration->expiration = '';
+        $expiration->expiration = null;
         $channels = new \stdClass();
         $channels->channels = 12;
         $resolution = new \stdClass();
@@ -111,7 +111,7 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $foo->setDefaultContractValue( 21000 );
         $foo->setDefaultEventValue( 1600 );
         $expiration = new \stdClass();
-        $expiration->expiration = '';
+        $expiration->expiration = null;
         $channels = new \stdClass();
         $channels->channels = 4;
         $foo->setCustomAttributes( [$expiration, $channels] );

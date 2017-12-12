@@ -146,7 +146,7 @@ class TransfersController extends FOSRestController
             $logUtil->getLog( 'AppBundle\Entity\Asset\TransferLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'transfer' . $transfer->getId(), $transfer->getUpdated() );
+            $formUtil->saveDataTimestamp( 'transfer' . $transfer->getId(), $transfer->getUpdatedAt() );
 
             $form = $this->createForm( TransferType::class, $transfer, ['allow_extra_fields' => true] );
             $transfer->setHistory( $history );
@@ -184,7 +184,7 @@ class TransfersController extends FOSRestController
         {
             $transfer = $em->getRepository( 'AppBundle\Entity\Asset\Transfer' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'transfer' . $transfer->getId(), $transfer->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'transfer' . $transfer->getId(), $transfer->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }

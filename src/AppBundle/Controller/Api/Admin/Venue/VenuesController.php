@@ -99,7 +99,7 @@ class VenuesController extends FOSRestController
             $logUtil->getLog( 'AppBundle\Entity\Venue\VenueLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdated() );
+            $formUtil->saveDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdatedAt() );
 
             $form = $this->createForm( VenueType::class, $venue, ['allow_extra_fields' => true] );
             $venue->setHistory( $history );
@@ -137,7 +137,7 @@ class VenuesController extends FOSRestController
         {
             $venue = $em->getRepository( 'AppBundle\Entity\Venue\Venue' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }

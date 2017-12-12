@@ -11,7 +11,7 @@ trait Name
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=64, nullable=true, unique=false)
+     * @ORM\Column(name="name", type="text", nullable=true, unique=false)
      * @Assert\NotBlank(
      *     message = "blank.name")
      * @Assert\Regex(

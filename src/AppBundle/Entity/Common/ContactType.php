@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Active;
 
 /**
  * Contact Type
@@ -18,6 +19,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ContactType
 {
+
+    use Active;
 
     /**
      * @var int
@@ -34,13 +37,6 @@ class ContactType
      * @ORM\Column(type="string", length=64, nullable=false)
      */
     private $entity;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="active", type="boolean")
-     * 
-     */
-    private $active = true;
 
     /**
      * Set id
@@ -84,16 +80,6 @@ class ContactType
     public function getEntity()
     {
         return $this->entity;
-    }
-
-    public function setActive( $active )
-    {
-        $this->active = $active;
-    }
-
-    public function isActive()
-    {
-        return $this->active;
     }
 
 }

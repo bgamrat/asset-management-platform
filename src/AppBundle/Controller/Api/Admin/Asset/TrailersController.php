@@ -110,7 +110,7 @@ class TrailersController extends FOSRestController
             $logUtil->getLog( 'AppBundle\Entity\Asset\TrailerLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
-            $formUtil->saveDataTimestamp( 'trailer' . $trailer->getId(), $trailer->getUpdated() );
+            $formUtil->saveDataTimestamp( 'trailer' . $trailer->getId(), $trailer->getUpdatedAt() );
 
             $form = $this->createForm( TrailerType::class, $trailer, ['allow_extra_fields' => true] );
             $trailer->setHistory( $history );
@@ -148,7 +148,7 @@ class TrailersController extends FOSRestController
         {
             $trailer = $em->getRepository( 'AppBundle\Entity\Asset\Trailer' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
-            if( $formUtil->checkDataTimestamp( 'trailer' . $trailer->getId(), $trailer->getUpdated() ) === false )
+            if( $formUtil->checkDataTimestamp( 'trailer' . $trailer->getId(), $trailer->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }
