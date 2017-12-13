@@ -39,6 +39,7 @@ define([
     function run() {
         var action = null;
         var personId = null;
+        var person;
 
         var personViewDialog = new Dialog({
             title: core.view,
@@ -254,7 +255,7 @@ define([
 
         });
 
-        person = xperson.run('person');
+        person = xperson.run('person',false);
 
         lib.pageReady();
     }

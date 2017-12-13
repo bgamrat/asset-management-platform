@@ -46,6 +46,7 @@ define([
         var divId;
         var personStore;
         var aContainer, contentPane = [];
+        var accordion = true;
 
         function setDivId(divId) {
             divIdInUse = divId;
@@ -60,30 +61,32 @@ define([
 
             prototypeContent = dataPrototype.replace(/__person__/g, personId.length);
             block = domConstruct.toDom(prototypeContent);
-            cp = query(".content-pane", block);
-            dijit = new ContentPane({
-                title: core.new,
-                content: cp[0]
-            });
-            dijit.on("change", function (evt) {
-                var cp = registry.byId(this.id);
-                var first, middle, middleName, last;
-                first = query("input[id$='firstname']", this);
-                first = registry.byId(first[0].id);
-                middle = query("input[id$='middlename']", this);
-                middle = registry.byId(middle[0].id);
-                middleName = middle.get("value");
-                if (middleName === "") {
-                    middleName = "";
-                }
-                last = query("input[id$='lastname']", this);
-                last = registry.byId(last[0].id);
-                cp.set("title", first.get("value") + " "
-                        + middleName + " "
-                        + last.get("value"));
-            });
-            contentPane.push(dijit);
-            aContainer.addChild(dijit);
+            if( accordion === true ) {
+                cp = query(".content-pane", block);
+                dijit = new ContentPane({
+                    title: core.new,
+                    content: cp[0]
+                });
+                dijit.on("change", function (evt) {
+                    var cp = registry.byId(this.id);
+                    var first, middle, middleName, last;
+                    first = query("input[id$='firstname']", this);
+                    first = registry.byId(first[0].id);
+                    middle = query("input[id$='middlename']", this);
+                    middle = registry.byId(middle[0].id);
+                    middleName = middle.get("value");
+                    if( middleName === "" ) {
+                        middleName = "";
+                    }
+                    last = query("input[id$='lastname']", this);
+                    last = registry.byId(last[0].id);
+                    cp.set("title", first.get("value") + " "
+                            + middleName + " "
+                            + last.get("value"));
+                });
+                contentPane.push(dijit);
+                aContainer.addChild(dijit);
+            }
         }
 
         function createDijits() {
@@ -159,7 +162,9 @@ define([
             middlenameInput[i].set('value', obj.middlename);
             lastnameInput[i].set('value', obj.lastname);
 
-            contentPane[i].set('title', obj.firstname + " " + ((obj.middlename === null) ? "" : obj.middlename) + " " + obj.lastname);
+            if (accordion === true) {
+                contentPane[i].set('title', obj.firstname + " " + ((obj.middlename === null) ? "" : obj.middlename) + " " + obj.lastname);
+            }
             commentInput[i].set('value', obj.comment);
             if( typeof obj.phones !== "undefined" ) {
                 phones[i].setData(obj.phones);
@@ -181,11 +186,11 @@ define([
         function loadPerson(evt) {
             var item = this.get("item");
             var id, idx;
-            if (item === null) {
+            if( item === null ) {
                 return;
             }
             id = item.id;
-            idx = this.id.replace(/\D/g,'');
+            idx = this.id.replace(/\D/g, '');
             xhr.get('/api/people/' + id, {
                 handleAs: "json"
             }).then(function (data) {
@@ -194,7 +199,7 @@ define([
                 for( i = 0; i < l; i++ ) {
                     kid = lastnameInput[i].id.replace(/\D/g, '');
                     if( kid == idx ) {
-                        setPersonValues(data,i);
+                        setPersonValues(data, i);
                         break;
                     }
                 }
@@ -230,20 +235,28 @@ define([
             emails[id].destroy(target);
             phones[id].destroy(target);
             addresses[id].destroy(target);
-            aContainer.removeChild(cp[0]);
-            cp[0].destroyDescendants(false);
-            cp[0].destroyRendering(false);
-            cp[0].destroyRecursive();
+            if( accordion === true ) {
+                aContainer.removeChild(cp[0]);
+                cp[0].destroyDescendants(false);
+                cp[0].destroyRendering(false);
+                cp[0].destroyRecursive();
+            }
             domConstruct.destroy(target);
         }
 
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
+        if( typeof arguments[1] !== "undefined" ) {
+            accordion = arguments[1];
+        }
+
         base = getDivId();
 
-        aContainer = new AccordionContainer({style: "overflow-y: auto;"}, domConstruct.place("<div>",dom.byId(base),"first"));
-        aContainer.startup();
+        if( accordion === true ) {
+            aContainer = new AccordionContainer({style: "overflow-y: auto;"}, domConstruct.place("<div>", dom.byId(base), "first"));
+            aContainer.startup();
+        }
 
         prototypeNode = dom.byId(getDivId());
         if( prototypeNode !== null ) {
@@ -296,16 +309,17 @@ define([
                 }
             });
         }
-
-        on(aContainer, ".remove-form-row:click", function (event) {
-            var target = event.target;
-            var targetParent = target.parentNode;
-            var id = parseInt(targetParent.id.replace(/\D/g, ''));
-            while( !targetParent.classList.contains("content-pane") ) {
-                targetParent = targetParent.parentNode;
-            }
-            destroyRow(id, targetParent);
-        });
+        if( accordion === true ) {
+            on(aContainer, ".remove-form-row:click", function (event) {
+                var target = event.target;
+                var targetParent = target.parentNode;
+                var id = parseInt(targetParent.id.replace(/\D/g, ''));
+                while( !targetParent.classList.contains("content-pane") ) {
+                    targetParent = targetParent.parentNode;
+                }
+                destroyRow(id, targetParent);
+            });
+        }
 
         divId = getDivId();
         emails[0] = xemails.run(divId, 0);
@@ -354,7 +368,7 @@ define([
                         createDijits();
                     }
                     obj = person[i];
-                    setPersonValues(obj,i);
+                    setPersonValues(obj, i);
                 }
             } else {
                 personId[0] = null;

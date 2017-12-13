@@ -147,8 +147,8 @@ fieldset ul.unstyled {
 .form-row.address > * {
     display:block;
 }
-.form-row.comment .dijitTextBox.dijitTextArea {
-    height:50px;
+.form-row .comment .dijitTextBox.dijitTextArea {
+    height: 50px;
     width: 300px;
 }
 .dijit.type-select,
