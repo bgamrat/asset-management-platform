@@ -28,13 +28,15 @@ define([
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
+    "dojo/i18n!app/nls/client",
+    "dojo/i18n!app/nls/person",
     "dojo/domReady!"
 ], function (declare, dom, domConstruct, on,
         all, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson, lib, libGrid, core) {
+        xperson, lib, libGrid, core, client, personWords) {
     //"use strict";
     function run() {
         var action = null;
@@ -50,17 +52,40 @@ define([
             grid.clearSelection();
         });
 
-        /*
-         var tabContainer = new TabContainer({
-         style: "height: 525px; width: 100%;"
-         }, "person-view-tabs");
-         var contactsContentPane = new ContentPane({
-         title: core.contacts},
-         "person-view-history-tab"
-         );
-         tabContainer.addChild(contactsContentPane);
-         tabContainer.startup();
-         */
+        var tabContainer = new TabContainer({
+            style: "height: 525px; width: 100%;"
+        }, "person-view-tabs");
+
+        var baseContentPane = new ContentPane({
+            title: core.person},
+        "person-view-base-tab"
+                );
+        tabContainer.addChild(baseContentPane);
+
+        var staffContentPane = new ContentPane({
+            title: personWords.staff},
+        "person-view-staff-tab"
+                );
+        tabContainer.addChild(staffContentPane);
+
+        var employmentContentPane = new ContentPane({
+            title: personWords.employment},
+        "person-view-employment-tab"
+                );
+        tabContainer.addChild(employmentContentPane);
+
+        var userContentPane = new ContentPane({
+            title: core.user},
+        "person-view-user-tab"
+                );
+        tabContainer.addChild(userContentPane);
+
+        var historyContentPane = new ContentPane({
+            title: core.history},
+        "person-view-history-tab"
+                );
+        tabContainer.addChild(historyContentPane);
+        tabContainer.startup();
 
         var newBtn = new Button({
             label: core["new"]
@@ -255,7 +280,7 @@ define([
 
         });
 
-        person = xperson.run('person',false);
+        person = xperson.run('person', false);
 
         lib.pageReady();
     }

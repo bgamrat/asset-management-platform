@@ -5,6 +5,7 @@ namespace AppBundle\Form\Common;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -16,6 +17,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class PersonType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -24,6 +26,7 @@ class PersonType extends AbstractType
     {
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
+                ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'type', EntityType::class, [
                     'class' => 'AppBundle\Entity\Common\PersonType',
                     'choice_label' => 'type',
