@@ -412,7 +412,8 @@ class Event
 
     public function addCategoryQuantity( CategoryQuantity $categoryQuantity )
     {
-        if( !$this->categoryQuantities->contains( $categoryQuantity ) )
+        if( !empty( $this->categoryQuantities ) &&
+                !$this->categoryQuantities->contains( $categoryQuantity ) )
         {
             $this->categoryQuantities->add( $categoryQuantity );
         }
@@ -420,7 +421,10 @@ class Event
 
     public function removeCategoryQuantity( CategoryQuantity $categoryQuantity )
     {
-        $this->categoryQuantities->removeElement( $categoryQuantity );
+        if( !empty( $this->categoryQuantities ) )
+        {
+            $this->categoryQuantities->removeElement( $categoryQuantity );
+        }
     }
 
     public function getTimeSpans()

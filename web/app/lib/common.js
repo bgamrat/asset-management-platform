@@ -102,9 +102,11 @@ define([
     }
 
     function addTimeToDate(date,time) {
-        date.setHours(time.getHours());
-        date.setMinutes(time.getMinutes());
-        date.setSeconds(time.getSeconds());
+        if (date instanceof Date) {
+            date.setHours(time.getHours());
+            date.setMinutes(time.getMinutes());
+            date.setSeconds(time.getSeconds());
+        }
     }
 
     function showHistory(historyContentPane, historyLog) {

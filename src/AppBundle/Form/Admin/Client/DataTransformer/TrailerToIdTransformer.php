@@ -24,11 +24,14 @@ class TrailerToIdTransformer implements DataTransformerInterface
      */
     public function transform( $trailer )
     {
+ 
         if( null === $trailer )
         {
             return '';
         }
-
+        if (isset($trailer['name'])) {
+            return $trailer['name'];
+        }
         return $trailer->getName();
     }
 
