@@ -142,7 +142,7 @@ define([
                 createDijits();
                 obj = items[i];
                 itemId[i] = obj.id;
-                itemFilteringSelect[i].set('displayedValue', obj.name);
+                itemFilteringSelect[i].set('displayedValue', obj.asset.name.brandModelName);
                 rmaInput[i].set('value', obj.rma);
                 commentInput[i].set('value', obj.comment);
             }

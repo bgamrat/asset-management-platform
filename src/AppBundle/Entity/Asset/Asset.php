@@ -34,7 +34,6 @@ class Asset
         Comment,
         Cost,
         CustomAttributes,
-        Name,
         Value,
         TimestampableEntity,
         SoftDeleteableEntity,

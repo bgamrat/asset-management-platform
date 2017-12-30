@@ -137,14 +137,14 @@ define([
         });
 
         var createdInput = new TextBox({
-            value: dom.byId("issue_created").value,
+            value: dom.byId("issue_created_at").value,
             disabled: true
-        }, "issue_created");
+        }, "issue_created_at");
         createdInput.startup();
         var updatedInput = new ValidationTextBox({
-            value: dom.byId("issue_updated").value,
+            value: dom.byId("issue_updated_at").value,
             disabled: true
-        }, "issue_updated");
+        }, "issue_updated_at");
         updatedInput.startup();
 
         var priorityInput = new ValidationTextBox({
@@ -403,14 +403,14 @@ define([
                     issueItems.setData(issue.items);
                     issueNotes.setData(issue.notes);
                     f = null;
-                    if( typeof issue.updated !== "undefined" ) {
-                        t = new Date(issue.updated.timestamp * 1000);
+                    if( typeof issue.updatedAt !== "undefined" ) {
+                        t = new Date(issue.updatedAt.timestamp * 1000);
                         f = locale.format(t);
                     }
                     updatedInput.set("value", f);
                     f = null;
-                    if( typeof issue.created !== "undefined" ) {
-                        t = new Date(issue.created.timestamp * 1000);
+                    if( typeof issue.createdAt !== "undefined" ) {
+                        t = new Date(issue.createdAt.timestamp * 1000);
                         f = locale.format(t);
                     }
                     createdInput.set("value", f);

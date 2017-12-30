@@ -116,7 +116,6 @@ define([
             for( i = 0; i < trailers.length; i++ ) {
                 cloneNewNode.call(rObj);
                 createDijit.call(rObj);
-                rObj.trailerFilteringSelect[i].set("value", trailers[i].id);
                 rObj.trailerFilteringSelect[i].set("displayedValue", trailers[i].name);
             }
         }

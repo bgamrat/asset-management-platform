@@ -128,14 +128,14 @@ define([
         });
 
         var createdInput = new TextBox({
-            value: dom.byId("transfer_created").value,
+            value: dom.byId("transfer_created_at").value,
             disabled: true
-        }, "transfer_created");
+        }, "transfer_created_at");
         createdInput.startup();
         var updatedInput = new ValidationTextBox({
-            value: dom.byId("transfer_updated").value,
+            value: dom.byId("transfer_updated_at").value,
             disabled: true
-        }, "transfer_updated");
+        }, "transfer_updated_at");
         updatedInput.startup();
 
         var transferStatusSelect = dom.byId('transfer_status');
@@ -393,9 +393,9 @@ define([
                     }
                     destinationLocation.setData(transfer.destinationLocation, transfer.destinationLocationText);
                     timestamp = new Date();
-                    timestamp.setTime(transfer.updated.timestamp * 1000);
+                    timestamp.setTime(transfer.updatedAt.timestamp * 1000);
                     updatedInput.set('value', timestamp.toLocaleString());
-                    timestamp.setTime(transfer.updated.timestamp * 1000);
+                    timestamp.setTime(transfer.createdAt.timestamp * 1000);
                     createdInput.set("value", timestamp.toLocaleString());
                     lib.showHistory(historyContentPane, transfer["history"]);
                 }, lib.xhrError);

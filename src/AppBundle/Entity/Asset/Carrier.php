@@ -65,10 +65,6 @@ class Carrier
      */
     private $services = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
     public function __construct()
     {
         $this->contacts = new ArrayCollection();

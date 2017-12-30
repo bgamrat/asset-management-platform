@@ -45,7 +45,7 @@ define([
         dijit = new TextBox({
             disabled: true,
             "class": showDate ? "" : "hidden"
-        }, base + "updated");
+        }, base + "updated_at");
         updatedInput.push(dijit);
         dijit.startup();
 
@@ -125,7 +125,7 @@ define([
                 obj = notes[i];
                 noteId[i] = obj.id;
                 noteInput[i].set('value', obj.note);
-                timestamp.setTime(obj.updated.timestamp * 1000);
+                timestamp.setTime(obj.updatedAt.timestamp * 1000);
                 updatedInput[i].set('value', timestamp.toLocaleString());
             }
         }

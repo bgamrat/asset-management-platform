@@ -28,7 +28,7 @@ class DefaultController extends FOSRestController
             $select = ['m.id', "CONCAT(CONCAT(b.name, ' '), m.name) AS name"];
             if( $ca !== null )
             {
-                $select[] = 'm.customAttributes';
+                $select[] = 'm.custom_attributes';
             }
             $queryBuilder = $em->createQueryBuilder()->select( $select )
                     ->from( 'AppBundle\Entity\Asset\Model', 'm' )
