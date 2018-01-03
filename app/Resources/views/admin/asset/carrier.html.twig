@@ -57,7 +57,7 @@
         <div id="carrier-grid">
         </div>
         <div id="carrier-view-dialog">
-            {{form_start(carrier_form)}} 
+            {{form_start(carrier_form)}}
             <div class="text-right">
                 <button id="carrier-save-btn" type="button">{{ 'common.save'|trans }}</button>
             </div>
@@ -78,7 +78,7 @@
                 <div id="carrier-view-tabs">
                     <div id="carrier-view-contacts-tab">
                         <fieldset class="contacts">
-                            <div class="carrier_contacts accordion"></div>
+                            <div id="carrier_contacts_accordion"></div>
                             {{form_row(carrier_form.contacts)}}
                             {% if carrier_form.contacts.vars.allow_add %}
                                 <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>

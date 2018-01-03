@@ -42,7 +42,7 @@ define([
 
         var carrierViewDialog = new Dialog({
             title: core.view,
-            style: "width: 800px"
+            style: "width: 800px; height: 800px;"
         }, "carrier-view-dialog");
         carrierViewDialog.startup();
         carrierViewDialog.on("cancel", function (event) {
@@ -50,7 +50,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "width: 100%; height: 300px "
+            style: "width: 780px; height: 600px "
         }, "carrier-view-tabs");
 
         var contactsContentPane = new ContentPane({
@@ -242,6 +242,7 @@ define([
                 grid.collection.get(id).then(function (carrier) {
                     action = "view";
                     carrierId = carrier.id;
+                    carrierViewDialog.show();
                     nameInput.set("value", carrier.name);
                     activeCheckBox.set("checked", carrier.active === true);
                     person.setData(carrier.contacts);
@@ -249,7 +250,7 @@ define([
                     commentInput.set("value", carrier.comment);
                     accountInformationInput.set("value", carrier.accountInformation);
                     trackingUrlInput.set("value", carrier.trackingUrl);
-                    carrierViewDialog.show();
+
                 }, lib.xhrError);
             }
         });

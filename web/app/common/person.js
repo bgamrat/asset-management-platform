@@ -58,15 +58,16 @@ define([
 
         function cloneNewNode() {
             var block, cp, dijit;
-
             prototypeContent = dataPrototype.replace(/__person__/g, personId.length);
-            block = domConstruct.toDom(prototypeContent);
             if( accordion === true ) {
-                cp = query(".content-pane", block);
+                block = domConstruct.toDom(prototypeContent);
+                cp = query(".form-row.contacts", block);
                 dijit = new ContentPane({
                     title: core.new,
                     content: cp[0]
                 });
+                contentPane.push(dijit);
+                aContainer.addChild(dijit);
                 dijit.on("change", function (evt) {
                     var cp = registry.byId(this.id);
                     var first, middle, middleName, last;
@@ -84,15 +85,17 @@ define([
                             + middleName + " "
                             + last.get("value"));
                 });
-                contentPane.push(dijit);
-                aContainer.addChild(dijit);
+            } else {
+                domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
             }
         }
 
         function createDijits() {
             var dijit, base = getDivId() + '_';
+            var divId = getDivId();
+            var idNumber = personId.length;
             if( prototypeNode !== null ) {
-                base += personId.length + '_';
+                base += idNumber + '_';
             }
             personId.push(null);
             dijit = new Select({
@@ -151,10 +154,12 @@ define([
             }, base + "comment");
             dijit.startup();
             commentInput.push(dijit);
+            phones[idNumber] = xphones.run(divId, idNumber);
+            emails[idNumber] = xemails.run(divId, idNumber);
+            addresses[idNumber] = xaddresses.run(divId, idNumber);
         }
 
         function setPersonValues(obj, i) {
-
             personId[i] = obj.id;
             typeSelect[i].set('value', obj.type.id);
             titleInput[i].set('value', obj.title);
@@ -166,27 +171,15 @@ define([
                 contentPane[i].set('title', obj.firstname + " " + ((obj.middlename === null) ? "" : obj.middlename) + " " + obj.lastname);
             }
             commentInput[i].set('value', obj.comment);
-            if( typeof obj.phones !== "undefined" ) {
-                phones[i].setData(obj.phones);
-            } else {
-                phones[i].setData(null);
-            }
-            if( typeof obj.emails !== "undefined" ) {
-                emails[i].setData(obj.emails);
-            } else {
-                emails[i].setData(null);
-            }
-            if( typeof obj.addresses !== "undefined" ) {
-                addresses[i].setData(obj.addresses);
-            } else {
-                addresses[i].setData(null);
-            }
+            phones[i].setData(obj.phones);
+            emails[i].setData(obj.emails);
+            addresses[i].setData(obj.addresses);
         }
 
         function loadPerson(evt) {
             var item = this.get("item");
             var id, idx;
-            if( item === null ) {
+            if( item === null || evt === null ) {
                 return;
             }
             id = item.id;
@@ -207,9 +200,7 @@ define([
         }
 
         function destroyRow(id, target) {
-
             var i, l, item, kid, cp;
-
             l = typeSelect.length;
             for( i = 0; i < l; i++ ) {
                 kid = typeSelect[i].id.replace(/\D/g, '');
@@ -231,11 +222,13 @@ define([
             item[0].destroyRecursive();
             item = commentInput.splice(id, 1);
             item[0].destroyRecursive();
-            cp = contentPane.splice(id, 1);
+
             emails[id].destroy(target);
             phones[id].destroy(target);
             addresses[id].destroy(target);
+
             if( accordion === true ) {
+                cp = contentPane.splice(id, 1);
                 aContainer.removeChild(cp[0]);
                 cp[0].destroyDescendants(false);
                 cp[0].destroyRendering(false);
@@ -254,7 +247,7 @@ define([
         base = getDivId();
 
         if( accordion === true ) {
-            aContainer = new AccordionContainer({style: "overflow-y: auto;"}, domConstruct.place("<div>", dom.byId(base), "first"));
+            aContainer = new AccordionContainer({style: "overflow-y: auto;"}, base + "_accordion");
             aContainer.startup();
         }
 
@@ -297,13 +290,8 @@ define([
         addOneMoreControl = query('.contacts .add-one-more-row');
         if( addOneMoreControl.length > 0 ) {
             addOneMoreControl.on("click", function (event) {
-                var divId = getDivId();
-                var idNumber = personId.length;
                 cloneNewNode();
                 createDijits();
-                phones[idNumber] = xphones.run(divId, idNumber);
-                emails[idNumber] = xemails.run(divId, idNumber);
-                addresses[idNumber] = xaddresses.run(divId, idNumber);
                 if( personId.length >= lib.constant.MAX_CONTACTS ) {
                     addOneMoreControl.addClass("hidden");
                 }
@@ -314,17 +302,12 @@ define([
                 var target = event.target;
                 var targetParent = target.parentNode;
                 var id = parseInt(targetParent.id.replace(/\D/g, ''));
-                while( !targetParent.classList.contains("content-pane") ) {
+                while( !targetParent.classList.contains("form-row") ) {
                     targetParent = targetParent.parentNode;
                 }
                 destroyRow(id, targetParent);
             });
         }
-
-        divId = getDivId();
-        emails[0] = xemails.run(divId, 0);
-        addresses[0] = xaddresses.run(divId, 0);
-        phones[0] = xphones.run(divId, 0);
 
         function getData() {
             var i, returnData = [];
@@ -354,7 +337,7 @@ define([
             nodes = query(".form-row.person,.form-row.contacts");
             nodes.forEach(function (node, index) {
                 if( index !== 0 ) {
-                    destroyRow(index, node);
+                   destroyRow(index, node);
                 }
             });
 

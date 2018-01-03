@@ -177,7 +177,7 @@ define([
         function setData(phones) {
             var i, obj;
 
-            query(".form-row.phone").forEach(function (node, index) {
+            query(".form-row.phone",dom.byId(getDivId())).forEach(function (node, index) {
                 if( index !== 0 ) {
                     destroyRow(index, node);
                 }
