@@ -4,11 +4,15 @@ define([
     "dijit/tree/ObjectStoreModel",
     "dojo/store/JsonRest",
     "dijit/Tree",
+    "dijit/form/ComboBox",
+    "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (dom,
-        Memory, ObjectStoreModel, JsonRest, Tree) {
+        Memory, ObjectStoreModel, JsonRest, Tree, ComboBox, core) {
 //"use strict";
     function run() {
+
+        var searchInput, searchStore;
 
         var store = new JsonRest({
             target: "/api/menustore/adminmenus/",
@@ -43,6 +47,25 @@ define([
             }
         }, "admin-left-menu");
         tree.startup();
+
+        searchStore = new JsonRest({
+            target: '/api/store/search',
+            useRangeHeaders: false,
+            idProperty: 'id'});
+        searchInput = new ComboBox({
+            trim: true,
+            pattern: "[A-Za-z\.\,\ \'-]{2,64}",
+            "class": "name",
+            store: searchStore,
+            searchAttr: "name",
+            placeholder: core.search
+        }, "search");
+        searchInput.startup();
+        searchInput.on("change", function(evt){
+            console.log(evt);
+            console.log(searchInput.store);
+        });
+
     }
     return {
         run: run

@@ -82,7 +82,7 @@ asset:
     tracking_url:
         Tracking URL
     tracking_url_note:
-        Enter the tracking URL with __ID__ to indicate where the tracking number should be 
+        Enter the tracking URL with __ID__ to indicate where the tracking number should be
     trailer:
         Trailer
     trailers:
@@ -99,11 +99,11 @@ asset:
         Vendors
     workflow:
         Workflow
-        
+
 calendar:
     controls:
         Calendar Controls
- 
+
 client:
     client:
         Client
@@ -111,7 +111,7 @@ client:
         Contract
     contracts:
         Contracts
- 
+
 common:
     account_information:
         Account Information
@@ -285,8 +285,10 @@ common:
         Save
     schedule:
         Schedule
+    search:
+        Search
     select_columns:
-            Select the columns to display
+        Select the columns to display
     send:
         Send
     service:
@@ -329,7 +331,7 @@ common:
         Venue
     venues:
         Venues
-        
+
 error:
     cannot_be_null:
         cannot be null
@@ -367,7 +369,7 @@ event:
         Time Span Types
 
 invitation:
-    user: 
+    user:
         Invitation
     admin:
         User Invitation Admin
@@ -402,7 +404,7 @@ person:
         Middle name
     title:
         Title
-                
+
 user:
     admin:
         User Admin

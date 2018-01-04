@@ -69,6 +69,7 @@ define({
         "roles": "Roles",
         "satisfies": "Satisfies",
         "save": "Save",
+        "search": "Search",
         "send": "Send",
         "sent": "Sent",
         "service": "Service",

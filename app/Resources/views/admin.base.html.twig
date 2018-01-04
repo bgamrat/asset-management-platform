@@ -26,6 +26,9 @@
         </header>
         <div class="admin-menu-block{% if no_hide is not defined %} hide-on-load{% endif %}">
             <a href="/"><img src="{{asset('images/logo.png')}}" width="75" height="auto" alt="{{ 'common.logo'|trans }}"></a>
+            <form>
+                <input type="search" id="search" placeholder="{{'common.search'|trans}}">
+            </form>
             <nav id="admin-left-menu" class="admin-left-menu">
             </nav>
         </div>

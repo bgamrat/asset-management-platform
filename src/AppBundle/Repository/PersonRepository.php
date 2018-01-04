@@ -12,7 +12,7 @@ use \Doctrine\ORM\Mapping\ClassMetadata;
 class PersonRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    const CONCAT_NAME = "CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname) AS name";
+    const CONCAT_NAME = "CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname) LIKE :name";
     const CONCAT_NAME_LIKE = "LOWER(CONCAT(p.firstname, ' ',COALESCE(CONCAT(p.middlename,' '),''), p.lastname)) LIKE :name OR LOWER(p.title) LIKE :name";
 
     private $contactTypes = [];
@@ -37,7 +37,7 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
                         ->createQuery(
                                 "SELECT p FROM AppBundle\Entity\Common\Person p WHERE "
                                 . self::CONCAT_NAME_LIKE
-                                . "ORDER BY p.lastname ASC"
+                                . " ORDER BY p.lastname ASC"
                         )
                         ->setParameter( 'name', $name )
                         ->getResult();
