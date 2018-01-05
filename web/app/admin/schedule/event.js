@@ -59,7 +59,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 525px; width: 978px;"
+            style: "height: 525px; width: 900px;"
         }, "event-view-tabs");
 
         var detailsContentPane = new ContentPane({
@@ -403,9 +403,9 @@ define([
                     trailers.setData(event.trailers);
                     categoryQuantities.setData(event.categoryQuantities);
                     contracts.setData(event.contracts);
-                    person.setData(event.contacts);
                     timeSpans.setData(event.timeSpans);
                     eventViewDialog.show();
+                    person.setData(event.contacts);
                 }, lib.xhrError);
             }
         });

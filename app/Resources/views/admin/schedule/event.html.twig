@@ -169,6 +169,7 @@
                     </div>
                     <div id="event-view-contacts-tab">
                         <fieldset class="contacts">
+                            <div id="event_contacts_accordion"></div>
                             {{form_row(event_form.contacts)}}
                             {% if event_form.contacts.vars.allow_add %}
                                 <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
