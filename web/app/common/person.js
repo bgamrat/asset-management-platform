@@ -90,7 +90,7 @@ define([
             }
         }
 
-        function createDijits() {
+        function createDijits(newPerson) {
             var dijit, base = getDivId() + '_';
             var divId = getDivId();
             var idNumber = personId.length;
@@ -142,7 +142,8 @@ define([
                 "class": "name",
                 store: personStore,
                 searchAttr: "name",
-                placeholder: core.lastname
+                placeholder: core.lastname,
+                readonly: true
             }, base + "lastname");
             dijit.startup();
             dijit.on("change", loadPerson);
@@ -159,14 +160,14 @@ define([
             addresses[idNumber] = xaddresses.run(divId, idNumber);
         }
 
-        function setPersonValues(obj, i) {
+        function setPersonValues(obj, i, existingPerson) {
             personId[i] = obj.id;
             typeSelect[i].set('value', obj.type.id);
             titleInput[i].set('value', obj.title);
             firstnameInput[i].set('value', obj.firstname);
             middlenameInput[i].set('value', obj.middlename);
             lastnameInput[i].set('value', obj.lastname);
-
+            lastnameInput[i].set('readOnly',existingPerson);
             if (accordion === true) {
                 contentPane[i].set('title', obj.firstname + " " + ((obj.middlename === null) ? "" : obj.middlename) + " " + obj.lastname);
             }
@@ -192,7 +193,7 @@ define([
                 for( i = 0; i < l; i++ ) {
                     kid = lastnameInput[i].id.replace(/\D/g, '');
                     if( kid == idx ) {
-                        setPersonValues(data, i);
+                        setPersonValues(data, i, false);
                         break;
                     }
                 }
@@ -285,13 +286,13 @@ define([
             useRangeHeaders: false,
             idProperty: 'id'});
 
-        createDijits();
+        createDijits(true);
 
         addOneMoreControl = query('.contacts .add-one-more-row');
         if( addOneMoreControl.length > 0 ) {
             addOneMoreControl.on("click", function (event) {
                 cloneNewNode();
-                createDijits();
+                createDijits(true);
                 if( personId.length >= lib.constant.MAX_CONTACTS ) {
                     addOneMoreControl.addClass("hidden");
                 }
@@ -348,10 +349,10 @@ define([
                 for( i = 0; i < person.length; i++ ) {
                     if( i !== 0 ) {
                         cloneNewNode();
-                        createDijits();
+                        createDijits(false);
                     }
                     obj = person[i];
-                    setPersonValues(obj, i);
+                    setPersonValues(obj, i, true);
                 }
             } else {
                 personId[0] = null;

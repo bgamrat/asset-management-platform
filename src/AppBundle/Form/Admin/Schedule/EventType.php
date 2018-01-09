@@ -58,6 +58,7 @@ class EventType extends AbstractType
                 ->add( 'tentative', CheckboxType::class, ['label' => 'event.tentative'] )
                 ->add( 'billable', CheckboxType::class, ['label' => 'event.billable'] )
                 ->add( 'canceled', CheckboxType::class, ['label' => 'event.canceled'] )
+
                 ->add( 'contacts', CollectionType::class, [
                     'entry_type' => PersonType::class,
                     'by_reference' => false,
@@ -115,6 +116,7 @@ class EventType extends AbstractType
                     'prototype_name' => '__time_span__'
                 ] )
         ;
+
         $builder->get( 'client' )
                 ->addModelTransformer( new ClientToIdTransformer( $this->em ) );
         $builder->get( 'venue' )

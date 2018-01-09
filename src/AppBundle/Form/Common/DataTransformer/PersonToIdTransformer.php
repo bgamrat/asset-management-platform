@@ -19,7 +19,7 @@ class PersonToIdTransformer implements DataTransformerInterface
     /**
      * Transforms an object (person) to a string (id).
      *
-     * @param  Issue|null $person
+     * @param  Person|null $person
      * @return string
      */
     public function transform($person)

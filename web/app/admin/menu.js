@@ -54,7 +54,6 @@ define([
             idProperty: 'id'});
         searchInput = new ComboBox({
             trim: true,
-            pattern: "[A-Za-z\.\,\ \'-]{2,64}",
             "class": "name",
             store: searchStore,
             searchAttr: "name",

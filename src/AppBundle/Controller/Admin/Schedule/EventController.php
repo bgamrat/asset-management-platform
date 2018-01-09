@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use AppBundle\Form\Admin\Schedule\EventType;
+use AppBundle\Form\Common\PersonType;
 
 /**
  * Description of EventController
@@ -27,10 +28,12 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $form = $this->createForm( EventType::class, null, [] );
+        $eventForm = $this->createForm( EventType::class, null, [] );
+        $personForm = $this->createForm( PersonType::class, null, [] );
 
         return $this->render( 'admin/schedule/event.html.twig', array(
-                    'event_form' => $form->createView()
+                    'event_form' => $eventForm->createView(),
+                    'person_form' => $personForm->createView()
                 ) );
     }
 

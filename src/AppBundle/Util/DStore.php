@@ -61,7 +61,9 @@ class DStore
         if( strpos( $queryString, '=gt=' ) !== false )
         {
             preg_match( '#(\w+)=gt=([a-z0-9\-\(\)\[\]\.\,\% ]+)#i', $queryString, $matches );
-            $filter = [self::OP => self::GT, self::FIELD => $matches[1], self::VALUE => $matches[2]];
+            if (count($matches) >= 3) {
+                $filter = [self::OP => self::GT, self::FIELD => $matches[1], self::VALUE => $matches[2]];
+            }
         }
 
         return [ 'filter' => $filter, 'offset' => $offset, 'limit' => $limit, 'sort-field' => $field, 'sort-direction' => $direction];

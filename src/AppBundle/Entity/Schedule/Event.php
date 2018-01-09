@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Client\Contract;
@@ -89,12 +90,14 @@ class Event
      */
     private $client;
     /**
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Venue\Venue")
      * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
      * @Gedmo\Versioned
      */
     private $venue;
     /**
+     * @Assert\NotBlank()
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="event_contact",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},

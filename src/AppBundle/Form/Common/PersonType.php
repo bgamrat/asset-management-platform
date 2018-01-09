@@ -80,15 +80,6 @@ class PersonType extends AbstractType
                     'required' => false,
                     'label' => false
                 ] );
-        $builder->addEventListener( FormEvents::PRE_SUBMIT, function (FormEvent $event)
-        {
-            // The client side has a ComboBox widget that allows the user
-            // to change the person.  This avoids identity conflicts.
-	    // @TODO: Fix this!!!!
-            $person = $event->getData();
-            $form = $event->getForm();
-            $form->get('id')->setData($person['id']);
-        } );
     }
 
     /**

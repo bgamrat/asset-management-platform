@@ -73,7 +73,7 @@ services:
         public: false
 
     app.form.data_transformer.person_type:
-        class: AppBundle\Form\Admin\Asset\DataTransformer\PersonTypeToIdTransformer
+        class: AppBundle\Form\Common\DataTransformer\PersonToIdTransformer
         arguments: ['@doctrine.orm.entity_manager']
         public: false
 
@@ -233,7 +233,8 @@ services:
             - { name: "form.type", alias: "app_invitation_type" }
 
     app.form.person:
-        class: AppBundle\Form\Common\PersonFormType
+        class: AppBundle\Form\Common\Type\PersonType
+        arguments: ['@app.form.data_transformer.person_type']
         tags:
             - { name: "form.type", alias: "app_common_person" }
 
