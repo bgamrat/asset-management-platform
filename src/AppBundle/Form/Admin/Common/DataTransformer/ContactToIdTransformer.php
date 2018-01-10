@@ -26,7 +26,6 @@ class ContactToIdTransformer implements DataTransformerInterface
         if (null === $contact) {
             return null;
         }
-        return 1;
         return $contact->getId();
     }
 

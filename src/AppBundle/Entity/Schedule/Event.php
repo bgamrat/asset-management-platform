@@ -101,7 +101,7 @@ class Event
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="event_contact",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")}
      *      )
      */
     private $contacts = null;
@@ -319,7 +319,7 @@ class Event
 
     public function getContacts()
     {
-        return empty( $this->contacts ) ? [] : $this->contacts->toArray();
+        return $this->contacts;
     }
 
     public function addContact( Person $contact )

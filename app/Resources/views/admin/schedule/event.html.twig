@@ -13,21 +13,7 @@
 {% form_theme event_form _self %}
 
 {% block _event_contacts_entry_row %}
-    <div class="form-row contacts">
-        {% include 'common/person.html.twig' with {'legend': 'common.contact'} %}
-    </div>
-{% endblock %}
-
-{% block _event_contacts_entry_addresses_entry_row %}
-    {{ block('_address_entry_row') }}
-{% endblock %}
-
-{% block _event_contacts_entry_emails_entry_row %}
-    {{ block('_emails_entry_row') }}
-{% endblock %}
-
-{% block _event_contacts_entry_phones_entry_row %}
-    {{ block('_phones_entry_row') }}
+    {{ block('_contacts_entry_row') }}
 {% endblock %}
 
 {% block _event_contracts_entry_row %}{% spaceless %}
@@ -169,7 +155,6 @@
                     </div>
                     <div id="event-view-contacts-tab">
                         <fieldset class="contacts">
-                            <div id="event_contacts_accordion"></div>
                             {{form_row(event_form.contacts)}}
                             {% if event_form.contacts.vars.allow_add %}
                                 <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>

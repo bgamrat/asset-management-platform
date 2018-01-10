@@ -31,7 +31,10 @@ class PersonType extends AbstractType
 
     public function configureOptions( OptionsResolver $resolver )
     {
-        
+        $resolver->setDefaults( [
+            'label' => false,
+            'data_class' => 'AppBundle\Entity\Common\Person'
+        ] );
     }
 
     public function getParent()

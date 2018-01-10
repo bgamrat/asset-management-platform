@@ -27,7 +27,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/common/person",
+    "app/common/contact",
     "app/admin/schedule/contracts",
     "app/admin/schedule/trailers",
     "app/admin/schedule/category_quantities",
@@ -41,11 +41,11 @@ define([
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, ColumnHider, Selection, Editor, put,
-        xperson, contracts, trailers, categoryQuantities, timeSpans,
+        xcontact, contracts, trailers, categoryQuantities, timeSpans,
         lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
-        var action = null, d, person;
+        var action = null, d, contact;
 
         var eventId;
 
@@ -119,7 +119,7 @@ define([
             canceledCheckBox.set("checked", false);
             clientFilteringSelect.set('displayedValue', "");
             descriptionInput.set("value", "");
-            person.setData(null);
+            contact.setData(null);
             contracts.setData(null);
             trailers.setData(null);
             categoryQuantities.setData(null);
@@ -240,7 +240,7 @@ define([
                     "tentative": tentativeCheckBox.get("checked"),
                     "billable": billableCheckBox.get("checked"),
                     "canceled": canceledCheckBox.get("checked"),
-                    "contacts": person.getData(),
+                    "contacts": contact.getData(),
                     "contracts": contracts.getData(),
                     "client": parseInt(clientFilteringSelect.get("value")),
                     "venue": parseInt(venueFilteringSelect.get("value")),
@@ -405,7 +405,7 @@ define([
                     contracts.setData(event.contracts);
                     timeSpans.setData(event.timeSpans);
                     eventViewDialog.show();
-                    person.setData(event.contacts);
+                    contact.setData(event.contacts);
                 }, lib.xhrError);
             }
         });
@@ -461,7 +461,7 @@ define([
             }));
         });
 
-        person = xperson.run('event_contacts');
+        contact = xcontact.run('event_contacts');
         contracts.run('event_contracts');
         trailers.run('event_trailers');
         categoryQuantities.run();

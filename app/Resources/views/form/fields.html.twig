@@ -75,6 +75,15 @@
     {% endspaceless %}
 {% endblock %}
 
+{% block _contacts_entry_row %}
+    {% spaceless %}
+        <div class="form-row contact">
+            <span class="name">{{ form_widget(form) }}</span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="contact-__person__"><i class="fa fa-remove"></i></span>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
 {% block _emails_entry_row %}
     {% spaceless %}
         <div class="form-row email">

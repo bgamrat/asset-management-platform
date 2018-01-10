@@ -18,7 +18,8 @@ use AppBundle\Form\Admin\Client\DataTransformer\ClientToIdTransformer;
 use AppBundle\Form\Admin\Venue\DataTransformer\VenueToIdTransformer;
 use AppBundle\Form\Admin\Schedule\Type\TrailerType;
 use AppBundle\Form\Admin\Client\Type\ContractType;
-use AppBundle\Form\Common\PersonType;
+use AppBundle\Form\Common\Type\PersonType;
+
 
 class EventType extends AbstractType
 {
@@ -61,7 +62,6 @@ class EventType extends AbstractType
 
                 ->add( 'contacts', CollectionType::class, [
                     'entry_type' => PersonType::class,
-                    'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
