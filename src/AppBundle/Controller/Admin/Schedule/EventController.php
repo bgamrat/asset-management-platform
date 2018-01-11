@@ -29,11 +29,9 @@ class EventController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $eventForm = $this->createForm( EventType::class, null, [] );
-        $personForm = $this->createForm( PersonType::class, null, [] );
 
         return $this->render( 'admin/schedule/event.html.twig', array(
-                    'event_form' => $eventForm->createView(),
-                    'person_form' => $personForm->createView()
+                    'event_form' => $eventForm->createView()
                 ) );
     }
 
