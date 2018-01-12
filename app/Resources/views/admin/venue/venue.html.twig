@@ -13,21 +13,7 @@
 {% form_theme venue_form _self %}
 
 {% block _venue_contacts_entry_row %}
-    <div class="form-row contacts">
-        {% include 'common/person.html.twig' with {'legend': 'common.contact'} %}
-    </div>
-{% endblock %}
-
-{% block _venue_contacts_entry_addresses_entry_row %}
-    {{ block('_address_entry_row') }}
-{% endblock %}
-
-{% block _venue_contacts_entry_emails_entry_row %}
-    {{ block('_emails_entry_row') }}
-{% endblock %}
-
-{% block _venue_contacts_entry_phones_entry_row %}
-    {{ block('_phones_entry_row') }}
+    {{ block('_contacts_entry_row') }}
 {% endblock %}
 
 {% block admin_content %}

@@ -23,7 +23,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/common/person",
+    "app/common/contact",
     "app/admin/client/contracts",
     "app/lib/common",
     "app/lib/grid",
@@ -33,11 +33,11 @@ define([
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson, contracts, lib, libGrid, core, client) {
+        xcontact, contracts, lib, libGrid, core, client) {
     //"use strict";
     function run() {
         var action = null;
-        var person;
+        var contact;
 
         var clientId;
 
@@ -80,7 +80,7 @@ define([
             clientId = null;
             nameInput.set("value", "");
             activeCheckBox.set("checked", true);
-            person.setData(null);
+            contact.setData(null);
             contracts.setData(null);
             clientViewDialog.set("title", core["new"]).show();
             action = "new";
@@ -133,7 +133,7 @@ define([
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
-                    "contacts": person.getData(),
+                    "contacts": contact.getData(),
                     "contracts": contracts.getData()
                 };
                 if( action === "view" ) {
@@ -245,7 +245,7 @@ define([
                     nameInput.set("value", client.name);
                     activeCheckBox.set("checked", client.active === true);
                     commentInput.set("value", client.comment);
-                    person.setData(client.contacts);
+                    contact.setData(client.contacts);
                     contracts.setData(client.contracts);
                     clientViewDialog.show();
                 }, lib.xhrError);
@@ -303,7 +303,7 @@ define([
             }));
         });
 
-        person = xperson.run('client_contacts');
+        contact = xcontact.run('client_contacts');
         contracts.run('client');
 
         lib.pageReady();

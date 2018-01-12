@@ -23,7 +23,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/common/person",
+    "app/common/contact",
     "app/common/address",
     "app/lib/common",
     "app/lib/grid",
@@ -33,11 +33,11 @@ define([
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson, xaddress, lib, libGrid, core, venue) {
+        xcontact, xaddress, lib, libGrid, core, venue) {
     //"use strict";
     function run(id) {
         var action = null;
-        var person, address;
+        var contact, address;
 
         var venueId;
 
@@ -80,7 +80,7 @@ define([
             venueId = null;
             nameInput.set("value", "");
             activeCheckBox.set("checked", true);
-            person.setData(null);
+            contact.setData(null);
             venueViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -149,7 +149,7 @@ define([
                     "comment": commentInput.get("value"),
                     "directions": directionsInput.get("value"),
                     "parking": parkingInput.get("value"),
-                    "contacts": person.getData()
+                    "contacts": contact.getData()
                 };
                 if( action === "view" ) {
                     grid.collection.put(data).then(function (data) {
@@ -254,7 +254,7 @@ define([
             directionsInput.set("value", venue.directions);
             parkingInput.set("value", venue.parking);
             commentInput.set("value", venue.comment);
-            person.setData(venue.contacts);
+            contact.setData(venue.contacts);
             address.setData(venue.address);
             lib.showHistory(historyContentPane, venue.history);
             venueViewDialog.show();
@@ -311,7 +311,7 @@ define([
         });
 
         lib.getAddressTypes();
-        person = xperson.run('venue_contacts');
+        contact = xcontact.run('venue_contacts');
         address = xaddress.run('venue');
 
         lib.pageReady();

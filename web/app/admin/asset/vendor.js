@@ -23,7 +23,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/common/person",
+    "app/common/contact",
     "app/admin/asset/brand_select",
     "app/lib/common",
     "app/lib/grid",
@@ -33,11 +33,11 @@ define([
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson, brandSelect, lib, libGrid, core, asset) {
+        xcontact, brandSelect, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
         var action = null;
-        var person;
+        var contact;
 
         var vendorId;
 
@@ -84,6 +84,7 @@ define([
         newBtn.startup();
         newBtn.on("click", function (event) {
             vendorId = null;
+            contact.setData(null);
             nameInput.set("value", "");
             activeCheckBox.set("checked", true);
             vendorViewDialog.set("title", core["new"]).show();
@@ -150,7 +151,7 @@ define([
                 var data = {
                     "id": vendorId,
                     "name": nameInput.get("value"),
-                    "contacts": person.getData(),
+                    "contacts": contact.getData(),
                     "brand_data": brandData,
                     "brands": brandIds,
                     "active": activeCheckBox.get("checked"),
@@ -247,7 +248,7 @@ define([
             nameInput.set("value", vendor.name);
             brandSelect.setData(vendor.brandData);
             activeCheckBox.set("checked", vendor.active === true);
-            person.setData(vendor.contacts);
+            contact.setData(vendor.contacts);
             commentInput.set("value", vendor.comment);
             rmaRequiredCheckBox.set("checked", vendor.rma_required === true);
             serviceInstructionsInput.set("value", vendor.service_instructions);
@@ -320,7 +321,7 @@ define([
             }));
         });
 
-        person = xperson.run('vendor_contacts');
+        contact = xcontact.run('vendor_contacts');
         brandSelect.run('vendor');
         if( typeof loadVendorId !== "undefined" && loadVendorId !== null ) {
             grid.collection.get(loadVendorId).then(load, lib.xhrError);

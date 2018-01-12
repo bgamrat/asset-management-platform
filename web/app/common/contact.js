@@ -187,7 +187,7 @@ ${addresses}
             return returnData.length > 0 ? returnData : null;
         }
         function setData(contact) {
-            var i, p, obj, nodes;
+            var i, p, obj, nodes, d;
 
             nodes = query(".form-row.contact");
             nodes.forEach(function (node, index) {
@@ -211,6 +211,9 @@ ${addresses}
             } else {
                 personId[0] = null;
                 nameSelect[0].set('value', '');
+                base = query("#"+getDivId() + '_0').closest(".form-row.contact");
+                d = query(".view-contact-details",base[0]);
+                domConstruct.destroy(d[0]);
             }
         }
         return {

@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use AppBundle\Form\Common\PersonType;
+use AppBundle\Form\Common\Type\PersonType;
 use AppBundle\Form\Admin\Client\ContractType;
 use Doctrine\ORM\EntityManager;
 

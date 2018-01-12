@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * @TODO: clean this up
+ */
+
 namespace AppBundle\Form\Admin\Client\DataTransformer;
 
 use Doctrine\ORM\EntityManager;
@@ -24,12 +28,13 @@ class TrailerToIdTransformer implements DataTransformerInterface
      */
     public function transform( $trailer )
     {
- 
+
         if( null === $trailer )
         {
             return '';
         }
-        if (isset($trailer['name'])) {
+        if( is_array( $trailer ) && isset( $trailer['name'] ) )
+        {
             return $trailer['name'];
         }
         return $trailer->getName();
@@ -57,9 +62,16 @@ class TrailerToIdTransformer implements DataTransformerInterface
 
         if( null === $trailer )
         {
-            throw new TransformationFailedException( sprintf(
-                    'An trailer with name "%s" does not exist!', $trailerName
-            ) );
+            $trailer = $this->em
+                    ->getRepository( 'AppBundle\Entity\Asset\Trailer' )
+                    ->find( ['id' => $trailerName] )
+            ;
+            if( null === $trailer )
+            {
+                throw new TransformationFailedException( sprintf(
+                        'An trailer with name "%s" does not exist!', $trailerName
+                ) );
+            }
         }
         return $trailer;
     }
