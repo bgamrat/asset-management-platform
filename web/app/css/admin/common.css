@@ -172,3 +172,6 @@
 .wide {
     width: 95%;
 }
+.form-row:nth-of-type(odd) {
+    background-color: #eee;
+}

@@ -172,7 +172,7 @@ ${addresses}
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
             destroyRow(id, targetParent.parentNode);
-            if( nameInput.length <= lib.constant.MAX_PHONE_NUMBERS ) {
+            if( nameSelect.length <= lib.constant.MAX_PHONE_NUMBERS ) {
                 addOneMoreControl.removeClass("hidden");
             }
         });

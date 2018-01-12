@@ -7,8 +7,6 @@ define([
     "dojo/query",
     "dijit/registry",
     "dojo/request/xhr",
-    "dijit/layout/AccordionContainer",
-    "dijit/layout/ContentPane",
     "dijit/form/ValidationTextBox",
     "dijit/form/Textarea",
     "dijit/form/Select",
@@ -23,7 +21,6 @@ define([
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (lang, dom, domAttr, domConstruct, on, query, registry, xhr,
-        AccordionContainer, ContentPane,
         ValidationTextBox, Textarea, Select, ComboBox,
         ObjectStore, Memory, JsonRest,
         xemails, xphones, xaddresses,
@@ -43,10 +40,7 @@ define([
         var select, storeData, memoryStore;
         var addOneMoreControl;
         var emails = [], phones = [], addresses = [];
-        var divId;
         var personStore;
-        var aContainer, contentPane = [];
-        var accordion = true;
 
         function setDivId(divId) {
             divIdInUse = divId;
@@ -57,40 +51,11 @@ define([
         }
 
         function cloneNewNode() {
-            var block, cp, dijit;
             prototypeContent = dataPrototype.replace(/__person__/g, personId.length);
-            if( accordion === true ) {
-                block = domConstruct.toDom(prototypeContent);
-                cp = query(".form-row.contacts", block);
-                dijit = new ContentPane({
-                    title: core.new,
-                    content: cp[0]
-                });
-                contentPane.push(dijit);
-                aContainer.addChild(dijit);
-                dijit.on("change", function (evt) {
-                    var cp = registry.byId(this.id);
-                    var first, middle, middleName, last;
-                    first = query("input[id$='firstname']", this);
-                    first = registry.byId(first[0].id);
-                    middle = query("input[id$='middlename']", this);
-                    middle = registry.byId(middle[0].id);
-                    middleName = middle.get("value");
-                    if( middleName === "" ) {
-                        middleName = "";
-                    }
-                    last = query("input[id$='lastname']", this);
-                    last = registry.byId(last[0].id);
-                    cp.set("title", first.get("value") + " "
-                            + middleName + " "
-                            + last.get("value"));
-                });
-            } else {
-                domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
-            }
+            domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
         }
 
-        function createDijits(newPerson) {
+        function createDijits() {
             var dijit, base = getDivId() + '_';
             var divId = getDivId();
             var idNumber = personId.length;
@@ -135,7 +100,7 @@ define([
             }, base + "middlename");
             dijit.startup();
             middlenameInput.push(dijit);
-            dijit = new ComboBox({
+            dijit = new ValidationTextBox({
                 required: true,
                 trim: true,
                 pattern: "[A-Za-z\.\,\ \'-]{2,64}",
@@ -146,7 +111,6 @@ define([
                 readonly: true
             }, base + "lastname");
             dijit.startup();
-            dijit.on("change", loadPerson);
             lastnameInput.push(dijit);
             dijit = new Textarea({
                 placeholder: core.comment,
@@ -160,17 +124,13 @@ define([
             addresses[idNumber] = xaddresses.run(divId, idNumber);
         }
 
-        function setPersonValues(obj, i, existingPerson) {
+        function setPersonValues(obj, i) {
             personId[i] = obj.id;
             typeSelect[i].set('value', obj.type.id);
             titleInput[i].set('value', obj.title);
             firstnameInput[i].set('value', obj.firstname);
             middlenameInput[i].set('value', obj.middlename);
             lastnameInput[i].set('value', obj.lastname);
-            lastnameInput[i].set('readOnly',existingPerson);
-            if (accordion === true) {
-                contentPane[i].set('title', obj.firstname + " " + ((obj.middlename === null) ? "" : obj.middlename) + " " + obj.lastname);
-            }
             commentInput[i].set('value', obj.comment);
             phones[i].setData(obj.phones);
             emails[i].setData(obj.emails);
@@ -228,29 +188,14 @@ define([
             phones[id].destroy(target);
             addresses[id].destroy(target);
 
-            if( accordion === true ) {
-                cp = contentPane.splice(id, 1);
-                aContainer.removeChild(cp[0]);
-                cp[0].destroyDescendants(false);
-                cp[0].destroyRendering(false);
-                cp[0].destroyRecursive();
-            }
             domConstruct.destroy(target);
         }
 
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
         }
-        if( typeof arguments[1] !== "undefined" ) {
-            accordion = arguments[1];
-        }
 
         base = getDivId();
-
-        if( accordion === true ) {
-            aContainer = new AccordionContainer({style: "overflow-y: auto;"}, base + "_accordion");
-            aContainer.startup();
-        }
 
         prototypeNode = dom.byId(getDivId());
         if( prototypeNode !== null ) {
@@ -286,29 +231,28 @@ define([
             useRangeHeaders: false,
             idProperty: 'id'});
 
-        createDijits(true);
+        createDijits();
 
         addOneMoreControl = query('.contacts .add-one-more-row');
         if( addOneMoreControl.length > 0 ) {
             addOneMoreControl.on("click", function (event) {
                 cloneNewNode();
-                createDijits(true);
+                createDijits();
                 if( personId.length >= lib.constant.MAX_CONTACTS ) {
                     addOneMoreControl.addClass("hidden");
                 }
             });
         }
-        if( accordion === true ) {
-            on(aContainer, ".remove-form-row:click", function (event) {
-                var target = event.target;
-                var targetParent = target.parentNode;
-                var id = parseInt(targetParent.id.replace(/\D/g, ''));
-                while( !targetParent.classList.contains("form-row") ) {
-                    targetParent = targetParent.parentNode;
-                }
-                destroyRow(id, targetParent);
-            });
-        }
+
+        on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
+            var target = event.target;
+            var targetParent = target.parentNode;
+            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            destroyRow(id, targetParent.parentNode);
+            if( lastnameInput.length <= lib.constant.MAX_PHONE_NUMBERS ) {
+                addOneMoreControl.removeClass("hidden");
+            }
+        });
 
         function getData() {
             var i, returnData = [];
@@ -349,10 +293,10 @@ define([
                 for( i = 0; i < person.length; i++ ) {
                     if( i !== 0 ) {
                         cloneNewNode();
-                        createDijits(false);
+                        createDijits();
                     }
                     obj = person[i];
-                    setPersonValues(obj, i, true);
+                    setPersonValues(obj, i);
                 }
             } else {
                 personId[0] = null;

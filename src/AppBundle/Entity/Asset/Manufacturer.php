@@ -43,7 +43,7 @@ class Manufacturer
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="manufacturer_contact",
      *      joinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")}
      *      )
      */
     private $contacts = null;
@@ -52,15 +52,11 @@ class Manufacturer
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Asset\Brand", cascade={"persist"})
      * @ORM\JoinTable(name="manufacturer_brand",
      *      joinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", onDelete="CASCADE", unique=true, nullable=false)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)}
      *      )
      */
     protected $brands = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
     public function __construct()
     {
         $this->contacts = new ArrayCollection();

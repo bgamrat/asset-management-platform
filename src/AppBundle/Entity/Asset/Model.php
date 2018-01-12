@@ -12,7 +12,7 @@ use AppBundle\Entity\CustomAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
-use AppBundle\Entity\Traits\Versioned\CustomAttributes;
+use AppBundle\Entity\Traits\CustomAttributes;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\History;
 

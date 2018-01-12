@@ -23,7 +23,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/common/person",
+    "app/common/contact",
     "app/admin/asset/brands",
     "app/lib/common",
     "app/lib/grid",
@@ -34,12 +34,12 @@ define([
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson, brands, lib, libGrid, core) {
+        xcontact, brands, lib, libGrid, core) {
     //"use strict";
     function run() {
         var action = null;
         var manufacturerId = null;
-        var person;
+        var contact;
 
         var manufacturerViewDialog = new Dialog({
             title: core.view,
@@ -80,7 +80,7 @@ define([
         newBtn.on("click", function (event) {
             nameInput.set("value", "");
             activeCheckBox.set("checked", true);
-            person.setData(null);
+            contact.setData(null);
             brands.setData(null);
             manufacturerViewDialog.set("title", core["new"]).show();
             action = "new";
@@ -127,32 +127,20 @@ define([
         }, 'manufacturer-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeId, beforeIdFilter, filter;
             if( manufacturerForm.validate() ) {
                 var data = {
                     "id": manufacturerId,
                     "name": nameInput.get("value"),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
-                    "contacts": person.getData(),
+                    "contacts": contact.getData(),
                     "brands": brands.getData()
                 };
-                if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
-                        manufacturerViewDialog.hide();
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeIdFilter = filter.gt('name', data.name);
-                    store.filter(beforeIdFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        beforeId = (results.length > 0) ? results[0].name : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            manufacturerViewDialog.hide();
-                            store.fetch();
-                            grid.refresh();
-                        }, lib.xhrError);
-                    });
-                }
+                grid.collection.put(data).then(function (data) {
+                    manufacturerViewDialog.hide();
+                    store.fetch();
+                    grid.refresh();
+                }, lib.xhrError);
             } else {
                 lib.textError(core.invalid_form)
             }
@@ -246,7 +234,7 @@ define([
                         nameInput.set("value", manufacturer.name);
                         commentInput.set("value", manufacturer.comment);
                         activeCheckBox.set("checked", manufacturer.active === true);
-                        person.setData(manufacturer.contacts);
+                        contact.setData(manufacturer.contacts);
                         brands.setData(manufacturer.brands);
                         manufacturerViewDialog.show();
                     }, lib.xhrError);
@@ -305,7 +293,7 @@ define([
             }));
         });
 
-        person = xperson.run('manufacturer_contacts');
+        contact = xcontact.run('manufacturer_contacts');
         brands.run('manufacturer');
 
         lib.pageReady();

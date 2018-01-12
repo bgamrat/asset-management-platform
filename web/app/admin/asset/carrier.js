@@ -23,7 +23,7 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/common/person",
+    "app/common/contact",
     "app/admin/asset/carrier_service",
     "app/lib/common",
     "app/lib/grid",
@@ -32,11 +32,11 @@ define([
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson, carrierService, lib, libGrid, core) {
+        xcontact, carrierService, lib, libGrid, core) {
     // "use strict";
     function run() {
         var action = null;
-        var person;
+        var contact;
 
         var carrierId;
 
@@ -85,6 +85,7 @@ define([
         newBtn.on("click", function (event) {
             carrierId = null;
             nameInput.set("value", "");
+            contact.setData(null);
             activeCheckBox.set("checked", true);
             carrierViewDialog.set("title", core["new"]).show();
             action = "new";
@@ -149,7 +150,7 @@ define([
                 var data = {
                     "id": carrierId,
                     "name": nameInput.get("value"),
-                    "contacts": person.getData(),
+                    "contacts": contact.getData(),
                     "services": carrierService.getData(),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
@@ -245,7 +246,7 @@ define([
                     carrierViewDialog.show();
                     nameInput.set("value", carrier.name);
                     activeCheckBox.set("checked", carrier.active === true);
-                    person.setData(carrier.contacts);
+                    contact.setData(carrier.contacts);
                     carrierService.setData(carrier.services);
                     commentInput.set("value", carrier.comment);
                     accountInformationInput.set("value", carrier.accountInformation);
@@ -306,7 +307,7 @@ define([
             }));
         });
 
-        person = xperson.run('carrier_contacts');
+        contact = xcontact.run('carrier_contacts');
         carrierService.run();
 
         lib.pageReady();
