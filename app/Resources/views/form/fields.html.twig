@@ -60,16 +60,18 @@
         <div class="justify">
             <div class="remove-form-row" title="{{'common.remove'|trans}}" id="remove-address-__address__"><i class="fa fa-remove"></i></div>
             <div class="form-row address">
-                <div>{{ form_widget(form.type) }}</div>
-                <div>{{ form_widget(form.street1) }}</div>
-                <div>{{ form_widget(form.street2) }}</div>
-                <div>{{ form_widget(form.city) }}</div>
-                <div>{{ form_widget(form.state_province) }}</div>
-                <div>{{ form_widget(form.postal_code) }}</div>
-                <div>{{ form_widget(form.country) }}</div>
-            </div>
-            <div class="form-row comment">
-                {{form_widget(form.comment)}}
+                <div class="address-details">
+                    {{ form_widget(form.type) }}
+                    {{ form_widget(form.street1) }}
+                    {{ form_widget(form.street2) }}
+                    {{ form_widget(form.city) }}
+                    {{ form_widget(form.state_province) }}
+                    {{ form_widget(form.postal_code) }}
+                    {{ form_widget(form.country) }}
+                </div>
+                <div class="comment">
+                    {{form_widget(form.comment)}}
+                </div>
             </div>
         </div>
     {% endspaceless %}

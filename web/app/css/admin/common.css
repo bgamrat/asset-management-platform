@@ -174,4 +174,5 @@
 }
 .form-row:nth-of-type(odd) {
     background-color: #eee;
+    padding: 5px 0;
 }

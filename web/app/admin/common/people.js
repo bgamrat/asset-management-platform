@@ -36,12 +36,11 @@ define([
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson, lib, libGrid, core, client, personWords) {
+        person, lib, libGrid, core, client, personWords) {
     //"use strict";
     function run() {
         var action = null;
         var personId = null;
-        var person;
 
         var personViewDialog = new Dialog({
             title: core.view,
@@ -119,24 +118,16 @@ define([
         }, 'person-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeId, beforeIdFilter, filter, data;
+            var data;
             grid.clearSelection();
             if( personForm.validate() ) {
                 data = person.getData();
-                if( action === "view" ) {
-                    grid.collection.put(data[0]).then(function (data) {
-                        personViewDialog.hide();
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeIdFilter = filter.gt('name', data.name);
-                    store.filter(beforeIdFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        beforeId = (results.length > 0) ? results[0].name : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            personViewDialog.hide();
-                        }, lib.xhrError);
-                    });
-                }
+                data.id = personId;
+                grid.collection.put(data).then(function (data) {
+                    personViewDialog.hide();
+                    store.fetch();
+                    grid.refresh();
+                }, lib.xhrError);
             } else {
                 lib.textError(core.invalid_form)
             }
@@ -280,7 +271,7 @@ define([
 
         });
 
-        person = xperson.run('person', false);
+        person.run();
 
         lib.pageReady();
     }
