@@ -142,7 +142,6 @@ define([
         }, 'vendor-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeNameFilter, filter;
             if( vendorForm.validate() ) {
                 var i, brandData = brandSelect.getData(), brandIds = [];
                 for( i = 0; i < brandData.length; i++ ) {
@@ -159,23 +158,11 @@ define([
                     "rma_required": rmaRequiredCheckBox.get("checked"),
                     "service_instructions": serviceInstructionsInput.get("value")
                 };
-                if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
-                        vendorViewDialog.hide();
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeNameFilter = filter.gt('name', data.name);
-                    store.filter(beforeNameFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        var beforeId;
-                        beforeId = (results.length > 0) ? results[0].id : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            vendorViewDialog.hide();
-                            store.fetch();
-                            grid.refresh();
-                        }, lib.xhrError);
-                    });
-                }
+                grid.collection.put(data).then(function (data) {
+                    vendorViewDialog.hide();
+                    store.fetch();
+                    grid.refresh();
+                }, lib.xhrError);
             } else {
                 lib.textError(core.invalid_form)
             }

@@ -50,11 +50,11 @@
                         {{form_row(user_form.enabled)}}
                         {{form_row(user_form.locked)}} 
                     </div>
+                    <div>
+                        {{form_row(user_form.person)}}
+                    </div>
                 </fieldset>
                 <div id="user-view-tabs">
-                    <div id="user-view-person-tab">
-                        {% include 'common/person.html.twig' with { 'form' : user_form.person } %}
-                    </div>
                     <div id="user-view-roles-tab">
                         <fieldset class="inline-block">
                             <legend>{{'common.roles'|trans}}</legend>

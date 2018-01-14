@@ -228,7 +228,7 @@ define([
         }, 'event-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeNameFilter, filter, st, en;
+            var st, en;
             if( eventForm.validate() ) {
                 st = startInput.get('value');
                 en = endInput.get('value');
@@ -252,23 +252,11 @@ define([
                     "trailer_text": [contracts.getTrailerText(), trailers.getText()].join(', '),
                     "description": descriptionInput.get("value")
                 };
-                if( action === "view" ) {
-                    grid.collection.put(data).then(function (data) {
-                        eventViewDialog.hide();
-                    }, lib.xhrError);
-                } else {
-                    filter = new store.Filter();
-                    beforeNameFilter = filter.gt('name', data.name);
-                    store.filter(beforeNameFilter).sort('name').fetchRange({start: 0, end: 1}).then(function (results) {
-                        var beforeId;
-                        beforeId = (results.length > 0) ? results[0].id : null;
-                        grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                            eventViewDialog.hide();
-                            store.fetch();
-                            grid.refresh();
-                        }, lib.xhrError);
-                    });
-                }
+                grid.collection.put(data).then(function (data) {
+                    eventViewDialog.hide();
+                    store.fetch();
+                    grid.refresh();
+                }, lib.xhrError);
             } else {
                 lib.textError(core.invalid_form)
             }

@@ -12,7 +12,7 @@ security:
         ROLE_ADMIN:       ROLE_USER
         ROLE_ADMIN_USER:  ROLE_ADMIN
         ROLE_ADMIN_USER_ADMIN: [ROLE_API,ROLE_ADMIN,ROLE_ADMIN_USER]      
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_SUPER_ADMIN: ROLE_ADMIN, ROLE_ADMIN_USER_ADMIN
     providers:
         chain_provider:
             chain:
@@ -21,7 +21,7 @@ security:
             id: fos_user.user_provider.username
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
+        # disables authentication for assets and the profiler
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false

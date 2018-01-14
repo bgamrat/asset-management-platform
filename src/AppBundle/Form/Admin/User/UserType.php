@@ -2,7 +2,7 @@
 
 namespace AppBundle\Form\Admin\User;
 
-use AppBundle\Form\Common\PersonType;
+use AppBundle\Form\Common\Type\PersonType;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -44,13 +44,10 @@ class UserType extends AbstractType
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'email', TextType::class, ['label' => 'common.email'] )
                 ->add( 'username', TextType::class, ['label' => 'common.username', 'validation_groups' => array('registration')] )
-                ->add( 'person', PersonType::class, array(
-                    'data_class' => 'AppBundle\Entity\Common\Person',
-                    'by_reference' => true,
-                    'required' => false,
-                    'label' => false,
-                    'empty_data' => null
-                ) );
+                ->add( 'person', PersonType::class, [
+                    'required' => true,
+                    'label' => false
+                ] );
         if( $this->authorizationChecker->isGranted( 'ROLE_ADMIN_USER_ADMIN' ) )
         {
             $builder

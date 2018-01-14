@@ -11,11 +11,13 @@ define([
     "dijit/form/Form",
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
+    "dijit/form/FilteringSelect",
     "dijit/form/CheckBox",
     "dijit/form/Button",
     "dijit/Dialog",
     "dijit/layout/TabContainer",
     "dijit/layout/ContentPane",
+    'dojo/store/JsonRest',
     'dstore/Rest',
     'dstore/SimpleQuery',
     'dstore/Trackable',
@@ -23,16 +25,14 @@ define([
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
-    "app/common/person",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (declare, dom, domConstruct, html, on, xhr, aspect, query,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, Button,
+        registry, Form, TextBox, ValidationTextBox, FilteringSelect, CheckBox, Button,
         Dialog, TabContainer, ContentPane,
-        Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xperson,
+        JsonRest, Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
         lib, libGrid, core) {
     //"use strict";
     function run() {
@@ -50,13 +50,7 @@ define([
         var tabContainer = new TabContainer({
             style: "height: 600px; width: 100%;"
         }, "user-view-tabs");
-        
-        var personContentPane = new ContentPane({
-            title: core.person},
-        "user-view-person-tab"
-                );
-        tabContainer.addChild(personContentPane);
-        
+
         var rolesContentPane = new ContentPane({
             title: core.roles},
         "user-view-roles-tab"
@@ -77,6 +71,7 @@ define([
                 emailInput.set("value", "");
                 enabledCheckBox.set("checked", true);
                 lockedCheckBox.set("checked", false);
+                personSelector.set("value",null);
                 userViewDialog.set("title", core["new"]).show();
                 action = "new";
             });
@@ -100,6 +95,20 @@ define([
                 }
             });
         }
+
+        var personStore = new JsonRest({
+            target: '/api/store/people?',
+            useRangeHeaders: false,
+            idProperty: 'id'});
+
+        var personSelector = new FilteringSelect({
+            required: true,
+            "class": "name",
+            store: personStore,
+            searchAttr: "name",
+            placeholder: core.lastname
+        }, "user_person");
+        personSelector.startup();
 
         var emailInput = new ValidationTextBox({
             required: true,
@@ -153,7 +162,7 @@ define([
             }, 'user-save-btn');
             saveBtn.startup();
             saveBtn.on("click", function (event) {
-                var beforeId, beforeIdFilter, filter, g, groups, r, roles;
+                var g, groups, r, roles;
                 if( userForm.validate() ) {
                     groups = [];
                     for( g in userGroupsCheckBoxes ) {
@@ -175,22 +184,13 @@ define([
                         "locked": lockedCheckBox.get("checked"),
                         "groups": groups,
                         "roles": roles,
-                        "person": person.getData()
+                        "person": personSelector.get("value")
                     };
-                    if( action === "view" ) {
-                        grid.collection.put(data).then(function (data) {
-                            userViewDialog.hide();
-                        }, lib.xhrError);
-                    } else {
-                        filter = new store.Filter();
-                        beforeIdFilter = filter.gt('username', data.username);
-                        store.filter(beforeIdFilter).sort('username').fetchRange({start: 0, end: 1}).then(function (results) {
-                            beforeId = (results.length > 0) ? results[0].username : null;
-                            grid.collection.add(data, {"beforeId": beforeId}).then(function (data) {
-                                userViewDialog.hide();
-                            }, lib.xhrError);
-                        });
-                    }
+                    grid.collection.put(data).then(function (data) {
+                        userViewDialog.hide();
+                        store.fetch();
+                        grid.refresh();
+                    }, lib.xhrError);
                 } else {
                     lib.textError(core.invalid_form)
                 }
@@ -325,7 +325,7 @@ define([
                             }
                         }
                     }
-                    person.setData(user.person);
+                    personSelector.set("value",(user.person !== null) ? user.person.id : null);
                     userViewDialog.show();
                 }, lib.xhrError);
             }
@@ -382,7 +382,6 @@ define([
             }));
         });
 
-        person = xperson.run('user_person');
         lib.pageReady();
     }
     return {

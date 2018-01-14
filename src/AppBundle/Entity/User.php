@@ -88,6 +88,10 @@ class User extends BaseUser
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", unique=true, nullable=true)
      */
     protected $person = null;
+    /**
+     * @var boolean
+     */
+    protected $locked = false;
 
     public function __construct()
     {
@@ -132,6 +136,17 @@ class User extends BaseUser
     public function getPerson()
     {
         return $this->person;
+    }
+
+    public function setLocked( $locked )
+    {
+        $this->locked = $locked;
+        return $this;
+    }
+
+    public function isLocked()
+    {
+        return $this->locked;
     }
 
     public function setDeletedAt( $deletedAt )
