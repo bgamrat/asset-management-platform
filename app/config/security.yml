@@ -8,11 +8,13 @@ security:
     # Be sure to update the role validation for the User entity!
     role_hierarchy:
         ROLE_API:
-        ROLE_USER:
         ROLE_ADMIN:       ROLE_USER
+        ROLE_ADMIN_GROUP: ROLE_ADMIN
+        ROLE_ADMIN_GROUP_ADMIN: [ROLE_API,ROLE_ADMIN_GROUP]
         ROLE_ADMIN_USER:  ROLE_ADMIN
-        ROLE_ADMIN_USER_ADMIN: [ROLE_API,ROLE_ADMIN,ROLE_ADMIN_USER]      
-        ROLE_SUPER_ADMIN: ROLE_ADMIN, ROLE_ADMIN_USER_ADMIN
+        ROLE_ADMIN_USER_ADMIN: [ROLE_API,ROLE_ADMIN,ROLE_ADMIN_USER]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ADMIN_USER_ADMIN, ROLE_ADMIN_GROUP_ADMIN]
+        ROLE_USER:
     providers:
         chain_provider:
             chain:

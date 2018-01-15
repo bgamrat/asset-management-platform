@@ -233,6 +233,8 @@ common:
         Logo
     map:
         Map
+    members:
+        Members
     name:
         Name
     new:

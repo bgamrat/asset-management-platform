@@ -48,8 +48,14 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 600px; width: 100%;"
+            style: "height: 500px; width: 100%;"
         }, "user-view-tabs");
+
+        var groupsContentPane = new ContentPane({
+            title: core.groups},
+        "user-view-groups-tab"
+                );
+        tabContainer.addChild(groupsContentPane);
 
         var rolesContentPane = new ContentPane({
             title: core.roles},

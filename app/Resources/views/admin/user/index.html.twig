@@ -48,7 +48,7 @@
                         {{form_row(user_form.username)}}
                         {{form_row(user_form.email)}}
                         {{form_row(user_form.enabled)}}
-                        {{form_row(user_form.locked)}} 
+                        {{form_row(user_form.locked)}}
                     </div>
                     <div>
                         {{form_row(user_form.person)}}
@@ -59,12 +59,18 @@
                         <fieldset class="inline-block">
                             <legend>{{'common.roles'|trans}}</legend>
                             <div class="user-admin">
-                                {{form_row(user_form.groups)}}
                                 {{form_row(user_form.roles)}}
                             </div>
                         </fieldset>
                     </div>
-
+                    <div id="user-view-groups-tab">
+                        <fieldset class="inline-block">
+                            <legend>{{'common.groups'|trans}}</legend>
+                            <div class="user-admin">
+                                {{form_row(user_form.groups)}}
+                            </div>
+                        </fieldset>
+                    </div>
                 </div>
                 {{ form_end(user_form) }}
             {% else %}
@@ -76,13 +82,13 @@
                         <span id="view-enabled"></span>
                         <span id="view-locked"></span>
                     </div>
-                </fieldset> 
+                </fieldset>
                 {% include 'common/view-only/person.html.twig' with { 'base': 'user'} %}
             {% endif %}
         </div>
         {% if is_granted('ROLE_ADMIN_USER_ADMIN') %}
             <div id="user-invite-dialog">
-                {{ form(invitation_form) }}  
+                {{ form(invitation_form) }}
                 <div class="center">
                     <button id="user-invite-send-btn" type="button">{{'common.send'|trans}}</button>
                 </div>

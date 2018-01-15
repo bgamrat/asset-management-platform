@@ -117,7 +117,7 @@ services:
         arguments: ['@app.form.data_transformer.contract']
         tags:
             - { name: form.type, alias: 'app_client_contract_type' }
-            
+
     app.admin.form.type.event:
         class: AppBundle\Form\Admin\Schedule\EventType
         arguments: ['@doctrine.orm.entity_manager']
@@ -129,6 +129,12 @@ services:
         arguments: ['@app.form.data_transformer.event_trailer']
         tags:
             - { name: form.type, alias: 'app_event_trailer_type' }
+
+    app.admin.form.type.group:
+        class: AppBundle\Form\Admin\User\GroupType
+        arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']
+        tags:
+        - { name: form.type, alias: group }
 
     app.admin.form.type.issue:
         class: AppBundle\Form\Admin\Asset\IssueType

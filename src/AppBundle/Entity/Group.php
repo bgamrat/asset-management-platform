@@ -7,6 +7,8 @@ namespace AppBundle\Entity;
 use FOS\UserBundle\Model\Group as BaseGroup;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use AppBundle\Entity\Traits\Active;
+use AppBundle\Entity\Traits\Comment;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**
@@ -18,7 +20,9 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 class Group extends BaseGroup
 {
 
-    use SoftDeleteableEntity;
+    use Active,
+        Comment,
+        SoftDeleteableEntity;
 
     /**
      * @ORM\Id

@@ -51,6 +51,7 @@ define({
         "lastname": "Last name",
         "locked": "Locked",
         "manufacturer": "Manufacturer",
+        "members": "Members",
         "middlename": "Middle name",
         "name": "Name",
         "new": "New",

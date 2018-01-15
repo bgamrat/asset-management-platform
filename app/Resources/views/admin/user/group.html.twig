@@ -1,0 +1,90 @@
+{% block title %}{{ 'common.group'|trans }} {{ 'common.admin'|trans}}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% form_theme group_form _self %}
+
+{% block admin_content %}
+    <div id="group-wrapper">
+        <h1>{{ block('title') }}</h1>
+        <div class="grid-controls">
+            <div>
+                {% if is_granted('ROLE_ADMIN_GROUP_ADMIN') %}
+                    <button id="group-new-btn" type="button">{{ 'common.new'|trans }}</button>
+                {% endif %}
+            </div>
+            <div>
+                <form id="group-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="group-filter-input">
+                </form>
+            </div>
+            {% if is_granted('ROLE_ADMIN_GROUP_ADMIN') %}
+                <button id="group-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+            {% endif %}
+        </div>
+        <div id="group-grid">
+        </div>
+        <div id="group-view-dialog">
+            {% if is_granted('ROLE_ADMIN_GROUP_ADMIN') %}
+                {{form_start(group_form)}}
+                <div class="text-right">
+                    <button id="group-save-btn" type="button">{{ 'common.save'|trans }}</button>
+                </div>
+                <fieldset class="name-active">
+                    <legend>{{'common.group'|trans}}</legend>
+                    <div class="justify">
+                        <span class="name">
+                            {{form_row(group_form.name)}}
+                        </span>
+                        <span class="comment">
+                            {{form_row(group_form.comment)}}
+                        </span>
+                        <span class="active">
+                            {{form_widget(group_form.active)}}
+                            {{form_label(group_form.active)}}
+                        </span>
+                    </div>
+
+                </fieldset>
+                <div id="group-view-tabs">
+                    <div id="group-view-roles-tab">
+                        <fieldset class="inline-block">
+                            <legend>{{'common.roles'|trans}}</legend>
+                            <div class="group-admin">
+                                {{form_row(group_form.roles)}}
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div id="group-view-members-tab">
+                        <fieldset class="inline-block">
+                            <legend>{{'common.members'|trans}}</legend>
+                            <div class="group-admin">
+                                {# {form_row(group_form.members)} #}
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                {{ form_end(group_form) }}
+            {% else %}
+                <fieldset class="inline-block">
+                    <legend>{{'common.group'|trans}}</legend>
+                    <div class="view-inline">
+                        <span id="view-groupname"></span>
+                        <span id="view-email"></span>
+                        <span id="view-enabled"></span>
+                        <span id="view-locked"></span>
+                    </div>
+                </fieldset>
+                {% include 'common/view-only/person.html.twig' with { 'base': 'group'} %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["{% if is_granted('ROLE_ADMIN_GROUP_ADMIN') %}app/admin/user/group{% else %}app/admin/view-only/group{%endif %}"],
+                function (group) {
+                    group.run();
+                });
+    </script>
+{% endblock %}
