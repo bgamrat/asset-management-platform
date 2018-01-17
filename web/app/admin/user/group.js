@@ -38,6 +38,7 @@ define([
     function run() {
         var action = null;
         var viewGroupname = dom.byId("group_groupname");
+        var groupId;
 
         var groupViewDialog = new Dialog({
             title: core.view,
@@ -73,6 +74,7 @@ define([
             }, 'group-new-btn');
             newBtn.startup();
             newBtn.on("click", function (event) {
+                groupId = null;
                 nameInput.set("value", "");
                 nameInput.set("readOnly", false);
                 activeCheckBox.set("checked", true);
@@ -148,6 +150,7 @@ define([
                         }
                     }
                     var data = {
+                        "id": groupId,
                         "name": nameInput.get("value"),
                         "comment": commentInput.get("value"),
                         "active": activeCheckBox.get("checked"),
@@ -169,7 +172,7 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/user/groups', useRangeHeaders: true, idProperty: 'groupname'});
+        var store = new TrackableRest({target: '/api/groups', useRangeHeaders: true, idProperty: 'name'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
@@ -205,7 +208,7 @@ define([
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var groupname = row.data.groupname;
+            var groupname = row.data.name;
             if( checkBoxes.indexOf(field) === -1 ) {
                 if( typeof grid.selection[0] !== "undefined" ) {
                     grid.clearSelection();
@@ -214,6 +217,7 @@ define([
                 grid.collection.get(groupname).then(function (group) {
                     var r;
                     action = "view";
+                    groupId = group.id;
                     nameInput.set("value", group.name);
                     commentInput.set("value", group.comment);
                     if( typeof activeCheckBox !== "undefined" ) {

@@ -5,7 +5,7 @@ namespace AppBundle\Controller\Api\Admin\User;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Group;
 use AppBundle\Util\DStore;
-use AppBundle\Form\Admin\Group\GroupType;
+use AppBundle\Form\Admin\User\GroupType;
 use AppBundle\Form\Admin\Group\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +28,7 @@ class GroupsController extends FOSRestController
 
         $queryBuilder = $em->createQueryBuilder()->select( ['g'] )
                 ->from( 'AppBundle:Group', 'g' )
-                ->orderBy( 'u.' . $dstore['sort-field'], $dstore['sort-direction'] );
+                ->orderBy( 'g.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -43,9 +43,7 @@ class GroupsController extends FOSRestController
             switch( $dstore['filter'][DStore::OP] )
             {
                 case DStore::LIKE:
-                    $filterQuery = $queryBuilder->expr()->orX(
-                            $queryBuilder->expr()->like( 'g.name', '?1' ), $queryBuilder->expr()->like( 'u.email', '?1' )
-                    );
+                    $filterQuery = $queryBuilder->expr()->like( 'g.name', '?1' );
                     break;
                 case DStore::GT:
                     $filterQuery = $queryBuilder->expr()->gt( 'g.name', '?1' );
@@ -57,43 +55,23 @@ class GroupsController extends FOSRestController
         {
             $queryBuilder->where( $filterQuery );
         }
-        $query = $queryBuilder->getQuery();
-        $groupCollection = $query->getResult();
-        $data = [];
-        foreach( $groupCollection as $u )
-        {
-            $item = [
-                'name' => $g->getName(),
-                'comment' => $g->getComment(),
-                'active' => $g->isActive()
-            ];
-
-            $data[] = $item;
-        }
-        return $data;
+        $data = $queryBuilder->getQuery()->getResult();
+        return array_values( $data );
     }
 
     /**
      * @View()
      */
-    public function getGroupAction( $groupname )
+    public function getGroupAction( $name )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_GROUP', null, 'Unable to access this page!' );
 
-        $group = $this->get( 'fos_group.group_manager' )->findGroupBy( ['groupname' => $groupname] );
+        $group = $this->get( 'fos_user.group_manager' )->findGroupByName( $name );
+
         if( $group !== null )
         {
-            $data = [
-                'name' => $group->getName(),
-                'comment' => $group->getComment(),
-                'active' => $group->isActive()
-            ];
-
-            if( $this->isGranted( 'ROLE_ADMIN_GROUP_ADMIN' ) )
-            {
-                $data['roles'] = $group->getRoles();
-            }
-            return $data;
+            $form = $this->createForm( GroupType::class, $group, ['allow_extra_fields' => true] );
+            return $form->getViewData();
         }
         else
         {
@@ -102,30 +80,30 @@ class GroupsController extends FOSRestController
     }
 
     /**
+     * @View()
      */
-    public function postGroupAction( $groupname, Request $request )
+    public function postGroupAction( Request $request )
     {
-        return $this->putGroupAction( $groupname, $request );
+        return $this->putGroupAction( $request );
     }
 
     /**
      * @View()
      */
-    public function putGroupAction( $groupname, Request $request )
+    public function putGroupAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_GROUP_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
         $em = $this->getDoctrine()->getManager();
+        $groupManager = $this->get( 'fos_user.group_manager' );
         $data = $request->request->all();
-        if( $id === "null" )
+        if( $data['id'] === null )
         {
-                           $group = $groupManager->createGroup();
-                $group->setGroupname( $data['groupname'] );
-                $group->setPassword( md5( 'junk' ) );
+            $group = $groupManager->createGroup($data['name']);
         }
         else
         {
-            $group = $em->getRepository( 'AppBundle\Entity\Group' )->findOneBy( ['groupname' => $groupname] );
+            $group = $em->getRepository( 'AppBundle\Entity\Group' )->find( $data['id'] );
         }
         $form = $this->createForm( GroupType::class, $group, [] );
         try
@@ -134,11 +112,12 @@ class GroupsController extends FOSRestController
             if( $form->isValid() )
             {
                 $group = $form->getData();
+                $groupManager->updateGroup( $group );
                 $em->persist( $group );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_group_get_group', array('id' => $group->getId()), true // absolute
+                                'app_admin_api_user_groups_get_group', array('id' => $group->getId()), true // absolute
                         )
                 );
             }

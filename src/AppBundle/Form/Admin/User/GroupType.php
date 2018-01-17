@@ -46,7 +46,7 @@ class GroupType extends AbstractType
                     'required' => false,
                     'label' => false
                 ] )
-                ->add( 'active', CheckboxType::class )
+                ->add( 'active', CheckboxType::class, [ 'label' => false ] )
         ;
         if( $this->authorizationChecker->isGranted( 'ROLE_ADMIN_USER_ADMIN' ) )
         {
@@ -65,14 +65,14 @@ class GroupType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'groups' => [],
-            'data_class' => 'AppBundle\Entity\User'
+            'roles' => [],
+            'data_class' => 'AppBundle\Entity\Group'
         ) );
     }
 
     public function getName()
     {
-        return 'user';
+        return 'group';
     }
 
 }
