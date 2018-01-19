@@ -210,7 +210,7 @@ services:
 
     app.admin.form.type.user:
         class: AppBundle\Form\Admin\User\UserType
-        arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']
+        arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%', '@app.form.data_transformer.person_type' ]
         tags:
         - { name: form.type, alias: user }
 

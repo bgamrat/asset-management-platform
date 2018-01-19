@@ -254,7 +254,7 @@ define([
         }, 'asset-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeModelTextFilter, filter, data, purchased;
+            var data, purchased;
             grid.clearSelection();
             if( assetForm.validate() ) {
                 purchased = purchasedInput.get("value");

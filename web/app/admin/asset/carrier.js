@@ -145,7 +145,6 @@ define([
         }, 'carrier-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeNameFilter, filter;
             if( carrierForm.validate() ) {
                 var data = {
                     "id": carrierId,

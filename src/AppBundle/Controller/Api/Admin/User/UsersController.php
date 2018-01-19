@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Api\Admin\User;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\User;
 use AppBundle\Util\DStore;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use AppBundle\Form\Admin\User\UserType;
 use AppBundle\Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -77,6 +78,7 @@ class UsersController extends FOSRestController
         foreach( $userCollection as $u )
         {
             $item = [
+                'id' => $u->getId(),
                 'username' => $u->getUsername(),
                 'email' => $u->getEmail(),
             ];
@@ -97,32 +99,28 @@ class UsersController extends FOSRestController
     /**
      * @View()
      */
-    public function getUserAction( $username )
+    public function getUserAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER', null, 'Unable to access this page!' );
 
-        $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['username' => $username] );
+        $em = $this->getDoctrine()->getManager();
+        if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $em->getFilters()->disable( 'softdeleteable' );
+        }
+        $user = $em->getRepository('AppBundle\Entity\User')->find( $id );
         if( $user !== null )
         {
-            $data = [
-                'username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-                'enabled' => $user->isEnabled(),
-                'locked' => $user->isLocked()
-            ];
-            $data['person'] = $user->getPerson();
+            $logUtil = $this->get( 'app.util.log' );
+            $logUtil->getLog( 'AppBundle\Entity\UserLog', $id );
+            $history = $logUtil->translateIdsToText();
+            $formUtil = $this->get( 'app.util.form' );
+            $formUtil->saveDataTimestamp( 'user' . $user->getId(), $user->getUpdatedAt() );
 
-            if( $this->isGranted( 'ROLE_ADMIN_USER_ADMIN' ) )
-            {
-
-                $data['roles'] = $user->getRoles();
-                $data['groups'] = [];
-                foreach( $user->getGroups() as $group )
-                {
-                    $data['groups'][] = $group->getId();
-                }
-            }
-            return $data;
+            $form = $this->createForm( UserType::class, $user, ['allow_extra_fields' => true] );
+            $user->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
         }
         else
         {
@@ -131,30 +129,33 @@ class UsersController extends FOSRestController
     }
 
     /**
+     * @View()
      */
-    public function postUserAction( $username, Request $request )
+    public function postUserAction( $id, Request $request )
     {
-        return $this->putUserAction( $username, $request );
+        return $this->putUserAction( $id, $request );
     }
 
     /**
      * @View()
      */
-    public function putUserAction( $username, Request $request )
+    public function putUserAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
-        if( $id === "null" )
+        $username = $data['username'];
+        if( $id === null )
         {
-                           $user = $userManager->createUser();
+                $user = $userManager->createUser();
                 $user->setUsername( $data['username'] );
                 $user->setPassword( md5( 'junk' ) );
         }
         else
         {
-            $user = $em->getRepository( 'AppBundle\Entity\User' )->findOneBy( ['username' => $username] );
+            $user = $em->getRepository( 'AppBundle\Entity\User' )->find( $id );
+            $person = $user->getPerson();
         }
         $form = $this->createForm( UserType::class, $user, [] );
         try
@@ -162,8 +163,15 @@ class UsersController extends FOSRestController
             $form->submit( $data );
             if( $form->isValid() )
             {
+                if (!empty($person)) {
+                    $person->setUser(null);
+                    $em->persist($person);
+                }
                 $user = $form->getData();
                 $em->persist( $user );
+                $updatedPerson = $user->getPerson();
+                $updatedPerson->setUser($user);
+                $em->persist($updatedPerson);
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
@@ -189,12 +197,12 @@ class UsersController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function patchUserAction( $username, Request $request )
+    public function patchUserAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER_ADMIN', null, 'Unable to access this page!' );
         $data = $request->request->all();
         $userManager = $this->get( 'fos_user.user_manager' );
-        $user = $userManager->findUserBy( ['username' => $username] );
+        $user = $userManager->findUserBy( ['id' => $id ] );
         if( $user !== null )
         {
             if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )

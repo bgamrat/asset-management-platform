@@ -2,7 +2,7 @@
 
 namespace AppBundle\Form\Admin\User;
 
-use AppBundle\Form\Common\Type\PersonType;
+use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -19,8 +19,9 @@ class UserType extends AbstractType
 
     private $authorizationChecker;
     private $roles = null;
+    private $personToIdTransformer;
 
-    public function __construct( AuthorizationCheckerInterface $authorizationChecker, Array $roles )
+    public function __construct( AuthorizationCheckerInterface $authorizationChecker, Array $roles, PersonToIdTransformer $personToIdTransformer )
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->roles = [];
@@ -36,6 +37,7 @@ class UserType extends AbstractType
             $role->value = $n;
             $this->roles[] = $role;
         }
+        $this->personToIdTransformer = $personToIdTransformer;
     }
 
     public function buildForm( FormBuilderInterface $builder, array $options )
@@ -44,10 +46,12 @@ class UserType extends AbstractType
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'email', TextType::class, ['label' => 'common.email'] )
                 ->add( 'username', TextType::class, ['label' => 'common.username', 'validation_groups' => array('registration')] )
-                ->add( 'person', PersonType::class, [
-                    'required' => true,
+                ->add( 'person', TextType::class, [
+                    'required' => false,
                     'label' => false
                 ] );
+        $builder->get( 'person' )
+                ->addModelTransformer( $this->personToIdTransformer );
         if( $this->authorizationChecker->isGranted( 'ROLE_ADMIN_USER_ADMIN' ) )
         {
             $builder

@@ -18,7 +18,7 @@ use AppBundle\Entity\Traits\History;
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
- * @Gedmo\Loggable
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\UserLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("person")
  */
@@ -66,14 +66,7 @@ class User extends BaseUser
      */
     protected $groups;
     /**
-     * @Assert\Choice(multiple=true, 
-     *  min=0, 
-     *  choices = {"ROLE_API",
-     *             "ROLE_USER",
-     *             "ROLE_ADMIN",
-     *             "ROLE_ADMIN_USER",
-     *             "ROLE_ADMIN_USER_ADMIN",
-     *             "ROLE_SUPER_ADMIN"}, message = "Invalid role")
+     * @var array
      * @Gedmo\Versioned
      */
     protected $roles;
@@ -96,6 +89,26 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+    }
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /*
@@ -127,10 +140,8 @@ class User extends BaseUser
     public function setPerson( Person $person )
     {
         $this->person = $person;
-        if( $person->getUser() === null )
-        {
-            $person->setUser( $this );
-        }
+
+        return $this;
     }
 
     public function getPerson()

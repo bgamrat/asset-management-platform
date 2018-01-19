@@ -143,8 +143,8 @@ class Person
      */
     private $addresses;
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="person", fetch="EXTRA_LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", unique=true, nullable=true)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="person", fetch="EXTRA_LAZY", cascade="remove")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      * @Gedmo\Versioned
      */
     private $user = null;
@@ -337,13 +337,10 @@ class Person
      *
      * @return Person
      */
-    public function setUser( User $user )
+    public function setUser( User $user = null )
     {
         $this->user = $user;
-        if( $user->getPerson() === null )
-        {
-            $user->setPerson( $this );
-        }
+
         return $this;
     }
 

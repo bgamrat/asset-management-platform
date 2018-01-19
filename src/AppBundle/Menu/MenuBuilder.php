@@ -71,6 +71,7 @@ class MenuBuilder implements ContainerAwareInterface
 
             $menu['admin']['user']->addChild( 'users', ['label' => 'common.users', 'route' => 'app_admin_user_default_index'] );
             $menu['admin']['user']->addChild( 'invitations', ['label' => 'user.invitation', 'route' => 'app_admin_user_invitation_index'] );
+            $menu['admin']['user']->addChild( 'groups', ['label' => 'common.groups', 'route' => 'app_admin_user_group_index'] );
         }
 
         $menu['admin']->addChild( 'admin-venues', ['label' => 'common.venues', 'route' => 'app_admin_venue_venue_index'] );

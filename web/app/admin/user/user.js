@@ -38,7 +38,7 @@ define([
     function run() {
         var action = null;
         var viewUsername = dom.byId("user_username");
-
+        var userId;
         var userViewDialog = new Dialog({
             title: core.view
         }, "user-view-dialog");
@@ -72,6 +72,7 @@ define([
             }, 'user-new-btn');
             newBtn.startup();
             newBtn.on("click", function (event) {
+                userId = null;
                 usernameInput.set("value", "");
                 usernameInput.set("readOnly", false);
                 emailInput.set("value", "");
@@ -105,7 +106,7 @@ define([
         var personStore = new JsonRest({
             target: '/api/store/people?',
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: 'name'});
 
         var personSelector = new FilteringSelect({
             required: true,
@@ -168,7 +169,7 @@ define([
             }, 'user-save-btn');
             saveBtn.startup();
             saveBtn.on("click", function (event) {
-                var g, groups, r, roles;
+                var g, groups, r, roles, person;
                 if( userForm.validate() ) {
                     groups = [];
                     for( g in userGroupsCheckBoxes ) {
@@ -183,14 +184,16 @@ define([
                             //roles.push(r);
                         }
                     }
+                    person = personSelector.get("item");
                     var data = {
+                        "id": userId,
                         "username": usernameInput.get("value"),
                         "email": emailInput.get("value"),
                         "enabled": enabledCheckBox.get("checked"),
                         "locked": lockedCheckBox.get("checked"),
                         "groups": groups,
                         "roles": roles,
-                        "person": personSelector.get("value")
+                        "person": person === null ? null : person.id
                     };
                     grid.collection.put(data).then(function (data) {
                         userViewDialog.hide();
@@ -248,11 +251,14 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/users', useRangeHeaders: true, idProperty: 'username'});
+        var store = new TrackableRest({target: '/api/users', useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
             columns: {
+                id: {
+                    label: core.id
+                },
                 username: {
                     label: core.username
                 },
@@ -301,16 +307,17 @@ define([
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var username = row.data.username;
+            var id = row.data.id;
             if( checkBoxes.indexOf(field) === -1 ) {
                 if( typeof grid.selection[0] !== "undefined" ) {
                     grid.clearSelection();
                 }
                 grid.select(row);
-                grid.collection.get(username).then(function (user) {
+                grid.collection.get(id).then(function (user) {
                     var r;
                     action = "view";
                     html.set(viewUsername, user.username);
+                    userId = user.id;
                     usernameInput.set("value", user.username);
                     emailInput.set("value", user.email);
                     if( typeof enabledCheckBox !== "undefined" ) {
@@ -331,7 +338,7 @@ define([
                             }
                         }
                     }
-                    personSelector.set("value",(user.person !== null) ? user.person.id : null);
+                    personSelector.set("displayedValue",(user.person !== null) ? user.person.fullName : null);
                     userViewDialog.show();
                 }, lib.xhrError);
             }
@@ -341,12 +348,12 @@ define([
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
-            var username = row.data.username;
+            var id = row.data.id;
             var value = event.value;
             switch( field ) {
                 case "enabled":
                 case "locked":
-                    xhr("/api/users/" + username, {
+                    xhr("/api/users/" + id, {
                         method: "PATCH",
                         handleAs: "json",
                         headers: {'Content-Type': 'application/json'},
