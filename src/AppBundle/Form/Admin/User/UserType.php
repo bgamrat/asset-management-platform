@@ -47,8 +47,9 @@ class UserType extends AbstractType
                 ->add( 'email', TextType::class, ['label' => 'common.email'] )
                 ->add( 'username', TextType::class, ['label' => 'common.username', 'validation_groups' => array('registration')] )
                 ->add( 'person', TextType::class, [
-                    'required' => false,
-                    'label' => false
+                    'required' => true,
+                    'label' => false,
+                    'mapped' => false
                 ] );
         $builder->get( 'person' )
                 ->addModelTransformer( $this->personToIdTransformer );

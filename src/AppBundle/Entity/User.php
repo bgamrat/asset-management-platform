@@ -137,7 +137,7 @@ class User extends BaseUser
         return $this->invitation;
     }
 
-    public function setPerson( Person $person )
+    public function setPerson( Person $person = null )
     {
         $this->person = $person;
 

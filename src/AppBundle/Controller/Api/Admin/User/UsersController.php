@@ -108,7 +108,7 @@ class UsersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $user = $em->getRepository('AppBundle\Entity\User')->find( $id );
+        $user = $em->getRepository( 'AppBundle\Entity\User' )->find( $id );
         if( $user !== null )
         {
             $logUtil = $this->get( 'app.util.log' );
@@ -144,18 +144,20 @@ class UsersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
         $em = $this->getDoctrine()->getManager();
+
         $data = $request->request->all();
         $username = $data['username'];
         if( $id === null )
         {
-                $user = $userManager->createUser();
-                $user->setUsername( $data['username'] );
-                $user->setPassword( md5( 'junk' ) );
+            $userManager = $this->get( 'fos_user.user_manager' );
+            $user = $userManager->createUser();
+            $user->setUsername( $data['username'] );
+            $user->setPassword( md5( 'junk' ) );
         }
         else
         {
             $user = $em->getRepository( 'AppBundle\Entity\User' )->find( $id );
-            $person = $user->getPerson();
+            $person = $user->getPerson(true);
         }
         $form = $this->createForm( UserType::class, $user, [] );
         try
@@ -163,15 +165,23 @@ class UsersController extends FOSRestController
             $form->submit( $data );
             if( $form->isValid() )
             {
-                if (!empty($person)) {
-                    $person->setUser(null);
-                    $em->persist($person);
+                if( !empty( $person ) )
+                {
+                    $person->setUser( null );
+                    $em->persist( $person );
                 }
+                if( !empty( $user ) )
+                {
+                    $user->setPerson( null );
+                    $em->persist( $user );
+                }
+                $em->flush();
                 $user = $form->getData();
                 $em->persist( $user );
-                $updatedPerson = $user->getPerson();
-                $updatedPerson->setUser($user);
-                $em->persist($updatedPerson);
+                $updatedPerson = $form->get( 'person' )->getData();
+                $updatedPerson->setUser( $user );
+                $user->setPerson( $updatedPerson );
+                $em->persist( $updatedPerson );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
@@ -202,7 +212,7 @@ class UsersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER_ADMIN', null, 'Unable to access this page!' );
         $data = $request->request->all();
         $userManager = $this->get( 'fos_user.user_manager' );
-        $user = $userManager->findUserBy( ['id' => $id ] );
+        $user = $userManager->findUserBy( ['id' => $id] );
         if( $user !== null )
         {
             if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
