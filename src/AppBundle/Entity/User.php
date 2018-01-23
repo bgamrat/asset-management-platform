@@ -67,6 +67,12 @@ class User extends BaseUser
     protected $groups;
     /**
      * @var array
+     * @Assert\All({
+     * @Assert\Regex(
+     *     pattern="/^ROLE_([A-Z]+_?)+$/",
+     *     message = "invalid.role {{ value }}",
+     *     match=true)
+     * })
      * @Gedmo\Versioned
      */
     protected $roles;

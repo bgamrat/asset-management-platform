@@ -2,6 +2,7 @@ define([
     "dojo/_base/declare",
     "dojo/dom",
     "dojo/dom-construct",
+    "dojo/dom-attr",
     "dojo/html",
     "dojo/on",
     "dojo/request/xhr",
@@ -29,7 +30,7 @@ define([
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
-], function (declare, dom, domConstruct, html, on, xhr, aspect, query,
+], function (declare, dom, domConstruct, domAttr, html, on, xhr, aspect, query,
         registry, Form, TextBox, ValidationTextBox, FilteringSelect, CheckBox, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest, Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
@@ -72,13 +73,20 @@ define([
             }, 'user-new-btn');
             newBtn.startup();
             newBtn.on("click", function (event) {
+                var g, r;
                 userId = null;
                 usernameInput.set("value", "");
                 usernameInput.set("readOnly", false);
                 emailInput.set("value", "");
                 enabledCheckBox.set("checked", true);
                 lockedCheckBox.set("checked", false);
-                personSelector.set("value",null);
+                personSelector.set("value", null);
+                for( g in userGroupsCheckBoxes ) {
+                    userGroupsCheckBoxes[g].set("checked", false);
+                }
+                for( r in userRolesCheckBoxes ) {
+                    userRolesCheckBoxes[r].set("checked", false);
+                }
                 userViewDialog.set("title", core["new"]).show();
                 action = "new";
             });
@@ -153,7 +161,7 @@ define([
         var userRolesCheckBoxes = {};
         query('[data-type="user-role-cb"] input[type="checkbox"]').forEach(function (node) {
             var label, cb;
-            label = query('label[for="' + node.id + '"]')[0].textContent;
+            label = domAttr.get(query('label[for="' + node.id + '"]')[0],"data-text");
             cb = new CheckBox({label: label}, node.id);
             cb.startup();
             userRolesCheckBoxes[label] = cb;
@@ -181,7 +189,6 @@ define([
                     for( r in userRolesCheckBoxes ) {
                         if( userRolesCheckBoxes[r].get("checked") === true ) {
                             roles.push(parseInt(userRolesCheckBoxes[r].get("id").replace(/.*(\d+)$/, "$1")));
-                            //roles.push(r);
                         }
                     }
                     person = personSelector.get("item");
@@ -314,7 +321,7 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (user) {
-                    var r;
+                    var r,g;
                     action = "view";
                     html.set(viewUsername, user.username);
                     userId = user.id;
@@ -338,7 +345,7 @@ define([
                             }
                         }
                     }
-                    personSelector.set("displayedValue",(user.person !== null) ? user.person.fullName : null);
+                    personSelector.set("displayedValue", (user.person !== null) ? user.person.fullName : null);
                     userViewDialog.show();
                 }, lib.xhrError);
             }

@@ -12,6 +12,9 @@
 [name="user"] .dijitSelect .dijitButtonContents {
     width: 160px;
 }
+fieldset ul#user_roles {
+    display: inline-block;
+}
 ul#user_roles li,
 ul#user_groups li,
 ul#group_roles {
@@ -45,4 +48,12 @@ ul#user_groups li label {
 .field-sent {
     text-align: center;
     width: 75px;
+}
+.columns.four {
+  -webkit-column-count: 4;
+     -moz-column-count: 4;
+          column-count: 4;
+  -webkit-column-width: 175px;
+     -moz-column-width: 175px;
+          column-width: 175px;
 }

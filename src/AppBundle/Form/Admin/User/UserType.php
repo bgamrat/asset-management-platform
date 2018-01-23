@@ -73,8 +73,7 @@ class UserType extends AbstractType
                         'expanded' => true,
                         'label' => 'common.roles',
                         'choice_label' => 'name',
-                        'choice_translation_domain' => false,
-                        //'translation_domain' => false,
+                        'choice_translation_domain' => 'user',
                         'attr' => [ 'data-type' => 'user-role-cb']] );
         }
     }

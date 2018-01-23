@@ -3,16 +3,29 @@
 
 {% form_theme user_form _self %}
 
-{% block _user_person_addresses_entry_row %}
-    {{ block('_address_entry_row') }}
-{% endblock %}
-
-{% block _user_person_emails_entry_row %}
-    {{ block('_emails_entry_row') }}
-{% endblock %}
-
-{% block _user_person_phones_entry_row %}
-    {{ block('_phones_entry_row') }}
+{% block _user_roles_widget %}
+    {% spaceless %}
+    <div class="columns four">
+        {% set trans_domain = form.vars.choice_translation_domain %}
+        {% set prev = null %}
+        {% for choice in form.vars.choices %}
+            {% set perm = choice.label|split('_') %}
+            {% if perm[1] != prev %}
+                {% if ul is defined %}
+                </ul>
+            {% endif %}
+            {% set ul = true %}
+            <ul {{ block('widget_container_attributes') }}>
+            {% endif %}
+            <li>
+                <input type="checkbox" id="user_roles_{{loop.index0}}" name="user[roles][]" value="{{choice.value}}">
+                <label for="user_roles_{{loop.index0}}" data-text="{{choice.label}}">{{choice.label|trans({},trans_domain)}}</label>
+            </li>
+            {% set prev = perm[1] %}
+        {% endfor %}
+        </ul>
+    </div>
+{% endspaceless %}
 {% endblock %}
 
 {% block admin_content %}

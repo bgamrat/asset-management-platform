@@ -165,6 +165,7 @@ class UsersController extends FOSRestController
             $form->submit( $data );
             if( $form->isValid() )
             {
+                // Clear out prior assignments to avoid constraints
                 if( !empty( $person ) )
                 {
                     $person->setUser( null );

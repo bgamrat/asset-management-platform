@@ -2,6 +2,8 @@ blank.name:
     "Name cannot be blank"
 "invalid.name {{ value }}":
     "Invalid name {{ value }}"
+"invalid.role {{ value }}":
+    "Invalid role {{ value }}"
 "invalid.url {{ value }}":
     "Invalid URL {{ value }}"
 invalid_channels:
