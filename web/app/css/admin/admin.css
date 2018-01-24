@@ -190,3 +190,6 @@ fieldset ul.unstyled {
 .end .dijitTextBox {
     width: 100px;
 }
+.search.dijitTextBox {
+    width: 230px;
+}

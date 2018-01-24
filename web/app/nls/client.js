@@ -1,5 +1,5 @@
 define({
     root: ({
-       "contracts": "Contracts"
+        "contracts": "Contracts"
     })
 });

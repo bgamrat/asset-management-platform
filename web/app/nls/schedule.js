@@ -6,6 +6,7 @@ define({
         "end_date": "End Date",
         "end_time": "End Time",
         "event": "Event",
+        "rental": "Rental",
         "schedule": "Schedule",
         "staff": "Staff",
         "start_date": "Start Date",

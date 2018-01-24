@@ -52,17 +52,16 @@ define([
             style: "height: 500px; width: 100%;"
         }, "user-view-tabs");
 
-        var groupsContentPane = new ContentPane({
-            title: core.groups},
-        "user-view-groups-tab"
-                );
-        tabContainer.addChild(groupsContentPane);
-
         var rolesContentPane = new ContentPane({
             title: core.roles},
         "user-view-roles-tab"
                 );
         tabContainer.addChild(rolesContentPane);
+        var groupsContentPane = new ContentPane({
+            title: core.groups},
+        "user-view-groups-tab"
+                );
+        tabContainer.addChild(groupsContentPane);
 
         tabContainer.startup();
 
@@ -161,7 +160,7 @@ define([
         var userRolesCheckBoxes = {};
         query('[data-type="user-role-cb"] input[type="checkbox"]').forEach(function (node) {
             var label, cb;
-            label = domAttr.get(query('label[for="' + node.id + '"]')[0],"data-text");
+            label = domAttr.get(query('label[for="' + node.id + '"]')[0], "data-text");
             cb = new CheckBox({label: label}, node.id);
             cb.startup();
             userRolesCheckBoxes[label] = cb;
@@ -321,7 +320,7 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (user) {
-                    var r,g;
+                    var r, g;
                     action = "view";
                     html.set(viewUsername, user.username);
                     userId = user.id;

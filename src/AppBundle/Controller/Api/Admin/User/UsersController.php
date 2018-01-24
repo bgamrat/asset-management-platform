@@ -147,7 +147,7 @@ class UsersController extends FOSRestController
 
         $data = $request->request->all();
         $username = $data['username'];
-        if( $id === null )
+        if( $id === "null" )
         {
             $userManager = $this->get( 'fos_user.user_manager' );
             $user = $userManager->createUser();

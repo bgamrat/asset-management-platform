@@ -54,7 +54,7 @@ define([
             idProperty: 'id'});
         searchInput = new ComboBox({
             trim: true,
-            "class": "name",
+            "class": "search",
             store: searchStore,
             searchAttr: "name",
             placeholder: core.search

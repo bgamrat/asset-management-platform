@@ -138,6 +138,17 @@ class EventController extends Controller
         }
 
         $assetBalance = [];
+
+        $categoryQuantities = $event->getCategoryQuantities();
+        foreach( $categoryQuantities as $cq )
+        {
+            $cId = $cq->getCategory()->getId();
+            if( !isset( $assetBalance[$cId] ) )
+            {
+                $assetBalance[$cId] = clone($cq);
+            }
+        }
+
         foreach( $requiresCategoryQuantities as $categoryId => $rcq )
         {
             $assetBalance[$categoryId] = clone($rcq);

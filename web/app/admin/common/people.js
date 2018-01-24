@@ -41,6 +41,7 @@ define([
     function run() {
         var action = null;
         var personId = null;
+        var urlParams, id;
 
         var personViewDialog = new Dialog({
             title: core.view,
@@ -268,7 +269,16 @@ define([
                     registry.findWidgets(node)[0].set("checked", state);
                 });
             });
-
+            urlParams = new URLSearchParams(window.location.search);
+            if( urlParams.has("id") ) {
+                id = urlParams.get("id");
+                grid.collection.get(id).then(function (pers) {
+                    personId = pers.id;
+                    action = "view";
+                    person.setData(pers);
+                    personViewDialog.show();
+                }, lib.xhrError);
+            }
         });
 
         person.run();

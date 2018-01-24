@@ -5,11 +5,10 @@
             <thead>
                 <tr>
                     <th>{{'asset.category'|trans}}</th>
-                    <th>{{'common.quantity'|trans}}</th>
+                    <th>{{'common.quantity'|trans}} {{'asset.required'|trans}}</th>
                     {% for name, l in location_names %}
                         <th>{{name}}</th>
                     {% endfor %}
-                    <th>{{'common.rental'|trans}}</th>
                     <th>{{'asset.balance'|trans}}</th>
                 </tr>
             </thead>
@@ -34,14 +33,6 @@
                             {% for name, l in location_names %}
                                 <td></td>
                             {% endfor %}
-                        {% endif %}
-                        {% if rental[category_quantity.category.id] is defined %}
-                            <td class="quantity available">
-                                {{rental[category_quantity.category.id]}}
-                                {% set row_balance = row_balance - rental[category_quantity.category.id] %}
-                            </td>
-                        {% else %}
-                            <td></td>
                         {% endif %}
                         <td class="quantity balance {% if row_balance > 0 %}deficit{% endif %}">
                             {{row_balance}}

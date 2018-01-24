@@ -69,10 +69,16 @@ define([
         tabContainer.addChild(detailsContentPane);
 
         var equipmentContentPane = new ContentPane({
-            title: core.equipment},
-        "event-view-equipment-tab"
+            title: core.contract + " " + core.equipment},
+        "event-view-contract-equipment-tab"
                 );
         tabContainer.addChild(equipmentContentPane);
+
+        var otherEquipmentContentPane = new ContentPane({
+            title: core.other + " " + core.equipment},
+        "event-view-other-equipment-tab"
+                );
+        tabContainer.addChild(otherEquipmentContentPane);
 
         var contactsContentPane = new ContentPane({
             title: core.contacts},
