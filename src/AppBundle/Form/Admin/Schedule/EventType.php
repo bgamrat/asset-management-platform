@@ -20,7 +20,6 @@ use AppBundle\Form\Admin\Schedule\Type\TrailerType;
 use AppBundle\Form\Admin\Client\Type\ContractType;
 use AppBundle\Form\Common\Type\PersonType;
 
-
 class EventType extends AbstractType
 {
 
@@ -59,7 +58,6 @@ class EventType extends AbstractType
                 ->add( 'tentative', CheckboxType::class, ['label' => 'event.tentative'] )
                 ->add( 'billable', CheckboxType::class, ['label' => 'event.billable'] )
                 ->add( 'canceled', CheckboxType::class, ['label' => 'event.canceled'] )
-
                 ->add( 'contacts', CollectionType::class, [
                     'entry_type' => PersonType::class,
                     'required' => false,
@@ -114,6 +112,17 @@ class EventType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true,
                     'prototype_name' => '__time_span__'
+                ] )
+                ->add( 'items', CollectionType::class, [
+                    'entry_type' => EventItemType::class,
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__item__'
                 ] )
         ;
 

@@ -32,6 +32,7 @@ define([
     "app/admin/schedule/trailers",
     "app/admin/schedule/category_quantities",
     "app/admin/schedule/time_spans",
+    "app/admin/schedule/event_items",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -41,7 +42,7 @@ define([
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, ColumnHider, Selection, Editor, put,
-        xcontact, contracts, trailers, categoryQuantities, timeSpans,
+        xcontact, contracts, trailers, categoryQuantities, timeSpans, eventItems,
         lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
@@ -74,11 +75,11 @@ define([
                 );
         tabContainer.addChild(equipmentContentPane);
 
-        var otherEquipmentContentPane = new ContentPane({
-            title: core.other + " " + core.equipment},
-        "event-view-other-equipment-tab"
+        var rentalEquipmentContentPane = new ContentPane({
+            title: schedule.rental + " " + core.equipment},
+        "event-view-rental-equipment-tab"
                 );
-        tabContainer.addChild(otherEquipmentContentPane);
+        tabContainer.addChild(rentalEquipmentContentPane);
 
         var contactsContentPane = new ContentPane({
             title: core.contacts},
@@ -130,6 +131,7 @@ define([
             trailers.setData(null);
             categoryQuantities.setData(null);
             timeSpans.setData(null);
+            eventItems.setData(null);
             document.getElementById("full-equipment-link").classList.add("hidden");
             eventViewDialog.set("title", core["new"]).show();
             action = "new";
@@ -253,6 +255,7 @@ define([
                     "client_text": clientFilteringSelect.get("displayedValue"),
                     "venue_text": venueFilteringSelect.get("displayedValue"),
                     "time_spans": timeSpans.getData(),
+                    "items": eventItems.getData(),
                     "trailers": trailers.getData(),
                     "category_quantities": categoryQuantities.getData(),
                     "trailer_text": [contracts.getTrailerText(), trailers.getText()].join(', '),
@@ -398,6 +401,7 @@ define([
                     categoryQuantities.setData(event.categoryQuantities);
                     contracts.setData(event.contracts);
                     timeSpans.setData(event.timeSpans);
+                    eventItems.setData(event.items);
                     eventViewDialog.show();
                     contact.setData(event.contacts);
                 }, lib.xhrError);
@@ -460,6 +464,7 @@ define([
         trailers.run('event_trailers');
         categoryQuantities.run();
         timeSpans.run('event_time_spans');
+        eventItems.run('event_items');
         lib.pageReady();
     }
     return {

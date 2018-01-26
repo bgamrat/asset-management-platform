@@ -37,7 +37,8 @@ create an admin user.
 5. Run **./bin/fixtures-demo.sh** to install demo data (optional)
 6. To build the *Dojo* assets for production use, **cd web/vendor; ./build.sh;**.  When in
 dev mode, the source JavaScript files are used to allow you to step through the code.
-7. There is an *httpd.conf* file in *app/system/etc/httpd/conf.d*, it might work
+7. Run **php bin/console assetic:dump** to dump the CSS
+8. There is an *httpd.conf* file in *app/system/etc/httpd/conf.d*, it might work
 
 ## Terminology
 

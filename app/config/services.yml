@@ -124,6 +124,12 @@ services:
         tags:
             - { name: form.type, alias: 'app_schedule_event_type' }
 
+    app.admin.form.type.event_item:
+        class: AppBundle\Form\Admin\Schedule\EventItemType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_schedule_event_item_type' }
+
     app.admin.field.type.event_trailer:
         class: AppBundle\Form\Admin\Schedule\Type\TrailerType
         arguments: ['@app.form.data_transformer.event_trailer']

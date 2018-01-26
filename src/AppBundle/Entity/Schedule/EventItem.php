@@ -1,13 +1,12 @@
 <?php
 
-Namespace AppBundle\Entity\Asset;
+Namespace AppBundle\Entity\Schedule;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Traits\Versioned\Comment;
@@ -15,14 +14,14 @@ use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Asset\Asset;
 
 /**
- * IssueItem
+ * EventItem
  *
  * @ORM\Entity()
- * @ORM\Table(name="issue_item")
- * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Asset\IssueLog")
+ * @ORM\Table(name="event_item")
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Schedule\EventLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class IssueItem
+class EventItem
 {
 
     use Name,
@@ -36,7 +35,7 @@ class IssueItem
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\ManyToOne(targetEntity="Issue", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="Event", inversedBy="items")
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      */
     private $id;
@@ -73,9 +72,9 @@ class IssueItem
      *
      * @param string $asset
      *
-     * @return IssueItem
+     * @return EventItem
      */
-    public function setAsset(Asset $asset )
+    public function setAsset( Asset $asset )
     {
         $this->asset = $asset;
 

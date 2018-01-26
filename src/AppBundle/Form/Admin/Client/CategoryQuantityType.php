@@ -30,7 +30,7 @@ class CategoryQuantityType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class, ['label' => false] )
+               // ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'category', TextType::class, [
                     'label' => 'asset.category'
                 ] )

@@ -12,15 +12,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Client\Contract;
 use AppBundle\Entity\Common\CategoryQuantity;
+use AppBundle\Entity\Schedule\EventItem;
 use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Schedule\TimeSpan;
 use AppBundle\Entity\Venue\Venue;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\Cost;
-use AppBundle\Entity\Traits\Versioned\CustomAttributes;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\Versioned\Value;
 use AppBundle\Entity\Traits\History;
+
 
 /**
  * Event
@@ -138,6 +139,16 @@ class Event
      *      )
      */
     private $categoryQuantities;
+    /**
+     * @var ArrayCollection $items
+     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Schedule\EventItem", cascade={"persist","remove"}, orphanRemoval=true)
+     * @ORM\JoinTable(name="event_items",
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id", unique=false, nullable=true)}
+     *      )
+     */
+    protected $items;
 
     public function __construct()
     {
@@ -145,6 +156,7 @@ class Event
         $this->contracts = new ArrayCollection();
         $this->trailers = new ArrayCollection();
         $this->time_spans = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     /**
@@ -300,7 +312,7 @@ class Event
      *
      * @return Event
      */
-    public function setVenue( $venue )
+    public function setVenue( Venue $venue )
     {
         $this->venue = $venue;
 
@@ -455,6 +467,29 @@ class Event
     public function removeTimeSpan( TimeSpan $timespan )
     {
         $this->timespans->removeElement( $timespan );
+    }
+
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    public function addItem( EventItem $item )
+    {
+        if( !$this->items->contains( $item ) )
+        {
+            $this->items->add( $item );
+        }
+    }
+
+    public function removeItem( EventItem $item )
+    {
+        if( !$this->items->contains( $item ) )
+        {
+            return;
+        }
+
+        $this->items->removeElement( $item );
     }
 
 }

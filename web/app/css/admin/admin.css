@@ -176,8 +176,10 @@ fieldset ul.unstyled {
     margin: 20px 0;
 }
 .form-row .category, .form-row .quantity, .form-row .value, .form-row .comment {
-    margin: 5px 3px;
     display: inline-block;
+}
+.form-row .category, .form-row .quantity, .form-row .value {
+    margin: 5px 3px;
 }
 .form-row .quantity .dijitTextBox {
     width: 50px;
