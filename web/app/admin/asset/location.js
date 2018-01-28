@@ -154,10 +154,16 @@ define([
 
         function setLocationType(locationType) {
             var i, l = locationTypeRadioButton.length;
-            for( i = 0; i < l; i++ ) {
-                if( parseInt(locationTypeRadioButton[i].value) === locationType ) {
-                    locationTypeRadioButton[i].set("checked", true);
-                    break;
+            if( locationType === null ) {
+                for( i = 0; i < l; i++ ) {
+                    locationTypeRadioButton[i].set("checked", false);
+                }
+            } else {
+                for( i = 0; i < l; i++ ) {
+                    if( parseInt(locationTypeRadioButton[i].value) === locationType ) {
+                        locationTypeRadioButton[i].set("checked", true);
+                        break;
+                    }
                 }
             }
         }
@@ -228,8 +234,10 @@ define([
                         locationFilteringSelect.set("readOnly", true);
                     }
                 } else {
+                    setLocationType(null);
                     locationFilteringSelect.set('value', null);
                     locationFilteringSelect.set("readOnly", true);
+                    document.getElementById(locationEcho).innerHTML = "";
                 }
             }
         }

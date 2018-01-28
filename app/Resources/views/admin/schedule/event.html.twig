@@ -36,7 +36,6 @@
 
 {% block _event_category_quantities_entry_row %}{% spaceless %}
     <div class="form-row category-quantity">
-        <span class="id">{{ form_widget(form.id) }}</span>
         <span class="category-select">{{ form_widget(form.category) }}</span>
         <span class="quantity">{{ form_widget(form.quantity) }}</span>
         <span class="value">{{ form_widget(form.value) }}</span>
@@ -168,12 +167,22 @@
                         </div>
                     </div>
                     <div id="event-view-rental-equipment-tab">
-                        <div id="items" class="items">
+                        <fieldset id="items" class="items">
                             {{form_row(event_form.items)}}
                             {% if event_form.items.vars.allow_add %}
                                 <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                             {% endif %}
-                        </div>
+                        </fieldset>
+                    </div>
+                    <div id="event-view-transfers-tab">
+                        <fieldset class="transfers">
+                            <legend>{{'common.inbound'|trans}}</legend>
+                            <div id="transfers-in"></div>
+                        </fieldset>
+                        <fieldset class="transfers">
+                            <legend>{{'common.outbound'|trans}}</legend>
+                            <div id="transfers-out"></div>
+                        </fieldset>
                     </div>
                     <div id="event-view-contacts-tab">
                         <fieldset class="contacts">

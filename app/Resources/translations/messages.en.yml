@@ -211,6 +211,8 @@ common:
         Home
     identification:
         Identification
+    inbound:
+        Inbound
     invalid:
         invalid
     invite:
@@ -251,6 +253,8 @@ common:
         Notes
     order:
         Order
+    outbound:
+        Outbound
     park:
         Park
     password:

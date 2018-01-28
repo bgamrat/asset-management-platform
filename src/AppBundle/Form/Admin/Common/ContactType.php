@@ -15,15 +15,17 @@ use AppBundle\Form\Admin\Common\DataTransformer\ContactToIdTransformer;
 use AppBundle\Form\Admin\Common\DataTransformer\ContactTypeToIdTransformer;
 use AppBundle\Form\Common\DataTransformer\PersonToIdTransformer;
 use AppBundle\Form\Common\DataTransformer\AddressToIdTransformer;
+use AppBundle\Form\Admin\EventListener\ContactFieldSubscriber;
 
 class ContactType extends AbstractType
 {
 
-    private $em;
+    private $em,$entities;
 
-    public function __construct( EntityManager $em )
+    public function __construct( EntityManager $em, Array $entities )
     {
         $this->em = $em;
+        $this->entities = $entities;
     }
 
     /**
@@ -46,6 +48,7 @@ class ContactType extends AbstractType
                 ->addModelTransformer( new PersonToIdTransformer( $this->em ) );
         $builder->get( 'address_id' )
                 ->addModelTransformer( new AddressToIdTransformer( $this->em ) );
+        $builder->addEventSubscriber( new ContactFieldSubscriber($this->em, $this->entities) );
     }
 
     /**

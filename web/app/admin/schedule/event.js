@@ -33,6 +33,7 @@ define([
     "app/admin/schedule/category_quantities",
     "app/admin/schedule/time_spans",
     "app/admin/schedule/event_items",
+    "app/admin/schedule/transfers",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -42,7 +43,7 @@ define([
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, ColumnHider, Selection, Editor, put,
-        xcontact, contracts, trailers, categoryQuantities, timeSpans, eventItems,
+        xcontact, contracts, trailers, categoryQuantities, timeSpans, eventItems, transfers,
         lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
@@ -80,6 +81,12 @@ define([
         "event-view-rental-equipment-tab"
                 );
         tabContainer.addChild(rentalEquipmentContentPane);
+
+        var transfersContentPane = new ContentPane({
+            title: core.transfers },
+        "event-view-transfers-tab"
+                );
+        tabContainer.addChild(transfersContentPane);
 
         var contactsContentPane = new ContentPane({
             title: core.contacts},
@@ -402,6 +409,7 @@ define([
                     contracts.setData(event.contracts);
                     timeSpans.setData(event.timeSpans);
                     eventItems.setData(event.items);
+                    transfers.setData(event.id);
                     eventViewDialog.show();
                     contact.setData(event.contacts);
                 }, lib.xhrError);
@@ -465,6 +473,7 @@ define([
         categoryQuantities.run();
         timeSpans.run('event_time_spans');
         eventItems.run('event_items');
+        transfers.run();
         lib.pageReady();
     }
     return {

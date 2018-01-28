@@ -12,11 +12,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Location
  *
+ * A location is a place where an item can be
+ *
  * @ORM\Table(name="location")
  * @ORM\Entity()
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * 
+ *
  */
 class Location
 {

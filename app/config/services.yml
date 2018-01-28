@@ -88,7 +88,7 @@ services:
         tags:
             - { name: form.type, alias: 'app_barcode_type' }
 
-    app.admin.form.type.asset_location_type_type:
+    app.admin.form.type.asset_location_type:
         class: AppBundle\Form\Admin\Asset\AssetLocationType
         arguments: ['@doctrine.orm.entity_manager','%location_type.entities%']
         tags:
@@ -108,7 +108,7 @@ services:
 
     app.admin.form.type.contact:
         class: AppBundle\Form\Admin\Common\ContactType
-        arguments: ['@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.entity_manager','%location_type.entities%']
         tags:
             - { name: form.type, alias: 'app_contact_type' }
 

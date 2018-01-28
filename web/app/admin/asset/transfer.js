@@ -102,11 +102,14 @@ define([
             sourceLocation.setData(null);
             toFilteringSelect.set("value", "");
             destinationLocation.setData(null);
+            carrierSelect.set("value",null);
+            carrierServiceSelect.set("value",null);
             trackingNumberInput.set("value", "");
             costInput.set("value", null);
             instructionsInput.set("value", "");
             updatedInput.set("value", null);
             createdInput.set("value", null);
+            billTo.setData(null);
             transferViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -251,9 +254,17 @@ define([
         }, 'transfer-save-btn');
         saveBtn.startup();
         saveBtn.on("click", function (event) {
-            var beforeTransferTextFilter, filter, data, locationId, locationData, purchased;
+            var data, to, from;
             grid.clearSelection();
             if( transferForm.validate() ) {
+                to = toFilteringSelect.get("value");
+                if (to === "") {
+                    to = null;
+                }
+                from = fromFilteringSelect.get("value");
+                if (from === "") {
+                    from = null;
+                }
                 data = {
                     "id": transferId,
                     "status_text": statusSelect.get("displayedValue"),
@@ -265,11 +276,11 @@ define([
                     "tracking_number": trackingNumberInput.get("value"),
                     "instructions": instructionsInput.get("value"),
                     "items": transferItems.getData(),
-                    "bill_to": billTo.getData(),
-                    "from": fromFilteringSelect.get("value"),
+                    "bill_tos": billTo.getData(),
+                    "from": from,
                     "source_location": sourceLocation.getData(),
                     "source_location_text": sourceLocation.getText().replace(/<br( \/)?>/, "\n"),
-                    "to": toFilteringSelect.get("value"),
+                    "to": to,
                     "destination_location": destinationLocation.getData(),
                     "destination_location_text": destinationLocation.getText().replace(/<br( \/)?>/, "\n")
                 };
@@ -381,7 +392,7 @@ define([
                     }
                     trackingNumberInput.set("value", transfer.trackingNumber);
                     instructionsInput.set("value", transfer.instructions);
-                    billTo.setData(transfer.bill_to);
+                    billTo.setData(transfer.billTos);
                     fromFilteringSelect.set("value", null);
                     if( transfer.from !== null && typeof transfer.from.fullName !== "undefined" ) {
                         fromFilteringSelect.set("displayedValue", transfer.from.fullName);

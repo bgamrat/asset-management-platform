@@ -9,7 +9,7 @@ define([
     "dijit/form/CurrencyTextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/FilteringSelect",
-    "dijit/form/Select",
+    "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/schedule",
     "dojo/NodeList-dom",
@@ -17,8 +17,8 @@ define([
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on, query, aspect,
         JsonRest,
-        CurrencyTextBox, ValidationTextBox, FilteringSelect, Select,
-        core, schedule) {
+        CurrencyTextBox, ValidationTextBox, FilteringSelect,
+        lib, core, schedule) {
     //"use strict";
 
     var dataPrototype;
@@ -44,7 +44,6 @@ define([
     function createDijits() {
         var dijit;
         var base = prototypeNode.id + "_" + contactFilteringSelect.length + "_";
-
         dijit = new FilteringSelect({
             store: contactStore,
             labelAttr: "label",
@@ -59,10 +58,11 @@ define([
         dijit.on("change", function (evt) {
             var id = parseInt(this.id.replace(/\D/g, ''));
             var item = this.get('item');
-            eventFilteringSelect[id].store.target = "/api/store/events?" + item.contact_type + "=" + item.contact_entity_id;
+            if (item !== null && typeof item.contact !== "undefined") {
+                eventFilteringSelect[id].store.target = "/api/store/events?" + lib.contactTypes[item.type.id] + "=" + item.contact.entity.id;
+            }
         });
         contactFilteringSelect.push(dijit);
-
         dijit = new FilteringSelect({
             store: eventStore,
             labelAttr: "name",
@@ -110,7 +110,6 @@ define([
         item = commentInput.splice(id, 1);
         item[0].destroyRecursive();
         domConstruct.destroy(target);
-
     }
 
     function run() {
@@ -120,6 +119,8 @@ define([
         } else {
             throw new Error('No divId');
         }
+
+        lib.getContactTypes();
 
         prototypeNode = dom.byId(getDivId());
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
@@ -161,6 +162,7 @@ define([
             contact = contactFilteringSelect[i].get('item');
             if( contact !== null ) {
                 contactData = {
+                    "id": contact.id,
                     "contact_entity_id": contact.entity,
                     "contact_type": contact.type.id,
                     "person_id": contact.person.id,
@@ -193,7 +195,7 @@ define([
             destroyRow(0, node);
         });
 
-        if( typeof items === "object" && items.length !== 0 ) {
+        if( items !== null && typeof items === "object" && items.length !== 0 ) {
             l = items.length;
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();

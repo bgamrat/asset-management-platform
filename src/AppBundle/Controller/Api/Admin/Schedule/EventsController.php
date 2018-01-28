@@ -6,6 +6,7 @@ use AppBundle\Form\Admin\Schedule\EventType;
 use AppBundle\Entity\Schedule\Event;
 use AppBundle\Util\DStore;
 use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -119,9 +120,17 @@ class EventsController extends FOSRestController
                         ->getRepository( 'AppBundle\Entity\Schedule\Event' )->find( $id );
         if( $event !== null )
         {
-            $form = $this->createForm( EventType::class, $event, ['allow_extra_fields' => true] );
+            $logUtil = $this->get( 'app.util.log' );
+            $logUtil->getLog( 'AppBundle\Entity\Schedule\EventLog', $id );
+            $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'event' . $event->getId(), $event->getUpdatedAt() );
+
+            $form = $this->createForm( EventType::class, $event, ['allow_extra_fields' => true] );
+            $event->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
+
             return $form->getViewData();
         }
         else

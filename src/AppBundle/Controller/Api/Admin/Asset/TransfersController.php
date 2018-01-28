@@ -207,7 +207,7 @@ class TransfersController extends FOSRestController
                         $location = $transfer->getDestinationLocation();
                         $locationEntity = $location->getEntity();
                         $locationText = $locationEntity !== null ? $locationEntity->getName() : $location->getType()->getName();
-                        $t->getAsset()->setLocation( $location )->setLocationText($locationText);
+                        $t->getAsset()->setLocation( $location )->setLocationText( $locationText );
                     }
                 }
                 else
@@ -322,6 +322,23 @@ class TransfersController extends FOSRestController
         {
             throw $this->createNotFoundException( 'Not found!' );
         }
+    }
+
+    /**
+     * @View()
+     */
+    public function getEventTransfersAction( $eventId )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $em = $this->getDoctrine()->getManager();
+        $columns = ['t.id', 's.name', 't.source_location_text', 't.destination_location_text'];
+        $queryBuilder = $em->createQueryBuilder()->select( $columns )
+                ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
+                ->join( 't.status', 's' )
+                ->leftJoin( 't.bill_tos', 'tb' )
+                ->where( 'tb.event = :event_id' )
+                ->setParameter( 'event_id', $eventId );
+        return $transferData = $queryBuilder->getQuery()->getResult();
     }
 
 }

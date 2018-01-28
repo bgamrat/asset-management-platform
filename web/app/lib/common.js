@@ -86,12 +86,12 @@ define([
 
     }
 
-    function formatDate(value,unix) {
+    function formatDate(value, unix) {
         var date = new Date(), year, month, day;
-        if (typeof unix === "undefined") {
+        if( typeof unix === "undefined" ) {
             unix = true;
         }
-        if (unix === true) {
+        if( unix === true ) {
             value *= 1000;
         }
         date.setTime(value);
@@ -101,8 +101,8 @@ define([
         return year + '-' + month + '-' + day;
     }
 
-    function addTimeToDate(date,time) {
-        if (date instanceof Date) {
+    function addTimeToDate(date, time) {
+        if( date instanceof Date ) {
             date.setHours(time.getHours());
             date.setMinutes(time.getMinutes());
             date.setSeconds(time.getSeconds());
@@ -144,6 +144,19 @@ define([
             l = res.length;
             for( i = 0; i < l; i++ ) {
                 addressTypes[res[i].id] = res[i]['type'];
+            }
+        })
+    }
+
+    var contactTypes = [];
+    function getContactTypes() {
+        return xhr.get('/api/store/contacttypes', {
+            handleAs: "json"
+        }).then(function (res) {
+            var i, l;
+            l = res.length;
+            for( i = 0; i < l; i++ ) {
+                contactTypes[res[i].id] = res[i]['type'];
             }
         })
     }
@@ -191,9 +204,11 @@ define([
         addressTypes: addressTypes,
         addTimeToDate: addTimeToDate,
         confirmAction: confirmAction,
+        contactTypes: contactTypes,
         emailTypes: emailTypes,
         formatDate: formatDate,
         getAddressTypes: getAddressTypes,
+        getContactTypes: getContactTypes,
         getEmailTypes: getEmailTypes,
         getPersonTypes: getPersonTypes,
         getPhoneTypes: getPhoneTypes,

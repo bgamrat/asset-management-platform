@@ -31,7 +31,7 @@ class BillToType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'id', HiddenType::class )
+                //->add( 'id', HiddenType::class )
                 ->add( 'contact', ContactType::class )
                 ->add( 'event', TextType::class, ['label' => 'common.event'] )
                 ->add( 'amount', MoneyType::class, ['label' => 'common.amount', 'currency' => 'USD'] )

@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Traits\Versioned\Cost;
 use AppBundle\Entity\Traits\History;
+use AppBundle\Entity\Common\BillTo;
 
 /**
  * Transfer
@@ -185,7 +186,7 @@ class Transfer
      *
      * @return Transfer
      */
-    public function setFrom( Person $from )
+    public function setFrom( Person $from = null)
     {
         $this->from = $from;
 
@@ -253,11 +254,11 @@ class Transfer
     /**
      * Set to
      *
-     * @param string $to
+     * @param Person $to
      *
      * @return Transfer
      */
-    public function setTo( Person $to )
+    public function setTo( Person $to = null)
     {
         $this->to = $to;
 
@@ -267,7 +268,7 @@ class Transfer
     /**
      * Get to
      *
-     * @return string
+     * @return Person
      */
     public function getTo()
     {
@@ -361,20 +362,18 @@ class Transfer
 
     public function setBillTos( $bill_tos )
     {
-        foreach( $bill_tos as $a )
+        foreach( $bill_tos as $bt )
         {
-            $this->addBillTos( $a );
-            $a->setTransfer( $this );
+            $this->addBillTos( $bt );
         }
         return $this;
     }
 
-    public function addBillTo( Model $bill_to )
+    public function addBillTos( BillTo $bill_to )
     {
-        if( !$this->extends->contains( $bill_to ) )
+        if( !$this->bill_tos->contains( $bill_to ) )
         {
-            $this->extends->add( $bill_to );
-            $a->setTransfer( $this );
+            $this->bill_tos->add( $bill_to );
         }
     }
 
