@@ -72,56 +72,68 @@ class EventController extends Controller
         $locationNames = [];
         $dependencies = [];
         $requirements = array_keys( $requiresCategoryQuantities );
-        $locationAssetCollection = array_merge( $trailerAssets, $venueAssets );
-        foreach( $locationAssetCollection as $locationName => $locationAssets )
+
+        $locationAssetCollection = [];
+        if( !empty( $trailerAssets ) )
         {
-            foreach( $locationAssets as $a )
+            $locationAssetCollection = $trailerAssets;
+        }
+        if( !empty( $venueAssets ) )
+        {
+            $locationAssetCollection = array_merge( $locationAssetCollection, $venueAssets );
+        }
+        if( !empty( $locationAssetCollection ) )
+        {
+            foreach( $locationAssetCollection as $locationName => $locationAssets )
             {
-                $model = $a->getModel();
-                $modelId = $model->getId();
-                $modelSatisfies = $model->getSatisfies();
-                $itemSatisfies = [];
-                if( $a->getStatus()->isAvailable() && !empty( $modelSatisfies ) )
+                foreach( $locationAssets as $a )
                 {
-                    $locationNames[$locationName] = true;
-                    foreach( $modelSatisfies as $s )
+                    $model = $a->getModel();
+                    $modelId = $model->getId();
+                    $modelSatisfies = $model->getSatisfies();
+                    $itemSatisfies = [];
+                    if( $a->getStatus()->isAvailable() && !empty( $modelSatisfies ) )
                     {
-                        $categoryId = $s->getId();
-                        if( !isset( $eventAssets[$categoryId] ) )
+                        $locationNames[$locationName] = true;
+                        foreach( $modelSatisfies as $s )
                         {
-                            $eventAssets[$categoryId] = [];
-                        }
-                        if( !isset( $eventAssets[$categoryId][$locationName] ) )
-                        {
-                            $eventAssets[$categoryId][$locationName] = 0;
-                        }
-                        $eventAssets[$categoryId][$locationName] ++;
-
-                        $itemSatisfies[] = $categoryId;
-                        if( !isset( $satisfies[$categoryId] ) )
-                        {
-                            $satisfies[$categoryId] = 0;
-                        }
-                        $satisfies[$categoryId] ++;
-                    }
-
-                    if( count( array_intersect( $requirements, $itemSatisfies ) ) > 0 )
-                    {
-                        if( !isset( $assetCollection[$modelId] ) )
-                        {
-                            $assetCollection[$modelId] = 0;
-                        }
-                        $assetCollection[$modelId] ++;
-                        $modelDependencies = $this->getDependencies( $a->getModel() );
-                        if( !empty( $modelDependencies ) )
-                        {
-                            foreach( $modelDependencies as $md )
+                            $categoryId = $s->getId();
+                            if( !isset( $eventAssets[$categoryId] ) )
                             {
-                                if( !isset( $dependencies[$modelId] ) )
+                                $eventAssets[$categoryId] = [];
+                            }
+                            if( !isset( $eventAssets[$categoryId][$locationName] ) )
+                            {
+                                $eventAssets[$categoryId][$locationName] = 0;
+                            }
+                            $eventAssets[$categoryId][$locationName] ++;
+
+                            $itemSatisfies[] = $categoryId;
+                            if( !isset( $satisfies[$categoryId] ) )
+                            {
+                                $satisfies[$categoryId] = 0;
+                            }
+                            $satisfies[$categoryId] ++;
+                        }
+
+                        if( count( array_intersect( $requirements, $itemSatisfies ) ) > 0 )
+                        {
+                            if( !isset( $assetCollection[$modelId] ) )
+                            {
+                                $assetCollection[$modelId] = 0;
+                            }
+                            $assetCollection[$modelId] ++;
+                            $modelDependencies = $this->getDependencies( $a->getModel() );
+                            if( !empty( $modelDependencies ) )
+                            {
+                                foreach( $modelDependencies as $md )
                                 {
-                                    $dependencies[$modelId] = 0;
+                                    if( !isset( $dependencies[$modelId] ) )
+                                    {
+                                        $dependencies[$modelId] = 0;
+                                    }
+                                    $dependencies[$modelId] ++;
                                 }
-                                $dependencies[$modelId] ++;
                             }
                         }
                     }
@@ -129,11 +141,15 @@ class EventController extends Controller
             }
         }
 
-        foreach( $assetCollection as $modelId => $ac )
+        if( !empty( $assetCollection ) )
         {
-            if( isset( $dependencies[$modelId] ) )
+
+            foreach( $assetCollection as $modelId => $ac )
             {
-                $assetCollection[$modelId] -= $dependencies[$modelId];
+                if( isset( $dependencies[$modelId] ) )
+                {
+                    $assetCollection[$modelId] -= $dependencies[$modelId];
+                }
             }
         }
 
@@ -158,11 +174,30 @@ class EventController extends Controller
             }
         }
 
-        return $this->render( 'common/event-view.html.twig', [
+        $columns = ['t.id', 't.updatedAt', 'c.name AS carrier', 'cs.name AS carrier_service', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount',
+            'a.id AS asset_id', 'b.barcode', 'br.name AS brand', 'm.name AS model'];
+        $queryBuilder = $em->createQueryBuilder()->select( $columns )
+                ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
+                ->join( 't.status', 's' )
+                ->leftJoin( 't.items', 'ti' )
+                ->leftJoin( 't.carrier', 'c' )
+                ->leftJoin( 'c.services', 'cs' )
+                ->leftJoin( 'ti.asset', 'a' )
+                ->leftJoin( 'a.model', 'm' )
+                ->leftJoin( 'm.brand', 'br' )
+                ->leftJoin( 'a.barcodes', 'b' )
+                ->leftJoin( 't.bill_tos', 'tb' )
+                ->where( 'tb.event = :event_id' )
+                ->setParameter( 'event_id', $id )
+                ->orderBy( 't.updatedAt,b.barcode' );
+        $transfers = $queryBuilder->distinct()->getQuery()->getResult();
+
+        return $this->render( 'common/event.html.twig', [
                     'event' => $event,
                     'event_assets' => $eventAssets,
                     'location_names' => $locationNames,
                     'asset_balance' => $assetBalance,
+                    'transfers' => $transfers,
                     'no_hide' => true,
                     'omit_menu' => true]
         );

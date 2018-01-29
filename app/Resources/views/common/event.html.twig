@@ -129,6 +129,20 @@
                 </div>
             </div>
         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="transfers-heading">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#transfers" aria-expanded="false" aria-controls="transfers">
+                        {{'asset.transfers'|trans}}
+                    </a>
+                </h4>
+            </div>
+            <div id="transfers" class="panel-collapse collapse" role="tabpanel" aria-labeled-by="transfers-heading">
+                <div class="panel-body">
+                    {% include 'common/parts/event-transfers.html.twig' %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 

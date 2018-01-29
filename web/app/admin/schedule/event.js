@@ -139,6 +139,7 @@ define([
             categoryQuantities.setData(null);
             timeSpans.setData(null);
             eventItems.setData(null);
+            transfers.setData(null);
             document.getElementById("full-equipment-link").classList.add("hidden");
             eventViewDialog.set("title", core["new"]).show();
             action = "new";
@@ -379,7 +380,8 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (event) {
-                    var r, equipmentLink, timestamp = new Date();
+                    var equipmentLink, timestamp = new Date();
+                    var eventVenue;
                     action = "view";
                     eventId = event.id;
                     nameInput.set("value", event.name);
@@ -399,7 +401,8 @@ define([
                     billableCheckBox.set("checked", event.billable === true);
                     canceledCheckBox.set("checked", event.canceled === true);
                     clientFilteringSelect.set('displayedValue', (event.client !== null) ? event.client.name : null);
-                    venueFilteringSelect.set('displayedValue', (event.venue !== null) ? event.venue.name : null);
+                    eventVenue = (event.venue !== null) ? event.venue.name : null
+                    venueFilteringSelect.set('displayedValue', eventVenue );
                     descriptionInput.set("value", event.description);
                     equipmentLink = document.getElementById("full-equipment-link");
                     equipmentLink.href = equipmentLink.href.replace(/(__ID__|\d+)/, event.id);
@@ -409,7 +412,7 @@ define([
                     contracts.setData(event.contracts);
                     timeSpans.setData(event.timeSpans);
                     eventItems.setData(event.items);
-                    transfers.setData(event.id);
+                    transfers.setData(event.id,eventVenue);
                     eventViewDialog.show();
                     contact.setData(event.contacts);
                 }, lib.xhrError);

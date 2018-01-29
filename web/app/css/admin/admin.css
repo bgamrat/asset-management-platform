@@ -195,3 +195,12 @@ fieldset ul.unstyled {
 .search.dijitTextBox {
     width: 230px;
 }
+.table-row {
+    display:table-row;
+}
+.table-row * {
+    margin: 3px 5px;
+}
+.table-row:nth-child(even) {
+    background-color: #ccc;
+}

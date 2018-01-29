@@ -324,21 +324,4 @@ class TransfersController extends FOSRestController
         }
     }
 
-    /**
-     * @View()
-     */
-    public function getEventTransfersAction( $eventId )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $em = $this->getDoctrine()->getManager();
-        $columns = ['t.id', 's.name', 't.source_location_text', 't.destination_location_text'];
-        $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
-                ->join( 't.status', 's' )
-                ->leftJoin( 't.bill_tos', 'tb' )
-                ->where( 'tb.event = :event_id' )
-                ->setParameter( 'event_id', $eventId );
-        return $transferData = $queryBuilder->getQuery()->getResult();
-    }
-
 }
