@@ -50,7 +50,7 @@ class TransfersController extends FOSRestController
         $columns = ['i'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
-            $columns[] = 'i.deletedAt AS deleted_at';
+            $columns[] = 't.deletedAt AS deleted_at';
         }
         $transferIds = [];
         if( !empty( $dstore['filter'][DStore::VALUE] ) )
@@ -79,14 +79,11 @@ class TransfersController extends FOSRestController
         }
 
         $columns = ['t.id', 't.instructions', 's.name AS status_text', 't.source_location_text', 't.destination_location_text',
-            'b.barcode', 'c.name AS carrier_text', 't.tracking_number', 'c.tracking_url'];
+           'c.name AS carrier_text', 't.tracking_number', 'c.tracking_url'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
                 ->join( 't.status', 's' )
-                ->leftJoin( 't.items', 'ti' )
                 ->leftJoin( 't.carrier', 'c' )
-                ->leftJoin( 'ti.asset', 'a' )
-                ->leftJoin( 'a.barcodes', 'b' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
 
         if( $dstore['limit'] !== null )

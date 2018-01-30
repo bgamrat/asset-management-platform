@@ -63,6 +63,8 @@ asset:
         Owner
     parent:
         Parent
+    received:
+        Received
     requirements:
         Requirements
     required:

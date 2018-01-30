@@ -65,7 +65,7 @@ class EventController extends Controller
             $venueLocationType = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Venue' );
             $venueAssets[$venue->getName()] = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $venueLocationType, $venue->getId() );
         }
-
+        
         $satisfies = [];
         $assetCollection = [];
         $eventAssets = [];
@@ -174,23 +174,51 @@ class EventController extends Controller
             }
         }
 
-        $columns = ['t.id', 't.updatedAt', 'c.name AS carrier', 'cs.name AS carrier_service', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount',
-            'a.id AS asset_id', 'b.barcode', 'br.name AS brand', 'm.name AS model'];
+        $columns = ['t.id', 't.updatedAt', 'c.name AS carrier', 'cs.name AS carrier_service', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
                 ->join( 't.status', 's' )
-                ->leftJoin( 't.items', 'ti' )
                 ->leftJoin( 't.carrier', 'c' )
-                ->leftJoin( 'c.services', 'cs' )
-                ->leftJoin( 'ti.asset', 'a' )
-                ->leftJoin( 'a.model', 'm' )
-                ->leftJoin( 'm.brand', 'br' )
-                ->leftJoin( 'a.barcodes', 'b' )
-                ->leftJoin( 't.bill_tos', 'tb' )
+                ->innerJoin( 't.carrier_service', 'cs' )
+                ->join( 't.bill_tos', 'tb' )
                 ->where( 'tb.event = :event_id' )
                 ->setParameter( 'event_id', $id )
-                ->orderBy( 't.updatedAt,b.barcode' );
+                ->orderBy( 't.updatedAt' );
         $transfers = $queryBuilder->distinct()->getQuery()->getResult();
+
+        if( !empty( $transfers ) )
+        {
+            foreach ($transfers as $i => $t) {
+                if (stripos($t['destination_location_text'],$event->getVenue()->getName()) === 0) {
+                    $transfers[$i]['to'] = true;
+                }
+            }
+            $transferIds = array_column( $transfers, 'id' );
+            $transferIndex = array_flip( $transferIds );
+            $columns = ['t.id', 'a.id AS asset_id', 'b.barcode', 'br.name AS brand', 'm.name AS model'];
+            $queryBuilder = $em->createQueryBuilder()->select( $columns )
+                    ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
+                    ->leftJoin( 't.items', 'ti' )
+                    ->leftJoin( 'ti.asset', 'a' )
+                    ->leftJoin( 'a.model', 'm' )
+                    ->leftJoin( 'm.brand', 'br' )
+                    ->leftJoin( 'a.barcodes', 'b' )
+                    ->where( 't.id IN (:transfer_ids)' )
+                    ->setParameter( 'transfer_ids', $transferIds )
+                    ->orderBy( 't.updatedAt,b.barcode' );
+            $transferItems = $queryBuilder->getQuery()->getResult();
+            if (!empty($transferItems)) {
+            foreach( $transferItems as $ti )
+                {
+                    $index = $transferIndex[$ti['id']];
+                    if( !isset( $transfers[$index]['items'] ) )
+                    {
+                        $transfers[$index]['items'] = [];
+                    }
+                    $transfers[$index]['items'][] = $ti;
+                }
+            }
+        }
 
         return $this->render( 'common/event.html.twig', [
                     'event' => $event,
@@ -203,7 +231,8 @@ class EventController extends Controller
         );
     }
 
-    private function getDependencies( $model )
+    private
+            function getDependencies( $model )
     {
         $result = $model->getRequires();
         if( !empty( $requires ) )

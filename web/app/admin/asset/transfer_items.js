@@ -130,7 +130,7 @@ define([
     function setData(items) {
         var i, l, obj, nodes;
 
-        nodes = query(".form-row.transfer-item", ".items");
+        nodes = query(".form-row.transfer-item", document.getElementById("items"));
         nodes.forEach(function (node, index) {
             destroyRow(index, node);
         });

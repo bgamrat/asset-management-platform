@@ -14,29 +14,28 @@
                 </tr>
             </thead>
             <tbody>
-                {% set first = true %}
-                {% set last_transfer_id = null %}
                 {% for transfer in transfers %}
-                    {% if transfer.id != last_transfer_id %}
-                        {% if first == false %}
-                            close</td></tr>
-                            {% set first = false %}
-                        {% endif %}
                     <tr>
                         <td class="id">{{transfer.id}}</td>
-                        <td class="status">{{transfer.status|trans}}</td>
+                        <td class="status">
+                            {{transfer.status|trans}}<br>
+                            {% if transfer.to is defined %}
+                                <button type="button" class="btn btn-sm btn-default">{{ 'asset.received'|trans}}</button>
+                            {% endif %}
+                        </td>
                         <td class="source-location">{{transfer.source_location_text|nl2br}}</td>
                         <td class="destination-location">{{transfer.destination_location_text|nl2br}}</td>
                         <td class="carrier">{{transfer.carrier}}</td>
                         <td class="carrier-server">{{transfer.carrier_service}}</td>
-                        <td class="barcode">
-                        {% set last_transfer_id = transfer.id %}
-                    {% endif %}
-                    {{transfer.barcode}} {{transfer.brand}} {{transfer.model}}<br>
-                    
+                        <td class="items">
+                            {% if transfer.items is defined %}
+                                {% for transfer_item in transfer.items %}
+                                    {{transfer_item.barcode}} {{transfer_item.brand}} {{transfer_item.model}}<br>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
                 {% endfor %}
-                    </td>
-                </tr>
             </tbody>
         </table>
     </article>
