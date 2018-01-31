@@ -285,6 +285,8 @@ common:
         Purchased
     rental:
         Rental
+    rentals:
+        Rentals
     quantity:
         Quantity
     remove:

@@ -14,14 +14,14 @@ use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Asset\Asset;
 
 /**
- * EventItem
+ * EventRental
  *
  * @ORM\Entity()
- * @ORM\Table(name="event_item")
+ * @ORM\Table(name="event_rental")
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Schedule\EventLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class EventItem
+class EventRental
 {
 
     use Name,
@@ -35,8 +35,8 @@ class EventItem
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\ManyToOne(targetEntity="Event", inversedBy="items")
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Event", inversedBy="rentals")
+     * @ORM\JoinColumn(name="rental_id", referencedColumnName="id")
      */
     private $id;
     /**
@@ -72,7 +72,7 @@ class EventItem
      *
      * @param string $asset
      *
-     * @return EventItem
+     * @return EventRental
      */
     public function setAsset( Asset $asset )
     {

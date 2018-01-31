@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Form\Admin\Asset\DataTransformer\BarcodeIdToAssetTransformer;
 
-class EventItemType extends AbstractType
+class EventRentalType extends AbstractType
 {
 
     private $em;
@@ -26,12 +26,12 @@ class EventItemType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'item', TextType::class, ['label' => false, 'property_path' => 'asset'] )
+                ->add( 'rental', TextType::class, ['label' => false, 'property_path' => 'asset'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )
         ;
-        $builder->get( 'item' )
+        $builder->get( 'rental' )
                 ->addModelTransformer( new BarcodeIdToAssetTransformer( $this->em ) );
     }
 
@@ -41,13 +41,13 @@ class EventItemType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Schedule\EventItem'
+            'data_class' => 'AppBundle\Entity\Schedule\EventRental'
         ) );
     }
 
     public function getName()
     {
-        return 'event_item';
+        return 'event_rental';
     }
 
 }

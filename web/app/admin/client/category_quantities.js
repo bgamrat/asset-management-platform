@@ -105,19 +105,21 @@ define([
 
     function run() {
         var existingRows, c, addOneMoreControl = null;
+        var className;
         categoryStore = new JsonRest({
             target: '/api/store/categories?value',
             useRangeHeaders: false,
             idProperty: 'id'});
         var prototypeNode, dataPrototype;
         for( c in categoryQuantityObjs ) {
+            className = c.replace(/_/g,'-');
             prototypeNode = dom.byId("contract_" + c);
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-            addOneMoreControl = query('#contract-' + c + ' .add-one-more-row');
+            addOneMoreControl = query('.' + className + '.add-one-more-row');
 
             categoryQuantityObjs[c] = new CategoryQuantityObj(c, dataPrototype, prototypeNode);
 
-            existingRows = query('.form-row.' + c);
+            existingRows = query('.form-row.' +className);
             existingRows = existingRows.length;
 
             for( i = 0; i < existingRows; i++ ) {

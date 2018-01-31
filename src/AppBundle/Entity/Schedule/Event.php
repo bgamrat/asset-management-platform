@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Client\Contract;
 use AppBundle\Entity\Common\CategoryQuantity;
-use AppBundle\Entity\Schedule\EventItem;
+use AppBundle\Entity\Schedule\EventRental;
 use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Schedule\TimeSpan;
 use AppBundle\Entity\Venue\Venue;
@@ -140,15 +140,15 @@ class Event
      */
     private $categoryQuantities;
     /**
-     * @var ArrayCollection $items
+     * @var ArrayCollection $rentals
      * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Schedule\EventItem", cascade={"persist","remove"}, orphanRemoval=true)
-     * @ORM\JoinTable(name="event_items",
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Schedule\EventRental", cascade={"persist","remove"}, orphanRemoval=true)
+     * @ORM\JoinTable(name="event_rentals",
      *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id", unique=false, nullable=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="rental_id", referencedColumnName="id", unique=false, nullable=true)}
      *      )
      */
-    protected $items;
+    protected $rentals;
 
     public function __construct()
     {
@@ -156,7 +156,7 @@ class Event
         $this->contracts = new ArrayCollection();
         $this->trailers = new ArrayCollection();
         $this->time_spans = new ArrayCollection();
-        $this->items = new ArrayCollection();
+        $this->rentals = new ArrayCollection();
     }
 
     /**
@@ -469,27 +469,27 @@ class Event
         $this->timespans->removeElement( $timespan );
     }
 
-    public function getItems()
+    public function getRentals()
     {
-        return $this->items;
+        return $this->rentals;
     }
 
-    public function addItem( EventItem $item )
+    public function addRental( EventRental $rental )
     {
-        if( !$this->items->contains( $item ) )
+        if( !$this->rentals->contains( $rental ) )
         {
-            $this->items->add( $item );
+            $this->rentals->add( $rental );
         }
     }
 
-    public function removeItem( EventItem $item )
+    public function removeRental( EventRental $rental )
     {
-        if( !$this->items->contains( $item ) )
+        if( !$this->rentals->contains( $rental ) )
         {
             return;
         }
 
-        $this->items->removeElement( $item );
+        $this->rentals->removeElement( $rental );
     }
 
 }

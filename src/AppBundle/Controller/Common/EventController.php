@@ -65,7 +65,7 @@ class EventController extends Controller
             $venueLocationType = $em->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Venue' );
             $venueAssets[$venue->getName()] = $em->getRepository( 'AppBundle\Entity\Asset\Asset' )->findByLocation( $venueLocationType, $venue->getId() );
         }
-        
+
         $satisfies = [];
         $assetCollection = [];
         $eventAssets = [];
@@ -81,6 +81,15 @@ class EventController extends Controller
         if( !empty( $venueAssets ) )
         {
             $locationAssetCollection = array_merge( $locationAssetCollection, $venueAssets );
+        }
+        if( !empty( $event->getRentals() ) )
+        {
+            $locationAssetCollection['common.rentals'] = [];
+            $rentals = $event->getRentals();
+            foreach( $rentals as $r )
+            {
+                $locationAssetCollection['common.rentals'][] = $em->getRepository('AppBundle\Entity\Asset\Asset')->find($r->getAsset()->getId());
+            }
         }
         if( !empty( $locationAssetCollection ) )
         {
@@ -188,11 +197,6 @@ class EventController extends Controller
 
         if( !empty( $transfers ) )
         {
-            foreach ($transfers as $i => $t) {
-                if (stripos($t['destination_location_text'],$event->getVenue()->getName()) === 0) {
-                    $transfers[$i]['to'] = true;
-                }
-            }
             $transferIds = array_column( $transfers, 'id' );
             $transferIndex = array_flip( $transferIds );
             $columns = ['t.id', 'a.id AS asset_id', 'b.barcode', 'br.name AS brand', 'm.name AS model'];
@@ -207,8 +211,9 @@ class EventController extends Controller
                     ->setParameter( 'transfer_ids', $transferIds )
                     ->orderBy( 't.updatedAt,b.barcode' );
             $transferItems = $queryBuilder->getQuery()->getResult();
-            if (!empty($transferItems)) {
-            foreach( $transferItems as $ti )
+            if( !empty( $transferItems ) )
+            {
+                foreach( $transferItems as $ti )
                 {
                     $index = $transferIndex[$ti['id']];
                     if( !isset( $transfers[$index]['items'] ) )

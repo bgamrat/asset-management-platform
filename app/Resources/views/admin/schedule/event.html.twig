@@ -63,16 +63,16 @@
         </div>
 {% endspaceless %}{% endblock %}
 
-{% block _event_items_entry_row %}{% spaceless %}
-        <div class="form-row event-item">
+{% block _event_rentals_entry_row %}{% spaceless %}
+        <div class="form-row event-rental">
             <div class="justify">
-                <span class="item">
-                    {{ form_widget(form.item) }}
+                <span class="rental">
+                    {{ form_widget(form.rental) }}
                 </span>
                 <span class="comment">
                     {{ form_widget(form.comment) }}
                 </span>
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="issue_item-__item__"><i class="fa fa-remove"></i></span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="issue_rental-__rental__"><i class="fa fa-remove"></i></span>
             </div>
         </div>
 {% endspaceless %}{% endblock %}
@@ -167,9 +167,9 @@
                         </div>
                     </div>
                     <div id="event-view-rental-equipment-tab">
-                        <fieldset id="items" class="items">
-                            {{form_row(event_form.items)}}
-                            {% if event_form.items.vars.allow_add %}
+                        <fieldset id="rentals" class="rentals">
+                            {{form_row(event_form.rentals)}}
+                            {% if event_form.rentals.vars.allow_add %}
                                 <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
                             {% endif %}
                         </fieldset>

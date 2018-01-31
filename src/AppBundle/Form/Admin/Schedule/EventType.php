@@ -113,8 +113,8 @@ class EventType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__time_span__'
                 ] )
-                ->add( 'items', CollectionType::class, [
-                    'entry_type' => EventItemType::class,
+                ->add( 'rentals', CollectionType::class, [
+                    'entry_type' => EventRentalType::class,
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,
@@ -122,7 +122,7 @@ class EventType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'delete_empty' => true,
-                    'prototype_name' => '__item__'
+                    'prototype_name' => '__rental__'
                 ] )
         ;
 

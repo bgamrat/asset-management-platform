@@ -29,8 +29,8 @@
 
 {% macro category_quantity_entry_row(type,form) %}{% spaceless %}
     {% if type is not defined %}{% set type = '' %}{% endif %}
+    {% set type = type|replace('_','-') %}
     <div class="form-row {{ type }}">
-        <span class="id">{{ form_widget(form.id) }}</span>
         <span class="type-select">{{ form_widget(form.category) }}</span>
         <span class="quantity">{{ form_widget(form.quantity) }}</span>
         <span class="value">{{ form_widget(form.value) }}</span>
@@ -117,7 +117,7 @@
                 <legend>{{'common.requires'|trans}} {{'asset.equipment'|trans}}</legend>
                 {{form_row(contract_form.requires_category_quantities)}}
                 {% if contract_form.requires_category_quantities.vars.allow_add %}
-                    <span data-type="requires_category_quantities" class="requires_category_quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                    <span data-type="requires_category_quantities" class="requires-category-quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
                 {% endif %}
             </fieldset>
 
@@ -125,7 +125,7 @@
                 <legend>{{'common.available'|trans}} {{'asset.equipment'|trans}}</legend>
                 {{form_row(contract_form.available_category_quantities)}}
                 {% if contract_form.available_category_quantities.vars.allow_add %}
-                    <span data-type="available_category_quantities" class="available_category_quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                    <span data-type="available_category_quantities" class="available-category-quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
                 {% endif %}
             </fieldset>
             {{form_end(contract_form)}}

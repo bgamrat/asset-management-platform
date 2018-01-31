@@ -19,7 +19,7 @@
                         <td class="id">{{transfer.id}}</td>
                         <td class="status">
                             {{transfer.status|trans}}<br>
-                            {% if transfer.to is defined %}
+                            {% if transfer.status != 'asset.received'|trans %}
                                 <button type="button" class="btn btn-sm btn-default">{{ 'asset.received'|trans}}</button>
                             {% endif %}
                         </td>

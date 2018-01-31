@@ -35,8 +35,7 @@
 .name-value-active {
     margin: 10px 0;
 }
-.container,
-.comment {
+.container {
     margin: 25px 0;
 }
 .comment .dijitTextBox.dijitTextArea {

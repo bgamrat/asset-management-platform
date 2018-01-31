@@ -46,15 +46,15 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
 
         $trailerLocationType = $manager->getRepository( 'AppBundle\Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
 
-        $location = new Location();
-        $location->setEntity( $main->getId() );
-        $location->setType( $trailerLocationType );
-        $manager->persist( $location );
-
-        $location = new Location();
-        $location->setEntity( $box->getId() );
-        $location->setType( $trailerLocationType );
-        $manager->persist( $location );
+        $locationMain = new Location();
+        $locationMain->setEntity( $main->getId() );
+        $locationMain->setType( $trailerLocationType );
+        $manager->persist( $locationMain );
+        
+        $locationBox = new Location();
+        $locationBox->setEntity( $box->getId() );
+        $locationBox->setType( $trailerLocationType );
+        $manager->persist( $locationBox );
 
         $manager->flush();
     }

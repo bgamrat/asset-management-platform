@@ -8,20 +8,21 @@ define([
     "dijit/form/ValidationTextBox",
     "dijit/form/FilteringSelect",
     "dojo/i18n!app/nls/core",
+    "dojo/i18n!app/nls/schedule",
     "dojo/NodeList-dom",
     "dojo/NodeList-traverse",
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on, query,
         JsonRest,
         ValidationTextBox, FilteringSelect,
-        core) {
+        core, schedule) {
     //"use strict";
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var itemFilteringSelect = [], commentInput = [];
-    var itemStore;
-    var divIdInUse = 'event_items';
+    var rentalFilteringSelect = [], commentInput = [];
+    var rentalStore;
+    var divIdInUse = 'event_rentals';
     var addOneMoreControl = null;
 
     function getDivId() {
@@ -29,21 +30,21 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__item__/g, itemFilteringSelect.length);
+        prototypeContent = dataPrototype.replace(/__rental__/g, rentalFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode, "last");
     }
 
     function createDijits() {
         var dijit;
-        var base = prototypeNode.id + "_" + itemFilteringSelect.length + "_";
+        var base = prototypeNode.id + "_" + rentalFilteringSelect.length + "_";
         dijit = new FilteringSelect({
-            store: itemStore,
+            store: rentalStore,
             labelAttr: "name",
             searchAttr: "name",
-            placeholder: core.item,
+            placeholder: schedule.rental,
             pageSize: 25
-        }, base + "item");
-        itemFilteringSelect.push(dijit);
+        }, base + "rental");
+        rentalFilteringSelect.push(dijit);
         dijit.startup();
         dijit = new ValidationTextBox({
             placeholder: core.comment,
@@ -55,12 +56,12 @@ define([
     }
 
     function destroyRow(id, target) {
-        var item;
+        var rental;
 
-        item = itemFilteringSelect.splice(id, 1);
-        item[0].destroyRecursive();
-        item = commentInput.splice(id, 1);
-        item[0].destroyRecursive();
+        rental = rentalFilteringSelect.splice(id, 1);
+        rental[0].destroyRecursive();
+        rental = commentInput.splice(id, 1);
+        rental[0].destroyRecursive();
         domConstruct.destroy(target);
     }
 
@@ -68,14 +69,14 @@ define([
 
         prototypeNode = dom.byId(getDivId());
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__item__/g, '0');
+        prototypeContent = dataPrototype.replace(/__rental__/g, '0');
 
-        itemStore = new JsonRest({
+        rentalStore = new JsonRest({
             target: '/api/store/barcodes',
             useRangeHeaders: false,
             idProperty: 'id'});
 
-        addOneMoreControl = query('.items .add-one-more-row');
+        addOneMoreControl = query('.rentals .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -86,36 +87,36 @@ define([
             var target = event.target;
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
-            destroyRow(id, target.closest(".form-row.event-item"));
+            destroyRow(id, target.closest(".form-row.event-rental"));
         });
     }
 
     function getData() {
-        var i, l = itemFilteringSelect.length, returnData = [];
+        var i, l = rentalFilteringSelect.length, returnData = [];
         for( i = 0; i < l; i++ ) {
             returnData.push(
                     {
-                        "item": itemFilteringSelect[i].get('value'),
+                        "rental": rentalFilteringSelect[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
         return returnData;
     }
 
-    function setData(items) {
+    function setData(rentals) {
         var i, l, obj, nodes;
 
-        nodes = query(".form-row.event-item", "items");
+        nodes = query(".form-row.event-rental", "rentals");
         nodes.forEach(function (node, index) {
             destroyRow(0, node);
         });
-        if( typeof items === "object" && items !== null ) {
-            l = items.length;
+        if( typeof rentals === "object" && rentals !== null ) {
+            l = rentals.length;
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits();
-                obj = items[i];
-                itemFilteringSelect[i].set('displayedValue', obj.name);
+                obj = rentals[i];
+                rentalFilteringSelect[i].set('displayedValue', obj.name);
                 commentInput[i].set('value', obj.comment);
             }
         }
