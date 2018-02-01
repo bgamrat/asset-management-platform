@@ -45,7 +45,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="identification-heading">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#identification" aria-expanded="true" aria-controls="identification">
+                    <a role="button" data-toggle="collapse" href="#identification" aria-expanded="true" aria-controls="identification">
                         {{'common.details'|trans}}
                     </a>
                 </h4>
@@ -73,12 +73,12 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="contacts-heading">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#contacts" aria-expanded="true" aria-controls="identification">
+                    <a role="button" data-toggle="collapse" href="#contacts" aria-expanded="true" aria-controls="identification">
                         {{'common.contacts'|trans}}
                     </a>
                 </h4>
             </div>
-            <div id="contacts" class="panel-collapse collapse" role="tabpanel">
+            <div id="contacts" class="panel-collapse collapse in" role="tabpanel">
                 <div class ="panel-body">
                 </div>
             </div>
@@ -86,12 +86,12 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="schedule-heading">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#schedule" aria-expanded="false" aria-controls="contracts">
+                    <a role="button" data-toggle="collapse" href="#schedule" aria-expanded="false" aria-controls="contracts">
                         {{'common.schedule'|trans}}
                     </a>
                 </h4>
             </div>
-            <div id="schedule" class="panel-collapse collapse" role="tabpanel">
+            <div id="schedule" class="panel-collapse collapse in" role="tabpanel">
                 <div class="panel-body">
                     {% include 'common/parts/event-timespans.html.twig' %}
                 </div>
@@ -100,12 +100,12 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="contracts-heading">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#contracts" aria-expanded="false" aria-controls="contracts">
+                    <a role="button" data-toggle="collapse" href="#contracts" aria-expanded="false" aria-controls="contracts">
                         {{'client.contracts'|trans}}
                     </a>
                 </h4>
             </div>
-            <div id="contracts" class="panel-collapse collapse" role="tabpanel">
+            <div id="contracts" class="panel-collapse collapse in" role="tabpanel">
                 <div class="panel-body">
                     {% if event.contracts is not empty %}
                         {% for contract in event.contracts %}
@@ -118,12 +118,12 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="assets-needed-heading">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#assets-needed" aria-expanded="false" aria-controls="assets-needed">
+                    <a role="button" data-toggle="collapse" href="#assets-needed" aria-expanded="false" aria-controls="assets-needed">
                         {{'event.assets_needed'|trans}}
                     </a>
                 </h4>
             </div>
-            <div id="assets-needed" class="panel-collapse collapse" role="tabpanel" aria-labeled-by="assets-needed-heading">
+            <div id="assets-needed" class="panel-collapse collapse in" role="tabpanel" aria-labeled-by="assets-needed-heading">
                 <div class="panel-body">
                     {% include 'common/parts/asset-balance.html.twig' %}
                 </div>
@@ -132,12 +132,12 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="transfers-heading">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#transfers" aria-expanded="false" aria-controls="transfers">
+                    <a role="button" data-toggle="collapse" href="#transfers" aria-expanded="false" aria-controls="transfers">
                         {{'asset.transfers'|trans}}
                     </a>
                 </h4>
             </div>
-            <div id="transfers" class="panel-collapse collapse" role="tabpanel" aria-labeled-by="transfers-heading">
+            <div id="transfers" class="panel-collapse collapse in" role="tabpanel" aria-labeled-by="transfers-heading">
                 <div class="panel-body">
                     {% include 'common/parts/event-transfers.html.twig' %}
                 </div>

@@ -140,7 +140,7 @@ define([
             timeSpans.setData(null);
             eventRentals.setData(null);
             transfers.setData(null);
-            document.getElementById("full-equipment-link").classList.add("hidden");
+            document.getElementById("view-event").classList.add("hidden");
             eventViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -404,7 +404,7 @@ define([
                     eventVenue = (event.venue !== null) ? event.venue.name : null
                     venueFilteringSelect.set('displayedValue', eventVenue );
                     descriptionInput.set("value", event.description);
-                    equipmentLink = document.getElementById("full-equipment-link");
+                    equipmentLink = document.getElementById("view-event");
                     equipmentLink.href = equipmentLink.href.replace(/(__ID__|\d+)/, event.id);
                     equipmentLink.classList.remove("hidden");
                     trailers.setData(event.trailers);

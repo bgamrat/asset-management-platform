@@ -133,6 +133,7 @@ define([
 
         var trackingUrlInput = new ValidationTextBox({
             trim: true,
+            placeholder: "https://www.example.com/tracking/__ID__",
             pattern: "https?://[A-Za-z0-9:/\., '_%#@&+?-]{2,64}"
         }, "carrier_tracking_url");
         trackingUrlInput.startup();

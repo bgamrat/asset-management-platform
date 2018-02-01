@@ -183,7 +183,7 @@ class EventController extends Controller
             }
         }
 
-        $columns = ['t.id', 't.updatedAt', 'c.name AS carrier', 'cs.name AS carrier_service', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount'];
+        $columns = ['t.id', 't.updatedAt', 't.tracking_number', 'c.name AS carrier', 'c.tracking_url', 'cs.name AS carrier_service', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'AppBundle\Entity\Asset\Transfer', 't' )
                 ->join( 't.status', 's' )

@@ -35,225 +35,226 @@
 {% endspaceless %}{% endblock %}
 
 {% block _event_category_quantities_entry_row %}{% spaceless %}
-    <div class="form-row category-quantity">
-        <span class="category-select">{{ form_widget(form.category) }}</span>
-        <span class="quantity">{{ form_widget(form.quantity) }}</span>
-        <span class="value">{{ form_widget(form.value) }}</span>
-        <span class="comment">{{ form_widget(form.comment) }}</span>
-        {% if form.parent.vars.allow_delete is defined %}
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="category-quantity-__category_quantity__"><i class="fa fa-remove"></i></span>
-        {% endif %}
-</div>{% endspaceless %}{% endblock %}
-
-{% block _event_time_spans_entry_row %}{% spaceless %}
-        <div class="form-row time-span">
-            <span class="type">
-                {{ form_widget(form.type) }}
-            </span>
-            <span class="start">
-                {{ form_widget(form.start) }} <input id="{{id}}-start-time" type="text">
-            </span>
-            <span class="end">
-                {{ form_widget(form.end) }} <input id="{{id}}-end-time" type="text">
-            </span>
+        <div class="form-row category-quantity">
+            <span class="category-select">{{ form_widget(form.category) }}</span>
+            <span class="quantity">{{ form_widget(form.quantity) }}</span>
+            <span class="value">{{ form_widget(form.value) }}</span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
-            {% if form.parent.vars.allow_delete %}
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="time-span-__time_span__"><i class="fa fa-remove"></i></span>
+            {% if form.parent.vars.allow_delete is defined %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="category-quantity-__category_quantity__"><i class="fa fa-remove"></i></span>
                 {% endif %}
-        </div>
-{% endspaceless %}{% endblock %}
+        </div>{% endspaceless %}{% endblock %}
 
-{% block _event_rentals_entry_row %}{% spaceless %}
-        <div class="form-row event-rental">
-            <div class="justify">
-                <span class="rental">
-                    {{ form_widget(form.rental) }}
-                </span>
-                <span class="comment">
-                    {{ form_widget(form.comment) }}
-                </span>
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="issue_rental-__rental__"><i class="fa fa-remove"></i></span>
-            </div>
-        </div>
-{% endspaceless %}{% endblock %}
+        {% block _event_time_spans_entry_row %}{% spaceless %}
+                <div class="form-row time-span">
+                    <span class="type">
+                        {{ form_widget(form.type) }}
+                    </span>
+                    <span class="start">
+                        {{ form_widget(form.start) }} <input id="{{id}}-start-time" type="text">
+                    </span>
+                    <span class="end">
+                        {{ form_widget(form.end) }} <input id="{{id}}-end-time" type="text">
+                    </span>
+                    <span class="comment">{{ form_widget(form.comment) }}</span>
+                    {% if form.parent.vars.allow_delete %}
+                        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="time-span-__time_span__"><i class="fa fa-remove"></i></span>
+                        {% endif %}
+                </div>
+        {% endspaceless %}{% endblock %}
 
-{% block admin_content %}
-    <div id="event-wrapper">
-        <h1>{{ block('title') }}</h1>
-        <div class="grid-controls">
-            <div>
-                <button id="event-new-btn" type="button">{{ 'common.new'|trans }}</button>
-            </div>
-            <div>
-                <form id="event-grid-filter-form">
-                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="event-filter-input">
-                </form>
-            </div>
-            <button id="event-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
-        </div>
-        <div id="event-grid">
-        </div>
-        <div id="event-view-dialog">
-            {{form_start(event_form)}}
-            <span class="id">{{ form_widget(event_form.id) }}</span>
-            <div class="text-right">
-                <button id="event-save-btn" type="button">{{ 'common.save'|trans }}</button>
-            </div>
-            <div class="event">
-                <fieldset class="name-active">
-                    <legend>{{'common.event'|trans}}</legend>
-                    <div class="event name">
-                        {{form_widget(event_form.name)}}
-                    </div>
+        {% block _event_rentals_entry_row %}{% spaceless %}
+                <div class="form-row event-rental">
                     <div class="justify">
-                        <span class="event client">
-                            {{form_widget(event_form.client)}}
+                        <span class="rental">
+                            {{ form_widget(form.rental) }}
                         </span>
-                        <span class="event start">
-                            {{form_label(event_form.start)}}
-                            {{form_widget(event_form.start)}}
+                        <span class="comment">
+                            {{ form_widget(form.comment) }}
                         </span>
-                        <span class="event end">
-                            {{form_label(event_form.end)}}
-                            {{form_widget(event_form.end)}}
-                        </span>
-                        <span class="event-flags">
-                            {{form_widget(event_form.tentative)}}
-                            {{form_label(event_form.tentative)}}
-                            {{form_widget(event_form.billable)}}
-                            {{form_label(event_form.billable)}}
-                            {{form_widget(event_form.canceled)}}
-                            {{form_label(event_form.canceled)}}
-                        </span>
-                    </div>
-                </fieldset>
-                <div id="event-view-tabs">
-                    <div id="event-view-details-tab">
-                        <fieldset class="details">
-                            {{form_row(event_form.description,{"attr":{"class":"description"}})}}
-                        </fieldset>
-                    </div>
-                    <div id="event-view-contract-equipment-tab">
-                        <div class="justify right">
-                            <a class="hidden" target="_blank" id="full-equipment-link" href="{{url('app_common_event_view',{'id':'__ID__'})}}">{{'asset.equipment'|trans}}</a>                        </div>
-                        <div class="justify">
-                            <fieldset class="contracts">
-                                <legend>{{'client.contracts'|trans}}</legend>
-                                {{form_row(event_form.contracts)}}
-                                {% if event_form.contracts.vars.allow_add %}
-                                    <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                                {% endif %}
-                            </fieldset>
-                            <fieldset class="trailers">
-                                <legend>{{'asset.trailers'|trans}}</legend>
-                                <h2>{{'client.contract'|trans}} {{'asset.required'|trans}} / {{'common.available'|trans}}</h2>
-                                <ul id="trailers-required-by-contracts">
-                                </ul>
-                                <h2>{{'common.additional'|trans}}</h2>
-                                {{form_row(event_form.trailers)}}
-                                {% if event_form.trailers.vars.allow_add %}
-                                    <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                                {% endif %}
-                            </fieldset>
-                        </div>
-                        <div>
-                            <fieldset class="equipment">
-                                <legend>{{'asset.equipment'|trans}}</legend>
-                                {{form_row(event_form.category_quantities)}}
-                                {% if event_form.category_quantities.vars.allow_add %}
-                                    <span data-type="category_quantities" class="category-quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                                {% endif %}
-                            </fieldset>
-                        </div>
-                    </div>
-                    <div id="event-view-rental-equipment-tab">
-                        <fieldset id="rentals" class="rentals">
-                            {{form_row(event_form.rentals)}}
-                            {% if event_form.rentals.vars.allow_add %}
-                                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
-                            {% endif %}
-                        </fieldset>
-                    </div>
-                    <div id="event-view-transfers-tab">
-                        <fieldset class="transfers">
-                            <legend>{{'common.inbound'|trans}}</legend>
-                            <div id="transfers-in"></div>
-                        </fieldset>
-                        <fieldset class="transfers">
-                            <legend>{{'common.outbound'|trans}}</legend>
-                            <div id="transfers-out"></div>
-                        </fieldset>
-                    </div>
-                    <div id="event-view-contacts-tab">
-                        <fieldset class="contacts">
-                            {{form_row(event_form.contacts)}}
-                            {% if event_form.contacts.vars.allow_add %}
-                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                            {% endif %}
-                        </fieldset>
-                    </div>
-                    <div id="event-view-venue-tab">
-                        <fieldset class="event venue">
-                            <legend>{{'common.venue'|trans}}</legend>
-                            <div class="justify left">
-                                <span>
-                                    {{form_row(event_form.venue)}}
-                                </span>
-                                <span>
-                                    <a id="venue-equipment-link" target="_blank">{{ 'common.equipment'|trans }}</a>
-                                </span>
-                                <span class="venue-info">
-                                    <div class="label">{{ 'common.address'|trans }}</div>
-                                    <pre id="venue-address"></pre>
-                                </span>
-                            </div>
-                            <div class="justify">
-                                <span class="venue-info">
-                                    <div class="label">{{ 'common.comment'|trans }}</div>
-                                    <div id="venue-comment"></div>
-                                </span>
-                                <span class="venue-info">
-                                    <div class="label">{{ 'common.directions'|trans }}</div>
-                                    <div id="venue-directions"></div>
-                                </span>
-                                <span class="venue-info">
-                                    <div class="label">{{ 'common.address'|trans }}</div>
-                                    <div id="venue-parking"></div>
-                                </span>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div id="event-view-times-tab">
-                        <fieldset class="event time-spans">
-                            <legend>{{'common.schedule'|trans}}</legend>
-                            {{form_row(event_form.time_spans)}}
-                            {% if event_form.time_spans.vars.allow_add %}
-                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                            {% endif %}
-                        </fieldset>
-                    </div>
-                    <div id="event-view-staff-tab">
-                        <fieldset class="event staff">
-                            <legend>{{'event.staff'|trans}}</legend>
-                            {# {{form_row(event_form.event_times)}}
-                                                    {% if event_form.events.vars.allow_add %}
-                                                        <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-                                                    {% endif %} #}
-                        </fieldset>
-                    </div>
-                    <div id="event-view-history-tab">
+                        <span class="remove-form-row" title="{{'common.remove'|trans}}" id="issue_rental-__rental__"><i class="fa fa-remove"></i></span>
                     </div>
                 </div>
-            </div>
-            {{ form_end(event_form) }}
-        </div>
-    </div>
-{% endblock %}
+        {% endspaceless %}{% endblock %}
 
-{% block javascripts %}
-    <script>
-        require(["app/admin/schedule/event"], function (event) {
-            event.run();
-        });
-    </script>
-{% endblock %}
+        {% block admin_content %}
+            <div id="event-wrapper">
+                <h1>{{ block('title') }}</h1>
+                <div class="grid-controls">
+                    <div>
+                        <button id="event-new-btn" type="button">{{ 'common.new'|trans }}</button>
+                    </div>
+                    <div>
+                        <form id="event-grid-filter-form">
+                            <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="event-filter-input">
+                        </form>
+                    </div>
+                    <button id="event-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+                </div>
+                <div id="event-grid">
+                </div>
+                <div id="event-view-dialog">
+                    {{form_start(event_form)}}
+                    <span class="id">{{ form_widget(event_form.id) }}</span>
+                    <div class="text-right">
+                        <button id="event-save-btn" type="button">{{ 'common.save'|trans }}</button>
+                    </div>
+                    <div class="event">
+                        <fieldset class="name-active">
+                            <legend>{{'common.event'|trans}}</legend>
+                            <div class="justify">
+                                <span class="event name">
+                                    {{form_widget(event_form.name)}}
+                                </span>
+                                <a class="hidden" target="_blank" id="view-event" href="{{url('app_common_event_view',{'id':'__ID__'})}}">{{'common.view'|trans}}</a>
+                            </div>
+                            <div class="justify">
+                                <span class="event client">
+                                    {{form_widget(event_form.client)}}
+                                </span>
+                                <span class="event start">
+                                    {{form_label(event_form.start)}}
+                                    {{form_widget(event_form.start)}}
+                                </span>
+                                <span class="event end">
+                                    {{form_label(event_form.end)}}
+                                    {{form_widget(event_form.end)}}
+                                </span>
+                                <span class="event-flags">
+                                    {{form_widget(event_form.tentative)}}
+                                    {{form_label(event_form.tentative)}}
+                                    {{form_widget(event_form.billable)}}
+                                    {{form_label(event_form.billable)}}
+                                    {{form_widget(event_form.canceled)}}
+                                    {{form_label(event_form.canceled)}}
+                                </span>
+                            </div>
+                        </fieldset>
+                        <div id="event-view-tabs">
+                            <div id="event-view-details-tab">
+                                <fieldset class="details">
+                                    {{form_row(event_form.description,{"attr":{"class":"description"}})}}
+                                </fieldset>
+                            </div>
+                            <div id="event-view-contract-equipment-tab">
+                                <div class="justify">
+                                    <fieldset class="contracts">
+                                        <legend>{{'client.contracts'|trans}}</legend>
+                                        {{form_row(event_form.contracts)}}
+                                        {% if event_form.contracts.vars.allow_add %}
+                                            <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                        {% endif %}
+                                    </fieldset>
+                                    <fieldset class="trailers">
+                                        <legend>{{'asset.trailers'|trans}}</legend>
+                                        <h2>{{'client.contract'|trans}} {{'asset.required'|trans}} / {{'common.available'|trans}}</h2>
+                                        <ul id="trailers-required-by-contracts">
+                                        </ul>
+                                        <h2>{{'common.additional'|trans}}</h2>
+                                        {{form_row(event_form.trailers)}}
+                                        {% if event_form.trailers.vars.allow_add %}
+                                            <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                        {% endif %}
+                                    </fieldset>
+                                </div>
+                                <div>
+                                    <fieldset class="equipment">
+                                        <legend>{{'asset.equipment'|trans}}</legend>
+                                        {{form_row(event_form.category_quantities)}}
+                                        {% if event_form.category_quantities.vars.allow_add %}
+                                            <span data-type="category_quantities" class="category-quantities add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                        {% endif %}
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div id="event-view-rental-equipment-tab">
+                                <fieldset id="rentals" class="rentals">
+                                    {{form_row(event_form.rentals)}}
+                                    {% if event_form.rentals.vars.allow_add %}
+                                        <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                                    {% endif %}
+                                </fieldset>
+                            </div>
+                            <div id="event-view-transfers-tab">
+                                <fieldset class="transfers">
+                                    <legend>{{'common.inbound'|trans}}</legend>
+                                    <div id="transfers-in"></div>
+                                </fieldset>
+                                <fieldset class="transfers">
+                                    <legend>{{'common.outbound'|trans}}</legend>
+                                    <div id="transfers-out"></div>
+                                </fieldset>
+                            </div>
+                            <div id="event-view-contacts-tab">
+                                <fieldset class="contacts">
+                                    {{form_row(event_form.contacts)}}
+                                    {% if event_form.contacts.vars.allow_add %}
+                                        <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                    {% endif %}
+                                </fieldset>
+                            </div>
+                            <div id="event-view-venue-tab">
+                                <fieldset class="event venue">
+                                    <legend>{{'common.venue'|trans}}</legend>
+                                    <div class="justify left">
+                                        <span>
+                                            {{form_row(event_form.venue)}}
+                                        </span>
+                                        <span>
+                                            <a id="venue-equipment-link" target="_blank">{{ 'common.equipment'|trans }}</a>
+                                        </span>
+                                        <span class="venue-info">
+                                            <div class="label">{{ 'common.address'|trans }}</div>
+                                            <pre id="venue-address"></pre>
+                                        </span>
+                                    </div>
+                                    <div class="justify">
+                                        <span class="venue-info">
+                                            <div class="label">{{ 'common.comment'|trans }}</div>
+                                            <div id="venue-comment"></div>
+                                        </span>
+                                        <span class="venue-info">
+                                            <div class="label">{{ 'common.directions'|trans }}</div>
+                                            <div id="venue-directions"></div>
+                                        </span>
+                                        <span class="venue-info">
+                                            <div class="label">{{ 'common.address'|trans }}</div>
+                                            <div id="venue-parking"></div>
+                                        </span>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div id="event-view-times-tab">
+                                <fieldset class="event time-spans">
+                                    <legend>{{'common.schedule'|trans}}</legend>
+                                    {{form_row(event_form.time_spans)}}
+                                    {% if event_form.time_spans.vars.allow_add %}
+                                        <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                    {% endif %}
+                                </fieldset>
+                            </div>
+                            <div id="event-view-staff-tab">
+                                <fieldset class="event staff">
+                                    <legend>{{'event.staff'|trans}}</legend>
+                                    {# {{form_row(event_form.event_times)}}
+                                                            {% if event_form.events.vars.allow_add %}
+                                                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                                                            {% endif %} #}
+                                </fieldset>
+                            </div>
+                            <div id="event-view-history-tab">
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(event_form) }}
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block javascripts %}
+            <script>
+                require(["app/admin/schedule/event"], function (event) {
+                    event.run();
+                });
+            </script>
+        {% endblock %}
