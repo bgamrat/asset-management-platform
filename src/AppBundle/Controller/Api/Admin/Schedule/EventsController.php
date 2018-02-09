@@ -25,8 +25,28 @@ class EventsController extends FOSRestController
     public function getEventsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
 
+        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        switch( $dstore['sort-field'] )
+        {
+            case 'client_text':
+                $sortField = 'c.name';
+                break;
+            case 'venue_text':
+                $sortField = 'v.name';
+                break;
+            case 'brand':
+                $sortField = 'b.name';
+                break;
+            case 'trailer_text':
+                $sortField = 't.name';
+                break;
+            case 'dates':
+                $sortField = 'e.start';
+                break;
+            default:
+                $sortField = 'e.' . $dstore['sort-field'];
+        }
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
@@ -38,7 +58,8 @@ class EventsController extends FOSRestController
                 ->from( 'AppBundle\Entity\Schedule\Event', 'e' )
                 ->leftJoin( 'e.client', 'c' )
                 ->leftJoin( 'e.venue', 'v' )
-                ->orderBy( 'e.' . $dstore['sort-field'], $dstore['sort-direction'] );
+                ->leftJoin( 'e.trailers', 't')
+                ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
             $queryBuilder->setMaxResults( $dstore['limit'] );
@@ -53,7 +74,10 @@ class EventsController extends FOSRestController
             {
                 case DStore::LIKE:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->like( 'LOWER(e.name)', '?1' )
+                           $queryBuilder->expr()->orX($queryBuilder->expr()->like( 'LOWER(e.name)', '?1' ),
+                            $queryBuilder->expr()->like( 'LOWER(t.name)', '?1' ))
+                            //$queryBuilder->expr()->like( 'LOWER(v.name)', '?1' )
+                            //$queryBuilder->expr()->like( 'LOWER(e.name)', '?1' )
                     );
                     break;
                 case DStore::GT:
@@ -68,18 +92,20 @@ class EventsController extends FOSRestController
         $data = [];
         foreach( $eventCollection as $e )
         {
-            $event = $em->getRepository('AppBundle\Entity\Schedule\Event')->find($e['id']);
+            $event = $em->getRepository( 'AppBundle\Entity\Schedule\Event' )->find( $e['id'] );
             $trailers = $event->getTrailers();
-            $trailerList = array_column($trailers, 'name');
+            $trailerList = array_column( $trailers, 'name' );
             $contracts = $event->getContracts();
-            foreach ($contracts as $c) {
-                foreach ($c->getTrailers('requiresTrailers',false) as $t) {
+            foreach( $contracts as $c )
+            {
+                foreach( $c->getTrailers( 'requiresTrailers', false ) as $t )
+                {
                     $trailerList[] = $t['name'];
                 }
             }
-            $contractList = array_column($contracts,'id');
-            $contractTrailers = $em->getRepository('AppBundle\Entity\Client\Contract')
-                    ->findBy(['id' => $contractList]);
+            $contractList = array_column( $contracts, 'id' );
+            $contractTrailers = $em->getRepository( 'AppBundle\Entity\Client\Contract' )
+                    ->findBy( ['id' => $contractList] );
             $client_text = $e['client_name'];
             $venue_text = $e['venue_name'];
             $st = $e['start'];
@@ -89,7 +115,7 @@ class EventsController extends FOSRestController
                 'name' => $e['name'],
                 'client_text' => $client_text,
                 'venue_text' => $venue_text,
-                'trailer_text' => implode(',',$trailerList),
+                'trailer_text' => implode( ',', $trailerList ),
                 'tentative' => $e['tentative'],
                 'billable' => $e['billable'],
                 'canceled' => $e['canceled'],

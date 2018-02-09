@@ -1,0 +1,60 @@
+{% block title %}{{ 'common.type'|trans }} {{ 'common.type'|trans}} {{'common.admin'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% form_theme person_types_form _self %}
+
+{% block _person_types_types_entry_row %}
+    {% spaceless %}
+        <div class="form-row type">
+            <span class="id">{{ form_widget(form.id) }}</span>
+            <span class="type">{{ form_widget(form.type) }}</span>
+        </div>
+    {% endspaceless %}
+
+{% endblock %}
+
+{% block admin_content %}
+    <div id="type-type-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="types">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
+                </div>
+            {% endfor %}
+            {% if not person_types_form.vars.valid %}
+                <div class="form-errors types">
+                    {% for type in person_types_form.types %}
+                        {% if not type.vars.valid %}
+                            {{form_errors(type.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form_start(person_types_form)}}
+            <div class="text-right">
+                <button id="types-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="form-row header">
+                <span class="name">{{ 'common.name'|trans }}</span>
+            </div>
+            {{form_row(person_types_form)}}
+            {% for type in person_types_form.types %}
+                {{form_row(type)}}
+            {% endfor %}
+
+            {% if person_types_form.types.vars.allow_add %}
+                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+            {% endif %}
+            {{form_end(person_types_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/common/person_type"], function (type) {
+            type.run();
+        });
+    </script>
+{% endblock %}
