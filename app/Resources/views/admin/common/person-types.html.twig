@@ -8,6 +8,9 @@
         <div class="form-row type">
             <span class="id">{{ form_widget(form.id) }}</span>
             <span class="type">{{ form_widget(form.type) }}</span>
+            {% if form.parent.vars.allow_delete %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}"><i id="type_{{form.vars.name}}" class="fa fa-remove"></i></span>
+            {% endif %}
         </div>
     {% endspaceless %}
 
@@ -38,15 +41,17 @@
             <div class="form-row header">
                 <span class="name">{{ 'common.name'|trans }}</span>
             </div>
-            {{form_row(person_types_form)}}
-            {% for type in person_types_form.types %}
-                {{form_row(type)}}
-            {% endfor %}
+            <div id="type-form">
+                {{form_row(person_types_form)}}
+                {% for type in person_types_form.types %}
+                    {{form_row(type)}}
+                {% endfor %}
 
-            {% if person_types_form.types.vars.allow_add %}
-                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
-            {% endif %}
-            {{form_end(person_types_form)}}
+                {% if person_types_form.types.vars.allow_add %}
+                    <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                {% endif %}
+                {{form_end(person_types_form)}}
+            </div>
         </div>
     </div>
 {% endblock %}

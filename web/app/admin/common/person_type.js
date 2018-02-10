@@ -18,7 +18,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var typeInput = [];
+    var typeForm, typeInput = [];
     var addOneMoreControl = null;
     var divId = "person_types_types";
 
@@ -61,13 +61,31 @@ define([
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__type__/g, typeInput.length);
-        //domConstruct.place(prototypeContent, "types_types", "last");
 
         addOneMoreControl = query('.types .add-one-more-row');
-
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
             createDijits(true);
+        });
+
+        typeForm = document.getElementById("type-form");
+        on(typeForm, "click", function (evt) {
+            var formRow = evt.target.closest(".form-row");
+            var id = evt.target.id.replace(/\D/g, '');
+            var i, l = typeInput.length;
+            var idInput, item;
+            idInput = document.getElementById("person_types_types_" + id + "_id");
+            domConstruct.destroy(idInput);
+            for( i = 0; i < l; i++ ) {
+                if( typeInput[i].get("id").replace(/\D/g, '') === id ) {
+                    id = i;
+                    break;
+                }
+            }
+            typeInput[i].set("value",'');
+            item = typeInput.splice(id, 1);
+            item[0].destroyRecursive();
+            domConstruct.destroy(formRow);
         });
 
         var saveBtn = new Button({

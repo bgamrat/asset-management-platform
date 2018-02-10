@@ -69,7 +69,7 @@ define([
         var i, item;
 
         for( i = 0; i < barcodeInput.length; i++ ) {
-            if( barcodeInput[i].get("id").indexOf(id) !== -1 ) {
+            if( barcodeInput[i].get("id").replace(/\D/g, '') === id ) {
                 id = i;
                 break;
             }

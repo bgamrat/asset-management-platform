@@ -48,6 +48,10 @@ class PersonTypeController extends Controller
         $response = new Response();
         $personTypes = [];
         $personTypes['types'] = $em->getRepository( 'AppBundle\Entity\Common\PersonType' )->findAll();
+        $ids = [];
+        foreach ($personTypes['types'] as $pt) {
+            $ids[$pt->getId()] = $pt;
+        }
         $form = $this->createForm( PersonTypesType::class, $personTypes, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )
@@ -55,7 +59,13 @@ class PersonTypeController extends Controller
             $personTypes = $form->getData();
             foreach( $personTypes['types'] as $type )
             {
-                $em->persist( $type );
+                if ($type !== null) {
+                    unset($ids[$type->getId()]);
+                    $em->persist( $type );
+                }
+            }
+            foreach ($ids as $pt) {
+                $em->remove($pt);
             }
             $em->flush();
             $this->addFlash(

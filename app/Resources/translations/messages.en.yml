@@ -273,6 +273,8 @@ common:
         People
     person:
         Person
+    person_types:
+        Person Types
     phone:
         Phone Number
     phones:

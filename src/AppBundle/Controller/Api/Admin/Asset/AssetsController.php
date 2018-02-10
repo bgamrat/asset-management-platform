@@ -60,7 +60,7 @@ class AssetsController extends FOSRestController
                 ->from( 'AppBundle\Entity\Asset\Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
-                ->leftJoin( 'a.barcodes', 'bc', 'WITH', 'bc.active = true' )
+                ->leftJoin( 'a.barcodes', 'bc'/*, 'WITH', 'bc.active = true' */)
                 ->leftJoin( 'a.status', 's' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
@@ -81,7 +81,10 @@ class AssetsController extends FOSRestController
                                     $queryBuilder->expr()->orX(
                                             $queryBuilder->expr()->like( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?1' ), 
                                             $queryBuilder->expr()->like( 'LOWER(a.serial_number)', '?1' ) ), 
-                                    $queryBuilder->expr()->like( 'LOWER(a.location_text)', '?1' )
+                                    $queryBuilder->expr()->orX(
+                                            $queryBuilder->expr()->like( 'LOWER(a.location_text)', '?1' ),
+                                            $queryBuilder->expr()->like( 'LOWER(bc.barcode)', '?1' )
+                                    )
                             )
                     );
                     break;
@@ -91,8 +94,9 @@ class AssetsController extends FOSRestController
                     );
             }
             $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
+        } else {
+            $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
         }
-        //$queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
         $data = $queryBuilder->getQuery()->getResult();
         return array_values( $data );
     }

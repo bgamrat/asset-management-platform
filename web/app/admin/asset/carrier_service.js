@@ -69,7 +69,7 @@ define([
     function destroyRow(id, target) {
         var item;
         for( i = 0; i < nameInput.length; i++ ) {
-            if( nameInput[i].get("id").indexOf(id) !== -1 ) {
+            if( nameInput[i].get("id").replace(/\D/g, '') === id ) {
                 id = i;
                 break;
             }

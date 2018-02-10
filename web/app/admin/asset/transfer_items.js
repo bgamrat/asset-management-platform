@@ -70,7 +70,7 @@ define([
         var i, item;
 
         for( i = 0; i < itemFilteringSelect.length; i++ ) {
-            if( itemFilteringSelect[i].get("id").indexOf(id) !== -1 ) {
+            if( itemFilteringSelect[i].get("id").replace(/\D/g, '') === id ) {
                 id = i;
                 break;
             }

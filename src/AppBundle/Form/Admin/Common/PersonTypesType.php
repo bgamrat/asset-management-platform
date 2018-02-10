@@ -20,12 +20,16 @@ class PersonTypesType extends AbstractType
         $builder
                 ->add( 'types', CollectionType::class, [
                     'entry_type' => PersonTypeType::class,
+                    'entry_options' => [
+                        'required' => false,
+                        'empty_data' => null
+                    ],
                     'by_reference' => false,
                     'required' => false,
                     'label' => false,
                     'empty_data' => null,
                     'allow_add' => true,
-                    'allow_delete' => false,
+                    'allow_delete' => true,
                     'delete_empty' => true,
                     'prototype_name' => '__type__'
                 ] )
