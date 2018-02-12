@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * IssueNote
@@ -22,7 +23,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class IssueNote
 {
 
-    use TimestampableEntity,
+    use Id,
+        TimestampableEntity,
         SoftDeleteableEntity;
 
     /**
@@ -40,28 +42,6 @@ class IssueNote
      * @Gedmo\Versioned
      */
     private $note;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * Set note

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Entity\Traits\Active;
 use AppBundle\Entity\Traits\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Name;
 
 /**
@@ -21,6 +22,7 @@ class TimeSpanType
 
     use Active,
         Comment,
+        Id,
         Name;
 
     /**
@@ -31,26 +33,4 @@ class TimeSpanType
      * @ORM\OneToMany(targetEntity="TimeSpan", mappedBy="id")
      */
     private $id;
-
-    /**
-     * Set id
-     *
-     * @return TimeSpanType
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
 }

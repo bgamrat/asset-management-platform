@@ -14,6 +14,7 @@ use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\Cost;
 use AppBundle\Entity\Traits\Versioned\CustomAttributes;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\Versioned\Value;
 use AppBundle\Entity\Traits\History;
@@ -34,6 +35,7 @@ class Asset
         Comment,
         Cost,
         CustomAttributes,
+        Id,
         Value,
         TimestampableEntity,
         SoftDeleteableEntity,
@@ -109,28 +111,6 @@ class Asset
     public function __construct()
     {
         $this->barcodes = new ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**

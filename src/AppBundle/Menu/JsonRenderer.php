@@ -16,6 +16,7 @@ class JsonRenderer implements RendererInterface
     private $environment;
     private $matcher;
     private $defaultOptions;
+    private $translator;
 
     /**
      * @param \Twig_Environment $environment
@@ -42,14 +43,13 @@ class JsonRenderer implements RendererInterface
             'leaf_class' => null,
             'branch_class' => null
                 ), $defaultOptions );
-   
     }
 
     public function render( ItemInterface $item, array $options = array() )
     {
         $options = array_merge( $this->defaultOptions, $options );
-        
-        $translator = $options['translator'];
+
+        $this->translator = $options['translator'];
 
         $itemIterator = new \Knp\Menu\Iterator\RecursiveItemIterator( $item );
 
@@ -58,21 +58,59 @@ class JsonRenderer implements RendererInterface
         $items = [];
         foreach( $iterator as $item )
         {
-            $translatedLabel = $translator->trans($item->getLabel());
-            $id = $item->getName();  
+            $translatedLabel = $translator->trans( $item->getLabel() );
+            $id = $item->getName();
             $itemData = [ 'id' => strtolower( $item->getName() ), 'name' => $translatedLabel, 'uri' => $item->getUri()];
             $itemData['has_children'] = $item->hasChildren();
             $parentId = $item->getParent()->getName();
-            if ($parentId !== $id) {
-                $itemData['parent'] = strtolower($parentId);
-                if (!isset($items[$parentId]['children'])) {
+            if( $parentId !== $id )
+            {
+                $itemData['parent'] = strtolower( $parentId );
+                if( !isset( $items[$parentId]['children'] ) )
+                {
                     $items[$parentId]['children'] = [];
                 }
                 $items[$parentId]['children'][] = $itemData;
             }
-            if (isset($items[$id])) {
-                $items[$id] = array_merge($itemData, $items[$id]);
-            } else {
+            if( isset( $items[$id] ) )
+            {
+                $items[$id] = array_merge( $itemData, $items[$id] );
+            }
+            else
+            {
+                $items[$id] = $itemData;
+            }
+        }
+        return $items;
+    }
+
+    private function buildTree( $iterator )
+    {
+        foreach( $iterator as $item )
+        {
+            $translatedLabel = $this->translator->trans( $item->getLabel() );
+            $id = $item->getName();
+            $itemData = [ 'id' => strtolower( $item->getName() ), 'name' => $translatedLabel, 'uri' => $item->getUri()];
+            $itemData['has_children'] = $item->hasChildren();
+            if ($itemData['has_children']) {
+                $itemData['children'] = $this->buildTree($iterator[$item]);
+            }
+            $parentId = $item->getParent()->getName();
+            if( $parentId !== $id )
+            {
+                $itemData['parent'] = strtolower( $parentId );
+                if( !isset( $items[$parentId]['children'] ) )
+                {
+                    $items[$parentId]['children'] = [];
+                }
+                $items[$parentId]['children'][] = $itemData;
+            }
+            if( isset( $items[$id] ) )
+            {
+                $items[$id] = array_merge( $itemData, $items[$id] );
+            }
+            else
+            {
                 $items[$id] = $itemData;
             }
         }

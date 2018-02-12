@@ -20,7 +20,7 @@ class RequestVoter implements VoterInterface
         $request = $this->requestStack->getCurrentRequest();
 
         if ($item->getUri() === $request->getRequestUri()) {
-            // URL's completely match
+            // URLs completely match
             return true;
         } else if ($item->getUri() !== $request->getBaseUrl() . '/' 
             && substr($request->getRequestUri(), 0, strlen($item->getUri())) === $item->getUri()) {

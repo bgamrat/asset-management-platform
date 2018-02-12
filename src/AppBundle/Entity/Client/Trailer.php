@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\Versioned\Value;
 
@@ -44,28 +45,6 @@ class Trailer
      * @Gedmo\Versioned
      */
     private $trailer;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * Set trailer

@@ -13,6 +13,7 @@ use AppBundle\Entity\Asset\Brand;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * Manufacturer
@@ -27,6 +28,7 @@ class Manufacturer
 
     use Active,
         Comment,
+        Id,
         Name,
         TimestampableEntity,
         SoftDeleteableEntity;
@@ -61,26 +63,6 @@ class Manufacturer
     {
         $this->contacts = new ArrayCollection();
         $this->brands = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getBrands( $deep = true )

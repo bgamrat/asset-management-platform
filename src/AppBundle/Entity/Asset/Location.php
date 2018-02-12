@@ -8,6 +8,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * Location
@@ -23,7 +24,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Location
 {
 
-    use TimestampableEntity,
+    use Id,
+        TimestampableEntity,
         SoftDeleteableEntity;
 
     /**
@@ -61,26 +63,6 @@ class Location
     public function __construct()
     {
         $this->assets = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

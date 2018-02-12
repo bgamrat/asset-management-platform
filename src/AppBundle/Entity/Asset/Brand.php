@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\CustomAttributes;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\History;
 
@@ -28,6 +29,7 @@ class Brand
     use Active,
         Comment,
         CustomAttributes,
+            Id,
         Name,
         TimestampableEntity,
         SoftDeleteableEntity,
@@ -72,26 +74,6 @@ class Brand
     {
         $this->models = new ArrayCollection();
         $this->vendors = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

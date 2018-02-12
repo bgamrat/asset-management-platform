@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Entity\Traits\Comment;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * @ORM\Entity
@@ -19,7 +20,8 @@ use AppBundle\Entity\Traits\Comment;
 class Email
 {
 
-    use Comment;
+    use Comment,
+        Id;
 
     /**
      * @ORM\Column(type="integer")
@@ -39,26 +41,6 @@ class Email
      * @ORM\Column(type="string", length=24, name="email", nullable=false)
      */
     private $email;
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set type

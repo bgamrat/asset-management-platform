@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Value;
 
 /**
@@ -24,6 +25,7 @@ class CategoryQuantity
 {
 
     use Comment,
+        Id,
         Value,
         TimestampableEntity;
 
@@ -47,28 +49,6 @@ class CategoryQuantity
      * @ORM\Column(name="quantity", type="integer", nullable=false, unique=false)
      */
     private $quantity = 1;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * Set category

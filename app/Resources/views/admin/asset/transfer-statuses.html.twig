@@ -19,7 +19,7 @@
         <span class="location-destination">{{ form_widget(form.location_destination) }}</span>
         <span class="location-unknown">{{ form_widget(form.location_unknown) }}</span>
         <span class="active">{{ form_widget(form.active) }}</span>
-        {% if form.parent.vars.allow_delete is defined %}
+        {% if form.parent.vars.allow_delete %}
             <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__{{type}}__"><i class="fa fa-remove"></i></span>
         {% endif %}
     </div>{% endspaceless %}

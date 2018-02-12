@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\Versioned\Value;
 
@@ -27,6 +28,7 @@ class Category
 
     use Active,
         Comment,
+        Id,
         Name,
         Value;
 
@@ -56,27 +58,6 @@ class Category
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent = null;
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set fullname

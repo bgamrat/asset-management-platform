@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * TransferItem
@@ -24,8 +25,9 @@ class TransferItem
 {
 
     use Comment,
-        TimestampableEntity,
-        SoftDeleteableEntity;
+        Id,
+        SoftDeleteableEntity,
+        TimestampableEntity;
 
     /**
      * @var int
@@ -48,28 +50,6 @@ class TransferItem
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $rma;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * Set asset

@@ -16,10 +16,7 @@ use AppBundle\Entity\Common\Address;
 use AppBundle\Entity\Common\PersonLog;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
-use AppBundle\Entity\Traits\Versioned\Cost;
-use AppBundle\Entity\Traits\Versioned\CustomAttributes;
-use AppBundle\Entity\Traits\Versioned\Name;
-use AppBundle\Entity\Traits\Versioned\Value;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\History;
 
 /**
@@ -36,6 +33,7 @@ class Person
 
     use Active,
         Comment,
+        Id,
         TimestampableEntity,
         SoftDeleteableEntity,
         History;
@@ -154,25 +152,6 @@ class Person
         $this->phones = new ArrayCollection();
         $this->emails = new ArrayCollection();
         $this->addresses = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     * 
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

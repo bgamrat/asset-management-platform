@@ -12,6 +12,7 @@ use AppBundle\Entity\Asset\Transfer;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Traits\Active;
 use AppBundle\Entity\Traits\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Name;
 
 /**
@@ -27,6 +28,7 @@ class Carrier
 
     use Active,
         Comment,
+        Id,
         Name,
         TimestampableEntity,
         SoftDeleteableEntity;
@@ -69,26 +71,6 @@ class Carrier
     {
         $this->contacts = new ArrayCollection();
         $this->services = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getContacts()

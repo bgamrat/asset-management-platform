@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Traits\Versioned\Cost;
 use AppBundle\Entity\Traits\History;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Common\BillTo;
 
 /**
@@ -28,9 +29,10 @@ class Transfer
 {
 
     use Cost,
-        TimestampableEntity,
-        SoftDeleteableEntity,
-        History;
+            Id,
+        History,
+            SoftDeleteableEntity,
+        TimestampableEntity;
 
     /**
      * @var int
@@ -131,28 +133,6 @@ class Transfer
     {
         $this->bill_tos = new ArrayCollection();
         $this->items = new ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**

@@ -8,6 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Traits\Comment;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * @ORM\Entity
@@ -16,7 +17,9 @@ use AppBundle\Entity\Traits\Comment;
  */
 class Phone
 {
-    use Comment;
+    use 
+     Id,
+            Comment;
 
     /**
      * @ORM\Column(type="integer")
@@ -36,26 +39,6 @@ class Phone
      * @ORM\Column(type="string", length=24, name="phone", nullable=false)
      */
     private $phone;
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set type

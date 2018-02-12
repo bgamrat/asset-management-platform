@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Traits\Active;
 use AppBundle\Entity\Traits\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Name;
 use AppBundle\Entity\Traits\XDefault;
 
@@ -27,6 +28,7 @@ class TransferStatus
 
     use Active,
         Comment,
+        Id,
         Name,
         XDefault,
         TimestampableEntity,
@@ -61,26 +63,6 @@ class TransferStatus
      * 
      */
     private $location_unknown = false;
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     public function setInTransit( $in_transit )
     {

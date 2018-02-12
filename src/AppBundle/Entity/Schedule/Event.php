@@ -18,10 +18,10 @@ use AppBundle\Entity\Schedule\TimeSpan;
 use AppBundle\Entity\Venue\Venue;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\Cost;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\Versioned\Value;
 use AppBundle\Entity\Traits\History;
-
 
 /**
  * Event
@@ -36,6 +36,7 @@ class Event
 
     use Comment,
         Cost,
+        Id,
         Name,
         Value,
         TimestampableEntity,
@@ -157,26 +158,6 @@ class Event
         $this->trailers = new ArrayCollection();
         $this->time_spans = new ArrayCollection();
         $this->rentals = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

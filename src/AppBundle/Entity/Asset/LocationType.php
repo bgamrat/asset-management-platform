@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Traits\Active;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Name;
 use AppBundle\Entity\Traits\XDefault;
 
@@ -23,6 +24,7 @@ class LocationType
 {
 
     use Active,
+        Id,
         Name,
         XDefault;
 
@@ -52,26 +54,6 @@ class LocationType
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $url;
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set entity

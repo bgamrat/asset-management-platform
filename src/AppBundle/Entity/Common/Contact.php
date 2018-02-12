@@ -9,6 +9,7 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 
 /**
@@ -27,6 +28,7 @@ class Contact
 {
 
     use Active,
+        Id,
         Name,
         TimestampableEntity,
         SoftDeleteableEntity;
@@ -65,26 +67,6 @@ class Contact
     public function __construct()
     {
         $this->assets = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

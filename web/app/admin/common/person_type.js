@@ -82,7 +82,6 @@ define([
                     break;
                 }
             }
-            typeInput[i].set("value",'');
             item = typeInput.splice(id, 1);
             item[0].destroyRecursive();
             domConstruct.destroy(formRow);

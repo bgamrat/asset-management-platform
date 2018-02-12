@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\Versioned\Value;
 
@@ -28,6 +29,7 @@ class BillTo
 
     use Active,
         Comment,
+        Id,
         Name,
         Value,
         TimestampableEntity,
@@ -62,28 +64,6 @@ class BillTo
      * @ORM\Column(name="amount", type="float", nullable=true, unique=false)
      */
     private $amount = 0.0;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * Set contact

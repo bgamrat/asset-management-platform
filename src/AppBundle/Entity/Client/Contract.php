@@ -13,6 +13,7 @@ use AppBundle\Entity\Client\Trailer;
 use AppBundle\Entity\Common\CategoryQuantity;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\Versioned\Value;
 
@@ -29,6 +30,7 @@ class Contract
 
     use Active,
         Comment,
+        Id,
         Name,
         Value,
         TimestampableEntity,
@@ -100,28 +102,6 @@ class Contract
         $this->availableTrailers = new ArrayCollection();
         $this->requiresCategoryQuantities = new ArrayCollection();
         $this->availableCategoryQuantities = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     *
-     * @return Contract
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

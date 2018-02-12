@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Asset\IssueItem;
 use AppBundle\Entity\Common\BillTo;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Cost;
 use AppBundle\Entity\Traits\History;
 
@@ -120,26 +121,6 @@ class Issue
         $this->items = new ArrayCollection();
         $this->bill_tos = new ArrayCollection();
         $this->notes = new ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
     }
 
     /**

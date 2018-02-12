@@ -26,7 +26,7 @@ class LocationTypesType extends AbstractType
                     'label' => false,
                     'empty_data' => null,
                     'allow_add' => true,
-                    'allow_delete' => true,
+                    'allow_delete' => false,
                     'delete_empty' => true,
                     'prototype_name' => '__type__'
                 ] )

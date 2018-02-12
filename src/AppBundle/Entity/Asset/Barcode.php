@@ -9,6 +9,7 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * Barcode
@@ -22,7 +23,8 @@ use AppBundle\Entity\Traits\Versioned\Comment;
 class Barcode
 {
 
-    use Active,
+    use Id,
+        Active,
         Comment,
         TimestampableEntity,
         SoftDeleteableEntity;
@@ -42,26 +44,6 @@ class Barcode
      * @ORM\ManyToMany(targetEntity="Asset", mappedBy="barcodes", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $barcode;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
 
     /**
      * Set barcode

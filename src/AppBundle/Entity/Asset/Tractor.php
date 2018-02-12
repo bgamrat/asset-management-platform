@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * Tractor
@@ -24,6 +25,7 @@ class Tractor
 {
 
     use Active,
+        Id,
         TimestampableEntity,
         SoftDeleteableEntity;
 
@@ -35,25 +37,5 @@ class Tractor
      * @ORM\OneToMany(targetEntity="Transfer", mappedBy="id")
      */
     private $id;
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
 }

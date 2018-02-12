@@ -61,7 +61,6 @@ class MenuStoreController extends FOSRestController
                     $menu['id'] = $parent;
                     $menu['name'] = $name;
                     $menu['children'] = $renderer->render( $children, ['depth' => 1], 'json' );
-
                     break;
                 }
             }
@@ -208,7 +207,7 @@ class MenuStoreController extends FOSRestController
         $menu['children'] = $children;
         return $menu;
     }
-    
+
     /*
      * @View()
      */

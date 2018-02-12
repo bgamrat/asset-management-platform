@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Traits\Comment;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * TimeSpan
@@ -19,7 +20,9 @@ use AppBundle\Entity\Traits\Comment;
 class TimeSpan
 {
 
-    use Comment;
+    use Comment,
+        Id
+    ;
 
     /**
      * @var int
@@ -43,26 +46,6 @@ class TimeSpan
      * @ORM\Column(name="enddate", type="datetime", nullable=true, unique=false)
      */
     private $end = null;
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set type

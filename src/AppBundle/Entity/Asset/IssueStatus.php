@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\XDefault;
 
 /**
@@ -23,9 +24,10 @@ use AppBundle\Entity\Traits\Versioned\XDefault;
 class IssueStatus
 {
 
-    use Comment,
-        XDefault,
-        Active;
+    use Active,
+        Comment,
+        Id,
+        XDefault;
 
     /**
      * @var int
@@ -66,26 +68,6 @@ class IssueStatus
     public function __construct()
     {
         $this->next = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

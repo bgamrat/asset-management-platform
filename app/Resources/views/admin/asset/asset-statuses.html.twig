@@ -1,4 +1,4 @@
-{% block title %}{{ 'asset.asset'|trans }} {{ 'asset.status'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% block title %}{{ 'asset.asset'|trans }} {{ 'asset.status'|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
 {% form_theme statuses_form _self %}
@@ -12,7 +12,7 @@
             <span class="comment">{{ form_widget(form.comment) }}</span>
             <span class="default">{{ form_widget(form.default)}}</span>
             <span class="active">{{ form_widget(form.active) }}</span>
-            {% if form.parent.vars.allow_delete is defined %}
+            {% if form.parent.vars.allow_delete %}
                 <span class="remove-form-row" title="{{'common.remove'|trans}}" id="asset-status-__status__"><i class="fa fa-remove"></i></span>
             {% endif %}
         </div>

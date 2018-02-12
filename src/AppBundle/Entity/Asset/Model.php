@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\CustomAttributes;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\History;
 
@@ -32,6 +33,7 @@ class Model
     use Active,
         Comment,
         CustomAttributes,
+        Id,
         Name,
         TimestampableEntity,
         SoftDeleteableEntity,
@@ -126,25 +128,6 @@ class Model
         $this->extended_by = new ArrayCollection();
         $this->required_by = new ArrayCollection();
         $this->satisfies = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     * 
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Asset\Asset;
 
@@ -24,10 +25,11 @@ use AppBundle\Entity\Asset\Asset;
 class EventRental
 {
 
-    use Name,
-        Comment,
-        TimestampableEntity,
-        SoftDeleteableEntity;
+    use Comment,
+        Id,
+        Name,
+        SoftDeleteableEntity,
+        TimestampableEntity;
 
     /**
      * @var int
@@ -44,28 +46,6 @@ class EventRental
      * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
      */
     private $asset = null;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * Set asset

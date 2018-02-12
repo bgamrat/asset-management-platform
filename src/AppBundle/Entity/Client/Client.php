@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 
 /**
@@ -26,6 +27,7 @@ class Client
 
     use Active,
         Comment,
+        Id,
         Name,
         TimestampableEntity,
         SoftDeleteableEntity;
@@ -60,26 +62,6 @@ class Client
     {
         $this->contacts = new ArrayCollection();
         $this->contracts = new ArrayCollection();
-    }
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getContacts()

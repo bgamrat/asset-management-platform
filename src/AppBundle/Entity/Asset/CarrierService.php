@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Entity\Traits\Active;
 use AppBundle\Entity\Traits\Comment;
+use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Name;
 use AppBundle\Entity\Traits\XDefault;
 
@@ -23,6 +24,7 @@ class CarrierService
 
     use Active,
         Comment,
+            Id,
         Name,
         XDefault;
 
@@ -38,26 +40,6 @@ class CarrierService
      * @ORM\OrderBy({"name" = "ASC"})
      */
     protected $carrier;
-
-    /**
-     * Set id
-     *
-     * @return integer
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set carrier

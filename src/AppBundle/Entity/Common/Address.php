@@ -8,6 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Id;
 
 /**
  * Address
@@ -20,6 +21,7 @@ class Address
 {
 
     use Comment,
+        Id,
         TimestampableEntity;
 
     /**
@@ -75,25 +77,6 @@ class Address
      * @ORM\Column(name="country", type="string", length=2, nullable=true)
      */
     private $country;
-
-    /**
-     * Set id
-     * 
-     */
-    public function setId( $id )
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set type
