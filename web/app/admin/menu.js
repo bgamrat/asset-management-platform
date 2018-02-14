@@ -1,52 +1,61 @@
 define([
     "dojo/dom",
+    "dojo/request/xhr",
     "dojo/store/Memory",
     "dijit/tree/ObjectStoreModel",
-    "dojo/store/JsonRest",
     "dijit/Tree",
+    "dojo/store/JsonRest",
     "dijit/form/ComboBox",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (dom,
-        Memory, ObjectStoreModel, JsonRest, Tree, ComboBox, core) {
+        xhr, Memory, ObjectStoreModel, Tree, JsonRest, ComboBox, core) {
 //"use strict";
     function run() {
 
         var searchInput, searchStore;
 
-        var store = new JsonRest({
-            target: "/api/menustore/adminmenus/",
-            getChildren: function (object) {
-                return this.get(object.id).then(function (fullObject) {
-                    return fullObject.children;
-                });
+        xhr.get("/api/menustore/adminmenus/", {
+            handleAs: "json"
+        }).then(function (res) {
+            var i, l, store = [], memory, model;
+            l = res.length;
+            for( i = 0; i < l; i++ ) {
+                store.push(res[i]);
             }
-        });
-
-        var model = new ObjectStoreModel({
-            store: store,
-            mayHaveChildren: function (object) {
-                return object.has_children;
-            }, getRoot: function (onItem) {
-                this.store.get("admin").then(onItem);
-            }
-        });
-        // Create the Tree.
-        var tree = new Tree({
-            id: "admin-menu",
-            model: model,
-            persist: true,
-            showRoot: false,
-            onClick: function (item) {
-                if( typeof item.uri !== "undefined" && item.uri !== null ) {
-                    location.href = item.uri;
+            memory = new Memory({
+                data: store,
+                getChildren: function (object) {
+                    return this.query({parent: object.id});
                 }
-            },
-            getIconClass: function (item, opened) {
-                return (item && item.has_children) ? (opened ? "dijitFolderOpened" : "dijitFolderClosed") : "dijitLeaf"
-            }
-        }, "admin-left-menu");
-        tree.startup();
+            });
+
+            // Create the model
+            var model = new ObjectStoreModel({
+                store: memory,
+                query: {id: 'admin'},
+                mayHaveChildren: function(object) {
+                    return typeof object.has_children !== "undefined" && object.has_children;
+                }
+            });
+
+            // Create the Tree.
+            var tree = new Tree({
+                id: "admin-menu",
+                model: model,
+                persist: true,
+                showRoot: false,
+                onClick: function (item) {
+                    if( typeof item.uri !== "undefined" && item.uri !== null ) {
+                        location.href = item.uri;
+                    }
+                },
+                getIconClass: function (item, opened) {
+                    return (item && item.has_children) ? (opened ? "dijitFolderOpened" : "dijitFolderClosed") : "dijitLeaf"
+                }
+            }, "admin-left-menu");
+            tree.startup();
+        });
 
         searchStore = new JsonRest({
             target: '/api/store/search',
@@ -60,7 +69,7 @@ define([
             placeholder: core.search
         }, "search");
         searchInput.startup();
-        searchInput.on("change", function(evt){
+        searchInput.on("change", function (evt) {
             console.log(evt);
             console.log(searchInput.store);
         });

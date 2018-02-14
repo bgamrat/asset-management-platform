@@ -48,6 +48,10 @@ class JsonRenderer implements RendererInterface
     public function render( ItemInterface $item, array $options = array() )
     {
         $options = array_merge( $this->defaultOptions, $options );
+        if( empty( $options['depth'] ) )
+        {
+            $options['depth'] = PHP_INT_MAX;
+        }
 
         $this->translator = $options['translator'];
 
@@ -55,66 +59,52 @@ class JsonRenderer implements RendererInterface
 
         $iterator = new \RecursiveIteratorIterator( $itemIterator, \RecursiveIteratorIterator::SELF_FIRST );
 
-        $items = [];
-        foreach( $iterator as $item )
-        {
-            $translatedLabel = $translator->trans( $item->getLabel() );
-            $id = $item->getName();
-            $itemData = [ 'id' => strtolower( $item->getName() ), 'name' => $translatedLabel, 'uri' => $item->getUri()];
-            $itemData['has_children'] = $item->hasChildren();
-            $parentId = $item->getParent()->getName();
-            if( $parentId !== $id )
-            {
-                $itemData['parent'] = strtolower( $parentId );
-                if( !isset( $items[$parentId]['children'] ) )
-                {
-                    $items[$parentId]['children'] = [];
-                }
-                $items[$parentId]['children'][] = $itemData;
-            }
-            if( isset( $items[$id] ) )
-            {
-                $items[$id] = array_merge( $itemData, $items[$id] );
-            }
-            else
-            {
-                $items[$id] = $itemData;
-            }
-        }
-        return $items;
-    }
+        $tree = [];
+        $tree['root'] = [ 'id' => 'root', 'name' => 'root', 'level' => 0];
+        $levelParent = [];
+        $levelParent[0] = 'root';
+        $parent = 'root';
 
-    private function buildTree( $iterator )
-    {
+        $tree = [];
+        $parent = null;
+        $levelParent[0] = null;
+
+        $lastLevel = null;
         foreach( $iterator as $item )
         {
             $translatedLabel = $this->translator->trans( $item->getLabel() );
-            $id = $item->getName();
-            $itemData = [ 'id' => strtolower( $item->getName() ), 'name' => $translatedLabel, 'uri' => $item->getUri()];
-            $itemData['has_children'] = $item->hasChildren();
-            if ($itemData['has_children']) {
-                $itemData['children'] = $this->buildTree($iterator[$item]);
-            }
-            $parentId = $item->getParent()->getName();
-            if( $parentId !== $id )
+            $id = strtolower( $item->getName() );
+            $level = $item->getLevel();
+            if( $level <= $options['depth'] )
             {
-                $itemData['parent'] = strtolower( $parentId );
-                if( !isset( $items[$parentId]['children'] ) )
+                $node = [];
+                $node['id'] = $id;
+                $node['name'] = $translatedLabel;
+                $node['uri'] = $item->getUri();
+                $node['has_children'] = $item->hasChildren();
+                $node['level'] = $level;
+                if( $lastLevel !== null )
                 {
-                    $items[$parentId]['children'] = [];
+                    if( $level > $lastLevel )
+                    {
+                        $parent = $levelParent[$level] = $lastNode['id'];
+                    }
+                    else
+                    {
+                        if( $level < $lastLevel )
+                        {
+                            $parent = $levelParent[$level];
+                        }
+                    }
+                    $lastParent = $parent;
                 }
-                $items[$parentId]['children'][] = $itemData;
-            }
-            if( isset( $items[$id] ) )
-            {
-                $items[$id] = array_merge( $itemData, $items[$id] );
-            }
-            else
-            {
-                $items[$id] = $itemData;
+                $node['parent'] = $parent;
+                $tree[$id] = $node;
+                $lastLevel = $level;
+                $lastNode = $node;
             }
         }
-        return $items;
+        return $tree;
     }
 
 }
