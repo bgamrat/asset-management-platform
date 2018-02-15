@@ -1,16 +1,15 @@
 <?php
 
-namespace AppBundle\Form\Admin\Common;
+namespace AppBundle\Form\Admin\Staff;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PersonTypeType extends AbstractType
+class RoleTypeType extends AbstractType
 {
 
     /**
@@ -33,13 +32,13 @@ class PersonTypeType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'AppBundle\Entity\Common\PersonType'
+            'data_class' => 'AppBundle\Entity\Staff\RoleType'
         ] );
     }
 
     public function getName()
     {
-        return 'person_type';
+        return 'role_type';
     }
 
 }

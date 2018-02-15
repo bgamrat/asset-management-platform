@@ -5,7 +5,6 @@ namespace AppBundle\Menu;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\MatcherInterface;
 use Knp\Menu\Renderer\RendererInterface;
-use Translator;
 
 class JsonRenderer implements RendererInterface
 {
@@ -58,12 +57,6 @@ class JsonRenderer implements RendererInterface
         $itemIterator = new \Knp\Menu\Iterator\RecursiveItemIterator( $item );
 
         $iterator = new \RecursiveIteratorIterator( $itemIterator, \RecursiveIteratorIterator::SELF_FIRST );
-
-        $tree = [];
-        $tree['root'] = [ 'id' => 'root', 'name' => 'root', 'level' => 0];
-        $levelParent = [];
-        $levelParent[0] = 'root';
-        $parent = 'root';
 
         $tree = [];
         $parent = null;

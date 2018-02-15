@@ -21,7 +21,7 @@ define([
     var dataPrototype, prototypeNode, prototypeContent;
     var typeForm, typeInput = [], commentInput = [], activeCheckBox = [];
     var addOneMoreControl = null;
-    var divId = "person_types_types";
+    var divId = "role_types_types";
 
     function cloneNewNode() {
         prototypeContent = dataPrototype.replace(/__type__/g, typeInput.length);
@@ -36,7 +36,7 @@ define([
             trim: true,
             pattern: "[a-zA-Z0-9x\.\,\ \+\(\)-]{2,24}",
             required: true,
-            name: "person_types[types][" + index + "][type]",
+            name: "role_types[types][" + index + "][type]",
             value: document.getElementById(base + "type").value
         }, base + "type");
         typeInput.push(dijit);
@@ -45,13 +45,13 @@ define([
             placeholder: core.comment,
             trim: true,
             required: false,
-            name: "person_types[types][" + index + "][comment]",
+            name: "role_types[types][" + index + "][comment]",
             value: document.getElementById(base + "comment").value
         }, base + "comment");
         commentInput.push(dijit);
         dijit.startup();
         dijit = new CheckBox({'checked': document.getElementById(base + "active").checked || newRow === true,
-            name: "person_types[types][" + index + "][active]"}, base + "active");
+            name: "role_types[types][" + index + "][active]"}, base + "active");
         activeCheckBox.push(dijit);
         dijit.startup();
     }

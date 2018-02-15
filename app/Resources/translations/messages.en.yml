@@ -297,6 +297,8 @@ common:
         Requires
     rma:
         RMA
+    role:
+        Role
     roles:
         Roles
     satisfies:
@@ -317,6 +319,8 @@ common:
         Shop
     source:
         Source
+    staff:
+        Staff
     start:
         Start
     state_province:
@@ -428,6 +432,10 @@ person:
         Middle name
     title:
         Title
+        
+staff:
+    role_types:
+        Role Types
 
 user:
     admin:

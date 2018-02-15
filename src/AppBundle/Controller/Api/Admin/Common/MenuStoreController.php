@@ -3,9 +3,7 @@
 namespace AppBundle\Controller\Api\Admin\Common;
 
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
 
 class MenuStoreController extends FOSRestController

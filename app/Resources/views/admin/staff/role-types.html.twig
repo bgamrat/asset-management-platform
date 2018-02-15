@@ -1,9 +1,9 @@
-{% block title %}{{ 'common.person'|trans }} {{ 'common.type'|trans}}{% endblock %}
+{% block title %}{{ 'common.role'|trans }} {{ 'common.type'|trans}}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
-{% form_theme person_types_form _self %}
+{% form_theme role_types_form _self %}
 
-{% block _person_types_types_entry_row %}
+{% block _role_types_types_entry_row %}
     {% spaceless %}
         <div class="form-row type">
             <span class="id">{{ form_widget(form.id) }}</span>
@@ -27,16 +27,16 @@
                     {{ flash_message|trans }}
                 </div>
             {% endfor %}
-            {% if not person_types_form.vars.valid %}
+            {% if not role_types_form.vars.valid %}
                 <div class="form-errors types">
-                    {% for type in person_types_form.types %}
+                    {% for type in role_types_form.types %}
                         {% if not type.vars.valid %}
                             {{form_errors(type.name)}}
                         {% endif %}
                     {% endfor %}
                 </div>
             {% endif %}
-            {{form_start(person_types_form)}}
+            {{form_start(role_types_form)}}
             <div class="text-right">
                 <button id="types-save-btn" type="submit">{{ 'common.save'|trans }}</button>
             </div>
@@ -44,15 +44,15 @@
                 <span class="name">{{ 'common.name'|trans }}</span>
             </div>
             <div id="type-form">
-                {{form_row(person_types_form)}}
-                {% for type in person_types_form.types %}
+                {{form_row(role_types_form)}}
+                {% for type in role_types_form.types %}
                     {{form_row(type)}}
                 {% endfor %}
 
-                {% if person_types_form.types.vars.allow_add %}
+                {% if role_types_form.types.vars.allow_add %}
                     <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
                 {% endif %}
-                {{form_end(person_types_form)}}
+                {{form_end(role_types_form)}}
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@
 
 {% block javascripts %}
     <script>
-        require(["app/admin/common/person_type"], function (type) {
+        require(["app/admin/staff/role_type"], function (type) {
             type.run();
         });
     </script>

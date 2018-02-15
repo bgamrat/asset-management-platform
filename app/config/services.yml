@@ -231,8 +231,6 @@ services:
 
     app.admin.menu_store_controller:
         class: AppBundle\Controller\Api\Admin\Common\MenuStoreController
-        calls:
-            - [setContainer, ["@service_container"]]
 
     app.form.invitation:
         class: AppBundle\Form\User\InvitationFormType

@@ -22,9 +22,11 @@ class DefaultController extends FOSRestController
 
         $queryBuilder = $em->createQueryBuilder()->select( ['pt.id', 'pt.type'] )
                 ->from( 'AppBundle\Entity\Common\PersonType', 'pt' )
+                ->where( "pt.active = 't'" )
                 ->orderBy( 'pt.type' );
         $data = $queryBuilder->getQuery()->getResult();
 
         return $data;
     }
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity\Common;
+namespace AppBundle\Entity\Staff;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Traits\Id;
@@ -9,10 +9,10 @@ use AppBundle\Entity\Traits\Active;
 use AppBundle\Entity\Traits\Comment;
 
 /**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonTypeRepository")
- * @ORM\Table(name="person_type")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\RoleTypeRepository")
+ * @ORM\Table(name="role_type")
  */
-class PersonType
+class RoleType
 {
     use Id,
         Type,

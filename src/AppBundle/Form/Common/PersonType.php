@@ -14,8 +14,7 @@ use AppBundle\Form\Common\PhoneType;
 use AppBundle\Form\Common\AppEmailType; // Named to avoid conflicts with Symfony EmailType
 use AppBundle\Form\Common\AddressType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+use Doctrine\ORM\EntityRepository;
 
 class PersonType extends AbstractType
 {
@@ -31,6 +30,12 @@ class PersonType extends AbstractType
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'type', EntityType::class, [
                     'class' => 'AppBundle\Entity\Common\PersonType',
+                    'query_builder' => function (EntityRepository $er)
+                    {
+                        return $er->createQueryBuilder( 'pt' )
+                                ->where( 'pt.active = true' )
+                                ->orderBy( 'pt.type', 'ASC' );
+                    },
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
