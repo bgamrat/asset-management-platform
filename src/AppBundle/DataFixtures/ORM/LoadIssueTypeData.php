@@ -12,8 +12,8 @@ class LoadIssueTypeData implements FixtureInterface
     public function load( ObjectManager $manager )
     {
 
-        $typees = [ 'Configuration', 'Maintenance', 'Missing', 'Repair'];
-        foreach( $typees as $i => $s )
+        $types = [ 'Configuration', 'Maintenance', 'Missing', 'Repair'];
+        foreach( $types as $i => $s )
         {
             $issueType = new IssueType();
             $issueType->setType( $s );

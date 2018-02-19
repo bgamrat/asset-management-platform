@@ -166,6 +166,9 @@
 .dgrid-column-name.field-name pre.name {
     font-weight: 700;
 }
+.dgrid-column-default {
+    width: 75px;
+}
 .deficit {
     color: #f00;
 }
@@ -175,4 +178,12 @@
 .form-row:nth-of-type(odd) {
     background-color: #eee;
     padding: 5px 0;
+}
+.columns.four {
+  -webkit-column-count: 4;
+     -moz-column-count: 4;
+          column-count: 4;
+  -webkit-column-width: 175px;
+     -moz-column-width: 175px;
+          column-width: 175px;
 }

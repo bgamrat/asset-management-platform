@@ -71,6 +71,12 @@ app_admin_schedule_events:
     name_prefix:   app_admin_api_schedule_
     prefix: /api
 
+app_admin_staff_roles:
+    type:     rest
+    resource: AppBundle\Controller\Api\Admin\Staff\RolesController
+    name_prefix:   app_admin_api_role_
+    prefix: /api
+
 app_admin_user_groups:
     type:     rest
     resource: AppBundle\Controller\Api\Admin\User\GroupsController

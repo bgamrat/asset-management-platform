@@ -175,6 +175,12 @@ services:
         tags:
             - { name: form.type, alias: 'app_person_type' }
 
+    app.admin.form.type.role:
+        class: AppBundle\Form\Admin\Staff\RoleType
+        arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%' ]
+        tags:
+        - { name: form.type, alias: user }
+
     app.admin.form.type.time_span:
         class: AppBundle\Form\Admin\Schedule\TimeSpanType
         arguments: ['@doctrine.orm.entity_manager']

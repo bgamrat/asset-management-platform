@@ -65,7 +65,7 @@ class MenuBuilder implements ContainerAwareInterface
         $menu['admin']->addChild( 'admin-staff', ['label' => 'common.staff'] );
         $menu['admin']['admin-staff']->addChild( 'staff', ['label' => 'common.staff', 'route' => 'app_admin_staff_staff_index'] );
         $menu['admin']['admin-staff']->addChild( 'staff-configuration', [ 'label' => 'common.configuration'] );
-        $menu['admin']['admin-staff']['staff-configuration']->addChild( 'role-types', ['label' => 'staff.role_types', 'route' => 'app_admin_staff_roletype_index'] );
+        $menu['admin']['admin-staff']['staff-configuration']->addChild( 'roles', ['label' => 'common.roles', 'route' => 'app_admin_staff_role_index'] );
    
         $menu['admin']->addChild( 'admin-common', ['label' => 'common.common'] );
         $menu['admin']['admin-common']->addChild( 'people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index'] );

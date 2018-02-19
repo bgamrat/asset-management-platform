@@ -1,0 +1,61 @@
+{% block title %}{{ 'common.roles'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% form_theme role_form _self %}
+
+{% import '/form/macros.html.twig' as form_macros %}
+
+{% block admin_content %}
+    <div id="role-wrapper">
+
+        <h1>{{ block('title') }}</h1>
+        <div class="grid-controls">
+            <div>
+                <button id="role-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            </div>
+            <div>
+                <form id="role-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="role-filter-input">
+                </form>
+            </div>
+            <button id="role-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+        </div>
+        <div id="role-grid">
+        </div>
+        <div id="role-view-dialog">
+            {{form_start(role_form)}}
+            <div class="text-right">
+                <button id="role-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+            <fieldset class="inline-block">
+                <legend>{{'common.role'|trans}}</legend>
+                <span class="id">{{ form_widget(role_form.id) }}</span>
+                <span class="id">{{ form_widget(role_form.default) }}</span>
+                <span class="name">{{ form_widget(role_form.name) }}</span>
+                <span class="comment">{{ form_widget(role_form.comment) }}</span>
+                <span class="active">{{ form_widget(role_form.active) }}</span>
+            </fieldset>
+            <div id="role-view-tabs">
+                <div id="role-view-roles-tab">
+                    <fieldset class="inline-block">
+                        <legend>{{'common.roles'|trans}}</legend>
+                        <div class="role-admin columns four">
+                            {{form_row(role_form.roles)}}
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            {{form_end(role_form)}}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/staff/role"], function (type) {
+            type.run();
+        });
+    </script>
+{% endblock %}
+

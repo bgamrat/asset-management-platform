@@ -2,13 +2,13 @@
 
 namespace AppBundle\Form\Admin\Staff;
 
-use AppBundle\Form\Admin\Staff\RoleTypeType;
+use AppBundle\Form\Admin\Staff\RoleType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RoleTypesType extends AbstractType
+class RolesType extends AbstractType
 {
 
     /**
@@ -18,8 +18,8 @@ class RoleTypesType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'types', CollectionType::class, [
-                    'entry_type' => RoleTypeType::class,
+                ->add( 'roles', CollectionType::class, [
+                    'entry_type' => RoleType::class,
                     'entry_options' => [
                         'required' => false,
                         'empty_data' => null
@@ -31,7 +31,7 @@ class RoleTypesType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => false,
                     'delete_empty' => true,
-                    'prototype_name' => '__type__'
+                    'prototype_name' => '__role__'
                 ] )
         ;
     }
@@ -51,7 +51,7 @@ class RoleTypesType extends AbstractType
 
     public function getName()
     {
-        return 'role_types';
+        return 'roles';
     }
 
 }
