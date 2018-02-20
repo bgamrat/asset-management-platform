@@ -54,15 +54,27 @@ class DStore
         if( $query->has( 'match' ) )
         {
             preg_match( '#match=/(\w+)/#i', $query->get( 'match' ), $matches );
-            if (!empty($matches) && !empty($matches[1])) {
+            if( !empty( $matches ) && !empty( $matches[1] ) )
+            {
                 $filter = [self::OP => 'LIKE', self::VALUE => '%' . $matches[1] . '%'];
             }
         }
         if( strpos( $queryString, '=gt=' ) !== false )
         {
             preg_match( '#(\w+)=gt=([a-z0-9\-\(\)\[\]\.\,\% ]+)#i', $queryString, $matches );
-            if (count($matches) >= 3) {
+            if( count( $matches ) >= 3 )
+            {
                 $filter = [self::OP => self::GT, self::FIELD => $matches[1], self::VALUE => $matches[2]];
+            }
+        }
+
+        if( strpos( $queryString, 'limit' ) !== false )
+        {
+            preg_match( '/limit\((\d+)\)/i', $queryString, $matches );
+            if( count( $matches ) >= 2 )
+            {
+
+                $limit = $matches[1];
             }
         }
 

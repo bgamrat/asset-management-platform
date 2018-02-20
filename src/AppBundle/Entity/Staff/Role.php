@@ -13,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RoleRepository")
@@ -53,6 +54,7 @@ class Role
     public function __construct()
     {
         $this->roles = new ArrayCollection();
+        $this->setDefault(false);
     }
 
     public function getRoles()

@@ -41,7 +41,6 @@ class RoleType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'default', CheckBoxType::class )
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
                 ->add( 'comment', TextType::class )

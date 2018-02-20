@@ -14,10 +14,18 @@ define([
     }
     ;
 
+    function renderGridRadioButton(object, value, td) {
+        var cl = td.classList.length, checked;;
+        var column = td.classList[cl-1].replace('field-','');
+        checked = ( value === true || value === 'on') ? "[checked]" : "";
+        put(td,"input[type=radio][name=rb-"+column+"][data-id="+object.id+"]"+checked);
+    }
+    ;
+
     function renderAddress(object, value, td) {
         var a, i, l, segments, content = [], address_lines, address_segments;
         var address;
-        if (object === null) {
+        if( object === null ) {
             return;
         }
         if( typeof value[0] === "undefined" ) {
@@ -70,7 +78,7 @@ define([
                 this.renderPhone(object.contacts[i].phones, object.contacts[i].phones, td);
                 this.renderEmail(object.contacts[i].emails, object.contacts[i].emails, td);
                 this.renderAddress(object.contacts[i].addresses, object.contacts[i].addresses, td);
-                put(td,'hr');
+                put(td, 'hr');
             }
         }
     }
@@ -78,7 +86,7 @@ define([
     function renderEmail(object, value, td) {
         var e;
         var email, ul = null, li, t, link, c;
-        if (object === null) {
+        if( object === null ) {
             return;
         }
         if( typeof value === "object" && value !== null && value.length !== 0 ) {
@@ -113,7 +121,7 @@ define([
     ;
     function renderPerson(object, value, td) {
         var type_text;
-        if (object === null) {
+        if( object === null ) {
             return;
         }
         if( typeof object.type_text === "undefined" ) {
@@ -127,7 +135,7 @@ define([
     function renderPhone(object, value, td) {
         var i, l, p, content = [], phone_lines;
         var phone, row;
-        if (object === null) {
+        if( object === null ) {
             return;
         }
         if( typeof value === "object" && value !== null && value.length !== 0 ) {
@@ -164,6 +172,7 @@ define([
         renderContacts: renderContacts,
         renderEmail: renderEmail,
         renderGridCheckbox: renderGridCheckbox,
+        renderGridRadioButton: renderGridRadioButton,
         renderPerson: renderPerson,
         renderPhone: renderPhone
     };

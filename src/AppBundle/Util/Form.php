@@ -19,6 +19,12 @@ class Form
         $this->session = new Session( $storage );
     }
 
+    public function getJsonData( Request $request )
+    {
+        $data = json_decode( $request->getContent(), true );
+        return $data;
+    }
+
     public function strToBool( $string )
     {
         if( in_array( $string, [true, 'true', 'on', 1, '1', 'enabled'] ) )

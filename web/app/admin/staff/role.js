@@ -175,10 +175,8 @@ define([
                 },
                 "default": {
                     label: core["default"],
-                    editor: RadioButton,
-                    editOn: "click",
                     sortable: false,
-                    //renderCell: libGrid.renderGridRadioButton
+                    renderCell: libGrid.renderGridRadioButton
                 },
                 name: {
                     label: core.role
@@ -217,7 +215,7 @@ define([
         grid.collection.track();
 
         grid.on(".dgrid-row:click", function (event) {
-            var checkBoxes = ["enabled", "locked", "remove"];
+            var checkBoxes = ["default", "active", "remove"];
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
@@ -246,15 +244,26 @@ define([
             }
         });
 
-        grid.on('.field-enabled:dgrid-datachange, .field-locked:dgrid-datachange', function (event) {
+        grid.on('.field-active:dgrid-datachange', function (event) {
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
             var id = row.data.id;
             var value = event.value;
+            patch (id,field,value);
+        });
+
+        on(document.getElementById("role-grid"),'[name^="rb-"]:change',function(event){
+            var field=event.target.name.replace("rb-","");
+            var value=event.target.checked;
+            var id = event.target.getAttribute("data-id");
+            patch(id,field,value);
+        });
+
+        function patch(id,field,value){
             switch( field ) {
-                case "enabled":
-                case "locked":
+                case "default":
+                case "active":
                     xhr("/api/roles/" + id, {
                         method: "PATCH",
                         handleAs: "json",
@@ -264,7 +273,7 @@ define([
                     });
                     break;
             }
-        });
+        };
 
         var cbAll = new CheckBox({}, "cb-all");
         cbAll.startup();

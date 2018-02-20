@@ -168,6 +168,7 @@
 }
 .dgrid-column-default {
     width: 75px;
+    text-align: center;
 }
 .deficit {
     color: #f00;

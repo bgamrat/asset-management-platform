@@ -38,7 +38,7 @@ class RolesController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['r.id'];
+        $columns = ['r.id', 'r.name', 'r.comment', 'r.default'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'r.deletedAt AS deleted_at';
@@ -70,21 +70,7 @@ class RolesController extends FOSRestController
             }
             $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
-
-        $ids = $queryBuilder->getQuery()->getResult();
-
-        $data = [];
-        foreach( $ids as $i => $row )
-        {
-            $role = $em->getRepository( 'AppBundle\Entity\Common\Role' )->find( $row['id'] );
-            $p = ['id' => $row['id'],
-                'name' => $role->getName(),
-                'default' => $role->getDefault(),
-                'comment' => $role->getComment(),
-                'active' => $role->isActive()];
-            $data[] = $p;
-        }
-        return array_values( $data );
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -189,7 +175,7 @@ class RolesController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'AppBundle\Entity\Common\Role' );
+        $repository = $em->getRepository( 'AppBundle\Entity\Staff\Role' );
         $role = $repository->find( $id );
         if( $role !== null )
         {
@@ -198,6 +184,14 @@ class RolesController extends FOSRestController
                 $value = $formProcessor->strToBool( $data['value'] );
                 switch( $data['field'] )
                 {
+                    case 'default':
+                        $prevDefault = $repository->findBy( ['default' => true] );
+                        foreach( $prevDefault as $pd )
+                        {
+                            $pd->setDefault( false );
+                        }
+                        $role->setDefault( true );
+                        break;
                     case 'active':
                         $role->setActive( $value );
                         break;
