@@ -15,6 +15,20 @@
     {{ block('_phones_entry_row') }}
 {% endblock %}
 
+{% block _person_roles_entry_row %}{% spaceless %}
+        <div class="form-row person-role">
+            <div class="details justify">
+                {{ form_widget(form.role) }}
+                {{form_row(form.start)}}
+                {{form_row(form.end)}}
+            </div>
+            {% if form.parent.vars.allow_delete %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="person-__role__"><i class="fa fa-remove"></i></span>
+            {% endif %}
+        </div>
+    </div>
+{% endspaceless %}{% endblock %}
+
 {% block admin_content %}
     <div id="person-wrapper">
         <h1>{{ 'common.person'|trans }} {{'common.admin'|trans }}</h1>
@@ -54,6 +68,12 @@
                     <div id="person-view-employment-tab">
                     </div>
                     <div id="person-view-staff-tab">
+                        <div id="roles" class="roles">
+                            {{form_row(person_form.roles)}}
+                            {% if person_form.roles.vars.allow_add %}
+                                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                            {% endif %}
+                        </div>
                     </div>
                     <div id="person-view-user-tab">
                     </div>

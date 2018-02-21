@@ -13,6 +13,7 @@ use AppBundle\Entity\Client\Trailer;
 use AppBundle\Entity\Common\CategoryQuantity;
 use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
+use AppBundle\Entity\Traits\Versioned\DateSpan;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\Versioned\Value;
@@ -30,6 +31,7 @@ class Contract
 
     use Active,
         Comment,
+        DateSpan,
         Id,
         Name,
         Value,
@@ -57,16 +59,6 @@ class Contract
      * @ORM\Column(name="container", type="boolean")
      */
     private $container = false;
-    /**
-     * @Gedmo\Versioned
-     * @ORM\Column(name="startdate", type="datetime", nullable=true, unique=false)
-     */
-    private $start = null;
-    /**
-     * @Gedmo\Versioned
-     * @ORM\Column(name="enddate", type="datetime", nullable=true, unique=false)
-     */
-    private $end = null;
     /**
      * @ORM\ManyToMany(targetEntity="Trailer", cascade={"persist"})
      * @ORM\JoinTable(name="contract_trailer_required",
@@ -137,54 +129,6 @@ class Contract
     public function isContainer()
     {
         return $this->container;
-    }
-
-    /**
-     * Set start
-     *
-     * @param float $start
-     *
-     * @return Contract
-     */
-    public function setStart( $start )
-    {
-        $this->start = $start;
-
-        return $this;
-    }
-
-    /**
-     * Get start
-     *
-     * @return float
-     */
-    public function getStart()
-    {
-        return $this->start;
-    }
-
-    /**
-     * Set end
-     *
-     * @param float $end
-     *
-     * @return Contract
-     */
-    public function setEnd( $end )
-    {
-        $this->end = $end;
-
-        return $this;
-    }
-
-    /**
-     * Get end
-     *
-     * @return float
-     */
-    public function getEnd()
-    {
-        return $this->end;
     }
 
     public function getTrailers( $trailer, $full )

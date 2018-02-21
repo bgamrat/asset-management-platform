@@ -146,6 +146,15 @@ class Person
      * @Gedmo\Versioned
      */
     private $user = null;
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Staff\PersonRole", cascade={"persist"})
+     * @ORM\JoinTable(name="staff_role",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     *      )
+     * @ORM\OrderBy({"start" = "DESC"})
+     */
+    private $roles = null;
 
     public function __construct()
     {
@@ -407,6 +416,24 @@ class Person
     public function removeAddress( Address $address )
     {
         $this->addresses->removeElement( $address );
+    }
+
+    public function getRoles()
+    {
+        return $this->roles->toArray();
+    }
+
+    public function addRole( Role $role )
+    {
+        if( !$this->roles->contains( $role ) )
+        {
+            $this->roles->add( $role );
+        }
+    }
+
+    public function removeRole( Role $role )
+    {
+        $this->roles->removeElement( $role );
     }
 
     public function setDeletedAt( $deletedAt )

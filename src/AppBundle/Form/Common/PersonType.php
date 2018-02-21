@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use AppBundle\Form\Common\PhoneType;
 use AppBundle\Form\Common\AppEmailType; // Named to avoid conflicts with Symfony EmailType
 use AppBundle\Form\Common\AddressType;
+use AppBundle\Form\Admin\Staff\PersonRoleType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 
@@ -47,6 +48,10 @@ class PersonType extends AbstractType
                 ->add( 'middlename', TextType::class, ['label' => 'person.middlename'] )
                 ->add( 'lastname', TextType::class, ['label' => 'person.lastname'] )
                 ->add( 'title', TextType::class, ['label' => 'person.title'] )
+                ->add( 'comment', TextareaType::class, [
+                    'required' => false,
+                    'label' => false
+                ] )
                 ->add( 'phones', CollectionType::class, [
                     'entry_type' => PhoneType::class,
                     'by_reference' => false,
@@ -81,9 +86,16 @@ class PersonType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__address__'
                 ] )
-                ->add( 'comment', TextareaType::class, [
+                ->add( 'roles', CollectionType::class, [
+                    'entry_type' => PersonRoleType::class,
+                    'by_reference' => false,
                     'required' => false,
-                    'label' => false
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__role__'
                 ] );
     }
 

@@ -38,7 +38,7 @@ class RolesController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $columns = ['r.id', 'r.name', 'r.comment', 'r.default'];
+        $columns = ['r.id', 'r.name', 'r.comment', 'r.active', 'r.default'];
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $columns[] = 'r.deletedAt AS deleted_at';
