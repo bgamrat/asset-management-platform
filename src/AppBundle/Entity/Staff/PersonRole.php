@@ -36,11 +36,41 @@ class PersonRole
      */
     private $id;
     /**
-     * @ORM\OneToOne(targetEntity="\AppBundle\Entity\Staff\Role")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Person")
+     * @ORM\JoinColumn(name="person", referencedColumnName="id")
+     * @ORM\OrderBy({"type" = "ASC"})
+     */
+    protected $person;
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Staff\Role")
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
     private $role;
+
+    /**
+     * Set person
+     *
+     * @param int $person
+     *
+     * @return PersonRole
+     */
+    public function setPerson( $person )
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    /**
+     * Get person
+     *
+     * @return Person
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
 
     /**
      * Set role

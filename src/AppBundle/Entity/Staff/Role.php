@@ -62,7 +62,7 @@ class Role
         return $this->roles->toArray();
     }
 
-    public function addRole( string $role )
+    public function addRole( $role )
     {
         if( !$this->roles->contains( $role ) )
         {
@@ -70,7 +70,7 @@ class Role
         }
     }
 
-    public function removeRole( string $role )
+    public function removeRole( $role )
     {
         $this->roles->removeElement( $role );
     }

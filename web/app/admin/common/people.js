@@ -25,6 +25,7 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/common/person",
+    "app/admin/staff/person_roles",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -36,7 +37,7 @@ define([
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, lib, libGrid, core, client, personWords) {
+        person, personRoles, lib, libGrid, core, client, personWords) {
     //"use strict";
     function run() {
         var action = null;
@@ -93,6 +94,7 @@ define([
         newBtn.startup();
         newBtn.on("click", function (event) {
             person.setData(null);
+            personRoles.setData(null);
             personViewDialog.set("title", core["new"]).show();
             action = "new";
             personId = null;
@@ -123,6 +125,7 @@ define([
             grid.clearSelection();
             if( personForm.validate() ) {
                 data = person.getData();
+                data.roles = personRoles.getData();
                 data.id = personId;
                 grid.collection.put(data).then(function (data) {
                     personViewDialog.hide();
@@ -214,6 +217,7 @@ define([
                         personId = pers.id;
                         action = "view";
                         person.setData(pers);
+                        personRoles.setData(pers.roles);
                         personViewDialog.show();
                     }, lib.xhrError);
                 }
@@ -282,7 +286,7 @@ define([
         });
 
         person.run();
-
+        personRoles.run();
         lib.pageReady();
     }
     return {

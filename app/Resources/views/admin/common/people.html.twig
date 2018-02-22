@@ -21,10 +21,10 @@
                 {{ form_widget(form.role) }}
                 {{form_row(form.start)}}
                 {{form_row(form.end)}}
-            </div>
             {% if form.parent.vars.allow_delete %}
                 <span class="remove-form-row" title="{{'common.remove'|trans}}" id="person-__role__"><i class="fa fa-remove"></i></span>
             {% endif %}
+            </div>
         </div>
     </div>
 {% endspaceless %}{% endblock %}

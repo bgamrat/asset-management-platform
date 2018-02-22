@@ -18,6 +18,7 @@ use AppBundle\Entity\Traits\Versioned\Active;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\History;
+use AppBundle\Entity\Staff\PersonRole;
 
 /**
  * Person
@@ -147,11 +148,7 @@ class Person
      */
     private $user = null;
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Staff\PersonRole", cascade={"persist"})
-     * @ORM\JoinTable(name="staff_role",
-     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
-     *      )
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Staff\PersonRole", mappedBy="person", cascade={"persist"})
      * @ORM\OrderBy({"start" = "DESC"})
      */
     private $roles = null;
@@ -161,6 +158,7 @@ class Person
         $this->phones = new ArrayCollection();
         $this->emails = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     /**
@@ -423,15 +421,16 @@ class Person
         return $this->roles->toArray();
     }
 
-    public function addRole( Role $role )
+    public function addRole( PersonRole $role )
     {
         if( !$this->roles->contains( $role ) )
         {
             $this->roles->add( $role );
+            $role->setPerson($this);
         }
     }
 
-    public function removeRole( Role $role )
+    public function removeRole( PersonRole $role )
     {
         $this->roles->removeElement( $role );
     }
