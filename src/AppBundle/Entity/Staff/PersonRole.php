@@ -18,7 +18,7 @@ use AppBundle\Entity\Traits\DateSpan;
  * @ORM\Table(name="person_role")
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Common\PersonLog")
  * @ORM\Entity()
- * 
+ *
  */
 class PersonRole
 {
@@ -33,16 +33,17 @@ class PersonRole
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Person")
-     * @ORM\JoinColumn(name="person", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Common\Person", inversedBy="roles")
+     * @ORM\JoinColumn(name="person", referencedColumnName="id" )
      * @ORM\OrderBy({"type" = "ASC"})
      */
     protected $person;
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Staff\Role")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Staff\Role")
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */

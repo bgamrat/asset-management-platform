@@ -13,15 +13,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\RoleRepository")
- * @ORM\Table(name="role")
- * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Staff\RoleLog")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EmploymentStatusRepository")
+ * @ORM\Table(name="employment_status")
+ * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Staff\EmploymentStatusLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Role
+class EmploymentStatus
 {
 
     use Id,

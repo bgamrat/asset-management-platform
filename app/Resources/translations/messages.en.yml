@@ -434,6 +434,8 @@ person:
         Title
         
 staff:
+    employment_statuses:
+        Employment Statuses
     role_types:
         Role Types
 

@@ -48,7 +48,7 @@ class MenuBuilder implements ContainerAwareInterface
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'issue_types', ['label' => 'asset.issue_types', 'route' => 'app_admin_asset_issuetype_index'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'issue_workflow', ['label' => 'asset.issue_workflow', 'route' => 'app_admin_asset_issuestatus_workflow'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
-            $menu['admin']['admin-assets']['asset-configuration']->addChild( 'transfer_statuses', ['label' => 'asset.transfer_statuses', 'route' => 'app_admin_asset_transferstatus_index'] );  
+            $menu['admin']['admin-assets']['asset-configuration']->addChild( 'transfer_statuses', ['label' => 'asset.transfer_statuses', 'route' => 'app_admin_asset_transferstatus_index'] );
         }
 
         $menu['admin']->addChild( 'admin-clients', ['label' => 'common.clients', 'route' => 'app_admin_client_client_index'] );
@@ -59,18 +59,28 @@ class MenuBuilder implements ContainerAwareInterface
         $menu['admin']['admin-schedule']->addChild( 'service', ['label' => 'common.service', 'route' => 'app_admin_schedule_service_index'] );
         $menu['admin']['admin-schedule']->addChild( 'shop', ['label' => 'common.shop', 'route' => 'app_admin_schedule_shop_index'] );
         $menu['admin']['admin-schedule']->addChild( 'park', ['label' => 'common.park', 'route' => 'app_admin_schedule_park_index'] );
-        $menu['admin']['admin-schedule']->addChild( 'schedule-configuration', [ 'label' => 'common.configuration'] );
-        $menu['admin']['admin-schedule']['schedule-configuration']->addChild( 'time-span-types', ['label' => 'event.time_span_types', 'route' => 'app_admin_schedule_timespantype_index'] );
+        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $menu['admin']['admin-schedule']->addChild( 'schedule-configuration', [ 'label' => 'common.configuration'] );
+            $menu['admin']['admin-schedule']['schedule-configuration']->addChild( 'time-span-types', ['label' => 'event.time_span_types', 'route' => 'app_admin_schedule_timespantype_index'] );
+        }
 
         $menu['admin']->addChild( 'admin-staff', ['label' => 'common.staff'] );
         $menu['admin']['admin-staff']->addChild( 'staff', ['label' => 'common.staff', 'route' => 'app_admin_staff_staff_index'] );
-        $menu['admin']['admin-staff']->addChild( 'staff-configuration', [ 'label' => 'common.configuration'] );
-        $menu['admin']['admin-staff']['staff-configuration']->addChild( 'roles', ['label' => 'common.roles', 'route' => 'app_admin_staff_role_index'] );
-   
+        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $menu['admin']['admin-staff']->addChild( 'staff-configuration', [ 'label' => 'common.configuration'] );
+            $menu['admin']['admin-staff']['staff-configuration']->addChild( 'employment_statuses', ['label' => 'staff.employment_statuses', 'route' => 'app_admin_staff_employmentstatus_index'] );
+            $menu['admin']['admin-staff']['staff-configuration']->addChild( 'roles', ['label' => 'common.roles', 'route' => 'app_admin_staff_role_index'] );
+        }
+
         $menu['admin']->addChild( 'admin-common', ['label' => 'common.common'] );
         $menu['admin']['admin-common']->addChild( 'people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index'] );
-        $menu['admin']['admin-common']->addChild( 'common-configuration', [ 'label' => 'common.configuration'] );
-        $menu['admin']['admin-common']['common-configuration']->addChild( 'person-types', ['label' => 'common.person_types', 'route' => 'app_admin_common_persontype_index'] );
+        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        {
+            $menu['admin']['admin-common']->addChild( 'common-configuration', [ 'label' => 'common.configuration'] );
+            $menu['admin']['admin-common']['common-configuration']->addChild( 'person-types', ['label' => 'common.person_types', 'route' => 'app_admin_common_persontype_index'] );
+        }
 
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN_USER' ) )
         {
