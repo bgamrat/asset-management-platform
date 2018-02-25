@@ -51,7 +51,7 @@ class AssetType extends AbstractType
                     'label' => 'asset.status',
                     'preferred_choices' => function($status, $key, $index)
                     {
-                        return $status->isActive();
+                        return $status->isInUse();
                     },
                     'data' => $this->em->getReference( 'AppBundle\Entity\Asset\AssetStatus', $defaultStatus->getId() ),
                     'choice_translation_domain' => false

@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Doctrine\ORM\EntityRepository;
 
-class PersonRoleType extends AbstractType
+class PersonEmploymentStatusType extends AbstractType
 {
 
     /**
@@ -17,19 +17,19 @@ class PersonRoleType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $builder->add( 'role', EntityType::class, [
-                    'class' => 'AppBundle\Entity\Staff\Role',
+        $builder->add( 'employment_status', EntityType::class, [
+                    'class' => 'AppBundle\Entity\Staff\EmploymentStatus',
                     'query_builder' => function (EntityRepository $er)
                     {
-                        return $er->createQueryBuilder( 'r' )
-                                ->where( 'r.in_use = true' )
-                                ->orderBy( 'r.name', 'ASC' );
+                        return $er->createQueryBuilder( 'es' )
+                                ->where( 'es.in_use = true' )
+                                ->orderBy( 'es.name', 'ASC' );
                     },
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
-                    'label' => 'common.role',
+                    'label' => 'staff.employment_status',
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'start', DateType::class, [
@@ -52,7 +52,7 @@ class PersonRoleType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'AppBundle\Entity\Staff\PersonRole'
+            'data_class' => 'AppBundle\Entity\Staff\PersonEmploymentStatus'
         ) );
     }
 
@@ -61,7 +61,7 @@ class PersonRoleType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'person_role';
+        return 'person_employment_status';
     }
 
 }

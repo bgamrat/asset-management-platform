@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/admin")
+     * @Route("/admin/venue/index")
      * @Method("GET")
      */
     public function indexAction( Request $request )

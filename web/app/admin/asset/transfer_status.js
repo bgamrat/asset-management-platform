@@ -21,7 +21,7 @@ define([
 
     var dataPrototype, prototypeNode, prototypeContent;
     var nameInput = [], commentInput = [], noneCheckBox = [], inTransitCheckBox = [],
-            locationDestinationCheckBox = [], locationUnknownCheckBox = [], activeCheckBox = [], defaultRadioButton = [];
+            locationDestinationCheckBox = [], locationUnknownCheckBox = [], inUseCheckBox = [], defaultRadioButton = [];
     var addOneMoreControl = null;
     var divId = "transfer_statuses_statuses";
 
@@ -75,9 +75,9 @@ define([
             name: "transfer_statuses[statuses][" + index + "][location]"}, base + "location_unknown");
         locationUnknownCheckBox.push(dijit);
         dijit.startup();
-        dijit = new CheckBox({'checked': document.getElementById(base + "active").checked || newRow === true,
-            name: "transfer_statuses[statuses][" + index + "][active]"}, base + "active");
-        activeCheckBox.push(dijit);
+        dijit = new CheckBox({'checked': document.getElementById(base + "in_use").checked || newRow === true,
+            name: "transfer_statuses[statuses][" + index + "][in_use]"}, base + "in_use");
+        inUseCheckBox.push(dijit);
         dijit.startup();
         if( dom.byId(base + "default").checked === true ) {
             checked = true;

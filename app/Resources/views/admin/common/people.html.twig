@@ -1,4 +1,4 @@
-{% block title %}{{ 'common.people'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% block title %}{{ title|trans }}{% endblock %}
 {% extends 'admin.base.html.twig' %}
 
 {% form_theme person_form _self %}
@@ -14,6 +14,20 @@
 {% block _person_phones_entry_row %}
     {{ block('_phones_entry_row') }}
 {% endblock %}
+
+{% block _person_employment_statuses_entry_row %}{% spaceless %}
+        <div class="form-row person-employment-status">
+            <div class="details justify">
+                {{ form_widget(form.employment_status) }}
+                {{form_row(form.start)}}
+                {{form_row(form.end)}}
+            {% if form.parent.vars.allow_delete %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="person-__role__"><i class="fa fa-remove"></i></span>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endspaceless %}{% endblock %}
 
 {% block _person_roles_entry_row %}{% spaceless %}
         <div class="form-row person-role">
@@ -31,7 +45,7 @@
 
 {% block admin_content %}
     <div id="person-wrapper">
-        <h1>{{ 'common.person'|trans }} {{'common.admin'|trans }}</h1>
+        <h1>{{ block ('title') }}</h1>
         <div class="grid-controls">
             <div>
                 <button id="person-new-btn" type="button">{{ 'common.new'|trans }}</button>
@@ -66,6 +80,12 @@
                         </fieldset>
                     </div>
                     <div id="person-view-employment-tab">
+                         <div id="employment-statuses" class="employment-statuses">
+                            {{form_row(person_form.employment_statuses)}}
+                            {% if person_form.employment_statuses.vars.allow_add %}
+                                <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                            {% endif %}
+                        </div>
                     </div>
                     <div id="person-view-staff-tab">
                         <div id="roles" class="roles">

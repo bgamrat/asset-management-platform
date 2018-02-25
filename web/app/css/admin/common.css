@@ -136,6 +136,9 @@
 .dijitNumberTextBox{
     width: 100px;
 }
+.dijitTextBox.dijitComboBox.dijitDateTextBox {
+    width: 100px;
+}
 .dijitMenuItem {
     border-bottom: 1px solid #000;
 }

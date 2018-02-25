@@ -5,7 +5,7 @@ namespace AppBundle\Entity\Common;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Type;
-use AppBundle\Entity\Traits\Active;
+use AppBundle\Entity\Traits\InUse;
 use AppBundle\Entity\Traits\Comment;
 
 /**
@@ -17,7 +17,7 @@ class PersonType
     use Id,
         Type,
         Comment,
-        Active;
+        InUse;
 
     /**
      * @ORM\Column(type="integer")

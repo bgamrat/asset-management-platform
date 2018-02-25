@@ -24,7 +24,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var nameInput = [], entitySelect = [], urlInput = [], activeCheckBox = [], defaultRadioButton = [];
+    var nameInput = [], entitySelect = [], urlInput = [], inUseCheckBox = [], defaultRadioButton = [];
     var addOneMoreControl = null;
     var divId = "location_types_types";
     var store;
@@ -68,9 +68,9 @@ define([
         }, base + "url");
         dijit.startup();
         urlInput.push(dijit);
-        dijit = new CheckBox({'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
-            name: "location_types[types][" + index + "][active]"}, base + "active");
-        activeCheckBox.push(dijit);
+        dijit = new CheckBox({'checked': document.getElementById(base + "in_use").value === "1" || document.getElementById(base + "in_use").checked || newRow === true,
+            name: "location_types[types][" + index + "][in_use]"}, base + "in_use");
+        inUseCheckBox.push(dijit);
         dijit.startup();
         checked = dom.byId(base + "default").checked === true;
         dijit.startup();

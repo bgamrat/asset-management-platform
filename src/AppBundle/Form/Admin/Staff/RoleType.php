@@ -44,7 +44,7 @@ class RoleType extends AbstractType
                 ->add( 'id', HiddenType::class )
                 ->add( 'name', TextType::class )
                 ->add( 'comment', TextType::class )
-                ->add( 'active', CheckboxType::class )
+                ->add( 'in_use', CheckboxType::class )
         ;
         if( $this->authorizationChecker->isGranted( 'ROLE_ADMIN_USER_ADMIN' ) )
         {

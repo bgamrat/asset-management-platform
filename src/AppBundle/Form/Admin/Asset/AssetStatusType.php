@@ -25,7 +25,7 @@ class AssetStatusType extends AbstractType
                 ->add( 'name', TextType::class )
                 ->add( 'comment', TextType::class )
                 ->add( 'available', CheckboxType::class )
-                ->add( 'active', CheckboxType::class )
+                ->add( 'in_use', CheckboxType::class )
 
         ;
     }

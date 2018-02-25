@@ -3,7 +3,7 @@
 
 {% form_theme types_form _self %}
 
-{% block _time_span_types_types_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_active_entry_row('type',form,false) }}{% endblock %}
+{% block _time_span_types_types_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_in_use_entry_row('type',form,false) }}{% endblock %}
 
 {% block admin_content %}
     <div id="status-wrapper">
@@ -30,7 +30,7 @@
             <div class="form-row header">
                 <span class="name">{{ 'common.name'|trans }}</span>
                 <span class="comment">{{ 'common.comment'|trans }}</span>
-                <span class="active">{{ 'common.active'|trans }}</span>
+                <span class="in-use">{{ 'common.in_use'|trans }}</span>
             </div>
             {{form_row(types_form)}}
             {% for status in types_form.types %}

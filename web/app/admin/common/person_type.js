@@ -19,7 +19,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var typeForm, typeInput = [], commentInput = [], activeCheckBox = [];
+    var typeForm, typeInput = [], commentInput = [], inUseCheckBox = [];
     var addOneMoreControl = null;
     var divId = "person_types_types";
 
@@ -50,9 +50,9 @@ define([
         }, base + "comment");
         commentInput.push(dijit);
         dijit.startup();
-        dijit = new CheckBox({'checked': document.getElementById(base + "active").checked || newRow === true,
-            name: "person_types[types][" + index + "][active]"}, base + "active");
-        activeCheckBox.push(dijit);
+        dijit = new CheckBox({'checked': document.getElementById(base + "in_use").checked || newRow === true,
+            name: "person_types[types][" + index + "][in_use]"}, base + "in_use");
+        inUseCheckBox.push(dijit);
         dijit.startup();
     }
 

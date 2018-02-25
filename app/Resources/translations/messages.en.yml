@@ -113,7 +113,6 @@ client:
         Contract
     contracts:
         Contracts
-
 common:
     account_information:
         Account Information
@@ -221,6 +220,8 @@ common:
         Identification
     inbound:
         Inbound
+    in_use:
+        In Use
     invalid:
         invalid
     invite:

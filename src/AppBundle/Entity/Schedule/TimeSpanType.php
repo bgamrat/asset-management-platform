@@ -4,7 +4,7 @@ namespace AppBundle\Entity\Schedule;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use AppBundle\Entity\Traits\Active;
+use AppBundle\Entity\Traits\InUse;
 use AppBundle\Entity\Traits\Comment;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Name;
@@ -20,7 +20,7 @@ use AppBundle\Entity\Traits\Name;
 class TimeSpanType
 {
 
-    use Active,
+    use InUse,
         Comment,
         Id,
         Name;

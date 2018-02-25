@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\InUse;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Type;
@@ -25,7 +25,7 @@ use AppBundle\Entity\Traits\Versioned\XDefault;
 class IssueType
 {
 
-    use Active,
+    use InUse,
         Comment,
         Id,
         Type,

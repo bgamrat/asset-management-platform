@@ -17,7 +17,7 @@
             <span class="name">{{ form_widget(form.name,attr) }}</span>
             <span class="entity">{{ form_widget(form.entity) }}</span>
             <span class="url">{{ form_widget(form.url) }}</span>
-            <span class="active">{{ form_widget(form.active) }}</span>
+            <span class="in_use">{{ form_widget(form.in_use) }}</span>
         </div>
     {% endspaceless %}
 {% endblock %}
@@ -50,7 +50,7 @@
                 <span class="name">{{ 'common.name'|trans }}</span>
                 <span class="entity">{{ 'common.type'|trans }}</span>
                 <span class="url">{{ 'common.url'|trans }}</span>
-                <span class="active">{{ 'common.active'|trans }}</span>
+                <span class="in-use">{{ 'common.in_use'|trans }}</span>
             </div>
 
             {{form_row(location_types_form)}}

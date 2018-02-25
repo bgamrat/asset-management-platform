@@ -14,6 +14,7 @@ use AppBundle\Form\Common\PhoneType;
 use AppBundle\Form\Common\AppEmailType; // Named to avoid conflicts with Symfony EmailType
 use AppBundle\Form\Common\AddressType;
 use AppBundle\Form\Admin\Staff\PersonRoleType;
+use AppBundle\Form\Admin\Staff\PersonEmploymentStatusType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 
@@ -34,7 +35,7 @@ class PersonType extends AbstractType
                     'query_builder' => function (EntityRepository $er)
                     {
                         return $er->createQueryBuilder( 'pt' )
-                                ->where( 'pt.active = true' )
+                                ->where( 'pt.in_use = true' )
                                 ->orderBy( 'pt.type', 'ASC' );
                     },
                     'choice_label' => 'type',
@@ -96,7 +97,19 @@ class PersonType extends AbstractType
                     'allow_delete' => true,
                     'delete_empty' => true,
                     'prototype_name' => '__role__'
+                ] )
+                ->add( 'employment_statuses', CollectionType::class, [
+                    'entry_type' => PersonEmploymentStatusType::class,
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__employment_status__'
                 ] );
+        ;
     }
 
     /**

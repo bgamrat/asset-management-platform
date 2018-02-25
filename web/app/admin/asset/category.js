@@ -22,7 +22,7 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent, store;
-    var positionInput = [], parentSelect = [], nameInput = [], valueInput = [], commentInput = [], activeCheckBox = [];
+    var positionInput = [], parentSelect = [], nameInput = [], valueInput = [], commentInput = [], inUseCheckBox = [];
     var addOneMoreControl = null;
     var divId = "categories_categories";
 
@@ -86,10 +86,10 @@ define([
         dijit.startup();
         dijit = new CheckBox({
             readOnly: readOnly,
-            'checked': document.getElementById(base + "active").value === "1" || document.getElementById(base + "active").checked || newRow === true,
-            name: "categories[categories][" + index + "][active]"
-        }, base + "active");
-        activeCheckBox.push(dijit);
+            'checked': document.getElementById(base + "in_use").value === "1" || document.getElementById(base + "in_use").checked || newRow === true,
+            name: "categories[categories][" + index + "][in_use]"
+        }, base + "in_use");
+        inUseCheckBox.push(dijit);
         dijit.startup();
     }
 

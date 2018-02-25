@@ -19,6 +19,8 @@ use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\History;
 use AppBundle\Entity\Staff\PersonRole;
+use AppBundle\Entity\Staff\PersonEmploymentStatus;
+
 
 /**
  * Person
@@ -152,6 +154,11 @@ class Person
      * @ORM\OrderBy({"start" = "DESC"})
      */
     private $roles = null;
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Staff\PersonEmploymentStatus", mappedBy="person", cascade={"persist"})
+     * @ORM\OrderBy({"start" = "DESC"})
+     */
+    private $employment_statuses = null;
 
     public function __construct()
     {
@@ -159,6 +166,7 @@ class Person
         $this->emails = new ArrayCollection();
         $this->addresses = new ArrayCollection();
         $this->roles = new ArrayCollection();
+        $this->employment_status = new ArrayCollection();
     }
 
     /**
@@ -426,13 +434,32 @@ class Person
         if( !$this->roles->contains( $role ) )
         {
             $this->roles->add( $role );
-            $role->setPerson($this);
+            $role->setPerson( $this );
         }
     }
 
     public function removeRole( PersonRole $role )
     {
         $this->roles->removeElement( $role );
+    }
+
+    public function getEmploymentStatuses()
+    {
+        return $this->employment_statuses->toArray();
+    }
+
+    public function addEmploymentStatus( PersonEmploymentStatus $employment_status )
+    {
+        if( !$this->employment_statuses->contains( $employment_status ) )
+        {
+            $this->employment_statuses->add( $employment_status );
+            $employment_status->setPerson( $this );
+        }
+    }
+
+    public function removeEmploymentStatus( PersonEmploymentStatus $employment_status )
+    {
+        $this->employment_statuses->removeElement( $employment_status );
     }
 
     public function setDeletedAt( $deletedAt )

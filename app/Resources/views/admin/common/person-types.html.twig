@@ -9,7 +9,7 @@
             <span class="id">{{ form_widget(form.id) }}</span>
             <span class="type">{{ form_widget(form.type) }}</span>
             <span class="comment">{{ form_widget(form.comment) }}</span>
-            <span class="active">{{ form_widget(form.active) }}</span>
+            <span class="in-use">{{ form_widget(form.in_use) }}</span>
             {% if form.parent.vars.allow_delete %}
                 <span class="remove-form-row" title="{{'common.remove'|trans}}"><i id="type_{{form.vars.name}}" class="fa fa-remove"></i></span>
             {% endif %}

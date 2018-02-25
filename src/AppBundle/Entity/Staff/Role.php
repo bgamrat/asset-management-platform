@@ -5,7 +5,7 @@ namespace AppBundle\Entity\Staff;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
-use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\InUse;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\XDefault;
 use AppBundle\Entity\Traits\History;
@@ -27,7 +27,7 @@ class Role
     use Id,
         Name,
         Comment,
-        Active,
+        InUse,
         XDefault,
         TimestampableEntity,
         SoftDeleteableEntity,
@@ -43,7 +43,7 @@ class Role
     public function setDeletedAt( $deletedAt )
     {
         $this->deletedAt = $deletedAt;
-        $this->setActive( false );
+        $this->setInUse( false );
     }
 
 }

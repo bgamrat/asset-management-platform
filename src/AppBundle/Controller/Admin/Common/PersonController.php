@@ -27,8 +27,9 @@ class PersonController extends Controller
 
         $personForm = $this->createForm( PersonType::class, null, [] );
 
-        return $this->render( 'admin/common/people.html.twig', array(
-                    'person_form' => $personForm->createView()) );
+        return $this->render( 'admin/common/people.html.twig', [
+                    'title' => 'common.people',
+                    'person_form' => $personForm->createView()] );
     }
 
 }

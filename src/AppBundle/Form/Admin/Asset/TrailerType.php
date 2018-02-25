@@ -50,7 +50,7 @@ class TrailerType extends AbstractType
                     'label' => 'asset.status',
                     'preferred_choices' => function($status, $key, $index)
                     {
-                        return $status->isActive();
+                        return $status->isInUse();
                     },
                     'choice_translation_domain' => false
                 ] )

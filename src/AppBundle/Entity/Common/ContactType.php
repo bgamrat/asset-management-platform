@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Traits\Active;
+use AppBundle\Entity\Traits\InUse;
 use AppBundle\Entity\Traits\Id;
 
 /**
@@ -21,7 +21,7 @@ use AppBundle\Entity\Traits\Id;
 class ContactType
 {
 
-    use Active;
+    use InUse;
 
     /**
      * @var int

@@ -25,7 +25,7 @@ class IssueStatusType extends AbstractType
                 ->add( 'order', IntegerType::class )
                 ->add( 'name', TextType::class, ['property_path' => 'status'] )
                 ->add( 'comment', TextType::class )
-                ->add( 'active', CheckboxType::class )
+                ->add( 'in_use', CheckboxType::class )
                 ->add( 'default', CheckBoxType::class )
         ;
     }

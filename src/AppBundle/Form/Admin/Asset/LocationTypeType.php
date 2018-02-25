@@ -36,7 +36,7 @@ class LocationTypeType extends AbstractType
                 ->add( 'entity', ChoiceType::class, ['choices' => $this->entities]
                 )
                 ->add( 'url', TextType::class )
-                ->add( 'active', CheckboxType::class )
+                ->add( 'in_use', CheckboxType::class )
                 ->add( 'default', CheckBoxType::class );
     }
 

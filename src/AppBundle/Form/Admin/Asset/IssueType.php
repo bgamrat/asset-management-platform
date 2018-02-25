@@ -72,7 +72,7 @@ class IssueType extends AbstractType
                     'label' => 'issue.type',
                     'preferred_choices' => function($type, $key, $index)
                     {
-                        return $type->isActive();
+                        return $type->isInUse();
                     },
                     'data' => $this->em->getReference( 'AppBundle\Entity\Asset\IssueType', $defaultType->getId() ),
                     'choice_translation_domain' => false
@@ -86,7 +86,7 @@ class IssueType extends AbstractType
                     'label' => 'issue.status',
                     'preferred_choices' => function($status, $key, $index)
                     {
-                        return $status->isActive();
+                        return $status->isInUse();
                     },
                     'data' => $this->em->getReference( 'AppBundle\Entity\Asset\IssueStatus', $defaultStatus->getId() ),
                     'choice_translation_domain' => false

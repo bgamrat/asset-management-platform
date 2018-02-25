@@ -3,9 +3,9 @@
 
 {% form_theme statuses_form _self %}
 
-{% block _transfer_statuses_statuses_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_active_entry_row('status',form,true) }}{% endblock %}
+{% block _transfer_statuses_statuses_entry_row %}{% import _self as form_macros %}{{ form_macros.name_comment_in_use_entry_row('status',form,true) }}{% endblock %}
 
-{% macro name_comment_active_entry_row(type,form,default_rb) %}{% spaceless %}
+{% macro name_comment_in_use_entry_row(type,form,default_rb) %}{% spaceless %}
     {% if type is not defined %}{% set type = '' %}{% endif %}
     <div class="form-row {{ type }}">
         {% if default_rb is defined and default_rb == true %}
@@ -18,7 +18,7 @@
         <span class="in-transit">{{ form_widget(form.in_transit) }}</span>
         <span class="location-destination">{{ form_widget(form.location_destination) }}</span>
         <span class="location-unknown">{{ form_widget(form.location_unknown) }}</span>
-        <span class="active">{{ form_widget(form.active) }}</span>
+        <span class="in-use">{{ form_widget(form.in_use) }}</span>
         {% if form.parent.vars.allow_delete %}
             <span class="remove-form-row" title="{{'common.remove'|trans}}" id="{{type}}-__{{type}}__"><i class="fa fa-remove"></i></span>
         {% endif %}
@@ -55,7 +55,7 @@
                 <span class="in-transit">{{ 'asset.in_transit'|trans }}</span>
                 <span class="location-destination">{{ 'asset.location_destination'|trans }}</span>
                 <span class="location-unknown">{{ 'asset.location_unknown'|trans }}</span>
-                <span class="active">{{ 'common.active'|trans }}</span>
+                <span class="in-use">{{ 'common.in_use'|trans }}</span>
             </div>
             {{form_row(statuses_form)}}
             {% for status in statuses_form.statuses %}

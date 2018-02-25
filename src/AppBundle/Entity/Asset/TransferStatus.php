@@ -9,7 +9,7 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Traits\Active;
+use AppBundle\Entity\Traits\InUse;
 use AppBundle\Entity\Traits\Comment;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Name;
@@ -26,7 +26,7 @@ use AppBundle\Entity\Traits\XDefault;
 class TransferStatus
 {
 
-    use Active,
+    use InUse,
         Comment,
         Id,
         Name,

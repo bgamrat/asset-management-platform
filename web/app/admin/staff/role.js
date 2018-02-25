@@ -71,8 +71,8 @@ define([
         }, "role_comment");
         commentInput.startup();
 
-        var activeCheckBox = new CheckBox({}, "role_active");
-        activeCheckBox.startup();
+        var inUseCheckBox = new CheckBox({}, "role_in_use");
+        inUseCheckBox.startup();
 
         var roleId;
 
@@ -99,7 +99,7 @@ define([
                 roleId = null;
                 nameInput.set("value", "");
                 commentInput.set("value", "");
-                activeCheckBox.set("checked", true);
+                inUseCheckBox.set("checked", true);
                 for( r in roleRolesCheckBoxes ) {
                     roleRolesCheckBoxes[r].set("checked", false);
                 }
@@ -145,7 +145,7 @@ define([
                     var data = {
                         "id": roleId,
                         "name": nameInput.get("value"),
-                        "active": activeCheckBox.get("checked"),
+                        "in_use": inUseCheckBox.get("checked"),
                         "roles": roles
                     };
                     grid.collection.put(data).then(function (data) {
@@ -184,8 +184,8 @@ define([
                 comment: {
                     label: core.comment
                 },
-                active: {
-                    label: core.active,
+                in_use: {
+                    label: core.in_use,
                     editor: CheckBox,
                     editOn: "click",
                     sortable: false,
@@ -215,7 +215,7 @@ define([
         grid.collection.track();
 
         grid.on(".dgrid-row:click", function (event) {
-            var checkBoxes = ["default", "active", "remove"];
+            var checkBoxes = ["default", "in_use", "remove"];
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
@@ -231,7 +231,7 @@ define([
                     roleId = role.id;
                     nameInput.set("value", role.name);
                     commentInput.set("value", role.comment);
-                    activeCheckBox.set("checked", role.active === true);
+                    inUseCheckBox.set("checked", role.in_use === true);
                     for( r in roleRolesCheckBoxes ) {
                         if( role.roles.indexOf(r) !== -1 ) {
                             roleRolesCheckBoxes[r].set("checked", true);
@@ -244,7 +244,7 @@ define([
             }
         });
 
-        grid.on('.field-active:dgrid-datachange', function (event) {
+        grid.on('.field-in_use:dgrid-datachange', function (event) {
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
@@ -263,7 +263,7 @@ define([
         function patch(id,field,value){
             switch( field ) {
                 case "default":
-                case "active":
+                case "in_use":
                     xhr("/api/roles/" + id, {
                         method: "PATCH",
                         handleAs: "json",

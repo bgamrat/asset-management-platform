@@ -25,6 +25,7 @@ class EmploymentStatusType extends AbstractType
                 ->add( 'name', TextType::class )
                 ->add( 'comment', TextType::class )
                 ->add( 'active', CheckboxType::class )
+                ->add( 'in_use', CheckboxType::class )
         ;
     }
 

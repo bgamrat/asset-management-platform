@@ -37,7 +37,7 @@ class CategoryType extends AbstractType
                 ] )
                 ->add( 'value', MoneyType::class, ['currency' => 'USD'] )
                 ->add( 'comment', TextType::class )
-                ->add( 'active', CheckboxType::class )
+                ->add( 'in_use', CheckboxType::class )
         ;
     }
 

@@ -1,11 +1,7 @@
 app_admin:
     resource: "@AppBundle/Controller/Admin"
     type:     annotation
-    
-app_api:
-    type: rest
-    resource: routing_rest.yml
-    
+  
 app_api_store:
     resource: "@AppBundle/Controller/Api/Common"
     type:   annotation
@@ -25,6 +21,10 @@ app_public:
 app_user:
     resource: "@AppBundle/Controller/User"
     type:     annotation
+
+app_api:
+    type: rest
+    resource: routing_rest.yml
 
 admin_rest:
     type: rest

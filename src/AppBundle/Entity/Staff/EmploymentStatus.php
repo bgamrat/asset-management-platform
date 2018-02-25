@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
 use AppBundle\Entity\Traits\Versioned\Active;
+use AppBundle\Entity\Traits\Versioned\InUse;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\XDefault;
 use AppBundle\Entity\Traits\History;
@@ -27,7 +28,7 @@ class EmploymentStatus
         Name,
         Comment,
         Active,
-        XDefault,
+        InUse,
         TimestampableEntity,
         SoftDeleteableEntity,
         History;
@@ -42,7 +43,7 @@ class EmploymentStatus
     public function setDeletedAt( $deletedAt )
     {
         $this->deletedAt = $deletedAt;
-        $this->setActive( false );
+        $this->setInUse( false );
     }
 
 }

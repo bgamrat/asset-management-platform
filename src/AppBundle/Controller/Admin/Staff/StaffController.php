@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use AppBundle\Form\Common\PersonType;
 
 /**
  * Description of DefaultController
@@ -22,10 +23,13 @@ class StaffController extends Controller
      */
     public function indexAction( Request $request )
     {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER', null, 'Unable to access this page!' );
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
+        $personForm = $this->createForm( PersonType::class, null, [] );
 
-        return $this->render( 'admin/staff/index.html.twig' );
+        return $this->render( 'admin/common/people.html.twig',[
+                    'title' => 'common.staff',
+                    'person_form' => $personForm->createView()] );
     }
 
 }

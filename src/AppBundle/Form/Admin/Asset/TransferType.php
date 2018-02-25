@@ -60,7 +60,7 @@ class TransferType extends AbstractType
                     'label' => 'issue.status',
                     'preferred_choices' => function($status, $key, $index)
                     {
-                        return $status->isActive();
+                        return $status->isInUse();
                     },
                     'data' => $defaultStatus !== null ? $this->em->getReference( 'AppBundle\Entity\Asset\TransferStatus', $defaultStatus->getId() ) : '',
                     'choice_translation_domain' => false

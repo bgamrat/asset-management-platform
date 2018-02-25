@@ -3,7 +3,7 @@
 
 {% form_theme issue_types_form _self %}
 
-{% block _issue_types_types_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_active_entry_row('type',form,true) }}{% endblock %}
+{% block _issue_types_types_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_in_use_entry_row('type',form,true) }}{% endblock %}
 
 {% block admin_content %}
     <div id="issue-type-wrapper">
@@ -31,7 +31,7 @@
                 <span class="default">{{ 'common.default'|trans }}</span>
                 <span class="name">{{ 'common.name'|trans }}</span>
                 <span class="comment">{{ 'common.comment'|trans }}</span>
-                <span class="active">{{ 'common.active'|trans }}</span>
+                <span class="in_use">{{ 'common.in_use'|trans }}</span>
             </div>
             {{form_row(issue_types_form)}}
             {% for type in issue_types_form.types %}

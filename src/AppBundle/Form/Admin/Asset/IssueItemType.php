@@ -40,7 +40,7 @@ class IssueItemType extends AbstractType
                     'label' => 'common.status',
                     'preferred_choices' => function($status, $key, $index)
                     {
-                        return $status->isActive();
+                        return $status->isInUse();
                     },
                     'choice_translation_domain' => false,
                     'mapped' => false
