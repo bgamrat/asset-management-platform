@@ -13,7 +13,7 @@ class LoadCategoryData implements FixtureInterface
     {
         $top = new Category();
         $top->setName( 'top' );
-        $top->setActive( true );
+        $top->setInUse( true );
         $top->setPosition( 0 );
         $top->setParent( null );
         $top->setFullName();

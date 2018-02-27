@@ -17,7 +17,7 @@ class LoadAssetStatusData implements FixtureInterface
         {
             $assetStatus = new AssetStatus();
             $assetStatus->setName( $s );
-            $assetStatus->setActive( true );
+            $assetStatus->setInUse( true );
             $assetStatus->setDefault( $s === 'Operational' );
             $assetStatus->setAvailable( $s === 'Operational' );
             $manager->persist( $assetStatus );

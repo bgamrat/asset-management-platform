@@ -24,7 +24,7 @@ class LoadRoleData implements FixtureInterface
         {
             $role = new Role();
             $role->setName( $r );
-            $role->setActive( true );
+            $role->setInUse( true );
             $manager->persist( $role );
         }
 

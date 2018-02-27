@@ -17,7 +17,7 @@ class LoadIssueTypeData implements FixtureInterface
         {
             $issueType = new IssueType();
             $issueType->setType( $s );
-            $issueType->setActive( true );
+            $issueType->setInUse( true );
             $issueType->setDefault( $s === 'Repair' );
             $manager->persist( $issueType );
         }

@@ -15,7 +15,7 @@ class LoadLocationTypeData implements FixtureInterface
         $inTransitLocation = new LocationType();
         $inTransitLocation->setName( 'In Transit' );
         $inTransitLocation->setEntity( 'other' );
-        $inTransitLocation->setActive( true );
+        $inTransitLocation->setInUse( true );
         $inTransitLocation->setDefault( false );
         $manager->persist( $inTransitLocation );
 
@@ -26,7 +26,7 @@ class LoadLocationTypeData implements FixtureInterface
         $unknownLocation = new LocationType();
         $unknownLocation->setName( 'Unknown' );
         $unknownLocation->setEntity( 'other' );
-        $unknownLocation->setActive( true );
+        $unknownLocation->setInUse( true );
         $unknownLocation->setDefault( false );
         $manager->persist( $unknownLocation );
 
@@ -39,7 +39,7 @@ class LoadLocationTypeData implements FixtureInterface
         $caseLocation->setLocation( 'asset' );
         $caseLocation->setEntity( 'asset' );
         $caseLocation->setUrl( '/api/store/cases' );
-        $caseLocation->setActive( true );
+        $caseLocation->setInUse( true );
         $caseLocation->setDefault( false );
         $manager->persist( $caseLocation );
 
@@ -48,7 +48,7 @@ class LoadLocationTypeData implements FixtureInterface
         $manufacturerLocation->setLocation( 'manufacturer' );
         $manufacturerLocation->setEntity( 'contact' );
         $manufacturerLocation->setUrl( '/api/store/contacts?manufacturer' );
-        $manufacturerLocation->setActive( true );
+        $manufacturerLocation->setInUse( true );
         $manufacturerLocation->setDefault( false );
         $manager->persist( $manufacturerLocation );
 
@@ -56,7 +56,7 @@ class LoadLocationTypeData implements FixtureInterface
         $shopLocation->setName( 'Shop' );
         $shopLocation->setEntity( 'other' );
         $shopLocation->setUrl( null );
-        $shopLocation->setActive( true );
+        $shopLocation->setInUse( true );
         $shopLocation->setDefault( false );
         $manager->persist( $shopLocation );
 
@@ -69,7 +69,7 @@ class LoadLocationTypeData implements FixtureInterface
         $trailerLocation->setLocation( 'trailer' );
         $trailerLocation->setEntity( 'trailer' );
         $trailerLocation->setUrl( '/api/store/trailers' );
-        $trailerLocation->setActive( true );
+        $trailerLocation->setInUse( true );
         $trailerLocation->setDefault( true );
         $manager->persist( $trailerLocation );
 
@@ -78,7 +78,7 @@ class LoadLocationTypeData implements FixtureInterface
         $vendorLocation->setLocation( 'vendor' );
         $vendorLocation->setEntity( 'contact' );
         $vendorLocation->setUrl( '/api/store/contacts?vendor' );
-        $vendorLocation->setActive( true );
+        $vendorLocation->setInUse( true );
         $vendorLocation->setDefault( false );
         $manager->persist( $vendorLocation );
 
@@ -87,7 +87,7 @@ class LoadLocationTypeData implements FixtureInterface
         $venueLocation->setLocation( 'venue' );
         $venueLocation->setEntity( 'contact' );
         $venueLocation->setUrl( '/api/store/contacts?venue' );
-        $venueLocation->setActive( true );
+        $venueLocation->setInUse( true );
         $venueLocation->setDefault( false );
         $manager->persist( $venueLocation );
 

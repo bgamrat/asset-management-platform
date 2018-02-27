@@ -17,7 +17,7 @@ class LoadTimeSpanTypeData implements FixtureInterface
         {
             $timespanType = new TimeSpanType();
             $timespanType->setName( $c );
-            $timespanType->setActive( true );
+            $timespanType->setInUse( true );
             $manager->persist( $timespanType );
         }
 

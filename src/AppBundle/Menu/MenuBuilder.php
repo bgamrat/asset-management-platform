@@ -62,6 +62,7 @@ class MenuBuilder implements ContainerAwareInterface
         if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $menu['admin']['admin-schedule']->addChild( 'schedule-configuration', [ 'label' => 'common.configuration'] );
+            $menu['admin']['admin-schedule']['schedule-configuration']->addChild( 'event-role-types', ['label' => 'event.event_role_types', 'route' => 'app_admin_schedule_eventroletype_index'] );
             $menu['admin']['admin-schedule']['schedule-configuration']->addChild( 'time-span-types', ['label' => 'event.time_span_types', 'route' => 'app_admin_schedule_timespantype_index'] );
         }
 

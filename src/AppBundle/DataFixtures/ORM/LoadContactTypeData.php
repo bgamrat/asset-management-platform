@@ -17,7 +17,7 @@ class LoadContactTypeData implements FixtureInterface
         {
             $contactType = new ContactType();
             $contactType->setEntity( $c );
-            $contactType->setActive( true );
+            $contactType->setInUse( true );
             $manager->persist( $contactType );
         }
 

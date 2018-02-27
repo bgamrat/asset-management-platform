@@ -382,6 +382,10 @@ event:
         Billable
     canceled:
         Canceled
+    event_role_types:
+        Event Role Types
+    event_roles:
+        Event Roles
     firm:
         Firm
     staff:

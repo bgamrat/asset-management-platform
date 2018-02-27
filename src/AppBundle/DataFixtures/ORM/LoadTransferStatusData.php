@@ -17,7 +17,7 @@ class LoadTransferStatusData implements FixtureInterface
         {
             $transferStatus = new TransferStatus();
             $transferStatus->setName( $s );
-            $transferStatus->setActive( true );
+            $transferStatus->setInUse( true );
             $transferStatus->setDefault( $s === 'None' );
             $transferStatus->setInTransit( in_array( $s, ['Delayed', 'In Transit', 'Rerouted'] ) );
             $transferStatus->setLocationDestination( in_array( $s, ['Delivered'] ) );

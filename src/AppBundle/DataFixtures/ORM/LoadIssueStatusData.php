@@ -18,7 +18,7 @@ class LoadIssueStatusData implements FixtureInterface
             $issueStatus = new IssueStatus();
             $issueStatus->setOrder( $i + 1 );
             $issueStatus->setStatus( $s );
-            $issueStatus->setActive( true );
+            $issueStatus->setInUse( true );
             $issueStatus->setDefault( $s === 'New' );
             $manager->persist( $issueStatus );
         }

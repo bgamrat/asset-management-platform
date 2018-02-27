@@ -1,0 +1,54 @@
+{% block title %}{{ 'event.event_role_types'|trans }} {{'common.configuration'|trans }}{% endblock %}
+{% extends 'admin.base.html.twig' %}
+
+{% form_theme types_form _self %}
+
+{% block _event_role_types_types_entry_row %}{% import '/form/macros.html.twig' as form_macros %}{{ form_macros.name_comment_in_use_entry_row('type',form,false) }}{% endblock %}
+
+{% block admin_content %}
+    <div id="status-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="types">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
+                </div>
+            {% endfor %}
+            {% if not types_form.vars.valid %}
+                <div class="form-errors types">
+                    {% for status in types_form.types %}
+                        {% if not status.vars.valid %}
+                            {{form_errors(status.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form_start(types_form)}}
+            <div class="text-right">
+                <button id="types-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="form-row header">
+                <span class="name">{{ 'common.name'|trans }}</span>
+                <span class="comment">{{ 'common.comment'|trans }}</span>
+                <span class="in-use">{{ 'common.in_use'|trans }}</span>
+            </div>
+            {{form_row(types_form)}}
+            {% for status in types_form.types %}
+                {{form_row(status)}}
+            {% endfor %}
+
+            {% if types_form.types.vars.allow_add %}
+                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+            {% endif %}
+            {{form_end(types_form)}}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        require(["app/admin/schedule/event_role_type"], function (eventRoleType) {
+            eventRoleType.run();
+        });
+    </script>
+{% endblock %}

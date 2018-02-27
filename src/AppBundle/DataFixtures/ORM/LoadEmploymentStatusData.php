@@ -25,7 +25,7 @@ class LoadEmploymentStatusData implements FixtureInterface
         {
             $status = new EmploymentStatus();
             $status->setName( $r );
-            $status->setActive( true );
+            $status->setInUse( true );
             $manager->persist( $status );
         }
 
