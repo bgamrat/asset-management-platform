@@ -16,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+
 class PeopleController extends FOSRestController
 {
 
@@ -25,7 +26,8 @@ class PeopleController extends FOSRestController
     public function getPeopleAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $staff = $request->get('s');
+        $staff = $request->headers->has( 'X-Staff' ) ? $request->headers->get('X-Staff') === '1' : false;
+
         $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
@@ -72,10 +74,11 @@ class PeopleController extends FOSRestController
             }
             $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
-        if ($staff === '') {
-            $queryBuilder->join('p.employment_statuses','pes')
-                    ->join('pes.employment_status','es')
-                    ->andWhere('es.active = TRUE');
+        if( $staff === true )
+        {
+            $queryBuilder->join( 'p.employment_statuses', 'pes' )
+                    ->join( 'pes.employment_status', 'es' )
+                    ->andWhere( 'es.active = TRUE' );
         }
         $ids = $queryBuilder->getQuery()->getResult();
 

@@ -132,7 +132,7 @@ class Event
      *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", unique=true)}
      *      )
      */
-    private $timespans = null;
+    private $time_spans = null;
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\CategoryQuantity", cascade={"persist"})
      * @ORM\JoinTable(name="event_category_quantity",
@@ -425,7 +425,7 @@ class Event
 
     public function getTimeSpans()
     {
-        return empty( $this->timespans ) ? [] : $this->timespans->toArray();
+        return empty( $this->time_spans ) ? [] : $this->time_spans->toArray();
     }
 
     public function setTimeSpans( $time_spans )
@@ -439,15 +439,15 @@ class Event
 
     public function addTimeSpan( TimeSpan $timespan )
     {
-        if( !$this->timespans->contains( $timespan ) )
+        if( !$this->time_spans->contains( $timespan ) )
         {
-            $this->timespans->add( $timespan );
+            $this->time_spans->add( $timespan );
         }
     }
 
     public function removeTimeSpan( TimeSpan $timespan )
     {
-        $this->timespans->removeElement( $timespan );
+        $this->time_spans->removeElement( $timespan );
     }
 
     public function getRentals()

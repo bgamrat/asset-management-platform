@@ -25,8 +25,6 @@ define([
     'dgrid/Editor',
     'put-selector/put',
     "app/common/person",
-    "app/admin/staff/person_roles",
-    "app/admin/staff/person_employment_status",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -38,7 +36,7 @@ define([
         registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        person, personRoles, personEmploymentStatuses, lib, libGrid, core, client, personWords) {
+        person, lib, libGrid, core, client, personWords) {
     //"use strict";
     function run() {
         var action = null;
@@ -95,8 +93,6 @@ define([
         newBtn.startup();
         newBtn.on("click", function (event) {
             person.setData(null);
-            personRoles.setData(null);
-            personEmploymentStatuses.setData(null);
             personViewDialog.set("title", core["new"]).show();
             action = "new";
             personId = null;
@@ -127,8 +123,6 @@ define([
             grid.clearSelection();
             if( personForm.validate() ) {
                 data = person.getData();
-                data.roles = personRoles.getData();
-                data.employment_statuses = personEmploymentStatuses.getData();
                 data.id = personId;
                 grid.collection.put(data).then(function (data) {
                     personViewDialog.hide();
@@ -148,7 +142,12 @@ define([
         personForm.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: "/api/people"+((location.href.indexOf("staff") !== -1) ? "?s" : ''), useRangeHeaders: true, idProperty: 'id'});
+        var store = new TrackableRest(
+                {target: "/api/people",
+                    useRangeHeaders: true,
+                    idProperty: 'id',
+                    headers: {"X-Staff": (location.href.indexOf("staff") !== -1) ? 1 : 0}
+                });
         var grid;
 
         all([lib.getAddressTypes(), lib.getEmailTypes(), lib.getPersonTypes(), lib.getPhoneTypes()]).then(function (results) {
@@ -220,8 +219,6 @@ define([
                         personId = pers.id;
                         action = "view";
                         person.setData(pers);
-                        personRoles.setData(pers.roles);
-                        personEmploymentStatuses.setData(pers.employmentStatuses);
                         personViewDialog.show();
                     }, lib.xhrError);
                 }
@@ -290,8 +287,6 @@ define([
         });
 
         person.run();
-        personRoles.run();
-        personEmploymentStatuses.run();
         lib.pageReady();
     }
     return {

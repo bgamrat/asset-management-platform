@@ -18,7 +18,7 @@
 {% block _person_employment_statuses_entry_row %}{% spaceless %}
         <div class="form-row person-employment-status">
             <div class="details justify">
-                {{ form_widget(form.employment_status) }}
+                {{form_widget(form.employment_status)}}
                 {{form_row(form.start)}}
                 {{form_row(form.end)}}
             {% if form.parent.vars.allow_delete %}
@@ -32,7 +32,7 @@
 {% block _person_roles_entry_row %}{% spaceless %}
         <div class="form-row person-role">
             <div class="details justify">
-                {{ form_widget(form.role) }}
+                {{form_widget(form.role)}}
                 {{form_row(form.start)}}
                 {{form_row(form.end)}}
             {% if form.parent.vars.allow_delete %}

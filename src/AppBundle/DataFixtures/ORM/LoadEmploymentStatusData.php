@@ -20,12 +20,13 @@ class LoadEmploymentStatusData implements FixtureInterface
             'Resigned',
             'Retired',
             'Terminated'
-            ];
+        ];
         foreach( $statuses as $i => $r )
         {
             $status = new EmploymentStatus();
             $status->setName( $r );
             $status->setInUse( true );
+            $status->setActive( in_array( $s, ['Full-time', 'Part-time', 'Temporary', 'Intern'] ) );
             $manager->persist( $status );
         }
 

@@ -61,7 +61,7 @@ class EventRoleTypeController extends Controller
             $em->flush();
             $this->addFlash(
                     'notice', 'common.success' );
-            $response = new RedirectResponse( $this->generateUrl( 'app_admin_schedule_timespantype_index', [], UrlGeneratorInterface::ABSOLUTE_URL ) );
+            $response = new RedirectResponse( $this->generateUrl( 'app_admin_schedule_eventroletype_index', [], UrlGeneratorInterface::ABSOLUTE_URL ) );
             $response->prepare( $request );
 
             return $response->send();

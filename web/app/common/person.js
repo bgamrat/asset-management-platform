@@ -11,13 +11,15 @@ define([
     "app/common/emails",
     "app/common/phones",
     "app/common/addresses",
+        "app/admin/staff/person_roles",
+    "app/admin/staff/person_employment_status",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
 ], function (lang, dom, domAttr, query,
         ValidationTextBox, Textarea, Select,
         ObjectStore, Memory,
-        xemails, xphones, xaddresses,
+        xemails, xphones, xaddresses, roles, employmentStatuses,
         lib, core) {
 
     "use strict";
@@ -107,6 +109,8 @@ define([
         phones.setData(obj.phones);
         emails.setData(obj.emails);
         addresses.setData(obj.addresses);
+        roles.setData(obj.roles);
+        employmentStatuses.setData(obj.employmentStatuses);
     }
 
     function run() {
@@ -137,6 +141,9 @@ define([
         store = new ObjectStore({objectStore: memoryStore});
 
         createDijits();
+
+        roles.run();
+        employmentStatuses.run();
     }
 
     function getData() {
@@ -152,7 +159,9 @@ define([
             "comment": commentInput.get('value'),
             "emails": emails.getData(),
             "phones": phones.getData(),
-            "addresses": addresses.getData()
+            "addresses": addresses.getData(),
+            "roles": roles.getData(),
+            "employment_statuses": employmentStatuses.getData()
         }
 
     }
@@ -170,6 +179,8 @@ define([
             phones.setData(null);
             emails.setData(null);
             addresses.setData(null);
+            roles.setData(null);
+            employmentStatuses.setData(null);
         }
     }
 

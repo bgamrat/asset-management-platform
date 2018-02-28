@@ -64,6 +64,10 @@ class DefaultController extends FOSRestController
      */
     public function getEventTransfersAction( $eventId )
     {
+        if (empty($eventId)) {
+            return;
+        }
+
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $columns = ['t.id', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount'];
