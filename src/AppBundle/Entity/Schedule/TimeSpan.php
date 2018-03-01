@@ -29,13 +29,13 @@ class TimeSpan
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
+     * @ORM\OneToMany(targetEntity="Event", mappedBy="id")
      */
     private $id;
     /**
      * @ORM\ManyToOne(targetEntity="TimeSpanType")
      * @ORM\JoinColumn(name="type", referencedColumnName="id")
-     * @ORM\OrderBy({"type" = "ASC"})
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     protected $type;
     /**

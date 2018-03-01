@@ -15,6 +15,7 @@ use AppBundle\Entity\Common\CategoryQuantity;
 use AppBundle\Entity\Schedule\EventRental;
 use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Schedule\TimeSpan;
+use AppBundle\Entity\Schedule\EventRole;
 use AppBundle\Entity\Venue\Venue;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Versioned\Cost;
@@ -134,6 +135,14 @@ class Event
      */
     private $time_spans = null;
     /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Schedule\EventRole", cascade={"persist"})
+     * @ORM\JoinTable(name="event_event_role",
+     *      joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    private $roles = null;
+    /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Common\CategoryQuantity", cascade={"persist"})
      * @ORM\JoinTable(name="event_category_quantity",
      *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")}
@@ -157,6 +166,7 @@ class Event
         $this->contracts = new ArrayCollection();
         $this->trailers = new ArrayCollection();
         $this->time_spans = new ArrayCollection();
+        $this->event_roles = new ArrayCollection();
         $this->rentals = new ArrayCollection();
     }
 
@@ -448,6 +458,33 @@ class Event
     public function removeTimeSpan( TimeSpan $timespan )
     {
         $this->time_spans->removeElement( $timespan );
+    }
+
+    public function getRoles()
+    {
+        return empty( $this->roles ) ? [] : $this->roles->toArray();
+    }
+
+    public function setRoles( $roles )
+    {
+        foreach( $roles as $r )
+        {
+            $this->addRole( $r );
+        }
+        return $this;
+    }
+
+    public function addRole( EventRole $role )
+    {
+        if( !$this->roles->contains( $role ) )
+        {
+            $this->roles->add( $role );
+        }
+    }
+
+    public function removeRole( EventRole $role )
+    {
+        $this->roles->removeElement( $role );
     }
 
     public function getRentals()

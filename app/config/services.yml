@@ -127,6 +127,13 @@ services:
         tags:
             - { name: form.type, alias: 'app_admin_schedule_event_rental_type' }
 
+    app.admin.form.type.event_role:
+        class: AppBundle\Form\Admin\Schedule\EventRoleType
+        arguments: ['@app.form.data_transformer.person_type' ]
+        tags:
+        - { name: form.type, alias: event_role }
+
+
     app.admin.field.type.event_trailer:
         class: AppBundle\Form\Admin\Schedule\Type\TrailerType
         arguments: ['@app.form.data_transformer.event_trailer']

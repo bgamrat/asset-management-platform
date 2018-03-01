@@ -51,3 +51,6 @@ pre#venue-address {
 .form-row .comment .dijitTextBox {
     width: 250px;
 }
+.event-role .person {
+    display: inline-block;
+}

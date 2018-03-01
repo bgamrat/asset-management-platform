@@ -32,6 +32,7 @@ define([
     "app/admin/schedule/trailers",
     "app/admin/schedule/category_quantities",
     "app/admin/schedule/time_spans",
+    "app/admin/schedule/event_roles",
     "app/admin/schedule/event_rentals",
     "app/admin/schedule/transfers",
     "app/lib/common",
@@ -43,7 +44,7 @@ define([
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, ColumnHider, Selection, Editor, put,
-        xcontact, contracts, trailers, categoryQuantities, timeSpans, eventRentals, transfers,
+        xcontact, contracts, trailers, categoryQuantities, timeSpans, eventRoles, eventRentals, transfers,
         lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
@@ -138,6 +139,7 @@ define([
             trailers.setData(null);
             categoryQuantities.setData(null);
             timeSpans.setData(null);
+            eventRoles.setData(null);
             eventRentals.setData(null);
             transfers.setData(null);
             document.getElementById("view-event").classList.add("hidden");
@@ -263,6 +265,7 @@ define([
                     "client_text": clientFilteringSelect.get("displayedValue"),
                     "venue_text": venueFilteringSelect.get("displayedValue"),
                     "time_spans": timeSpans.getData(),
+                    "roles": eventRoles.getData(),
                     "rentals": eventRentals.getData(),
                     "trailers": trailers.getData(),
                     "category_quantities": categoryQuantities.getData(),
@@ -411,6 +414,7 @@ define([
                     categoryQuantities.setData(event.categoryQuantities);
                     contracts.setData(event.contracts);
                     timeSpans.setData(event.timeSpans);
+                    eventRoles.setData(event.roles);
                     eventRentals.setData(event.rentals);
                     transfers.setData(event.id,eventVenue);
                     eventViewDialog.show();
@@ -475,6 +479,7 @@ define([
         trailers.run('event_trailers');
         categoryQuantities.run();
         timeSpans.run('event_time_spans');
+        eventRoles.run('event_roles');
         eventRentals.run('event_rentals');
         transfers.run();
         lib.pageReady();

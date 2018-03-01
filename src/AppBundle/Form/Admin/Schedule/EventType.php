@@ -113,6 +113,16 @@ class EventType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__time_span__'
                 ] )
+                ->add( 'roles', CollectionType::class, [
+                    'entry_type' => EventRoleType::class,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__role__'
+                ] )
                 ->add( 'rentals', CollectionType::class, [
                     'entry_type' => EventRentalType::class,
                     'by_reference' => false,

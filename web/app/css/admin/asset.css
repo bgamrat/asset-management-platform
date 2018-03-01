@@ -58,10 +58,14 @@
 }
 .category-form .position,
 .category-form .position .dijitTextBox,
-.category-form .value,
-.category-form .value .dijitTextBox,
 .issue-priority .dijitTextBox {
     width: 45px;
+}
+.category-form .value {
+    width: 75px;
+}
+.category-form .value .dijitTextBox {
+    width: 55px;
 }
 .category .position .dijitInputContainer input {
     text-align: right;

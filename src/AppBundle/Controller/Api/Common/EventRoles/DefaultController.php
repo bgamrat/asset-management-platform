@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Api\Common\TimeSpanTypes;
+namespace AppBundle\Controller\Api\Common\EventRoles;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,9 +12,9 @@ class DefaultController extends FOSRestController
 
     /**
      * @View()
-     * @Route("/api/store/timespantypes")
+     * @Route("/api/store/eventroles")
      */
-    public function getTimeSpanTypesAction( Request $request )
+    public function getEventRolesAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
@@ -25,11 +25,11 @@ class DefaultController extends FOSRestController
 
             $em = $this->getDoctrine()->getManager();
 
-            $queryBuilder = $em->createQueryBuilder()->select( ['ts.id', "ts.name"] )
-                    ->from( 'AppBundle\Entity\Schedule\TimeSpanType', 'ts' )
-                    ->where( 'LOWER(ts.name) LIKE :time_span_name' )
-                    ->orderBy( 'ts.name')
-                    ->setParameter( 'time_span_name', strtolower( $name ) );
+            $queryBuilder = $em->createQueryBuilder()->select( ['er.id', "er.name"] )
+                    ->from( 'AppBundle\Entity\Schedule\EventRoleType', 'er' )
+                    ->where( 'LOWER(er.name) LIKE :event_role_name' )
+                    ->orderBy( 'er.name')
+                    ->setParameter( 'event_role_name', strtolower( $name ) );
 
             $data = $queryBuilder->getQuery()->getResult();
         }
