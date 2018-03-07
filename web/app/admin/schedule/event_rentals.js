@@ -6,6 +6,7 @@ define([
     "dojo/query",
     'dojo/store/JsonRest',
     "dijit/form/ValidationTextBox",
+    "dijit/form/CurrencyTextBox",
     "dijit/form/FilteringSelect",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/schedule",
@@ -14,13 +15,13 @@ define([
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on, query,
         JsonRest,
-        ValidationTextBox, FilteringSelect,
+        ValidationTextBox, CurrencyTextBox, FilteringSelect,
         core, schedule) {
     //"use strict";
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var rentalFilteringSelect = [], commentInput = [];
+    var rentalFilteringSelect = [], costInput = [], commentInput = [];
     var rentalStore;
     var divIdInUse = 'event_rentals';
     var addOneMoreControl = null;
@@ -46,6 +47,13 @@ define([
         }, base + "rental");
         rentalFilteringSelect.push(dijit);
         dijit.startup();
+        dijit = new CurrencyTextBox({
+            placeholder: core.cost,
+            trim: true,
+            required: false
+        }, base + "cost");
+        dijit.startup();
+        costInput.push(dijit);
         dijit = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
@@ -56,12 +64,14 @@ define([
     }
 
     function destroyRow(id, target) {
-        var rental;
+        var item;
 
-        rental = rentalFilteringSelect.splice(id, 1);
-        rental[0].destroyRecursive();
-        rental = commentInput.splice(id, 1);
-        rental[0].destroyRecursive();
+        item = rentalFilteringSelect.splice(id, 1);
+        item[0].destroyRecursive();
+        item = costInput.splice(id, 1);
+        item[0].destroyRecursive();
+        item = commentInput.splice(id, 1);
+        item[0].destroyRecursive();
         domConstruct.destroy(target);
     }
 
@@ -97,6 +107,7 @@ define([
             returnData.push(
                     {
                         "rental": rentalFilteringSelect[i].get('value'),
+                        "cost": costInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
@@ -117,6 +128,7 @@ define([
                 createDijits();
                 obj = rentals[i];
                 rentalFilteringSelect[i].set('displayedValue', obj.name);
+                costInput[i].set('value', obj.cost);
                 commentInput[i].set('value', obj.comment);
             }
         }

@@ -4,6 +4,7 @@ namespace AppBundle\Form\Admin\Schedule;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
@@ -27,6 +28,7 @@ class EventRentalType extends AbstractType
     {
         $builder
                 ->add( 'rental', TextType::class, ['label' => false, 'property_path' => 'asset'] )
+                ->add( 'cost', MoneyType::class, ['label' => 'common.cost', 'currency' => 'USD'] )
                 ->add( 'comment', TextType::class, [
                     'label' => false
                 ] )

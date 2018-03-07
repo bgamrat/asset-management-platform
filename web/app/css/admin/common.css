@@ -191,3 +191,6 @@
      -moz-column-width: 175px;
           column-width: 175px;
 }
+.cost .dijitTextBox {
+    width: 100px;
+}

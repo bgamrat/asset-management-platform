@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Name;
+use AppBundle\Entity\Traits\Versioned\Cost;
 use AppBundle\Entity\Asset\Asset;
 
 /**
@@ -25,8 +26,9 @@ use AppBundle\Entity\Asset\Asset;
 class EventRental
 {
 
-    use Comment,
-        Id,
+    use Id,
+        Comment,
+        Cost,
         Name,
         SoftDeleteableEntity,
         TimestampableEntity;
@@ -54,29 +56,31 @@ class EventRental
      *
      * @return EventRental
      */
-    public function setAsset( Asset $asset )
+    public function setAsset( $asset = null )
     {
-        $this->asset = $asset;
-
-        $name = '';
         if( !empty( $asset ) )
         {
-            $barcodes = $asset->getBarcodes();
-            if( !empty( $barcodes ) )
+            $this->asset = $asset;
+
+            $name = '';
+            if( !empty( $asset ) )
             {
-                foreach( $barcodes as $b )
+                $barcodes = $asset->getBarcodes();
+                if( !empty( $barcodes ) )
                 {
-                    if( $b->isActive() )
+                    foreach( $barcodes as $b )
                     {
-                        $name = $b->getBarcode() . ' - ';
+                        if( $b->isActive() )
+                        {
+                            $name = $b->getBarcode() . ' - ';
+                        }
                     }
                 }
+                $model = $asset->getModel();
+                $name .= $model->getBrand()->getName() . ' ' . $asset->getModel()->getName();
             }
-            $model = $asset->getModel();
-            $name .= $model->getBrand()->getName() . ' ' . $asset->getModel()->getName();
+            $this->name = $name;
         }
-        $this->name = $name;
-
         return $this;
     }
 

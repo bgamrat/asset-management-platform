@@ -206,8 +206,7 @@
 }
 .transfer-details .carrier .dijitTextBox,
 .transfer-details .carrier-service .dijitTextBox,
-.transfer-details .tracking-number .dijitTextBox,
-.transfer-details .cost .dijitTextBox {
+.transfer-details .tracking-number .dijitTextBox {
     width: 120px;
 }
 .transfer-details .carrier > div,
