@@ -13,6 +13,7 @@ use AppBundle\Entity\Common\Person;
 use AppBundle\Entity\Client\Contract;
 use AppBundle\Entity\Common\CategoryQuantity;
 use AppBundle\Entity\Schedule\EventRental;
+use AppBundle\Entity\Schedule\ClientEquipment;
 use AppBundle\Entity\Asset\Trailer;
 use AppBundle\Entity\Schedule\TimeSpan;
 use AppBundle\Entity\Schedule\EventRole;
@@ -159,6 +160,16 @@ class Event
      *      )
      */
     protected $rentals;
+    /**
+     * @var ArrayCollection $clientEquipment
+     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Schedule\ClientEquipment", cascade={"persist","remove"}, orphanRemoval=true)
+     * @ORM\JoinTable(name="event_client_equipment",
+     *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="client_equipment_id", referencedColumnName="id", unique=false, nullable=true)}
+     *      )
+     */
+    protected $client_equipment;
 
     public function __construct()
     {
@@ -168,6 +179,7 @@ class Event
         $this->time_spans = new ArrayCollection();
         $this->event_roles = new ArrayCollection();
         $this->rentals = new ArrayCollection();
+        $this->client_equipment = new ArrayCollection();
     }
 
     /**
@@ -508,6 +520,29 @@ class Event
         }
 
         $this->rentals->removeElement( $rental );
+    }
+
+    public function getClientEquipment()
+    {
+        return $this->client_equipment;
+    }
+
+    public function addClientEquipment( EventClientEquipment $clientEquipment )
+    {
+        if( !$this->client_equipment->contains( $clientEquipment ) )
+        {
+            $this->client_equipment->add( $clientEquipment );
+        }
+    }
+
+    public function removeClientEquipment( EventClientEquipment $clientEquipment )
+    {
+        if( !$this->client_equipment->contains( $clientEquipment ) )
+        {
+            return;
+        }
+
+        $this->client_equipment->removeElement( $clientEquipment );
     }
 
 }

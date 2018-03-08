@@ -33,6 +33,7 @@ define([
     "app/admin/schedule/category_quantities",
     "app/admin/schedule/time_spans",
     "app/admin/schedule/event_roles",
+    "app/admin/schedule/client_equipment",
     "app/admin/schedule/event_rentals",
     "app/admin/schedule/transfers",
     "app/lib/common",
@@ -44,7 +45,7 @@ define([
         registry, Form, TextBox, DateTextBox, ValidationTextBox, CheckBox, SimpleTextarea, FilteringSelect, JsonRest,
         Button, Dialog, TabContainer, ContentPane,
         Rest, SimpleQuery, Trackable, OnDemandGrid, ColumnHider, Selection, Editor, put,
-        xcontact, contracts, trailers, categoryQuantities, timeSpans, eventRoles, eventRentals, transfers,
+        xcontact, contracts, trailers, categoryQuantities, timeSpans, eventRoles, clientEquipment, eventRentals, transfers,
         lib, libGrid, core, schedule) {
     //"use strict";
     function run() {
@@ -65,6 +66,12 @@ define([
             style: "height: 525px; width: 900px;"
         }, "event-view-tabs");
 
+        var venueContentPane = new ContentPane({
+            title: core.venue},
+        "event-view-venue-tab"
+                );
+        tabContainer.addChild(venueContentPane);
+
         var detailsContentPane = new ContentPane({
             title: core.details},
         "event-view-details-tab"
@@ -76,6 +83,12 @@ define([
         "event-view-contract-equipment-tab"
                 );
         tabContainer.addChild(equipmentContentPane);
+
+        var clientEquipmentContentPane = new ContentPane({
+            title: core.client + " " + core.equipment},
+        "event-view-client-equipment-tab"
+                );
+        tabContainer.addChild(clientEquipmentContentPane);
 
         var rentalEquipmentContentPane = new ContentPane({
             title: schedule.rental + " " + core.equipment},
@@ -94,12 +107,6 @@ define([
         "event-view-contacts-tab"
                 );
         tabContainer.addChild(contactsContentPane);
-
-        var venueContentPane = new ContentPane({
-            title: core.venue},
-        "event-view-venue-tab"
-                );
-        tabContainer.addChild(venueContentPane);
 
         var timesContentPane = new ContentPane({
             title: schedule.schedule},
@@ -140,6 +147,7 @@ define([
             categoryQuantities.setData(null);
             timeSpans.setData(null);
             eventRoles.setData(null);
+            clientEquipment.setData(null);
             eventRentals.setData(null);
             transfers.setData(null);
             document.getElementById("view-event").classList.add("hidden");
@@ -266,6 +274,7 @@ define([
                     "venue_text": venueFilteringSelect.get("displayedValue"),
                     "time_spans": timeSpans.getData(),
                     "roles": eventRoles.getData(),
+                    "client_equipment": clientEquipment.getData(),
                     "rentals": eventRentals.getData(),
                     "trailers": trailers.getData(),
                     "category_quantities": categoryQuantities.getData(),
@@ -415,6 +424,7 @@ define([
                     contracts.setData(event.contracts);
                     timeSpans.setData(event.timeSpans);
                     eventRoles.setData(event.roles);
+                    clientEquipment.setData(event.clientEquipment);
                     eventRentals.setData(event.rentals);
                     transfers.setData(event.id,eventVenue);
                     eventViewDialog.show();
@@ -480,6 +490,7 @@ define([
         categoryQuantities.run();
         timeSpans.run('event_time_spans');
         eventRoles.run('event_roles');
+        clientEquipment.run('event_client_equipment');
         eventRentals.run('event_rentals');
         transfers.run();
         lib.pageReady();

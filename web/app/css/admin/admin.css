@@ -179,7 +179,7 @@ fieldset ul.unstyled {
     display: inline-block;
 }
 .form-row .category, .form-row .quantity, .form-row .value {
-    margin: 5px 3px;
+    margin: 0 3px;
 }
 .form-row .quantity .dijitTextBox {
     width: 50px;

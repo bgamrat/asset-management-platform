@@ -87,16 +87,32 @@
 {% block _event_rentals_entry_row %}{% spaceless %}
     <div class="form-row event-rental">
         <div class="justify">
-            <span class="rental">
-                {{ form_widget(form.rental) }}
+            <span class="category">
+                {{ form_widget(form.category) }}
             </span>
-                        <span class="cost">
+            <span class="vendor">
+                {{ form_widget(form.vendor) }}
+            </span>
+            <span class="cost">
                 {{ form_widget(form.cost) }}
             </span>
             <span class="comment">
                 {{ form_widget(form.comment) }}
             </span>
-            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="issue_rental-__rental__"><i class="fa fa-remove"></i></span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="event_rental-__rental__"><i class="fa fa-remove"></i></span>
+        </div>
+    </div>{% endspaceless %}{% endblock %}
+
+{% block _event_client_equipment_entry_row %}{% spaceless %}
+    <div class="form-row client-equipment">
+        <div class="justify">
+            <span class="category">
+                {{ form_widget(form.category) }}
+            </span>
+            <span class="comment">
+                {{ form_widget(form.comment) }}
+            </span>
+            <span class="remove-form-row" title="{{'common.remove'|trans}}" id="client_equipment-__client_equipment__"><i class="fa fa-remove"></i></span>
         </div>
     </div>{% endspaceless %}{% endblock %}
 
@@ -154,6 +170,37 @@
                 </div>
             </fieldset>
             <div id="event-view-tabs">
+                <div id="event-view-venue-tab">
+                    <fieldset class="event venue">
+                        <legend>{{'common.venue'|trans}}</legend>
+                        <div class="justify left">
+                            <span>
+                                {{form_row(event_form.venue)}}
+                            </span>
+                            <span>
+                                <a id="venue-equipment-link" target="_blank">{{ 'common.equipment'|trans }}</a>
+                            </span>
+                            <span class="venue-info">
+                                <div class="label">{{ 'common.address'|trans }}</div>
+                                <pre id="venue-address"></pre>
+                            </span>
+                        </div>
+                        <div class="justify">
+                            <span class="venue-info">
+                                <div class="label">{{ 'common.comment'|trans }}</div>
+                                <div id="venue-comment"></div>
+                            </span>
+                            <span class="venue-info">
+                                <div class="label">{{ 'common.directions'|trans }}</div>
+                                <div id="venue-directions"></div>
+                            </span>
+                            <span class="venue-info">
+                                <div class="label">{{ 'common.address'|trans }}</div>
+                                <div id="venue-parking"></div>
+                            </span>
+                        </div>
+                    </fieldset>
+                </div>
                 <div id="event-view-details-tab">
                     <fieldset class="details">
                         {{form_row(event_form.description,{"attr":{"class":"description"}})}}
@@ -190,6 +237,14 @@
                         </fieldset>
                     </div>
                 </div>
+                <div id="event-view-client-equipment-tab">
+                    <fieldset id="client-equipment" class="client-equipment">
+                        {{form_row(event_form.client_equipment)}}
+                        {% if event_form.client_equipment.vars.allow_add %}
+                            <div class="add-one-more-row">{{ 'common.add_one_more'|trans}}</div>
+                        {% endif %}
+                    </fieldset>
+                </div>
                 <div id="event-view-rental-equipment-tab">
                     <fieldset id="rentals" class="rentals">
                         {{form_row(event_form.rentals)}}
@@ -214,37 +269,6 @@
                         {% if event_form.contacts.vars.allow_add %}
                             <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
                         {% endif %}
-                    </fieldset>
-                </div>
-                <div id="event-view-venue-tab">
-                    <fieldset class="event venue">
-                        <legend>{{'common.venue'|trans}}</legend>
-                        <div class="justify left">
-                            <span>
-                                {{form_row(event_form.venue)}}
-                            </span>
-                            <span>
-                                <a id="venue-equipment-link" target="_blank">{{ 'common.equipment'|trans }}</a>
-                            </span>
-                            <span class="venue-info">
-                                <div class="label">{{ 'common.address'|trans }}</div>
-                                <pre id="venue-address"></pre>
-                            </span>
-                        </div>
-                        <div class="justify">
-                            <span class="venue-info">
-                                <div class="label">{{ 'common.comment'|trans }}</div>
-                                <div id="venue-comment"></div>
-                            </span>
-                            <span class="venue-info">
-                                <div class="label">{{ 'common.directions'|trans }}</div>
-                                <div id="venue-directions"></div>
-                            </span>
-                            <span class="venue-info">
-                                <div class="label">{{ 'common.address'|trans }}</div>
-                                <div id="venue-parking"></div>
-                            </span>
-                        </div>
                     </fieldset>
                 </div>
                 <div id="event-view-times-tab">

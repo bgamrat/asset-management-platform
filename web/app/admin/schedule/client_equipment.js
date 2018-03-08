@@ -6,7 +6,6 @@ define([
     "dojo/query",
     'dojo/store/JsonRest',
     "dijit/form/ValidationTextBox",
-    "dijit/form/CurrencyTextBox",
     "dijit/form/FilteringSelect",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/schedule",
@@ -15,15 +14,15 @@ define([
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on, query,
         JsonRest,
-        ValidationTextBox, CurrencyTextBox, FilteringSelect,
+        ValidationTextBox, FilteringSelect,
         core, schedule) {
     //"use strict";
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var categoryFilteringSelect = [], vendorFilteringSelect = [], costInput = [], commentInput = [];
-    var categoryStore, vendorStore;
-    var divIdInUse = 'event_rentals';
+    var categoryFilteringSelect = [], commentInput = [];
+    var categoryStore;
+    var divIdInUse = 'event_client_equipment';
     var addOneMoreControl = null;
 
     function getDivId() {
@@ -31,7 +30,7 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__rental__/g, categoryFilteringSelect.length);
+        prototypeContent = dataPrototype.replace(/__client_equipment__/g, categoryFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode, "last");
     }
 
@@ -47,23 +46,6 @@ define([
         }, base + "category");
         dijit.startup();
         categoryFilteringSelect.push(dijit);
-        dijit = new FilteringSelect({
-            store: vendorStore,
-            labelAttr: "name",
-            searchAttr: "name",
-            placeholder: core.vendor,
-            "required": false,
-            pageSize: 25
-        }, base + "vendor");
-        dijit.startup();
-        vendorFilteringSelect.push(dijit);
-        dijit = new CurrencyTextBox({
-            placeholder: core.cost,
-            trim: true,
-            required: false
-        }, base + "cost");
-        dijit.startup();
-        costInput.push(dijit);
         dijit = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
@@ -78,10 +60,6 @@ define([
 
         item = categoryFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
-        item = vendorFilteringSelect.splice(id, 1);
-        item[0].destroyRecursive();
-        item = costInput.splice(id, 1);
-        item[0].destroyRecursive();
         item = commentInput.splice(id, 1);
         item[0].destroyRecursive();
         domConstruct.destroy(target);
@@ -91,19 +69,14 @@ define([
 
         prototypeNode = dom.byId(getDivId());
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__rental__/g, '0');
-
-        vendorStore = new JsonRest({
-            target: '/api/store/vendors',
-            useRangeHeaders: false,
-            idProperty: 'id'});
+        prototypeContent = dataPrototype.replace(/__client_equipment__/g, '0');
 
         categoryStore = new JsonRest({
             target: '/api/store/categories',
             useRangeHeaders: false,
             idProperty: 'id'});
 
-        addOneMoreControl = query('.rentals .add-one-more-row');
+        addOneMoreControl = query('.client-equipment .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -114,40 +87,36 @@ define([
             var target = event.target;
             var targetParent = target.parentNode;
             var id = parseInt(targetParent.id.replace(/\D/g, ''));
-            destroyRow(id, target.closest(".form-row.event-rental"));
+            destroyRow(id, target.closest(".form-row.client-equipment"));
         });
     }
 
     function getData() {
-        var i, l = vendorFilteringSelect.length, returnData = [];
+        var i, l = categoryFilteringSelect.length, returnData = [];
         for( i = 0; i < l; i++ ) {
             returnData.push(
                     {
                         "category": categoryFilteringSelect[i].get('value'),
-                        "vendor": vendorFilteringSelect[i].get('value'),
-                        "cost": costInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
         return returnData;
     }
 
-    function setData(rentals) {
+    function setData(clientEquipment) {
         var i, l, obj, nodes;
 
-        nodes = query(".form-row.event-rental", "rentals");
+        nodes = query(".form-row.client-equipment", "client-equipment");
         nodes.forEach(function (node, index) {
             destroyRow(0, node);
         });
-        if( typeof rentals === "object" && rentals !== null ) {
-            l = rentals.length;
+        if( typeof clientEquipment === "object" && clientEquipment !== null ) {
+            l = clientEquipment.length;
             for( i = 0; i < l; i++ ) {
                 cloneNewNode();
                 createDijits();
-                obj = rentals[i];
+                obj = clientEquipment[i];
                 categoryFilteringSelect[i].set('displayedValue', obj.category.fullName);
-                vendorFilteringSelect[i].set('displayedValue', obj.vendor.name);
-                costInput[i].set('value', obj.cost);
                 commentInput[i].set('value', obj.comment);
             }
         }

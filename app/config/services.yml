@@ -103,6 +103,12 @@ services:
         tags:
             - { name: form.type, alias: 'app_category_quantity_type' }
 
+    app.admin.form.type.client_equipment:
+        class: AppBundle\Form\Admin\Schedule\ClientEquipmentType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_schedule_client_equipment_type' }
+
     app.admin.form.type.contact:
         class: AppBundle\Form\Admin\Common\ContactType
         arguments: ['@doctrine.orm.entity_manager','%location_type.entities%']

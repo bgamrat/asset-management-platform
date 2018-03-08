@@ -134,6 +134,17 @@ class EventType extends AbstractType
                     'delete_empty' => true,
                     'prototype_name' => '__rental__'
                 ] )
+                ->add( 'client_equipment', CollectionType::class, [
+                    'entry_type' => ClientEquipmentType::class,
+                    'by_reference' => false,
+                    'required' => false,
+                    'label' => false,
+                    'empty_data' => null,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'delete_empty' => true,
+                    'prototype_name' => '__client_equipment__'
+                ] )
         ;
 
         $builder->get( 'client' )

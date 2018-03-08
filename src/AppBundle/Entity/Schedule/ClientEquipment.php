@@ -14,14 +14,14 @@ use AppBundle\Entity\Traits\Id;
 use AppBundle\Entity\Traits\Versioned\Cost;
 
 /**
- * EventRental
+ * ClientEquipment
  *
  * @ORM\Entity()
- * @ORM\Table(name="event_rental")
+ * @ORM\Table(name="client_equipment")
  * @Gedmo\Loggable(logEntryClass="AppBundle\Entity\Schedule\EventLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class EventRental
+class ClientEquipment
 {
 
     use Id,
@@ -36,8 +36,8 @@ class EventRental
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\ManyToOne(targetEntity="Event", inversedBy="rentals")
-     * @ORM\JoinColumn(name="rental_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Event", inversedBy="client_equipment")
+     * @ORM\JoinColumn(name="client_equipment_id", referencedColumnName="id")
      */
     private $id;
     /**
@@ -46,21 +46,13 @@ class EventRental
      * @Gedmo\Versioned
      */
     private $category;
-        /**
-     * @var int
-     * @Gedmo\Versioned
-     * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Asset\Vendor")
-     * @ORM\JoinColumn(name="vendor_id", referencedColumnName="id")
-     */
-    protected $vendor = null;
 
-        /**
+    /**
      * Set category
      *
      * @param string $category
      *
-     * @return EventRental
+     * @return ClientEquipment
      */
     public function setCategory( $category )
     {
@@ -79,27 +71,4 @@ class EventRental
         return $this->category;
     }
 
-    /**
-     * Set vendor
-     *
-     * @param int $vendor
-     *
-     * @return EventRental
-     */
-    public function setVendor( $vendor )
-    {
-        $this->vendor = $vendor;
-
-        return $this;
-    }
-
-    /**
-     * Get vendor
-     *
-     * @return int
-     */
-    public function getVendor()
-    {
-        return $this->vendor;
-    }
 }
