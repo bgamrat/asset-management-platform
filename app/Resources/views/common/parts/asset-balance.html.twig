@@ -5,19 +5,31 @@
             <thead>
                 <tr>
                     <th>{{'asset.category'|trans}}</th>
-                    <th>{{'common.quantity'|trans}}</th>
+                    <th>{{'common.client'|trans}} {{'common.equipment'|trans}}</th>
+                    <th>{{'common.rental'|trans}} {{'common.equipment'|trans}}</th>
+                    <th>{{'event.deficit'|trans}}</th>
                 </tr>
             </thead>
             <tbody>
-                {% for category_quantity in asset_balance %}
-                    {% if category_quantity.quantity > 0 %} 
+                {% for id, category_quantity in asset_balance %}
                     <tr>
                         <td class="category">{{category_quantity.category.fullName}}</td>
-                        <td class="quantity{% if category_quantity.quantity > 0 %} deficit{% endif %}">
-                            {{category_quantity.quantity|abs}}
+                        <td class="quantity">
+                            {% if client_provided[category_quantity.id] is defined %}
+                                {{client_provided[category_quantity.id].quantity}}
+                            {% endif %}
+                        </td>
+                        <td class="quantity">
+                            {% if rentals[id] is defined %}
+                                {{rentals[id]}}
+                            {% endif %}
+                        </td>
+                        <td class="quantity deficit">
+                           {% if category_quantity.quantity > 0 %}
+                               {{-category_quantity.quantity}}
+                           {% endif %}
                         </td>
                     </tr>
-                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>

@@ -20,7 +20,7 @@ define([
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var categoryFilteringSelect = [], commentInput = [];
+    var quantityInput = [], categoryFilteringSelect = [], commentInput = [];
     var categoryStore;
     var divIdInUse = 'event_client_equipment';
     var addOneMoreControl = null;
@@ -47,6 +47,15 @@ define([
         dijit.startup();
         categoryFilteringSelect.push(dijit);
         dijit = new ValidationTextBox({
+            trim: true,
+            pattern: "[0-9]+",
+            required: true,
+            placeholder: core.quantity
+        }, base + "quantity");
+        quantityInput.push(dijit);
+        dijit.startup();
+        quantityInput.push(dijit);
+        dijit = new ValidationTextBox({
             placeholder: core.comment,
             trim: true,
             required: false
@@ -59,6 +68,8 @@ define([
         var item;
 
         item = categoryFilteringSelect.splice(id, 1);
+        item[0].destroyRecursive();
+        item = quantityInput.splice(id, 1);
         item[0].destroyRecursive();
         item = commentInput.splice(id, 1);
         item[0].destroyRecursive();
@@ -97,6 +108,7 @@ define([
             returnData.push(
                     {
                         "category": categoryFilteringSelect[i].get('value'),
+                        "quantity": commentInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
         }
@@ -117,6 +129,7 @@ define([
                 createDijits();
                 obj = clientEquipment[i];
                 categoryFilteringSelect[i].set('displayedValue', obj.category.fullName);
+                quantityInput[i].set('value', obj.quantity);
                 commentInput[i].set('value', obj.comment);
             }
         }

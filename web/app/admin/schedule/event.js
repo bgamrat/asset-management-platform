@@ -55,7 +55,7 @@ define([
 
         var eventViewDialog = new Dialog({
             title: core.view,
-            style: "height:700px;width:1000px"
+            style: "height:700px;width:980px"
         }, "event-view-dialog");
         eventViewDialog.startup();
         eventViewDialog.on("cancel", function (event) {
@@ -63,7 +63,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "height: 525px; width: 900px;"
+            style: "height: 425px; width: 900px;"
         }, "event-view-tabs");
 
         var venueContentPane = new ContentPane({

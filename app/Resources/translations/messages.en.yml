@@ -382,6 +382,8 @@ event:
         Billable
     canceled:
         Canceled
+    deficit:
+        Deficit
     event_role_types:
         Event Role Types
     event_roles:

@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Id;
+use AppBundle\Entity\Traits\Versioned\Quantity;
 use AppBundle\Entity\Traits\Versioned\Value;
 
 /**
@@ -27,6 +28,7 @@ class CategoryQuantity
     use Comment,
         Id,
         Value,
+        Quantity,
         TimestampableEntity;
 
     /**
@@ -43,12 +45,6 @@ class CategoryQuantity
      * @Gedmo\Versioned
      */
     private $category;
-    /**
-     * @var int
-     * @Gedmo\Versioned
-     * @ORM\Column(name="quantity", type="integer", nullable=false, unique=false)
-     */
-    private $quantity = 1;
 
     /**
      * Set category
@@ -73,36 +69,4 @@ class CategoryQuantity
     {
         return $this->category;
     }
-
-    public function setQuantity( $quantity )
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function addQuantity( $quantity )
-    {
-        $this->quantity += $quantity;
-
-        return $this;
-    }
-
-    public function subtractQuantity( $quantity )
-    {
-        $this->quantity -= $quantity;
-
-        return $this;
-    }
-
-    /**
-     * Get quantity
-     *
-     * @return string
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
 }

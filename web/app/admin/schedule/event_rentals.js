@@ -21,7 +21,7 @@ define([
 
     var dataPrototype;
     var prototypeNode, prototypeContent;
-    var categoryFilteringSelect = [], vendorFilteringSelect = [], costInput = [], commentInput = [];
+    var categoryFilteringSelect = [], vendorFilteringSelect = [], quantityInput = [], costInput = [], commentInput = [];
     var categoryStore, vendorStore;
     var divIdInUse = 'event_rentals';
     var addOneMoreControl = null;
@@ -57,6 +57,14 @@ define([
         }, base + "vendor");
         dijit.startup();
         vendorFilteringSelect.push(dijit);
+        dijit = new ValidationTextBox({
+            trim: true,
+            pattern: "[0-9]+",
+            required: true,
+            placeholder: core.quantity
+        }, base + "quantity");
+        quantityInput.push(dijit);
+        dijit.startup();
         dijit = new CurrencyTextBox({
             placeholder: core.cost,
             trim: true,
@@ -79,6 +87,8 @@ define([
         item = categoryFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
         item = vendorFilteringSelect.splice(id, 1);
+        item[0].destroyRecursive();
+        item = quantityInput.splice(id, 1);
         item[0].destroyRecursive();
         item = costInput.splice(id, 1);
         item[0].destroyRecursive();
@@ -125,6 +135,7 @@ define([
                     {
                         "category": categoryFilteringSelect[i].get('value'),
                         "vendor": vendorFilteringSelect[i].get('value'),
+                        "quantity": quantityInput[i].get('value'),
                         "cost": costInput[i].get('value'),
                         "comment": commentInput[i].get('value')
                     });
@@ -147,6 +158,7 @@ define([
                 obj = rentals[i];
                 categoryFilteringSelect[i].set('displayedValue', obj.category.fullName);
                 vendorFilteringSelect[i].set('displayedValue', obj.vendor.name);
+                quantityInput[i].set('value', obj.quantity);
                 costInput[i].set('value', obj.cost);
                 commentInput[i].set('value', obj.comment);
             }

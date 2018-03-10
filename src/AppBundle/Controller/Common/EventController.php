@@ -4,10 +4,11 @@ namespace AppBundle\Controller\Common;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Form\Admin\Asset\TrailerType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use AppBundle\Form\Admin\Asset\TrailerType;
+use AppBundle\Entity\Common\CategoryQuantity;
 
 /**
  * Description of EventController
@@ -82,15 +83,6 @@ class EventController extends Controller
         {
             $locationAssetCollection = array_merge( $locationAssetCollection, $venueAssets );
         }
-        if( !empty( $event->getRentals() ) )
-        {
-            $locationAssetCollection['common.rentals'] = [];
-            $rentals = $event->getRentals();
-            foreach( $rentals as $r )
-            {
-                $locationAssetCollection['common.rentals'][] = $em->getRepository('AppBundle\Entity\Asset\Asset')->find($r->getAsset()->getId());
-            }
-        }
         if( !empty( $locationAssetCollection ) )
         {
             foreach( $locationAssetCollection as $locationName => $locationAssets )
@@ -152,7 +144,6 @@ class EventController extends Controller
 
         if( !empty( $assetCollection ) )
         {
-
             foreach( $assetCollection as $modelId => $ac )
             {
                 if( isset( $dependencies[$modelId] ) )
@@ -176,11 +167,49 @@ class EventController extends Controller
 
         foreach( $requiresCategoryQuantities as $categoryId => $rcq )
         {
-            $assetBalance[$categoryId] = clone($rcq);
+            if (!isset($assetBalance[$categoryId])) {
+                $assetBalance[$categoryId] = clone($rcq);
+            }
             if( isset( $satisfies[$categoryId] ) )
             {
                 $assetBalance[$categoryId]->subtractQuantity( $satisfies[$categoryId] );
             }
+        }
+
+        $rentalEquipment = $event->getRentals();
+        $rentals = [];
+        foreach ($rentalEquipment as $re) {
+            $cId = $re->getCategory()->getId();
+            if( !isset( $assetBalance[$cId] ) )
+            {
+                $cq = new CategoryQuantity();
+                $cq->setCategory($re->getCategory());
+                $cq->setQuantity(0);
+                $assetBalance[$cId] = $cq;
+            }
+            if (!isset($rentals[$cId])) {
+                $rentals[$cId] = 0;
+            }
+            $assetBalance[$cId]->subtractQuantity($re->getQuantity());
+            $rentals[$cId] += $re->getQuantity();
+        }
+
+        $clientEquipment = $event->getClientEquipment();
+        $clientProvided = [];
+        foreach ($clientEquipment as $ce) {
+            $cId = $ce->getCategory()->getId();
+            if( !isset( $assetBalance[$cId] ) )
+            {
+                $cq = new CategoryQuantity();
+                $cq->setCategory($ce->getCategory());
+                $cq->setQuantity(0);
+                $assetBalance[$cId] = $cq;
+            }
+            if (!isset($clientProvided[$cId])) {
+                $clientProvided[$cId] = 0;
+            }
+            $assetBalance[$cId]->subtractQuantity($ce->getQuantity());
+            $clientProvided[$cId] += $ce->getQuantity();
         }
 
         $columns = ['t.id', 't.updatedAt', 't.tracking_number', 'c.name AS carrier', 'c.tracking_url', 'cs.name AS carrier_service', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount'];
@@ -230,14 +259,15 @@ class EventController extends Controller
                     'event_assets' => $eventAssets,
                     'location_names' => $locationNames,
                     'asset_balance' => $assetBalance,
+                    'client_provided' => $clientProvided,
+                    'rentals' => $rentals,
                     'transfers' => $transfers,
                     'no_hide' => true,
                     'omit_menu' => true]
         );
     }
 
-    private
-            function getDependencies( $model )
+    private function getDependencies( $model )
     {
         $result = $model->getRequires();
         if( !empty( $requires ) )

@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use AppBundle\Entity\Traits\Versioned\Comment;
 use AppBundle\Entity\Traits\Id;
-use AppBundle\Entity\Traits\Versioned\Cost;
+use AppBundle\Entity\Traits\Versioned\Quantity;
 
 /**
  * ClientEquipment
@@ -26,7 +26,7 @@ class ClientEquipment
 
     use Id,
         Comment,
-        Cost,
+        Quantity,
         SoftDeleteableEntity,
         TimestampableEntity;
 
