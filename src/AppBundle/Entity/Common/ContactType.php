@@ -21,7 +21,8 @@ use AppBundle\Entity\Traits\Id;
 class ContactType
 {
 
-    use InUse;
+    use Id,
+        InUse;
 
     /**
      * @var int

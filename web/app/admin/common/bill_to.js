@@ -52,7 +52,7 @@ define([
             placeholder: core.contact,
             required: false,
             pageSize: 25
-                    //intermediateChanges: true
+            //intermediateChanges: true
         }, base + "contact");
         dijit.startup();
         dijit.on("change", function (evt) {
@@ -158,13 +158,12 @@ define([
     function getData() {
         var i, l = contactFilteringSelect.length, contact, contactData, returnData = [];
         for( i = 0; i < l; i++ ) {
-
             contact = contactFilteringSelect[i].get('item');
             if( contact !== null ) {
                 contactData = {
                     "id": contact.id,
                     "contact_entity_id": contact.entity,
-                    "contact_type": contact.type.id,
+                    "contact_type": contact.type.entity,
                     "person_id": contact.person.id,
                     "name": contact.name
                 };

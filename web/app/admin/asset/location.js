@@ -222,7 +222,7 @@ define([
                         locationFilteringSelect.set("readOnly", false);
                         if( obj.address === true && obj.entityData !== null ) {
                             obj.entityData.label = location_text;
-                            locationFilteringSelect.set('displayedValue',obj.entityData.label);
+                            locationFilteringSelect.set('displayedValue',obj.entityData.name);
                             document.getElementById(locationEcho).innerHTML = obj.entityData.label.replace(/\n/g, '<br>');
                         } else {
                             locationFilteringSelect.set('displayedValue', obj.entityData.name);

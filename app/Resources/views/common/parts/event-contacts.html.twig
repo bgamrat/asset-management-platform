@@ -1,0 +1,34 @@
+<div class="contacts">
+    <table class="table table-striped table-condensed table-bordered">
+        <thead>
+            <th>{{'common.name'|trans}}</th>
+            <th>{{'common.phone'|trans}}</th>
+            <th>{{'common.email'|trans}}</th>
+            <th>{{'common.address'|trans}}
+        </thead>
+        <tbody>
+            {% for contact in event.contacts %}
+                <tr>
+                    <td>{{contact.fullName}}</td>
+                    <td>
+                        {% for phone in contact.phones %}
+                            <a href="tel:{{phone.phone}}">{{phone.phone}}</a> ({{phone.type.type}})<br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for email in contact.emails %}
+                            <a href="mailto:{{email.email}}">{{email.email}}</a> ({{email.type.type}})<br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for address in contact.addresses %}
+                            <pre>{%spaceless%}
+                                {{address.getAddress()|trim}}
+                                {%endspaceless%}</pre><br>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

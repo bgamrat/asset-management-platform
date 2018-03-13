@@ -527,7 +527,7 @@ class Event
         return $this->client_equipment;
     }
 
-    public function addClientEquipment( EventClientEquipment $clientEquipment )
+    public function addClientEquipment( ClientEquipment $clientEquipment )
     {
         if( !$this->client_equipment->contains( $clientEquipment ) )
         {
@@ -535,7 +535,7 @@ class Event
         }
     }
 
-    public function removeClientEquipment( EventClientEquipment $clientEquipment )
+    public function removeClientEquipment( ClientEquipment $clientEquipment )
     {
         if( !$this->client_equipment->contains( $clientEquipment ) )
         {

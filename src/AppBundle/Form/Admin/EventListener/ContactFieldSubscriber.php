@@ -54,19 +54,19 @@ class ContactFieldSubscriber implements EventSubscriberInterface
         if( !empty( $contact['contact_entity_id'] ) )
         {
             $entityId = $contact['contact_entity_id'];
-            $contactTypeId = $contact['contact_type'];
-            if( isset( $this->entities[$contactTypeId] ) )
+            $contactType = $contact['contact_type'];
+            if( isset( $this->entities[$contactType] ) )
             {
-                $class = $this->entities[$contactTypeId];
-                $contactType = $this->em->getRepository( 'AppBundle\Entity\Common\ContactType' )->find( $contactTypeId );
+                $class = $this->entities[$contactType];
+                $contactType = $this->em->getRepository( 'AppBundle\Entity\Common\ContactType' )->findOneByEntity( $contactType );
                 $contactData->setType( $contactType );
-                $entity = $this->em->getReference( $class, $entityId );
-                $contactData->setEntity( $entity );
+                $contactData->setEntity( $entityId );
             }
         }
 
         $this->em->persist( $contactData );
         $contact['id'] = $contactData->getId();
+        $contact['entity_id'] = $entityId;
     }
 
 }

@@ -28,6 +28,7 @@ class ContactTypeToIdTransformer implements DataTransformerInterface
         {
             return null;
         }
+
         return $contactType->getId();
     }
 
@@ -46,10 +47,18 @@ class ContactTypeToIdTransformer implements DataTransformerInterface
             return;
         }
 
-        $contactType = $this->em
-                ->getRepository( 'AppBundle\Entity\Common\ContactType' )
-                ->find( $contactTypeId )
-        ;
+        if( is_numeric( $contactTypeId ) )
+        {
+            $contactType = $this->em
+                    ->getRepository( 'AppBundle\Entity\Common\ContactType' )
+                    ->find( $contactTypeId );
+        }
+        else
+        {
+            $contactType = $this->em
+                    ->getRepository( 'AppBundle\Entity\Common\ContactType' )
+                    ->findOneByEntity( $contactTypeId );
+        }
 
         if( null === $contactType )
         {

@@ -58,6 +58,9 @@
                     <div class="row">
                         <div class="col-sm-6">
                             {{event.venue.name}}
+                            <pre>{%spaceless%}
+                                {{event.venue.address.getAddress()|trim}}
+                            {%endspaceless%}</pre>
                         </div>
                     </div>
                     <div class="row">
@@ -80,6 +83,7 @@
             </div>
             <div id="contacts" class="panel-collapse collapse in" role="tabpanel">
                 <div class ="panel-body">
+                    {% include 'common/parts/event-contacts.html.twig' %}
                 </div>
             </div>
         </div>
@@ -94,6 +98,20 @@
             <div id="schedule" class="panel-collapse collapse in" role="tabpanel">
                 <div class="panel-body">
                     {% include 'common/parts/event-timespans.html.twig' %}
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="staff-heading">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" href="#staff" aria-expanded="false" aria-controls="contracts">
+                        {{'common.staff'|trans}}
+                    </a>
+                </h4>
+            </div>
+            <div id="staff" class="panel-collapse collapse in" role="tabpanel">
+                <div class="panel-body">
+                    {% include 'common/parts/event-roles.html.twig' %}
                 </div>
             </div>
         </div>

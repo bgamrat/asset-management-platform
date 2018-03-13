@@ -29,9 +29,9 @@ class Transfer
 {
 
     use Cost,
-            Id,
+        Id,
         History,
-            SoftDeleteableEntity,
+        SoftDeleteableEntity,
         TimestampableEntity;
 
     /**
@@ -166,7 +166,7 @@ class Transfer
      *
      * @return Transfer
      */
-    public function setFrom( Person $from = null)
+    public function setFrom( Person $from = null )
     {
         $this->from = $from;
 
@@ -238,7 +238,7 @@ class Transfer
      *
      * @return Transfer
      */
-    public function setTo( Person $to = null)
+    public function setTo( Person $to = null )
     {
         $this->to = $to;
 
