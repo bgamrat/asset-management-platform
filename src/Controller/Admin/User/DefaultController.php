@@ -1,0 +1,82 @@
+<?php
+
+Namespace App\Controller\Admin\User;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Form\Admin\User\InvitationType;
+use Form\Admin\User\UserType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Entity\Invitation;
+
+/**
+ * Description of DefaultController
+ *
+ * @author bgamrat
+ */
+class DefaultController extends Controller
+{
+
+    /**
+     * @Route("/admin/user/")
+     * @Method("GET")
+     */
+    public function indexAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER', null, 'Unable to access this page!' );
+
+        $user_form = $this->createForm( UserType::class, null, [] );
+        $invitation_form = $this->createForm( InvitationType::class, null, [] );
+
+        $em = $this->getDoctrine()->getManager();
+        $outstandingInvitations = $em->getRepository( 'AppBundle:Invitation' )->findAll();
+
+        return $this->render( 'admin/user/index.html.twig', array(
+                    'user_form' => $user_form->createView(),
+                    'invitation_form' => $invitation_form->createView(),
+                    'outstanding_invitations' => $outstandingInvitations) );
+    }
+
+    /**
+     * @Route("/admin/user/invite")
+     * @Method("POST")
+     */
+    public function inviteUserAction( Request $request )
+    {
+        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $response = new Response();
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $checkForExisting = $em->getRepository( 'AppBundle:Invitation' )->findOneByEmail( $data['email'] );
+        if( $checkForExisting !== null )
+        {
+            throw new \Exception( 'invitation.exists' );
+        }
+        $user = $this->get( 'fos_user.user_manager' )->findUserBy( ['email' => $data['email']] );
+        if( $user !== null )
+        {
+            throw new \Exception( 'user.exists' );
+        }
+        $form = $this->createForm( InvitationType::class, null, [] );
+
+        $form->handleRequest( $request );
+        if( $form->isSubmitted() && $form->isValid() )
+        {
+
+            $invitation = new Invitation();
+            $invitation->setEmail( $data['email'] );
+            $invitation->send();
+
+            $em->persist( $invitation );
+            $em->flush();
+            $response->setStatusCode( 204 );
+
+            return $response;
+        }
+
+        return $form;
+    }
+
+}

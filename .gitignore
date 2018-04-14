@@ -25,3 +25,22 @@ web/vendor/menu*
 !web/vendor/profiles/app.profile.js
 !web/vendor/build.sh
 src/AppBundle/DataFixtures/Demo/LoadUserData.php
+
+###> symfony/framework-bundle ###
+/.env
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/webpack-encore-pack ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-pack ###
