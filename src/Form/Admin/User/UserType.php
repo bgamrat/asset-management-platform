@@ -59,7 +59,7 @@ class UserType extends AbstractType
                     ->add( 'enabled', CheckboxType::class, ['label' => 'common.enabled'] )
                     ->add( 'locked', CheckboxType::class, ['label' => 'common.locked'] )
                     ->add( 'groups', EntityType::class, [
-                        'class' => 'AppBundle:Group',
+                        'class' => 'App\:Group',
                         'choice_label' => 'name',
                         'multiple' => true,
                         'label' => 'common.groups',

@@ -26,7 +26,7 @@ class VendorController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Vendor' );
+                ->getRepository( 'App\:Vendor' );
         $vendors = $repository->findAll();
 
         return $this->render( 'user/vendor/index.html.twig', array(

@@ -44,9 +44,9 @@ class InvitationToCodeTransformer implements DataTransformerInterface
 
         $dql = <<<DQL
 SELECT i
-FROM AppBundle:Invitation i
+FROM App\:Invitation i
 WHERE i.code = :code
-AND NOT EXISTS(SELECT 1 FROM AppBundle:User u WHERE u.invitation = i)
+AND NOT EXISTS(SELECT 1 FROM App\:User u WHERE u.invitation = i)
 DQL;
 
         return $this->entityManager

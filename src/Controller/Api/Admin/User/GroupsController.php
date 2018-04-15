@@ -27,7 +27,7 @@ class GroupsController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $queryBuilder = $em->createQueryBuilder()->select( ['g'] )
-                ->from( 'AppBundle:Group', 'g' )
+                ->from( 'App\:Group', 'g' )
                 ->orderBy( 'g.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -172,7 +172,7 @@ class GroupsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $group = $em->getRepository( 'AppBundle:Group' )->findOneBy( ['groupname' => $groupname] );
+        $group = $em->getRepository( 'App\:Group' )->findOneBy( ['groupname' => $groupname] );
         if( $group !== null )
         {
             $em->remove( $group );

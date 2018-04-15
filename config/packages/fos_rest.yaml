@@ -1,0 +1,42 @@
+fos_rest:
+    disable_csrf_role: ROLE_API
+    
+    view:
+        view_response_listener: false
+        force_redirects:
+            html: true
+        formats:
+            json: true
+        templating_formats:
+            json: false
+            html: true
+        mime_types:
+            json: ['application/json', 'application/x-json']
+        failed_validation: HTTP_BAD_REQUEST
+        default_engine: php
+    body_listener:
+        default_format: json
+    param_fetcher_listener:
+        force: true
+    allowed_methods_listener: true
+    access_denied_listener:
+        json: true
+    body_converter:
+        enabled: true
+        validate: true
+        # validation_errors_argument: validationErrors # This is the default value
+    exception:
+        enabled: false
+    routing_loader:
+        default_format: json
+        include_format: false
+    format_listener:
+        rules:
+            -
+                # http://symfony.com/doc/current/bundles/FOSRestBundle/format_listener.html
+                path: ^/admin/user
+                priorities: ['json', 'html', 'xml','form']
+                fallback_format: ~
+                methods: [ 'get', 'post', 'put', 'delete']
+            - { path: '^/api', priorities: ['json'], fallback_format: json, prefer_extension: false }
+            - { path: '^/', stop: true }

@@ -14,7 +14,7 @@ class ModelRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT m FROM AppBundle:Model m '
+                'SELECT m FROM App\:Model m '
                     . 'JOIN brand_model AS bm ON m.id = bm.model_id'
                     . 'JOIN brand AS b ON bm.brand_id = b.id'
                     . 'WHERE CONCAT_WS(\' \',b.name,m.name) LIKE ?1'

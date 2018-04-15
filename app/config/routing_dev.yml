@@ -16,4 +16,4 @@ _main:
 _debug_url:
     path:     /admin?XDEBUG_SESSION_START=netbeans-xdebug
     defaults:
-        _controller: AppBundle:DefaultController
+        _controller: App:DefaultController

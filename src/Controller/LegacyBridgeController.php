@@ -8,6 +8,6 @@ class LegacyBridgeController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('LegacyAppBundle:Default:index.html.twig');
+        return $this->render('LegacyApp\:Default:index.html.twig');
     }
 }

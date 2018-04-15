@@ -1,0 +1,14 @@
+blank.name:
+    "Name cannot be blank"
+"invalid.name {{ value }}":
+    "Invalid name {{ value }}"
+"invalid.role {{ value }}":
+    "Invalid role {{ value }}"
+"invalid.url {{ value }}":
+    "Invalid URL {{ value }}"
+invalid_channels:
+    Channels must be an integer
+invalid_expiration_date:
+    Expiration dates must be formatted as YYYY-MM-DD
+name.must-be-unique:
+    "Name must be unique"

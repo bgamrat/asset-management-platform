@@ -24,7 +24,7 @@ class InvitationsController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder()->select( ['i'] )
-                ->from( 'AppBundle:Invitation', 'i' )
+                ->from( 'App\:Invitation', 'i' )
                 ->orderBy( 'i.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {

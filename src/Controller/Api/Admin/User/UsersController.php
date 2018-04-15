@@ -31,7 +31,7 @@ class UsersController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['u'] )
-                ->from( 'AppBundle:User', 'u' )
+                ->from( 'App\:User', 'u' )
                 ->orderBy( 'u.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -241,7 +241,7 @@ class UsersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $user = $em->getRepository( 'AppBundle:User' )->findOneBy( ['username' => $username] );
+        $user = $em->getRepository( 'App\:User' )->findOneBy( ['username' => $username] );
         if( $user !== null )
         {
             $em->remove( $user );

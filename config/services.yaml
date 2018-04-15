@@ -1,0 +1,352 @@
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'en'
+    location_type.entities:
+        asset: 'App\Entity\Asset\Asset'
+        client: 'App\Entity\Client\Client'
+        contact: 'App\Entity\Common\Contact'
+        manufacturer: 'App\Entity\Common\Contact'
+        other:
+        shop:
+        trailer: 'App\Entity\Asset\Trailer'
+        vendor: 'App\Entity\Asset\Vendor'
+        venue: 'App\Entity\Common\Contact'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+#    service_name:
+#        class: App\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+    # JSON Encoder
+    app.encoder.json:
+        class: 'Symfony\Component\Serializer\Encoder\JsonEncoder'
+
+    app.normalizer.object:
+        class: 'App\Serializer\Normalizer\Normalizer'
+        public: false
+        tags:
+            - { name: serializer.normalizer }
+
+    app.serializer.default:
+        class: 'Symfony\Component\Serializer\Serializer'
+        arguments:
+            0:
+                - '@app.normalizer.object'
+            1:
+                - '@app.encoder.json'
+
+    app.form.data_transformer.category:
+        class: App\Form\Admin\Asset\DataTransformer\CategoryToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.contact:
+        class: App\Form\Admin\Common\DataTransformer\ContactToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.contract:
+        class: App\Form\Admin\Client\DataTransformer\ContractToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.event_trailer:
+        class: App\Form\Admin\Client\DataTransformer\TrailerToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.invitation:
+        class: App\Form\User\DataTransformer\InvitationToCodeTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.model:
+        class: App\Form\Admin\Asset\DataTransformer\ModelToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.form.data_transformer.person_type:
+        class: App\Form\Common\DataTransformer\PersonToIdTransformer
+        arguments: ['@doctrine.orm.entity_manager']
+        public: false
+
+    app.admin.form.type.asset:
+        class: App\Form\Admin\Asset\AssetType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_asset_type' }
+
+    app.admin.form.type.barcode:
+        class: App\Form\Admin\Asset\BarcodeType
+        tags:
+            - { name: form.type, alias: 'app_barcode_type' }
+
+    app.admin.form.type.asset_location_type:
+        class: App\Form\Admin\Asset\AssetLocationType
+        arguments: ['@doctrine.orm.entity_manager','%location_type.entities%']
+        tags:
+            - { name: form.type, alias: 'app_asset_location_type' }
+
+    app.admin.field.type.category:
+        class: App\Form\Admin\Asset\Type\CategoryType
+        arguments: ['@app.form.data_transformer.category']
+        tags:
+            - { name: form.type, alias: 'app_category_type' }
+
+    app.admin.form.type.category_quantity:
+        class: App\Form\Admin\Client\CategoryQuantityType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_category_quantity_type' }
+
+    app.admin.form.type.client_equipment:
+        class: App\Form\Admin\Schedule\ClientEquipmentType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_schedule_client_equipment_type' }
+
+    app.admin.form.type.contact:
+        class: App\Form\Admin\Common\ContactType
+        arguments: ['@doctrine.orm.entity_manager','%location_type.entities%']
+        tags:
+            - { name: form.type, alias: 'app_contact_type' }
+
+    app.admin.field.type.contract:
+        class: App\Form\Admin\Client\Type\ContractType
+        arguments: ['@app.form.data_transformer.contract']
+        tags:
+            - { name: form.type, alias: 'app_client_contract_type' }
+
+    app.admin.form.type.event:
+        class: App\Form\Admin\Schedule\EventType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_schedule_event_type' }
+
+    app.admin.form.type.event_rental:
+        class: App\Form\Admin\Schedule\EventRentalType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_schedule_event_rental_type' }
+
+    app.admin.form.type.event_role:
+        class: App\Form\Admin\Schedule\EventRoleType
+        arguments: ['@app.form.data_transformer.person_type' ]
+        tags:
+        - { name: form.type, alias: event_role }
+
+
+    app.admin.field.type.event_trailer:
+        class: App\Form\Admin\Schedule\Type\TrailerType
+        arguments: ['@app.form.data_transformer.event_trailer']
+        tags:
+            - { name: form.type, alias: 'app_event_trailer_type' }
+
+    app.admin.form.type.group:
+        class: App\Form\Admin\User\GroupType
+        arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%']
+        tags:
+        - { name: form.type, alias: group }
+
+    app.admin.form.type.issue:
+        class: App\Form\Admin\Asset\IssueType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_asset_issue_type' }
+
+    app.admin.form.type.issue_item:
+        class: App\Form\Admin\Asset\IssueItemType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_asset_issue_item_type' }
+
+    app.admin.form.type.location_type:
+        class: App\Form\Admin\Asset\LocationTypeType
+        arguments: ['%location_type.entities%']
+        tags:
+            - { name: form.type, alias: 'app_admin_asset_location_type_type' }
+
+    app.admin.form.type.model:
+        class: App\Form\Admin\Asset\ModelType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_model_type' }
+
+    app.admin.field.type.model_relationship:
+        class: App\Form\Admin\Asset\Type\ModelRelationshipType
+        arguments: ['@app.form.data_transformer.model']
+        tags:
+            - { name: form.type, alias: 'app_model_relationship_type' }
+
+    app.admin.form.type.person:
+        class: App\Form\Common\PersonType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_person_type' }
+
+    app.admin.form.type.role:
+        class: App\Form\Admin\Staff\RoleType
+        arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%' ]
+        tags:
+        - { name: form.type, alias: user }
+
+    app.admin.form.type.time_span:
+        class: App\Form\Admin\Schedule\TimeSpanType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_time_span_type' }
+
+    app.admin.form.type.trailer.asset:
+        class: App\Form\Admin\Asset\TrailerType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_trailer_asset_type' }
+
+    app.admin.form.type.trailer.client:
+        class: App\Form\Admin\Client\TrailerType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_trailer_client_type' }
+
+    app.admin.form.type.transfer_bill_to:
+        class: App\Form\Admin\Common\BillToType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_transfer_bill_to_type' }
+
+    app.admin.form.type.transfer_item:
+        class: App\Form\Admin\Asset\TransferItemType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_admin_asset_transfer_item_type' }
+
+    app.admin.form.type.transfer:
+        class: App\Form\Admin\Asset\TransferType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_transfer_type' }
+
+    app.admin.form.type.user:
+        class: App\Form\Admin\User\UserType
+        arguments: ['@security.authorization_checker','%security.role_hierarchy.roles%', '@app.form.data_transformer.person_type' ]
+        tags:
+        - { name: form.type, alias: user }
+
+    app.admin.form.type.vendor:
+        class: App\Form\Admin\Asset\VendorType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: 'app_vendor_type' }
+
+    app.admin.menu_voter_request:
+        class: App\Menu\RequestVoter
+        arguments: ["@request_stack"]
+        tags:
+            - { name: knp_menu.voter }
+
+    app.admin.menu_store_controller:
+        class: App\Controller\Api\Admin\Common\MenuStoreController
+
+    app.form.invitation:
+        class: App\Form\User\InvitationFormType
+        arguments: ['@app.form.data_transformer.invitation']
+        tags:
+            - { name: "form.type", alias: "app_invitation_type" }
+
+    app.form.person:
+        class: App\Form\Common\Type\PersonType
+        arguments: ['@app.form.data_transformer.person_type']
+        tags:
+            - { name: "form.type", alias: "app_common_person" }
+
+    app.form.registration:
+        class: App\Form\User\RegistrationFormType
+        tags:
+            - { name: "form.type", alias: "app_user_registration" }
+
+    Symfony\Component\Form\Form: ~
+
+    app.form.user:
+        factory: 'Symfony\Component\Form\Form:createNamed'
+        class: 'Symfony\Component\Form\Form'
+        arguments:
+            - user_form                        # name of the form
+            - user                             # alias of the form type
+            - null                             # data to bind, this is where your entity could go if you have that defined as a service
+            - { validation_groups: [Registration] } # validation groups
+
+    app.menu_builder:
+        class: AppBundle\Menu\MenuBuilder
+        arguments: ["@knp_menu.factory"]
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags:
+            - { name: knp_menu.menu_builder.admin, method: createAdminMenu, alias: admin }
+            - { name: knp_menu.menu_builder.calendar, method: createCalendarMenu, alias: calendar }
+            - { name: knp_menu.menu_builder.main, method: createMainMenu, alias: main }
+            - { name: knp_menu.menu_builder.trailer, method: createTrailerMenu, alias: trailer }
+            - { name: knp_menu.menu_builder.user, method: createUserMenu, alias: user }
+
+
+    app.menu_renderer:
+        # The class implements Knp\Menu\Renderer\RendererInterface
+        class: App\Menu\JsonRenderer
+        arguments: [ "@twig",  "knp_menu.html.twig", "@knp_menu.matcher", {"translator": "@translator" }]
+        tags:
+            # The alias is what is used to retrieve the menu
+            - { name: knp_menu.renderer, alias: json }
+
+    app.menu_voter_request:
+        class: App\Menu\RequestVoter
+        arguments: ["@request_stack"]
+        tags:
+            - { name: knp_menu.voter }
+
+    app.util.dstore:
+        class: App\Util\DStore
+
+    app.util.form:
+        class: App\Util\Form
+        arguments: ['@session.handler.memcached']
+
+    app.util.log:
+        class: App\Util\Log
+        arguments: ['@doctrine.orm.entity_manager']
+
+    app.util.user:
+        class: App\Util\User
+        arguments: ["@fos_user.group_manager"]
+
+    fos_user.doctrine_registry:
+        alias: doctrine
+
+    session.memcached:
+        class: Memcached
+
+    session.handler.memcached:
+        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
+        arguments: ['@session.memcached']
+
+    sensio_framework_extra.view.listener:
+        alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener

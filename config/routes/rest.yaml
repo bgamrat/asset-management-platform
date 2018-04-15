@@ -1,0 +1,85 @@
+app_admin_asset_assets:
+    type:     rest
+    resource: App\Controller\Api\Admin\Asset\AssetsController
+    prefix: /api
+
+app_admin_asset_carriers:
+    type:     rest
+    resource: App\Controller\Api\Admin\Asset\CarriersController
+    prefix: /api
+
+app_admin_asset_categories:
+    type:     rest
+    resource: App\Controller\Api\Admin\Asset\CategoriesController
+    prefix: /api
+
+app_admin_asset_issues:
+    type:     rest
+    resource: App\Controller\Api\Admin\Asset\IssuesController
+    prefix: /api
+
+app_admin_asset_manufacturers:
+    type:     rest
+    resource: App\Controller\Api\Admin\Asset\ManufacturersController
+    prefix: /api
+
+app_admin_asset_trailers:
+    type:     rest
+    resource: App\Controller\Api\Admin\Asset\TrailersController
+    prefix: /api
+
+app_admin_asset_transfers:
+    type:     rest
+    resource: App\Controller\Api\Admin\Asset\TransfersController
+    prefix: /api
+
+app_admin_asset_vendors:
+    type:     rest
+    resource: App\Controller\Api\Admin\Asset\VendorsController
+    prefix: /api
+
+app_admin_client_clients:
+    type:     rest
+    resource: App\Controller\Api\Admin\Client\ClientsController
+    prefix: /api
+
+app_admin_common_people:
+    type:     rest
+    resource: App\Controller\Api\Admin\Common\PeopleController
+    prefix: /api
+
+app_admin_common_menu_store:
+    resource: app.admin.menu_store_controller
+    type:     rest
+    controller: App\Controller\Api\Admin\Common\MenuStoreController
+    prefix: /api/menustore
+
+app_admin_schedule_events:
+    type:     rest
+    resource: App\Controller\Api\Admin\Schedule\EventsController
+    prefix: /api
+
+app_admin_staff_roles:
+    type:     rest
+    resource: App\Controller\Api\Admin\Staff\RolesController
+    prefix: /api
+
+app_admin_user_groups:
+    type:     rest
+    resource: App\Controller\Api\Admin\User\GroupsController
+    prefix: /api
+
+app_admin_users:
+    type:     rest
+    resource: App\Controller\Api\Admin\User\UsersController
+    prefix: /api
+
+app_admin_users_invitations:
+    type: rest
+    resource: App\Controller\Api\Admin\User\InvitationsController
+    prefix: /api
+
+app_admin_venue_venues:
+    type:     rest
+    resource: App\Controller\Api\Admin\Venue\VenuesController
+    prefix: /api

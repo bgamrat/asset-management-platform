@@ -1,0 +1,19 @@
+app_admin:
+    resource: ../../src/Controller/Admin
+    type:     annotation
+
+app_api_store:
+    resource: ../../src/Controller/Api/Common
+    type:   annotation
+
+app_common:
+    resource: ../../src/Controller/Common
+    type:     annotation
+
+app_public:
+    resource: ../../src/Controller
+    type:     annotation
+
+app_user:
+    resource: ../../src/Controller/User
+    type:     annotation

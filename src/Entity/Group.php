@@ -1,6 +1,6 @@
 <?php
 
-// src/AppBundle/Entity/Group.php
+// src/App\/Entity/Group.php
 
 Namespace App\Entity;
 

@@ -122,7 +122,7 @@ class CategoriesController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
-                ->getRepository( 'AppBundle:Category' );
+                ->getRepository( 'App\:Category' );
         $category = $repository->find( $id );
         if( $category !== null )
         {

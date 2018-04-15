@@ -1,0 +1,11 @@
+vendor
+vendor/bootstrap
+vendor/Font-Awesome
+vendor/fonts
+vendor/dojo*
+vendor/menu*
+!vendor
+!vendor/bootstrap-7-col
+!vendor/profiles
+!vendor/profiles/app.profile.js
+!vendor/build.sh

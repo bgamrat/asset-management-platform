@@ -1,6 +1,6 @@
 <?php
 
-// src/AppBundle/Menu/MenuBuilder.php
+// src/App\/Menu/MenuBuilder.php
 
 Namespace App\Menu;
 
@@ -147,7 +147,7 @@ class MenuBuilder implements ContainerAwareInterface
             $user = $this->container->get( 'security.token_storage' )->getToken()->getUser();
             $username = $user->getUsername();
             $menu->addChild( 'user' )
-                    ->setExtra( 'translation_domain', 'AppBundle' )
+                    ->setExtra( 'translation_domain', 'App' )
                     ->setAttribute( 'dropdown', true )
                     ->setAttribute( 'icon', 'fa fa-user' );
             $menu['user']->setLabel( $username )->setExtra( 'translation_domain', false );

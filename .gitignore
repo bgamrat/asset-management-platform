@@ -8,22 +8,16 @@
 autoload.php
 composer
 var
-web/assetic
-web/css
-web/js
-web/release
-web/vendor
-web/vendor/bootstrap
-web/vendor/bootstrap-7-col
-web/vendor/Font-Awesome
-web/vendor/fonts
-web/vendor/dojo*
-web/vendor/menu*
-!web/vendor
-!web/vendor/bootstrap-7-col
-!web/vendor/profiles
-!web/vendor/profiles/app.profile.js
-!web/vendor/build.sh
+public/css
+public/js
+public/release
+public/vendor
+public/vendor/bootstrap
+public/vendor/bootstrap-7-col
+public/vendor/Font-Awesome
+public/vendor/fonts
+public/vendor/dojo*
+public/vendor/menu*
 src/AppBundle/DataFixtures/Demo/LoadUserData.php
 
 ###> symfony/framework-bundle ###

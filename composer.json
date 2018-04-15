@@ -5,18 +5,15 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/"
-        },
-        "files": [
-            "app/AppKernel.php"
-        ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
     "repositories": [
         {
             "type": "package",
@@ -103,7 +100,6 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "symfony/security": "^3.0",
         "symfony/security-bundle": "^4.0",
-        "symfony/assetic-bundle": "^2.7",
         "twig/extensions": "^1.3",
         "symfony/security-csrf": "^3.0",
         "symfony/asset": "^4.0",
@@ -141,8 +137,8 @@
         "symfony/dotenv": "^4.0",
         "symfony/webpack-encore-pack": "^1.0"
     },
-     "conflict": {
-         "symfony/symfony": "*"
+    "conflict": {
+        "symfony/symfony": "*"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^3.0",

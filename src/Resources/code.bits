@@ -1,0 +1,230 @@
+ValidationTextBox editor for dgrid
+
+    editor: ValidationTextBox,
+    editorArgs: {
+        required: true,
+        pattern: "^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" 
+    }
+
+
+DGrid empty object handler for column
+
+            groups: {
+                label: core.groups,
+                sortable: true,
+                formatter: function (value, object) {
+                    if( lib.isEmpty(value) ) {
+                        return '';
+                    } else {
+                        return 'stuff';
+                    }
+                }
+            },
+
+DGrid formatter to convert a comma separated list to one separated by <br>
+            roles: {
+                label: core.roles,
+                sortable: true,
+                formatter: function (value, object) {
+                    return value.join('<br>');
+                }
+            },
+
+Get groups (in a controller)
+            $groups = $this->get( 'fos_user.group_manager' )->findGroups();
+            $groupNames = [];
+            foreach( $groups as $g )
+            {
+                $groupNames[$g->getName()] = $g->getId();
+            }
+
+Groups in field (this needs to be different)
+             ->add( 'groups', ChoiceType::class, [
+                    'choices' => $data['group_names'],
+
+<<<<<<< Updated upstream
+PostgreSQL
+
+/var/lib/pgsql/data/pg_hba.conf
+
+// Use login access
+
+=======
+>>>>>>> Stashed changes
+Setup PostgreSQL
+
+/var/lib/pgsql/data/pg_hba.conf
+
+# TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+
+# "local" is for Unix domain socket connections only
+local   all         all                               md5
+# IPv4 local connections:
+host    all         all         127.0.0.1/32          md5
+# IPv6 local connections:
+host    all         all         ::1/128               md5
+
+Create database and user
+
+create database dev;
+create role dev;
+alter database dev owner dev;
+alter role dev login;
+
+\password dev
+\password postgres
+
+Permissions for Symfony
+mkdir -p var/cache var/logs
+sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs
+sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs
+
+Install assets
+
+ php bin/console assets:install --symlink --relative
+
+ php bin/console assetic:dump
+
+
+Symfony Environment variables
+
+more /etc/profile.d/bash.sh
+export SYMFONY_ENV=dev
+export SYMFONY_DEBUG=true
+
+Apache conf file
+
+<VirtualHost *:80>
+ServerName symfony-dev
+ServerAlias asus-tower-centos
+DocumentRoot /var/www/html/symfony-dev/web
+
+SetEnv SYMFONY_ENV dev
+SetEnv USE_DEBUGGING 1
+
+<Directory /var/www/html/symfony-dev/web>
+AllowOverride None
+Order Allow,Deny
+Allow from All
+
+<IfModule mod_rewrite.c>
+Options -MultiViews
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ app_dev.php [QSA,L]
+</IfModule>
+</Directory>
+
+# uncomment the following lines if you install assets as symlinks
+# or run into problems when compiling LESS/Sass/CoffeScript assets
+# <Directory /var/www/project>
+#     Options FollowSymlinks
+# </Directory>
+
+ErrorLog /var/log/httpd/symfony-dev_error.log
+CustomLog /var/log/httpd/symfony-dev_access.log combined
+
+
+Update doctrine schema 
+
+php bin/console doctrine:schema:update --force
+
+Get Dojo and Dgid
+
+cd web/common
+http://download.dojotoolkit.org/release-1.10.4/dojo-release-1.10.4-src.tar.gz
+tar xzf dojo*
+wget https://github.com/SitePen/dgrid/archive/master.zip
+unzip master.zip
+mv dgrid-master dojo-release-1.10.4-src
+wget https://github.com/SitePen/dstore/archive/1.x.zip
+unzip 1.x.zip
+mv dstore-1.x dojo-release-1.10.4-src
+wget https://github.com/persvr/rql/archive/master.zip
+unzip master.zip
+mv rql-master *src/rql
+cd *src
+mv dgrid-master dgrid
+mv dstore-1.x dstore
+mv rql-master rql
+symlink -rf ../app
+cd ..
+./build.sh
+
+
+Create user with FOS User Bundle
+
+php bin/console fos:user:create adminuser --super-admin
+
+Add .json to all api requests
+
+=======
+
+Get Dojo and build
+cd web/common
+http://download.dojotoolkit.org/release-1.10.4/dojo-release-1.10.4-src.tar.gz
+tar xzf dojo*
+./build.sh
+
+>>>>>>> Stashed changes
+<IfModule mod_rewrite.c>
+Options -MultiViews
+RewriteEngine On
+
+RewriteCond %{REQUEST_URI} !\.json$
+RewriteRule ^(api.*) $1.json [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ app_dev.php [QSA,L]
+</IfModule>
+
+Checking routing
+
+php bin/console router:match  --method GET /api/admin/user/1
+
+ php bin/console assetic:dump
+
+Set a token
+
+            $csrf = $this->get('security.csrf.token_manager');
+            $token = $csrf->refreshToken('user');
+
+EntityType (From UserType.php)
+
+->add( 'groups', EntityType::class, [
+                    'class' => 'AppBundle:Group',
+                    'choice_label' => 'name',
+                    'multiple' => true,
+                    'choices_as_values' => true,
+                    'expanded' => true,
+                    'attr' => array('data-type' => 'user-group-cb'),
+                    'label' => 'groups'
+                ] )
+
+Set HTML attributes 
+{{ form(invitation_form, {'attr': {'id': 'user-invitation-form'}}) 
+
+php bin/console generate:doctrine:entity --entity=AppBundle:Person  --fields="firstname:string(length=64 nullable=false unique=false) \
+ lastname:string(length=64 nullable=false unique=false) \
+ middleinitial:string(length=1 nullable=true unique=false) \
+ fos_user_id:integer(nullable=false unique=true) )"
+
+php bin/console generate:doctrine:form AppBundle:Person
+
+php bin/console doctrine:schema:update --force -em=(entity manager)
+
+grant all on database legacy to dev;
+
+php bin/console list
+
+ * @ORM\Table(name="person")
+
+php bin/console generate:bundle --bundle-name=AssetBundle --dir=/var/www/html/symfony-dev/src  --format=annotation
+
+The class - often called an "entity", meaning a basic class that holds data - is simple and helps fulfill the business 
+requirement of needing products in your application. 
+
+You can think of a repository as a PHP class whose only job is to help you fetch entities of a certain class. 
+
+[root@ami symfony-dev]# setfacl -R -m u:apache:rwX -m u:bgamrat:rwX var
+[root@ami symfony-dev]# setfacl -dR -m u:apache:rwX -m u:bgamrat:rwX var
