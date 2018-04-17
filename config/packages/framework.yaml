@@ -1,12 +1,6 @@
 framework:
     secret: '%env(APP_SECRET)%'
-    default_locale: en
     #http_method_override: true
-
-    # Enables session support. Note that the session will ONLY be started if you read or write from it.
-    # Remove or comment this section to explicitly disable session support.
-    session:
-        handler_id: ~
 
     #esi: true
     #fragments: true
@@ -42,14 +36,9 @@ framework:
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
-    assets:
-        version: 'v5'
-        version_format: '%%s?version=%%s'
-        base_path: ~
-    default_locale:  "%locale%"
+
     trusted_hosts:   ~
     session:
          handler_id: session.handler.memcached
     fragments:       ~
     http_method_override: true
-    validation: { enable_annotations: true }

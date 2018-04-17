@@ -1,6 +1,6 @@
 <?php
 
-// src/App\/Menu/MenuBuilder.php
+// src/App/Menu/MenuBuilder.php
 
 Namespace App\Menu;
 
@@ -18,8 +18,6 @@ class MenuBuilder implements ContainerAwareInterface
 
     /**
      * @param FactoryInterface $factory
-     *
-     * Add any other dependency you need
      */
     public function __construct( FactoryInterface $factory )
     {

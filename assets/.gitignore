@@ -9,3 +9,4 @@ vendor/menu*
 !vendor/profiles
 !vendor/profiles/app.profile.js
 !vendor/build.sh
+public

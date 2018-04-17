@@ -6,12 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
-            {% stylesheets
-            '@bootstrap_css'
-            '@main_css'
-            filter='cssrewrite' output='css/compiled/app.css' %}
-            <link rel="stylesheet" href="{{ asset_url }}">
-            {% endstylesheets %}
+            <link rel="stylesheet" href="{{ asset('build/bootstrap.css') }}" />
+            <link rel="stylesheet" href="{{ asset('build/main.css') }}" />
             {% block additional_stylesheets %}
             {% endblock %}
         {% endblock %}
@@ -31,7 +27,7 @@
                     <h1>{{ block('title') }}
                         {% if no_settings is not defined %}
                             <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
-                        {% endif %}
+                            {% endif %}
                     </h1>
                 </div>
             </div>

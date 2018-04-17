@@ -1,7 +1,7 @@
 var profile = (function () {
     return {
         basePath: "../../vendor/dojo",
-        releaseDir: "../../release",
+        releaseDir: "../../public/build",
         action: "release",
         layerOptimize: "closure",
         optimize: "closure",

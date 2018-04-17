@@ -1,6 +1,7 @@
 imports:
     - { resource: framework.yaml }
     - { resource: framework_extra.yaml }
+    - { resource: knp_menu.yaml }
     - { resource: stof_doctrine_extensions.yaml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
