@@ -6,7 +6,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\View;
-use Entity\IdNameURL;
+use App\Entity\IdNameURL;
 
 class SearchStoreController extends FOSRestController
 {

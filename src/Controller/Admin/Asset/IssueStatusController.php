@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Asset;
 
-use Entity\Asset\IssueStatus;
+use App\Entity\Asset\IssueStatus;
 use Form\Admin\Asset\IssueStatusesType;
 use Form\Admin\Asset\IssueWorkflowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;

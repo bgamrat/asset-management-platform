@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Api\Admin\Asset;
 
-use Entity\Asset\Carrier;
+use App\Entity\Asset\Carrier;
 use Util\DStore;
 use Form\Admin\Asset\CarrierType;
 use FOS\RestBundle\Controller\FOSRestController;

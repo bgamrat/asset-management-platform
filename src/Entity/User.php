@@ -4,8 +4,8 @@
 
 Namespace App\Entity;
 
-use Entity\Group;
-use Entity\Common\Person;
+use App\Entity\Group;
+use App\Entity\Common\Person;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Entity\Traits\History;
+use App\Entity\Traits\History;
 
 /**
  * @ORM\Entity

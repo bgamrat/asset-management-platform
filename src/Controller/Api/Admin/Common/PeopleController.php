@@ -3,8 +3,8 @@
 Namespace App\Controller\Api\Admin\Common;
 
 use Util\DStore;
-use Entity\Person\Person;
-use Entity\Person\Location;
+use App\Entity\Person\Person;
+use App\Entity\Person\Location;
 use Form\Common\PersonType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;

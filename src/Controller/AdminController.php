@@ -10,7 +10,7 @@ use Form\Common\PersonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Entity\Invitation;
+use App\Entity\Invitation;
 
 class AdminController extends Controller
 {

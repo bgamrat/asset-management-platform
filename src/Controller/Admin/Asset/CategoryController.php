@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Asset;
 
-use Entity\Category;
+use App\Entity\Category;
 use Form\Admin\Asset\CategoriesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

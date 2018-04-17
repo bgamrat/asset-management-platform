@@ -7,9 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Traits\Comment;
-use Entity\Traits\Id;
-use Entity\Traits\DateSpan;
+use App\Entity\Traits\Comment;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\DateSpan;
 
 /**
  * EventRole

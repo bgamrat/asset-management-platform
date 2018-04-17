@@ -2,7 +2,7 @@
 
 Namespace App\Repository;
 
-use Entity\Asset\IssueStatus;
+use App\Entity\Asset\IssueStatus;
 
 /**
  * TransferStatusRepository

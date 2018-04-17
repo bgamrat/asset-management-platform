@@ -329,6 +329,8 @@ services:
 
     session.memcached:
         class: Memcached
+        calls:
+            - [ addServer, [  '%env(resolve:MEMCACHED_HOST)%','%env(resolve:MEMCACHED_PORT)%']]
 
     session.handler.memcached:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
@@ -339,12 +341,33 @@ services:
 
     Symfony\Component\Form\Form: ~
 
-    App\Menu\MenuBuilder:
-        public: true
-        tags:
-            - { name: app.menu_builder.admin, method: createAdminMenu, alias: admin }
-            - { name: app.menu_builder.calendar, method: createCalendarMenu, alias: calendar }
-            - { name: app.menu_builder.main, method: createMainMenu, alias: main }
-            - { name: app.menu_builder.trailer, method: createTrailerMenu, alias: trailer }
-            - { name: app.menu_builder.user, method: createUserMenu, alias: user }
+    app.menu_builder:
+        class: App\Menu\MenuBuilder
 
+    app.menu.main:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createMainMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: main }
+
+    app.menu.calendar:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createCalendarMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: calendar }
+
+    app.menu.trailer:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createTrailerMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: trailer }
+
+    app.menu.user:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createUserMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: user }

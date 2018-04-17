@@ -7,8 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Id;
 
 /**
  * Address

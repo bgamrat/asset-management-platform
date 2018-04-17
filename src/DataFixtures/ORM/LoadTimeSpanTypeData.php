@@ -4,7 +4,7 @@ Namespace App\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Schedule\TimeSpanType;
+use App\Entity\Schedule\TimeSpanType;
 
 class LoadTimeSpanTypeData implements FixtureInterface
 {

@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Asset;
 
-use Entity\Asset\IssueType;
+use App\Entity\Asset\IssueType;
 use Form\Admin\Asset\IssueTypesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

@@ -2,8 +2,8 @@
 
 Namespace App\Controller\Api\Admin\User;
 
-use Entity\Common\Person;
-use Entity\Group;
+use App\Entity\Common\Person;
+use App\Entity\Group;
 use Util\DStore;
 use Form\Admin\User\GroupType;
 use Form\Admin\Group\InvitationType;

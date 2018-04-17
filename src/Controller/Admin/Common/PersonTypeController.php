@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Common;
 
-use Entity\Common\PersonType;
+use App\Entity\Common\PersonType;
 use Form\Admin\Common\PersonTypesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

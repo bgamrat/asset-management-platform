@@ -9,10 +9,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Id;
-use Entity\Traits\Versioned\Quantity;
-use Entity\Traits\Versioned\Value;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Quantity;
+use App\Entity\Traits\Versioned\Value;
 
 /**
  * CategoryQuantity

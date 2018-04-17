@@ -4,7 +4,7 @@ Namespace App\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Asset\IssueStatus;
+use App\Entity\Asset\IssueStatus;
 
 class LoadIssueStatusData implements FixtureInterface
 {

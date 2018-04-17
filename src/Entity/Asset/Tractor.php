@@ -9,8 +9,8 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Traits\Versioned\Active;
-use Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Active;
+use App\Entity\Traits\Id;
 
 /**
  * Tractor

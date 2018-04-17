@@ -8,12 +8,12 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Common\Person;
-use Entity\Asset\Brand;
-use Entity\Traits\Versioned\Active;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Versioned\Name;
-use Entity\Traits\Id;
+use App\Entity\Common\Person;
+use App\Entity\Asset\Brand;
+use App\Entity\Traits\Versioned\Active;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Versioned\Name;
+use App\Entity\Traits\Id;
 
 /**
  * Manufacturer

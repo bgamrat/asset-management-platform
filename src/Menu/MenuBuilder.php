@@ -5,28 +5,30 @@
 Namespace App\Menu;
 
 use Knp\Menu\FactoryInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class MenuBuilder implements ContainerAwareInterface
+class MenuBuilder
 {
 
-    use ContainerAwareTrait;
-
     private $factory;
+    private $security;
+    private $translator;
 
     /**
      * @param FactoryInterface $factory
      */
-    public function __construct( FactoryInterface $factory )
+    public function __construct( FactoryInterface $factory, AuthorizationCheckerInterface $security, TranslatorInterface $translator )
     {
         $this->factory = $factory;
+        $this->security = $security;
+        $this->translator = $translator;
     }
 
     public function createAdminMenu( array $options )
     {
-        $menu = $this->factory->createItem( 'root', [ 'label' => 'common.admin'] )->setExtra( 'translation_domain', $this->container->get( 'translator' )->getLocale() );
+        $menu = $this->factory->createItem( 'root', [ 'label' => 'common.admin'] )
+                ->setExtra( 'translation_domain', $this->translator->getLocale() );
 
         $menu->addChild( 'admin', ['route' => 'root', 'label' => 'common.home'] );
         $menu['admin']->addChild( 'admin-assets', ['label' => 'common.assets'] );
@@ -38,7 +40,7 @@ class MenuBuilder implements ContainerAwareInterface
         $menu['admin']['admin-assets']->addChild( 'trailers', ['label' => 'asset.trailers', 'route' => 'app_admin_asset_trailer_index'] );
         $menu['admin']['admin-assets']->addChild( 'vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index'] );
         $menu['admin']['admin-assets']->addChild( 'asset-configuration', [ 'label' => 'common.configuration'] );
-        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        if( $this->security->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'statuses', ['label' => 'asset.asset_statuses', 'route' => 'app_admin_asset_assetstatus_index'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index'] );
@@ -57,7 +59,7 @@ class MenuBuilder implements ContainerAwareInterface
         $menu['admin']['admin-schedule']->addChild( 'service', ['label' => 'common.service', 'route' => 'app_admin_schedule_service_index'] );
         $menu['admin']['admin-schedule']->addChild( 'shop', ['label' => 'common.shop', 'route' => 'app_admin_schedule_shop_index'] );
         $menu['admin']['admin-schedule']->addChild( 'park', ['label' => 'common.park', 'route' => 'app_admin_schedule_park_index'] );
-        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        if( $this->security->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $menu['admin']['admin-schedule']->addChild( 'schedule-configuration', [ 'label' => 'common.configuration'] );
             $menu['admin']['admin-schedule']['schedule-configuration']->addChild( 'event-role-types', ['label' => 'event.event_role_types', 'route' => 'app_admin_schedule_eventroletype_index'] );
@@ -66,7 +68,7 @@ class MenuBuilder implements ContainerAwareInterface
 
         $menu['admin']->addChild( 'admin-staff', ['label' => 'common.staff'] );
         $menu['admin']['admin-staff']->addChild( 'staff', ['label' => 'common.staff', 'route' => 'app_admin_staff_staff_index'] );
-        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        if( $this->security->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $menu['admin']['admin-staff']->addChild( 'staff-configuration', [ 'label' => 'common.configuration'] );
             $menu['admin']['admin-staff']['staff-configuration']->addChild( 'employment_statuses', ['label' => 'staff.employment_statuses', 'route' => 'app_admin_staff_employmentstatus_index'] );
@@ -75,13 +77,13 @@ class MenuBuilder implements ContainerAwareInterface
 
         $menu['admin']->addChild( 'admin-common', ['label' => 'common.common'] );
         $menu['admin']['admin-common']->addChild( 'people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index'] );
-        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_SUPER_ADMIN' ) )
+        if( $this->security->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
             $menu['admin']['admin-common']->addChild( 'common-configuration', [ 'label' => 'common.configuration'] );
             $menu['admin']['admin-common']['common-configuration']->addChild( 'person-types', ['label' => 'common.person_types', 'route' => 'app_admin_common_persontype_index'] );
         }
 
-        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN_USER' ) )
+        if( $this->security->isGranted( 'ROLE_ADMIN_USER' ) )
         {
             $menu['admin']->addChild( 'user', ['label' => 'common.users'] );
 
@@ -112,7 +114,7 @@ class MenuBuilder implements ContainerAwareInterface
     {
         $menu = $this->factory->createItem( 'calendar' );
 
-        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
+        if( $this->security->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
         {
             $menu->setChildrenAttribute( 'class', 'nav navbar-nav' );
             $menu->addChild( 'calendar', ['label' => 'common.calendar', 'route' => 'calendar'] )
@@ -140,9 +142,9 @@ class MenuBuilder implements ContainerAwareInterface
         $menu = $this->factory->createItem( 'user' );
         $menu->setChildrenAttribute( 'class', 'nav navbar-nav navbar-right' );
 
-        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
+        if( $this->security->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
         {
-            $user = $this->container->get( 'security.token_storage' )->getToken()->getUser();
+            $user = $this->security->getToken()->getUser();
             $username = $user->getUsername();
             $menu->addChild( 'user' )
                     ->setExtra( 'translation_domain', 'App' )
@@ -150,7 +152,7 @@ class MenuBuilder implements ContainerAwareInterface
                     ->setAttribute( 'icon', 'fa fa-user' );
             $menu['user']->setLabel( $username )->setExtra( 'translation_domain', false );
 
-            if( $this->container->get( 'security.authorization_checker' )->isGranted( 'ROLE_ADMIN' ) )
+            if( $this->security->isGranted( 'ROLE_ADMIN' ) )
             {
                 $menu['user']->addChild( 'admin', array('label' => 'common.admin', 'route' => 'app_admin_asset_equipment_index') )
                         ->setAttribute( 'icon', 'fa fa-star-o' );

@@ -3,8 +3,8 @@
 Namespace App\Controller\Api\Admin\Asset;
 
 use Util\DStore;
-use Entity\Asset\Trailer;
-use Entity\Asset\Location;
+use App\Entity\Asset\Trailer;
+use App\Entity\Asset\Location;
 use Form\Admin\Asset\TrailerType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;

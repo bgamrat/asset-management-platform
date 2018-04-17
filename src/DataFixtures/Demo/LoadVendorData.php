@@ -5,9 +5,9 @@ Namespace App\DataFixtures\Demo;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Asset\Vendor;
-use Entity\Common\Address;
-use Entity\Common\Person;
+use App\Entity\Asset\Vendor;
+use App\Entity\Common\Address;
+use App\Entity\Common\Person;
 
 class LoadVendorData extends AbstractFixture implements OrderedFixtureInterface
 {

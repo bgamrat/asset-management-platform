@@ -9,14 +9,14 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use Entity\Client\Trailer;
-use Entity\Common\CategoryQuantity;
-use Entity\Traits\Versioned\Active;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Versioned\DateSpan;
-use Entity\Traits\Id;
-use Entity\Traits\Versioned\Name;
-use Entity\Traits\Versioned\Value;
+use App\Entity\Client\Trailer;
+use App\Entity\Common\CategoryQuantity;
+use App\Entity\Traits\Versioned\Active;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Versioned\DateSpan;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Name;
+use App\Entity\Traits\Versioned\Value;
 
 /**
  * Contract

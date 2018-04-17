@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Asset;
 
-use Entity\Asset\AssetStatus;
+use App\Entity\Asset\AssetStatus;
 use Form\Admin\Asset\AssetStatusesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

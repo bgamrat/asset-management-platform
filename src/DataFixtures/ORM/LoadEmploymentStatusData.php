@@ -4,7 +4,7 @@ Namespace App\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Staff\EmploymentStatus;
+use App\Entity\Staff\EmploymentStatus;
 
 class LoadEmploymentStatusData implements FixtureInterface
 {

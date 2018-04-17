@@ -2,7 +2,7 @@
 
 Namespace App\Repository;
 
-use Entity\Asset\Asset;
+use App\Entity\Asset\Asset;
 
 /**
  * AssetRepository

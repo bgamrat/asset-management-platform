@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Form\Admin\Asset\TrailerType;
-use Entity\Common\CategoryQuantity;
+use App\Entity\Common\CategoryQuantity;
 
 /**
  * Description of EventController

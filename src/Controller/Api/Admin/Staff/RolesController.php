@@ -3,7 +3,7 @@
 Namespace App\Controller\Api\Admin\Staff;
 
 use Util\DStore;
-use Entity\Staff\Role;
+use App\Entity\Staff\Role;
 use Form\Admin\Staff\RoleType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;

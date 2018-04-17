@@ -3,13 +3,13 @@
 Namespace App\Entity\Staff;
 
 use Doctrine\ORM\Mapping as ORM;
-use Entity\Traits\Id;
-use Entity\Traits\Versioned\Name;
-use Entity\Traits\Versioned\Active;
-use Entity\Traits\Versioned\InUse;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Versioned\XDefault;
-use Entity\Traits\History;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Name;
+use App\Entity\Traits\Versioned\Active;
+use App\Entity\Traits\Versioned\InUse;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Versioned\XDefault;
+use App\Entity\Traits\History;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;

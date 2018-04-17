@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Api\Admin\Client;
 
-use Entity\Client\Client;
+use App\Entity\Client\Client;
 use Util\DStore;
 use Form\Admin\Client\ClientType;
 use FOS\RestBundle\Controller\FOSRestController;

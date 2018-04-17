@@ -5,9 +5,9 @@ Namespace App\DataFixtures\Alt;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Asset\Asset;
-use Entity\Asset\Barcode;
-use Entity\CustomAttribute;
+use App\Entity\Asset\Asset;
+use App\Entity\Asset\Barcode;
+use App\Entity\CustomAttribute;
 
 class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
 {

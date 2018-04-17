@@ -8,12 +8,12 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Asset\Transfer;
-use Entity\Common\Person;
-use Entity\Traits\Active;
-use Entity\Traits\Comment;
-use Entity\Traits\Id;
-use Entity\Traits\Name;
+use App\Entity\Asset\Transfer;
+use App\Entity\Common\Person;
+use App\Entity\Traits\Active;
+use App\Entity\Traits\Comment;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Name;
 
 /**
  * Carrier

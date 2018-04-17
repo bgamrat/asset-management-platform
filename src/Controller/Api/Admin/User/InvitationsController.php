@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Api\Admin\User;
 
-use Entity\Invitation;
+use App\Entity\Invitation;
 use Util\DStore;
 use Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;

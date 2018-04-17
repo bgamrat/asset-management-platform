@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Api\Admin\Asset;
 
-use Entity\Category;
+use App\Entity\Category;
 use Util\DStore;
 use Form\Admin\Asset\CategoryType;
 use FOS\RestBundle\Controller\FOSRestController;

@@ -5,11 +5,11 @@ Namespace App\Entity\Asset;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Entity\Traits\Active;
-use Entity\Traits\Comment;
-use Entity\Traits\Id;
-use Entity\Traits\Name;
-use Entity\Traits\XDefault;
+use App\Entity\Traits\Active;
+use App\Entity\Traits\Comment;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Name;
+use App\Entity\Traits\XDefault;
 
 /**
  * Status

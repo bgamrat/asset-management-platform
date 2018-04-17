@@ -9,12 +9,12 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use Entity\Traits\Versioned\Active;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Versioned\CustomAttributes;
-use Entity\Traits\Id;
-use Entity\Traits\Versioned\Name;
-use Entity\Traits\History;
+use App\Entity\Traits\Versioned\Active;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Versioned\CustomAttributes;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Name;
+use App\Entity\Traits\History;
 
 /**
  * Model

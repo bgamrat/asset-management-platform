@@ -4,7 +4,7 @@ Namespace App\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Common\PersonType;
+use App\Entity\Common\PersonType;
 
 class LoadPersonTypeData implements FixtureInterface
 {

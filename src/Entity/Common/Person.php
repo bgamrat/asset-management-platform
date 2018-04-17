@@ -9,17 +9,17 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\User;
-use Entity\Common\Email;
-use Entity\Common\Phone;
-use Entity\Common\Address;
-use Entity\Common\PersonLog;
-use Entity\Traits\Versioned\Active;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Id;
-use Entity\Traits\History;
-use Entity\Staff\PersonRole;
-use Entity\Staff\PersonEmploymentStatus;
+use App\Entity\User;
+use App\Entity\Common\Email;
+use App\Entity\Common\Phone;
+use App\Entity\Common\Address;
+use App\Entity\Common\PersonLog;
+use App\Entity\Traits\Versioned\Active;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\History;
+use App\Entity\Staff\PersonRole;
+use App\Entity\Staff\PersonEmploymentStatus;
 
 
 /**

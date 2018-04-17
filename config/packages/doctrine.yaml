@@ -16,7 +16,7 @@ doctrine:
                 url: '%env(resolve:DATABASE_URL)%'
             legacy:
                 url:
-                     '%env(resolve:LEGACY_DATABSE_URL)%'
+                     '%env(resolve:LEGACY_DATABASE_URL)%'
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"

@@ -3,8 +3,8 @@
 Namespace App\Controller\Api\Admin\Asset;
 
 use Util\DStore;
-use Entity\Asset\Asset;
-use Entity\Asset\Location;
+use App\Entity\Asset\Asset;
+use App\Entity\Asset\Location;
 use Form\Admin\Asset\AssetType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;

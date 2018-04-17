@@ -7,8 +7,8 @@ Namespace App\Entity;
 use FOS\UserBundle\Model\Group as BaseGroup;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Entity\Traits\Active;
-use Entity\Traits\Comment;
+use App\Entity\Traits\Active;
+use App\Entity\Traits\Comment;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**

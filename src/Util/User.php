@@ -2,7 +2,7 @@
 
 Namespace App\Util;
 
-use Entity\User as UserEntity;
+use App\Entity\User as UserEntity;
 use FOS\UserBundle\Doctrine\GroupManager;
 
 class User

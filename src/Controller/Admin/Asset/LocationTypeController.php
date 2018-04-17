@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Asset;
 
-use Entity\Asset\LocationType;
+use App\Entity\Asset\LocationType;
 use Form\Admin\Asset\LocationTypesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

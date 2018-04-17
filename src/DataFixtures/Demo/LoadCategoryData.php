@@ -5,7 +5,7 @@ Namespace App\DataFixtures\Demo;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Asset\Category;
+use App\Entity\Asset\Category;
 
 class LoadCategoryData extends AbstractFixture implements OrderedFixtureInterface
 {

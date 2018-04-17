@@ -9,21 +9,21 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Common\Person;
-use Entity\Client\Contract;
-use Entity\Common\CategoryQuantity;
-use Entity\Schedule\EventRental;
-use Entity\Schedule\ClientEquipment;
-use Entity\Asset\Trailer;
-use Entity\Schedule\TimeSpan;
-use Entity\Schedule\EventRole;
-use Entity\Venue\Venue;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Versioned\Cost;
-use Entity\Traits\Id;
-use Entity\Traits\Versioned\Name;
-use Entity\Traits\Versioned\Value;
-use Entity\Traits\History;
+use App\Entity\Common\Person;
+use App\Entity\Client\Contract;
+use App\Entity\Common\CategoryQuantity;
+use App\Entity\Schedule\EventRental;
+use App\Entity\Schedule\ClientEquipment;
+use App\Entity\Asset\Trailer;
+use App\Entity\Schedule\TimeSpan;
+use App\Entity\Schedule\EventRole;
+use App\Entity\Venue\Venue;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Versioned\Cost;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Name;
+use App\Entity\Traits\Versioned\Value;
+use App\Entity\Traits\History;
 
 /**
  * Event

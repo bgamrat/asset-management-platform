@@ -4,10 +4,10 @@ Namespace App\DataFixtures\Demo;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Asset\Carrier;
-use Entity\Asset\CarrierService;
-use Entity\Common\Person;
-use Entity\Common\Phone;
+use App\Entity\Asset\Carrier;
+use App\Entity\Asset\CarrierService;
+use App\Entity\Common\Person;
+use App\Entity\Common\Phone;
 
 class LoadCarrierData implements FixtureInterface
 {

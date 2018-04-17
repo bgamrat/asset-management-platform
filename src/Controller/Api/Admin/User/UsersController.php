@@ -2,8 +2,8 @@
 
 Namespace App\Controller\Api\Admin\User;
 
-use Entity\Common\Person;
-use Entity\User;
+use App\Entity\Common\Person;
+use App\Entity\User;
 use Util\DStore;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Form\Admin\User\UserType;

@@ -6,8 +6,8 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\CommonException;
-use Entity\Asset\Trailer;
-use Entity\Asset\Location;
+use App\Entity\Asset\Trailer;
+use App\Entity\Asset\Location;
 
 class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
 {

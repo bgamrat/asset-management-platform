@@ -2,14 +2,14 @@
 
 Namespace App\Entity\Common;
 
-use Entity\Common\EmailType;
+use App\Entity\Common\EmailType;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Entity\Traits\Comment;
-use Entity\Traits\Id;
+use App\Entity\Traits\Comment;
+use App\Entity\Traits\Id;
 
 /**
  * @ORM\Entity

@@ -6,13 +6,13 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\CommonException;
-use Entity\Client\Client;
-use Entity\Common\Person;
-use Entity\Common\Email;
-use Entity\Common\Address;
-use Entity\Client\Contract;
-use Entity\Common\CategoryQuantity;
-use Entity\Client\Trailer as ClientTrailer;
+use App\Entity\Client\Client;
+use App\Entity\Common\Person;
+use App\Entity\Common\Email;
+use App\Entity\Common\Address;
+use App\Entity\Client\Contract;
+use App\Entity\Common\CategoryQuantity;
+use App\Entity\Client\Trailer as ClientTrailer;
 
 class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
 {

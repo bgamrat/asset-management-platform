@@ -9,10 +9,10 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Id;
-use Entity\Traits\Versioned\Cost;
-use Entity\Traits\Versioned\Quantity;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Cost;
+use App\Entity\Traits\Versioned\Quantity;
 
 /**
  * EventRental

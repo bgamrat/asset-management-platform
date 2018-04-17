@@ -4,8 +4,8 @@ Namespace App\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Asset\Location;
-use Entity\Asset\LocationType;
+use App\Entity\Asset\Location;
+use App\Entity\Asset\LocationType;
 
 class LoadLocationTypeData implements FixtureInterface
 {

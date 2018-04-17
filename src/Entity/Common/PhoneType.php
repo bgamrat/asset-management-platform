@@ -3,8 +3,8 @@
 Namespace App\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
-use Entity\Traits\Id;
-use Entity\Traits\Type;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Type;
 
 /**
  * @ORM\Entity

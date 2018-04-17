@@ -3,10 +3,10 @@
 Namespace App\Entity\Common;
 
 use Doctrine\ORM\Mapping as ORM;
-use Entity\Traits\Id;
-use Entity\Traits\Type;
-use Entity\Traits\InUse;
-use Entity\Traits\Comment;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Type;
+use App\Entity\Traits\InUse;
+use App\Entity\Traits\Comment;
 
 /**
  * @ORM\Entity(repositoryClass="Repository\PersonTypeRepository")

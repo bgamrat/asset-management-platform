@@ -8,12 +8,12 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Common\Person;
-use Entity\Asset\IssueItem;
-use Entity\Common\BillTo;
-use Entity\Traits\Id;
-use Entity\Traits\Versioned\Cost;
-use Entity\Traits\History;
+use App\Entity\Common\Person;
+use App\Entity\Asset\IssueItem;
+use App\Entity\Common\BillTo;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Cost;
+use App\Entity\Traits\History;
 
 /**
  * Issue

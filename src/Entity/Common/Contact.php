@@ -8,9 +8,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Traits\Versioned\Active;
-use Entity\Traits\Id;
-use Entity\Traits\Versioned\Name;
+use App\Entity\Traits\Versioned\Active;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Name;
 
 /**
  * Contact

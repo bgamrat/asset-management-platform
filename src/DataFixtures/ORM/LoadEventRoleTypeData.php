@@ -4,7 +4,7 @@ Namespace App\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Schedule\EventRoleType;
+use App\Entity\Schedule\EventRoleType;
 
 class LoadEventRoleTypeData implements FixtureInterface
 {

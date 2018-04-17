@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Staff;
 
-use Entity\Staff\EmploymentStatus;
+use App\Entity\Staff\EmploymentStatus;
 use Form\Admin\Staff\EmploymentStatusesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

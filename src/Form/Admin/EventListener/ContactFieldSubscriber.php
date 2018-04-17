@@ -8,7 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Entity\Common\Contact;
+use App\Entity\Common\Contact;
 
 class ContactFieldSubscriber implements EventSubscriberInterface
 {

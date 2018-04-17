@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Api\Admin\Venue;
 
-use Entity\Venue\Venue;
+use App\Entity\Venue\Venue;
 use Util\DStore;
 use Form\Admin\Venue\VenueType;
 use FOS\RestBundle\Controller\FOSRestController;

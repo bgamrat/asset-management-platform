@@ -3,10 +3,10 @@
 Namespace App\Controller\Api\Admin\Asset;
 
 use Util\DStore;
-use Entity\Asset\Transfer;
-use Entity\Asset\Trailer;
-use Entity\Common\Person;
-use Entity\Asset\Location;
+use App\Entity\Asset\Transfer;
+use App\Entity\Asset\Trailer;
+use App\Entity\Common\Person;
+use App\Entity\Asset\Location;
 use Form\Admin\Asset\TransferType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use FOS\RestBundle\Controller\FOSRestController;

@@ -3,9 +3,9 @@
 Namespace App\Controller\Api\Admin\Asset;
 
 use Util\DStore;
-use Entity\Asset\Issue;
-use Entity\Asset\Trailer;
-use Entity\Common\Person;
+use App\Entity\Asset\Issue;
+use App\Entity\Asset\Trailer;
+use App\Entity\Common\Person;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Form\Admin\Asset\IssueType;
 use Doctrine\Common\Collections\ArrayCollection;

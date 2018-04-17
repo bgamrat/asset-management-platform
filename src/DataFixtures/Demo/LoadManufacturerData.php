@@ -6,13 +6,13 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\CommonException;
-use Entity\Asset\Brand;
-use Entity\Asset\Manufacturer;
-use Entity\Asset\Model;
-use Entity\Common\Person;
-use Entity\Common\Email;
-use Entity\Common\Phone;
-use Entity\Common\Address;
+use App\Entity\Asset\Brand;
+use App\Entity\Asset\Manufacturer;
+use App\Entity\Asset\Model;
+use App\Entity\Common\Person;
+use App\Entity\Common\Email;
+use App\Entity\Common\Phone;
+use App\Entity\Common\Address;
 
 class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInterface
 {

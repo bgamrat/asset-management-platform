@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Api\Admin\Asset;
 
-use Entity\Asset\Vendor;
+use App\Entity\Asset\Vendor;
 use Util\DStore;
 use Form\Admin\Asset\VendorType;
 use FOS\RestBundle\Controller\FOSRestController;

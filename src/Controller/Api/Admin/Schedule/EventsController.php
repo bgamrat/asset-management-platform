@@ -3,7 +3,7 @@
 Namespace App\Controller\Api\Admin\Schedule;
 
 use Form\Admin\Schedule\EventType;
-use Entity\Schedule\Event;
+use App\Entity\Schedule\Event;
 use Util\DStore;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;

@@ -10,11 +10,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Entity\Common\Person;
-use Entity\Traits\Versioned\Cost;
-use Entity\Traits\History;
-use Entity\Traits\Id;
-use Entity\Common\BillTo;
+use App\Entity\Common\Person;
+use App\Entity\Traits\Versioned\Cost;
+use App\Entity\Traits\History;
+use App\Entity\Traits\Id;
+use App\Entity\Common\BillTo;
 
 /**
  * Transfer

@@ -3,8 +3,8 @@
 Namespace App\Controller\Api\Admin\Asset;
 
 use Util\DStore;
-use Entity\Asset\Manufacturer;
-use Entity\Asset\Model;
+use App\Entity\Asset\Manufacturer;
+use App\Entity\Asset\Model;
 use Form\Admin\Asset\ManufacturerType;
 use Form\Admin\Asset\ModelType;
 use FOS\RestBundle\Controller\FOSRestController;

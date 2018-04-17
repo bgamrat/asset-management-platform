@@ -7,10 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Traits\Versioned\InUse;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Id;
-use Entity\Traits\Versioned\XDefault;
+use App\Entity\Traits\Versioned\InUse;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\XDefault;
 
 /**
  * Status

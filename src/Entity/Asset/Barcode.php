@@ -7,9 +7,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Entity\Traits\Versioned\Active;
-use Entity\Traits\Versioned\Comment;
-use Entity\Traits\Id;
+use App\Entity\Traits\Versioned\Active;
+use App\Entity\Traits\Versioned\Comment;
+use App\Entity\Traits\Id;
 
 /**
  * Barcode

@@ -9,11 +9,11 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Traits\InUse;
-use Entity\Traits\Comment;
-use Entity\Traits\Id;
-use Entity\Traits\Name;
-use Entity\Traits\XDefault;
+use App\Entity\Traits\InUse;
+use App\Entity\Traits\Comment;
+use App\Entity\Traits\Id;
+use App\Entity\Traits\Name;
+use App\Entity\Traits\XDefault;
 
 /**
  * TransferStatus

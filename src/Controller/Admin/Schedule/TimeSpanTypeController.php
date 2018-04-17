@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Schedule;
 
-use Entity\Schedule\TimeSpanType;
+use App\Entity\Schedule\TimeSpanType;
 use Form\Admin\Schedule\TimeSpanTypesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

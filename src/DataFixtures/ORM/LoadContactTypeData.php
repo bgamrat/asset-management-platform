@@ -4,7 +4,7 @@ Namespace App\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Common\ContactType;
+use App\Entity\Common\ContactType;
 
 class LoadContactTypeData implements FixtureInterface
 {

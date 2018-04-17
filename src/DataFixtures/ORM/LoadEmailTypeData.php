@@ -4,7 +4,7 @@ Namespace App\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Entity\Common\EmailType;
+use App\Entity\Common\EmailType;
 
 class LoadEmailTypeData implements FixtureInterface
 {
