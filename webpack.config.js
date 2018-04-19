@@ -34,7 +34,7 @@ Encore
         .addStyleEntry('css/admin_venue_css',
                 './assets/app/css/admin/venue.css')
         // User side - stock Bootstrap
-        .createSharedEntry('bootstrap',
+        .createSharedEntry('css/bootstrap',
                 ['./assets/vendor/bootstrap/css/bootstrap.css',
                     './assets/vendor/bootstrap/css/bootstrap-theme.css',
                     './assets/vendor/font-awesome/css/font-awesome.min.css'])
