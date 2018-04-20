@@ -25,7 +25,7 @@ class LoadIssueStatusData implements FixtureInterface
 
         $manager->flush();
 
-        $entity = 'Entity\Asset\IssueStatus';
+        $entity = 'App\Entity\Asset\IssueStatus';
 
         $er = $manager->getRepository( $entity );
         $issueStatuses = $er->findAll();

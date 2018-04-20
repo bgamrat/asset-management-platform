@@ -45,7 +45,7 @@ class ClientToIdTransformer implements DataTransformerInterface
         }
 
         $client = $this->em
-            ->getRepository('Entity\Client\Client')
+            ->getRepository('App\Entity\Client\Client')
             ->find($clientId)
         ;
 

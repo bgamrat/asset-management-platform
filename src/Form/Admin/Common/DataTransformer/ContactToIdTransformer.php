@@ -44,7 +44,7 @@ class ContactToIdTransformer implements DataTransformerInterface
         }
 
         $contact = $this->em
-            ->getRepository('Entity\Common\Contact')
+            ->getRepository('App\Entity\Common\Contact')
             ->find($contactId)
         ;
 

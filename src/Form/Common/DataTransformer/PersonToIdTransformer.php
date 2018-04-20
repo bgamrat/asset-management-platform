@@ -45,7 +45,7 @@ class PersonToIdTransformer implements DataTransformerInterface
         }
 ;
         $person = $this->em
-            ->getRepository('Entity\Common\Person')
+            ->getRepository('App\Entity\Common\Person')
             ->find($personId)
         ;
 

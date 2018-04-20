@@ -4,7 +4,7 @@ Namespace App\Controller\Admin\Asset;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Form\Admin\Asset\VendorType;
+use App\Form\Admin\Asset\VendorType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -28,7 +28,7 @@ class VendorController extends Controller
 
         if( $name !== null )
         {
-            $vendor = $this->getDoctrine()->getEntityManager()->getRepository( 'Entity\Asset\Vendor' )->findOneBy( ['name' => $name] );
+            $vendor = $this->getDoctrine()->getEntityManager()->getRepository( 'App\Entity\Asset\Vendor' )->findOneBy( ['name' => $name] );
             $vendorId = $vendor->getId();
         }
         else

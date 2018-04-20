@@ -7,7 +7,7 @@ use App\Entity\Asset\Transfer;
 use App\Entity\Asset\Trailer;
 use App\Entity\Common\Person;
 use App\Entity\Asset\Location;
-use Form\Admin\Asset\TransferType;
+use App\Form\Admin\Asset\TransferType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -55,7 +55,7 @@ class TransfersController extends FOSRestController
         $transferIds = [];
         if( !empty( $dstore['filter'][DStore::VALUE] ) )
         {
-            $assetData = $em->getRepository( 'Entity\Asset\Asset' )->findByBarcode( $dstore['filter'][DStore::VALUE] );
+            $assetData = $em->getRepository( 'App\Entity\Asset\Asset' )->findByBarcode( $dstore['filter'][DStore::VALUE] );
             if( !empty( $assetData ) )
             {
                 $assetIds = [];
@@ -64,7 +64,7 @@ class TransfersController extends FOSRestController
                     $assetIds[] = $a->getId();
                 }
                 $queryBuilder = $em->createQueryBuilder()->select( 't.id' )
-                        ->from( 'Entity\Asset\Transfer', 't' )
+                        ->from( 'App\Entity\Asset\Transfer', 't' )
                         ->join( 't.items', 'ti' )
                         ->join( 'ti.asset', 'a' );
                 $queryBuilder->where( 'a.id IN (:asset_ids)' );
@@ -81,7 +81,7 @@ class TransfersController extends FOSRestController
         $columns = ['t.id', 't.instructions', 's.name AS status_text', 't.source_location_text', 't.destination_location_text',
            'c.name AS carrier_text', 't.tracking_number', 'c.tracking_url'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Transfer', 't' )
+                ->from( 'App\Entity\Asset\Transfer', 't' )
                 ->join( 't.status', 's' )
                 ->leftJoin( 't.carrier', 'c' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
@@ -136,11 +136,11 @@ class TransfersController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $transfer = $this->getDoctrine()
-                        ->getRepository( 'Entity\Asset\Transfer' )->find( $id );
+                        ->getRepository( 'App\Entity\Asset\Transfer' )->find( $id );
         if( $transfer !== null )
         {
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\Asset\TransferLog', $id );
+            $logUtil->getLog( 'App\Entity\Asset\TransferLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'transfer' . $transfer->getId(), $transfer->getUpdatedAt() );
@@ -179,7 +179,7 @@ class TransfersController extends FOSRestController
         }
         else
         {
-            $transfer = $em->getRepository( 'Entity\Asset\Transfer' )->find( $id );
+            $transfer = $em->getRepository( 'App\Entity\Asset\Transfer' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'transfer' . $transfer->getId(), $transfer->getUpdatedAt() ) === false )
             {
@@ -213,7 +213,7 @@ class TransfersController extends FOSRestController
                     {
                         $inTransit = $this->get( 'translator' )->trans( 'asset.in_transit' );
                         $queryBuilder = $em->createQueryBuilder()->select( ['l'] )
-                                ->from( 'Entity\Asset\Location', 'l' )
+                                ->from( 'App\Entity\Asset\Location', 'l' )
                                 ->join( 'l.type', 't' )
                                 ->where( 't.name = :type' )
                                 ->setParameter( 'type', $inTransit );
@@ -232,7 +232,7 @@ class TransfersController extends FOSRestController
                         {
                             $unknown = $this->get( 'translator' )->trans( 'common.unknown' );
                             $queryBuilder = $em->createQueryBuilder()->select( ['l'] )
-                                    ->from( 'Entity\Asset\Location', 'l' )
+                                    ->from( 'App\Entity\Asset\Location', 'l' )
                                     ->join( 'l.type', 't' )
                                     ->where( 't.name = :type' )
                                     ->setParameter( 'type', $unknown );
@@ -277,7 +277,7 @@ class TransfersController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'Entity\Asset\Transfer' );
+        $repository = $em->getRepository( 'App\Entity\Asset\Transfer' );
         $transfer = $repository->find( $id );
         if( $transfer !== null )
         {
@@ -308,7 +308,7 @@ class TransfersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $transfer = $em->getRepository( 'Entity\Asset\Transfer' )->find( $id );
+        $transfer = $em->getRepository( 'App\Entity\Asset\Transfer' )->find( $id );
         if( $transfer !== null )
         {
             $em->getFilters()->enable( 'softdeleteable' );

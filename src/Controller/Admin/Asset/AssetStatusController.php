@@ -3,7 +3,7 @@
 Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Asset\AssetStatus;
-use Form\Admin\Asset\AssetStatusesType;
+use App\Form\Admin\Asset\AssetStatusesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -30,7 +30,7 @@ class AssetStatusController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $statuses = [];
-        $statuses['statuses'] = $em->getRepository( 'Entity\Asset\AssetStatus' )->findAll();
+        $statuses['statuses'] = $em->getRepository( 'App\Entity\Asset\AssetStatus' )->findAll();
 
         $statusesForm = $this->createForm( AssetStatusesType::class, $statuses, [ 'action' => $this->generateUrl( 'app_admin_asset_assetstatus_save' )] );
 
@@ -49,7 +49,7 @@ class AssetStatusController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $statuses = [];
-        $statuses['statuses'] = $em->getRepository( 'Entity\Asset\AssetStatus' )->findAll();
+        $statuses['statuses'] = $em->getRepository( 'App\Entity\Asset\AssetStatus' )->findAll();
         $form = $this->createForm( AssetStatusesType::class, $statuses, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )

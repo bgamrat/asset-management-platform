@@ -26,7 +26,7 @@ class DefaultController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['ts.id', "ts.name"] )
-                    ->from( 'Entity\Schedule\TimeSpanType', 'ts' )
+                    ->from( 'App\Entity\Schedule\TimeSpanType', 'ts' )
                     ->where( 'LOWER(ts.name) LIKE :time_span_name' )
                     ->orderBy( 'ts.name')
                     ->setParameter( 'time_span_name', strtolower( $name ) );

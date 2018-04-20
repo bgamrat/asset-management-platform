@@ -5,8 +5,8 @@ Namespace App\Controller\Api\Admin\User;
 use App\Entity\Common\Person;
 use App\Entity\Group;
 use Util\DStore;
-use Form\Admin\User\GroupType;
-use Form\Admin\Group\InvitationType;
+use App\Form\Admin\User\GroupType;
+use App\Form\Admin\Group\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,7 +103,7 @@ class GroupsController extends FOSRestController
         }
         else
         {
-            $group = $em->getRepository( 'Entity\Group' )->find( $data['id'] );
+            $group = $em->getRepository( 'App\Entity\Group' )->find( $data['id'] );
         }
         $form = $this->createForm( GroupType::class, $group, [] );
         try

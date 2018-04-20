@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * AddressLog
  *
  * @ORM\Table(name="address_log")
- * @ORM\Entity(repositoryClass="Repository\AddressLogEntryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AddressLogEntryRepository")
  */
 class AddressLog Extends LogEntry
 {

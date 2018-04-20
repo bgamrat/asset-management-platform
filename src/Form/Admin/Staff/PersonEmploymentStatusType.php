@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityApp\Repository;
 
 class PersonEmploymentStatusType extends AbstractType
 {
@@ -18,8 +18,8 @@ class PersonEmploymentStatusType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder->add( 'employment_status', EntityType::class, [
-                    'class' => 'Entity\Staff\EmploymentStatus',
-                    'query_builder' => function (EntityRepository $er)
+                    'class' => 'App\Entity\Staff\EmploymentStatus',
+                    'query_builder' => function (EntityApp\Repository $er)
                     {
                         return $er->createQueryBuilder( 'es' )
                                 ->where( 'es.in_use = true' )
@@ -52,7 +52,7 @@ class PersonEmploymentStatusType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Staff\PersonEmploymentStatus'
+            'data_class' => 'App\Entity\Staff\PersonEmploymentStatus'
         ) );
     }
 

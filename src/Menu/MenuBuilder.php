@@ -7,21 +7,24 @@ Namespace App\Menu;
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class MenuBuilder
 {
 
     private $factory;
     private $security;
+    private $tokenStorage;
     private $translator;
 
     /**
      * @param FactoryInterface $factory
      */
-    public function __construct( FactoryInterface $factory, AuthorizationCheckerInterface $security, TranslatorInterface $translator )
+    public function __construct( FactoryInterface $factory, AuthorizationCheckerInterface $security, TokenStorageInterface $tokenStorage, TranslatorInterface $translator )
     {
         $this->factory = $factory;
         $this->security = $security;
+        $this->tokenStorage = $tokenStorage;
         $this->translator = $translator;
     }
 
@@ -144,7 +147,7 @@ class MenuBuilder
 
         if( $this->security->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
         {
-            $user = $this->security->getToken()->getUser();
+            $user = $this->tokenStorage->getToken()->getUser();
             $username = $user->getUsername();
             $menu->addChild( 'user' )
                     ->setExtra( 'translation_domain', 'App' )

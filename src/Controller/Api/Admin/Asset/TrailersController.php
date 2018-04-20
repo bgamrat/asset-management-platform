@@ -5,7 +5,7 @@ Namespace App\Controller\Api\Admin\Asset;
 use Util\DStore;
 use App\Entity\Asset\Trailer;
 use App\Entity\Asset\Location;
-use Form\Admin\Asset\TrailerType;
+use App\Form\Admin\Asset\TrailerType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +55,7 @@ class TrailersController extends FOSRestController
             $columns[] = 't.deletedAt AS deleted_at';
         }
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Trailer', 't' )
+                ->from( 'App\Entity\Asset\Trailer', 't' )
                 ->innerJoin( 't.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
                 ->leftJoin( 't.status', 's' )
@@ -103,11 +103,11 @@ class TrailersController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $trailer = $this->getDoctrine()
-                        ->getRepository( 'Entity\Asset\Trailer' )->find( $id );
+                        ->getRepository( 'App\Entity\Asset\Trailer' )->find( $id );
         if( $trailer !== null )
         {
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\Asset\TrailerLog', $id );
+            $logUtil->getLog( 'App\Entity\Asset\TrailerLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'trailer' . $trailer->getId(), $trailer->getUpdatedAt() );
@@ -146,7 +146,7 @@ class TrailersController extends FOSRestController
         }
         else
         {
-            $trailer = $em->getRepository( 'Entity\Asset\Trailer' )->find( $id );
+            $trailer = $em->getRepository( 'App\Entity\Asset\Trailer' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'trailer' . $trailer->getId(), $trailer->getUpdatedAt() ) === false )
             {
@@ -195,7 +195,7 @@ class TrailersController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'Entity\Asset\Trailer' );
+        $repository = $em->getRepository( 'App\Entity\Asset\Trailer' );
         $trailer = $repository->find( $id );
         if( $trailer !== null )
         {
@@ -226,7 +226,7 @@ class TrailersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $trailer = $em->getRepository( 'Entity\Asset\Trailer' )->find( $id );
+        $trailer = $em->getRepository( 'App\Entity\Asset\Trailer' )->find( $id );
         if( $trailer !== null )
         {
             $em->getFilters()->enable( 'softdeleteable' );

@@ -3,7 +3,7 @@
 Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Category;
-use Form\Admin\Asset\CategoriesType;
+use App\Form\Admin\Asset\CategoriesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -30,7 +30,7 @@ class CategoryController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $categories = [];
-        $categories['categories'] = $em->getRepository( 'Entity\Asset\Category' )->findAll();
+        $categories['categories'] = $em->getRepository( 'App\Entity\Asset\Category' )->findAll();
         $categoriesForm = $this->createForm( CategoriesType::class, $categories, [ 'action' => $this->generateUrl( 'app_admin_asset_category_save' )] );
         return $this->render( 'admin/asset/categories.html.twig', array(
                     'categories_form' => $categoriesForm->createView()
@@ -47,7 +47,7 @@ class CategoryController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $categories = [];
-        $categories['categories'] = $em->getRepository( 'Entity\Asset\Category' )->findAll();
+        $categories['categories'] = $em->getRepository( 'App\Entity\Asset\Category' )->findAll();
         $form = $this->createForm( CategoriesType::class, $categories, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )
@@ -58,7 +58,7 @@ class CategoryController extends Controller
                 $em->persist( $category );
             }
 
-            $categories = $em->getRepository( 'Entity\Asset\Category' )->findAll();
+            $categories = $em->getRepository( 'App\Entity\Asset\Category' )->findAll();
             foreach( $categories as $category )
             {
                 $category->setFullName();

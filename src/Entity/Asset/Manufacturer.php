@@ -19,7 +19,7 @@ use App\Entity\Traits\Id;
  * Manufacturer
  *
  * @ORM\Table(name="manufacturer")
- * @ORM\Entity(repositoryClass="Repository\ManufacturerRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ManufacturerRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -42,7 +42,7 @@ class Manufacturer
      */
     private $id;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity\Common\Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="manufacturer_contact",
      *      joinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")}
@@ -51,7 +51,7 @@ class Manufacturer
     private $contacts = null;
     /**
      * @var ArrayCollection $brands
-     * @ORM\ManyToMany(targetEntity="Entity\Asset\Brand", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Asset\Brand", cascade={"persist"})
      * @ORM\JoinTable(name="manufacturer_brand",
      *      joinColumns={@ORM\JoinColumn(name="manufacturer_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)}

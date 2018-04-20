@@ -9,7 +9,7 @@ use App\Entity\Traits\InUse;
 use App\Entity\Traits\Comment;
 
 /**
- * @ORM\Entity(repositoryClass="Repository\PersonTypeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PersonTypeRepository")
  * @ORM\Table(name="person_type")
  */
 class PersonType

@@ -3,13 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% stylesheets 
-            '@dojo_dijit_css'
-            '@dgrid_css'
-            '@admin_css'
-            filter='cssrewrite' %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-        {% endstylesheets %}
+        <link rel="stylesheet" href="{{ asset('build/css/dojo_dijit.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/dgrid.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/admin.css') }}">
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>

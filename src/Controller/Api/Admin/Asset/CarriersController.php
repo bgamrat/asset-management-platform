@@ -4,7 +4,7 @@ Namespace App\Controller\Api\Admin\Asset;
 
 use App\Entity\Asset\Carrier;
 use Util\DStore;
-use Form\Admin\Asset\CarrierType;
+use App\Form\Admin\Asset\CarrierType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +32,7 @@ class CarriersController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['c'] )
-                ->from( 'Entity\Asset\Carrier', 'c' )
+                ->from( 'App\Entity\Asset\Carrier', 'c' )
                 ->leftJoin( 'c.contacts', 'cc' )
                 ->orderBy( 'c.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
@@ -75,7 +75,7 @@ class CarriersController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $carrier = $this->getDoctrine()
-                        ->getRepository( 'Entity\Asset\Carrier' )->find( $id );
+                        ->getRepository( 'App\Entity\Asset\Carrier' )->find( $id );
         if( $carrier !== null )
         {
 
@@ -114,7 +114,7 @@ class CarriersController extends FOSRestController
         }
         else
         {
-            $carrier = $em->getRepository( 'Entity\Asset\Carrier' )->find( $id );
+            $carrier = $em->getRepository( 'App\Entity\Asset\Carrier' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdatedAt() ) === false )
             {
@@ -159,7 +159,7 @@ class CarriersController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
-                ->getRepository( 'Entity\Asset\Carrier' );
+                ->getRepository( 'App\Entity\Asset\Carrier' );
         $carrier = $repository->find( $id );
         if( $carrier !== null )
         {
@@ -187,7 +187,7 @@ class CarriersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $carrier = $em->getRepository( 'Entity\Asset\Carrier' )->find( $id );
+        $carrier = $em->getRepository( 'App\Entity\Asset\Carrier' )->find( $id );
         if( $carrier !== null )
         {
             $em->remove( $carrier );

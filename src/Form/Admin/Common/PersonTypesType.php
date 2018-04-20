@@ -2,7 +2,7 @@
 
 Namespace App\Form\Admin\Common;
 
-use Form\Admin\Common\PersonTypeType;
+use App\Form\Admin\Common\PersonTypeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;

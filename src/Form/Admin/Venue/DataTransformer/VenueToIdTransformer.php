@@ -45,7 +45,7 @@ class VenueToIdTransformer implements DataTransformerInterface
         }
 
         $venue = $this->em
-            ->getRepository('Entity\Venue\Venue')
+            ->getRepository('App\Entity\Venue\Venue')
             ->find($venueId)
         ;
 

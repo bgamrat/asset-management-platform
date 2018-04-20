@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Table(name="legacy_users")
- * @ORM\Entity(repositoryClass="Entity\LegacyUserRepository")
+ * @ORM\Entity(repositoryClass="App\Entity\LegacyUserApp\Repository")
  */
 class LegacyUser implements AdvancedUserInterface, \Serializable
 {

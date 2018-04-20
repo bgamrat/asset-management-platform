@@ -11,8 +11,6 @@ Encore
 // .enableVersioning(Encore.isProduction())
 
 
-        .addEntry('js/bootstrap', './assets/vendor/bootstrap/js/bootstrap.js')
-
         .addStyleEntry('css/dojo_dijit',
                 ['./assets/vendor/dojo/dojo/resources/dojo.css',
                     './assets/vendor/dojo/dojo/resources/dnd.css',

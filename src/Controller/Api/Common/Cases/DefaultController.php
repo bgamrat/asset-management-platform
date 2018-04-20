@@ -25,7 +25,7 @@ class DefaultController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['a.id', "CONCAT(b.barcode,' ',m.name) AS name"] )
-                    ->from( 'Entity\Asset\Asset', 'a' )
+                    ->from( 'App\Entity\Asset\Asset', 'a' )
                     ->innerJoin( 'a.barcodes', 'b' )
                     ->innerJoin( 'a.model', 'm' );
             $queryBuilder

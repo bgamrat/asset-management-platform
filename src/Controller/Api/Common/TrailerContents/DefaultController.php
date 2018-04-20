@@ -20,7 +20,7 @@ class DefaultController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder()->select( 'a.id' )
-                ->from( 'Entity\Asset\Asset', 'a' )
+                ->from( 'App\Entity\Asset\Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->leftJoin( 'a.location', 'l' )
                 ->leftJoin( 'l.type', 'lt' )
@@ -60,7 +60,7 @@ class DefaultController extends FOSRestController
         }
 
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Asset', 'a' )
+                ->from( 'App\Entity\Asset\Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.category', 'c' )
                 ->innerJoin( 'm.brand', 'b' )

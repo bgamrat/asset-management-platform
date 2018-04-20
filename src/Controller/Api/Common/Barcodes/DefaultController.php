@@ -24,7 +24,7 @@ class DefaultController extends FOSRestController
             $barcode = sprintf('%%%s%%', trim(urldecode($barcode),'*' ));
             $em = $this->getDoctrine()->getManager();
             $queryBuilder = $em->createQueryBuilder()->select( ['a.id', "CONCAT(CONCAT(b.barcode,' - '),CONCAT(CONCAT(bd.name,' '),m.name)) AS name" ])
-                    ->from( 'Entity\Asset\Asset', 'a' )
+                    ->from( 'App\Entity\Asset\Asset', 'a' )
                     ->join( 'a.model', 'm')
                     ->join('m.brand', 'bd')
                     ->join( 'a.barcodes', 'b' )

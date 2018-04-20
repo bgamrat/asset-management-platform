@@ -3,8 +3,8 @@
 Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Asset\IssueStatus;
-use Form\Admin\Asset\IssueStatusesType;
-use Form\Admin\Asset\IssueWorkflowType;
+use App\Form\Admin\Asset\IssueStatusesType;
+use App\Form\Admin\Asset\IssueWorkflowType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -30,7 +30,7 @@ class IssueStatusController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $issueStatuses = [];
-        $issueStatuses['statuses'] = $em->getRepository( 'Entity\Asset\IssueStatus' )->findAll();
+        $issueStatuses['statuses'] = $em->getRepository( 'App\Entity\Asset\IssueStatus' )->findAll();
         $issueStatusesForm = $this->createForm( IssueStatusesType::class, $issueStatuses, [ 'action' => $this->generateUrl( 'app_admin_asset_issuestatus_save' )] );
         return $this->render( 'admin/asset/issue-statuses.html.twig', array(
                     'issue_statuses_form' => $issueStatusesForm->createView())
@@ -47,7 +47,7 @@ class IssueStatusController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $issueStatuses = [];
-        $issueStatuses['statuses'] = $em->getRepository( 'Entity\Asset\IssueStatus' )->findAll();
+        $issueStatuses['statuses'] = $em->getRepository( 'App\Entity\Asset\IssueStatus' )->findAll();
         $form = $this->createForm( IssueStatusesType::class, $issueStatuses, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )
@@ -90,7 +90,7 @@ class IssueStatusController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-        $issueStatuses = $em->getRepository( 'Entity\Asset\IssueStatus' )->findAll();
+        $issueStatuses = $em->getRepository( 'App\Entity\Asset\IssueStatus' )->findAll();
         $next = [];
         foreach( $issueStatuses as $is )
         {
@@ -112,7 +112,7 @@ class IssueStatusController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
-        $issueStatuses = $em->getRepository( 'Entity\Asset\IssueStatus' )->findAll();
+        $issueStatuses = $em->getRepository( 'App\Entity\Asset\IssueStatus' )->findAll();
         $next = [];
         foreach( $issueStatuses as $is )
         {

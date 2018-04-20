@@ -9,13 +9,13 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Form\Admin\Asset\Type\ModelRelationshipType;
-use Form\Admin\Asset\Type\CategoryType;
-use Form\Common\CustomAttributeType;
+use App\Form\Admin\Asset\Type\ModelRelationshipType;
+use App\Form\Admin\Asset\Type\CategoryType;
+use App\Form\Common\CustomAttributeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Asset\DataTransformer\CategoryToIdTransformer;
+use App\Form\Admin\Asset\DataTransformer\CategoryToIdTransformer;
 use Symfony\Component\Validator\Constraints\Valid;
 
 class ModelType extends AbstractType
@@ -123,7 +123,7 @@ class ModelType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Model'
+            'data_class' => 'App\Entity\Asset\Model'
         ) );
     }
 

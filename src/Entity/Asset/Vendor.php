@@ -18,7 +18,7 @@ use App\Entity\Traits\Versioned\Name;
  * Vendor
  *
  * @ORM\Table(name="vendor")
- * @ORM\Entity(repositoryClass="Repository\VendorRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\VendorRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -41,7 +41,7 @@ class Vendor
      */
     private $id;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity\Common\Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="vendor_contact",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id")}

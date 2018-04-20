@@ -66,7 +66,7 @@ class GroupType extends AbstractType
     {
         $resolver->setDefaults( array(
             'roles' => [],
-            'data_class' => 'Entity\Group'
+            'data_class' => 'App\Entity\Group'
         ) );
     }
 

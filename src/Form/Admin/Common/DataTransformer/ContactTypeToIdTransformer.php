@@ -50,13 +50,13 @@ class ContactTypeToIdTransformer implements DataTransformerInterface
         if( is_numeric( $contactTypeId ) )
         {
             $contactType = $this->em
-                    ->getRepository( 'Entity\Common\ContactType' )
+                    ->getRepository( 'App\Entity\Common\ContactType' )
                     ->find( $contactTypeId );
         }
         else
         {
             $contactType = $this->em
-                    ->getRepository( 'Entity\Common\ContactType' )
+                    ->getRepository( 'App\Entity\Common\ContactType' )
                     ->findOneByEntity( $contactTypeId );
         }
 

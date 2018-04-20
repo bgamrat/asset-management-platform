@@ -45,7 +45,7 @@ class ModelToIdTransformer implements DataTransformerInterface
         }
 
         $model = $this->em
-            ->getRepository('Entity\Asset\Model')
+            ->getRepository('App\Entity\Asset\Model')
             ->find($modelId)
         ;
 

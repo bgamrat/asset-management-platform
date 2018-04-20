@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Form\Admin\Asset\TrailerType;
+use App\Form\Admin\Asset\TrailerType;
 use App\Entity\Common\CategoryQuantity;
 
 /**
@@ -26,7 +26,7 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-        $event = $em->getRepository( 'Entity\Schedule\Event' )->find( $id );
+        $event = $em->getRepository( 'App\Entity\Schedule\Event' )->find( $id );
 
         $contracts = $event->getContracts();
 
@@ -48,13 +48,13 @@ class EventController extends Controller
 
             $trailers = $contract->getRequiresTrailers( true );
             $assets = $trailerNames = [];
-            $trailerLocationType = $em->getRepository( 'Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
+            $trailerLocationType = $em->getRepository( 'App\Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
             foreach( $trailers as $t )
             {
                 $trailer = $t->getTrailer();
                 $trailerId = $trailer->getId();
                 $trailerName = $trailer->getName();
-                $trailerAssets[$trailerName] = $em->getRepository( 'Entity\Asset\Asset' )->findByLocation( $trailerLocationType, $trailerId );
+                $trailerAssets[$trailerName] = $em->getRepository( 'App\Entity\Asset\Asset' )->findByLocation( $trailerLocationType, $trailerId );
                 $trailerNames[$trailerId] = $trailer->getName();
             }
         }
@@ -63,8 +63,8 @@ class EventController extends Controller
         $venue = $event->getVenue();
         if( !empty( $venue ) )
         {
-            $venueLocationType = $em->getRepository( 'Entity\Asset\LocationType' )->findOneByName( 'Venue' );
-            $venueAssets[$venue->getName()] = $em->getRepository( 'Entity\Asset\Asset' )->findByLocation( $venueLocationType, $venue->getId() );
+            $venueLocationType = $em->getRepository( 'App\Entity\Asset\LocationType' )->findOneByName( 'Venue' );
+            $venueAssets[$venue->getName()] = $em->getRepository( 'App\Entity\Asset\Asset' )->findByLocation( $venueLocationType, $venue->getId() );
         }
 
         $satisfies = [];
@@ -214,7 +214,7 @@ class EventController extends Controller
 
         $columns = ['t.id', 't.updatedAt', 't.tracking_number', 'c.name AS carrier', 'c.tracking_url', 'cs.name AS carrier_service', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Transfer', 't' )
+                ->from( 'App\Entity\Asset\Transfer', 't' )
                 ->join( 't.status', 's' )
                 ->leftJoin( 't.carrier', 'c' )
                 ->innerJoin( 't.carrier_service', 'cs' )
@@ -230,7 +230,7 @@ class EventController extends Controller
             $transferIndex = array_flip( $transferIds );
             $columns = ['t.id', 'a.id AS asset_id', 'b.barcode', 'br.name AS brand', 'm.name AS model'];
             $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                    ->from( 'Entity\Asset\Transfer', 't' )
+                    ->from( 'App\Entity\Asset\Transfer', 't' )
                     ->leftJoin( 't.items', 'ti' )
                     ->leftJoin( 'ti.asset', 'a' )
                     ->leftJoin( 'a.model', 'm' )

@@ -2,7 +2,7 @@
 
 Namespace App\Form\Admin\Asset;
 
-use Form\Admin\Asset\IssueTypeType;
+use App\Form\Admin\Asset\IssueTypeType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;

@@ -9,8 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Form\Admin\Client\CategoryQuantityType;
-use Form\Admin\Client\TrailerType;
+use App\Form\Admin\Client\CategoryQuantityType;
+use App\Form\Admin\Client\TrailerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -96,7 +96,7 @@ class ContractType extends AbstractType
     {
         $resolver->setDefaults( array(
             'allow_extra_fields' => true,
-            'data_class' => 'Entity\Client\Contract'
+            'data_class' => 'App\Entity\Client\Contract'
         ) );
     }
 

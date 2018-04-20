@@ -5,7 +5,7 @@ Namespace App\Controller\Api\Admin\Asset;
 use Util\DStore;
 use App\Entity\Asset\Asset;
 use App\Entity\Asset\Location;
-use Form\Admin\Asset\AssetType;
+use App\Form\Admin\Asset\AssetType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,7 +57,7 @@ class AssetsController extends FOSRestController
             $columns[] = 'a.deletedAt AS deleted_at';
         }
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Asset', 'a' )
+                ->from( 'App\Entity\Asset\Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
                 ->leftJoin( 'a.barcodes', 'bc'/*, 'WITH', 'bc.active = true' */)
@@ -113,11 +113,11 @@ class AssetsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $asset = $this->getDoctrine()
-                        ->getRepository( 'Entity\Asset\Asset' )->find( $id );
+                        ->getRepository( 'App\Entity\Asset\Asset' )->find( $id );
         if( $asset !== null )
         {
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\Asset\AssetLog', $id );
+            $logUtil->getLog( 'App\Entity\Asset\AssetLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdatedAt() );
@@ -156,7 +156,7 @@ class AssetsController extends FOSRestController
         }
         else
         {
-            $asset = $em->getRepository( 'Entity\Asset\Asset' )->find( $id );
+            $asset = $em->getRepository( 'App\Entity\Asset\Asset' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdatedAt() ) === false )
             {
@@ -206,7 +206,7 @@ class AssetsController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'Entity\Asset\Asset' );
+        $repository = $em->getRepository( 'App\Entity\Asset\Asset' );
         $asset = $repository->find( $id );
         if( $asset !== null )
         {
@@ -237,7 +237,7 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $asset = $em->getRepository( 'Entity\Asset\Asset' )->find( $id );
+        $asset = $em->getRepository( 'App\Entity\Asset\Asset' )->find( $id );
         if( $asset !== null )
         {
             $em->getFilters()->enable( 'softdeleteable' );

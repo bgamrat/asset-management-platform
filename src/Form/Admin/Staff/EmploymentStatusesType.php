@@ -2,7 +2,7 @@
 
 Namespace App\Form\Admin\Staff;
 
-use Form\Admin\Staff\EmploymentStatusType;
+use App\Form\Admin\Staff\EmploymentStatusType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;

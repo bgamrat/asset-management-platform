@@ -15,8 +15,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use Form\Common\DataTransformer\PersonToIdTransformer;
-use Form\Admin\Common\BillToType;
+use App\Form\Common\DataTransformer\PersonToIdTransformer;
+use App\Form\Admin\Common\BillToType;
 
 class IssueType extends AbstractType
 {
@@ -34,8 +34,8 @@ class IssueType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $defaultStatus = $this->em->getRepository( 'Entity\Asset\IssueStatus' )->findOneBy( ['default' => true] );
-        $defaultType = $this->em->getRepository( 'Entity\Asset\IssueType' )->findOneBy( ['default' => true] );
+        $defaultStatus = $this->em->getRepository( 'App\Entity\Asset\IssueStatus' )->findOneBy( ['default' => true] );
+        $defaultType = $this->em->getRepository( 'App\Entity\Asset\IssueType' )->findOneBy( ['default' => true] );
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'created_at', DateTimeType::class, [
@@ -53,7 +53,7 @@ class IssueType extends AbstractType
                     'disabled' => true
                 ] )
                 ->add( 'trailer', EntityType::class, [
-                    'class' => 'Entity\Asset\Trailer',
+                    'class' => 'App\Entity\Asset\Trailer',
                     'choice_label' => 'name',
                     'choice_value' => 'name',
                     'multiple' => false,
@@ -64,7 +64,7 @@ class IssueType extends AbstractType
                 ] )
                 ->add( 'priority', IntegerType::class, ['label' => 'issue.priority'] )
                 ->add( 'type', EntityType::class, [
-                    'class' => 'Entity\Asset\IssueType',
+                    'class' => 'App\Entity\Asset\IssueType',
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
@@ -74,11 +74,11 @@ class IssueType extends AbstractType
                     {
                         return $type->isInUse();
                     },
-                    'data' => $this->em->getReference( 'Entity\Asset\IssueType', $defaultType->getId() ),
+                    'data' => $this->em->getReference( 'App\Entity\Asset\IssueType', $defaultType->getId() ),
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'status', EntityType::class, [
-                    'class' => 'Entity\Asset\IssueStatus',
+                    'class' => 'App\Entity\Asset\IssueStatus',
                     'choice_label' => 'status',
                     'multiple' => false,
                     'expanded' => false,
@@ -88,7 +88,7 @@ class IssueType extends AbstractType
                     {
                         return $status->isInUse();
                     },
-                    'data' => $this->em->getReference( 'Entity\Asset\IssueStatus', $defaultStatus->getId() ),
+                    'data' => $this->em->getReference( 'App\Entity\Asset\IssueStatus', $defaultStatus->getId() ),
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'assigned_to', TextType::class, ['label' => 'issue.assigned_to'] )
@@ -144,7 +144,7 @@ class IssueType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Issue'
+            'data_class' => 'App\Entity\Asset\Issue'
         ) );
     }
 

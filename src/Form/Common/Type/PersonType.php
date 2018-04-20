@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Form\Common\DataTransformer\PersonToIdTransformer;
+use App\Form\Common\DataTransformer\PersonToIdTransformer;
 
 class PersonType extends AbstractType
 {

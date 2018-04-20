@@ -12,9 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Form\Common\Type\PersonType;
+use App\Form\Common\Type\PersonType;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Asset\DataTransformer\BrandsToIdsTransformer;
+use App\Form\Admin\Asset\DataTransformer\BrandsToIdsTransformer;
 
 class VendorType extends AbstractType
 {
@@ -78,7 +78,7 @@ class VendorType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Vendor'
+            'data_class' => 'App\Entity\Asset\Vendor'
         ) );
     }
 

@@ -19,7 +19,7 @@ use App\Entity\Traits\Versioned\Value;
  *
  * @Gedmo\Loggable
  * @ORM\Table(name="category")
- * @ORM\Entity(repositoryClass="Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  */

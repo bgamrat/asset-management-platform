@@ -13,10 +13,10 @@ doctrine:
         default_connection: default
         connections:
             default:
-                url: '%env(resolve:DATABASE_URL)%'
+                url: '%env(APP_DATABASE_URL)%'
             legacy:
                 url:
-                     '%env(resolve:LEGACY_DATABASE_URL)%'
+                     '%env(LEGACY_DATABASE_URL)%'
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"

@@ -10,13 +10,13 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Form\Common\PhoneType;
-use Form\Common\AppEmailType; // Named to avoid conflicts with Symfony EmailType
-use Form\Common\AddressType;
-use Form\Admin\Staff\PersonRoleType;
-use Form\Admin\Staff\PersonEmploymentStatusType;
+use App\Form\Common\PhoneType;
+use App\Form\Common\AppEmailType; // Named to avoid conflicts with Symfony EmailType
+use App\Form\Common\AddressType;
+use App\Form\Admin\Staff\PersonRoleType;
+use App\Form\Admin\Staff\PersonEmploymentStatusType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityApp\Repository;
 
 class PersonType extends AbstractType
 {
@@ -31,8 +31,8 @@ class PersonType extends AbstractType
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'type', EntityType::class, [
-                    'class' => 'Entity\Common\PersonType',
-                    'query_builder' => function (EntityRepository $er)
+                    'class' => 'App\Entity\Common\PersonType',
+                    'query_builder' => function (EntityApp\Repository $er)
                     {
                         return $er->createQueryBuilder( 'pt' )
                                 ->where( 'pt.in_use = true' )
@@ -118,7 +118,7 @@ class PersonType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Common\Person',
+            'data_class' => 'App\Entity\Common\Person',
             'allow_extra_fields' => true
         ) );
     }

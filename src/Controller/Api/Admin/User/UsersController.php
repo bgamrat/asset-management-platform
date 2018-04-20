@@ -6,8 +6,8 @@ use App\Entity\Common\Person;
 use App\Entity\User;
 use Util\DStore;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Form\Admin\User\UserType;
-use Form\Admin\User\InvitationType;
+use App\Form\Admin\User\UserType;
+use App\Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,11 +108,11 @@ class UsersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $user = $em->getRepository( 'Entity\User' )->find( $id );
+        $user = $em->getRepository( 'App\Entity\User' )->find( $id );
         if( $user !== null )
         {
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\UserLog', $id );
+            $logUtil->getLog( 'App\Entity\UserLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'user' . $user->getId(), $user->getUpdatedAt() );
@@ -156,7 +156,7 @@ class UsersController extends FOSRestController
         }
         else
         {
-            $user = $em->getRepository( 'Entity\User' )->find( $id );
+            $user = $em->getRepository( 'App\Entity\User' )->find( $id );
             $person = $user->getPerson(true);
         }
         $form = $this->createForm( UserType::class, $user, [] );

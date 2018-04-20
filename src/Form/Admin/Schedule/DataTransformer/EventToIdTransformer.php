@@ -45,7 +45,7 @@ class EventToIdTransformer implements DataTransformerInterface
         }
 
         $event = $this->em
-            ->getRepository('Entity\Schedule\Event')
+            ->getRepository('App\Entity\Schedule\Event')
             ->find($eventId)
         ;
 

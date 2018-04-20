@@ -48,7 +48,7 @@ class ContractToIdTransformer implements DataTransformerInterface
         }
 
         $contract = $this->em
-            ->getRepository('Entity\Client\Contract')
+            ->getRepository('App\Entity\Client\Contract')
             ->find($contractId)
         ;
 

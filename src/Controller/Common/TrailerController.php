@@ -4,7 +4,7 @@ Namespace App\Controller\Common;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Form\Admin\Asset\TrailerType;
+use App\Form\Admin\Asset\TrailerType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -51,7 +51,7 @@ class TrailerController extends Controller
 
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-        $trailer = $em->getRepository( 'Entity\Asset\Trailer' )->findOneByName( $name );
+        $trailer = $em->getRepository( 'App\Entity\Asset\Trailer' )->findOneByName( $name );
         return $this->render( 'admin/asset/trailer.html.twig', array(
                     'trailer' => $trailer
                 ) );
@@ -65,7 +65,7 @@ class TrailerController extends Controller
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
-        $trailer = $em->getRepository( 'Entity\Asset\Trailer' )->findOneByName( $name );
+        $trailer = $em->getRepository( 'App\Entity\Asset\Trailer' )->findOneByName( $name );
         return $this->render( 'common/trailer-equipment-by-category.html.twig', array(
                     'trailer' => $trailer,
                     'equipment' => $this->getTrailerEquipment( $trailer ),
@@ -78,8 +78,8 @@ class TrailerController extends Controller
     private function getTrailerEquipment( $trailer )
     {
         $em = $this->getDoctrine()->getManager();
-        $trailerLocationType = $em->getRepository( 'Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
-        $assets = $em->getRepository( 'Entity\Asset\Asset' )->findByLocation( $trailerLocationType, $trailer->getId() );
+        $trailerLocationType = $em->getRepository( 'App\Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
+        $assets = $em->getRepository( 'App\Entity\Asset\Asset' )->findByLocation( $trailerLocationType, $trailer->getId() );
         $lastModelId = null;
         foreach( $assets as $i => $a )
         {
@@ -99,7 +99,7 @@ class TrailerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder()->select( 'm.id', 'm.name', 'COUNT(m.id) AS quantity' )
-                ->from( 'Entity\Asset\Asset', 'a' )
+                ->from( 'App\Entity\Asset\Asset', 'a' )
                 ->join( 'a.model', 'm' )
                 ->innerJoin( 'a.location', 'l' )
                 ->innerJoin( 'l.type', 'lt' )

@@ -33,7 +33,7 @@ class TimeSpanTypeType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'Entity\Schedule\TimeSpanType'
+            'data_class' => 'App\Entity\Schedule\TimeSpanType'
         ] );
     }
 

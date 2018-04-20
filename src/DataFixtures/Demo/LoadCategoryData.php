@@ -12,7 +12,7 @@ class LoadCategoryData extends AbstractFixture implements OrderedFixtureInterfac
 
     public function load( ObjectManager $manager )
     {
-        $top = $manager->getRepository( 'Entity\Asset\Category' )->findOneByName( 'top' );
+        $top = $manager->getRepository( 'App\Entity\Asset\Category' )->findOneByName( 'top' );
 
         $trailer = new Category();
         $trailer->setName( 'trailer' )->setActive( true )->setPosition( 0 )->setParent( $top )->setFullName();

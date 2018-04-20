@@ -34,7 +34,7 @@ class IssueTypeType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'Entity\Asset\IssueType'
+            'data_class' => 'App\Entity\Asset\IssueType'
         ] );
     }
 

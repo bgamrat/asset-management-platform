@@ -24,8 +24,8 @@ class SearchStoreController extends FOSRestController
         {
             $data = [];
             $em = $this->getDoctrine()->getManager();
-            $searchEntities = ['Entity\Common\Person' => 'app_admin_common_person_index',
-                'Entity\Client\Client' => 'app_admin_client_client_index'];
+            $searchEntities = ['App\Entity\Common\Person' => 'app_admin_common_person_index',
+                'App\Entity\Client\Client' => 'app_admin_client_client_index'];
             foreach( $searchEntities as $entity => $route )
             {
                 $results = $em->getRepository( $entity )->findByNameLike( $name );

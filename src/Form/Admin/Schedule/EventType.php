@@ -9,16 +9,16 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Form\Admin\Client\CategoryQuantityType;
+use App\Form\Admin\Client\CategoryQuantityType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Client\DataTransformer\ClientToIdTransformer;
-use Form\Admin\Venue\DataTransformer\VenueToIdTransformer;
-use Form\Admin\Schedule\Type\TrailerType;
-use Form\Admin\Client\Type\ContractType;
-use Form\Common\Type\PersonType;
+use App\Form\Admin\Client\DataTransformer\ClientToIdTransformer;
+use App\Form\Admin\Venue\DataTransformer\VenueToIdTransformer;
+use App\Form\Admin\Schedule\Type\TrailerType;
+use App\Form\Admin\Client\Type\ContractType;
+use App\Form\Common\Type\PersonType;
 
 class EventType extends AbstractType
 {
@@ -159,7 +159,7 @@ class EventType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Schedule\Event'
+            'data_class' => 'App\Entity\Schedule\Event'
         ) );
     }
 

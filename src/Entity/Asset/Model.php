@@ -20,8 +20,8 @@ use App\Entity\Traits\History;
  * Model
  *
  * @ORM\Table(name="model")
- * @ORM\Entity(repositoryClass="Repository\ModelRepository")
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\ModelLog")
+ * @ORM\Entity(repositoryClass="App\Repository\ModelRepository")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\ModelLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity(
  *     fields={"brand", "name"},

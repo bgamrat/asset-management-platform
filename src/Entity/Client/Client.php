@@ -18,7 +18,7 @@ use App\Entity\Traits\Versioned\Name;
  * Client
  *
  * @ORM\Table(name="client")
- * @ORM\Entity(repositoryClass="Repository\ClientRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
  * @Gedmo\Loggable
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
@@ -41,7 +41,7 @@ class Client
      */
     private $id;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity\Common\Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="client_contact",
      *      joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")}
@@ -50,7 +50,7 @@ class Client
     private $contacts = null;
     /**
      * @var ArrayCollection $contracts
-     * @ORM\ManyToMany(targetEntity="Entity\Client\Contract", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Client\Contract", cascade={"persist"})
      * @ORM\JoinTable(name="client_contract",
      *      joinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contract_id", referencedColumnName="id", onDelete="CASCADE", unique=true, nullable=false)}

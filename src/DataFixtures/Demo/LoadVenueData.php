@@ -17,7 +17,7 @@ class LoadVenueData extends AbstractFixture implements OrderedFixtureInterface
         $td = new Venue();
         $td->setName( 'TD Garden' );
         $address = new Address();
-        $address->setType( $manager->getRepository( 'Entity\Common\AddressType' )->findOneByType( 'venue' ) );
+        $address->setType( $manager->getRepository( 'App\Entity\Common\AddressType' )->findOneByType( 'venue' ) );
         $address->setStreet1( '100 Legends Way' );
         $address->setCity( 'Boston' );
         $address->setStateProvince( 'MA' );
@@ -28,9 +28,9 @@ class LoadVenueData extends AbstractFixture implements OrderedFixtureInterface
         $contact = new Person();
         $contact->setFirstname( 'Cerulean' );
         $contact->setLastname( 'Blue' );
-        $contact->setType( $manager->getRepository( 'Entity\Common\PersonType' )->findOneByType( 'representative' ) );
+        $contact->setType( $manager->getRepository( 'App\Entity\Common\PersonType' )->findOneByType( 'representative' ) );
         $address = new Address();
-        $address->setType( $manager->getRepository( 'Entity\Common\AddressType' )->findOneByType( 'office' ) );
+        $address->setType( $manager->getRepository( 'App\Entity\Common\AddressType' )->findOneByType( 'office' ) );
         $address->setStreet1( '100 Legends Way' );
         $address->setCity( 'Boston' );
         $address->setStateProvince( 'MA' );

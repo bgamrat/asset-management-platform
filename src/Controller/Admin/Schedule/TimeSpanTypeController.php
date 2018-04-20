@@ -3,7 +3,7 @@
 Namespace App\Controller\Admin\Schedule;
 
 use App\Entity\Schedule\TimeSpanType;
-use Form\Admin\Schedule\TimeSpanTypesType;
+use App\Form\Admin\Schedule\TimeSpanTypesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -30,7 +30,7 @@ class TimeSpanTypeController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $time_span_types = [];
-        $time_span_types['types'] = $em->getRepository( 'Entity\Schedule\TimeSpanType' )->findAll();
+        $time_span_types['types'] = $em->getRepository( 'App\Entity\Schedule\TimeSpanType' )->findAll();
 
         $time_span_typesForm = $this->createForm( TimeSpanTypesType::class, $time_span_types, [ 'action' => $this->generateUrl( 'app_admin_schedule_timespantype_save' )] );
 
@@ -49,7 +49,7 @@ class TimeSpanTypeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $time_span_types = [];
-        $time_span_types['types'] = $em->getRepository( 'Entity\Schedule\TimeSpanType' )->findAll();
+        $time_span_types['types'] = $em->getRepository( 'App\Entity\Schedule\TimeSpanType' )->findAll();
         $form = $this->createForm( TimeSpanTypesType::class, $time_span_types, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )

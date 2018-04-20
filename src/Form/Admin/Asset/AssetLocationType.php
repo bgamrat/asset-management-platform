@@ -10,9 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Form\Admin\Asset\DataTransformer\LocationTypeToIdTransformer;
+use App\Form\Admin\Asset\DataTransformer\LocationTypeToIdTransformer;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\EventListener\LocationFieldSubscriber;
+use App\Form\Admin\EventListener\LocationFieldSubscriber;
 
 class AssetLocationType extends AbstractType
 {
@@ -31,12 +31,12 @@ class AssetLocationType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $defaultLocationType = $this->em->getRepository( 'Entity\Asset\LocationType' )->findOneBy( ['default' => true] );
+        $defaultLocationType = $this->em->getRepository( 'App\Entity\Asset\LocationType' )->findOneBy( ['default' => true] );
 
         $builder
                 ->add( 'id', HiddenType::class )
                 ->add( 'ctype', EntityType::class, [
-                    'class' => 'Entity\Asset\LocationType',
+                    'class' => 'App\Entity\Asset\LocationType',
                     'choice_label' => 'name',
                     'choice_attr' => function($val, $key, $index)
                     {
@@ -49,7 +49,7 @@ class AssetLocationType extends AbstractType
                             return ['data-type' => strtolower( $val->getName() )];
                         }
                     },
-                            'data' => $this->em->getReference( 'Entity\Asset\LocationType', $defaultLocationType->getId() ),
+                            'data' => $this->em->getReference( 'App\Entity\Asset\LocationType', $defaultLocationType->getId() ),
                             'multiple' => false,
                             'expanded' => true,
                             'required' => true,
@@ -75,7 +75,7 @@ class AssetLocationType extends AbstractType
             public function configureOptions( OptionsResolver $resolver )
             {
                 $resolver->setDefaults( ['label' => false,
-                    'data_class' => 'Entity\Asset\Location',
+                    'data_class' => 'App\Entity\Asset\Location',
                     'allow_extra_fields' => true
                 ] );
             }

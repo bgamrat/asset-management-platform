@@ -2,7 +2,7 @@
 
 Namespace App\Form\Admin\Schedule;
 
-use Form\Admin\Schedule\EventRoleTypeType;
+use App\Form\Admin\Schedule\EventRoleTypeType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;

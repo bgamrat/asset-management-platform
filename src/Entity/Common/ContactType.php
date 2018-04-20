@@ -14,7 +14,7 @@ use App\Entity\Traits\Id;
  * Contact Type
  *
  * @ORM\Table(name="contact_type")
- * @ORM\Entity(repositoryClass="Repository\ContactTypeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ContactTypeRepository")
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  */

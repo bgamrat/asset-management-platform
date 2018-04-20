@@ -4,7 +4,7 @@ Namespace App\Controller\Api\Admin\Venue;
 
 use App\Entity\Venue\Venue;
 use Util\DStore;
-use Form\Admin\Venue\VenueType;
+use App\Form\Admin\Venue\VenueType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,7 +33,7 @@ class VenuesController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['v'] )
-                ->from( 'Entity\Venue\Venue', 'v' )
+                ->from( 'App\Entity\Venue\Venue', 'v' )
                 ->orderBy( 'v.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -92,11 +92,11 @@ class VenuesController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $venue = $this->getDoctrine()
-                        ->getRepository( 'Entity\Venue\Venue' )->find( $id );
+                        ->getRepository( 'App\Entity\Venue\Venue' )->find( $id );
         if( $venue !== null )
         {
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\Venue\VenueLog', $id );
+            $logUtil->getLog( 'App\Entity\Venue\VenueLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdatedAt() );
@@ -135,7 +135,7 @@ class VenuesController extends FOSRestController
         }
         else
         {
-            $venue = $em->getRepository( 'Entity\Venue\Venue' )->find( $id );
+            $venue = $em->getRepository( 'App\Entity\Venue\Venue' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdatedAt() ) === false )
             {
@@ -180,7 +180,7 @@ class VenuesController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
-                ->getRepository( 'Entity\Venue\Venue' );
+                ->getRepository( 'App\Entity\Venue\Venue' );
         $venue = $repository->find( $id );
         if( $venue !== null )
         {
@@ -208,7 +208,7 @@ class VenuesController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $venue = $em->getRepository( 'Entity\Venue\Venue' )->find( $id );
+        $venue = $em->getRepository( 'App\Entity\Venue\Venue' )->find( $id );
         if( $venue !== null )
         {
             $em->remove( $venue );

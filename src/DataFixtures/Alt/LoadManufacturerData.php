@@ -20,7 +20,7 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
     public function load( ObjectManager $manager )
     {
 
-        $categories = $manager->getRepository( 'Entity\Asset\Category' )->findAll();
+        $categories = $manager->getRepository( 'App\Entity\Asset\Category' )->findAll();
         if( empty( $categories ) )
         {
             throw CommonException( "There are no category types defined (load them before running this)" );
@@ -33,13 +33,13 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $contact = new Person();
         $contact->setFirstname( 'Carmen' );
         $contact->setLastname( 'Red' );
-        $contact->setType( $manager->getRepository( 'Entity\Common\PersonType' )->findOneByType( 'representative' ) );
+        $contact->setType( $manager->getRepository( 'App\Entity\Common\PersonType' )->findOneByType( 'representative' ) );
         $email = new Email();
         $email->setEmail( 'carmen@acme.example.com' );
-        $email->setType( $manager->getRepository( 'Entity\Common\EmailType' )->findOneByType( 'office' ) );
+        $email->setType( $manager->getRepository( 'App\Entity\Common\EmailType' )->findOneByType( 'office' ) );
         $contact->addEmail( $email );
         $address = new Address();
-        $address->setType( $manager->getRepository( 'Entity\Common\AddressType' )->findOneByType( 'office' ) );
+        $address->setType( $manager->getRepository( 'App\Entity\Common\AddressType' )->findOneByType( 'office' ) );
         $address->setStreet1( '200 Marginal Way' );
         $address->setCity( 'Portland' );
         $address->setStateProvince( 'ME' );
@@ -52,13 +52,13 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $contact = new Person();
         $contact->setFirstname( 'Azure' );
         $contact->setLastname( 'Blue' );
-        $contact->setType( $manager->getRepository( 'Entity\Common\PersonType' )->findOneByType( 'sales' ) );
+        $contact->setType( $manager->getRepository( 'App\Entity\Common\PersonType' )->findOneByType( 'sales' ) );
         $email = new Email();
         $email->setEmail( 'azure@acme.example.com' );
-        $email->setType( $manager->getRepository( 'Entity\Common\EmailType' )->findOneByType( 'office' ) );
+        $email->setType( $manager->getRepository( 'App\Entity\Common\EmailType' )->findOneByType( 'office' ) );
         $contact->addEmail( $email );
         $address = new Address();
-        $address->setType( $manager->getRepository( 'Entity\Common\AddressType' )->findOneByType( 'office' ) );
+        $address->setType( $manager->getRepository( 'App\Entity\Common\AddressType' )->findOneByType( 'office' ) );
         $address->setStreet1( '300 Bayview Drive' );
         $address->setCity( 'San Francisco' );
         $address->setStateProvince( 'CA' );
@@ -193,7 +193,7 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $boxesWithWheels->addBrand( $boxes );
 
         $box = new Model();
-        $box->setCategory( $manager->getRepository( 'Entity\Asset\Category' )->findOneByName( 'trailer' ) );
+        $box->setCategory( $manager->getRepository( 'App\Entity\Asset\Category' )->findOneByName( 'trailer' ) );
         $box->setName( 'Box' );
         $box->setContainer( false );
         $box->setCarnetValue( 4400000 );
@@ -202,7 +202,7 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $boxes->addModel( $box );
 
         $box = new Model();
-        $box->setCategory( $manager->getRepository( 'Entity\Asset\Category' )->findOneByName( 'trailer' ) );
+        $box->setCategory( $manager->getRepository( 'App\Entity\Asset\Category' )->findOneByName( 'trailer' ) );
         $box->setName( 'Main-Box' );
         $box->setContainer( false );
         $box->setCarnetValue( 7500000 );

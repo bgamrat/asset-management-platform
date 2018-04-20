@@ -3,7 +3,7 @@
 Namespace App\Repository;
 
 /**
- * ClientRepository
+ * ClientApp\Repository
  */
 class ClientRepository extends \Doctrine\ORM\EntityRepository
 {

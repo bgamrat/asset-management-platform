@@ -3,7 +3,7 @@
 Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Asset\IssueType;
-use Form\Admin\Asset\IssueTypesType;
+use App\Form\Admin\Asset\IssueTypesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,7 +29,7 @@ class IssueTypeController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $issueTypes = [];
-        $issueTypes['types'] = $em->getRepository( 'Entity\Asset\IssueType' )->findAll();
+        $issueTypes['types'] = $em->getRepository( 'App\Entity\Asset\IssueType' )->findAll();
         $issueTypesForm = $this->createForm( IssueTypesType::class, $issueTypes, [ 'action' => $this->generateUrl( 'app_admin_asset_issuetype_save' )] );
         return $this->render( 'admin/asset/issue-types.html.twig', array(
                     'issue_types_form' => $issueTypesForm->createView())
@@ -46,7 +46,7 @@ class IssueTypeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $issueTypes = [];
-        $issueTypes['types'] = $em->getRepository( 'Entity\Asset\IssueType' )->findAll();
+        $issueTypes['types'] = $em->getRepository( 'App\Entity\Asset\IssueType' )->findAll();
         $form = $this->createForm( IssueTypesType::class, $issueTypes, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )

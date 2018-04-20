@@ -3,7 +3,7 @@
 Namespace App\Controller\Admin\Common;
 
 use App\Entity\Common\PersonType;
-use Form\Admin\Common\PersonTypesType;
+use App\Form\Admin\Common\PersonTypesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,7 +29,7 @@ class PersonTypeController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $personTypes = [];
-        $personTypes['types'] = $em->getRepository( 'Entity\Common\PersonType' )->findAll();
+        $personTypes['types'] = $em->getRepository( 'App\Entity\Common\PersonType' )->findAll();
         $personTypesForm = $this->createForm( PersonTypesType::class, $personTypes, 
                 [ 'action' => $this->generateUrl( 'app_admin_common_persontype_save' )] );
         return $this->render( 'admin/common/person-types.html.twig', array(
@@ -47,7 +47,7 @@ class PersonTypeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $personTypes = [];
-        $personTypes['types'] = $em->getRepository( 'Entity\Common\PersonType' )->findAll();
+        $personTypes['types'] = $em->getRepository( 'App\Entity\Common\PersonType' )->findAll();
         $ids = [];
         foreach ($personTypes['types'] as $pt) {
             $ids[$pt->getId()] = $pt;

@@ -16,7 +16,7 @@ use App\Entity\Traits\Id;
  * IssueNote
  *
  * @ORM\Table(name="issue_note")
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\IssueLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\IssueLog")
  * @ORM\Entity()
  * 
  */

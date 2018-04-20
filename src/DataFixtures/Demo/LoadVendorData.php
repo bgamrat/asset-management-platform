@@ -21,9 +21,9 @@ class LoadVendorData extends AbstractFixture implements OrderedFixtureInterface
         $contact = new Person();
         $contact->setFirstname( 'Lavendar' );
         $contact->setLastname( 'Violet' );
-        $contact->setType( $manager->getRepository( 'Entity\Common\PersonType' )->findOneByType( 'representative' ) );
+        $contact->setType( $manager->getRepository( 'App\Entity\Common\PersonType' )->findOneByType( 'representative' ) );
         $address = new Address();
-        $address->setType( $manager->getRepository( 'Entity\Common\AddressType' )->findOneByType( 'office' ) );
+        $address->setType( $manager->getRepository( 'App\Entity\Common\AddressType' )->findOneByType( 'office' ) );
         $address->setStreet1( '100 Commonwealth Ave' );
         $address->setCity( 'Boston' );
         $address->setStateProvince( 'MA' );

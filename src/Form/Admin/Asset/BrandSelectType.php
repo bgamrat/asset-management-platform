@@ -22,7 +22,7 @@ class BrandSelectType extends AbstractType
     {
         $builder
                 ->add( 'brand', EntityType::class, [
-                    'class' => 'Entity\Asset\Brand',
+                    'class' => 'App\Entity\Asset\Brand',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
@@ -40,7 +40,7 @@ class BrandSelectType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Brand'
+            'data_class' => 'App\Entity\Asset\Brand'
         ) );
     }
 

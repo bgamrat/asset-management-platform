@@ -36,7 +36,7 @@ class BarcodeType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Barcode'
+            'data_class' => 'App\Entity\Asset\Barcode'
         ) );
     }
 

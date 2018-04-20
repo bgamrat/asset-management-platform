@@ -19,7 +19,7 @@ use App\Entity\Traits\Versioned\Quantity;
  *
  * @ORM\Entity()
  * @ORM\Table(name="event_rental")
- * @Gedmo\Loggable(logEntryClass="Entity\Schedule\EventLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Schedule\EventLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class EventRental
@@ -43,7 +43,7 @@ class EventRental
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Asset\Category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Asset\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
@@ -52,7 +52,7 @@ class EventRental
      * @var int
      * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Entity\Asset\Vendor")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Asset\Vendor")
      * @ORM\JoinColumn(name="vendor_id", referencedColumnName="id")
      */
     protected $vendor = null;

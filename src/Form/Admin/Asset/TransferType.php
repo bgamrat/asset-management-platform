@@ -14,9 +14,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use Form\Common\DataTransformer\PersonToIdTransformer;
-use Form\Admin\Common\BillToType;
-use Form\Admin\Asset\DataTransformer\CarrierServiceToIdTransformer;
+use App\Form\Common\DataTransformer\PersonToIdTransformer;
+use App\Form\Admin\Common\BillToType;
+use App\Form\Admin\Asset\DataTransformer\CarrierServiceToIdTransformer;
 
 class TransferType extends AbstractType
 {
@@ -34,7 +34,7 @@ class TransferType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $defaultStatus = $this->em->getRepository( 'Entity\Asset\TransferStatus' )->findOneBy( ['default' => true] );
+        $defaultStatus = $this->em->getRepository( 'App\Entity\Asset\TransferStatus' )->findOneBy( ['default' => true] );
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'created_at', DateTimeType::class, [
@@ -52,7 +52,7 @@ class TransferType extends AbstractType
                     'disabled' => true
                 ] )
                 ->add( 'status', EntityType::class, [
-                    'class' => 'Entity\Asset\TransferStatus',
+                    'class' => 'App\Entity\Asset\TransferStatus',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
@@ -62,7 +62,7 @@ class TransferType extends AbstractType
                     {
                         return $status->isInUse();
                     },
-                    'data' => $defaultStatus !== null ? $this->em->getReference( 'Entity\Asset\TransferStatus', $defaultStatus->getId() ) : '',
+                    'data' => $defaultStatus !== null ? $this->em->getReference( 'App\Entity\Asset\TransferStatus', $defaultStatus->getId() ) : '',
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'cost', MoneyType::class, [
@@ -79,7 +79,7 @@ class TransferType extends AbstractType
                 ->add( 'destination_location_text', HiddenType::class, [
                     'property_path' => 'destinationLocationText'] )
                 ->add( 'carrier', EntityType::class, [
-                    'class' => 'Entity\Asset\Carrier',
+                    'class' => 'App\Entity\Asset\Carrier',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
@@ -132,7 +132,7 @@ class TransferType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Transfer'
+            'data_class' => 'App\Entity\Asset\Transfer'
         ) );
     }
 

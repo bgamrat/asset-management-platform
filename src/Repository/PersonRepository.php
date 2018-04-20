@@ -7,7 +7,7 @@ use \Entity\Common\Contact;
 use \Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
- * PersonRepository
+ * PersonApp\Repository
  */
 class PersonRepository extends \Doctrine\ORM\EntityRepository
 {
@@ -22,7 +22,7 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
         parent::__construct( $em, $class );
         $queryBuilder = $em->createQueryBuilder();
         $queryBuilder->select( 'ct' )
-                ->from( 'Entity\Common\ContactType', 'ct' );
+                ->from( 'App\Entity\Common\ContactType', 'ct' );
         $contactTypeData = $queryBuilder->getQuery()->getResult();
         foreach( $contactTypeData as $ct )
         {
@@ -49,7 +49,7 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
 
         $em = $this->getEntityManager();
         $queryBuilder = $em->createQueryBuilder()->select( [ 'c'] )
-                ->from( 'Entity\Common\Contact', 'c' )
+                ->from( 'App\Entity\Common\Contact', 'c' )
                 ->join( 'c.type', 'e' )
                 ->where( "LOWER(c.name) LIKE :name AND e.entity IN (:types)" )
                 ->setParameter( 'name', $contactName )
@@ -72,19 +72,19 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
             switch( $e )
             {
                 case 'client':
-                    $queryBuilder->from( 'Entity\Client\Client', 'c' )
+                    $queryBuilder->from( 'App\Entity\Client\Client', 'c' )
                             ->addSelect( ['c.id AS client_id', 'c.name AS client_name', "'client' AS entity"] )
                             ->leftJoin( 'c.contacts', 'p' )
                             ->orWhere( "LOWER(c.name) LIKE :name" );
                     break;
                 case 'manufacturer':
-                    $queryBuilder->from( 'Entity\Asset\Manufacturer', 'm' )
+                    $queryBuilder->from( 'App\Entity\Asset\Manufacturer', 'm' )
                             ->addSelect( ['m.id AS manufacturer_id', 'm.name AS manufacturer_name', "'manufacturer' AS entity"] )
                             ->leftJoin( 'm.contacts', 'p' )
                             ->orWhere( "LOWER(m.name) LIKE :name" );
                     break;
                 case 'venue':
-                    $queryBuilder->from( 'Entity\Venue\Venue', 'v' )
+                    $queryBuilder->from( 'App\Entity\Venue\Venue', 'v' )
                             ->addSelect( ['v.id AS venue_id', 'v.name AS venue_name', "'venue' AS entity"] )
                             ->leftJoin( 'v.contacts', 'p' )
                             ->orWhere( "LOWER(v.name) LIKE :name" );
@@ -105,7 +105,7 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
 
             $queryBuilder = $em->createQueryBuilder();
             $queryBuilder->select( 'p' )
-                    ->from( 'Entity\Common\Person', 'p' )
+                    ->from( 'App\Entity\Common\Person', 'p' )
                     ->where( $queryBuilder->expr()->in( 'p.id', '?1'));
             $queryBuilder->setParameter(1,array_keys( $contactIds ) ) ;
             $people = $queryBuilder->getQuery()->getResult();

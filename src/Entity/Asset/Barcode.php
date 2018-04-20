@@ -16,7 +16,7 @@ use App\Entity\Traits\Id;
  *
  * @ORM\Table(name="barcode")
  * @ORM\Entity()
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\BarcodeLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\BarcodeLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("barcode")
  */

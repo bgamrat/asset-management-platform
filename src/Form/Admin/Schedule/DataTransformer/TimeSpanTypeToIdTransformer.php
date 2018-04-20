@@ -45,7 +45,7 @@ class TimeSpanTypeToIdTransformer implements DataTransformerInterface
         }
 
         $timeSpanType = $this->em
-            ->getRepository('Entity\Schedule\TimeSpanType')
+            ->getRepository('App\Entity\Schedule\TimeSpanType')
             ->find($timeSpanTypeId)
         ;
 

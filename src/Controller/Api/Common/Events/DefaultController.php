@@ -28,7 +28,7 @@ class DefaultController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['e.id', "e.name"] )
-                    ->from( 'Entity\Schedule\Event', 'e' )
+                    ->from( 'App\Entity\Schedule\Event', 'e' )
                     ->leftJoin( 'e.client', 'cl' )
                     ->leftJoin( 'e.venue', 'v' )
                     ->where( "LOWER(e.name) LIKE :event_name" )
@@ -72,7 +72,7 @@ class DefaultController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $columns = ['t.id', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Transfer', 't' )
+                ->from( 'App\Entity\Asset\Transfer', 't' )
                 ->join( 't.status', 's' )
                 ->leftJoin( 't.bill_tos', 'tb' )
                 ->where( 'tb.event = :event_id' )

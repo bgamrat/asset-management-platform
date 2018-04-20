@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Form\Admin\Schedule\EventType;
-use Form\Common\PersonType;
+use App\Form\Admin\Schedule\EventType;
+use App\Form\Common\PersonType;
 
 /**
  * Description of EventController

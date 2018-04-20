@@ -55,7 +55,7 @@ class BarcodeIdToAssetTransformer implements DataTransformerInterface
             return;
         }
 
-        $asset = $this->em->getRepository( 'Entity\Asset\Asset' )->find( $assetId );
+        $asset = $this->em->getRepository( 'App\Entity\Asset\Asset' )->find( $assetId );
 
         if( null === $asset )
         {

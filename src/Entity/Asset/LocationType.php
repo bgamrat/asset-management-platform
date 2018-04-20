@@ -16,7 +16,7 @@ use App\Entity\Traits\XDefault;
  * Location
  *
  * @ORM\Table(name="location_type")
- * @ORM\Entity(repositoryClass="Repository\LocationTypeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\LocationTypeRepository")
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  */

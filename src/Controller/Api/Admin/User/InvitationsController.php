@@ -4,7 +4,7 @@ Namespace App\Controller\Api\Admin\User;
 
 use App\Entity\Invitation;
 use Util\DStore;
-use Form\Admin\User\InvitationType;
+use App\Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

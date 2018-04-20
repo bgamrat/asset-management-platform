@@ -26,7 +26,7 @@ class DefaultController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['er.id', "er.name"] )
-                    ->from( 'Entity\Schedule\EventRoleType', 'er' )
+                    ->from( 'App\Entity\Schedule\EventRoleType', 'er' )
                     ->where( 'LOWER(er.name) LIKE :event_role_name' )
                     ->orderBy( 'er.name')
                     ->setParameter( 'event_role_name', strtolower( $name ) );

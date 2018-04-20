@@ -12,8 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Form\Common\Type\PersonType;
-use Form\Admin\Client\ContractType;
+use App\Form\Common\Type\PersonType;
+use App\Form\Admin\Client\ContractType;
 use Doctrine\ORM\EntityManager;
 
 class ClientType extends AbstractType
@@ -64,7 +64,7 @@ class ClientType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Client\Client'
+            'data_class' => 'App\Entity\Client\Client'
         ) );
     }
 

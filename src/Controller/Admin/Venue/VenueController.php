@@ -2,8 +2,8 @@
 
 Namespace App\Controller\Admin\Venue;
 
-use Form\Admin\Venue\VenueType;
-use Form\Admin\Venue\ContractType;
+use App\Form\Admin\Venue\VenueType;
+use App\Form\Admin\Venue\ContractType;
 
 ;
 
@@ -48,9 +48,9 @@ class VenueController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $em = $this->getDoctrine()->getManager();
-        $venue = $em->getRepository( 'Entity\Venue\Venue' )->find( $id );
-        $locationType = $em->getRepository( 'Entity\Asset\LocationType' )->findBy( ['name' => 'Venue'] )[0];
-        $venueEquipment = $em->getRepository( 'Entity\Asset\Asset' )->findByLocation( $locationType->getId(), $id );
+        $venue = $em->getRepository( 'App\Entity\Venue\Venue' )->find( $id );
+        $locationType = $em->getRepository( 'App\Entity\Asset\LocationType' )->findBy( ['name' => 'Venue'] )[0];
+        $venueEquipment = $em->getRepository( 'App\Entity\Asset\Asset' )->findByLocation( $locationType->getId(), $id );
 
         return $this->render( 'admin/venue/venue-equipment.html.twig', array(
                     'venue' => $venue,

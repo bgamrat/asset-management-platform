@@ -1,6 +1,6 @@
 security:
     encoders:
-        Entity\LegacyUser:
+        App\Entity\LegacyUser:
             algorithm: md5
             encode_as_base64: false
             iterations: 0

@@ -31,7 +31,7 @@ class DefaultController extends FOSRestController
                 $select[] = 'm.custom_attributes';
             }
             $queryBuilder = $em->createQueryBuilder()->select( $select )
-                    ->from( 'Entity\Asset\Model', 'm' )
+                    ->from( 'App\Entity\Asset\Model', 'm' )
                     ->innerJoin( 'm.brand', 'b' )
                     ->where( "LOWER(CONCAT(CONCAT(b.name, ' '), m.name)) LIKE :brand_model" )
                     ->orderBy( 'name' )

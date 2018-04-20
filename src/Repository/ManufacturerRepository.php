@@ -3,7 +3,7 @@
 Namespace App\Repository;
 
 /**
- * ManufacturerRepository
+ * ManufacturerApp\Repository
  */
 class ManufacturerRepository extends \Doctrine\ORM\EntityRepository
 {
@@ -22,7 +22,7 @@ class ManufacturerRepository extends \Doctrine\ORM\EntityRepository
     public function findByContacts( $contactIds )
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder()->select( ['m.id', 'm.name', 'c.id AS contact_id'] )
-                ->from( 'Entity\Asset\Manufacturer', 'm' )
+                ->from( 'App\Entity\Asset\Manufacturer', 'm' )
                 ->leftJoin( 'm.contacts', 'c' );
         $queryBuilder->where( $queryBuilder->expr()->in( 'c.id', ':ids' ) )
                 ->setParameter( 'ids', $contactIds );

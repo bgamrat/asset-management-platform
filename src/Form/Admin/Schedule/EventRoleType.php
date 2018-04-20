@@ -8,8 +8,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Doctrine\ORM\EntityRepository;
-use Form\Common\DataTransformer\PersonToIdTransformer;
+use Doctrine\ORM\EntityApp\Repository;
+use App\Form\Common\DataTransformer\PersonToIdTransformer;
 
 class EventRoleType extends AbstractType
 {
@@ -32,8 +32,8 @@ class EventRoleType extends AbstractType
                     'mapped' => false
                 ] )
                 ->add( 'role', EntityType::class, [
-                    'class' => 'Entity\Schedule\EventRoleType',
-                    'query_builder' => function (EntityRepository $er)
+                    'class' => 'App\Entity\Schedule\EventRoleType',
+                    'query_builder' => function (EntityApp\Repository $er)
                     {
                         return $er->createQueryBuilder( 'r' )
                                 ->where( 'r.in_use = true' )
@@ -71,7 +71,7 @@ class EventRoleType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Schedule\EventRole'
+            'data_class' => 'App\Entity\Schedule\EventRole'
         ) );
     }
 

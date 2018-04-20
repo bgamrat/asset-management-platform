@@ -23,8 +23,8 @@ use App\Entity\Traits\History;
  * Asset
  *
  * @ORM\Table(name="asset")
- * @ORM\Entity(repositoryClass="Repository\AssetRepository")
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\AssetLog")
+ * @ORM\Entity(repositoryClass="App\Repository\AssetRepository")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\AssetLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 
  */

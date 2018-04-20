@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Client\DataTransformer\CategoryToIdTransformer;
+use App\Form\Admin\Client\DataTransformer\CategoryToIdTransformer;
 
 class CategoryQuantityType extends AbstractType
 {
@@ -50,7 +50,7 @@ class CategoryQuantityType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Common\CategoryQuantity'
+            'data_class' => 'App\Entity\Common\CategoryQuantity'
         ) );
     }
 

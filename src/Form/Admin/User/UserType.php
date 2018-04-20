@@ -2,7 +2,7 @@
 
 Namespace App\Form\Admin\User;
 
-use Form\Common\DataTransformer\PersonToIdTransformer;
+use App\Form\Common\DataTransformer\PersonToIdTransformer;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -82,7 +82,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults( array(
             'groups' => [],
-            'data_class' => 'Entity\User'
+            'data_class' => 'App\Entity\User'
         ) );
     }
 

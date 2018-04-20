@@ -49,7 +49,7 @@ class LocationFieldSubscriber implements EventSubscriberInterface
             if( $location->isAddress() )
             {
                 $addressId = $location->getAddressId();
-                $address = $this->em->getRepository( 'Entity\Common\Address' )->find( $addressId );
+                $address = $this->em->getRepository( 'App\Entity\Common\Address' )->find( $addressId );
                 $contactData = $this->em->getRepository( $class )->findOneByAddress( $address->getId() );
                 $data = $this->em->getReference( $class, $contactData->getId() );
             }
@@ -100,12 +100,12 @@ class LocationFieldSubscriber implements EventSubscriberInterface
                 {
                     $personId = $form->get( 'person_id' )->getData();
                     $contactData = new Contact();
-                    $contactType = $this->em->getRepository( 'Entity\Common\ContactType' )->findOneByEntity( strtolower( $locationType->getName() ) );
+                    $contactType = $this->em->getRepository( 'App\Entity\Common\ContactType' )->findOneByEntity( strtolower( $locationType->getName() ) );
                     $contactData->setType( $contactType );
-                    $person = $this->em->getRepository( 'Entity\Common\Person' )->find( $personId );
+                    $person = $this->em->getRepository( 'App\Entity\Common\Person' )->find( $personId );
                     $contactData->setPerson( $person );
                     $contactData->setName( $person->getFullName() );
-                    $address = $this->em->getRepository( 'Entity\Common\Address' )->find( $addressId );
+                    $address = $this->em->getRepository( 'App\Entity\Common\Address' )->find( $addressId );
                     $contactData->setAddress( $address );
                     $contactData->setEntity( $form->get( 'entity' )->getData() );
                     $this->em->persist( $contactData );

@@ -20,7 +20,7 @@ use App\Entity\Traits\History;
  *
  * @ORM\Table(name="issue")
  * @ORM\Entity()
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\IssueLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\IssueLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Issue
@@ -81,7 +81,7 @@ class Issue
     /**
      * @var ArrayCollection $items
      * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\ManyToMany(targetEntity="Entity\Asset\IssueItem", cascade={"persist","remove"}, orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Asset\IssueItem", cascade={"persist","remove"}, orphanRemoval=true)
      * @ORM\JoinTable(name="issue_item_item",
      *      joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id", unique=false, nullable=true)}
@@ -90,7 +90,7 @@ class Issue
     protected $items;
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Entity\Common\Person")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Common\Person")
      * @ORM\JoinColumn(name="assigned_to", referencedColumnName="id")
      */
     private $assignedTo = null;
@@ -107,7 +107,7 @@ class Issue
     private $billable = true;
     /**
      * @var ArrayCollection $bill_tos
-     * @ORM\ManyToMany(targetEntity="Entity\Common\BillTo", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\BillTo", cascade={"persist"}, orphanRemoval=true)
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\JoinTable(name="issue_bill_to",
      *      joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},

@@ -22,7 +22,7 @@ class DefaultController extends FOSRestController
         if( !empty( $name ) )
         {
             $em = $this->getDoctrine()->getManager();
-            $data = $em->getRepository( 'Entity\Client\Contract' )->findByNameLike( $name );
+            $data = $em->getRepository( 'App\Entity\Client\Contract' )->findByNameLike( $name );
             foreach ($data as $c) {
                 $c->setName($c->getClient()->getName().' '.$c->getName());
             }

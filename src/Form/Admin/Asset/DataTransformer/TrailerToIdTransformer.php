@@ -49,7 +49,7 @@ class TrailerToIdTransformer implements DataTransformerInterface
         }
 
         $trailer = $this->em
-            ->getRepository('Entity\Asset\Trailer')
+            ->getRepository('App\Entity\Asset\Trailer')
             ->findOneByName($trailerName)
         ;
 

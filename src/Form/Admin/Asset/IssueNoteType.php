@@ -39,7 +39,7 @@ class IssueNoteType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\IssueNote'
+            'data_class' => 'App\Entity\Asset\IssueNote'
         ) );
     }
 

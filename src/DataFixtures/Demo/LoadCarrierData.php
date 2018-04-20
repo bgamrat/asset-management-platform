@@ -18,10 +18,10 @@ class LoadCarrierData implements FixtureInterface
         $contact = new Person();
         $contact->setFirstname( 'Ebony' );
         $contact->setLastname( 'Black' );
-        $contact->setType( $manager->getRepository( 'Entity\Common\PersonType' )->findOneByType( 'representative' ) );
+        $contact->setType( $manager->getRepository( 'App\Entity\Common\PersonType' )->findOneByType( 'representative' ) );
         $phone = new Phone();
         $phone->setPhone( '1(800)-555-4377' );
-        $phone->setType( $manager->getRepository( 'Entity\Common\PhoneType' )->findOneByType( 'office' ) );
+        $phone->setType( $manager->getRepository( 'App\Entity\Common\PhoneType' )->findOneByType( 'office' ) );
         $manager->persist( $phone );
         $contact->addPhone( $phone );
         $manager->persist( $contact );
@@ -45,10 +45,10 @@ class LoadCarrierData implements FixtureInterface
         $contact = new Person();
         $contact->setFirstname( 'Snow' );
         $contact->setLastname( 'White' );
-        $contact->setType( $manager->getRepository( 'Entity\Common\PersonType' )->findOneByType( 'representative' ) );
+        $contact->setType( $manager->getRepository( 'App\Entity\Common\PersonType' )->findOneByType( 'representative' ) );
         $phone = new Phone();
         $phone->setPhone( '1(800)-555-9861' );
-        $phone->setType( $manager->getRepository( 'Entity\Common\PhoneType' )->findOneByType( 'office' ) );
+        $phone->setType( $manager->getRepository( 'App\Entity\Common\PhoneType' )->findOneByType( 'office' ) );
         $manager->persist( $phone );
         $contact->addPhone( $phone );
         $manager->persist( $contact );

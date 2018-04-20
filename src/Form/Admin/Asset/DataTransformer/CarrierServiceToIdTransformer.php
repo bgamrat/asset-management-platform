@@ -49,7 +49,7 @@ class CarrierServiceToIdTransformer implements DataTransformerInterface
         }
 
         $carrierService = $this->em
-            ->getRepository('Entity\Asset\carrierService')
+            ->getRepository('App\Entity\Asset\carrierService')
             ->find($carrierServiceId)
         ;
 

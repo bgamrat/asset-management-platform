@@ -30,7 +30,7 @@ use App\Entity\Traits\History;
  *
  * @ORM\Table(name="event")
  * @ORM\Entity()
- * @Gedmo\Loggable(logEntryClass="Entity\Schedule\EventLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Schedule\EventLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Event
@@ -88,21 +88,21 @@ class Event
      */
     private $canceled = false;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Client\Client")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Client\Client")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=true)
      * @Gedmo\Versioned
      */
     private $client;
     /**
      * @Assert\NotBlank()
-     * @ORM\ManyToOne(targetEntity="Entity\Venue\Venue")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Venue\Venue")
      * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
      * @Gedmo\Versioned
      */
     private $venue;
     /**
      * @Assert\NotBlank()
-     * @ORM\ManyToMany(targetEntity="Entity\Common\Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="event_contact",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")}
@@ -111,7 +111,7 @@ class Event
     private $contacts = null;
     /**
      * @var ArrayCollection $contracts
-     * @ORM\ManyToMany(targetEntity="Entity\Client\Contract", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Client\Contract", cascade={"persist"})
      * @ORM\JoinTable(name="event_contract",
      *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contract_id", referencedColumnName="id", onDelete="CASCADE", unique=true, nullable=false)}
@@ -120,7 +120,7 @@ class Event
     protected $contracts = null;
     /**
      * @var ArrayCollection $trailers
-     * @ORM\ManyToMany(targetEntity="Entity\Asset\Trailer", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Asset\Trailer", cascade={"persist"})
      * @ORM\JoinTable(name="event_trailer",
      *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="trailer_id", referencedColumnName="id", onDelete="CASCADE", unique=true, nullable=false)}
@@ -128,7 +128,7 @@ class Event
      */
     protected $trailers = null;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity\Schedule\TimeSpan", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Schedule\TimeSpan", cascade={"persist"})
      * @ORM\JoinTable(name="event_time_span",
      *      joinColumns={@ORM\JoinColumn(name="time_span_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", unique=true)}
@@ -136,7 +136,7 @@ class Event
      */
     private $time_spans = null;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity\Schedule\EventRole", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Schedule\EventRole", cascade={"persist"})
      * @ORM\JoinTable(name="event_event_role",
      *      joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", unique=true)}
@@ -144,7 +144,7 @@ class Event
      */
     private $roles = null;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity\Common\CategoryQuantity", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\CategoryQuantity", cascade={"persist"})
      * @ORM\JoinTable(name="event_category_quantity",
      *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")}
      *      )
@@ -153,7 +153,7 @@ class Event
     /**
      * @var ArrayCollection $rentals
      * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\ManyToMany(targetEntity="Entity\Schedule\EventRental", cascade={"persist","remove"}, orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Schedule\EventRental", cascade={"persist","remove"}, orphanRemoval=true)
      * @ORM\JoinTable(name="event_rentals",
      *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="rental_id", referencedColumnName="id", unique=false, nullable=true)}
@@ -163,7 +163,7 @@ class Event
     /**
      * @var ArrayCollection $clientEquipment
      * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\ManyToMany(targetEntity="Entity\Schedule\ClientEquipment", cascade={"persist","remove"}, orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\Schedule\ClientEquipment", cascade={"persist","remove"}, orphanRemoval=true)
      * @ORM\JoinTable(name="event_client_equipment",
      *      joinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="client_equipment_id", referencedColumnName="id", unique=false, nullable=true)}

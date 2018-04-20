@@ -21,12 +21,12 @@ class CalendarController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder()->select( ['e.id'] )
-                ->from( 'Entity\Schedule\Event', 'e' );
+                ->from( 'App\Entity\Schedule\Event', 'e' );
         $queryBuilder->where( $queryBuilder->expr()->lt( ':now', 'e.end' ) );
         $queryBuilder->setParameters( ['now' => date( 'Y/m/d' )] );
         $events = $queryBuilder->getQuery()->getResult();
         $ids = array_column($events,'id');
-        $events = $em->getRepository( 'Entity\Schedule\Event' )->findBy( ['id' => $ids] );
+        $events = $em->getRepository( 'App\Entity\Schedule\Event' )->findBy( ['id' => $ids] );
 
         return $this->render( 'user/calendar/index.html.twig', array(
                     'date' => $today,

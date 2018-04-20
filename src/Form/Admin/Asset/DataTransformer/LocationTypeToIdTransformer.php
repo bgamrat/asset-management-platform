@@ -44,7 +44,7 @@ class LocationTypeToIdTransformer implements DataTransformerInterface
             return;
         }
         $locationtype = $this->em
-            ->getRepository('Entity\Asset\LocationType')
+            ->getRepository('App\Entity\Asset\LocationType')
             ->find($locationtypeId)
         ;
 

@@ -52,7 +52,7 @@ class TrailerRelationshipsToIdsTransformer implements DataTransformerInterface
 
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder->select( 'm' )
-                ->from( 'Entity\Asset\Trailer', 'm' )
+                ->from( 'App\Entity\Asset\Trailer', 'm' )
                 ->where( $queryBuilder->expr()->in( 'm.id', ':trailerIds' ) )
                 ->setParameter( 'trailerIds', $trailerIds )
                 ->orderBy( 'm.name', 'ASC' );

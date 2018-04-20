@@ -4,7 +4,7 @@ Namespace App\Controller\Api\Admin\Client;
 
 use App\Entity\Client\Client;
 use Util\DStore;
-use Form\Admin\Client\ClientType;
+use App\Form\Admin\Client\ClientType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +32,7 @@ class ClientsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['c'] )
-                ->from( 'Entity\Client\Client', 'c' )
+                ->from( 'App\Entity\Client\Client', 'c' )
                 ->orderBy( 'c.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -90,7 +90,7 @@ class ClientsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $client = $this->getDoctrine()
-                        ->getRepository( 'Entity\Client\Client' )->find( $id );
+                        ->getRepository( 'App\Entity\Client\Client' )->find( $id );
         if( $client !== null )
         {
             $data = [
@@ -134,7 +134,7 @@ class ClientsController extends FOSRestController
         }
         else
         {
-            $client = $em->getRepository( 'Entity\Client\Client' )->find( $id );
+            $client = $em->getRepository( 'App\Entity\Client\Client' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'client' . $client->getId(), $client->getUpdatedAt() ) === false )
             {
@@ -179,7 +179,7 @@ class ClientsController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
-                ->getRepository( 'Entity\Client\Client' );
+                ->getRepository( 'App\Entity\Client\Client' );
         $client = $repository->find( $id );
         if( $client !== null )
         {
@@ -207,7 +207,7 @@ class ClientsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $client = $em->getRepository( 'Entity\Client\Client' )->find( $id );
+        $client = $em->getRepository( 'App\Entity\Client\Client' )->find( $id );
         if( $client !== null )
         {
             $em->remove( $client );

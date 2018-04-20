@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Schedule\DataTransformer\TimeSpanTypeToIdTransformer;
+use App\Form\Admin\Schedule\DataTransformer\TimeSpanTypeToIdTransformer;
 
 class TimeSpanType extends AbstractType
 {
@@ -56,7 +56,7 @@ class TimeSpanType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Schedule\TimeSpan'
+            'data_class' => 'App\Entity\Schedule\TimeSpan'
         ) );
     }
 

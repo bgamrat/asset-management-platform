@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Asset\AssetStatus;
-use Form\Admin\Common\TestType;
+use App\Form\Admin\Common\TestType;
 
 class DefaultController extends Controller
 {

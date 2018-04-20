@@ -3,7 +3,7 @@
 Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Asset\TransferStatus;
-use Form\Admin\Asset\TransferStatusesType;
+use App\Form\Admin\Asset\TransferStatusesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -30,7 +30,7 @@ class TransferStatusController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $statuses = [];
-        $statuses['statuses'] = $em->getRepository( 'Entity\Asset\TransferStatus' )->findAll();
+        $statuses['statuses'] = $em->getRepository( 'App\Entity\Asset\TransferStatus' )->findAll();
 
         $statusesForm = $this->createForm( TransferStatusesType::class, $statuses, [ 'action' => $this->generateUrl( 'app_admin_asset_transferstatus_save' )] );
 
@@ -49,7 +49,7 @@ class TransferStatusController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $statuses = [];
-        $statuses['statuses'] = $em->getRepository( 'Entity\Asset\TransferStatus' )->findAll();
+        $statuses['statuses'] = $em->getRepository( 'App\Entity\Asset\TransferStatus' )->findAll();
         $form = $this->createForm( TransferStatusesType::class, $statuses, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )

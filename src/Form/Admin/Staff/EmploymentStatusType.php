@@ -35,7 +35,7 @@ class EmploymentStatusType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'Entity\Staff\EmploymentStatus'
+            'data_class' => 'App\Entity\Staff\EmploymentStatus'
         ] );
     }
 

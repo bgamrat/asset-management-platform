@@ -4,8 +4,8 @@ Namespace App\Controller\Admin\Asset;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Form\Admin\Asset\ModelType;
-use Form\Admin\Asset\ManufacturerType;
+use App\Form\Admin\Asset\ModelType;
+use App\Form\Admin\Asset\ManufacturerType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;

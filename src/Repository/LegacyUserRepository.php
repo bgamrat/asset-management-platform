@@ -3,7 +3,7 @@ Namespace App\Repository;
 
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityApp\Repository;
 
 class LegacyUserRepository extends EntityRepository implements UserLoaderInterface
 {

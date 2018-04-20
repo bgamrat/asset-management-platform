@@ -26,7 +26,7 @@ use App\Entity\Staff\PersonEmploymentStatus;
  * Person
  *
  * @ORM\Table(name="person")
- * @ORM\Entity(repositoryClass="Repository\PersonRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  * @Gedmo\Loggable(logEntryClass="PersonLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("user")
@@ -144,18 +144,18 @@ class Person
      */
     private $addresses;
     /**
-     * @ORM\OneToOne(targetEntity="Entity\User", inversedBy="person", fetch="EXTRA_LAZY", cascade="remove")
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="person", fetch="EXTRA_LAZY", cascade="remove")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      * @Gedmo\Versioned
      */
     private $user = null;
     /**
-     * @ORM\OneToMany(targetEntity="Entity\Staff\PersonRole", mappedBy="person", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Staff\PersonRole", mappedBy="person", cascade={"persist"})
      * @ORM\OrderBy({"start" = "DESC"})
      */
     private $roles = null;
     /**
-     * @ORM\OneToMany(targetEntity="Entity\Staff\PersonEmploymentStatus", mappedBy="person", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Staff\PersonEmploymentStatus", mappedBy="person", cascade={"persist"})
      * @ORM\OrderBy({"start" = "DESC"})
      */
     private $employment_statuses = null;

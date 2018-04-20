@@ -22,8 +22,8 @@ use App\Entity\Traits\Versioned\Value;
  * Contract
  *
  * @ORM\Table(name="contract")
- * @ORM\Entity(repositoryClass="Repository\ContractRepository")
- * @Gedmo\Loggable(logEntryClass="Entity\Client\ContractLog")
+ * @ORM\Entity(repositoryClass="App\Repository\ContractRepository")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Client\ContractLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Contract
@@ -74,14 +74,14 @@ class Contract
      */
     private $availableTrailers;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity\Common\CategoryQuantity", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\CategoryQuantity", cascade={"persist"})
      * @ORM\JoinTable(name="contract_category_quantity_required",
      *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")}
      *      )
      */
     private $requiresCategoryQuantities;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity\Common\CategoryQuantity", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\CategoryQuantity", cascade={"persist"})
      * @ORM\JoinTable(name="contract_category_quantity_available",
      *      joinColumns={@ORM\JoinColumn(name="available_id", referencedColumnName="id")}
      *      )

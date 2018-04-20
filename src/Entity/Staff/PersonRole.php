@@ -16,7 +16,7 @@ use App\Entity\Traits\DateSpan;
  * PersonRole
  *
  * @ORM\Table(name="person_role")
- * @Gedmo\Loggable(logEntryClass="Entity\Common\PersonLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Common\PersonLog")
  * @ORM\Entity()
  *
  */
@@ -37,13 +37,13 @@ class PersonRole
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Common\Person", inversedBy="roles")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Common\Person", inversedBy="roles")
      * @ORM\JoinColumn(name="person", referencedColumnName="id" )
      * @ORM\OrderBy({"type" = "ASC"})
      */
     protected $person;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Staff\Role")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Staff\Role")
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */

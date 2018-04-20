@@ -46,7 +46,7 @@ class AddressToIdTransformer implements DataTransformerInterface
         }
 
         $address = $this->em
-            ->getRepository('Entity\Common\Address')
+            ->getRepository('App\Entity\Common\Address')
             ->find($addressId)
         ;
 

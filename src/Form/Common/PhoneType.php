@@ -8,7 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityApp\Repository;
 
 class PhoneType extends AbstractType
 {
@@ -23,7 +23,7 @@ class PhoneType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
-                    'class' => 'Entity\Common\PhoneType',
+                    'class' => 'App\Entity\Common\PhoneType',
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
@@ -44,7 +44,7 @@ class PhoneType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Common\Phone'
+            'data_class' => 'App\Entity\Common\Phone'
         ) );
     }
 

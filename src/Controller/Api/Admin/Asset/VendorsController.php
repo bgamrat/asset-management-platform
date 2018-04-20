@@ -4,7 +4,7 @@ Namespace App\Controller\Api\Admin\Asset;
 
 use App\Entity\Asset\Vendor;
 use Util\DStore;
-use Form\Admin\Asset\VendorType;
+use App\Form\Admin\Asset\VendorType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +41,7 @@ class VendorsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['v'] )
-                ->from( 'Entity\Asset\Vendor', 'v' )
+                ->from( 'App\Entity\Asset\Vendor', 'v' )
                 ->leftJoin( 'v.brands', 'b')
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
@@ -100,7 +100,7 @@ class VendorsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $vendor = $this->getDoctrine()
-                        ->getRepository( 'Entity\Asset\Vendor' )->find( $id );
+                        ->getRepository( 'App\Entity\Asset\Vendor' )->find( $id );
         if( $vendor !== null )
         {
             $formUtil = $this->get( 'app.util.form' );
@@ -139,7 +139,7 @@ class VendorsController extends FOSRestController
         }
         else
         {
-            $vendor = $em->getRepository( 'Entity\Asset\Vendor' )->find( $id );
+            $vendor = $em->getRepository( 'App\Entity\Asset\Vendor' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdatedAt() ) === false )
             {
@@ -184,7 +184,7 @@ class VendorsController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
-                ->getRepository( 'Entity\Asset\Vendor' );
+                ->getRepository( 'App\Entity\Asset\Vendor' );
         $vendor = $repository->find( $id );
         if( $vendor !== null )
         {
@@ -212,7 +212,7 @@ class VendorsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $vendor = $em->getRepository( 'Entity\Asset\Vendor' )->find( $id );
+        $vendor = $em->getRepository( 'App\Entity\Asset\Vendor' )->find( $id );
         if( $vendor !== null )
         {
             $em->remove( $vendor );

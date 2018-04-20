@@ -294,6 +294,36 @@ services:
             - null                             # data to bind, this is where your entity could go if you have that defined as a service
             - { validation_groups: [Registration] } # validation groups
 
+    app.menu_builder:
+        class: App\Menu\MenuBuilder
+
+    app.menu.main:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createMainMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: main }
+
+    app.menu.calendar:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createCalendarMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: calendar }
+
+    app.menu.trailer:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createTrailerMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: trailer }
+
+    app.menu.user:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createUserMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: user }
 
     app.menu_renderer:
         # The class implements Knp\Menu\Renderer\RendererInterface
@@ -340,34 +370,3 @@ services:
         alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
 
     Symfony\Component\Form\Form: ~
-
-    app.menu_builder:
-        class: App\Menu\MenuBuilder
-
-    app.menu.main:
-        class: Knp\Menu\MenuItem
-        factory: ['@app.menu_builder', 'createMainMenu']
-        arguments: { $options: [] }
-        tags:
-        - { name: knp_menu.menu, alias: main }
-
-    app.menu.calendar:
-        class: Knp\Menu\MenuItem
-        factory: ['@app.menu_builder', 'createCalendarMenu']
-        arguments: { $options: [] }
-        tags:
-        - { name: knp_menu.menu, alias: calendar }
-
-    app.menu.trailer:
-        class: Knp\Menu\MenuItem
-        factory: ['@app.menu_builder', 'createTrailerMenu']
-        arguments: { $options: [] }
-        tags:
-        - { name: knp_menu.menu, alias: trailer }
-
-    app.menu.user:
-        class: Knp\Menu\MenuItem
-        factory: ['@app.menu_builder', 'createUserMenu']
-        arguments: { $options: [] }
-        tags:
-        - { name: knp_menu.menu, alias: user }

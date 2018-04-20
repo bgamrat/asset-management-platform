@@ -5,8 +5,8 @@ Namespace App\Form\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
-use Form\User\DataTransformer\InvitationToCodeTransformer;
+use Doctrine\ORM\EntityApp\Repository;
+use App\Form\User\DataTransformer\InvitationToCodeTransformer;
 
 class InvitationFormType extends AbstractType
 {
@@ -25,7 +25,7 @@ class InvitationFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'class' => 'Entity\Invitation',
+            'class' => 'App\Entity\Invitation',
             'required' => true,
         ));
     }

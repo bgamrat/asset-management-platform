@@ -3,7 +3,7 @@
 Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Asset\LocationType;
-use Form\Admin\Asset\LocationTypesType;
+use App\Form\Admin\Asset\LocationTypesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -31,7 +31,7 @@ class LocationTypeController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $locationTypes = [];
-        $locationTypes['types'] = $em->getRepository( 'Entity\Asset\LocationType' )->findAll();
+        $locationTypes['types'] = $em->getRepository( 'App\Entity\Asset\LocationType' )->findAll();
         $locationTypesForm = $this->createForm( LocationTypesType::class, $locationTypes, [ 'action' => $this->generateUrl( 'app_admin_asset_locationtype_save' )
             ] );
 
@@ -50,7 +50,7 @@ class LocationTypeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $locationTypes = [];
-        $locationTypes['types'] = $em->getRepository( 'Entity\Asset\LocationType' )->findAll();
+        $locationTypes['types'] = $em->getRepository( 'App\Entity\Asset\LocationType' )->findAll();
         $form = $this->createForm( LocationTypesType::class, $locationTypes, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )

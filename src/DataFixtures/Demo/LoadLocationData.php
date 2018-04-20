@@ -13,13 +13,13 @@ class LoadLocationData extends AbstractFixture implements OrderedFixtureInterfac
 
     public function load( ObjectManager $manager )
     {
-        $locationType = $manager->getRepository( 'Entity\Asset\LocationType' )->findOneByName( 'Venue' );
+        $locationType = $manager->getRepository( 'App\Entity\Asset\LocationType' )->findOneByName( 'Venue' );
         if( empty( $locationType ) )
         {
             throw new CommonException( "The venue location type hasn't been defined (load it before running this)" );
         }
 
-        $venues = $manager->getRepository( 'Entity\Venue\Venue' )->findAll();
+        $venues = $manager->getRepository( 'App\Entity\Venue\Venue' )->findAll();
         if( empty( $venues ) )
         {
             throw new CommonException( "There are no venues defined (load them before running this)" );

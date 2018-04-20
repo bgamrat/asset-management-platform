@@ -19,7 +19,7 @@ use App\Entity\Traits\XDefault;
  * TransferStatus
  *
  * @ORM\Table(name="transfer_status")
- * @ORM\Entity(repositoryClass="Repository\TransferStatusRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\TransferStatusRepository")
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  */

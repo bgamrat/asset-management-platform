@@ -17,7 +17,7 @@ use App\Entity\Traits\Id;
  * TransferItem
  *
  * @ORM\Table(name="transfer_item")
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\TransferLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\TransferLog")
  * @ORM\Entity()
  * 
  */

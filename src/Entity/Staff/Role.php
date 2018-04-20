@@ -16,9 +16,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass="Repository\RoleRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\RoleRepository")
  * @ORM\Table(name="role")
- * @Gedmo\Loggable(logEntryClass="Entity\Staff\RoleLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Staff\RoleLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Role

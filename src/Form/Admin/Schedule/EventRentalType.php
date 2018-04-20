@@ -9,8 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Asset\DataTransformer\CategoryToIdTransformer;
-use Form\Admin\Asset\DataTransformer\VendorToIdTransformer;
+use App\Form\Admin\Asset\DataTransformer\CategoryToIdTransformer;
+use App\Form\Admin\Asset\DataTransformer\VendorToIdTransformer;
 
 
 class EventRentalType extends AbstractType
@@ -50,7 +50,7 @@ class EventRentalType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Schedule\EventRental'
+            'data_class' => 'App\Entity\Schedule\EventRental'
         ) );
     }
 

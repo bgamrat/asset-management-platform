@@ -26,7 +26,7 @@ class CategoryType extends AbstractType
                 ->add( 'name', TextType::class )
                 ->add( 'position', IntegerType::class )
                 ->add( 'parent', EntityType::class, [
-                    'class' => 'Entity\Asset\Category',
+                    'class' => 'App\Entity\Asset\Category',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
@@ -47,7 +47,7 @@ class CategoryType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'Entity\Asset\Category'
+            'data_class' => 'App\Entity\Asset\Category'
         ] );
     }
 

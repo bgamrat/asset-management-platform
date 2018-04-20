@@ -7,7 +7,7 @@ use App\Entity\Asset\Issue;
 use App\Entity\Asset\Trailer;
 use App\Entity\Common\Person;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Form\Admin\Asset\IssueType;
+use App\Form\Admin\Asset\IssueType;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -61,7 +61,7 @@ class IssuesController extends FOSRestController
         $issueIds = [];
         if( !empty( $dstore['filter'][DStore::VALUE] ) )
         {
-            $assetData = $em->getRepository( 'Entity\Asset\Asset' )->findByBarcode( $dstore['filter'][DStore::VALUE] );
+            $assetData = $em->getRepository( 'App\Entity\Asset\Asset' )->findByBarcode( $dstore['filter'][DStore::VALUE] );
             if( !empty( $assetData ) )
             {
                 $assetIds = [];
@@ -70,7 +70,7 @@ class IssuesController extends FOSRestController
                     $assetIds[] = $a->getId();
                 }
                 $queryBuilder = $em->createQueryBuilder()->select( 'i.id' )
-                        ->from( 'Entity\Asset\Issue', 'i' )
+                        ->from( 'App\Entity\Asset\Issue', 'i' )
                         ->join( 'i.items', 'ii' )
                         ->join( 'ii.asset', 'a' );
                 $queryBuilder->where( 'a.id IN (:asset_ids)' );
@@ -88,7 +88,7 @@ class IssuesController extends FOSRestController
             "CONCAT(CONCAT(p.firstname,' '),p.lastname) AS assigned_to_text", 'i.billable'
         ];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Issue', 'i' )
+                ->from( 'App\Entity\Asset\Issue', 'i' )
                 ->innerJoin( 'i.status', 's' )
                 ->innerJoin( 'i.type', 't' )
                 ->leftJoin( 'i.trailer', 'tr' )
@@ -150,12 +150,12 @@ class IssuesController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $issue = $this->getDoctrine()
-                        ->getRepository( 'Entity\Asset\Issue' )->find( $id );
+                        ->getRepository( 'App\Entity\Asset\Issue' )->find( $id );
 
         if( $issue !== null )
         {
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\Asset\IssueLog', $id );
+            $logUtil->getLog( 'App\Entity\Asset\IssueLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'issue' . $issue->getId(), $issue->getUpdatedAt() );
@@ -195,7 +195,7 @@ class IssuesController extends FOSRestController
         }
         else
         {
-            $issue = $em->getRepository( 'Entity\Asset\Issue' )->find( $id );
+            $issue = $em->getRepository( 'App\Entity\Asset\Issue' )->find( $id );
             $originalItems = new ArrayCollection();
             foreach( $issue->getItems() as $item )
             {
@@ -262,7 +262,7 @@ class IssuesController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'Entity\Asset\Issue' );
+        $repository = $em->getRepository( 'App\Entity\Asset\Issue' );
         $issue = $repository->find( $id );
         if( $issue !== null )
         {
@@ -293,7 +293,7 @@ class IssuesController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $issue = $em->getRepository( 'Entity\Asset\Issue' )->find( $id );
+        $issue = $em->getRepository( 'App\Entity\Asset\Issue' )->find( $id );
         if( $issue !== null )
         {
             $em->getFilters()->enable( 'softdeleteable' );

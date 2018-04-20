@@ -11,11 +11,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Common\DataTransformer\ContactToIdTransformer;
-use Form\Admin\Common\DataTransformer\ContactTypeToIdTransformer;
-use Form\Common\DataTransformer\PersonToIdTransformer;
-use Form\Common\DataTransformer\AddressToIdTransformer;
-use Form\Admin\EventListener\ContactFieldSubscriber;
+use App\Form\Admin\Common\DataTransformer\ContactToIdTransformer;
+use App\Form\Admin\Common\DataTransformer\ContactTypeToIdTransformer;
+use App\Form\Common\DataTransformer\PersonToIdTransformer;
+use App\Form\Common\DataTransformer\AddressToIdTransformer;
+use App\Form\Admin\EventListener\ContactFieldSubscriber;
 
 class ContactType extends AbstractType
 {
@@ -57,7 +57,7 @@ class ContactType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Common\Contact',
+            'data_class' => 'App\Entity\Common\Contact',
             'allow_extra_fields' => true
         ) );
     }

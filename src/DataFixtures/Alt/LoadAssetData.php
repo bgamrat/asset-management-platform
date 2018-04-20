@@ -14,23 +14,23 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
 
     public function load( ObjectManager $manager )
     {
-        $assetStatuses = $manager->getRepository( 'Entity\Asset\AssetStatus' )->findAll();
+        $assetStatuses = $manager->getRepository( 'App\Entity\Asset\AssetStatus' )->findAll();
         if( empty( $assetStatuses ) )
         {
             throw CommonException( "There are no asset statuses defined (load them before running this)" );
         }
         $assetStatusCount = count( $assetStatuses ) - 1;
 
-        $models = $manager->getRepository( 'Entity\Asset\Model' )->findAll();
+        $models = $manager->getRepository( 'App\Entity\Asset\Model' )->findAll();
         if( empty( $models ) )
         {
             throw CommonException( "There are no model types defined (load them before running this)" );
         }
         $modelCount = count( $models ) - 1;
 
-        $trailerLocationType = $manager->getRepository( 'Entity\Asset\LocationType' )->findOneBy( ['entity' => 'trailer'] );
+        $trailerLocationType = $manager->getRepository( 'App\Entity\Asset\LocationType' )->findOneBy( ['entity' => 'trailer'] );
 
-        $locations = $manager->getRepository( 'Entity\Asset\Location' )->findByType( $trailerLocationType->getId() );
+        $locations = $manager->getRepository( 'App\Entity\Asset\Location' )->findByType( $trailerLocationType->getId() );
         if( empty( $locations ) )
         {
             throw new CommonException( "There are no locations defined (load them before running this)" );
@@ -42,7 +42,7 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
         for( $i = 0; $i < 256; $i++ )
         {
             $location = $locations[rand( 0, $locationCount )];
-            $entityData = $manager->getReference( 'Entity\Asset\Trailer', $location->getEntity() );
+            $entityData = $manager->getReference( 'App\Entity\Asset\Trailer', $location->getEntity() );
             $location->setEntityData( $entityData );
 
             $item = new Asset();

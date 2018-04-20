@@ -4,7 +4,7 @@ Namespace App\Controller\Api\Admin\Staff;
 
 use Util\DStore;
 use App\Entity\Staff\Role;
-use Form\Admin\Staff\RoleType;
+use App\Form\Admin\Staff\RoleType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +44,7 @@ class RolesController extends FOSRestController
             $columns[] = 'r.deletedAt AS deleted_at';
         }
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Staff\Role', 'r' )
+                ->from( 'App\Entity\Staff\Role', 'r' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -85,7 +85,7 @@ class RolesController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $role = $this->getDoctrine()
-                        ->getRepository( 'Entity\Common\Role' )->find( $id );
+                        ->getRepository( 'App\Entity\Common\Role' )->find( $id );
         if( $role !== null )
         {
             $formUtil = $this->get( 'app.util.form' );
@@ -94,7 +94,7 @@ class RolesController extends FOSRestController
             $form = $this->createForm( RoleType::class, $role, ['allow_extra_fields' => true] );
 
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\Common\RoleLog', $id );
+            $logUtil->getLog( 'App\Entity\Common\RoleLog', $id );
             $history = $logUtil->translateIdsToText();
 
             $role->setHistory( $history );
@@ -130,7 +130,7 @@ class RolesController extends FOSRestController
         }
         else
         {
-            $role = $em->getRepository( 'Entity\Common\Role' )->find( $id );
+            $role = $em->getRepository( 'App\Entity\Common\Role' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'role' . $role->getId(), $role->getUpdatedAt() ) === false )
             {
@@ -175,7 +175,7 @@ class RolesController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'Entity\Staff\Role' );
+        $repository = $em->getRepository( 'App\Entity\Staff\Role' );
         $role = $repository->find( $id );
         if( $role !== null )
         {
@@ -214,7 +214,7 @@ class RolesController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $role = $em->getRepository( 'Entity\Common\Role' )->find( $id );
+        $role = $em->getRepository( 'App\Entity\Common\Role' )->find( $id );
         if( $role !== null )
         {
             $em->getFilters()->enable( 'softdeleteable' );

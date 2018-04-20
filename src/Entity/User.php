@@ -18,7 +18,7 @@ use App\Entity\Traits\History;
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
- * @Gedmo\Loggable(logEntryClass="Entity\UserLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\UserLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("person")
  */
@@ -83,7 +83,7 @@ class User extends BaseUser
      */
     protected $invitation;
     /**
-     * @ORM\OneToOne(targetEntity="Entity\Common\Person", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Common\Person", mappedBy="user", cascade={"persist"})
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", unique=true, nullable=true)
      */
     protected $person = null;

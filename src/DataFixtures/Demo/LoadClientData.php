@@ -19,7 +19,7 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
 
     public function load( ObjectManager $manager )
     {
-        $categories = $manager->getRepository( 'Entity\Asset\Category' )->findAll( false );
+        $categories = $manager->getRepository( 'App\Entity\Asset\Category' )->findAll( false );
         if( empty( $categories ) )
         {
             throw new CommonException( "There are no category types defined (load them before running this)" );
@@ -42,13 +42,13 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         $contact = new Person();
         $contact->setFirstname( 'Viridian' );
         $contact->setLastname( 'Green' );
-        $contact->setType( $manager->getRepository( 'Entity\Common\PersonType' )->findOneByType( 'representative' ) );
+        $contact->setType( $manager->getRepository( 'App\Entity\Common\PersonType' )->findOneByType( 'representative' ) );
         $email = new Email();
         $email->setEmail( 'viridian@htv.example.com' );
-        $email->setType( $manager->getRepository( 'Entity\Common\EmailType' )->findOneByType( 'office' ) );
+        $email->setType( $manager->getRepository( 'App\Entity\Common\EmailType' )->findOneByType( 'office' ) );
         $contact->addEmail( $email );
         $address = new Address();
-        $address->setType( $manager->getRepository( 'Entity\Common\AddressType' )->findOneByType( 'office' ) );
+        $address->setType( $manager->getRepository( 'App\Entity\Common\AddressType' )->findOneByType( 'office' ) );
         $address->setStreet1( '400 Benson Park Lane' );
         $address->setCity( 'Hudson' );
         $address->setStateProvince( 'NH' );
@@ -61,13 +61,13 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         $contact = new Person();
         $contact->setFirstname( 'Saffron' );
         $contact->setLastname( 'Yellow' );
-        $contact->setType( $manager->getRepository( 'Entity\Common\PersonType' )->findOneByType( 'sales' ) );
+        $contact->setType( $manager->getRepository( 'App\Entity\Common\PersonType' )->findOneByType( 'sales' ) );
         $email = new Email();
         $email->setEmail( 'saffron@htv.example.com' );
-        $email->setType( $manager->getRepository( 'Entity\Common\EmailType' )->findOneByType( 'office' ) );
+        $email->setType( $manager->getRepository( 'App\Entity\Common\EmailType' )->findOneByType( 'office' ) );
         $contact->addEmail( $email );
         $address = new Address();
-        $address->setType( $manager->getRepository( 'Entity\Common\AddressType' )->findOneByType( 'office' ) );
+        $address->setType( $manager->getRepository( 'App\Entity\Common\AddressType' )->findOneByType( 'office' ) );
         $address->setStreet1( '500 Benson Park Lane' );
         $address->setCity( 'Hudson' );
         $address->setStateProvince( 'NH' );
@@ -107,7 +107,7 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         $contract->addAvailableCategoryQuantity( $categoryQuantity );
 
         $clientTrailer = new ClientTrailer();
-        $clientTrailer->setTrailer( $manager->getRepository( 'Entity\Asset\Trailer' )->findOneByName( 'Box' ) );
+        $clientTrailer->setTrailer( $manager->getRepository( 'App\Entity\Asset\Trailer' )->findOneByName( 'Box' ) );
         $manager->persist( $clientTrailer );
 
         $contract->addRequiresTrailers( $clientTrailer );

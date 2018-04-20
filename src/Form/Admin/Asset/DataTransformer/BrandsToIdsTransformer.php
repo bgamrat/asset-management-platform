@@ -54,7 +54,7 @@ class BrandsToIdsTransformer implements DataTransformerInterface
 
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder->select( 'b' )
-                ->from( 'Entity\Asset\Brand', 'b' )
+                ->from( 'App\Entity\Asset\Brand', 'b' )
                 ->where( $queryBuilder->expr()->in( 'b.id', ':brand_ids' ) )
                 ->setParameter( 'brand_ids', $brandIds )
                 ->orderBy( 'b.name', 'ASC' );

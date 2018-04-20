@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Asset\DataTransformer\BarcodeIdToAssetTransformer;
+use App\Form\Admin\Asset\DataTransformer\BarcodeIdToAssetTransformer;
 
 class TransferItemType extends AbstractType
 {
@@ -47,7 +47,7 @@ class TransferItemType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\TransferItem'
+            'data_class' => 'App\Entity\Asset\TransferItem'
         ) );
     }
 

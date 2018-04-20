@@ -11,8 +11,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Common\ContactType;
-use Form\Admin\Schedule\DataTransformer\EventToIdTransformer;
+use App\Form\Admin\Common\ContactType;
+use App\Form\Admin\Schedule\DataTransformer\EventToIdTransformer;
 
 class BillToType extends AbstractType
 {
@@ -49,7 +49,7 @@ class BillToType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Common\BillTo'
+            'data_class' => 'App\Entity\Common\BillTo'
         ) );
     }
 

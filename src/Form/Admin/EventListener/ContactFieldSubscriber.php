@@ -38,12 +38,12 @@ class ContactFieldSubscriber implements EventSubscriberInterface
         $contactData = new Contact();
         $personId = $contact['person_id'];
 
-        $person = $this->em->getRepository( 'Entity\Common\Person' )->find( $personId );
+        $person = $this->em->getRepository( 'App\Entity\Common\Person' )->find( $personId );
         $contactData->setPerson( $person );
         if( !empty( $contact['address_id'] ) )
         {
             $addressId = $contact['address_id'];
-            $address = $this->em->getRepository( 'Entity\Common\Address' )->find( $addressId );
+            $address = $this->em->getRepository( 'App\Entity\Common\Address' )->find( $addressId );
             $contactData->setAddress( $address );
         }
 
@@ -58,7 +58,7 @@ class ContactFieldSubscriber implements EventSubscriberInterface
             if( isset( $this->entities[$contactType] ) )
             {
                 $class = $this->entities[$contactType];
-                $contactType = $this->em->getRepository( 'Entity\Common\ContactType' )->findOneByEntity( $contactType );
+                $contactType = $this->em->getRepository( 'App\Entity\Common\ContactType' )->findOneByEntity( $contactType );
                 $contactData->setType( $contactType );
                 $contactData->setEntity( $entityId );
             }

@@ -23,7 +23,7 @@ use App\Entity\Traits\History;
  *
  * @ORM\Table(name="trailer")
  * @ORM\Entity()
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\TrailerLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\TrailerLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 
  */

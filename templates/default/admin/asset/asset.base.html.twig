@@ -1,9 +1,5 @@
 {% extends 'admin.base.html.twig' %}
 
 {% block stylesheets %}
-    {% stylesheets 
-            '@admin_asset_css'
-            filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+   <link rel="stylesheet" href="{{ asset('build/css/asset.css') }}">
 {% endblock %}

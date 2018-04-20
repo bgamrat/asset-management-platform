@@ -26,7 +26,7 @@ class DefaultController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['b.id', "CONCAT(CONCAT(m.name, ' '), b.name) AS name"] )
-                    ->from( 'Entity\Asset\Manufacturer', 'm' )
+                    ->from( 'App\Entity\Asset\Manufacturer', 'm' )
                     ->innerJoin( 'm.brands', 'b' )
                     ->where( "LOWER(CONCAT(CONCAT(m.name, ' '), b.name)) LIKE :manufacturer_brand" )
                     ->setParameter( 'manufacturer_brand', strtolower( $manufacturerBrand ) );

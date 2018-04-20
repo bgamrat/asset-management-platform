@@ -2,7 +2,7 @@
 
 Namespace App\Form;
 
-use Form\Common\PersonType;
+use App\Form\Common\PersonType;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;

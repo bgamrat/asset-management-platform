@@ -26,7 +26,7 @@ class InvitationToCodeTransformer implements DataTransformerInterface
         }
 
         if (!$value instanceof Invitation) {
-            throw new UnexpectedTypeException($value, 'Entity\Invitation');
+            throw new UnexpectedTypeException($value, 'App\Entity\Invitation');
         }
 
         return $value->getCode();

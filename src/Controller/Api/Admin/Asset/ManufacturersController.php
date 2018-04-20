@@ -5,8 +5,8 @@ Namespace App\Controller\Api\Admin\Asset;
 use Util\DStore;
 use App\Entity\Asset\Manufacturer;
 use App\Entity\Asset\Model;
-use Form\Admin\Asset\ManufacturerType;
-use Form\Admin\Asset\ModelType;
+use App\Form\Admin\Asset\ManufacturerType;
+use App\Form\Admin\Asset\ModelType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +34,7 @@ class ManufacturersController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( 'm' )
-                ->from( 'Entity\Asset\Manufacturer', 'm' )
+                ->from( 'App\Entity\Asset\Manufacturer', 'm' )
                 ->leftJoin( 'm.brands', 'b' )
                 ->leftJoin( 'm.contacts', 'c' )
                 ->orderBy( 'm.' . $dstore['sort-field'], $dstore['sort-direction'] );
@@ -74,7 +74,7 @@ class ManufacturersController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $repository = $this->getDoctrine()
-                ->getRepository( 'Entity\Asset\Manufacturer' );
+                ->getRepository( 'App\Entity\Asset\Manufacturer' );
         $manufacturer = $repository->find( $id );
         if( $manufacturer !== null )
         {
@@ -113,7 +113,7 @@ class ManufacturersController extends FOSRestController
         }
         else
         {
-            $manufacturer = $em->getRepository( 'Entity\Asset\Manufacturer' )->find( $id );
+            $manufacturer = $em->getRepository( 'App\Entity\Asset\Manufacturer' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdatedAt() ) === false )
             {
@@ -150,7 +150,7 @@ class ManufacturersController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'Entity\Asset\Manufacturer' );
+        $repository = $em->getRepository( 'App\Entity\Asset\Manufacturer' );
         $manufacturer = $repository->findOneBy( ['name' => $name] );
         if( $manufacturer !== null )
         {
@@ -178,7 +178,7 @@ class ManufacturersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $manufacturer = $em->getRepository( 'Entity\Asset\Manufacturer' )->findOneBy( ['name' => $name] );
+        $manufacturer = $em->getRepository( 'App\Entity\Asset\Manufacturer' )->findOneBy( ['name' => $name] );
         if( $manufacturer !== null )
         {
             $em->remove( $manufacturer );
@@ -199,7 +199,7 @@ class ManufacturersController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $repository = $this->getDoctrine()
-                ->getRepository( 'Entity\Asset\Manufacturer' );
+                ->getRepository( 'App\Entity\Asset\Manufacturer' );
         $manufacturer = $repository->findOneBy( ['name' => $name] );
         if( $manufacturer !== null )
         {
@@ -247,7 +247,7 @@ class ManufacturersController extends FOSRestController
             $columns[] = 'm.deletedAt AS deleted_at';
         }
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Model', 'm' )
+                ->from( 'App\Entity\Asset\Model', 'm' )
                 ->innerJoin( 'm.category', 'c' )
                 ->innerJoin( 'm.brand', 'b' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
@@ -295,7 +295,7 @@ class ManufacturersController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $columns = ['m.id AS model_id', 'mn.id', 'b.id'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Manufacturer', 'mn' )
+                ->from( 'App\Entity\Asset\Manufacturer', 'mn' )
                 ->innerJoin( 'mn.brands', 'b' )
                 ->innerJoin( 'b.models', 'm' );
         $queryBuilder->where(
@@ -308,10 +308,10 @@ class ManufacturersController extends FOSRestController
         if( !empty( $data ) )
         {
             $id = $data[0]['model_id'];
-            $model = $em->getRepository( 'Entity\Asset\Model' )->find( $id );
+            $model = $em->getRepository( 'App\Entity\Asset\Model' )->find( $id );
 
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\Asset\ModelLog', $id );
+            $logUtil->getLog( 'App\Entity\Asset\ModelLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'model' . $model->getId(), $model->getUpdatedAt() );
@@ -350,7 +350,7 @@ class ManufacturersController extends FOSRestController
 
         $columns = [ 'b.id AS brand_id', 'mn.id AS manufacturer_id'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Manufacturer', 'mn' )
+                ->from( 'App\Entity\Asset\Manufacturer', 'mn' )
                 ->innerJoin( 'mn.brands', 'b' );
         $queryBuilder->where(
                 $queryBuilder->expr()->andX(
@@ -372,7 +372,7 @@ class ManufacturersController extends FOSRestController
         {
             if( isset( $modelData[0]['model_id'] ) )
             {
-                $model = $em->getRepository( 'Entity\Asset\Model' )->find( $modelData[0]['model_id'] );
+                $model = $em->getRepository( 'App\Entity\Asset\Model' )->find( $modelData[0]['model_id'] );
                 $formUtil = $this->get( 'app.util.form' );
                 if( $formUtil->checkDataTimestamp( 'model' . $model->getId(), $model->getUpdatedAt() ) === false )
                 {
@@ -383,7 +383,7 @@ class ManufacturersController extends FOSRestController
             {
                 $model = new Model();
             }
-            $brand = $em->getRepository( 'Entity\Asset\Brand' )->find( $manufacturerAndBrandData[0]['brand_id'] );
+            $brand = $em->getRepository( 'App\Entity\Asset\Brand' )->find( $manufacturerAndBrandData[0]['brand_id'] );
         }
         else
         {
@@ -425,7 +425,7 @@ class ManufacturersController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $columns = ['m.id AS model_id'];
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Asset\Manufacturer', 'mn' )
+                ->from( 'App\Entity\Asset\Manufacturer', 'mn' )
                 ->innerJoin( 'mn.brands', 'b' )
                 ->innerJoin( 'b.models', 'm' );
         $queryBuilder->where(
@@ -437,7 +437,7 @@ class ManufacturersController extends FOSRestController
 
         if( !empty( $modelData ) )
         {
-            $model = $em->getRepository( 'Entity\Asset\Model' )->find( $modelData[0]['model_id'] );
+            $model = $em->getRepository( 'App\Entity\Asset\Model' )->find( $modelData[0]['model_id'] );
             if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
             {
                 $value = $formProcessor->strToBool( $data['value'] );

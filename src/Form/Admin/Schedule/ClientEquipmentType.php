@@ -8,7 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Asset\DataTransformer\CategoryToIdTransformer;
+use App\Form\Admin\Asset\DataTransformer\CategoryToIdTransformer;
 
 class ClientEquipmentType extends AbstractType
 {
@@ -43,7 +43,7 @@ class ClientEquipmentType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Schedule\ClientEquipment'
+            'data_class' => 'App\Entity\Schedule\ClientEquipment'
         ) );
     }
 

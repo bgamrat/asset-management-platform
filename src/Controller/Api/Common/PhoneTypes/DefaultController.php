@@ -21,7 +21,7 @@ class DefaultController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $queryBuilder = $em->createQueryBuilder()->select( ['pt.id', 'pt.type'] )
-                ->from( 'Entity\Common\PhoneType', 'pt' )
+                ->from( 'App\Entity\Common\PhoneType', 'pt' )
                 ->orderBy( 'pt.type' );
         $data = $queryBuilder->getQuery()->getResult();
 

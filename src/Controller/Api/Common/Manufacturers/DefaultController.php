@@ -23,7 +23,7 @@ class DefaultController extends FOSRestController
         if( !empty( $name ) )
         {
             $em = $this->getDoctrine()->getManager();
-            $manufacturers = $em->getRepository( 'Entity\Asset\Manufacturer' )->findByNameLike( $name );
+            $manufacturers = $em->getRepository( 'App\Entity\Asset\Manufacturer' )->findByNameLike( $name );
             $common = new Common;
             $data = $common->getContacts($manufacturers);
         }

@@ -5,7 +5,7 @@ Namespace App\Controller\Api\Admin\Common;
 use Util\DStore;
 use App\Entity\Person\Person;
 use App\Entity\Person\Location;
-use Form\Common\PersonType;
+use App\Form\Common\PersonType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +48,7 @@ class PeopleController extends FOSRestController
             $columns[] = 'p.deletedAt AS deleted_at';
         }
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
-                ->from( 'Entity\Common\Person', 'p' )
+                ->from( 'App\Entity\Common\Person', 'p' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -85,7 +85,7 @@ class PeopleController extends FOSRestController
         $data = [];
         foreach( $ids as $i => $row )
         {
-            $person = $em->getRepository( 'Entity\Common\Person' )->find( $row['id'] );
+            $person = $em->getRepository( 'App\Entity\Common\Person' )->find( $row['id'] );
             $p = ['id' => $row['id'],
                 'name' => $person->getFullName(),
                 'type_text' => $person->getType()->getType(),
@@ -110,7 +110,7 @@ class PeopleController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $person = $this->getDoctrine()
-                        ->getRepository( 'Entity\Common\Person' )->find( $id );
+                        ->getRepository( 'App\Entity\Common\Person' )->find( $id );
         if( $person !== null )
         {
             $formUtil = $this->get( 'app.util.form' );
@@ -119,7 +119,7 @@ class PeopleController extends FOSRestController
             $form = $this->createForm( PersonType::class, $person, ['allow_extra_fields' => true] );
 
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\Common\PersonLog', $id );
+            $logUtil->getLog( 'App\Entity\Common\PersonLog', $id );
             $history = $logUtil->translateIdsToText();
 
             $person->setHistory( $history );
@@ -155,7 +155,7 @@ class PeopleController extends FOSRestController
         }
         else
         {
-            $person = $em->getRepository( 'Entity\Common\Person' )->find( $id );
+            $person = $em->getRepository( 'App\Entity\Common\Person' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'person' . $person->getId(), $person->getUpdatedAt() ) === false )
             {
@@ -200,7 +200,7 @@ class PeopleController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository( 'Entity\Common\Person' );
+        $repository = $em->getRepository( 'App\Entity\Common\Person' );
         $person = $repository->find( $id );
         if( $person !== null )
         {
@@ -231,7 +231,7 @@ class PeopleController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $person = $em->getRepository( 'Entity\Common\Person' )->find( $id );
+        $person = $em->getRepository( 'App\Entity\Common\Person' )->find( $id );
         if( $person !== null )
         {
             $em->getFilters()->enable( 'softdeleteable' );

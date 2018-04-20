@@ -14,7 +14,7 @@ use App\Entity\Traits\Id;
  * Address
  *
  * @ORM\Table(name="address")
- * @Gedmo\Loggable(logEntryClass="Entity\Common\AddressLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Common\AddressLog")
  * @ORM\Entity()
  */
 class Address
@@ -33,7 +33,7 @@ class Address
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Common\AddressType")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Common\AddressType")
      * @ORM\OrderBy({"type" = "ASC"})
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      * @Gedmo\Versioned

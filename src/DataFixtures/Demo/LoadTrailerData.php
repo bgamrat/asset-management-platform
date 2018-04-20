@@ -14,10 +14,10 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
 
     public function load( ObjectManager $manager )
     {
-        $operational = $manager->getRepository( 'Entity\Asset\AssetStatus' )->findOneByName( 'Operational' );
+        $operational = $manager->getRepository( 'App\Entity\Asset\AssetStatus' )->findOneByName( 'Operational' );
 
-        $shop = $manager->getRepository( 'Entity\Asset\LocationType' )->findOneByName('Shop');
-        $location = $manager->getRepository('Entity\Asset\Location')->findOneByType($shop->getId());
+        $shop = $manager->getRepository( 'App\Entity\Asset\LocationType' )->findOneByName('Shop');
+        $location = $manager->getRepository('App\Entity\Asset\Location')->findOneByType($shop->getId());
 
         if( empty( $location ) )
         {
@@ -29,7 +29,7 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
         $main->setDescription( 'Big trailer of stuff' );
         $main->setLocation( $location );
         $main->setStatus( $operational );
-        $main->setModel( $manager->getRepository( 'Entity\Asset\Model' )->findOneByName( 'Main-Box' ) );
+        $main->setModel( $manager->getRepository( 'App\Entity\Asset\Model' )->findOneByName( 'Main-Box' ) );
 
         $box = new Trailer();
         $box->setName( 'Box' );
@@ -37,14 +37,14 @@ class LoadTrailerData extends AbstractFixture implements OrderedFixtureInterface
         $box->setActive( true );
         $box->setLocation( $location );
         $box->setStatus( $operational );
-        $box->setModel( $manager->getRepository( 'Entity\Asset\Model' )->findOneByName( 'Box' ) );
+        $box->setModel( $manager->getRepository( 'App\Entity\Asset\Model' )->findOneByName( 'Box' ) );
         $manager->persist( $box );
 
         $main->addRequire( $box );
         $main->setActive( true );
         $manager->persist( $main );
 
-        $trailerLocationType = $manager->getRepository( 'Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
+        $trailerLocationType = $manager->getRepository( 'App\Entity\Asset\LocationType' )->findOneByName( 'Trailer' );
 
         $locationMain = new Location();
         $locationMain->setEntity( $main->getId() );

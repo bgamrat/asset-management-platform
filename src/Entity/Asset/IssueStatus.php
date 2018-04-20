@@ -16,8 +16,8 @@ use App\Entity\Traits\Versioned\XDefault;
  * Status
  *
  * @ORM\Table(name="issue_status")
- * @ORM\Entity(repositoryClass="Repository\IssueStatusRepository")
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\IssueLog")
+ * @ORM\Entity(repositoryClass="App\Repository\IssueStatusRepository")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\IssueLog")
  * @UniqueEntity("status")
  * @UniqueEntity("id")
  */

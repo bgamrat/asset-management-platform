@@ -5,7 +5,7 @@ Namespace App\Repository;
 use App\Entity\Asset\Vendor;
 
 /**
- * VendorRepository
+ * VendorApp\Repository
  */
 class VendorRepository extends \Doctrine\ORM\EntityRepository
 {
@@ -24,7 +24,7 @@ class VendorRepository extends \Doctrine\ORM\EntityRepository
     public function findByContacts( $contactIds )
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder()->select( ['v.id', 'v.name', 'c.id AS contact_id'] )
-                ->from( 'Entity\Asset\Vendor', 'v' )
+                ->from( 'App\Entity\Asset\Vendor', 'v' )
                 ->leftJoin( 'v.contacts', 'c' );
         $queryBuilder->where( $queryBuilder->expr()->in( 'c.id', ':ids' ) )
                 ->setParameter( 'ids', $contactIds );

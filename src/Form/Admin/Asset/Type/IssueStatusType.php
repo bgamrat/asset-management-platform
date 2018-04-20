@@ -23,7 +23,7 @@ class IssueStatusType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( [
-            'class' => 'Entity\Asset\IssueStatus',
+            'class' => 'App\Entity\Asset\IssueStatus',
             'multiple' => true,
             'expanded' => true,
             'required' => false,

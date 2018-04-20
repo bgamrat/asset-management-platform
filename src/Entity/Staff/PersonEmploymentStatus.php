@@ -16,7 +16,7 @@ use App\Entity\Traits\DateSpan;
  * PersonEmploymentStatus
  *
  * @ORM\Table(name="person_employment_status")
- * @Gedmo\Loggable(logEntryClass="Entity\Common\PersonLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Common\PersonLog")
  * @ORM\Entity()
  *
  */
@@ -37,13 +37,13 @@ class PersonEmploymentStatus
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Common\Person", inversedBy="employment_statuses")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Common\Person", inversedBy="employment_statuses")
      * @ORM\JoinColumn(name="person", referencedColumnName="id" )
      * @ORM\OrderBy({"type" = "ASC"})
      */
     protected $person;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Staff\EmploymentStatus")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Staff\EmploymentStatus")
      * @ORM\JoinColumn(name="employment_status_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */

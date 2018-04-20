@@ -45,7 +45,7 @@ class VendorToIdTransformer implements DataTransformerInterface
         }
 
         $vendor = $this->em
-            ->getRepository('Entity\Asset\Vendor')
+            ->getRepository('App\Entity\Asset\Vendor')
             ->find($vendorId)
         ;
 

@@ -45,7 +45,7 @@ class CategoryToIdTransformer implements DataTransformerInterface
         }
 
         $category = $this->em
-            ->getRepository('Entity\Asset\Category')
+            ->getRepository('App\Entity\Asset\Category')
             ->find($categoryId)
         ;
 

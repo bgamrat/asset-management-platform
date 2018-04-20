@@ -10,8 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Form\Common\Type\PersonType;
-use Form\Admin\Asset\BrandType;
+use App\Form\Common\Type\PersonType;
+use App\Form\Admin\Asset\BrandType;
 
 class ManufacturerType extends AbstractType
 {
@@ -61,7 +61,7 @@ class ManufacturerType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Manufacturer'
+            'data_class' => 'App\Entity\Asset\Manufacturer'
         ) );
     }
 

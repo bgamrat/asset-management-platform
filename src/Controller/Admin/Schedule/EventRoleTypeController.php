@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Schedule;
 
-use Form\Admin\Schedule\EventRoleTypesType;
+use App\Form\Admin\Schedule\EventRoleTypesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,7 +29,7 @@ class EventRoleTypeController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $event_role_types = [];
-        $event_role_types['types'] = $em->getRepository( 'Entity\Schedule\EventRoleType' )->findAll();
+        $event_role_types['types'] = $em->getRepository( 'App\Entity\Schedule\EventRoleType' )->findAll();
 
         $event_role_typesForm = $this->createForm( EventRoleTypesType::class, $event_role_types, [ 'action' => $this->generateUrl( 'app_admin_schedule_eventroletype_save' )] );
 
@@ -48,7 +48,7 @@ class EventRoleTypeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $event_role_types = [];
-        $event_role_types['types'] = $em->getRepository( 'Entity\Schedule\EventRoleType' )->findAll();
+        $event_role_types['types'] = $em->getRepository( 'App\Entity\Schedule\EventRoleType' )->findAll();
         $form = $this->createForm( EventRoleTypesType::class, $event_role_types, ['allow_extra_fields' => true] );
         $form->handleRequest( $request );
         if( $form->isSubmitted() && $form->isValid() )

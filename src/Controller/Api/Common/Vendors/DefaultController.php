@@ -22,7 +22,7 @@ class DefaultController extends FOSRestController
         if( !empty( $name ) )
         {
             $em = $this->getDoctrine()->getManager();
-            $data = $em->getRepository( 'Entity\Asset\Vendor' )->findByNameLike( $name );
+            $data = $em->getRepository( 'App\Entity\Asset\Vendor' )->findByNameLike( $name );
         }
         else
         {

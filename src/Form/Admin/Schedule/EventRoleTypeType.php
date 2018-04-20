@@ -33,7 +33,7 @@ class EventRoleTypeType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( ['label' => false,
-            'data_class' => 'Entity\Schedule\EventRoleType'
+            'data_class' => 'App\Entity\Schedule\EventRoleType'
         ] );
     }
 

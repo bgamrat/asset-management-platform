@@ -2,8 +2,8 @@
 
 Namespace App\Controller\Admin\Client;
 
-use Form\Admin\Client\ClientType;
-use Form\Admin\Client\ContractType;
+use App\Form\Admin\Client\ClientType;
+use App\Form\Admin\Client\ContractType;
 ;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -45,7 +45,7 @@ class ClientController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
         $em = $this->getDoctrine()->getManager();
-        $contract = $em->getRepository( 'Entity\Client\Contract' )->find( $id );
+        $contract = $em->getRepository( 'App\Entity\Client\Contract' )->find( $id );
         if( $contract !== null )
         {
             return $this->render( 'admin/client/contract-equipment.html.twig', array(
@@ -66,8 +66,8 @@ class ClientController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder()->select( ['ct'] )
-                ->from( 'Entity\Client\Contract', 'ct' )
-                ->join( 'Entity\Client\Client', 'c' );
+                ->from( 'App\Entity\Client\Contract', 'ct' )
+                ->join( 'App\Entity\Client\Client', 'c' );
         $queryBuilder->where( $queryBuilder->expr()->eq( 'c.name', '?1' ) )
                 ->andWhere( $queryBuilder->expr()->eq( 'ct.name', '?2' ) )
                 ->setParameters( [ 1 => $name, 2 => $cname] );
@@ -96,8 +96,8 @@ class ClientController extends Controller
         $response = new Response();
 
         $queryBuilder = $em->createQueryBuilder()->select( ['ct'] )
-                ->from( 'Entity\Client\Contract', 'ct' )
-                ->join( 'Entity\Client\Client', 'c' );
+                ->from( 'App\Entity\Client\Contract', 'ct' )
+                ->join( 'App\Entity\Client\Client', 'c' );
         $queryBuilder->where( $queryBuilder->expr()->eq( 'c.name', '?1' ) )
                 ->andWhere( $queryBuilder->expr()->eq( 'ct.name', '?2' ) )
                 ->setParameters( [ 1 => $name, 2 => $cname] );

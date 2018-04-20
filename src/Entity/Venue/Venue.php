@@ -19,8 +19,8 @@ use App\Entity\Traits\History;
  * Venue
  *
  * @ORM\Table(name="venue")
- * @ORM\Entity(repositoryClass="Repository\VenueRepository")
- * @Gedmo\Loggable(logEntryClass="Entity\Venue\VenueLog")
+ * @ORM\Entity(repositoryClass="App\Repository\VenueRepository")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Venue\VenueLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Venue
@@ -42,7 +42,7 @@ class Venue
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Common\Address", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Common\Address", cascade={"persist"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $address;
@@ -59,7 +59,7 @@ class Venue
      */
     private $parking;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity\Common\Person", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\Person", cascade={"persist"})
      * @ORM\JoinTable(name="venue_contact",
      *      joinColumns={@ORM\JoinColumn(name="venue_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", unique=true)}

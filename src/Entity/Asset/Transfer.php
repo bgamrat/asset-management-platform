@@ -21,7 +21,7 @@ use App\Entity\Common\BillTo;
  *
  * @ORM\Table(name="transfer")
  * @ORM\Entity()
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\TransferLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\TransferLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 
  */
@@ -52,7 +52,7 @@ class Transfer
     protected $status = null;
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Entity\Common\Person")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Common\Person")
      * @ORM\JoinColumn(name="from_id", referencedColumnName="id")
      */
     private $from = null;
@@ -71,7 +71,7 @@ class Transfer
     protected $source_location_text = null;
     /**
      * @var int
-     * @ORM\ManyToOne(targetEntity="Entity\Common\Person")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Common\Person")
      * @ORM\JoinColumn(name="to_id", referencedColumnName="id")
      */
     private $to = null;
@@ -90,7 +90,7 @@ class Transfer
     protected $destination_location_text = null;
     /**
      * @var ArrayCollection $items
-     * @ORM\ManyToMany(targetEntity="Entity\Asset\TransferItem", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Asset\TransferItem", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\JoinTable(name="transfer_item_item",
      *      joinColumns={@ORM\JoinColumn(name="transfer_id", referencedColumnName="id")},
@@ -100,7 +100,7 @@ class Transfer
     private $items;
     /**
      * @var ArrayCollection $bill_tos
-     * @ORM\ManyToMany(targetEntity="Entity\Common\BillTo", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Common\BillTo", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\JoinTable(name="transfer_bill_to",
      *      joinColumns={@ORM\JoinColumn(name="transfer_id", referencedColumnName="id")},

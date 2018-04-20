@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Api\Admin\Schedule;
 
-use Form\Admin\Schedule\EventType;
+use App\Form\Admin\Schedule\EventType;
 use App\Entity\Schedule\Event;
 use Util\DStore;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -55,7 +55,7 @@ class EventsController extends FOSRestController
         $queryBuilder = $em->createQueryBuilder()->select( ['e.id', 'e.name',
                     'e.tentative', 'e.billable', 'e.canceled', 'e.start', 'e.end', 'e.deletedAt',
                     'c.name AS client_name', 'v.name AS venue_name'] )
-                ->from( 'Entity\Schedule\Event', 'e' )
+                ->from( 'App\Entity\Schedule\Event', 'e' )
                 ->leftJoin( 'e.client', 'c' )
                 ->leftJoin( 'e.venue', 'v' )
                 ->leftJoin( 'e.trailers', 't')
@@ -92,7 +92,7 @@ class EventsController extends FOSRestController
         $data = [];
         foreach( $eventCollection as $e )
         {
-            $event = $em->getRepository( 'Entity\Schedule\Event' )->find( $e['id'] );
+            $event = $em->getRepository( 'App\Entity\Schedule\Event' )->find( $e['id'] );
             $trailers = $event->getTrailers();
             $trailerList = array_column( $trailers, 'name' );
             $contracts = $event->getContracts();
@@ -104,7 +104,7 @@ class EventsController extends FOSRestController
                 }
             }
             $contractList = array_column( $contracts, 'id' );
-            $contractTrailers = $em->getRepository( 'Entity\Client\Contract' )
+            $contractTrailers = $em->getRepository( 'App\Entity\Client\Contract' )
                     ->findBy( ['id' => $contractList] );
             $client_text = $e['client_name'];
             $venue_text = $e['venue_name'];
@@ -143,11 +143,11 @@ class EventsController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $event = $this->getDoctrine()
-                        ->getRepository( 'Entity\Schedule\Event' )->find( $id );
+                        ->getRepository( 'App\Entity\Schedule\Event' )->find( $id );
         if( $event !== null )
         {
             $logUtil = $this->get( 'app.util.log' );
-            $logUtil->getLog( 'Entity\Schedule\EventLog', $id );
+            $logUtil->getLog( 'App\Entity\Schedule\EventLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->get( 'app.util.form' );
             $formUtil->saveDataTimestamp( 'event' . $event->getId(), $event->getUpdatedAt() );
@@ -188,7 +188,7 @@ class EventsController extends FOSRestController
         }
         else
         {
-            $event = $em->getRepository( 'Entity\Schedule\Event' )->find( $id );
+            $event = $em->getRepository( 'App\Entity\Schedule\Event' )->find( $id );
             $formUtil = $this->get( 'app.util.form' );
             if( $formUtil->checkDataTimestamp( 'event' . $event->getId(), $event->getUpdatedAt() ) === false )
             {
@@ -233,7 +233,7 @@ class EventsController extends FOSRestController
         $formProcessor = $this->get( 'app.util.form' );
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
-                ->getRepository( 'Entity\Event\Event' );
+                ->getRepository( 'App\Entity\Event\Event' );
         $event = $repository->find( $id );
         if( $event !== null )
         {
@@ -261,7 +261,7 @@ class EventsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $event = $em->getRepository( 'Entity\Event\Event' )->find( $id );
+        $event = $em->getRepository( 'App\Entity\Event\Event' )->find( $id );
         if( $event !== null )
         {
             $em->remove( $event );

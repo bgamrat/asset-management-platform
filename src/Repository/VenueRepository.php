@@ -3,7 +3,7 @@
 Namespace App\Repository;
 
 /**
- * VenueRepository
+ * VenueApp\Repository
  */
 class VenueRepository extends \Doctrine\ORM\EntityRepository
 {

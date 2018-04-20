@@ -16,9 +16,9 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="Repository\EmploymentStatusRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\EmploymentStatusRepository")
  * @ORM\Table(name="employment_status")
- * @Gedmo\Loggable(logEntryClass="Entity\Staff\EmploymentStatusLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Staff\EmploymentStatusLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class EmploymentStatus

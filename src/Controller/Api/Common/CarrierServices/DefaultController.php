@@ -27,7 +27,7 @@ class DefaultController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             $queryBuilder = $em->createQueryBuilder()->select( ['cs.id', "cs.name"] )
-                    ->from( 'Entity\Asset\CarrierService', 'cs' )
+                    ->from( 'App\Entity\Asset\CarrierService', 'cs' )
                     ->innerJoin( 'cs.carrier', 'c' )
                     ->where( "LOWER(cs.name) LIKE :carrier_service_name AND c.id = :carrier_id" )
                     ->orderBy( 'cs.name' )

@@ -4,7 +4,7 @@ Namespace App\Controller\Api\Admin\Asset;
 
 use App\Entity\Category;
 use Util\DStore;
-use Form\Admin\Asset\CategoryType;
+use App\Form\Admin\Asset\CategoryType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +28,7 @@ class CategoriesController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $queryBuilder = $em->createQueryBuilder()->select( ['c.id', 'c.position', 'c.name', 'p.id AS parent'] )
-                ->from( 'Entity\Asset\Category', 'c' )
+                ->from( 'App\Entity\Asset\Category', 'c' )
                 ->leftJoin('c.parent', 'p')
                 ->orderBy( 'c.position' );
 
@@ -48,7 +48,7 @@ class CategoriesController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $category = $this->getDoctrine()
-                        ->getRepository( 'Entity\Asset\Category' )->find( $id );
+                        ->getRepository( 'App\Entity\Asset\Category' )->find( $id );
         if( $category !== null )
         {
             return $category;
@@ -82,7 +82,7 @@ class CategoriesController extends FOSRestController
         }
         else
         {
-            $category = $em->getRepository( 'Entity\Asset\Category' )->find( $id );
+            $category = $em->getRepository( 'App\Entity\Asset\Category' )->find( $id );
         }
         $form = $this->createForm( CategoryType::class, $category, ['allow_extra_fields' => true] );
         try
@@ -150,7 +150,7 @@ class CategoriesController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $category = $em->getRepository( 'Entity\Asset\Category' )->find( $id );
+        $category = $em->getRepository( 'App\Entity\Asset\Category' )->find( $id );
         if( $category !== null )
         {
             $em->remove( $category );

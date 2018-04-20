@@ -10,8 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Form\Common\Type\PersonType;
-use Form\Common\AddressType;
+use App\Form\Common\Type\PersonType;
+use App\Form\Common\AddressType;
 
 class VenueType extends AbstractType
 {
@@ -63,7 +63,7 @@ class VenueType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Venue\Venue'
+            'data_class' => 'App\Entity\Venue\Venue'
         ) );
     }
 

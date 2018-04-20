@@ -20,7 +20,7 @@ use App\Entity\Traits\Versioned\Value;
  * BillTo
  *
  * @ORM\Table(name="bill_to")
- * @Gedmo\Loggable(logEntryClass="Entity\Client\BillToLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Client\BillToLog")
  * @ORM\Entity()
  * 
  */
@@ -47,13 +47,13 @@ class BillTo
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Common\Contact", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Common\Contact", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
     private $contact;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Schedule\Event")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Schedule\Event")
      * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */

@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Admin\Staff;
 
-use Form\Admin\Staff\RoleType;
+use App\Form\Admin\Staff\RoleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,7 +29,7 @@ class RoleController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
         if( $name !== null )
         {
-            $role = $this->getDoctrine()->getEntityManager()->getRepository( 'Entity\Staff\Role' )->findOneBy( ['name' => $name] );
+            $role = $this->getDoctrine()->getEntityManager()->getRepository( 'App\Entity\Staff\Role' )->findOneBy( ['name' => $name] );
             $roleId = $role->getId();
         }
         else
@@ -54,7 +54,7 @@ class RoleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $roles = [];
-        $roles['roles'] = $em->getRepository( 'Entity\Staff\Role' )->findAll();
+        $roles['roles'] = $em->getRepository( 'App\Entity\Staff\Role' )->findAll();
         $ids = [];
         foreach ($roles['roles'] as $pt) {
             $ids[$pt->getId()] = $pt;

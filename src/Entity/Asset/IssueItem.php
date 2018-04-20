@@ -20,7 +20,7 @@ use App\Entity\Asset\Asset;
  *
  * @ORM\Entity()
  * @ORM\Table(name="issue_item")
- * @Gedmo\Loggable(logEntryClass="Entity\Asset\IssueLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\IssueLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class IssueItem

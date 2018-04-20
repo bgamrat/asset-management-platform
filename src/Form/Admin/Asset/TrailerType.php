@@ -14,9 +14,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
-use Form\Admin\Asset\DataTransformer\TrailerRelationshipsToIdsTransformer;
-use Form\Admin\Asset\AssetLocationType;
+use App\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
+use App\Form\Admin\Asset\DataTransformer\TrailerRelationshipsToIdsTransformer;
+use App\Form\Admin\Asset\AssetLocationType;
 
 class TrailerType extends AbstractType
 {
@@ -42,7 +42,7 @@ class TrailerType extends AbstractType
                     'label' => 'asset.model'
                 ] )
                 ->add( 'status', EntityType::class, [
-                    'class' => 'Entity\Asset\AssetStatus',
+                    'class' => 'App\Entity\Asset\AssetStatus',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
@@ -69,7 +69,7 @@ class TrailerType extends AbstractType
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'requires', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'Entity\Asset\Trailer',
+                    'entry_options' => [ 'class' => 'App\Entity\Asset\Trailer',
                         'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
@@ -81,7 +81,7 @@ class TrailerType extends AbstractType
                 ] )
                 ->add( 'required_by', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'Entity\Asset\Trailer',
+                    'entry_options' => [ 'class' => 'App\Entity\Asset\Trailer',
                         'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
@@ -94,7 +94,7 @@ class TrailerType extends AbstractType
                 ] )
                 ->add( 'extends', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'Entity\Asset\Trailer',
+                    'entry_options' => [ 'class' => 'App\Entity\Asset\Trailer',
                         'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
@@ -106,7 +106,7 @@ class TrailerType extends AbstractType
                 ] )
                 ->add( 'extended_by', CollectionType::class, [
                     'entry_type' => EntityType::class,
-                    'entry_options' => [ 'class' => 'Entity\Asset\Trailer',
+                    'entry_options' => [ 'class' => 'App\Entity\Asset\Trailer',
                         'choice_label' => false],
                     'by_reference' => false,
                     'required' => false,
@@ -136,7 +136,7 @@ class TrailerType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Trailer'
+            'data_class' => 'App\Entity\Asset\Trailer'
         ) );
     }
 

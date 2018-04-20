@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType As SymfonyEmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityApp\Repository;
 
 class AppEmailType extends AbstractType
 {
@@ -23,7 +23,7 @@ class AppEmailType extends AbstractType
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'type', EntityType::class, [
-                    'class' => 'Entity\Common\EmailType',
+                    'class' => 'App\Entity\Common\EmailType',
                     'choice_label' => 'type',
                     'multiple' => false,
                     'expanded' => false,
@@ -45,7 +45,7 @@ class AppEmailType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Common\Email'
+            'data_class' => 'App\Entity\Common\Email'
         ) );
     }
 

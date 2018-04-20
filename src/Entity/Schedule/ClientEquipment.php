@@ -18,7 +18,7 @@ use App\Entity\Traits\Versioned\Quantity;
  *
  * @ORM\Entity()
  * @ORM\Table(name="client_equipment")
- * @Gedmo\Loggable(logEntryClass="Entity\Schedule\EventLog")
+ * @Gedmo\Loggable(logEntryClass="App\Entity\Schedule\EventLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class ClientEquipment
@@ -41,7 +41,7 @@ class ClientEquipment
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Entity\Asset\Category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Asset\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */

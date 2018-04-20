@@ -21,7 +21,7 @@ class DefaultController extends FOSRestController
         if( !empty( $id ) )
         {
             $contractRepository = $this->getDoctrine()
-                    ->getRepository( 'Entity\Client\Contract' );
+                    ->getRepository( 'App\Entity\Client\Contract' );
 
             $contract = $contractRepository->find( $id );
             $data = ['id' => $id,

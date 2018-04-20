@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Form\Common\Type\PersonType;
+use App\Form\Common\Type\PersonType;
 
 class CarrierType extends AbstractType
 {
@@ -66,7 +66,7 @@ class CarrierType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Carrier'
+            'data_class' => 'App\Entity\Asset\Carrier'
         ) );
     }
 

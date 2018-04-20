@@ -3,7 +3,7 @@
 Namespace App\Controller\Admin\Staff;
 
 use App\Entity\Staff\EmploymentStatus;
-use Form\Admin\Staff\EmploymentStatusesType;
+use App\Form\Admin\Staff\EmploymentStatusesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,7 +29,7 @@ class EmploymentStatusController extends Controller
         $this->denyAccessUnlessGranted( 'ROLE_SUPER_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $employmentStatuses = [];
-        $employmentStatuses['statuses'] = $em->getRepository( 'Entity\Staff\EmploymentStatus' )->findAll();
+        $employmentStatuses['statuses'] = $em->getRepository( 'App\Entity\Staff\EmploymentStatus' )->findAll();
         $employmentStatusesForm = $this->createForm( EmploymentStatusesType::class, $employmentStatuses,
                 [ 'action' => $this->generateUrl( 'app_admin_staff_employmentstatus_save' )] );
         return $this->render( 'admin/staff/employment-status.html.twig', array(
@@ -47,7 +47,7 @@ class EmploymentStatusController extends Controller
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         $employmentStatuses = [];
-        $employmentStatuses['statuses'] = $em->getRepository( 'Entity\Staff\EmploymentStatus' )->findAll();
+        $employmentStatuses['statuses'] = $em->getRepository( 'App\Entity\Staff\EmploymentStatus' )->findAll();
         $ids = [];
         foreach ($employmentStatuses['statuses'] as $es) {
             $ids[$es->getId()] = $es;

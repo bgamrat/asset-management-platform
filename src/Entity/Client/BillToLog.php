@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BillToLog
  *
  * @ORM\Table(name="bill_to_log")
- * @ORM\Entity(repositoryClass="Repository\BillToLogEntryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\BillToLogEntryRepository")
  */
 class BillToLog Extends LogEntry
 {

@@ -13,10 +13,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
-use Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
-use Form\Admin\Asset\DataTransformer\VendorToIdTransformer;
-use Form\Admin\Asset\AssetLocationType;
-use Form\Common\CustomAttributeType;
+use App\Form\Admin\Asset\DataTransformer\ModelToIdTransformer;
+use App\Form\Admin\Asset\DataTransformer\VendorToIdTransformer;
+use App\Form\Admin\Asset\AssetLocationType;
+use App\Form\Common\CustomAttributeType;
 use Symfony\Component\Validator\Constraints\Valid;
 
 class AssetType extends AbstractType
@@ -35,7 +35,7 @@ class AssetType extends AbstractType
      */
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $defaultStatus = $this->em->getRepository( 'Entity\Asset\AssetStatus' )->findOneBy( ['default' => true] );
+        $defaultStatus = $this->em->getRepository( 'App\Entity\Asset\AssetStatus' )->findOneBy( ['default' => true] );
         $builder
                 ->add( 'id', HiddenType::class, ['label' => false] )
                 ->add( 'serial_number', TextType::class, ['label' => false] )
@@ -43,7 +43,7 @@ class AssetType extends AbstractType
                     'label' => 'common.model'
                 ] )
                 ->add( 'status', EntityType::class, [
-                    'class' => 'Entity\Asset\AssetStatus',
+                    'class' => 'App\Entity\Asset\AssetStatus',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
@@ -53,7 +53,7 @@ class AssetType extends AbstractType
                     {
                         return $status->isInUse();
                     },
-                    'data' => $this->em->getReference( 'Entity\Asset\AssetStatus', $defaultStatus->getId() ),
+                    'data' => $this->em->getReference( 'App\Entity\Asset\AssetStatus', $defaultStatus->getId() ),
                     'choice_translation_domain' => false
                 ] )
                 ->add( 'purchased', DateType::class, [
@@ -109,7 +109,7 @@ class AssetType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\Asset\Asset'
+            'data_class' => 'App\Entity\Asset\Asset'
         ) );
     }
 

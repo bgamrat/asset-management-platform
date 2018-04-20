@@ -25,7 +25,7 @@ class CustomAttributeType extends AbstractType
     public function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setDefaults( array(
-            'data_class' => 'Entity\CustomAttribute',
+            'data_class' => 'App\Entity\CustomAttribute',
             'by_reference' => false
         ) );
     }
