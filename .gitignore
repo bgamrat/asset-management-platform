@@ -38,3 +38,7 @@ src/AppBundle/DataFixtures/Demo/LoadUserData.php
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-pack ###
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###

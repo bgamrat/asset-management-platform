@@ -3,13 +3,13 @@
         // Enable the AMD loader
         async: true,
         // Define the base URL for all of our modules and packages
-        baseUrl: '/release',
-        paths: {"lib": "/app/lib",
-            "nls": "/app/nls"},
+        baseUrl: '/src/vendor/dojo',
+        paths: {"lib": "/src/app/lib",
+            "nls": "/src/app/nls"},
         // Register the packages we are going to be using. These same packages should be defined in the
         // build profile in `app.profile.js`.
         packages: [
-            {"name": 'app', "location": '/app'},
+            {"name": 'app', "location": '../../app'},
             'dojo',
             'dijit',
             'dojox',
@@ -29,4 +29,4 @@
     };
     //# sourceURL=admin-twig
 </script>
-<script src="/vendor/dojo/dojo/dojo.js"></script>
+<script src="/src/vendor/dojo/dojo/dojo.js"></script>

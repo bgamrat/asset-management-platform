@@ -17,9 +17,8 @@ Soon
 
 - Database
     - Postgres? I'm not sure, because the bulk of the database interaction is using Doctrine and
-I don't have time to test right now.  AppBundle was built with Postgres.
-    - MySQL? Same question as Postgres, although the LegacyBridgeBundle code was built using MySQL
-- PHP 5.5+
+I don't have time to test other databases right now.  App was built with Postgres.
+- PHP 7.1+
 - composer
 - node / java to build JavaScript (Dojo)
 - web server - this was built on Apache
@@ -30,15 +29,24 @@ I don't have time to test right now.  AppBundle was built with Postgres.
 
 1. Download the code
 2. Run **composer install**
-3. Create the databases (at this point use the settings in config.yml) or
-run **php bin/console doctrine:database:create**
-4. Run **./bin/fixtures-base.sh** to install the required base data types.  This will also allow you to
+3. Create an .env file with the following environment variables
+ - APP_ENV
+ - APP_SECRET
+ - MAILER_URL
+ - APP_DATABASE_URL
+ - LEGACY_DATABASE_URL
+ - MEMCACHED_HOST
+ - MEMCACHED_PORT
+4. Create the databases or run **php bin/console doctrine:database:create**
+5. Run **./bin/fixtures-base.sh** to install the required base data types.  This will also allow you to
 create an admin user.
-5. Run **./bin/fixtures-demo.sh** to install demo data (optional)
-6. To build the *Dojo* assets for production use, **cd web/vendor; ./build.sh;**.  When in
+6. Run **./bin/fixtures-demo.sh** to install demo data (optional)
+7. To build the *Dojo* assets for production use, **cd assets/vendor; ./build.sh;**.  When in
 dev mode, the source JavaScript files are used to allow you to step through the code.
-7. Run **php bin/console assetic:dump** to dump the CSS
-8. There is an *httpd.conf* file in *app/system/etc/httpd/conf.d*, it might work
+Use **cd public; ln -sf /var/www/html/symfony-dev/assets src** to create a symlink for
+development (not on production).
+8. Run **./node_modules/.bin/encore dev** to dump the CSS
+9. There is an *httpd.conf* file in *app/system/etc/httpd/conf.d*, it might work
 
 ## Terminology
 

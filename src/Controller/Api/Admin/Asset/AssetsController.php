@@ -2,7 +2,7 @@
 
 Namespace App\Controller\Api\Admin\Asset;
 
-use Util\DStore;
+use App\Util\DStore;
 use App\Entity\Asset\Asset;
 use App\Entity\Asset\Location;
 use App\Form\Admin\Asset\AssetType;
@@ -14,6 +14,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AssetsController extends FOSRestController
 {
+    private $dstore;
+
+    public function __construct( DStore $dstore ) {
+        $this->dstore = $dstore;
+    }
 
     /**
      * @View()
@@ -21,7 +26,7 @@ class AssetsController extends FOSRestController
     public function getAssetsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        $dstore = $this->dstore->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
             case 'barcode':
@@ -98,7 +103,7 @@ class AssetsController extends FOSRestController
             $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        return array_values( $data );
+        return new Response($data);
     }
 
     /**

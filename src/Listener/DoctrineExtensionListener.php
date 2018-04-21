@@ -3,21 +3,20 @@
 Namespace App\Listener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Gedmo\Loggable\LoggableListener;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class DoctrineExtensionListener implements ContainerAwareInterface
+class DoctrineExtensionListener
 {
 
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    private $loggableListener;
+    private $tokenStorage;
 
-    public function setContainer( ContainerInterface $container = null )
+    public function __construct( LoggableListener $loggableListener, TokenStorageInterface $tokenStorage )
     {
-        $this->container = $container;
+        $this->loggableListener = $loggableListener;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function onLateKernelRequest( GetResponseEvent $event )
@@ -34,11 +33,10 @@ class DoctrineExtensionListener implements ContainerAwareInterface
 
     public function onKernelRequest( GetResponseEvent $event )
     {
-        $tokenStorage = $this->container->get( 'security.token_storage', ContainerInterface::NULL_ON_INVALID_REFERENCE );
-        if( null !== $tokenStorage && null !== $tokenStorage->getToken() && !($tokenStorage->getToken() instanceof AnonymousToken ) )
-        {           
-            $loggable = $this->container->get( 'gedmo.listener.loggable' );
-            $user = $tokenStorage->getToken()->getUser();
+        if( null !== $this->tokenStorage && null !== $this->tokenStorage->getToken() && !($this->tokenStorage->getToken() instanceof AnonymousToken ) )
+        {
+            $loggable = $this->loggableListener;
+            $user = $this->tokenStorage->getToken()->getUser();
             $loggable->setUsername( $user->getUsername() );
         }
     }
