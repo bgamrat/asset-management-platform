@@ -2,7 +2,7 @@ fos_rest:
 
     disable_csrf_role: ROLE_API
     view:
-        view_response_listener: false
+        view_response_listener: true
         force_redirects:
             html: true
         formats:

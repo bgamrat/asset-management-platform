@@ -366,7 +366,4 @@ services:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
         arguments: ['@session.memcached']
 
-    sensio_framework_extra.view.listener:
-        alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
-
     Symfony\Component\Form\Form: ~
