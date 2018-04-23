@@ -2,7 +2,8 @@
 
 Namespace App\Controller\Api\Admin\Asset;
 
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Log;
 use App\Entity\Asset\Trailer;
 use App\Entity\Asset\Location;
 use App\Form\Admin\Asset\TrailerType;
@@ -19,13 +20,22 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class TrailersController extends FOSRestController
 {
 
+    private $dstore;
+    private $log;
+
+    public function __construct( DStore $dstore, Log $log )
+    {
+        $this->dstore = $dstore;
+        $this->log = $log;
+    }
+
     /**
      * @View()
      */
     public function getTrailersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        $dstore = $this->dstore->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
             case 'name':
@@ -106,10 +116,10 @@ class TrailersController extends FOSRestController
                         ->getRepository( 'App\Entity\Asset\Trailer' )->find( $id );
         if( $trailer !== null )
         {
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Asset\TrailerLog', $id );
             $history = $logUtil->translateIdsToText();
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'trailer' . $trailer->getId(), $trailer->getUpdatedAt() );
 
             $form = $this->createForm( TrailerType::class, $trailer, ['allow_extra_fields' => true] );
@@ -147,7 +157,7 @@ class TrailersController extends FOSRestController
         else
         {
             $trailer = $em->getRepository( 'App\Entity\Asset\Trailer' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'trailer' . $trailer->getId(), $trailer->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -192,7 +202,7 @@ class TrailersController extends FOSRestController
      */
     public function patchTrailerAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository( 'App\Entity\Asset\Trailer' );
@@ -238,4 +248,5 @@ class TrailersController extends FOSRestController
             throw $this->createNotFoundException( 'Not found!' );
         }
     }
+
 }

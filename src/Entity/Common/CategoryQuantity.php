@@ -40,7 +40,7 @@ class CategoryQuantity
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="\Entity\Asset\Category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Asset\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */

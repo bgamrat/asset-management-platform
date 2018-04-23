@@ -3,7 +3,9 @@
 Namespace App\Controller\Api\Admin\Asset;
 
 use App\Entity\Asset\Vendor;
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Form as FormUtil;
+use App\Util\Log;
 use App\Form\Admin\Asset\VendorType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,13 +20,24 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 class VendorsController extends FOSRestController
 {
 
+    private $dstore;
+    private $log;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil )
+    {
+        $this->dstore = $dstore;
+        $this->log = $log;
+        $this->formUtil = $formUtil;
+    }
+
     /**
      * @View()
      */
     public function getVendorsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
+        $dstore = $this->dstore->gridParams( $request, 'name' );
 
         switch( $dstore['sort-field'] )
         {
@@ -32,9 +45,9 @@ class VendorsController extends FOSRestController
                 $sortField = 'b.name';
                 break;
             default:
-                $sortField = 'v.'.$dstore['sort-field'];
+                $sortField = 'v.' . $dstore['sort-field'];
         }
-        
+
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         {
@@ -42,7 +55,7 @@ class VendorsController extends FOSRestController
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['v'] )
                 ->from( 'App\Entity\Asset\Vendor', 'v' )
-                ->leftJoin( 'v.brands', 'b')
+                ->leftJoin( 'v.brands', 'b' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -103,11 +116,11 @@ class VendorsController extends FOSRestController
                         ->getRepository( 'App\Entity\Asset\Vendor' )->find( $id );
         if( $vendor !== null )
         {
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdatedAt() );
 
             $form = $this->createForm( VendorType::class, $vendor, ['allow_extra_fields' => true] );
-            
+
             return $form->getViewData();
         }
         else
@@ -140,7 +153,7 @@ class VendorsController extends FOSRestController
         else
         {
             $vendor = $em->getRepository( 'App\Entity\Asset\Vendor' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'vendor' . $vendor->getId(), $vendor->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -181,7 +194,7 @@ class VendorsController extends FOSRestController
      */
     public function patchVendorAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
                 ->getRepository( 'App\Entity\Asset\Vendor' );

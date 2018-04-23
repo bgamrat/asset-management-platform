@@ -33,7 +33,7 @@ class DefaultController extends FOSRestController
             $containers[] = $c['id'];
         }
 
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        $dstore = $this->dstore->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
             case 'barcode':

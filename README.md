@@ -9,6 +9,8 @@ A system intended to help manage assets which are on tractor-trailers.
 
 Proof of concept - not fully operational
 
+*Upgrade to Symfony 4 in progress*
+
 ## Demo
 
 Soon

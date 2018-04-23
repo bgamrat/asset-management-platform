@@ -2,7 +2,9 @@
 
 Namespace App\Controller\Api\Admin\Asset;
 
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Log;
+use App\Util\Form as FormUtil;
 use App\Entity\Asset\Manufacturer;
 use App\Entity\Asset\Model;
 use App\Form\Admin\Asset\ManufacturerType;
@@ -20,13 +22,24 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class ManufacturersController extends FOSRestController
 {
 
+    private $dstore;
+    private $log;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil )
+    {
+        $this->dstore = $dstore;
+        $this->log = $log;
+        $this->formUtil = $formUtil;
+    }
+
     /**
      * @View()
      */
     public function getManufacturersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
+        $dstore = $this->dstore->gridParams( $request, 'name' );
 
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -78,7 +91,7 @@ class ManufacturersController extends FOSRestController
         $manufacturer = $repository->find( $id );
         if( $manufacturer !== null )
         {
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdatedAt() );
 
             $form = $this->createForm( ManufacturerType::class, $manufacturer, ['allow_extra_fields' => true] );
@@ -114,7 +127,7 @@ class ManufacturersController extends FOSRestController
         else
         {
             $manufacturer = $em->getRepository( 'App\Entity\Asset\Manufacturer' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'manufacturer' . $manufacturer->getId(), $manufacturer->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -147,7 +160,7 @@ class ManufacturersController extends FOSRestController
      */
     public function patchManufacturerAction( $name, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository( 'App\Entity\Asset\Manufacturer' );
@@ -222,7 +235,7 @@ class ManufacturersController extends FOSRestController
     {
 
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        $dstore = $this->dstore->gridParams( $request, 'id' );
 
         switch( $dstore['sort-field'] )
         {
@@ -310,10 +323,10 @@ class ManufacturersController extends FOSRestController
             $id = $data[0]['model_id'];
             $model = $em->getRepository( 'App\Entity\Asset\Model' )->find( $id );
 
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Asset\ModelLog', $id );
             $history = $logUtil->translateIdsToText();
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'model' . $model->getId(), $model->getUpdatedAt() );
 
             $form = $this->createForm( ModelType::class, $model, ['allow_extra_fields' => true] );
@@ -373,7 +386,7 @@ class ManufacturersController extends FOSRestController
             if( isset( $modelData[0]['model_id'] ) )
             {
                 $model = $em->getRepository( 'App\Entity\Asset\Model' )->find( $modelData[0]['model_id'] );
-                $formUtil = $this->get( 'app.util.form' );
+                $formUtil = $this->formUtil;
                 if( $formUtil->checkDataTimestamp( 'model' . $model->getId(), $model->getUpdatedAt() ) === false )
                 {
                     throw new \Exception( "data.outdated", 400 );
@@ -420,7 +433,7 @@ class ManufacturersController extends FOSRestController
      */
     public function patchManufacturersBrandsModelsAction( $mnname, $bname, $mname, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $columns = ['m.id AS model_id'];

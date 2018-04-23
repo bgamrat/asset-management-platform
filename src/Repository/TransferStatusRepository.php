@@ -17,7 +17,7 @@ class TransferStatusRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT ts FROM Entity\Asset\TransferStatus ts ORDER BY ts.name ASC"
+                                "SELECT ts FROM App\Entity\Asset\TransferStatus ts ORDER BY ts.name ASC"
                         )
                         ->getResult();
     }

@@ -3,7 +3,9 @@
 Namespace App\Controller\Api\Admin\Client;
 
 use App\Entity\Client\Client;
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Form as FormUtil;
+use App\Util\Log;
 use App\Form\Admin\Client\ClientType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,13 +20,24 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 class ClientsController extends FOSRestController
 {
 
+    private $dstore;
+    private $log;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil )
+    {
+        $this->dstore = $dstore;
+        $this->log = $log;
+        $this->formUtil = $formUtil;
+    }
+
     /**
      * @View()
      */
     public function getClientsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
+        $dstore = $this->dstore->gridParams( $request, 'name' );
 
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -66,7 +79,7 @@ class ClientsController extends FOSRestController
             $item = [
                 'id' => $c->getId(),
                 'name' => $c->getName(),
-                'contracts' => $c->getContracts(false),
+                'contracts' => $c->getContracts( false ),
                 'active' => $c->isActive(),
             ];
             if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -101,7 +114,7 @@ class ClientsController extends FOSRestController
                 'contacts' => $client->getContacts( false ),
                 'contracts' => $client->getContracts( false ),
             ];
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'client' . $client->getId(), $client->getUpdatedAt() );
             return $data;
         }
@@ -135,7 +148,7 @@ class ClientsController extends FOSRestController
         else
         {
             $client = $em->getRepository( 'App\Entity\Client\Client' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'client' . $client->getId(), $client->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -176,7 +189,7 @@ class ClientsController extends FOSRestController
      */
     public function patchClientAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
                 ->getRepository( 'App\Entity\Client\Client' );

@@ -2,7 +2,9 @@
 
 Namespace App\Controller\Api\Admin\Asset;
 
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Log;
+use App\Util\Form as FormUtil;
 use App\Entity\Asset\Issue;
 use App\Entity\Asset\Trailer;
 use App\Entity\Common\Person;
@@ -21,13 +23,24 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class IssuesController extends FOSRestController
 {
 
+    private $dstore;
+    private $log;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil )
+    {
+        $this->dstore = $dstore;
+        $this->log = $log;
+        $this->formUtil = $formUtil;
+    }
+
     /**
      * @View()
      */
     public function getIssuesAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        $dstore = $this->dstore->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
             case 'barcode':
@@ -154,10 +167,10 @@ class IssuesController extends FOSRestController
 
         if( $issue !== null )
         {
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Asset\IssueLog', $id );
             $history = $logUtil->translateIdsToText();
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'issue' . $issue->getId(), $issue->getUpdatedAt() );
 
             $form = $this->createForm( IssueType::class, $issue, ['allow_extra_fields' => true] );
@@ -201,7 +214,7 @@ class IssuesController extends FOSRestController
             {
                 $originalItems->add( $item );
             }
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'issue' . $issue->getId(), $issue->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -259,7 +272,7 @@ class IssuesController extends FOSRestController
      */
     public function patchIssueAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository( 'App\Entity\Asset\Issue' );

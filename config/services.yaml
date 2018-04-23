@@ -14,6 +14,7 @@ parameters:
         venue: 'App\Entity\Common\Contact'
 
 services:
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -342,9 +343,6 @@ services:
     app.util.dstore:
         class: App\Util\DStore
 
-    app.util.form:
-        class: App\Util\Form
-        arguments: ['@session.handler.memcached']
 
     app.util.log:
         class: App\Util\Log
@@ -357,13 +355,16 @@ services:
     fos_user.doctrine_registry:
         alias: doctrine
 
+    Symfony\Component\Form\Form: ~
+
     session.memcached:
         class: Memcached
         calls:
             - [ addServer, [  '%env(resolve:MEMCACHED_HOST)%','%env(resolve:MEMCACHED_PORT)%']]
 
-    session.handler.memcached:
-        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler:
         arguments: ['@session.memcached']
 
-    Symfony\Component\Form\Form: ~
+    FormUtil:
+        class: App\Util\Form
+        public: true

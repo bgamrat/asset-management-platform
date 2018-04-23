@@ -16,7 +16,7 @@ use App\Form\Common\AddressType;
 use App\Form\Admin\Staff\PersonRoleType;
 use App\Form\Admin\Staff\PersonEmploymentStatusType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Doctrine\ORM\EntityApp\Repository;
+use Doctrine\ORM\EntityRepository;
 
 class PersonType extends AbstractType
 {
@@ -32,7 +32,7 @@ class PersonType extends AbstractType
                 ->add( 'active', CheckboxType::class, ['label' => 'common.active'] )
                 ->add( 'type', EntityType::class, [
                     'class' => 'App\Entity\Common\PersonType',
-                    'query_builder' => function (EntityApp\Repository $er)
+                    'query_builder' => function (EntityRepository $er)
                     {
                         return $er->createQueryBuilder( 'pt' )
                                 ->where( 'pt.in_use = true' )

@@ -5,6 +5,7 @@ Namespace App\Menu;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\MatcherInterface;
 use Knp\Menu\Renderer\RendererInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class JsonRenderer implements RendererInterface
 {
@@ -23,7 +24,7 @@ class JsonRenderer implements RendererInterface
      * @param MatcherInterface  $matcher
      * @param array             $defaultOptions
      */
-    public function __construct( \Twig_Environment $environment, $template, MatcherInterface $matcher, array $defaultOptions = array() )
+    public function __construct( \Twig_Environment $environment, String $template = '', MatcherInterface $matcher, array $defaultOptions = array(), TranslatorInterface $translator )
     {
         $this->environment = $environment;
         $this->matcher = $matcher;
@@ -42,6 +43,7 @@ class JsonRenderer implements RendererInterface
             'leaf_class' => null,
             'branch_class' => null
                 ), $defaultOptions );
+        $this->translator = $translator;
     }
 
     public function render( ItemInterface $item, array $options = array() )
@@ -51,8 +53,6 @@ class JsonRenderer implements RendererInterface
         {
             $options['depth'] = PHP_INT_MAX;
         }
-
-        $this->translator = $options['translator'];
 
         $itemIterator = new \Knp\Menu\Iterator\RecursiveItemIterator( $item );
 

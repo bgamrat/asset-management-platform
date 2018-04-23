@@ -2,7 +2,9 @@
 
 Namespace App\Controller\Api\Admin\Asset;
 
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Log;
+use App\Util\Form as FormUtil;
 use App\Entity\Asset\Transfer;
 use App\Entity\Asset\Trailer;
 use App\Entity\Common\Person;
@@ -20,6 +22,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class TransfersController extends FOSRestController
 {
+    private $dstore;
+    private $log;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil )
+    {
+        $this->dstore = $dstore;
+        $this->log = $log;
+        $this->formUtil = $formUtil;
+    }
 
     /**
      * @View()
@@ -27,7 +39,7 @@ class TransfersController extends FOSRestController
     public function getTransfersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        $dstore = $this->dstore->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
             case 'barcode':
@@ -139,10 +151,10 @@ class TransfersController extends FOSRestController
                         ->getRepository( 'App\Entity\Asset\Transfer' )->find( $id );
         if( $transfer !== null )
         {
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Asset\TransferLog', $id );
             $history = $logUtil->translateIdsToText();
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'transfer' . $transfer->getId(), $transfer->getUpdatedAt() );
 
             $form = $this->createForm( TransferType::class, $transfer, ['allow_extra_fields' => true] );
@@ -180,7 +192,7 @@ class TransfersController extends FOSRestController
         else
         {
             $transfer = $em->getRepository( 'App\Entity\Asset\Transfer' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'transfer' . $transfer->getId(), $transfer->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -274,7 +286,7 @@ class TransfersController extends FOSRestController
      */
     public function patchTransferAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository( 'App\Entity\Asset\Transfer' );

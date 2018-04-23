@@ -2,7 +2,8 @@
 
 Namespace App\Controller\Api\Admin\Common;
 
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Log;
 use App\Entity\Person\Person;
 use App\Entity\Person\Location;
 use App\Form\Common\PersonType;
@@ -16,9 +17,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-
 class PeopleController extends FOSRestController
 {
+
+    private $dstore;
+    private $log;
+
+    public function __construct( DStore $dstore, Log $log ) {
+        $this->dstore = $dstore;
+        $this->log = $log;
+    }
 
     /**
      * @View()
@@ -26,9 +34,9 @@ class PeopleController extends FOSRestController
     public function getPeopleAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $staff = $request->headers->has( 'X-Staff' ) ? $request->headers->get('X-Staff') === '1' : false;
+        $staff = $request->headers->has( 'X-Staff' ) ? $request->headers->get( 'X-Staff' ) === '1' : false;
 
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        $dstore = $this->dstore->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
             case 'name':
@@ -113,12 +121,12 @@ class PeopleController extends FOSRestController
                         ->getRepository( 'App\Entity\Common\Person' )->find( $id );
         if( $person !== null )
         {
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'person' . $person->getId(), $person->getUpdatedAt() );
 
             $form = $this->createForm( PersonType::class, $person, ['allow_extra_fields' => true] );
 
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Common\PersonLog', $id );
             $history = $logUtil->translateIdsToText();
 
@@ -156,7 +164,7 @@ class PeopleController extends FOSRestController
         else
         {
             $person = $em->getRepository( 'App\Entity\Common\Person' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'person' . $person->getId(), $person->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -197,7 +205,7 @@ class PeopleController extends FOSRestController
      */
     public function patchPeopleAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository( 'App\Entity\Common\Person' );

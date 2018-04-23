@@ -13,7 +13,7 @@ class ManufacturerRepository extends \Doctrine\ORM\EntityRepository
         $name = '%' . str_replace( '*', '%', strtolower( $name ) );
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT m FROM Entity\Asset\Manufacturer m WHERE LOWER(m.name) LIKE :name ORDER BY m.name ASC"
+                                "SELECT m FROM App\Entity\Asset\Manufacturer m WHERE LOWER(m.name) LIKE :name ORDER BY m.name ASC"
                         )
                         ->setParameter( 'name', $name )
                         ->getResult();

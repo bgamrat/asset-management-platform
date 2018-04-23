@@ -4,7 +4,8 @@ Namespace App\Controller\Api\Admin\User;
 
 use App\Entity\Common\Person;
 use App\Entity\Group;
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Form as FormUtil;
 use App\Form\Admin\User\GroupType;
 use App\Form\Admin\Group\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -16,18 +17,26 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class GroupsController extends FOSRestController
 {
 
+    private $dstore;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, FormUtil $formUtil ) {
+        $this->dstore = $dstore;
+        $this->formUtil = $formUtil;
+    }
+
     /**
      * @View()
      */
     public function getGroupsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_GROUP', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
+        $dstore = $this->dstore->gridParams( $request, 'name' );
 
         $em = $this->getDoctrine()->getManager();
 
         $queryBuilder = $em->createQueryBuilder()->select( ['g'] )
-                ->from( 'App\:Group', 'g' )
+                ->from( 'App\Entity\Group', 'g' )
                 ->orderBy( 'g.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -99,7 +108,7 @@ class GroupsController extends FOSRestController
         $data = $request->request->all();
         if( $data['id'] === null )
         {
-            $group = $groupManager->createGroup($data['name']);
+            $group = $groupManager->createGroup( $data['name'] );
         }
         else
         {
@@ -172,7 +181,7 @@ class GroupsController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $group = $em->getRepository( 'App\:Group' )->findOneBy( ['groupname' => $groupname] );
+        $group = $em->getRepository( 'App\Entity\Group' )->findOneBy( ['groupname' => $groupname] );
         if( $group !== null )
         {
             $em->remove( $group );

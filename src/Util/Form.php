@@ -7,13 +7,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\SessionHandlerInterface;
 
 class Form
 {
 
     private $session;
 
-    public function __construct( $sessionHandler )
+    public function __construct( MemcachedSessionHandler $sessionHandler )
     {
         $storage = new NativeSessionStorage( array(), $sessionHandler );
         $this->session = new Session( $storage );

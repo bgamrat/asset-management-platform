@@ -3,7 +3,7 @@
 Namespace App\Controller\Api\Admin\User;
 
 use App\Entity\Invitation;
-use Util\DStore;
+use App\Util\DStore;
 use App\Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,13 +14,21 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class InvitationsController extends FOSRestController
 {
+
+    private $dstore;
+
+    public function __construct( DStore $dstore )
+    {
+        $this->dstore = $dstore;
+    }
+
     /**
      * @View()
      */
     public function getInvitationsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'email' );
+        $dstore = $this->dstore->gridParams( $request, 'email' );
 
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder()->select( ['i'] )

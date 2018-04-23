@@ -13,7 +13,7 @@ class VenueRepository extends \Doctrine\ORM\EntityRepository
         $name = '%' . str_replace( '*', '%', strtolower( $name ) );
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT v FROM Entity\Venue\Venue v WHERE LOWER(v.name) LIKE :name ORDER BY v.name ASC"
+                                "SELECT v FROM App\Entity\Venue\Venue v WHERE LOWER(v.name) LIKE :name ORDER BY v.name ASC"
                         )
                         ->setParameter( 'name', $name )
                         ->getResult();

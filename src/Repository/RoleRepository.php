@@ -15,7 +15,7 @@ class RoleRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT r FROM Entity\Staff\Role r ORDER BY r.name ASC"
+                                "SELECT r FROM App\Entity\Staff\Role r ORDER BY r.name ASC"
                         )
                         ->getResult();
     }

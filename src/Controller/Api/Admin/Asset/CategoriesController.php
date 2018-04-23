@@ -3,7 +3,8 @@
 Namespace App\Controller\Api\Admin\Asset;
 
 use App\Entity\Category;
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Form as FormUtil;
 use App\Form\Admin\Asset\CategoryType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,6 +18,15 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 class CategoriesController extends FOSRestController
 {
+
+    private $dstore;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, FormUtil $formUtil )
+    {
+        $this->dstore = $dstore;
+        $this->formUtil = $formUtil;
+    }
 
     /**
      * @View()
@@ -119,7 +129,7 @@ class CategoriesController extends FOSRestController
      */
     public function patchCategoryAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
                 ->getRepository( 'App\:Category' );

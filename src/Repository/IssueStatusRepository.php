@@ -17,7 +17,7 @@ class IssueStatusRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT i FROM Entity\Asset\IssueStatus i ORDER BY i.order ASC"
+                                "SELECT i FROM App\Entity\Asset\IssueStatus i ORDER BY i.order ASC"
                         )
                         ->getResult();
     }

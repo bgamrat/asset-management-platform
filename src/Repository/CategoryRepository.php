@@ -15,7 +15,7 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
     {
         $data = $this->getEntityManager()
                 ->createQuery(
-                        "SELECT c, p FROM Entity\Asset\Category c LEFT JOIN c.parent p ORDER BY c.position ASC, p.name"
+                        "SELECT c, p FROM App\Entity\Asset\Category c LEFT JOIN c.parent p ORDER BY c.position ASC, p.name"
                 )
                 ->getResult();
         // This moves the top category to the beginning of the array
@@ -35,7 +35,7 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT c, p FROM Entity\Asset\Category c LEFT JOIN c.parent p WHERE c.name != 'top' ORDER BY c.position ASC"
+                                "SELECT c, p FROM App\Entity\Asset\Category c LEFT JOIN c.parent p WHERE c.name != 'top' ORDER BY c.position ASC"
                         )
                         ->getResult();
     }

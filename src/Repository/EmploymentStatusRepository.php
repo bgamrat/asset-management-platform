@@ -15,7 +15,7 @@ class EmploymentStatusRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT es FROM Entity\Staff\EmploymentStatus es ORDER BY es.name ASC"
+                                "SELECT es FROM App\Entity\Staff\EmploymentStatus es ORDER BY es.name ASC"
                         )
                         ->getResult();
     }

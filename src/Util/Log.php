@@ -2,7 +2,7 @@
 
 Namespace App\Util;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface as EntityManager;
 
 Class Log
 {

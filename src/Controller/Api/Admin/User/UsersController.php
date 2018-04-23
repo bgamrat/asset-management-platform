@@ -4,7 +4,9 @@ Namespace App\Controller\Api\Admin\User;
 
 use App\Entity\Common\Person;
 use App\Entity\User;
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Log;
+use App\Util\Form as FormUtil;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Form\Admin\User\UserType;
 use App\Form\Admin\User\InvitationType;
@@ -17,13 +19,22 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class UsersController extends FOSRestController
 {
 
+    private $dstore;
+    private $log;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil ) {
+        $this->dstore = $dstore;
+        $this->log = $log;
+        $this->formUtil = $formUtil;
+    }
     /**
      * @View()
      */
     public function getUsersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN_USER', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'username' );
+        $dstore = $this->dstore->gridParams( $request, 'username' );
 
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -31,7 +42,7 @@ class UsersController extends FOSRestController
             $em->getFilters()->disable( 'softdeleteable' );
         }
         $queryBuilder = $em->createQueryBuilder()->select( ['u'] )
-                ->from( 'App\:User', 'u' )
+                ->from( 'App\Entity\User', 'u' )
                 ->orderBy( 'u.' . $dstore['sort-field'], $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -111,10 +122,10 @@ class UsersController extends FOSRestController
         $user = $em->getRepository( 'App\Entity\User' )->find( $id );
         if( $user !== null )
         {
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\UserLog', $id );
             $history = $logUtil->translateIdsToText();
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'user' . $user->getId(), $user->getUpdatedAt() );
 
             $form = $this->createForm( UserType::class, $user, ['allow_extra_fields' => true] );
@@ -157,7 +168,7 @@ class UsersController extends FOSRestController
         else
         {
             $user = $em->getRepository( 'App\Entity\User' )->find( $id );
-            $person = $user->getPerson(true);
+            $person = $user->getPerson( true );
         }
         $form = $this->createForm( UserType::class, $user, [] );
         try
@@ -241,7 +252,7 @@ class UsersController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $user = $em->getRepository( 'App\:User' )->findOneBy( ['username' => $username] );
+        $user = $em->getRepository( 'App\Entity\User' )->findOneBy( ['username' => $username] );
         if( $user !== null )
         {
             $em->remove( $user );

@@ -31,7 +31,7 @@ class DefaultController extends Controller
         $invitation_form = $this->createForm( InvitationType::class, null, [] );
 
         $em = $this->getDoctrine()->getManager();
-        $outstandingInvitations = $em->getRepository( 'App\:Invitation' )->findAll();
+        $outstandingInvitations = $em->getRepository( 'App\Entity\Invitation' )->findAll();
 
         return $this->render( 'admin/user/index.html.twig', array(
                     'user_form' => $user_form->createView(),
@@ -49,7 +49,7 @@ class DefaultController extends Controller
         $response = new Response();
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        $checkForExisting = $em->getRepository( 'App\:Invitation' )->findOneByEmail( $data['email'] );
+        $checkForExisting = $em->getRepository( 'App\Entity\Invitation' )->findOneByEmail( $data['email'] );
         if( $checkForExisting !== null )
         {
             throw new \Exception( 'invitation.exists' );

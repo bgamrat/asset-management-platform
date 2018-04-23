@@ -15,7 +15,7 @@ class PersonTypeRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT p FROM Entity\Common\PersonType p ORDER BY p.type ASC"
+                                "SELECT p FROM App\Entity\Common\PersonType p ORDER BY p.type ASC"
                         )
                         ->getResult();
     }

@@ -4,7 +4,9 @@ Namespace App\Controller\Api\Admin\Schedule;
 
 use App\Form\Admin\Schedule\EventType;
 use App\Entity\Schedule\Event;
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Log;
+use App\Util\Form as FormUtil;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,6 +20,16 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 class EventsController extends FOSRestController
 {
+    private $dstore;
+    private $log;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil )
+    {
+        $this->dstore = $dstore;
+        $this->log = $log;
+        $this->formUtil = $formUtil;
+    }
 
     /**
      * @View()
@@ -26,7 +38,7 @@ class EventsController extends FOSRestController
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
 
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        $dstore = $this->dstore->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
             case 'client_text':
@@ -58,7 +70,7 @@ class EventsController extends FOSRestController
                 ->from( 'App\Entity\Schedule\Event', 'e' )
                 ->leftJoin( 'e.client', 'c' )
                 ->leftJoin( 'e.venue', 'v' )
-                ->leftJoin( 'e.trailers', 't')
+                ->leftJoin( 'e.trailers', 't' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
         {
@@ -74,8 +86,7 @@ class EventsController extends FOSRestController
             {
                 case DStore::LIKE:
                     $queryBuilder->where(
-                           $queryBuilder->expr()->orX($queryBuilder->expr()->like( 'LOWER(e.name)', '?1' ),
-                            $queryBuilder->expr()->like( 'LOWER(t.name)', '?1' ))
+                            $queryBuilder->expr()->orX( $queryBuilder->expr()->like( 'LOWER(e.name)', '?1' ), $queryBuilder->expr()->like( 'LOWER(t.name)', '?1' ) )
                             //$queryBuilder->expr()->like( 'LOWER(v.name)', '?1' )
                             //$queryBuilder->expr()->like( 'LOWER(e.name)', '?1' )
                     );
@@ -146,10 +157,10 @@ class EventsController extends FOSRestController
                         ->getRepository( 'App\Entity\Schedule\Event' )->find( $id );
         if( $event !== null )
         {
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Schedule\EventLog', $id );
             $history = $logUtil->translateIdsToText();
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'event' . $event->getId(), $event->getUpdatedAt() );
 
             $form = $this->createForm( EventType::class, $event, ['allow_extra_fields' => true] );
@@ -189,7 +200,7 @@ class EventsController extends FOSRestController
         else
         {
             $event = $em->getRepository( 'App\Entity\Schedule\Event' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'event' . $event->getId(), $event->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -230,7 +241,7 @@ class EventsController extends FOSRestController
      */
     public function patchEventAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
                 ->getRepository( 'App\Entity\Event\Event' );

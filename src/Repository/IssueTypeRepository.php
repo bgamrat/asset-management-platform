@@ -15,7 +15,7 @@ class IssueTypeRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT i FROM Entity\Asset\IssueType i ORDER BY i.type ASC"
+                                "SELECT i FROM App\Entity\Asset\IssueType i ORDER BY i.type ASC"
                         )
                         ->getResult();
     }

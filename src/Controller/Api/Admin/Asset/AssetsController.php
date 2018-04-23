@@ -3,6 +3,8 @@
 Namespace App\Controller\Api\Admin\Asset;
 
 use App\Util\DStore;
+use App\Util\Log;
+use App\Util\Form as FormUtil;
 use App\Entity\Asset\Asset;
 use App\Entity\Asset\Location;
 use App\Form\Admin\Asset\AssetType;
@@ -14,10 +16,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AssetsController extends FOSRestController
 {
-    private $dstore;
 
-    public function __construct( DStore $dstore ) {
+    private $dstore;
+    private $log;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil )
+    {
         $this->dstore = $dstore;
+        $this->log = $log;
+        $this->formUtil = $formUtil;
     }
 
     /**
@@ -65,7 +73,7 @@ class AssetsController extends FOSRestController
                 ->from( 'App\Entity\Asset\Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
-                ->leftJoin( 'a.barcodes', 'bc'/*, 'WITH', 'bc.active = true' */)
+                ->leftJoin( 'a.barcodes', 'bc'/* , 'WITH', 'bc.active = true' */ )
                 ->leftJoin( 'a.status', 's' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         if( $dstore['limit'] !== null )
@@ -84,11 +92,8 @@ class AssetsController extends FOSRestController
                     $queryBuilder->where(
                             $queryBuilder->expr()->orX(
                                     $queryBuilder->expr()->orX(
-                                            $queryBuilder->expr()->like( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?1' ), 
-                                            $queryBuilder->expr()->like( 'LOWER(a.serial_number)', '?1' ) ), 
-                                    $queryBuilder->expr()->orX(
-                                            $queryBuilder->expr()->like( 'LOWER(a.location_text)', '?1' ),
-                                            $queryBuilder->expr()->like( 'LOWER(bc.barcode)', '?1' )
+                                            $queryBuilder->expr()->like( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?1' ), $queryBuilder->expr()->like( 'LOWER(a.serial_number)', '?1' ) ), $queryBuilder->expr()->orX(
+                                            $queryBuilder->expr()->like( 'LOWER(a.location_text)', '?1' ), $queryBuilder->expr()->like( 'LOWER(bc.barcode)', '?1' )
                                     )
                             )
                     );
@@ -98,12 +103,14 @@ class AssetsController extends FOSRestController
                             $queryBuilder->expr()->gt( "LOWER(CONCAT(CONCAT(b.name,' '),m.name))", '?1' )
                     );
             }
-            $queryBuilder->setParameter( 1, strtolower($dstore['filter'][DStore::VALUE]) );
-        } else {
+            $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
+        }
+        else
+        {
             $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        return new Response($data);
+        return $data;
     }
 
     /**
@@ -121,10 +128,10 @@ class AssetsController extends FOSRestController
                         ->getRepository( 'App\Entity\Asset\Asset' )->find( $id );
         if( $asset !== null )
         {
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Asset\AssetLog', $id );
             $history = $logUtil->translateIdsToText();
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdatedAt() );
 
             $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
@@ -162,7 +169,7 @@ class AssetsController extends FOSRestController
         else
         {
             $asset = $em->getRepository( 'App\Entity\Asset\Asset' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -197,7 +204,7 @@ class AssetsController extends FOSRestController
             $translator = $this->container->get( 'translator' )->getLocale();
             $response->setStatusCode( 400 );
             $response->setContent( json_encode(
-                            ['message' => 'errors', 'errors' => $translator->translate($e->getMessage()), 'file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()]
+                            ['message' => 'errors', 'errors' => $translator->translate( $e->getMessage() ), 'file' => $e->getFile(), 'line' => $e->getLine(), 'trace' => $e->getTraceAsString()]
             ) );
         }
         return $response;
@@ -208,7 +215,7 @@ class AssetsController extends FOSRestController
      */
     public function patchAssetAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository( 'App\Entity\Asset\Asset' );

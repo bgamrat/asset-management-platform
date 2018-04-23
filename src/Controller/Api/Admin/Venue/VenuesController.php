@@ -3,7 +3,9 @@
 Namespace App\Controller\Api\Admin\Venue;
 
 use App\Entity\Venue\Venue;
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Log;
+use App\Util\Form as FormUtil;
 use App\Form\Admin\Venue\VenueType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -19,13 +21,22 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 class VenuesController extends FOSRestController
 {
 
+    private $dstore;
+    private $log;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil ) {
+        $this->dstore = $dstore;
+        $this->log = $log;
+        $this->formUtil = $formUtil;
+    }
     /**
      * @View()
      */
     public function getVenuesAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
+        $dstore = $this->dstore->gridParams( $request, 'name' );
 
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -95,10 +106,10 @@ class VenuesController extends FOSRestController
                         ->getRepository( 'App\Entity\Venue\Venue' )->find( $id );
         if( $venue !== null )
         {
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Venue\VenueLog', $id );
             $history = $logUtil->translateIdsToText();
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdatedAt() );
 
             $form = $this->createForm( VenueType::class, $venue, ['allow_extra_fields' => true] );
@@ -136,7 +147,7 @@ class VenuesController extends FOSRestController
         else
         {
             $venue = $em->getRepository( 'App\Entity\Venue\Venue' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'venue' . $venue->getId(), $venue->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -177,7 +188,7 @@ class VenuesController extends FOSRestController
      */
     public function patchVenueAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
                 ->getRepository( 'App\Entity\Venue\Venue' );

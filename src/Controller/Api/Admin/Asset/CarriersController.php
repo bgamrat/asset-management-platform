@@ -3,7 +3,8 @@
 Namespace App\Controller\Api\Admin\Asset;
 
 use App\Entity\Asset\Carrier;
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Form as FormUtil;
 use App\Form\Admin\Asset\CarrierType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,13 +19,22 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 class CarriersController extends FOSRestController
 {
 
+    private $dstore;
+    private $formUtil;
+
+    public function __construct( DStore $dstore, FormUtil $formUtil )
+    {
+        $this->dstore = $dstore;
+        $this->formUtil = $formUtil;
+    }
+
     /**
      * @View()
      */
     public function getCarriersAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'name' );
+        $dstore = $this->dstore->gridParams( $request, 'name' );
 
         $em = $this->getDoctrine()->getManager();
         if( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -79,7 +89,7 @@ class CarriersController extends FOSRestController
         if( $carrier !== null )
         {
 
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdatedAt() );
             $form = $this->createForm( CarrierType::class, $carrier, ['allow_extra_fields' => true] );
 
@@ -115,7 +125,7 @@ class CarriersController extends FOSRestController
         else
         {
             $carrier = $em->getRepository( 'App\Entity\Asset\Carrier' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -156,7 +166,7 @@ class CarriersController extends FOSRestController
      */
     public function patchCarrierAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
                 ->getRepository( 'App\Entity\Asset\Carrier' );

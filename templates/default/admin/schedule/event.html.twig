@@ -3,11 +3,7 @@
 {% extends 'admin.base.html.twig' %}
 
 {% block stylesheets %}
-    {% stylesheets
-            '@admin_schedule_css'
-            filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+   <link rel="stylesheet" href="{{ asset('build/css/admin_schedule.css') }}">
 {% endblock %}
 
 {% form_theme event_form _self %}

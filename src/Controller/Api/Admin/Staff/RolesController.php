@@ -2,7 +2,8 @@
 
 Namespace App\Controller\Api\Admin\Staff;
 
-use Util\DStore;
+use App\Util\DStore;
+use App\Util\Log;
 use App\Entity\Staff\Role;
 use App\Form\Admin\Staff\RoleType;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -18,13 +19,21 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class RolesController extends FOSRestController
 {
 
+    private $dstore;
+    private $log;
+
+    public function __construct( DStore $dstore, Log $log ) {
+        $this->dstore = $dstore;
+        $this->log = $log;
+    }
+
     /**
      * @View()
      */
     public function getRolesAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $dstore = $this->get( 'app.util.dstore' )->gridParams( $request, 'id' );
+        $dstore = $this->dstore->gridParams( $request, 'id' );
         switch( $dstore['sort-field'] )
         {
             case 'name':
@@ -88,12 +97,12 @@ class RolesController extends FOSRestController
                         ->getRepository( 'App\Entity\Common\Role' )->find( $id );
         if( $role !== null )
         {
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'role' . $role->getId(), $role->getUpdatedAt() );
 
             $form = $this->createForm( RoleType::class, $role, ['allow_extra_fields' => true] );
 
-            $logUtil = $this->get( 'app.util.log' );
+            $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Common\RoleLog', $id );
             $history = $logUtil->translateIdsToText();
 
@@ -131,7 +140,7 @@ class RolesController extends FOSRestController
         else
         {
             $role = $em->getRepository( 'App\Entity\Common\Role' )->find( $id );
-            $formUtil = $this->get( 'app.util.form' );
+            $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'role' . $role->getId(), $role->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
@@ -172,7 +181,7 @@ class RolesController extends FOSRestController
      */
     public function patchRoleAction( $id, Request $request )
     {
-        $formProcessor = $this->get( 'app.util.form' );
+        $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository( 'App\Entity\Staff\Role' );

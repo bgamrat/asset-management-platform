@@ -1,13 +1,5 @@
 {% block title %}{{ 'asset.manufacturer'|trans }} {{'common.admin'|trans }}{% endblock %}
-{% extends 'admin.base.html.twig' %}
-
-{% block stylesheets %}
-    {% stylesheets
-            '@admin_asset_css'
-            filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
+{% extends 'admin/asset/asset.base.html.twig' %}
 
 {% form_theme manufacturer_form _self %}
 

@@ -35,7 +35,7 @@ class PersonRepository extends \Doctrine\ORM\EntityRepository
         $name = '%' . str_replace( '*', '%', strtolower( $name ) );
         return $this->getEntityManager()
                         ->createQuery(
-                                "SELECT p FROM Entity\Common\Person p WHERE "
+                                "SELECT p FROM App\Entity\Common\Person p WHERE "
                                 . self::CONCAT_NAME_LIKE
                                 . " ORDER BY p.lastname ASC"
                         )

@@ -40,7 +40,7 @@ class Trailer
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="\Entity\Asset\Trailer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Asset\Trailer")
      * @ORM\JoinColumn(name="trailer_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */
