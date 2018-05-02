@@ -51,14 +51,14 @@ define([
         dijit = new DateTextBox({
             placeholder: core.start,
             trim: true,
-            required: false,
+            required: false
         }, base + "start");
         dijit.startup();
         startInput.push(dijit);
         dijit = new DateTextBox({
             placeholder: core.end,
             trim: true,
-            required: false,
+            required: false
         }, base + "end");
         dijit.startup();
         endInput.push(dijit);
@@ -138,7 +138,7 @@ define([
                         {
                             "role": roleSelect[i].get('value'),
                             "start": st === null ? "" : st,
-                            "end": en === null ? "" : en,
+                            "end": en === null ? "" : en
                         });
             }
         }

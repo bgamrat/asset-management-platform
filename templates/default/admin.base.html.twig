@@ -38,7 +38,7 @@
 {% if app.environment == 'dev' %}
     {% include 'admin/parts/page_footer_script.html.twig' %}
 {% else %}
-    <script data-dojo-config="async:1" src="/lib/dojo/dojo.js"></script>
+    <script data-dojo-config="async:1" src="/build/lib/dojo/dojo.js"></script>
 {% endif %}
 
 {% block javascripts %}

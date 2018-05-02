@@ -40,7 +40,7 @@ class TransferItem
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="\Entity\Asset\Asset")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Asset\Asset")
      * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
      */
     private $asset = null;

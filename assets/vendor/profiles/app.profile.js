@@ -20,6 +20,10 @@ var profile = (function () {
             },
             async: 1
         },
+        optimizeOptions: {
+            languageIn: 'ECMASCRIPT6',
+            languageOut: 'ECMASCRIPT5'
+        },
         staticHasFeatures: {
             "config-deferredInstrumentation": 0,
             "config-dojo-loader-catches": 0,
