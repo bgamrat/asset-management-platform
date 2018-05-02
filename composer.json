@@ -108,7 +108,7 @@
         "stof/doctrine-extensions-bundle": "^1.2",
         "knplabs/knp-menu-bundle": "^2.0",
         "symfony/translation": "^4.0",
-        "sitepen/dojo": "^1.11",
+        "sitepen/dojo": "^1.13",
         "sitepen/dgrid": "^1.1",
         "sitepen/dstore": "^1.1",
         "ext-iconv": "*",
@@ -154,13 +154,13 @@
 
     },
     "scripts": {
-        "mvDojo": "mkdir -p public/vendor/dojo; cp -rf vendor/sitepen/dojo/* public/vendor/dojo; rm -rf vendor/sitepen/dojo/*",
-        "mvDgridDstore": "cp -rf vendor/sitepen/* public/vendor/dojo; rm -rf vendor/sitepen/dgrid vendor/sitepen/dstore/*",
-        "mvZyp": "cp -rf vendor/kriszyp/* public/vendor/dojo; rm -rf vendor/kriszyp/*",
-        "mvRql": "cp -rf vendor/persvr/* public/vendor/dojo; rm -rf vendor/persvr/*",
+	"mvDojo": "mkdir -p assets/vendor/dojo; cp -rf vendor/sitepen/dojo/* assets/vendor/dojo; rm -rf vendor/sitepen/dojo",
+        "mvDgridDstore": "cp -rf vendor/sitepen/* assets/vendor/dojo; rm -rf vendor/sitepen/dgrid vendor/sitepen/dstore",
+        "mvZyp": "cp -rf vendor/kriszyp/* assets/vendor/dojo; rm -rf vendor/kriszyp",
+        "mvRql": "cp -rf vendor/persvr/* assets/vendor/dojo; rm -rf vendor/persvr",
         "mvBootstrap": "cp -rf vendor/twbs/* public/vendor; rm -rf vendor/twbs/*",
         "mvFontAwesome": "cp -rf vendor/fortawesome/font-awesome public/vendor; rm -rf vendor/fort-awesome/*",
-        "rmAllJS": "rm -rf web/vendor/dojo/* web/vendor/bootstrap/* public/vendor/fortawesome/*",
+        "rmAllJS": "rm -rf public/vendor/dojo/* public/vendor/bootstrap/* public/vendor/fortawesome/*",
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "@mvDojo",
