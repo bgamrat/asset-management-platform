@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Traits\Comment;
 use App\Entity\Traits\Id;
 use App\Entity\Traits\DateSpan;
+use App\Entity\Common\Person;
 
 /**
  * EventRole
@@ -48,7 +49,6 @@ class EventRole
 
     public function setPerson( Person $person = null )
     {
-        dump($person);die;
         $this->person = $person;
 
         return $this;
