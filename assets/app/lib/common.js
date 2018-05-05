@@ -96,8 +96,14 @@ define([
         }
         date.setTime(value);
         year = date.getFullYear();
-        month = date.getMonth() + 1,
-                day = date.getDate();
+        month = date.getMonth() + 1;
+        if (month < 10) {
+            month = '0' + month.toString();
+        }
+        day = date.getDate();
+        if (day < 10) {
+            day = '0' + day.toString();
+        }
         return year + '-' + month + '-' + day;
     }
 

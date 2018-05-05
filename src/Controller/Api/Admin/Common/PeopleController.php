@@ -4,6 +4,7 @@ Namespace App\Controller\Api\Admin\Common;
 
 use App\Util\DStore;
 use App\Util\Log;
+use App\Util\Form as FormUtil;
 use App\Entity\Person\Person;
 use App\Entity\Person\Location;
 use App\Form\Common\PersonType;
@@ -22,10 +23,12 @@ class PeopleController extends FOSRestController
 
     private $dstore;
     private $log;
+    private $formUtil;
 
-    public function __construct( DStore $dstore, Log $log ) {
+    public function __construct( DStore $dstore, Log $log, FormUtil $formUtil ) {
         $this->dstore = $dstore;
         $this->log = $log;
+        $this->formUtil = $formUtil;
     }
 
     /**
