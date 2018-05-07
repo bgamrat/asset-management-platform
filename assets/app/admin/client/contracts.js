@@ -157,8 +157,8 @@ define([
                             "name": nameInput[i].get('value'),
                             "comment": commentInput[i].get('value'),
                             "active": activeCheckBox[i].get("checked"),
-                            "start": st === null ? "" : st,
-                            "end": en === null ? "" : en,
+                            "start": st === null ? "" : lib.formatDate(st,false),
+                            "end": en === null ? "" : lib.formatDate(en,false),
                             "value": valueInput[i].get('value')
                         });
             }

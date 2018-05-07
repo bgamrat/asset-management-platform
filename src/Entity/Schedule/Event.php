@@ -137,10 +137,6 @@ class Event
     private $time_spans = null;
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Schedule\EventRole", cascade={"persist"})
-     * @ORM\JoinTable(name="event_event_role",
-     *      joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="event_id", referencedColumnName="id", unique=true)}
-     *      )
      */
     private $roles = null;
     /**

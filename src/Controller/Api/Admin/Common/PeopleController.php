@@ -5,8 +5,8 @@ Namespace App\Controller\Api\Admin\Common;
 use App\Util\DStore;
 use App\Util\Log;
 use App\Util\Form as FormUtil;
-use App\Entity\Person\Person;
-use App\Entity\Person\Location;
+use App\Entity\Common\Person;
+use App\Entity\Common\Location;
 use App\Form\Common\PersonType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -184,7 +184,7 @@ class PeopleController extends FOSRestController
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_people_get_person', array('id' => $person->getId()), true // absolute
+                                'get_person', array('id' => $person->getId()), true // absolute
                         )
                 );
             }

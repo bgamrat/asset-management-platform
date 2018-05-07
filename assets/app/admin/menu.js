@@ -15,7 +15,7 @@ define([
 
         var searchInput, searchStore;
 
-        xhr.get("/api/menustore/adminmenus/", {
+        xhr.get("/api/menustore/adminmenu/", {
             handleAs: "json"
         }).then(function (res) {
             var i, l, store = [], memory, model;

@@ -174,7 +174,7 @@ define([
 
         createDijits();
 
-        addOneMoreControl = query('.event-roles .add-one-more-row');
+        addOneMoreControl = query('.event-staff .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();

@@ -15,7 +15,6 @@ use App\Entity\Common\Person;
 /**
  * EventRole
  *
- * @ORM\Table(name="event_role")
  * @ORM\Entity()
  * @UniqueEntity("id")
  */
