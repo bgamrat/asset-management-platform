@@ -137,8 +137,8 @@ define([
                 returnData.push(
                         {
                             "role": roleSelect[i].get('value'),
-                            "start": st === null ? "" : st,
-                            "end": en === null ? "" : en
+                            "start": st === null ? "" : lib.formatDate(st,false),
+                            "end": en === null ? "" : lib.formatDate(en,false)
                         });
             }
         }

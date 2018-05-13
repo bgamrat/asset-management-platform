@@ -2,11 +2,11 @@
 
 Namespace App\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Common\PhoneType;
 
-class LoadPhoneTypeData implements FixtureInterface
+class LoadPhoneTypeData extends Fixture
 {
 
     public function load( ObjectManager $manager )

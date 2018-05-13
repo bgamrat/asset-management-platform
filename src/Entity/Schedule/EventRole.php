@@ -49,7 +49,6 @@ class EventRole
 
     public function setPerson( Person $person = null )
     {
-        dump($person);die;
         $this->person = $person;
 
         return $this;

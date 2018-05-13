@@ -14,7 +14,6 @@ define([
     "dijit/registry",
     "dijit/form/Form",
     "dijit/form/CurrencyTextBox",
-    "dijit/form/DateTextBox",
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/CheckBox",
@@ -45,7 +44,7 @@ define([
     "dojo/domReady!"
 ], function (declare, lang, dom, domAttr, domClass, domConstruct, on,
         xhr, aspect, query, ObjectStore, Memory,
-        registry, Form, CurrencyTextBox, DateTextBox, TextBox, ValidationTextBox, CheckBox, RadioButton, Select, FilteringSelect, SimpleTextarea, Button,
+        registry, Form, CurrencyTextBox, TextBox, ValidationTextBox, CheckBox, RadioButton, Select, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,

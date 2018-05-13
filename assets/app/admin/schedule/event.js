@@ -181,9 +181,7 @@ define([
         var startInput = new DateTextBox({
             placeholder: core.start,
             trim: true,
-            required: false,
-            name: "event[start]",
-            value: (d === "") ? null : d
+            required: false
         }, "event_start");
         startInput.startup();
 
@@ -191,9 +189,7 @@ define([
         var endInput = new DateTextBox({
             placeholder: core.end,
             trim: true,
-            required: false,
-            name: "event[end]",
-            value: (d === "") ? null : d
+            required: false
         }, "event_end");
         endInput.startup();
 
@@ -261,8 +257,8 @@ define([
                 var data = {
                     "id": eventId,
                     "name": nameInput.get("value"),
-                    "start": st === null ? "" : st,
-                    "end": en === null ? "" : en,
+                    "start": st === null ? "" : lib.formatDate(st,false),
+                    "end": en === null ? "" : lib.formatDate(en,false),
                     "tentative": tentativeCheckBox.get("checked"),
                     "billable": billableCheckBox.get("checked"),
                     "canceled": canceledCheckBox.get("checked"),

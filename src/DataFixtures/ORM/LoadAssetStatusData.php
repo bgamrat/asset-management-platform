@@ -2,11 +2,11 @@
 
 Namespace App\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Asset\AssetStatus;
 
-class LoadAssetStatusData implements FixtureInterface
+class LoadAssetStatusData extends Fixture
 {
 
     public function load( ObjectManager $manager )

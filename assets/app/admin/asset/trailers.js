@@ -228,7 +228,7 @@ define([
                     "model_text": modelFilteringSelect.get("displayedValue"),
                     "status_text": statusSelect.get("displayedValue"),
                     "status": parseInt(statusSelect.get("value")),
-                    "purchased": purchased === null ? "" : purchased,
+                    "purchased": purchased === null ? "" : lib.formatDate(purchased,false),
                     "cost": parseFloat(costInput.get("value")),
                     "model": parseInt(modelFilteringSelect.get("value")),
                     "name": nameInput.get("value"),

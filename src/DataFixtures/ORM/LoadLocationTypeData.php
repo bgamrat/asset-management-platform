@@ -2,12 +2,12 @@
 
 Namespace App\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Asset\Location;
 use App\Entity\Asset\LocationType;
 
-class LoadLocationTypeData implements FixtureInterface
+class LoadLocationTypeData extends Fixture
 {
 
     public function load( ObjectManager $manager )

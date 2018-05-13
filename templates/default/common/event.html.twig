@@ -2,12 +2,8 @@
 
 {% extends 'base.html.twig' %}
 
-{% block additional_stylesheets %}
-    {% stylesheets
-            '@event_css'
-            filter='cssrewrite' output='css/compiled/eec.css'  %}
-    <link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %}
+{% block stylesheets %}
+   <link rel="stylesheet" href="{{ asset('build/css/event.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -167,8 +163,3 @@
 {% block modal_text %}
     <p>Event equipment by category</p>
 {% endblock %}
-
-{% javascripts
-    '@bootstrap_js'
-%}
-{% endjavascripts %}

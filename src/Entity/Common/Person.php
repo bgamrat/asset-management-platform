@@ -166,7 +166,7 @@ class Person
         $this->emails = new ArrayCollection();
         $this->addresses = new ArrayCollection();
         $this->roles = new ArrayCollection();
-        $this->employment_status = new ArrayCollection();
+        $this->employment_statuses = new ArrayCollection();
     }
 
     /**

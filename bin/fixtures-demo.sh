@@ -1,2 +1,2 @@
 #!/bin/bash
-php bin/console doctrine:fixtures:load --fixtures=src/AppBundle/DataFixtures/Demo --append
+php bin/console doctrine:fixtures:load --fixtures=src/DataFixtures/Demo --append

@@ -174,7 +174,7 @@ define([
 
         createDijits();
 
-        addOneMoreControl = query('.event-roles .add-one-more-row');
+        addOneMoreControl = query('.event-staff .add-one-more-row');
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -191,7 +191,7 @@ define([
     }
 
     function getData() {
-        var i, returnData = [], st, stt, en, ent;
+        var i, returnData = [], st, stt, en, ent, p;
         for( i = 0; i < eventRoleFilteringSelect.length; i++ ) {
             stt = startTimeInput[i].get('value');
             st = startInput[i].get('value');
@@ -199,12 +199,13 @@ define([
             ent = endTimeInput[i].get('value');
             en = endInput[i].get('value');
             lib.addTimeToDate(en, ent);
+            p = personSelector[i].get("item");
             returnData.push(
                     {
-                        "person": parseInt(personSelector[i].get("value")),
+                        "person": p.id,
                         "role": parseInt(eventRoleFilteringSelect[i].get("value")),
-                        "start": st === null ? "" : st,
-                        "end": en === null ? "" : en,
+                        "start": st === null ? "" : lib.formatDate(st,false),
+                        "end": en === null ? "" : lib.formatDate(en,false),
                         "comment": commentInput[i].get('value')
                     });
 
