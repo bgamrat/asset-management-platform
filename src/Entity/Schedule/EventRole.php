@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Traits\Comment;
 use App\Entity\Traits\Id;
 use App\Entity\Traits\DateSpan;
+use App\Entity\Common\Person;
 
 /**
  * EventRole
