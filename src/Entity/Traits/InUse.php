@@ -15,6 +15,7 @@ trait InUse
     public function setInUse( $in_use )
     {
         $this->in_use = $in_use;
+        return $this;
     }
 
     public function isInUse()

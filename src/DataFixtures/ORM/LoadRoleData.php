@@ -2,11 +2,11 @@
 
 Namespace App\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Staff\Role;
 
-class LoadRoleData implements FixtureInterface
+class LoadRoleData extends Fixture
 {
 
     public function load( ObjectManager $manager )

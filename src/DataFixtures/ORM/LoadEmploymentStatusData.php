@@ -2,11 +2,11 @@
 
 Namespace App\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Staff\EmploymentStatus;
 
-class LoadEmploymentStatusData implements FixtureInterface
+class LoadEmploymentStatusData extends Fixture
 {
 
     public function load( ObjectManager $manager )
@@ -21,10 +21,10 @@ class LoadEmploymentStatusData implements FixtureInterface
             'Retired',
             'Terminated'
         ];
-        foreach( $statuses as $i => $r )
+        foreach( $statuses as $i => $s )
         {
             $status = new EmploymentStatus();
-            $status->setName( $r );
+            $status->setName( $s );
             $status->setInUse( true );
             $status->setActive( in_array( $s, ['Full-time', 'Part-time', 'Temporary', 'Intern'] ) );
             $manager->persist( $status );

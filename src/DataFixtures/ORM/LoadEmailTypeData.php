@@ -2,11 +2,11 @@
 
 Namespace App\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Common\EmailType;
 
-class LoadEmailTypeData implements FixtureInterface
+class LoadEmailTypeData extends Fixture
 {
 
     public function load( ObjectManager $manager )
