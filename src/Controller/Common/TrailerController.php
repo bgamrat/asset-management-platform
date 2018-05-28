@@ -110,7 +110,7 @@ class TrailerController extends Controller
                         $queryBuilder->expr()->eq( 'lt.entity', "'trailer'" ), $queryBuilder->expr()->eq( 'l.entity', '?1' )
         ) );
         $queryBuilder->setParameter( 1, $trailer->getId() );
-        return array_column( $queryBuilder->getQuery()->getResult(), 'quantity', 'name' );
+        return array_column( $queryBuilder->getQuery()->getResult(), 'quantity', 'id' );
     }
 
 }

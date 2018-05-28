@@ -3,11 +3,7 @@
 {% extends 'admin.base.html.twig' %}
 
 {% block stylesheets %}
-    {% stylesheets
-            '@admin_client_css'
-            filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+   <link rel="stylesheet" href="{{ asset('build/css/admin_client.css') }}">
 {% endblock %}
 
 {% block admin_content %}
@@ -36,7 +32,7 @@
                 {% if equipment is not empty %}
                     <article class="trailer equipment">
                         <h2>{{'common.satisfies'|trans}}</h2>
-                        <table>
+                        <table class="striped">
                             <thead>
                                 <tr>
                                     <th>{{'asset.model'|trans}}</th>
@@ -48,10 +44,10 @@
                             <tbody>
                                 {% for asset in equipment %}
                                     <tr>
-                                        <td class="model-name">{{asset.model.name}} ({{asset.model.id}})</span>
+                                        <td class="model-name">{{asset.model.name}}</span>
                                         <td class="model-fullname">{{asset.model.category.fullName}}</span>
                                         <td>
-                                            <ul>
+                                            <ul class="counts">
                                                 {%for satisfies in asset.model.satisfies%}
                                                     <li>{{satisfies.fullName}}</li>
                                                     {%endfor %}

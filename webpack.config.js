@@ -26,7 +26,8 @@ Encore
         .addStyleEntry('css/admin_asset',
                 './assets/app/css/admin/asset.css')
         .addStyleEntry('css/admin_client',
-                './assets/app/css/admin/client.css')
+                ['./assets/app/css/admin/client.css',
+                    './assets/app/css/common/common.css'])
         .addStyleEntry('css/admin_schedule',
                 './assets/app/css/admin/schedule.css')
         .addStyleEntry('css/admin_venue_css',
@@ -51,4 +52,11 @@ Encore
         // .autoProvidejQuery()
         ;
 
-module.exports = Encore.getWebpackConfig();
+module.exports = Encore.getWebpackConfig(
+        {
+            devtool: 'inline-source-map',
+            devServer: {
+                contentBase: './dist'
+            }
+        }
+);

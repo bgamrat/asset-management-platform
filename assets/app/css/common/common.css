@@ -5,3 +5,14 @@
 .quantity {
     text-align: right;
 }
+.striped tr:nth-child(even) {
+    background-color: #eee;
+}
+.striped th {
+    border-bottom: 1px solid;
+}
+ul.counts {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
