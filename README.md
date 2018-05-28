@@ -47,7 +47,16 @@ create an admin user.
 dev mode, the source JavaScript files are used to allow you to step through the code.
 Use **cd public; ln -sf /var/www/html/symfony-dev/assets src** to create a symlink for
 development (not on production).
-8. Run **./node_modules/.bin/encore dev** to dump the CSS
+8. Run **./node_modules/.bin/encore dev** to dump the CSS. Building the client side code on my production server didn't go well
+   Instead, tar up the files from your local machine and scp them up
+     - tar up the client side files with **tar czf ~/public-build.tgz public/build**
+     - scp them to the production server with **scp ~/public-build.tgz user@example.com:.
+     - Move them into position above the target directory - **sudo mv public-build.tgz /var/www/html/symfony-dev**
+     - Change ownership for tidiness **sudo chown user.group /var/www/html/symfony-dev/public-build.tgz**
+     - Switch to be that user **sudo su user**
+     - Change into the directory **cd /var/www/html/symfony-dev**
+     - Extract the files out of the tar with **tar xzf public-build.tgz**
+
 9. There is an *httpd.conf* file in *app/system/etc/httpd/conf.d*, it might work
 
 ## Terminology
