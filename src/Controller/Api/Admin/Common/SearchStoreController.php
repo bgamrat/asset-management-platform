@@ -20,22 +20,26 @@ class SearchStoreController extends FOSRestController
         $this->denyAccessUnlessGranted( 'ROLE_USER', null, 'Unable to access this page!' );
 
         $name = $request->get( 'name' );
-        if( !empty( $name ) )
+        if( !empty( $name ) && $name !== '*' )
         {
             $data = [];
             $em = $this->getDoctrine()->getManager();
-            $searchEntities = ['App\Entity\Common\Person' => 'app_admin_common_person_index',
+            $searchEntities = ['App\Entity\Asset\Asset' => 'app_admin_asset_equipment_index',
+                'App\Entity\Common\Person' => 'app_admin_common_person_index',
                 'App\Entity\Client\Client' => 'app_admin_client_client_index'];
             foreach( $searchEntities as $entity => $route )
             {
                 $results = $em->getRepository( $entity )->findByNameLike( $name );
-                foreach( $results as $r )
+                if( !empty( $results ) )
                 {
-                    $type = preg_replace( '#^.*\\\(\w+)$#', '$1', $entity );
-                    $d = new IdNameURL( $r->getId(), $r->getName() . ' (' . $type . ')', $this->generateUrl(
-                                    $route, array('id' => $r->getId()), true
-                    ) );
-                    $data[] = $d;
+                    foreach( $results as $r )
+                    {
+                        $type = preg_replace( '#^.*\\\(\w+)$#', '$1', $entity );
+                        $d = new IdNameURL( $r->getId(), $r->getName() . ' (' . $type . ')', $this->generateUrl(
+                                        $route, array('id' => $r->getId()), true
+                                ) );
+                        $data[] = $d;
+                    }
                 }
             }
         }

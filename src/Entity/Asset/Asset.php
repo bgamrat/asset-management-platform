@@ -139,7 +139,8 @@ class Asset
 
     public function getName()
     {
-        return $this->model;
+        $barcodes = $this->getBarcodes();
+        return $barcodes[0]->getBarcode().' - '.$this->getModel()->getName();
     }
 
     /**

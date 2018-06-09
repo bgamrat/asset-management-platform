@@ -78,4 +78,11 @@ class AssetRepository extends \Doctrine\ORM\EntityRepository
         return $data;
     }
 
+    // Supports search drop down
+    public function findByNameLike( $barcode )
+    {
+        $barcode = '%' . str_replace( '*', '%', strtolower( $barcode ) );
+        return $this->findByBarcode( $barcode );
+    }
+
 }

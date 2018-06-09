@@ -2,7 +2,7 @@
 
 Namespace App\Repository;
 
-use \Entity\Common\Contact;
+use App\Entity\Common\Contact;
 
 use \Doctrine\ORM\Mapping\ClassMetadata;
 

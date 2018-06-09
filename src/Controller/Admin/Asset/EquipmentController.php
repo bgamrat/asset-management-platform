@@ -27,8 +27,10 @@ class EquipmentController extends Controller
 
         $assetForm = $this->createForm( AssetType::class, null, [] );
 
-        return $this->render( 'admin/asset/equipment.html.twig', array(
-                    'asset_form' => $assetForm->createView()) );
+        $id = $request->get( 'id' );
+
+        return $this->render( 'admin/asset/equipment.html.twig', [ 'id' => $id,
+                    'asset_form' => $assetForm->createView()] );
     }
 
 }
