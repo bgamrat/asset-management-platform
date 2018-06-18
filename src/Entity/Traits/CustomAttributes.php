@@ -8,7 +8,7 @@ trait CustomAttributes
 {
     /**
      * @var json
-     * @ORM\Column(type="json_document", options={"jsonb": true}, name="custom_attributes", nullable=true, unique=false)
+     * @ORM\Column(type="json_document", options={"jsonb": true})
      */
     private $custom_attributes;
 

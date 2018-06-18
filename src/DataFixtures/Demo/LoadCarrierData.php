@@ -2,14 +2,16 @@
 
 Namespace App\DataFixtures\Demo;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Asset\Carrier;
 use App\Entity\Asset\CarrierService;
 use App\Entity\Common\Person;
 use App\Entity\Common\Phone;
 
-class LoadCarrierData implements FixtureInterface
+
+class LoadCarrierData extends AbstractFixture implements OrderedFixtureInterface
 {
 
     public function load( ObjectManager $manager )
@@ -69,6 +71,11 @@ class LoadCarrierData implements FixtureInterface
 
         $manager->persist( $superTruck );
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 500;
     }
 
 }

@@ -45,7 +45,7 @@ class LoadVenueData extends AbstractFixture implements OrderedFixtureInterface
 
     public function getOrder()
     {
-        return 300;
+        return 400;
     }
 
 }
