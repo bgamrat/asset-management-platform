@@ -324,9 +324,7 @@ define([
                 active: {
                     label: core.active,
                     editor: CheckBox,
-                    editOn: "click",
-                    sortable: false,
-                    renderCell: libGrid.renderGridCheckbox
+                    sortable: false
                 },
                 remove: {
                     editor: CheckBox,

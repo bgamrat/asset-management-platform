@@ -177,9 +177,7 @@ define([
                     active: {
                         label: core.active,
                         editor: CheckBox,
-                        editOn: "click",
-                        sortable: false,
-                        renderCell: libGrid.renderGridCheckbox
+                        sortable: false
                     },
                     remove: {
                         editor: CheckBox,
@@ -210,6 +208,7 @@ define([
                 var cell = grid.cell(event);
                 var field = cell.column.field;
                 var id = row.data.id;
+                var value;
                 if( checkBoxes.indexOf(field) === -1 ) {
                     if( typeof grid.selection[0] !== "undefined" ) {
                         grid.clearSelection();
@@ -228,17 +227,18 @@ define([
                 var row = grid.row(event);
                 var cell = grid.cell(event);
                 var field = cell.column.field;
-                var name = row.data.name;
-                var value = event.value;
+                var id = row.data.id;
+                var value;
+                value = typeof event.value === "undefined" ? false : event.value;
                 switch( field ) {
                     case "active":
-                        xhr("/api/persons/" + name, {
+                        xhr("/api/people/" + id, {
                             method: "PATCH",
                             handleAs: "json",
                             headers: {'Content-Type': 'application/json'},
                             data: JSON.stringify({"field": field,
                                 "value": value})
-                        }).then(function (data) {
+                        }).then(function () {
                         }, lib.xhrError);
                         break;
                 }

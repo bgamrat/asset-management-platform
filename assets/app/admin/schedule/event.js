@@ -335,23 +335,17 @@ define([
                 tentative: {
                     label: schedule.tentative,
                     editor: CheckBox,
-                    editOn: "click",
-                    sortable: false,
-                    renderCell: libGrid.renderGridCheckbox
+                    sortable: false
                 },
                 billable: {
                     label: schedule.billable,
                     editor: CheckBox,
-                    editOn: "click",
-                    sortable: false,
-                    renderCell: libGrid.renderGridCheckbox
+                    sortable: false
                 },
                 canceled: {
                     label: schedule.canceled,
                     editor: CheckBox,
-                    editOn: "click",
-                    sortable: false,
-                    renderCell: libGrid.renderGridCheckbox
+                    sortable: false
                 },
                 remove: {
                     editor: CheckBox,

@@ -186,9 +186,7 @@ define([
                 active: {
                     label: core.active,
                     editor: CheckBox,
-                    editOn: "click",
-                    sortable: false,
-                    renderCell: libGrid.renderGridCheckbox
+                    sortable: false
                 }
             },
             renderRow: function (object) {

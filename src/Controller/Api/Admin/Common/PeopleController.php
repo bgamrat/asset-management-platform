@@ -215,9 +215,9 @@ class PeopleController extends FOSRestController
         $person = $repository->find( $id );
         if( $person !== null )
         {
-            if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
+            $value = $formProcessor->strToBool( $data['value'] );
+            if( isset( $data['field'] ) && is_bool( $value ) )
             {
-                $value = $formProcessor->strToBool( $data['value'] );
                 switch( $data['field'] )
                 {
                     case 'active':
