@@ -19,7 +19,15 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
         {
             throw CommonException( "There are no asset statuses defined (load them before running this)" );
         }
+        // It's no fun if all the stuff is broken - make it so most stuff works
+        $operational = 0;
         $assetStatusCount = count( $assetStatuses ) - 1;
+        foreach ($assetStatuses as $i => $as) {
+            if ($as->getName() === 'Operational') {
+                $operational = $i;
+                break;
+            }
+        }
 
         $models = $manager->getRepository( 'App\Entity\Asset\Model' )->findAll();
         if( empty( $models ) )
@@ -39,7 +47,7 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
         $durations = ['+1 week', '+1 month', '+2 months', '+3 months', '+4 months', '+6 months', '+1 year'];
         $durationCount = count( $durations ) - 1;
 
-        for( $i = 0; $i < 25; $i++ )
+        for( $i = 0; $i < 250; $i++ )
         {
             $location = $locations[rand( 0, $locationCount )];
             $entityData = $manager->getReference( 'App\Entity\Asset\Trailer', $location->getEntity() );
@@ -53,7 +61,9 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
             $numberFormatter = new \NumberFormatter( 'en_US', \NumberFormatter::ORDINAL );
             $n = $numberFormatter->format( $i );
             $item->setComment( 'This is the ' . $n . ' item' );
-            $item->setStatus( $assetStatuses[rand( 0, $assetStatusCount )] );
+            $odds = rand(0,10);
+            $status = $odds > 8 ? rand( 0, $assetStatusCount ) : $operational;
+            $item->setStatus( $assetStatuses[$status] );
             $item->setSerialNumber( preg_replace( '/\D/', '', md5( rand( 0, 10000 ) ) ) );
             $item->setValue( (float) rand( 1000, 30000 ) );
             $item->setPurchased( new \DateTime( '-' . rand( 0, 5 ) . ' years' ) );

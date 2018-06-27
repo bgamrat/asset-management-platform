@@ -31,6 +31,7 @@ define([
     'dstore/SimpleQuery',
     'dstore/Trackable',
     'dgrid/OnDemandGrid',
+    'dgrid/Keyboard',
     "dgrid/Selection",
     'dgrid/Editor',
     'put-selector/put',
@@ -48,7 +49,7 @@ define([
         registry, Form, CurrencyTextBox, DateTextBox, TextBox, ValidationTextBox, CheckBox, RadioButton, Select, FilteringSelect, SimpleTextarea, Button,
         Dialog, TabContainer, ContentPane,
         JsonRest,
-        Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
+        Rest, SimpleQuery, Trackable, OnDemandGrid, Keyboard, Selection, Editor, put,
         barcodes, customAttributes, xlocation, assetCommon, lib, libGrid, core, asset) {
     //"use strict";
     function run() {
@@ -292,7 +293,7 @@ define([
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
         var store = new TrackableRest({target: '/api/assets', useRangeHeaders: true, idProperty: 'id'});
-        var grid = new (declare([OnDemandGrid, Selection, Editor]))({
+        var grid = new (declare([OnDemandGrid, Keyboard, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
             sort: "model_text",

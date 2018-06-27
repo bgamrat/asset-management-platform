@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use FOS\RestBundle\View\View as FOSRestView;
 
 class AssetsController extends FOSRestController
 {
@@ -76,13 +77,17 @@ class AssetsController extends FOSRestController
                 ->leftJoin( 'a.barcodes', 'bc'/* , 'WITH', 'bc.active = true' */ )
                 ->leftJoin( 'a.status', 's' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
+        $limit = 0;
         if( $dstore['limit'] !== null )
         {
-            $queryBuilder->setMaxResults( $dstore['limit'] );
+            $limit = $dstore['limit'];
+            $queryBuilder->setMaxResults( $limit );
         }
+        $offset = 0;
         if( $dstore['offset'] !== null )
         {
-            $queryBuilder->setFirstResult( $dstore['offset'] );
+            $offset = $dstore['offset'];
+            $queryBuilder->setFirstResult( $offset );
         }
         if( $dstore['filter'] !== null )
         {
@@ -110,7 +115,13 @@ class AssetsController extends FOSRestController
             $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        return $data;
+        $count = $em->getRepository( 'App\Entity\Asset\Asset' )->count( ['active' => true] );
+
+        $view = FOSRestView::create();
+        $view->setData( $data );
+        $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
+        $handler = $this->get( 'fos_rest.view_handler' );
+        return $handler->handle( $view );
     }
 
     /**
