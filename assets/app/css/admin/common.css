@@ -1,3 +1,6 @@
+body.tundra {
+    min-width: 1080px;
+}
 .hidden {
     display: none;
 }

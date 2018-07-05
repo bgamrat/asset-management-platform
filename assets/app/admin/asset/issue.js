@@ -315,6 +315,7 @@ define([
             collection: store,
             className: "dgrid-autoheight",
             sort: "priority",
+            maxRowsPerPage: 25,
             columns: {
                 id: {
                     label: asset.issue + " " + core.id

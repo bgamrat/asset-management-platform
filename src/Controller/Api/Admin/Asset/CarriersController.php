@@ -7,10 +7,11 @@ use App\Util\DStore;
 use App\Util\Form as FormUtil;
 use App\Form\Admin\Asset\CarrierType;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\View\View as FOSRestView;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -45,13 +46,17 @@ class CarriersController extends FOSRestController
                 ->from( 'App\Entity\Asset\Carrier', 'c' )
                 ->leftJoin( 'c.contacts', 'cc' )
                 ->orderBy( 'c.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $limit = 0;
         if( $dstore['limit'] !== null )
         {
-            $queryBuilder->setMaxResults( $dstore['limit'] );
+            $limit = $dstore['limit'];
+            $queryBuilder->setMaxResults( $limit );
         }
+        $offset = 0;
         if( $dstore['offset'] !== null )
         {
-            $queryBuilder->setFirstResult( $dstore['offset'] );
+            $offset = $dstore['offset'];
+            $queryBuilder->setFirstResult( $offset );
         }
         if( $dstore['filter'] !== null )
         {
@@ -70,7 +75,12 @@ class CarriersController extends FOSRestController
             $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        return $data;
+        $count = $em->getRepository( 'App\Entity\Asset\Carrier' )->count([]);
+        $view = FOSRestView::create();
+        $view->setData( $data );
+        $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
+        $handler = $this->get( 'fos_rest.view_handler' );
+        return $handler->handle( $view );
     }
 
     /**

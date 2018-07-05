@@ -44,6 +44,7 @@ define([
             collection: store,
             className: "dgrid-autoheight",
             sort: "category",
+            maxRowsPerPage: 25,
             columns: {
                 id: {
                     label: core.id

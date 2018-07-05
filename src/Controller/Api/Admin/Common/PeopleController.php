@@ -9,13 +9,14 @@ use App\Entity\Common\Person;
 use App\Entity\Common\Location;
 use App\Form\Common\PersonType;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\View\View as FOSRestView;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PeopleController extends FOSRestController
@@ -61,13 +62,17 @@ class PeopleController extends FOSRestController
         $queryBuilder = $em->createQueryBuilder()->select( $columns )
                 ->from( 'App\Entity\Common\Person', 'p' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
+        $limit = 0;
         if( $dstore['limit'] !== null )
         {
-            $queryBuilder->setMaxResults( $dstore['limit'] );
+            $limit = $dstore['limit'];
+            $queryBuilder->setMaxResults( $limit );
         }
+        $offset = 0;
         if( $dstore['offset'] !== null )
         {
-            $queryBuilder->setFirstResult( $dstore['offset'] );
+            $offset = $dstore['offset'];
+            $queryBuilder->setFirstResult( $offset );
         }
         if( $dstore['filter'] !== null )
         {
@@ -106,7 +111,12 @@ class PeopleController extends FOSRestController
                 'active' => $person->isActive()];
             $data[] = $p;
         }
-        return array_values( $data );
+        $count = $em->getRepository( 'App\Entity\Common\Person' )->count([]);
+        $view = FOSRestView::create();
+        $view->setData( $data );
+        $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
+        $handler = $this->get( 'fos_rest.view_handler' );
+        return $handler->handle( $view );
     }
 
     /**

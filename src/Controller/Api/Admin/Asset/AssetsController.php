@@ -9,11 +9,11 @@ use App\Entity\Asset\Asset;
 use App\Entity\Asset\Location;
 use App\Form\Admin\Asset\AssetType;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\View\View as FOSRestView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use FOS\RestBundle\View\View as FOSRestView;
 
 class AssetsController extends FOSRestController
 {
@@ -115,7 +115,7 @@ class AssetsController extends FOSRestController
             $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        $count = $em->getRepository( 'App\Entity\Asset\Asset' )->count( ['active' => true] );
+        $count = $em->getRepository( 'App\Entity\Asset\Asset' )->count([]);
 
         $view = FOSRestView::create();
         $view->setData( $data );

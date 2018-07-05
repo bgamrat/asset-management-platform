@@ -7,13 +7,14 @@ use App\Entity\User;
 use App\Util\DStore;
 use App\Util\Log;
 use App\Util\Form as FormUtil;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Form\Admin\User\UserType;
 use App\Form\Admin\User\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\View\View as FOSRestView;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class UsersController extends FOSRestController
@@ -44,13 +45,17 @@ class UsersController extends FOSRestController
         $queryBuilder = $em->createQueryBuilder()->select( ['u'] )
                 ->from( 'App\Entity\User', 'u' )
                 ->orderBy( 'u.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $limit = 0;
         if( $dstore['limit'] !== null )
         {
-            $queryBuilder->setMaxResults( $dstore['limit'] );
+            $limit = $dstore['limit'];
+            $queryBuilder->setMaxResults( $limit );
         }
+        $offset = 0;
         if( $dstore['offset'] !== null )
         {
-            $queryBuilder->setFirstResult( $dstore['offset'] );
+            $offset = $dstore['offset'];
+            $queryBuilder->setFirstResult( $offset );
         }
         $filterQuery = null;
         if( $dstore['filter'] !== null )
@@ -104,6 +109,12 @@ class UsersController extends FOSRestController
             }
             $data[] = $item;
         }
+        $count = $em->getRepository( 'App\Entity\User' )->count([]);
+        $view = FOSRestView::create();
+        $view->setData( $data );
+        $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
+        $handler = $this->get( 'fos_rest.view_handler' );
+        return $handler->handle( $view );
         return $data;
     }
 

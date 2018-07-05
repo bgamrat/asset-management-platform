@@ -292,11 +292,14 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/assets', useRangeHeaders: true, idProperty: 'id'});
+        var store = new TrackableRest({target: '/api/assets',
+            useRangeHeaders: true,
+            idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Keyboard, Selection, Editor]))({
             collection: store,
             className: "dgrid-autoheight",
             sort: "model_text",
+            maxRowsPerPage: 25,
             columns: {
                 id: {
                     label: core.id

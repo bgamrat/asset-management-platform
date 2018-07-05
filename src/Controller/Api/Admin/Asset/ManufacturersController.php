@@ -10,14 +10,15 @@ use App\Entity\Asset\Model;
 use App\Form\Admin\Asset\ManufacturerType;
 use App\Form\Admin\Asset\ModelType;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\View;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use FOS\RestBundle\View\View as FOSRestView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ManufacturersController extends FOSRestController
 {
@@ -51,13 +52,17 @@ class ManufacturersController extends FOSRestController
                 ->leftJoin( 'm.brands', 'b' )
                 ->leftJoin( 'm.contacts', 'c' )
                 ->orderBy( 'm.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $limit = 0;
         if( $dstore['limit'] !== null )
         {
-            $queryBuilder->setMaxResults( $dstore['limit'] );
+            $limit = $dstore['limit'];
+            $queryBuilder->setMaxResults( $limit );
         }
+        $offset = 0;
         if( $dstore['offset'] !== null )
         {
-            $queryBuilder->setFirstResult( $dstore['offset'] );
+            $offset = $dstore['offset'];
+            $queryBuilder->setFirstResult( $offset );
         }
         if( $dstore['filter'] !== null )
         {
@@ -76,8 +81,13 @@ class ManufacturersController extends FOSRestController
             }
             $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
-        $manufacturers = $queryBuilder->getQuery()->getResult();
-        return $manufacturers;
+        $data = $queryBuilder->getQuery()->getResult();
+        $count = $em->getRepository( 'App\Entity\Asset\Manufacturer' )->count([]);
+        $view = FOSRestView::create();
+        $view->setData( $data );
+        $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
+        $handler = $this->get( 'fos_rest.view_handler' );
+        return $handler->handle( $view );
     }
 
     /**

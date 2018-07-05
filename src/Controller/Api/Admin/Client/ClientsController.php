@@ -8,10 +8,11 @@ use App\Util\Form as FormUtil;
 use App\Util\Log;
 use App\Form\Admin\Client\ClientType;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\View\View as FOSRestView;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -47,13 +48,17 @@ class ClientsController extends FOSRestController
         $queryBuilder = $em->createQueryBuilder()->select( ['c'] )
                 ->from( 'App\Entity\Client\Client', 'c' )
                 ->orderBy( 'c.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $limit = 0;
         if( $dstore['limit'] !== null )
         {
-            $queryBuilder->setMaxResults( $dstore['limit'] );
+            $limit = $dstore['limit'];
+            $queryBuilder->setMaxResults( $limit );
         }
+        $offset = 0;
         if( $dstore['offset'] !== null )
         {
-            $queryBuilder->setFirstResult( $dstore['offset'] );
+            $offset = $dstore['offset'];
+            $queryBuilder->setFirstResult( $offset );
         }
         if( $dstore['filter'] !== null )
         {
@@ -88,7 +93,12 @@ class ClientsController extends FOSRestController
             }
             $data[] = $item;
         }
-        return $data;
+        $count = $em->getRepository( 'App\Entity\Client\Client' )->count([]);
+        $view = FOSRestView::create();
+        $view->setData( $data );
+        $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
+        $handler = $this->get( 'fos_rest.view_handler' );
+        return $handler->handle( $view );
     }
 
     /**

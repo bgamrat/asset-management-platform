@@ -9,9 +9,10 @@ use App\Util\Form as FormUtil;
 use App\Form\Admin\User\GroupType;
 use App\Form\Admin\Group\InvitationType;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\View\View as FOSRestView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class GroupsController extends FOSRestController
@@ -38,13 +39,17 @@ class GroupsController extends FOSRestController
         $queryBuilder = $em->createQueryBuilder()->select( ['g'] )
                 ->from( 'App\Entity\Group', 'g' )
                 ->orderBy( 'g.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $limit = 0;
         if( $dstore['limit'] !== null )
         {
-            $queryBuilder->setMaxResults( $dstore['limit'] );
+            $limit = $dstore['limit'];
+            $queryBuilder->setMaxResults( $limit );
         }
+        $offset = 0;
         if( $dstore['offset'] !== null )
         {
-            $queryBuilder->setFirstResult( $dstore['offset'] );
+            $offset = $dstore['offset'];
+            $queryBuilder->setFirstResult( $offset );
         }
         $filterQuery = null;
         if( $dstore['filter'] !== null )
@@ -65,7 +70,12 @@ class GroupsController extends FOSRestController
             $queryBuilder->where( $filterQuery );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        return array_values( $data );
+        $count = $em->getRepository( 'App\Entity\Group' )->count([]);
+        $view = FOSRestView::create();
+        $view->setData( $data );
+        $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
+        $handler = $this->get( 'fos_rest.view_handler' );
+        return $handler->handle( $view );
     }
 
     /**

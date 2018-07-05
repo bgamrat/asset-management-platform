@@ -7,10 +7,11 @@ use App\Util\DStore;
 use App\Util\Form as FormUtil;
 use App\Form\Admin\Asset\CategoryType;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\View\View as FOSRestView;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -34,6 +35,7 @@ class CategoriesController extends FOSRestController
     public function getCategoriesAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
+        $dstore = $this->dstore->gridParams( $request, 'name' );
 
         $em = $this->getDoctrine()->getManager();
 
@@ -42,8 +44,25 @@ class CategoriesController extends FOSRestController
                 ->leftJoin('c.parent', 'p')
                 ->orderBy( 'c.position' );
 
+        $limit = 0;
+        if( $dstore['limit'] !== null )
+        {
+            $limit = $dstore['limit'];
+            $queryBuilder->setMaxResults( $limit );
+        }
+        $offset = 0;
+        if( $dstore['offset'] !== null )
+        {
+            $offset = $dstore['offset'];
+            $queryBuilder->setFirstResult( $offset );
+        }
         $data = $queryBuilder->getQuery()->getResult();
-        return $data;
+        $count = $em->getRepository( 'App\Entity\Asset\Category' )->count([]);
+        $view = FOSRestView::create();
+        $view->setData( $data );
+        $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
+        $handler = $this->get( 'fos_rest.view_handler' );
+        return $handler->handle( $view );
     }
 
     /**
