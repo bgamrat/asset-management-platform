@@ -139,7 +139,8 @@
         "symfony/dotenv": "^4.0",
         "symfony/webpack-encore-pack": "^1.0",
         "sensiolabs/security-checker": "^4.1",
-        "symfony/templating": "^4.0"
+        "symfony/templating": "^4.0",
+        "symfony/requirements-checker": "^1.1"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -184,7 +185,8 @@
         ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "security-checker security:check": "script"
+            "security-checker security:check": "script",
+            "requirements-checker": "script"
         }
     },
     "extra": {
