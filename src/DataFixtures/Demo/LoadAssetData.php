@@ -77,6 +77,7 @@ class LoadAssetData extends AbstractFixture implements OrderedFixtureInterface
 
             $barcode = new Barcode();
             $barcode->setBarcode( str_pad( (string) rand( 0, 99999 ), 5, '0', STR_PAD_LEFT ) );
+            $barcode->setAsset( $item );
             $item->addBarcode( $barcode );
             $manager->persist( $item );
         }

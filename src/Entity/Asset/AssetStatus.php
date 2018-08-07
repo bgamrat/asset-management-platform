@@ -19,6 +19,7 @@ use App\Entity\Traits\XDefault;
  * @ORM\Entity()
  * @UniqueEntity("name")
  * @UniqueEntity("id")
+ * @ORM\Cache()
  */
 class AssetStatus
 {

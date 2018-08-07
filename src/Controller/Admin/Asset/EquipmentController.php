@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\Asset\AssetType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of AssetController
@@ -19,7 +18,6 @@ class EquipmentController extends Controller
 
     /**
      * @Route("/admin/asset/equipment")
-     * @Method("GET")
      */
     public function indexAction( Request $request )
     {

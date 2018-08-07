@@ -22,6 +22,7 @@ use App\Entity\Traits\Versioned\Value;
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @UniqueEntity("name")
  * @UniqueEntity("id")
+ * @ORM\Cache()
  */
 class Category
 {

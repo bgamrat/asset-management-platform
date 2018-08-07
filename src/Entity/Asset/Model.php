@@ -49,12 +49,12 @@ class Model
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models")
+     * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models", fetch="EXTRA_LAZY")
      * @Gedmo\Versioned
      */
     private $brand;
     /**
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToOne(targetEntity="Category", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Gedmo\Versioned
      */

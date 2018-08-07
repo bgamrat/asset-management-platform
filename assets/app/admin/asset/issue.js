@@ -313,7 +313,6 @@ define([
         var store = new TrackableRest({target: '/api/issues', useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
-            className: "dgrid-autoheight",
             sort: "priority",
             maxRowsPerPage: 25,
             columns: {

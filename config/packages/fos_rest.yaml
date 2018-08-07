@@ -30,3 +30,5 @@ fos_rest:
     routing_loader:
         default_format: json
         include_format: false
+    service:
+        serializer: "fos_rest.serializer.jms"

@@ -19,6 +19,7 @@ use App\Entity\Traits\XDefault;
  * @ORM\Entity(repositoryClass="App\Repository\LocationTypeRepository")
  * @UniqueEntity("name")
  * @UniqueEntity("id")
+ * @ORM\Cache()
  */
 class LocationType
 {

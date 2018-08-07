@@ -42,7 +42,6 @@ define([
         var store = new RestStore({target: "/api/store/trailercontents/" + trailerId, useRangeHeaders: true, idProperty: 'id'});
         var grid = new OnDemandGrid({
             collection: store,
-            className: "dgrid-autoheight",
             sort: "category",
             maxRowsPerPage: 25,
             columns: {

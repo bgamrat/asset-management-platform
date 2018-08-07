@@ -41,9 +41,14 @@ class Barcode
      * @var string
      * 
      * @ORM\Column(type="string", length=64, nullable=true)
-     * @ORM\ManyToMany(targetEntity="Asset", mappedBy="barcodes", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $barcode;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Asset", inversedBy="barcodes", fetch="EXTRA_LAZY", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
+     */
+    private $asset = null;
 
     /**
      * Set barcode
@@ -67,6 +72,29 @@ class Barcode
     public function getBarcode()
     {
         return $this->barcode;
+    }
+
+    /**
+     * Set asset
+     *
+     * @param string $asset
+     *
+     * @return Asset
+     */
+    public function setAsset( Asset $asset )
+    {
+        $this->asset = $asset;
+        return $this;
+    }
+
+    /**
+     * Get asset
+     *
+     * @return string
+     */
+    public function getAsset()
+    {
+        return $this->asset;
     }
 
     public function setDeletedAt( $deletedAt )

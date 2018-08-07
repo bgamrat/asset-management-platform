@@ -11,6 +11,7 @@ use App\Form\Admin\Asset\AssetType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\View\View as FOSRestView;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -74,7 +75,7 @@ class AssetsController extends FOSRestController
                 ->from( 'App\Entity\Asset\Asset', 'a' )
                 ->innerJoin( 'a.model', 'm' )
                 ->innerJoin( 'm.brand', 'b' )
-                ->leftJoin( 'a.barcodes', 'bc'/* , 'WITH', 'bc.active = true' */ )
+                ->leftJoin( 'a.barcodes', 'bc' ) // 'WITH', 'bc.active = true' )
                 ->leftJoin( 'a.status', 's' )
                 ->orderBy( $sortField, $dstore['sort-direction'] );
         $limit = 0;
@@ -112,10 +113,10 @@ class AssetsController extends FOSRestController
         }
         else
         {
-            $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( true ) ) );
+            $queryBuilder->andWhere( $queryBuilder->expr()->eq( 'bc.active', $queryBuilder->expr()->literal( 't' ) ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        $count = $em->getRepository( 'App\Entity\Asset\Asset' )->count([]);
+        $count = $em->getRepository( 'App\Entity\Asset\Asset' )->count( [] );
 
         $view = FOSRestView::create();
         $view->setData( $data );
@@ -135,6 +136,7 @@ class AssetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
+
         $asset = $this->getDoctrine()
                         ->getRepository( 'App\Entity\Asset\Asset' )->find( $id );
         if( $asset !== null )
@@ -144,7 +146,6 @@ class AssetsController extends FOSRestController
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->formUtil;
             $formUtil->saveDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdatedAt() );
-
             $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
             $asset->setHistory( $history );
             $form->add( 'history', TextareaType::class, ['data' => $history] );

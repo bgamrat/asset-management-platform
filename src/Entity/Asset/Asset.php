@@ -99,12 +99,8 @@ class Asset
     protected $location_text = null;
     /**
      * @var ArrayCollection $barcodes
-     * @ORM\ManyToMany(targetEntity="Barcode", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Barcode", mappedBy="asset", cascade={"persist"})
      * @ORM\OrderBy({"id" = "ASC"})
-     * @ORM\JoinTable(name="asset_barcode",
-     *      joinColumns={@ORM\JoinColumn(name="asset_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="barcode_id", referencedColumnName="id", unique=true, nullable=false)}
-     *      )
      */
     protected $barcodes;
 
@@ -303,7 +299,7 @@ class Asset
 
     public function getBarcodes()
     {
-        return $this->barcodes->toArray();
+        return $this->barcodes;
     }
 
     public function addBarcode( Barcode $barcode )

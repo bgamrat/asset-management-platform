@@ -294,7 +294,6 @@ define([
         var store = new TrackableRest({target: '/api/events', useRangeHeaders: true, idProperty: 'id'});
         var grid = new (declare([OnDemandGrid, Selection, Editor, ColumnHider]))({
             collection: store,
-            className: "dgrid-autoheight",
             maxRowsPerPage: 25,
             columns: {
                 id: {

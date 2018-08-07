@@ -107,6 +107,9 @@ body.tundra {
 .dijitSelect .dijitButtonContents {
     width: 160px;
 }
+.dgrid {
+    height: 50em;
+}
 .dgrid pre {
     padding: 0;
     background: #fff;

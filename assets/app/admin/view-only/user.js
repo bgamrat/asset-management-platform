@@ -49,7 +49,6 @@ define([
         var store = new TrackableRest({target: '/api/users', useRangeHeaders: true, idProperty: 'username'});
         var grid = new (declare([OnDemandGrid, Selection]))({
             collection: store,
-            className: "dgrid-autoheight",
             columns: {
                 username: {
                     label: core.username

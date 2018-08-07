@@ -50,7 +50,7 @@ class Vendor
     private $contacts = null;
     /**
      * @var ArrayCollection $brands
-     * @ORM\ManyToMany(targetEntity="Brand")
+     * @ORM\ManyToMany(targetEntity="Brand", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="vendor_brand",
      *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id", nullable=false)},
      *      inverseJoinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id", nullable=false)}

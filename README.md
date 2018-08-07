@@ -9,6 +9,8 @@ A system intended to help manage assets which are on tractor-trailers.
 
 Proof of concept - not fully operational
 
+** Working on performance issues related to the size and complexity of the objects
+
 ## Demo
 
 Soon (whenever)

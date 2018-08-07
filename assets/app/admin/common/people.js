@@ -153,7 +153,6 @@ define([
         all([lib.getAddressTypes(), lib.getEmailTypes(), lib.getPersonTypes(), lib.getPhoneTypes()]).then(function (results) {
             grid = new (declare([OnDemandGrid, Selection, Editor]))({
                 collection: store,
-                className: "dgrid-autoheight",
                 maxRowsPerPage: 25,
                 columns: {
                     id: {

@@ -50,7 +50,6 @@ define([
         var store = new TrackableRest({target: '/api/invitations', useRangeHeaders: true, idProperty: 'invitationname'});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
-            className: "dgrid-autoheight",
             maxRowsPerPage: 25,
             columns: {
                 email: {

@@ -29,7 +29,7 @@ class Brand
     use Active,
         Comment,
         CustomAttributes,
-            Id,
+        Id,
         Name,
         TimestampableEntity,
         SoftDeleteableEntity,
@@ -44,7 +44,7 @@ class Brand
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Manufacturer")
+     * @ORM\ManyToOne(targetEntity="Manufacturer", fetch="EXTRA_LAZY")
      */
     private $manufacturer;
     /**
@@ -58,7 +58,7 @@ class Brand
     protected $models = null;
     /**
      * @var ArrayCollection $vendors
-     * @ORM\ManyToMany(targetEntity="Vendor", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Vendor", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="vendor_brands",
      *      joinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="vendor_id", referencedColumnName="id", nullable=false)}
@@ -66,10 +66,6 @@ class Brand
      */
     protected $vendors = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
     public function __construct()
     {
         $this->models = new ArrayCollection();

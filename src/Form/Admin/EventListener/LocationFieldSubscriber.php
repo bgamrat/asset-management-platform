@@ -13,7 +13,7 @@ use App\Entity\Common\Contact;
 class LocationFieldSubscriber implements EventSubscriberInterface
 {
 
-    private $em,$entities;
+    private $em, $entities;
 
     public function __construct( EntityManagerInterface $em, $entities = [] )
     {
@@ -35,6 +35,7 @@ class LocationFieldSubscriber implements EventSubscriberInterface
         if( !empty( $location ) )
         {
             $entityId = $location->getEntity();
+
             if( !empty( $entityId ) )
             {
                 if( isset( $this->entities[$location->getType()->getEntity()] ) )
@@ -50,8 +51,15 @@ class LocationFieldSubscriber implements EventSubscriberInterface
             {
                 $addressId = $location->getAddressId();
                 $address = $this->em->getRepository( 'App\Entity\Common\Address' )->find( $addressId );
-                $contactData = $this->em->getRepository( $class )->findOneByAddress( $address->getId() );
-                $data = $this->em->getReference( $class, $contactData->getId() );
+                if( !empty( $address ) )
+                {
+                    $contactData = $this->em->getRepository( $class )->findOneByAddress( $address->getId() );
+                    $data = $this->em->getReference( $class, $contactData->getId() );
+                }
+                else
+                {
+                    throw new Exception( "Invalid address" );
+                }
             }
             else
             {

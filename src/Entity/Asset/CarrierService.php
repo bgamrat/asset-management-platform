@@ -24,7 +24,7 @@ class CarrierService
 
     use Active,
         Comment,
-            Id,
+        Id,
         Name,
         XDefault;
 

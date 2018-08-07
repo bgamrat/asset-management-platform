@@ -34,11 +34,11 @@ class Location
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
+     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id", fetch="EXTRA_LAZY")
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="LocationType")
+     * @ORM\ManyToOne(targetEntity="LocationType", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="type", referencedColumnName="id")
      * @ORM\OrderBy({"type" = "ASC"})
      */

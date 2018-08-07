@@ -52,7 +52,7 @@ class Trailer
      * @var int
      * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Model")
+     * @ORM\ManyToOne(targetEntity="Model", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="model_id", referencedColumnName="id")
      */
     protected $model = null;
@@ -78,7 +78,7 @@ class Trailer
     /**
      * @var int
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     protected $location = null;

@@ -2,6 +2,10 @@ app_admin:
     resource: ../../src/Controller/Admin
     type:     annotation
 
+app_api:
+    resource: ../../src/Controller/Api
+    type:     annotation
+
 app_api_store:
     resource: ../../src/Controller/Api/Common
     type:   annotation

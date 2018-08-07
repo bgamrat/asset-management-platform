@@ -140,7 +140,9 @@
         "symfony/webpack-encore-pack": "^1.0",
         "sensiolabs/security-checker": "^4.1",
         "symfony/templating": "^4.0",
-        "symfony/requirements-checker": "^1.1"
+        "symfony/requirements-checker": "^1.1",
+        "api-platform/api-pack": "^1.1",
+        "jms/serializer-bundle": "^2.4"
     },
     "conflict": {
         "symfony/symfony": "*"

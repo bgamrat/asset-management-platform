@@ -243,7 +243,6 @@ define([
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             sort: "name",
-            className: "dgrid-autoheight",
             maxRowsPerPage: 25,
             columns: {
                 id: {

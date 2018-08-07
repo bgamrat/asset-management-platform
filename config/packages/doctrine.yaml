@@ -43,3 +43,16 @@ doctrine:
                     softdeleteable:
                         class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
                         enabled: true
+                query_cache_driver:
+                    type: memcached
+                    host: '%env(resolve:MEMCACHED_HOST)%'
+                    port: '%env(resolve:MEMCACHED_PORT)%'
+                    instance_class: Memcached
+                    namespace: q
+                metadata_cache_driver: apcu
+                result_cache_driver:
+                    type: memcached
+                    host: '%env(resolve:MEMCACHED_HOST)%'
+                    port: '%env(resolve:MEMCACHED_PORT)%'
+                    instance_class: Memcached
+                    namespace: rs

@@ -44,6 +44,7 @@ class Normalizer implements NormalizerInterface, NormalizerAwareInterface
             {
                 return $object->getStatus();
             }
+            die('I am lost!');
         } );
 
         $serializer = new Serializer( array($normalizer), array($encoder) );

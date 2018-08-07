@@ -66,7 +66,7 @@ class AssetLocationType extends AbstractType
                 ;
                 $builder->get( 'type' )
                         ->addModelTransformer( new LocationTypeToIdTransformer( $this->em ) );
-                $builder->addEventSubscriber( new LocationFieldSubscriber($this->em, $this->entities) );
+                //$builder->addEventSubscriber( new LocationFieldSubscriber($this->em, $this->entities) );
             }
 
             /**

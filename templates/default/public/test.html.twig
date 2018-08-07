@@ -1,34 +1,46 @@
-{% block title %}{{ 'common.test'|trans }}{% endblock %}
-{% extends '/admin.base.html.twig' %}
-
-
-{#% form_theme test_form _self %}
-
-{% block money_widget %}
-    Money Widget
-    {{dump(form)}}
-    {{form}}
-{% endblock %#}
-
-{% block admin_content %}
-
-    <h1>{{ block ('title') }}</h1>
-
-    <button id="test-btn">Test</button>
-
-    {{form_start(test_form)}}
-    {{form_widget(test_form.money)}}
-    {{form_end(test_form)}}
-
-{% endblock %}
-{% block page_js %}
-    {% if app.environment == 'prod' %}
-        <script src="/release/app/test.js"></script>
-    {% endif %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tutorial: Hello Dojo!</title>
+</head>
+<body>
+    <h1 id="greeting">Hello</h1>
+    <button id="textButton">Click</button>
+    <div id="resultDiv"></div>
+    <!-- load Dojo -->
     <script>
-        require(["app/test",
-            "dojo/domReady!"], function (test) {
-            test.run();
-        });
+  var dojoConfig = {
+    async:true,
+    cacheBust:new Date(),
+    waitSeconds:5
+  };
+</script>
+    <script src="/build/lib/dojo/dojo.js"
+            ></script>
+
+    <script>
+        require(["dojo/dom", "dojo/on", "dojo/request", "dojo/domReady!"],
+    function(dom, on, request){/*
+        // Results will be displayed in resultDiv
+        var resultDiv = dom.byId("resultDiv");
+
+        // Attach the onclick event handler to the textButton
+        on(dom.byId("textButton"), "click", function(evt){
+            // Request the text file
+            /*request.get("/psalm_of_life.txt").then(
+                function(response){
+                    // Display the text file content
+                    resultDiv.innerHTML = "<pre>"+response+"</pre>";
+                },
+                function(error){
+                    // Display the error returned
+                    resultDiv.innerHTML = "<div class=\"error\">"+error+"<div>";
+                }
+            );
+        });*/
+    }
+);
     </script>
-{% endblock %}
+</body>
+</html>
