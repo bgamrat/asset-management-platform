@@ -374,21 +374,21 @@ define([
                     assetViewDialog.show();
                     action = "view";
                     assetId = asset.id;
-                    modelFilteringSelect.set('displayedValue', asset.model.brandModelName);
-                    statusSelect.set("displayedValue", asset.status.name);
+                    modelFilteringSelect.set('displayedValue', asset.brand_model_name);
+                    statusSelect.set("displayedValue", asset.status_name);
                     timestamp = new Date();
-                    timestamp.setTime(asset.purchased.timestamp * 1000);
+                    timestamp.setTime(asset.purchased * 1000);
                     purchasedInput.set('value', timestamp);
-                    costInput.set("value", asset.cost);
-                    valueInput.set("value", asset.value);
+                    costInput.set("value", parseFloat(asset.cost));
+                    valueInput.set("value", parseFloat(asset.value));
                     if( asset.owner !== null ) {
                         ownerFilteringSelect.set("displayedValue", asset.owner.name);
                     } else {
                         ownerFilteringSelect.set("value", null);
                     }
-                    location.setData(asset.location, asset.locationText);
-                    serialNumberInput.set('value', asset.serialNumber);
-                    customAttributes.setData(asset.customAttributes);
+                    location.setData(asset.location, asset.location_text);
+                    serialNumberInput.set('value', asset.serial_number);
+                    customAttributes.setData(asset.custom_attributes);
                     commentInput.set('value', asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {
                         barcodes.setData(asset.barcodes);

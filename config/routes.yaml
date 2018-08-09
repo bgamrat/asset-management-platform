@@ -37,4 +37,3 @@ fos_user_group:
 
 legacy_app_homepage:
     resource: "routes/legacy_bridge.yaml"
-

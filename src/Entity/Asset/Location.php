@@ -34,7 +34,6 @@ class Location
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id", fetch="EXTRA_LAZY")
      */
     private $id;
     /**
@@ -55,7 +54,7 @@ class Location
      */
     private $address_id = null;
     /**
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="location")
+     * @ORM\OneToMany(targetEntity="Asset", mappedBy="location", fetch="EXTRA_LAZY")
      */
     private $assets;
     private $entityData;

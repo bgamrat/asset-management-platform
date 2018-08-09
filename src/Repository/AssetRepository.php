@@ -3,6 +3,7 @@
 Namespace App\Repository;
 
 use App\Entity\Asset\Asset;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -22,21 +23,56 @@ class AssetRepository extends ServiceEntityRepository
 
     public function findConcise( $assetId )
     {
+        // Raw SQL is used for performance
         if( !empty( $assetId ) )
         {
-
             $em = $this->getEntityManager();
-
-            $queryBuilder = $em->createQueryBuilder()->select( ['a'] )
-                    ->from( 'App\Entity\Asset\Asset', 'a' )
-                    ->join( 'a.barcodes', 'b' )
-                    ->join( 'a.model', 'm' )
-                    ->where( 'a.id = :asset_id' )
-                    ->setParameter( 'asset_id', $assetId );
-
-            $data = $queryBuilder->getQuery()->getResult();
-            if (!empty($data)) {
+            $sql = <<< SQL
+SELECT a.id,
+       a.active,
+       m.id AS model_id,
+       m.name AS model_name,
+       Concat_ws(' ', b.NAME, m.NAME)  AS brand_model_name,
+       m.name AS model_text,
+       a.status_id,
+       st.NAME                         AS status_name,
+       a.purchased,
+       --Extract(epoch FROM a.purchased) AS purchased,
+       a.cost,
+       a.value,
+       a.owner_id,
+       a.location_id,
+       l.type                          AS location_type,
+       a.serial_number,
+       a.custom_attributes,
+       a.comment,
+       a.updated_at
+FROM   asset a
+       JOIN model m
+         ON ( a.model_id = m.id )
+       JOIN brand b
+         ON ( m.brand_id = b.id )
+       JOIN asset_status st
+         ON ( a.status_id = st.id )
+       JOIN location l
+         ON ( a.location_id = l.id )
+WHERE  a.id = ?
+SQL;
+            $stmt = $em->getConnection()->prepare( $sql );
+            $stmt->bindValue( 1, $assetId );
+            $stmt->execute();
+            $data = $stmt->fetchAll();
+            if( !empty( $data ) )
+            {
                 $data = $data[0];
+                $sql = 'SELECT * FROM barcode b WHERE b.asset_id = ?';
+                $stmt = $em->getConnection()->prepare( $sql );
+                $stmt->bindValue( 1, $assetId );
+                $stmt->execute();
+                $data['barcodes'] = $stmt->fetchAll();
+                $data['model'] = $em->getRepository( 'App\Entity\Asset\Model' )->find( $data['model_id'] );
+                $data['owner'] = empty( $data['owner_id'] ) ? null :
+                        $data['owner'] = $em->getRepository( 'App\Entity\Asset\Vendor' )->find( $data['owner_id'] );
             }
         }
         else
