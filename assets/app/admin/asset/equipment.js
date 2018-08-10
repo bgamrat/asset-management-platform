@@ -377,7 +377,7 @@ define([
                     modelFilteringSelect.set('displayedValue', asset.model.brand.name + " " + asset.model.name);
                     statusSelect.set("displayedValue", asset.status.name);
                     timestamp = new Date();
-                    timestamp.setTime(asset.purchased.timestamp * 1000);
+                    timestamp.setTime(asset.purchased * 1000);
                     purchasedInput.set('value', timestamp);
                     costInput.set("value", asset.cost);
                     valueInput.set("value", asset.value);

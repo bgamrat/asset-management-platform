@@ -80,7 +80,7 @@ class Asset
      * @var int
      * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Vendor")
+     * @ORM\ManyToOne(targetEntity="Vendor", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      */
     protected $owner = null;
