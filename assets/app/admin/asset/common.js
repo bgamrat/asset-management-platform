@@ -8,25 +8,28 @@ define([
     function relationshipLists(listContentPane, relationships, satisfies) {
         var i, listContent, listHtml = "", r, s;
         listHtml += '<div class="justify">';
-        if (Object.keys(satisfies).length > 0) {
+        if( Object.keys(satisfies).length > 0 ) {
             listHtml += "<div>";
             listHtml += "<h4>" + asset.satisfies + "</h4>";
             listHtml += "<ul>";
             for( s in satisfies ) {
-                listHtml += "<li>" + satisfies[s].fullName + "</li>";
+                listHtml += "<li>" + satisfies[s].full_name + "</li>";
             }
+            listHtml += "</ul></div>";
         }
-        listHtml += "</ul></div>";
+
         listHtml += "<div>";
-        for( r in relationships ) {
-            listContent = relationships[r];
-            if (listContent.length > 0) {
-                listHtml += "<h4>" + asset[r] + "</h4>";
-                listHtml += "<ul>";
-                for( i = 0; i < listContent.length; i++ ) {
-                    listHtml += "<li>" + listContent[i].name + "</li>";
+        if( relationships.length > 0 ) {
+            for( r in relationships ) {
+                listContent = relationships[r];
+                if( listContent.length > 0 ) {
+                    listHtml += "<h4>" + asset[r] + "</h4>";
+                    listHtml += "<ul>";
+                    for( i = 0; i < listContent.length; i++ ) {
+                        listHtml += "<li>" + listContent[i].name + "</li>";
+                    }
+                    listHtml += "</ul>";
                 }
-                listHtml += "</ul>";
             }
         }
         listHtml += "</div>";

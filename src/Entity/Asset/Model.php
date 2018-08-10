@@ -49,7 +49,7 @@ class Model
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models", fetch="EXTRA_LAZY")
+     * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models")
      * @Gedmo\Versioned
      */
     private $brand;
@@ -84,11 +84,11 @@ class Model
      */
     private $defaultEventValue = 0.0;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends")
      */
     private $extended_by;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", inversedBy="extended_by", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="extended_by")
      * @ORM\JoinTable(name="model_extend",
      *      joinColumns={@ORM\JoinColumn(name="extends_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="extended_by_id", referencedColumnName="id")}
@@ -96,11 +96,11 @@ class Model
      */
     private $extends;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", mappedBy="requires", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="requires")
      */
     private $required_by;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", inversedBy="required_by", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Model", inversedBy="required_by")
      * @ORM\JoinTable(name="model_require",
      *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="required_by_id", referencedColumnName="id")}
@@ -108,7 +108,7 @@ class Model
      */
     private $requires;
     /**
-     * @ORM\ManyToMany(targetEntity="Category", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Category")
      * @ORM\JoinTable(name="model_satisfy",
      *      joinColumns={@ORM\JoinColumn(name="satisfy_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id")}

@@ -374,21 +374,21 @@ define([
                     assetViewDialog.show();
                     action = "view";
                     assetId = asset.id;
-                    modelFilteringSelect.set('displayedValue', asset.model.brandModelName);
+                    modelFilteringSelect.set('displayedValue', asset.model.brand.name + " " + asset.model.name);
                     statusSelect.set("displayedValue", asset.status.name);
                     timestamp = new Date();
                     timestamp.setTime(asset.purchased.timestamp * 1000);
                     purchasedInput.set('value', timestamp);
                     costInput.set("value", asset.cost);
                     valueInput.set("value", asset.value);
-                    if( asset.owner !== null ) {
+                    if( typeof asset.owner !== "undefined" && asset.owner !== null ) {
                         ownerFilteringSelect.set("displayedValue", asset.owner.name);
                     } else {
                         ownerFilteringSelect.set("value", null);
                     }
-                    location.setData(asset.location, asset.locationText);
-                    serialNumberInput.set('value', asset.serialNumber);
-                    customAttributes.setData(asset.customAttributes);
+                    location.setData(asset.location, asset.location_text);
+                    serialNumberInput.set('value', asset.serial_number);
+                    customAttributes.setData(asset.custom_attributes);
                     commentInput.set('value', asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {
                         barcodes.setData(asset.barcodes);
@@ -398,9 +398,9 @@ define([
                     activeCheckBox.set('checked', asset.active);
                     assetCommon.relationshipLists(modelRelationshipsContentPane,
                             {"requires": asset.model.requires,
-                                "required_by": asset.model.requiredBy,
+                                "required_by": asset.model.required_by,
                                 "extends": asset.model["extends"],
-                                "extended_by": asset.model.extendedBy}, asset.model.satisfies);
+                                "extended_by": asset.model.extended_by}, asset.model.satisfies);
                     lib.showHistory(historyContentPane, asset.history);
                 }, lib.xhrError);
             }

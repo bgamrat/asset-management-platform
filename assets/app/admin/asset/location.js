@@ -220,12 +220,12 @@ define([
                         locationStore.target = obj.type.url;
                         locationFilteringSelect.set("store", locationStore);
                         locationFilteringSelect.set("readOnly", false);
-                        if( obj.address === true && obj.entityData !== null ) {
-                            obj.entityData.label = location_text;
-                            locationFilteringSelect.set('displayedValue',obj.entityData.name);
-                            document.getElementById(locationEcho).innerHTML = obj.entityData.label.replace(/\n/g, '<br>');
+                        if( obj.address === true && obj.entity_data !== null ) {
+                            obj.entity_data.label = location_text;
+                            locationFilteringSelect.set('displayedValue', obj.entity_data.name);
+                            document.getElementById(locationEcho).innerHTML = obj.entity_data.label.replace(/\n/g, '<br>');
                         } else {
-                            locationFilteringSelect.set('displayedValue', obj.entityData.name);
+                            locationFilteringSelect.set('displayedValue', obj.entity_data.name);
                         }
                     } else {
                         textLocationMemoryStore.data = [{name: locationTypeLabels[obj.type.id], id: 0}];

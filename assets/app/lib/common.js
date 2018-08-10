@@ -124,8 +124,7 @@ define([
             if( h.username === null ) {
                 h.username = '';
             }
-            date.setTime(h.timestamp.timestamp * 1000);
-            dateText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+            dateText = h.timestamp;
             dataText = [];
             for( d in h.data ) {
                 dataText.push(d + ' set to ' + h.data[d]);

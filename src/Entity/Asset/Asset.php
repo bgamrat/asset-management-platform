@@ -26,7 +26,7 @@ use App\Entity\Traits\History;
  * @ORM\Entity(repositoryClass="App\Repository\AssetRepository")
  * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\AssetLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * 
+ *
  */
 class Asset
 {
@@ -53,7 +53,7 @@ class Asset
      * @var int
      * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Model")
+     * @ORM\ManyToOne(targetEntity="Model", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="model_id", referencedColumnName="id")
      */
     protected $model = null;
@@ -86,8 +86,9 @@ class Asset
     protected $owner = null;
     /**
      * @var int
+     * @Gedmo\Versioned
      * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\ManyToOne(targetEntity="Location", inversedBy="assets", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Location", cascade={"persist"})
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id")
      */
     protected $location = null;
@@ -99,7 +100,7 @@ class Asset
     protected $location_text = null;
     /**
      * @var ArrayCollection $barcodes
-     * @ORM\OneToMany(targetEntity="Barcode", mappedBy="asset", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Barcode", mappedBy="asset", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"id" = "ASC"})
      */
     protected $barcodes;
@@ -242,7 +243,7 @@ class Asset
     /**
      * Get owner
      *
-     * @return int
+     * @return Vendor
      */
     public function getOwner()
     {

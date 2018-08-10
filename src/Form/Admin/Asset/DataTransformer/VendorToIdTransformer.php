@@ -24,7 +24,7 @@ class VendorToIdTransformer implements DataTransformerInterface
     public function transform($vendor)
     {
         if (null === $vendor) {
-            return '';
+            return null;
         }
 
         return $vendor->getId();

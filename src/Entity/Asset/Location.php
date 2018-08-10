@@ -7,7 +7,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Traits\Id;
 
 /**
@@ -34,7 +33,6 @@ class Location
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="id", fetch="EXTRA_LAZY")
      */
     private $id;
     /**
@@ -54,15 +52,11 @@ class Location
      *
      */
     private $address_id = null;
-    /**
-     * @ORM\OneToMany(targetEntity="Asset", mappedBy="location")
-     */
-    private $assets;
+
     private $entityData;
 
     public function __construct()
     {
-        $this->assets = new ArrayCollection();
     }
 
     /**
@@ -127,35 +121,6 @@ class Location
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Get assets
-     *
-     * @return ArrayCollection
-     */
-    public function getAssets()
-    {
-        return $this->assets->toArray();
-    }
-
-    public function setAssets( $assets )
-    {
-        foreach( $assets as $a )
-        {
-            $this->addAssets( $a );
-            $a->setLocation( $this );
-        }
-        return $this;
-    }
-
-    public function addAsset( Model $asset )
-    {
-        if( !$this->extends->contains( $asset ) )
-        {
-            $this->extends->add( $asset );
-            $a->setLocation( $this );
-        }
     }
 
     /**

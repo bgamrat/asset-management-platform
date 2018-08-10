@@ -3,6 +3,7 @@
 Namespace App\Repository;
 
 use App\Entity\Asset\Asset;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -18,32 +19,6 @@ class AssetRepository extends ServiceEntityRepository
     public function __construct( RegistryInterface $registry )
     {
         parent::__construct( $registry, Asset::class );
-    }
-
-    public function findConcise( $assetId )
-    {
-        if( !empty( $assetId ) )
-        {
-
-            $em = $this->getEntityManager();
-
-            $queryBuilder = $em->createQueryBuilder()->select( ['a'] )
-                    ->from( 'App\Entity\Asset\Asset', 'a' )
-                    ->join( 'a.barcodes', 'b' )
-                    ->join( 'a.model', 'm' )
-                    ->where( 'a.id = :asset_id' )
-                    ->setParameter( 'asset_id', $assetId );
-
-            $data = $queryBuilder->getQuery()->getResult();
-            if (!empty($data)) {
-                $data = $data[0];
-            }
-        }
-        else
-        {
-            $data = null;
-        }
-        return $data;
     }
 
     public function findOneByBarcodeId( $barcodeId )

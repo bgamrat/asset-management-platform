@@ -44,7 +44,6 @@ class LocationFieldSubscriber implements EventSubscriberInterface
                 }
             }
         }
-
         if( $class !== null && $entityId !== null )
         {
             if( $location->isAddress() )
