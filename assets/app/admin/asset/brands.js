@@ -27,7 +27,7 @@ define([
     }
 
     function setDivId(divId) {
-        divIdInUse = divId + '_brands';
+        divIdInUse = divId + "_brands";
     }
 
     function cloneNewNode() {
@@ -38,7 +38,7 @@ define([
 
     function createDijits() {
         var dijit;
-        var base = getDivId() + '_' + nameInput.length + '_';
+        var base = getDivId() + "_" + nameInput.length + "_";
         dijit = new ValidationTextBox({
             placeholder: core.name,
             trim: true,
@@ -86,7 +86,7 @@ define([
 
         prototypeNode = dom.byId(getDivId());
         if( prototypeNode === null ) {
-            setDivId(arguments[0] + '_0');
+            setDivId(arguments[0] + "_0");
             prototypeNode = dom.byId(getDivId());
         }
 
@@ -101,7 +101,7 @@ define([
 
         createDijits();
 
-        addOneMoreControl = query('.brands .add-one-more-row');
+        addOneMoreControl = query(".brands .add-one-more-row");
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -114,7 +114,7 @@ define([
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
-            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            var id = parseInt(targetParent.id.replace(/\D/g, ""));
             destroyRow(id, targetParent.parentNode);
             if( nameInput.length <= lib.constant.MAX_BRANDS ) {
                 addOneMoreControl.removeClass("hidden");
@@ -125,13 +125,13 @@ define([
     function getData() {
         var i, returnData = [];
         for( i = 0; i < nameInput.length; i++ ) {
-            if (nameInput[i].get('value') !== "") {
+            if (nameInput[i].get("value") !== "") {
                 returnData.push(
                         {
                             "id": brandId[i],
-                            "name": nameInput[i].get('value'),
-                            "comment": commentInput[i].get('value'),
-                            "active": activeCheckBox[i].get('value')
+                            "name": nameInput[i].get("value"),
+                            "comment": commentInput[i].get("value"),
+                            "active": activeCheckBox[i].get("value")
                         });
             }
         }
@@ -156,15 +156,15 @@ define([
                 }
                 obj = brands[i];
                 brandId[i] = obj.id;
-                nameInput[i].set('value', obj.name);
-                commentInput[i].set('value', obj.comment);
-                activeCheckBox[i].set('value', obj.active);
+                nameInput[i].set("value", obj.name);
+                commentInput[i].set("value", obj.comment);
+                activeCheckBox[i].set("value", obj.active);
             }
         } else {
             brandId[0] = null;
-            nameInput[0].set('value', "");
-            commentInput[0].set('value', "");
-            activeCheckBox[0].set('value', "");
+            nameInput[0].set("value", "");
+            commentInput[0].set("value", "");
+            activeCheckBox[0].set("value", "");
         }
     }
 

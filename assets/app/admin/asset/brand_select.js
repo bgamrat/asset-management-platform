@@ -5,7 +5,7 @@ define([
     "dojo/on",
     "dojo/query",
     "dijit/form/FilteringSelect",
-    'dojo/store/JsonRest',
+    "dojo/store/JsonRest",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/NodeList-dom",
@@ -29,7 +29,7 @@ define([
     }
 
     function setDivId(divId) {
-        divIdInUse = divId + '_brands';
+        divIdInUse = divId + "_brands";
     }
 
     function cloneNewNode() {
@@ -39,7 +39,7 @@ define([
 
     function createDijits() {
         var dijit;
-        var base = getDivId() + '_' + brandFilteringSelect.length;
+        var base = getDivId() + "_" + brandFilteringSelect.length;
         dijit = new FilteringSelect({
             store: brandStore,
             labelAttr: "name",
@@ -55,7 +55,7 @@ define([
 
         l = brandFilteringSelect.length;
         for( i = 0; i < l; i++ ) {
-            kid = brandFilteringSelect[i].id.replace(/\D/g, '');
+            kid = brandFilteringSelect[i].id.replace(/\D/g, "");
             if( kid == id ) {
                 id = i;
                 break;
@@ -76,7 +76,7 @@ define([
 
         prototypeNode = dom.byId(getDivId());
         if( prototypeNode === null ) {
-            setDivId(arguments[0] + '_0');
+            setDivId(arguments[0] + "_0");
             prototypeNode = dom.byId(getDivId());
         }
 
@@ -86,17 +86,17 @@ define([
         }
 
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__brand__/g, '0');
+        prototypeContent = dataPrototype.replace(/__brand__/g, "0");
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
         brandStore = new JsonRest({
-            target: '/api/store/brands',
+            target: "/api/store/brands",
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: "id"});
 
         createDijits();
 
-        addOneMoreControl = query('.brands .add-one-more-row');
+        addOneMoreControl = query(".brands .add-one-more-row");
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -109,7 +109,7 @@ define([
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
-            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            var id = parseInt(targetParent.id.replace(/\D/g, ""));
             destroyRow(id, targetParent.parentNode);
             if( brandFilteringSelect.length <= lib.constant.MAX_BRANDS ) {
                 addOneMoreControl.removeClass("hidden");
@@ -123,7 +123,7 @@ define([
             returnData.push(
                     {
                         "id": brandFilteringSelect[i].get("value"),
-                        "name": brandFilteringSelect[i].get('displayedValue')
+                        "name": brandFilteringSelect[i].get("displayedValue")
                     });
         }
         return returnData;
@@ -146,10 +146,10 @@ define([
                     createDijits();
                 }
                 obj = brands[i];
-                brandFilteringSelect[i].set('displayedValue', obj.name);
+                brandFilteringSelect[i].set("displayedValue", obj.name);
             }
         } else {
-            brandFilteringSelect[0].set('displayedValue', "");
+            brandFilteringSelect[0].set("displayedValue", "");
         }
     }
 

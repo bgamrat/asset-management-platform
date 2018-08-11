@@ -121,7 +121,7 @@ define([
         historyHtml = "<ul>";
         for( i = 0; i < historyLog.length; i++ ) {
             h = historyLog[i];
-            if( h.username === null ) {
+            if( typeof h.username === "undefined" || h.username === null ) {
                 h.username = '';
             }
             dateText = h.timestamp;

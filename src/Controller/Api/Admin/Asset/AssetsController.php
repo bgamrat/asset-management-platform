@@ -138,16 +138,18 @@ class AssetsController extends FOSRestController
         }
 
         $asset = $this->getDoctrine()
-                        ->getRepository( 'App\Entity\Asset\Asset' )->findConcise( $id );
+                        ->getRepository( 'App\Entity\Asset\Asset' )->find( $id );
         if( $asset !== null )
         {
             $logUtil = $this->log;
             $logUtil->getLog( 'App\Entity\Asset\AssetLog', $id );
             $history = $logUtil->translateIdsToText();
             $formUtil = $this->formUtil;
-            $formUtil->saveDataTimestamp( 'asset' . $asset['id'], $asset['updated_at'] );
-            $asset['history'] = $history;
-            return $asset;
+            $formUtil->saveDataTimestamp( 'asset' . $asset->getId(), $asset->getUpdatedAt() );
+            $form = $this->createForm( AssetType::class, $asset, ['allow_extra_fields' => true] );
+            $asset->setHistory( $history );
+            $form->add( 'history', TextareaType::class, ['data' => $history] );
+            return $form->getViewData();
         }
         else
         {
@@ -200,7 +202,7 @@ class AssetsController extends FOSRestController
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_assets_get_asset', array('id' => $asset->getId()), true // absolute
+                                'get_asset', array('id' => $asset->getId()), true // absolute
                         )
                 );
             }

@@ -376,9 +376,7 @@ define([
                     assetId = asset.id;
                     modelFilteringSelect.set('displayedValue', asset.model.brand.name + " " + asset.model.name);
                     statusSelect.set("displayedValue", asset.status.name);
-                    timestamp = new Date();
-                    timestamp.setTime(asset.purchased * 1000);
-                    purchasedInput.set('value', timestamp);
+                    purchasedInput.set('value', asset.purchased);
                     costInput.set("value", asset.cost);
                     valueInput.set("value", asset.value);
                     if( typeof asset.owner !== "undefined" && asset.owner !== null ) {

@@ -30,7 +30,7 @@ define([
     }
 
     function setDivId(divId) {
-        divIdInUse = divId + '_barcodes';
+        divIdInUse = divId + "_barcodes";
     }
 
     function cloneNewNode() {
@@ -60,7 +60,7 @@ define([
         dijit = new RadioButton({}, base + "active");
         dijit.startup();
         if (barcodeInput.length === 1) {
-            dijit.set('checked',true);
+            dijit.set("checked",true);
         }
         activeRadioButton.push(dijit);
     }
@@ -69,7 +69,7 @@ define([
         var i, item;
 
         for( i = 0; i < barcodeInput.length; i++ ) {
-            if( barcodeInput[i].get("id").replace(/\D/g, '') === id ) {
+            if( barcodeInput[i].get("id").replace(/\D/g, "") === id ) {
                 id = i;
                 break;
             }
@@ -103,7 +103,7 @@ define([
 
         createDijits();
 
-        addOneMoreControl = query('.barcodes .add-one-more-row');
+        addOneMoreControl = query(".barcodes .add-one-more-row");
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -113,7 +113,7 @@ define([
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
-            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            var id = parseInt(targetParent.id.replace(/\D/g, ""));
             destroyRow(id, targetParent.parentNode);
         });
     }
@@ -123,8 +123,8 @@ define([
         for( i = 0; i < barcodeInput.length; i++ ) {
             returnData.push(
                     {
-                        "barcode": barcodeInput[i].get('value'),
-                        "comment": commentInput[i].get('value'),
+                        "barcode": barcodeInput[i].get("value"),
+                        "comment": commentInput[i].get("value"),
                         "active": activeRadioButton[i].get("checked")
                     });
         }
@@ -145,9 +145,9 @@ define([
                 createDijits();
                 obj = barcodes[i];
                 barcodeId[i] = obj.id;
-                barcodeInput[i].set('value', obj.barcode);
-                commentInput[i].set('value', obj.comment);
-                activeRadioButton[i].set('checked', obj.active);
+                barcodeInput[i].set("value", obj.barcode);
+                commentInput[i].set("value", obj.comment);
+                activeRadioButton[i].set("checked", obj.active);
             }
         }
     }
