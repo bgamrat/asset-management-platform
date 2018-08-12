@@ -219,7 +219,7 @@ define([
         {
             contactName.push(obj.lastname);
         }
-        if( cName.length === 0 )
+        if( contactName.length === 0 )
         {
             if( typeof obj.title !== "undefined" )
             {
