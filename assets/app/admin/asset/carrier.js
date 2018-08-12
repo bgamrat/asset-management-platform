@@ -16,13 +16,13 @@ define([
     "dijit/Dialog",
     "dijit/layout/TabContainer",
     "dijit/layout/ContentPane",
-    'dstore/Rest',
-    'dstore/SimpleQuery',
-    'dstore/Trackable',
-    'dgrid/OnDemandGrid',
+    "dstore/Rest",
+    "dstore/SimpleQuery",
+    "dstore/Trackable",
+    "dgrid/OnDemandGrid",
     "dgrid/Selection",
-    'dgrid/Editor',
-    'put-selector/put',
+    "dgrid/Editor",
+    "put-selector/put",
     "app/common/contact",
     "app/admin/asset/carrier_service",
     "app/lib/common",
@@ -50,7 +50,7 @@ define([
         });
 
         var tabContainer = new TabContainer({
-            style: "width: 780px; height: 600px "
+            style: "width: 780px; height: 600px"
         }, "carrier-view-tabs");
 
         var contactsContentPane = new ContentPane({
@@ -80,7 +80,7 @@ define([
 
         var newBtn = new Button({
             label: core["new"]
-        }, 'carrier-new-btn');
+        }, "carrier-new-btn");
         newBtn.startup();
         newBtn.on("click", function (event) {
             carrierId = null;
@@ -93,7 +93,7 @@ define([
 
         var removeBtn = new Button({
             label: core.remove
-        }, 'carrier-remove-btn');
+        }, "carrier-remove-btn");
         removeBtn.startup();
         removeBtn.on("click", function (event) {
             var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "carrier-grid");
@@ -143,7 +143,7 @@ define([
 
         var saveBtn = new Button({
             label: core.save
-        }, 'carrier-save-btn');
+        }, "carrier-save-btn");
         saveBtn.startup();
         saveBtn.on("click", function (event) {
             if( carrierForm.validate() ) {
@@ -174,7 +174,7 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/carriers', useRangeHeaders: true, idProperty: 'id'});
+        var store = new TrackableRest({target: "/api/carriers", useRangeHeaders: true, idProperty: "id"});
         var grid = new (declare([OnDemandGrid, Selection, Editor]))({
             collection: store,
             maxRowsPerPage: 25,
@@ -193,7 +193,7 @@ define([
                     label: core.account_information,
                     sortable: false,
                     renderCell: function (object, value, td) {
-                        put(td, "pre", object.accountInformation);
+                        put(td, "pre", object.account_information);
                     }
                 },
                 comment: {
@@ -218,12 +218,12 @@ define([
             renderRow: function (object) {
                 var rowElement = this.inherited(arguments);
                 if( typeof object.deleted_at !== "undefined" && object.deleted_at !== null ) {
-                    rowElement.className += ' deleted';
+                    rowElement.className += " deleted";
                 }
                 return rowElement;
             },
             selectionMode: "none"
-        }, 'carrier-grid');
+        }, "carrier-grid");
         grid.startup();
         grid.collection.track();
 
@@ -247,14 +247,14 @@ define([
                     contact.setData(carrier.contacts);
                     carrierService.setData(carrier.services);
                     commentInput.set("value", carrier.comment);
-                    accountInformationInput.set("value", carrier.accountInformation);
-                    trackingUrlInput.set("value", carrier.trackingUrl);
+                    accountInformationInput.set("value", carrier.account_information);
+                    trackingUrlInput.set("value", carrier.tracking_url);
 
                 }, lib.xhrError);
             }
         });
 
-        grid.on('.field-active:dgrid-datachange, .field-locked:dgrid-datachange', function (event) {
+        grid.on(".field-active:dgrid-datachange, .field-locked:dgrid-datachange", function (event) {
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;
@@ -266,7 +266,7 @@ define([
                     xhr("/api/carriers/" + name, {
                         method: "PATCH",
                         handleAs: "json",
-                        headers: {'Content-Type': 'application/json'},
+                        headers: {"Content-Type": "application/json"},
                         data: JSON.stringify({"field": field,
                             "value": value})
                     });
@@ -295,17 +295,17 @@ define([
             }
         });
 
-        on(dom.byId('carrier-grid-filter-form'), 'submit', function (event) {
+        on(dom.byId("carrier-grid-filter-form"), "submit", function (event) {
             event.preventDefault();
-            grid.set('collection', store.filter({
+            grid.set("collection", store.filter({
                 // Pass a RegExp to Memory's filter method
                 // Note: this code does not go out of its way to escape
                 // characters that have special meaning in RegExps
-                match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
+                match: new RegExp(filterInput.get("value").replace(/\W/, ""), "i")
             }));
         });
 
-        contact = xcontact.run('carrier_contacts');
+        contact = xcontact.run("carrier_contacts");
         carrierService.run();
 
         lib.pageReady();

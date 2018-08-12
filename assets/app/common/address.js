@@ -36,7 +36,7 @@ define([
         var divIdInUse = null;
 
         function setDivId(divId) {
-            divIdInUse = divId + '_address';
+            divIdInUse = divId + "_address";
         }
 
         function getDivId() {
@@ -145,17 +145,17 @@ define([
                 returnData =
                         {
                             "id": addressId,
-                            "type": parseInt(typeSelect.get('value')),
-                            "street1": street1Input.get('value'),
-                            "street2": street2Input.get('value'),
-                            "city": cityInput.get('value'),
+                            "type": parseInt(typeSelect.get("value")),
+                            "street1": street1Input.get("value"),
+                            "street2": street2Input.get("value"),
+                            "city": cityInput.get("value"),
                             // Address the duality of names between the forms and objects with two properties
-                            "state_province": stateProvinceInput.get('value'),
-                            "stateProvince": stateProvinceInput.get('value'),
-                            "postal_code": postalCodeInput.get('value'),
-                            "postalCode": postalCodeInput.get('value'),
-                            "country": countrySelect.get('value'),
-                            "comment": commentInput.get('value')
+                            "state_province": stateProvinceInput.get("value"),
+                            "stateProvince": stateProvinceInput.get("value"),
+                            "postal_code": postalCodeInput.get("value"),
+                            "postalCode": postalCodeInput.get("value"),
+                            "country": countrySelect.get("value"),
+                            "comment": commentInput.get("value")
                         };
             }
             return returnData;
@@ -165,25 +165,25 @@ define([
             if( typeof address === "object" && address !== null ) {
                 obj = address;
                 addressId = obj.id;
-                typeSelect.set('value', obj.type.id);
-                street1Input.set('value', obj.street1);
-                street2Input.set('value', obj.street2);
-                cityInput.set('value', obj.city);
-                stateProvinceInput.set('value', obj.stateProvince);
-                postalCodeInput.set('value', obj.postalCode);
-                countrySelect.set('value', obj.country);
-                commentInput.set('value', obj.comment);
+                typeSelect.set("value", obj.type.id);
+                street1Input.set("value", obj.street1);
+                street2Input.set("value", obj.street2);
+                cityInput.set("value", obj.city);
+                stateProvinceInput.set("value", obj.stateProvince);
+                postalCodeInput.set("value", obj.postalCode);
+                countrySelect.set("value", obj.country);
+                commentInput.set("value", obj.comment);
 
             } else {
                 addressId = null;
-                typeSelect.set('value', '');
-                street1Input.set('value', "");
-                street2Input.set('value', "");
-                cityInput.set('value', "");
-                stateProvinceInput.set('value', "");
-                postalCodeInput.set('value', "");
-                countrySelect.set('value', "US");
-                commentInput.set('value', "");
+                typeSelect.set("value", "");
+                street1Input.set("value", "");
+                street2Input.set("value", "");
+                cityInput.set("value", "");
+                stateProvinceInput.set("value", "");
+                postalCodeInput.set("value", "");
+                countrySelect.set("value", "US");
+                commentInput.set("value", "");
             }
         }
         return {

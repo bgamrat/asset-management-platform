@@ -26,15 +26,15 @@ define([
     "dijit/Dialog",
     "dijit/layout/TabContainer",
     "dijit/layout/ContentPane",
-    'dojo/store/JsonRest',
-    'dstore/Rest',
-    'dstore/SimpleQuery',
-    'dstore/Trackable',
-    'dgrid/OnDemandGrid',
-    'dgrid/Keyboard',
+    "dojo/store/JsonRest",
+    "dstore/Rest",
+    "dstore/SimpleQuery",
+    "dstore/Trackable",
+    "dgrid/OnDemandGrid",
+    "dgrid/Keyboard",
     "dgrid/Selection",
-    'dgrid/Editor',
-    'put-selector/put',
+    "dgrid/Editor",
+    "put-selector/put",
     "app/admin/asset/barcodes",
     "app/admin/asset/custom_attributes",
     "app/admin/asset/location",
@@ -132,7 +132,7 @@ define([
 
         var removeBtn = new Button({
             label: core.remove
-        }, 'asset-remove-btn');
+        }, "asset-remove-btn");
         removeBtn.startup();
         removeBtn.on("click", function (event) {
             var markedForDeletion = query(".dgrid-row .remove-cb input:checked", "asset-grid");
@@ -169,7 +169,7 @@ define([
         });
 
         var ownerStore = new JsonRest({
-            target: '/api/store/vendors',
+            target: "/api/store/vendors",
             useRangeHeaders: false,
             idProperty: 'id'});
         var ownerFilteringSelect = new FilteringSelect({
@@ -415,7 +415,7 @@ define([
                     xhr("/api/assets/" + name, {
                         method: "PATCH",
                         handleAs: "json",
-                        headers: {'Content-Type': 'application/json'},
+                        headers: {"Content-Type": "application/json"},
                         data: JSON.stringify({"field": field,
                             "value": value})
                     }).then(function (data) {
@@ -445,18 +445,18 @@ define([
             }
         });
 
-        on(dom.byId('asset-grid-filter-form'), 'submit', function (event) {
+        on(dom.byId("asset-grid-filter-form"), "submit", function (event) {
             event.preventDefault();
-            grid.set('collection', store.filter({
-                // Pass a RegExp to Memory's filter method
+            grid.set("collection", store.filter({
+                // Pass a RegExp to Memory"s filter method
                 // Note: this code does not go out of its way to escape
                 // characters that have special meaning in RegExps
-                match: new RegExp(filterInput.get("value").replace(/\W/, ''), 'i')
+                match: new RegExp(filterInput.get("value").replace(/\W/, ""), "i")
             }));
         });
 
-        barcodes.run('asset');
-        customAttributes.run('asset');
+        barcodes.run("asset");
+        customAttributes.run("asset");
         lib.pageReady();
     }
     return {

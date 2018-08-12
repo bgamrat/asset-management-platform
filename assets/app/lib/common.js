@@ -97,11 +97,11 @@ define([
         date.setTime(value);
         year = date.getFullYear();
         month = date.getMonth() + 1;
-        if (month < 10) {
+        if( month < 10 ) {
             month = '0' + month.toString();
         }
         day = date.getDate();
-        if (day < 10) {
+        if( day < 10 ) {
             day = '0' + day.toString();
         }
         return year + '-' + month + '-' + day;
@@ -142,67 +142,91 @@ define([
 
     var addressTypes = [];
     function getAddressTypes() {
-        return xhr.get('/api/store/addresstypes', {
+        return xhr.get("/api/store/addresstypes", {
             handleAs: "json"
         }).then(function (res) {
             var i, l;
             l = res.length;
             for( i = 0; i < l; i++ ) {
-                addressTypes[res[i].id] = res[i]['type'];
+                addressTypes[res[i].id] = res[i]["type"];
             }
         })
     }
 
     var contactTypes = [];
     function getContactTypes() {
-        return xhr.get('/api/store/contacttypes', {
+        return xhr.get("/api/store/contacttypes", {
             handleAs: "json"
         }).then(function (res) {
             var i, l;
             l = res.length;
             for( i = 0; i < l; i++ ) {
-                contactTypes[res[i].id] = res[i]['type'];
+                contactTypes[res[i].id] = res[i]["type"];
             }
         })
     }
 
     var emailTypes = [];
     function getEmailTypes() {
-        return xhr.get('/api/store/emailtypes', {
+        return xhr.get("/api/store/emailtypes", {
             handleAs: "json"
         }).then(function (res) {
             var i, l;
             l = res.length;
             for( i = 0; i < l; i++ ) {
-                emailTypes[res[i].id] = res[i]['type'];
+                emailTypes[res[i].id] = res[i]["type"];
             }
         })
     }
 
     var personTypes = [];
     function  getPersonTypes() {
-        return xhr.get('/api/store/persontypes', {
+        return xhr.get("/api/store/persontypes", {
             handleAs: "json"
         }).then(function (res) {
             var i, l;
             l = res.length;
             for( i = 0; i < l; i++ ) {
-                personTypes[res[i].id] = res[i]['type'];
+                personTypes[res[i].id] = res[i]["type"];
             }
         })
     }
 
     var phoneTypes = [];
     function getPhoneTypes() {
-        return xhr.get('/api/store/phonetypes', {
+        return xhr.get("/api/store/phonetypes", {
             handleAs: "json"
         }).then(function (res) {
             var i, l;
             l = res.length;
             for( i = 0; i < l; i++ ) {
-                phoneTypes[res[i].id] = res[i]['type'];
+                phoneTypes[res[i].id] = res[i]["type"];
             }
         })
+    }
+
+    function constructContactName(obj) {
+        var contactName = [];
+        if( typeof obj.firstname !== "undefined" )
+        {
+            contactName.push(obj.firstname);
+        }
+        if( typeof obj.middlename !== "undefined" )
+        {
+            contactName.push(obj.middlename);
+        }
+        if( typeof obj.lastname !== "undefined" )
+        {
+            contactName.push(obj.lastname);
+        }
+        if( cName.length === 0 )
+        {
+            if( typeof obj.title !== "undefined" )
+            {
+                contactName.push(obj.title);
+            }
+        }
+        return contactName.join(' ');
     }
 
     return {

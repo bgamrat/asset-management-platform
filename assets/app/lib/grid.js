@@ -1,5 +1,5 @@
 define([
-    'put-selector/put',
+    "put-selector/put",
     "app/lib/common",
     "dojo/domReady!"
 ], function (put, lib) {
@@ -16,8 +16,8 @@ define([
 
     function renderGridRadioButton(object, value, td) {
         var cl = td.classList.length, checked;;
-        var column = td.classList[cl-1].replace('field-','');
-        checked = ( value === true || value === 'on') ? "[checked]" : "";
+        var column = td.classList[cl-1].replace("field-","");
+        checked = ( value === true || value === "on") ? "[checked]" : "";
         put(td,"input[type=radio][name=rb-"+column+"][data-id="+object.id+"]"+checked);
     }
     ;
@@ -32,17 +32,17 @@ define([
             value = [value];
         }
         if( typeof value === "object" && value !== null && value.length !== 0 ) {
-            address_lines = ['street1', 'street2'];
-            address_segments = ['city', 'stateProvince', 'postalCode', 'country'];
+            address_lines = ["street1", "street2"];
+            address_segments = ["city", "state_province", "postal_code", "country"];
             for( a in value ) {
                 address = value[a];
-                if( typeof address['type'] === "undefined" ) {
+                if( typeof address["type"] === "undefined" ) {
                     continue;
                 } else {
-                    if( isNaN(address['type']) ) {
-                        content.push(address['type']['type']);
+                    if( isNaN(address["type"]) ) {
+                        content.push(address["type"]["type"]);
                     } else {
-                        content.push(lib.addressTypes[address['type']]);
+                        content.push(lib.addressTypes[address["type"]]);
                     }
                 }
                 l = address_lines.length;
@@ -74,11 +74,11 @@ define([
         if( typeof object.contacts !== "undefined" && object.contacts !== null ) {
             l = object.contacts.length;
             for( i = 0; i < l; i++ ) {
-                this.renderPerson(object.contacts[i], object.contacts[i].name, td);
+                this.renderPerson(object.contacts[i], object.contacts[i], td);
                 this.renderPhone(object.contacts[i].phones, object.contacts[i].phones, td);
                 this.renderEmail(object.contacts[i].emails, object.contacts[i].emails, td);
                 this.renderAddress(object.contacts[i].addresses, object.contacts[i].addresses, td);
-                put(td, 'hr');
+                put(td, "hr");
             }
         }
     }
@@ -94,19 +94,19 @@ define([
             for( e in value ) {
                 li = document.createElement("li");
                 email = value[e];
-                if( isNaN(email['type']) ) {
-                    t = document.createTextNode(email['type']['type'] + " ");
+                if( isNaN(email["type"]) ) {
+                    t = document.createTextNode(email["type"]["type"] + " ");
                 } else {
-                    t = document.createTextNode(lib.emailTypes[email['type']] + " ");
+                    t = document.createTextNode(lib.emailTypes[email["type"]] + " ");
                 }
-                if( email['email'] !== null && email['email'] !== "" ) {
+                if( email["email"] !== null && email["email"] !== "" ) {
                     link = document.createElement("a");
-                    link.href = "mailto:" + email['email'];
-                    link.textContent = email['email'];
+                    link.href = "mailto:" + email["email"];
+                    link.textContent = email["email"];
                     li.appendChild(t);
                     li.appendChild(link);
-                    if( email['comment'] !== null && email['comment'] !== "" ) {
-                        c = document.createTextNode(email['comment']);
+                    if( email["comment"] !== null && email["comment"] !== "" ) {
+                        c = document.createTextNode(email["comment"]);
                         li.appendChild(c);
                     }
                 }
@@ -129,7 +129,7 @@ define([
         } else {
             type_text = object.type_text;
         }
-        put(td, "em", value + " (" + type_text + ")");
+        put(td, "em", value.firstname + " " + value.lastname + " (" + type_text + ")");
     }
 
     function renderPhone(object, value, td) {
@@ -139,14 +139,14 @@ define([
             return;
         }
         if( typeof value === "object" && value !== null && value.length !== 0 ) {
-            phone_lines = ['phone', 'comment'];
+            phone_lines = ["phone", "comment"];
             l = phone_lines.length;
             for( p in value ) {
                 phone = value[p];
-                if( isNaN(phone['type']) ) {
-                    row = phone['type']['type'];
+                if( isNaN(phone["type"]) ) {
+                    row = phone["type"]["type"];
                 } else {
-                    row = lib.phoneTypes[phone['type']];
+                    row = lib.phoneTypes[phone["type"]];
                 }
                 row += " ";
                 for( i = 0; i < l; i++ ) {
