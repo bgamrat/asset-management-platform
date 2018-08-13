@@ -89,7 +89,7 @@ define([
     function run() {
         prototypeNode = dom.byId(divId);
         if( prototypeNode === null ) {
-            prototypeNode = dom.byId(divId + '_0');
+            prototypeNode = dom.byId(divId + "_0");
         }
 
         if( prototypeNode === null ) {
@@ -105,13 +105,13 @@ define([
             var id = target.id;
             if( target.checked && id.indexOf("default") !== -1 ) {
                 id = id.replace(/^.*(\d+).*$/, '$1');
-                target.name = 'carrier[services][' + id + '][default]';
+                target.name = "carrier[services][" + id + "][default]";
             } else {
                 target.removeAttribute("name");
             }
         });
 
-        addOneMoreControl = query('.services .add-one-more-row');
+        addOneMoreControl = query(".services .add-one-more-row");
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -121,7 +121,7 @@ define([
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
-            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            var id = parseInt(targetParent.id.replace(/\D/g, ""));
             destroyRow(id, targetParent.parentNode);
         });
     }
@@ -132,9 +132,9 @@ define([
             returnData.push(
                     {
                         "id": serviceId[i],
-                        "default": defaultRadioButton[i].get('value'),
-                        "name": nameInput[i].get('value'),
-                        "comment": commentInput[i].get('value'),
+                        "default": defaultRadioButton[i].get("value"),
+                        "name": nameInput[i].get("value"),
+                        "comment": commentInput[i].get("value"),
                         "active": activeCheckBox[i].get("checked")
                     });
         }
@@ -154,10 +154,10 @@ define([
                 createDijits();
                 obj = services[i];
                 serviceId[i] = obj.id;
-                nameInput[i].set('value', obj.name);
-                commentInput[i].set('value', obj.comment);
-                activeCheckBox[i].set('value', obj.active);
-                defaultRadioButton[i].set('checked', obj["default"]);
+                nameInput[i].set("value", obj.name);
+                commentInput[i].set("value", obj.comment);
+                activeCheckBox[i].set("value", obj.active);
+                defaultRadioButton[i].set("checked", obj["default"]);
             }
         }
     }

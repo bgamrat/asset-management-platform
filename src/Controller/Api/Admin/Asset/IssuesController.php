@@ -256,7 +256,7 @@ class IssuesController extends FOSRestController
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_issues_get_issue', array('id' => $issue->getId()), true // absolute
+                                'get_issue', array('id' => $issue->getId()), true // absolute
                         )
                 );
             }

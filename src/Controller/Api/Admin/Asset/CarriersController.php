@@ -134,6 +134,7 @@ class CarriersController extends FOSRestController
         }
         else
         {
+            $em->getFilters()->disable( 'softdeleteable' );
             $carrier = $em->getRepository( 'App\Entity\Asset\Carrier' )->find( $id );
             $formUtil = $this->formUtil;
             if( $formUtil->checkDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdatedAt() ) === false )
@@ -152,7 +153,7 @@ class CarriersController extends FOSRestController
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'app_admin_api_carrier_get_carrier', array('id' => $carrier->getId()), true // absolute
+                                'get_carrier', array('id' => $carrier->getId()), true // absolute
                         )
                 );
             }

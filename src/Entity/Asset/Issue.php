@@ -25,7 +25,12 @@ use App\Entity\Traits\History;
  */
 class Issue
 {
-    use Cost,TimeStampableEntity, SoftDeleteableEntity, History;
+
+    use Id,
+        Cost,
+        TimeStampableEntity,
+        SoftDeleteableEntity,
+        History;
 
     /**
      * @var int
@@ -404,4 +409,5 @@ class Issue
         $this->deletedAt = $deletedAt;
         $this->setActive( false );
     }
+
 }

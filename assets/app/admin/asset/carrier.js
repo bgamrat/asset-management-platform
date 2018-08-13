@@ -101,7 +101,7 @@ define([
                 lib.confirmAction(core.areyousure, function () {
                     markedForDeletion.forEach(function (node) {
                         var row = grid.row(node);
-                        store.remove(row.data.name);
+                        store.remove(row.data.id);
                     });
                 });
             }
@@ -154,9 +154,6 @@ define([
                     "services": carrierService.getData(),
                     "active": activeCheckBox.get("checked"),
                     "comment": commentInput.get("value"),
-                    // For the server
-                    "accountInformation": accountInformationInput.get("value"),
-                    // For the grid
                     "account_information": accountInformationInput.get("value"),
                     "tracking_url": trackingUrlInput.get("value")
                 };
