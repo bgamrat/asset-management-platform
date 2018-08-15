@@ -84,12 +84,12 @@ class Model
      */
     private $defaultEventValue = 0.0;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends")
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends", fetch="EXTRA_LAZY")
      */
     private $extended_by;
     /**
      * @ORM\ManyToMany(targetEntity="Model", inversedBy="extended_by")
-     * @ORM\JoinTable(name="model_extend",
+     * @ORM\JoinTable(name="model_extend", fetch="EXTRA_LAZY",
      *      joinColumns={@ORM\JoinColumn(name="extends_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="extended_by_id", referencedColumnName="id")}
      *      )
@@ -101,7 +101,7 @@ class Model
     private $required_by;
     /**
      * @ORM\ManyToMany(targetEntity="Model", inversedBy="required_by")
-     * @ORM\JoinTable(name="model_require",
+     * @ORM\JoinTable(name="model_require", fetch="EXTRA_LAZY",
      *      joinColumns={@ORM\JoinColumn(name="requires_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="required_by_id", referencedColumnName="id")}
      *      )
@@ -109,7 +109,7 @@ class Model
     private $requires;
     /**
      * @ORM\ManyToMany(targetEntity="Category")
-     * @ORM\JoinTable(name="model_satisfy",
+     * @ORM\JoinTable(name="model_satisfy", fetch="EXTRA_LAZY",
      *      joinColumns={@ORM\JoinColumn(name="satisfy_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id")}
      *      )

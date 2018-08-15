@@ -27,7 +27,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests,Kernel.php,DataFixtures/Demo}'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php,DataFixtures/Demo,DataFixtures/TV}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -342,7 +342,6 @@ services:
 
     app.util.dstore:
         class: App\Util\DStore
-
 
     app.util.log:
         class: App\Util\Log

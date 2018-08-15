@@ -19,6 +19,7 @@ public/vendor/fonts
 public/vendor/dojo*
 public/vendor/menu*
 src/AppBundle/DataFixtures/Demo/LoadUserData.php
+src/AppBundle/DataFixtures/TV/LoadUserData.php
 
 ###> symfony/framework-bundle ###
 /.env

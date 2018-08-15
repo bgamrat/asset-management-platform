@@ -55,7 +55,7 @@ class Category
     private $position = 0;
     /**
      * @Assert\Expression(expression="this !== this.getParent()", message="No self-referencing please")
-     * @ORM\ManyToOne(targetEntity="Category", fetch="EAGER",  cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent = null;

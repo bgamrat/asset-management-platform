@@ -19,7 +19,7 @@ define([
         }
 
         listHtml += "<div>";
-        if( relationships.length > 0 ) {
+        if( Object.keys(relationships).length > 0 ) {
             for( r in relationships ) {
                 listContent = relationships[r];
                 if( listContent.length > 0 ) {
