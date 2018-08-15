@@ -367,3 +367,8 @@ services:
     FormUtil:
         class: App\Util\Form
         public: true
+
+    App\DataFixtures\TV\:
+        resource: '../src/DataFixtures/TV/*'
+        tags: [ doctrine.fixture.orm ]
+
