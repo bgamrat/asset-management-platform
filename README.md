@@ -40,22 +40,23 @@ I don't have time to test other databases right now.  App was built with Postgre
  - MEMCACHED_HOST
  - MEMCACHED_PORT
 4. Create the databases or run **php bin/console doctrine:database:create**
-5. Run **php bin/console doctrine:fixtures:load** to install the required base data types.  This will also allow you to
+5. Update the schema with **php bin/console doctrine:schema:update --force**
+6. Run **php bin/console doctrine:fixtures:load** to install the required base data types.  This will also allow you to
 create an admin user.  *dev* environments will also get demo data.
-6. To build the *Dojo* assets for production use, **cd assets/vendor; ./build.sh;**.  When in
+7. To build the *Dojo* assets for production use, **cd assets/vendor; ./build.sh;**.  When in
 dev mode, the source JavaScript files are used to allow you to step through the code.
 Use **cd public; ln -sf /var/www/html/symfony-dev/assets src** to create a symlink for
 development (not on production).
-7. Run **./node_modules/.bin/encore** *(dev/production)* to dump the CSS. Building the client side code on my production server didn't go well
+8. Run **./node_modules/.bin/encore** *(dev/production)* to dump the CSS. Building the client side code on my production server didn't go well
    Instead, tar up the files from your local machine and scp them up
      - tar up the client side files with **tar czf ~/public-build.tgz public/build**
-     - scp them to the production server with **scp ~/public-build.tgz user@example.com:.
+     - scp them to the production server with **scp ~/public-build.tgz user@example.com:.**
      - Move them into position above the target directory - **sudo mv public-build.tgz /var/www/html/symfony-dev**
      - Change ownership for tidiness **sudo chown user.group /var/www/html/symfony-dev/public-build.tgz**
      - Switch to be that user **sudo su user**
      - Change into the directory **cd /var/www/html/symfony-dev**
      - Extract the files out of the tar with **tar xzf public-build.tgz**
-8. There is an *httpd.conf* file in *app/system/etc/httpd/conf.d*, it might work
+9. There is an *httpd.conf* file in *app/system/etc/httpd/conf.d*, it might work
 
 ## Terminology
 

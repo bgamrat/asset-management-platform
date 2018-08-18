@@ -73,7 +73,7 @@
 
 {% block javascripts %}
     <script>
-        require(["app/admin/asset/categories", "app/admin/asset/category"], function (categories, category) {
+        require(["app/admin/asset/categories", "app/admin/asset/category", "dojo/domReady!"], function (categories, category) {
             categories.run();
             category.run();
         });

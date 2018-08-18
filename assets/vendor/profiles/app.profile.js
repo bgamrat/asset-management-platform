@@ -115,7 +115,7 @@ var profile = (function () {
             'extend-dojo': 1
         },
         packages: [
-            {name: 'app', location: '../../app'},
+            {name: 'app', location: '../../app', destLocation: '../build/lib/app' },
             'dojo',
             'dijit',
             'dojox',
@@ -212,9 +212,6 @@ var profile = (function () {
             "app/admin/common/people": {
                 include: ["app/admin/common/people"]
             },
-            "app/admin/menu": {
-                include: ["app/admin/menu"]
-            },
             "app/admin/schedule/event": {
                 include: ["app/admin/schedule/event"]
             },
@@ -223,9 +220,6 @@ var profile = (function () {
             },
             "app/admin/venue/venue": {
                 include: ["app/admin/venue/venue"]
-            },
-            "app/lib/common": {
-                include: ["app/lib/common"]
             },
             "app/lib/grid": {
                 include: ["app/lib/grid"]
