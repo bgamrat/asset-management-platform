@@ -115,7 +115,7 @@ var profile = (function () {
             'extend-dojo': 1
         },
         packages: [
-            {name: 'app', location: '../../app', destLocation: '../build/lib/app' },
+            {name: 'app', location: '../../app' },
             'dojo',
             'dijit',
             'dojox',
