@@ -5,7 +5,7 @@ define([
     "dojo/on",
     "dojo/query",
     "dijit/form/FilteringSelect",
-    'dojo/store/JsonRest',
+    "dojo/store/JsonRest",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/domReady!"
@@ -43,25 +43,28 @@ define([
         dijit.startup();
         contractFilteringSelect.push(dijit);
         dijit.on("change", function (evt) {
-            var id = parseInt(this.id.replace(/\D/g, ''));
-            var item = this.get('item');
+            var id = parseInt(this.id.replace(/\D/g, ""));
+            var item = this.get("item");
             var templateContract;
             var i, l, reqd = [], avail = [], t, hidden;
             var equipmentLink = dom.byId("contract-equipment-link-event_contracts_" + id);
-            l = item.requiresTrailers.length;
-            trailerText[id] = [];
-            for( i = 0; i < l; i++ ) {
-                t = item.requiresTrailers[i];
-                reqd.push('<a target="_blank" href="/admin/trailer/'+t.trailer.name+'/equipment-by-category">'+t.trailer.name+'</a>');
-                trailerText[id].push(t.trailer.name);
+            if( typeof item.requiresTrailers !== "undefined" ) {
+                l = item.requiresTrailers.length;
+                trailerText[id] = [];
+                for( i = 0; i < l; i++ ) {
+                    t = item.requiresTrailers[i];
+                    reqd.push('<a target="_blank" href="/admin/trailer/' + t.trailer.name + '/equipment-by-category">' + t.trailer.name + '</a>');
+                    trailerText[id].push(t.trailer.name);
+                }
             }
-            l = item.availableTrailers.length;
-            for( i = 0; i < l; i++ ) {
-                t = item.availableTrailers[i];
-                avail.push('<a target="_blank" href="/admin/trailer/'+t.trailer.name+'/equipment-by-category">'+t.trailer.name+'</a>');
-                trailerText[id].push(t.trailer.name + "?")
+            if( typeof item.availableTrailers !== "undefined" ) {
+                l = item.availableTrailers.length;
+                for( i = 0; i < l; i++ ) {
+                    t = item.availableTrailers[i];
+                    avail.push('<a target="_blank" href="/admin/trailer/' + t.trailer.name + '/equipment-by-category">' + t.trailer.name + '</a>');
+                    trailerText[id].push(t.trailer.name + "?")
+                }
             }
-
             hidden = (reqd.length === 0 && avail.length === 0) ? 'class="hidden"' : "";
 
             // Backticks won't work with the old Chrome browser
@@ -72,7 +75,7 @@ define([
             if( avail.length > 0 ) {
                 templateContract += '<span class="label">&nbsp;' + core.available + '</span>&nbsp;' + avail.join();
             }
-            templateContract += '</li>';
+            templateContract += "</li>";
 
             if( dom.byId("contract-equipment-list-" + id) === null ) {
                 domConstruct.place(templateContract, dom.byId("trailers-required-by-contracts"), "last");
@@ -101,14 +104,14 @@ define([
         var addOneMoreControl = null;
 
         contractStore = new JsonRest({
-            target: '/api/store/contracts',
+            target: "/api/store/contracts",
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: "id"});
 
         contractTrailersStore = new JsonRest({
-            target: '/api/store/contracttrailers',
+            target: "/api/store/contracttrailers",
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: "id"});
 
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
@@ -116,7 +119,7 @@ define([
 
         prototypeNode = dom.byId(getDivId());
         if( prototypeNode === null ) {
-            setDivId(arguments[0] + '_0');
+            setDivId(arguments[0] + "_0");
             prototypeNode = dom.byId(getDivId());
         }
 
@@ -175,7 +178,7 @@ define([
         query(".contract-equipment-list").forEach(function (node, index) {
             domConstruct.destroy(node);
         });
-        
+
         if( typeof contracts === "object" && contracts !== null && contracts.length > 0 ) {
             for( i = 0; i < contracts.length; i++ ) {
                 cloneNewNode();
@@ -193,7 +196,7 @@ define([
         getData: getData,
         getTrailerText: getTrailerText,
         setData: setData
-    }
+    };
 }
 );
 //# sourceURL=contract.js

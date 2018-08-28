@@ -8,7 +8,7 @@ define([
     "dijit/form/TimeTextBox",
     "dijit/form/ValidationTextBox",
     "dijit/form/FilteringSelect",
-    'dojo/store/JsonRest',
+    "dojo/store/JsonRest",
     "app/lib/common",
     "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/schedule",
@@ -70,7 +70,7 @@ define([
         dijit.startup();
         startInput.push(dijit);
         startInput[index].on("change", function (evt) {
-            endInput[index].set('value', this.value);
+            endInput[index].set("value", this.value);
         });
 
         dijit = new TimeTextBox({
@@ -81,7 +81,7 @@ define([
         dijit.startup();
         startTimeInput.push(dijit);
         startTimeInput[index].on("change", function (evt) {
-            endTimeInput[index].set('value', this.value);
+            endTimeInput[index].set("value", this.value);
         });
 
         dijit = new DateTextBox({
@@ -144,14 +144,14 @@ define([
         var addOneMoreControl = null;
 
         personStore = new JsonRest({
-            target: '/api/store/staff',
+            target: "/api/store/staff",
             useRangeHeaders: false,
-            idProperty: 'name'});
+            idProperty: "name"});
 
         eventRoleStore = new JsonRest({
-            target: '/api/store/eventroles',
+            target: "/api/store/eventroles",
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: "id"});
 
         if( arguments.length > 0 ) {
             setDivId(arguments[0]);
@@ -159,7 +159,7 @@ define([
 
         prototypeNode = dom.byId(getDivId());
         if( prototypeNode === null ) {
-            setDivId(arguments[0] + '_0');
+            setDivId(arguments[0] + "_0");
             prototypeNode = dom.byId(getDivId());
         }
 
@@ -193,21 +193,23 @@ define([
     function getData() {
         var i, returnData = [], st, stt, en, ent, p;
         for( i = 0; i < eventRoleFilteringSelect.length; i++ ) {
-            stt = startTimeInput[i].get('value');
-            st = startInput[i].get('value');
-            lib.addTimeToDate(st, stt);
-            ent = endTimeInput[i].get('value');
-            en = endInput[i].get('value');
-            lib.addTimeToDate(en, ent);
             p = personSelector[i].get("item");
-            returnData.push(
-                    {
-                        "person": p.id,
-                        "role": parseInt(eventRoleFilteringSelect[i].get("value")),
-                        "start": st === null ? "" : lib.formatDate(st,false),
-                        "end": en === null ? "" : lib.formatDate(en,false),
-                        "comment": commentInput[i].get('value')
-                    });
+            if( p !== null ) {
+                stt = startTimeInput[i].get("value");
+                st = startInput[i].get("value");
+                lib.addTimeToDate(st, stt);
+                ent = endTimeInput[i].get("value");
+                en = endInput[i].get("value");
+                lib.addTimeToDate(en, ent);
+                returnData.push(
+                        {
+                            "person": p.id,
+                            "role": parseInt(eventRoleFilteringSelect[i].get("value")),
+                            "start": st === null ? "" : lib.formatDate(st, false),
+                            "end": en === null ? "" : lib.formatDate(en, false),
+                            "comment": commentInput[i].get("value")
+                        });
+            }
 
         }
         return returnData;
@@ -229,21 +231,21 @@ define([
                 eventRoleFilteringSelect[i].set("displayedValue", obj.role.name);
                 if( obj.start !== null ) {
                     timestamp.setTime(obj.start.timestamp * 1000);
-                    startInput[i].set('value', timestamp);
-                    startTimeInput[i].set('value', timestamp);
+                    startInput[i].set("value", timestamp);
+                    startTimeInput[i].set("value", timestamp);
                 } else {
-                    startInput[i].set('value', null);
-                    startTimeInput[i].set('value', null);
+                    startInput[i].set("value", null);
+                    startTimeInput[i].set("value", null);
                 }
                 if( obj.end !== null ) {
                     timestamp.setTime(obj.end.timestamp * 1000);
-                    endInput[i].set('value', timestamp);
-                    endTimeInput[i].set('value', timestamp);
+                    endInput[i].set("value", timestamp);
+                    endTimeInput[i].set("value", timestamp);
                 } else {
-                    endInput[i].set('value', null);
-                    endTimeInput[i].set('value', null);
+                    endInput[i].set("value", null);
+                    endTimeInput[i].set("value", null);
                 }
-                commentInput[i].set('value', obj.comment);
+                commentInput[i].set("value", obj.comment);
 
             }
         } else {

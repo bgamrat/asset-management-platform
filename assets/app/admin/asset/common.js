@@ -1,15 +1,14 @@
 define([
-    "dojo/i18n!app/nls/core",
     "dojo/i18n!app/nls/asset",
     "dojo/domReady!"
-], function (core, asset) {
+], function (asset) {
     "use strict";
 
     function relationshipLists(listContentPane, relationships, satisfies) {
         var i, listContent, listHtml = "", r, s;
-        listHtml += '<div class="justify">';
+        listHtml += '<div class="justify left">';
         if( Object.keys(satisfies).length > 0 ) {
-            listHtml += "<div>";
+            listHtml += '<div class="content">';
             listHtml += "<h4>" + asset.satisfies + "</h4>";
             listHtml += "<ul>";
             for( s in satisfies ) {
@@ -18,17 +17,17 @@ define([
             listHtml += "</ul></div>";
         }
 
-        listHtml += "<div>";
         if( Object.keys(relationships).length > 0 ) {
             for( r in relationships ) {
                 listContent = relationships[r];
                 if( listContent.length > 0 ) {
+                    listHtml += '<div class="content">';
                     listHtml += "<h4>" + asset[r] + "</h4>";
                     listHtml += "<ul>";
                     for( i = 0; i < listContent.length; i++ ) {
                         listHtml += "<li>" + listContent[i].name + "</li>";
                     }
-                    listHtml += "</ul>";
+                    listHtml += "</ul></div>";
                 }
             }
         }

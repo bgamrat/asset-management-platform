@@ -5,7 +5,7 @@ define([
     "dojo/on",
     "dojo/query",
     "dijit/form/FilteringSelect",
-    'dojo/store/JsonRest',
+    "dojo/store/JsonRest",
     "dojo/domReady!"
 ], function (dom, domAttr, domConstruct, on,
         query,
@@ -28,13 +28,14 @@ define([
     };
 
     var modelStore;
+    var divIdInUse;
 
     function getDivId() {
         return divIdInUse;
     }
 
     function setDivId(divId) {
-        divIdInUse = 'model_' + divId;
+        divIdInUse = "model_" + divId;
     }
 
     function cloneNewNode() {
@@ -68,15 +69,15 @@ define([
     function run() {
         var r, addOneMoreControl = null;
         modelStore = new JsonRest({
-            target: '/api/store/models',
+            target: "/api/store/models",
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: "id"});
         var prototypeNode, dataPrototype;
         for( r in relationshipObjs ) {
             prototypeNode = dom.byId("model_" + r);
             dataPrototype = domAttr.get(prototypeNode, "data-prototype");
 
-            addOneMoreControl = query('#' + r + ' .add-one-more-row');
+            addOneMoreControl = query("#" + r + " .add-one-more-row");
 
             relationshipObjs[r] = new RelationshipObj(r, dataPrototype, prototypeNode);
             addOneMoreControl.on("click", function (event) {
@@ -125,7 +126,7 @@ define([
         run: run,
         getData: getData,
         setData: setData
-    }
+    };
 }
 );
 //# sourceURL=model_relationships.js

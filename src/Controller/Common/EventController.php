@@ -253,7 +253,6 @@ class EventController extends Controller
                 }
             }
         }
-        dump($event);die;
 
         return $this->render( 'common/event.html.twig', [
                     'event' => $event,
