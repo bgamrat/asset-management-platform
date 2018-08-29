@@ -34,8 +34,8 @@
                                 <td></td>
                             {% endfor %}
                         {% endif %}
-                        <td class="quantity balance {% if row_balance > 0 %}deficit{% endif %}">
-                            {{row_balance}}
+                        <td class="quantity balance{% if row_balance > 0 %} deficit{% endif %}">
+                            {% if row_balance < 0 %}+{% endif %}{{row_balance|abs}}
                         </td>
                     </tr>
                 {% endfor %}

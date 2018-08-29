@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use App\Entity\Traits\Versioned\Active;
 use App\Entity\Traits\Versioned\Comment;
 use App\Entity\Traits\Id;
-use App\Entity\Traits\Versioned\Name;
 use App\Entity\Traits\Versioned\Value;
 
 /**
@@ -26,7 +25,8 @@ use App\Entity\Traits\Versioned\Value;
 class Trailer
 {
 
-    use Active,
+    use Id,
+        Active,
         Comment,
         Value,
         TimestampableEntity;
@@ -39,6 +39,7 @@ class Trailer
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Asset\Trailer")
      * @ORM\JoinColumn(name="trailer_id", referencedColumnName="id")

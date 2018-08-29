@@ -4,7 +4,6 @@ Namespace App\Controller\Admin\Client;
 
 use App\Form\Admin\Client\ClientType;
 use App\Form\Admin\Client\ContractType;
-;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -57,44 +56,17 @@ class ClientController extends Controller
     }
 
     /**
-     * @Route("/admin/client/{name}/contract/{cname}")
      * @Method("GET")
-     */
-    public function contractAction( $name, $cname )
-    {
-        $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-
-        $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder()->select( ['ct'] )
-                ->from( 'App\Entity\Client\Contract', 'ct' )
-                ->join( 'App\Entity\Client\Client', 'c' );
-        $queryBuilder->where( $queryBuilder->expr()->eq( 'c.name', '?1' ) )
-                ->andWhere( $queryBuilder->expr()->eq( 'ct.name', '?2' ) )
-                ->setParameters( [ 1 => $name, 2 => $cname] );
-        $query = $queryBuilder->getQuery();
-        $clientContract = $query->getResult();
-        if( is_array( $clientContract ) )
-        {
-            $clientContract = $clientContract[0];
-
-            $contractForm = $this->createForm( ContractType::class, $clientContract, [ 'action' => $this->generateUrl( 'app_admin_client_client_savecontract', ['name' => $name, 'cname' => $cname] )] );
-
-            return $this->render( 'admin/client/contract.html.twig', array(
-                        'contract' => $clientContract,
-                        'contract_form' => $contractForm->createView()) );
-        }
-    }
-
-    /**
      * @Route("/admin/client/{name}/contract/{cname}")
-     * @Method("POST")
      */
-    public function saveContractAction( $name, $cname, Request $request )
+    public function contractAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $em = $this->getDoctrine()->getManager();
-        $response = new Response();
 
+        $name = $request->get('name');
+        $cname = $request->get('cname');
+
+        $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->createQueryBuilder()->select( ['ct'] )
                 ->from( 'App\Entity\Client\Contract', 'ct' )
                 ->join( 'App\Entity\Client\Client', 'c' );
@@ -107,7 +79,7 @@ class ClientController extends Controller
         {
             $clientContract = $clientContract[0];
 
-            $form = $this->createForm( ContractType::class, $clientContract, [ 'action' => $this->generateUrl( 'app_admin_client_client_savecontract', ['name' => $name, 'cname' => $cname] )] );
+            $form = $this->createForm( ContractType::class, $clientContract, [ 'action' => $this->generateUrl( 'app_admin_client_client_contract', ['name' => $name, 'cname' => $cname] )] );
 
             $form->handleRequest( $request );
             if( $form->isSubmitted() && $form->isValid() )

@@ -19,22 +19,15 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
 
     public function load( ObjectManager $manager )
     {
-        $categories = $manager->getRepository( 'App\Entity\Asset\Category' )->findAll( false );
-        if( empty( $categories ) )
+        $categoryRepository = $manager->getRepository( 'App\Entity\Asset\Category' );
+        $categoryCount = $categoryRepository->count( [] );
+        if( $categoryCount === 0 )
         {
-            throw new CommonException( "There are no category types defined (load them before running this)" );
+            throw new CommonException( "There are no categories defined (load them before running this)" );
         }
-        foreach( $categories as $i => $c )
-        {
-            if( $c->getName() === 'top' )
-            {
-                unset( $categories[$i] );
-                break;
-            }
-        }
-        $categories = array_values( $categories );
-        shuffle( $categories );
-        $categoryCount = count( $categories ) - 1;
+        $categories = [];
+        $categories[] = $categoryRepository->findOneByName( '4K Video' );
+        $categories[] = $categoryRepository->findOneByName( '2x MO' );
 
         $hTv = new Client();
         $hTv->setName( 'Hudson TV' );
@@ -82,29 +75,18 @@ class LoadClientData extends AbstractFixture implements OrderedFixtureInterface
         $contract->setStart( new \DateTime( '2018-01-01' ) );
         $contract->setEnd( new \DateTime( '2018-12-31' ) );
 
-        $categoryQuantity = new CategoryQuantity();
-        $categoryQuantity->setCategory( array_pop( $categories ) );
-        $categoryQuantity->setQuantity( rand( 1, 3 ) );
-        $categoryQuantity->setValue( 4000 );
-        $contract->addRequiresCategoryQuantity( $categoryQuantity );
-
-        $categoryQuantity = new CategoryQuantity();
-        $categoryQuantity->setCategory( array_pop( $categories ) );
-        $categoryQuantity->setQuantity( rand( 1, 3 ) );
-        $categoryQuantity->setValue( 3000 );
-        $contract->addRequiresCategoryQuantity( $categoryQuantity );
-
-        $categoryQuantity = new CategoryQuantity();
-        $categoryQuantity->setCategory( array_pop( $categories ) );
-        $categoryQuantity->setQuantity( rand( 1, 3 ) );
-        $categoryQuantity->setValue( 430 );
-        $contract->addRequiresCategoryQuantity( $categoryQuantity );
-
-        $categoryQuantity = new CategoryQuantity();
-        $categoryQuantity->setCategory( array_pop( $categories ) );
-        $categoryQuantity->setQuantity( rand( 1, 3 ) );
-        $categoryQuantity->setValue( 6430 );
-        $contract->addAvailableCategoryQuantity( $categoryQuantity );
+        while( !empty( $categories ) )
+        {
+            $category = array_pop( $categories );
+            if( !empty( $category ) )
+            {
+                $categoryQuantity = new CategoryQuantity();
+                $categoryQuantity->setCategory( $category );
+                $categoryQuantity->setQuantity( rand( 1, 3 ) );
+                $categoryQuantity->setValue( rand( 4000, 100000 ) );
+                $contract->addRequiresCategoryQuantity( $categoryQuantity );
+            }
+        }
 
         $clientTrailer = new ClientTrailer();
         $clientTrailer->setTrailer( $manager->getRepository( 'App\Entity\Asset\Trailer' )->findOneByName( 'Box' ) );

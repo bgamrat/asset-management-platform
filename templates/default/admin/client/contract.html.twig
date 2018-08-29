@@ -3,11 +3,7 @@
 {% extends 'admin.base.html.twig' %}
 
 {% block stylesheets %}
-    {% stylesheets 
-            '@admin_client_css'
-            filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+   <link rel="stylesheet" href="{{ asset('build/css/admin_client.css') }}">
 {% endblock %}
 
 {% form_theme contract_form _self %}
@@ -29,7 +25,7 @@
 
 {% macro category_quantity_entry_row(type,form) %}{% spaceless %}
     {% if type is not defined %}{% set type = '' %}{% endif %}
-    {% set type = type|replace('_','-') %}
+    {% set type = type|replace({'_':'-'}) %}
     <div class="form-row {{ type }}">
         <span class="type-select">{{ form_widget(form.category) }}</span>
         <span class="quantity">{{ form_widget(form.quantity) }}</span>

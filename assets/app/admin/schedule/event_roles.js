@@ -184,7 +184,7 @@ define([
         on(prototypeNode.parentNode, ".remove-form-row:click", function (event) {
             var target = event.target;
             var targetParent = target.parentNode;
-            var id = parseInt(targetParent.id.replace(/\D/g, ''));
+            var id = parseInt(targetParent.id.replace(/\D/g, ""));
             destroyRow(id, target.closest(".form-row.event-role"));
         });
 
