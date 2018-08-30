@@ -82,7 +82,7 @@ class ManufacturersController extends FOSRestController
             $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        $count = $em->getRepository( 'App\Entity\Asset\Manufacturer' )->count([]);
+        $count = $em->getRepository( 'App\Entity\Asset\Manufacturer' )->count( [] );
         $view = FOSRestView::create();
         $view->setData( $data );
         $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
@@ -214,8 +214,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{name}/brands", name="app_admin_api_manufacturers_get_manufacturer_brands")
-     * @Method("GET")
+     * @Route("/api/manufacturers/{name}/brands", name="app_admin_api_manufacturers_get_manufacturer_brands", methods={"GET"})
      * @View()
      */
     public function getManufacturerBrandsAction( $name, Request $request )
@@ -237,8 +236,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mname}/brands/{bname}/models", name="app_admin_api_manufacturers_get_manufacturers_brands_models")
-     * @Method("GET")
+     * @Route("/api/manufacturers/{mname}/brands/{bname}/models", name="app_admin_api_manufacturers_get_manufacturers_brands_models", methods={"GET"})
      * @View()
      */
     public function getManufacturersBrandsModelsAction( $mname, $bname, Request $request )
@@ -307,8 +305,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mnname}/brands/{bname}/model/{mname}", name="app_admin_api_manufacturers_get_manufacturers_brands_model")
-     * @Method("GET")
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}", name="app_admin_api_manufacturers_get_manufacturers_brands_model", methods={"GET"})
      * @View()
      */
     public function getManufacturersBrandsModelAction( Request $request, $mnname, $bname, $mname )
@@ -351,21 +348,10 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}", name="app_admin_api_manufacturers_post_manufacturer_brand_models")
-     * @Method("POST")
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}", name="app_admin_api_manufacturers_post_manufacturer_brand_models", methods={"POST","PUT"})
      * @View()
      */
-    public function postManufacturerBrandModelsAction( $mnname, $bname, $mname, Request $request )
-    {
-        return $this->putManufacturerBrandModelsAction( $mnname, $bname, $mname, $request );
-    }
-
-    /**
-     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}", name="app_admin_api_manufacturers_put_manufacturer_brand_models")
-     * @Method("PUT")
-     * @View()
-     */
-    public function putManufacturerBrandModelsAction( Request $request, $mnname, $bname, $mname )
+    public function postManufacturerBrandModelsAction( Request $request, $mnname, $bname, $mname )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $response = new Response();
@@ -437,8 +423,7 @@ class ManufacturersController extends FOSRestController
     }
 
     /**
-     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}", name="app_admin_api_manufacturers_patch_manufacturers_brands_models")
-     * @Method("PATCH")
+     * @Route("/api/manufacturers/{mnname}/brands/{bname}/models/{mname}", methods={"GET"})
      * @View(statusCode=204)
      */
     public function patchManufacturersBrandsModelsAction( $mnname, $bname, $mname, Request $request )

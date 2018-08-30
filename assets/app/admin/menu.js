@@ -44,7 +44,7 @@ define([
                 id: "admin-menu",
                 model: model,
                 persist: true,
-                showRoot: false,
+                //showRoot: false,
                 onClick: function (item) {
                     if( typeof item.uri !== "undefined" && item.uri !== null ) {
                         location.href = item.uri;

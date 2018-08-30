@@ -55,7 +55,6 @@ class MenuBuilder
         }
 
         $menu['admin']->addChild( 'admin-clients', ['label' => 'common.clients', 'route' => 'app_admin_client_client_index'] );
-        $menu['admin']['admin-clients']->addChild( 'clients', ['label' => 'common.clients'] );
 
         $menu['admin']->addChild( 'admin-schedule', ['label' => 'common.schedule', 'route' => 'app_admin_schedule_default_index'] );
         $menu['admin']['admin-schedule']->addChild( 'events', ['label' => 'common.events', 'route' => 'app_admin_schedule_event_index'] );
@@ -96,7 +95,6 @@ class MenuBuilder
         }
 
         $menu['admin']->addChild( 'admin-venues', ['label' => 'common.venues', 'route' => 'app_admin_venue_venue_index'] );
-        $menu['admin']['admin-venues']->addChild( 'venues', ['label' => 'common.venues'] );
 
         // $menu->addChild( 'logout', ['class' => 'right', 'label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
 
