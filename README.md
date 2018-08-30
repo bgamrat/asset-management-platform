@@ -58,6 +58,13 @@ development (not on production).
      - Extract the files out of the tar with **tar xzf public-build.tgz**
 9. There is an *httpd.conf* file in *app/system/etc/httpd/conf.d*, it might work
 
+## Deployment
+
+(Updates)
+
+1. Local: **bin/build-css-js.sh**
+2. Remote/Stage/Production: **cd /var/www/html/symfony-dev; tar mxzf public-build.tgz**
+
 ## Terminology
 
 ### Addresses
