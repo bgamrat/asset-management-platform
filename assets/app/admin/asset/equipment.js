@@ -111,7 +111,7 @@ define([
 
         var newBtn = new Button({
             label: core["new"]
-        }, 'asset-new-btn');
+        }, "asset-new-btn");
         newBtn.startup();
         newBtn.on("click", function (event) {
             var id;
@@ -125,7 +125,7 @@ define([
             valueInput.set("value", null);
             commentInput.set("value", "");
             activeCheckBox.set("checked", true);
-            ownerFilteringSelect.set('value', null);
+            ownerFilteringSelect.set("value", null);
             assetViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -147,9 +147,9 @@ define([
         });
 
         var modelStore = new JsonRest({
-            target: '/api/store/models?ca',
+            target: "/api/store/models?ca",
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: "id"});
         var modelFilteringSelect = new FilteringSelect({
             store: modelStore,
             labelAttr: "name",
@@ -161,7 +161,7 @@ define([
         modelFilteringSelect.on("change", function (evt) {
             var item;
             if( action === "new" ) {
-                item = this.get('item');
+                item = this.get("item");
                 if( item !== null ) {
                     customAttributes.setData(item.customAttributes);
                 }
@@ -171,7 +171,7 @@ define([
         var ownerStore = new JsonRest({
             target: "/api/store/vendors",
             useRangeHeaders: false,
-            idProperty: 'id'});
+            idProperty: "id"});
         var ownerFilteringSelect = new FilteringSelect({
             store: ownerStore,
             labelAttr: "name",
@@ -215,7 +215,7 @@ define([
             store: store,
             placeholder: asset.status,
             required: true,
-            value: domAttr.get(select, 'data-selected')
+            value: domAttr.get(select, "data-selected")
         }, select);
         statusSelect.startup();
 
@@ -252,7 +252,7 @@ define([
 
         var saveBtn = new Button({
             label: core.save
-        }, 'asset-save-btn');
+        }, "asset-save-btn");
         saveBtn.startup();
         saveBtn.on("click", function (event) {
             var data, purchased;
@@ -292,9 +292,9 @@ define([
         filterInput.startup();
 
         var TrackableRest = declare([Rest, SimpleQuery, Trackable]);
-        var store = new TrackableRest({target: '/api/assets',
+        var store = new TrackableRest({target: "/api/assets",
             useRangeHeaders: true,
-            idProperty: 'id'});
+            idProperty: "id"});
         var grid = new (declare([OnDemandGrid, Keyboard, Selection, Editor]))({
             collection: store,
             sort: "model_text",
@@ -343,12 +343,12 @@ define([
             renderRow: function (object) {
                 var rowElement = this.inherited(arguments);
                 if( typeof object.deleted_at !== "undefined" && object.deleted_at !== null ) {
-                    rowElement.className += ' deleted';
+                    rowElement.className += " deleted";
                 }
                 return rowElement;
             },
             selectionMode: "none"
-        }, 'asset-grid');
+        }, "asset-grid");
         grid.startup();
         grid.collection.track();
 
@@ -370,13 +370,13 @@ define([
                     } else {
                         titleBarcode = asset.model_text;
                     }
-                    assetViewDialog.set('title', core.view + " " + titleBarcode);
+                    assetViewDialog.set("title", core.view + " " + titleBarcode);
                     assetViewDialog.show();
                     action = "view";
                     assetId = asset.id;
-                    modelFilteringSelect.set('displayedValue', asset.model.brand.name + " " + asset.model.name);
+                    modelFilteringSelect.set("displayedValue", asset.model.brand.name + " " + asset.model.name);
                     statusSelect.set("displayedValue", asset.status.name);
-                    purchasedInput.set('value', asset.purchased);
+                    purchasedInput.set("value", asset.purchased);
                     costInput.set("value", asset.cost);
                     valueInput.set("value", asset.value);
                     if( typeof asset.owner !== "undefined" && asset.owner !== null ) {
@@ -385,15 +385,15 @@ define([
                         ownerFilteringSelect.set("value", null);
                     }
                     location.setData(asset.location, asset.location_text);
-                    serialNumberInput.set('value', asset.serial_number);
+                    serialNumberInput.set("value",(typeof asset.serial_number !== "undefined") ? asset.serial_number : null);
                     customAttributes.setData(asset.custom_attributes);
-                    commentInput.set('value', asset.comment);
+                    commentInput.set("value", asset.comment);
                     if( typeof asset.barcodes !== "undefined" ) {
                         barcodes.setData(asset.barcodes);
                     } else {
                         barcodes.setData(null);
                     }
-                    activeCheckBox.set('checked', asset.active);
+                    activeCheckBox.set("checked", asset.active);
                     assetCommon.relationshipLists(modelRelationshipsContentPane,
                             {"requires": asset.model.requires,
                                 "required_by": asset.model.required_by,
@@ -404,7 +404,7 @@ define([
             }
         });
 
-        grid.on('.field-active:dgrid-datachange', function (event) {
+        grid.on(".field-active:dgrid-datachange", function (event) {
             var row = grid.row(event);
             var cell = grid.cell(event);
             var field = cell.column.field;

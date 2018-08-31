@@ -142,6 +142,11 @@ for example an *office* phone and a *personal* email, as well as a *receiving* a
 
 Requirements are described as **category quantities**, using the categories from the tree.
 
+### Sets ###
+
+Sets are collections of **models** which meet one or more **category** requirements.  The **models** may be from
+different **brands** and **manufacturers**.
+
 ### Transfers
 
 Transfers describe the transfer of **assets** from one **location** to another

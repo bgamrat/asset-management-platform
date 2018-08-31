@@ -24,6 +24,9 @@
 .form-row.brand:nth-child(2) .remove-form-row {
     display:none;
 }
+.asset-model .dijitTextBox {
+    width: 300px;
+}
 .asset .justify span,
 .model .justify span,
 .vendor .justify span {

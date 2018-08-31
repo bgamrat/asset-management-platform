@@ -14,6 +14,7 @@ use App\Entity\Traits\Versioned\Comment;
 use App\Entity\Traits\Versioned\CustomAttributes;
 use App\Entity\Traits\Id;
 use App\Entity\Traits\Versioned\Name;
+use App\Entity\Traits\Satisfies;
 use App\Entity\Traits\History;
 
 /**
@@ -35,6 +36,7 @@ class Model
         CustomAttributes,
         Id,
         Name,
+        Satisfies,
         TimestampableEntity,
         SoftDeleteableEntity,
         History;
@@ -107,14 +109,6 @@ class Model
      *      )
      */
     private $requires;
-    /**
-     * @ORM\ManyToMany(targetEntity="Category", fetch="EXTRA_LAZY")
-     * @ORM\JoinTable(name="model_satisfy",
-     *      joinColumns={@ORM\JoinColumn(name="satisfy_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="model_id", referencedColumnName="id")}
-     *      )
-     */
-    private $satisfies;
     /**
      * @var float
      * @ORM\Column(name="carnet_value", type="float", nullable=true, unique=false) 
@@ -388,33 +382,6 @@ class Model
     public function removeRequiredBy( Model $model )
     {
         $this->requires->removeElement( $model );
-    }
-
-    public function setSatisfies( $categories )
-    {
-        foreach( $categories as $c )
-        {
-            $this->addSatisfies( $c );
-        }
-        return $this;
-    }
-
-    public function getSatisfies()
-    {
-        return $this->satisfies;
-    }
-
-    public function addSatisfies( Category $category )
-    {
-        if( !$this->satisfies->contains( $category ) )
-        {
-            $this->satisfies->add( $category );
-        }
-    }
-
-    public function removeSatisfies( Category $category )
-    {
-        $this->satisfies->removeElement( $category );
     }
 
     public function setCarnetValue( $value )
