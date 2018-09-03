@@ -3,6 +3,7 @@
 Namespace App\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Asset\Category;
 
 trait Satisfies
 {
@@ -12,7 +13,7 @@ trait Satisfies
      */
     private $satisfies;
 
-    public function setSatisfies( $categories )
+    public function setSatisfies( Array $categories )
     {
         foreach( $categories as $c )
         {

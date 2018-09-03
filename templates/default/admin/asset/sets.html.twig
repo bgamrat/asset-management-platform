@@ -1,0 +1,75 @@
+{% block title %}{{ 'asset.set'|trans }} {{'common.admin'|trans }}{% endblock %}
+
+{% extends 'admin/asset/asset.base.html.twig' %}
+
+{% form_theme set_form _self %}
+
+{% macro category_entry_row(type,form) %}{% spaceless %}
+        <div class="form-row category">
+            <span class="type-select">{{ form_widget(form.category) }}</span>
+            {% if form.parent.vars.allow_delete is defined %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="categories-__categories__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>{% endspaceless %}{% endmacro %}
+
+{% macro model_entry_row(type,form) %}{% spaceless %}
+        <div class="form-row model">
+            <span class="type-select">{{ form_widget(form.model) }}</span>
+            {% if form.parent.vars.allow_delete is defined %}
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="models-__models__"><i class="fa fa-remove"></i></span>
+                {% endif %}
+        </div>{% endspaceless %}{% endmacro %}
+
+{% block admin_content %}
+    <div id="set-wrapper">
+        <h1>{{ block ('title') }}</h1>
+        <div class="sets">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flash_message|trans }}
+                </div>
+            {% endfor %}
+            {% if not set_form.vars.valid %}
+                <div class="form-errors sets">
+                    {% for set in set_form.sets %}
+                        {% if not set.vars.valid %}
+                            {{form_errors(set.name)}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="justify">
+                <div class="set-form">
+                    {{form_start(set_form)}}
+                    <div class="text-right">
+                        <button id="sets-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+                    </div>
+                    <div class="set-form-inputs">
+
+                        {{form_row(set_form.categories)}}
+
+                        {% for category in set_form.categories %}
+                            {{form_row(category)}}
+                        {% endfor %}
+
+                        {{form_row(set_form.models)}}
+
+                        {% for model in set_form.models %}
+                            {{form_row(model)}}
+                        {% endfor %}
+
+                    </div>
+                    {{form_end(set_form)}}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!--script>
+        require(["app/admin/asset/set", "dojo/domReady!"], function (sets, set) {
+            set.run();
+        });
+    </script-->
+{% endblock %}

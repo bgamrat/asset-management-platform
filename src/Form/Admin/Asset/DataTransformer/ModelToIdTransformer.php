@@ -3,6 +3,7 @@
 Namespace App\Form\Admin\Asset\DataTransformer;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -10,7 +11,7 @@ class ModelToIdTransformer implements DataTransformerInterface
 {
     private $em;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
