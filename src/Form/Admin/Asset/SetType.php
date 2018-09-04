@@ -6,7 +6,12 @@ use App\Form\Admin\Asset\Type\CategoryType;
 use App\Form\Admin\Asset\Type\ModelType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,7 +25,12 @@ class SetType extends AbstractType
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
         $builder
-                ->add( 'categories', CollectionType::class, [
+                ->add( 'id', HiddenType::class )
+                ->add( 'name', TextType::class )
+                ->add( 'value', MoneyType::class, ['currency' => 'USD'] )
+                ->add( 'comment', TextType::class )
+                ->add( 'in_use', CheckboxType::class )
+                ->add( 'satisfies', CollectionType::class, [
                     'entry_type' => CategoryType::class,
                     'required' => false,
                     'label' => false,

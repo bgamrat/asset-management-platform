@@ -1,14 +1,14 @@
-{% block title %}{{ 'asset.set'|trans }} {{'common.admin'|trans }}{% endblock %}
+{% block title %}{{ 'asset.sets'|trans }} {{'common.admin'|trans }}{% endblock %}
 
 {% extends 'admin/asset/asset.base.html.twig' %}
 
 {% form_theme set_form _self %}
 
-{% macro category_entry_row(type,form) %}{% spaceless %}
-        <div class="form-row category">
-            <span class="type-select">{{ form_widget(form.category) }}</span>
+{% macro satisifes_entry_row(type,form) %}{% spaceless %}
+        <div class="form-row satisfies">
+            <span class="type-select">{{ form_widget(form.satisfies) }}</span>
             {% if form.parent.vars.allow_delete is defined %}
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="categories-__categories__"><i class="fa fa-remove"></i></span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="satisfies-__categories__"><i class="fa fa-remove"></i></span>
                 {% endif %}
         </div>{% endspaceless %}{% endmacro %}
 
@@ -23,53 +23,61 @@
 {% block admin_content %}
     <div id="set-wrapper">
         <h1>{{ block ('title') }}</h1>
-        <div class="sets">
-            {% for flash_message in app.session.flashBag.get('notice') %}
-                <div class="flash-notice">
-                    {{ flash_message|trans }}
-                </div>
-            {% endfor %}
-            {% if not set_form.vars.valid %}
-                <div class="form-errors sets">
-                    {% for set in set_form.sets %}
-                        {% if not set.vars.valid %}
-                            {{form_errors(set.name)}}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
-            <div class="justify">
-                <div class="set-form">
-                    {{form_start(set_form)}}
+        <div class="grid-controls">
+            <div>
+                <button id="set-new-btn" type="button">{{ 'common.new'|trans }}</button>
+            </div>
+            <div>
+                <form id="set-grid-filter-form">
+                    <label for="filter-input">{{ 'common.filter'|trans }}</label><input type="text" id="set-filter-input">
+                </form>
+            </div>
+            <button id="set-remove-btn" type="button">{{ 'common.remove'|trans }}</button>
+        </div>
+        <div id="set-grid">
+        </div>
+        <div id="set-view-dialog">
+            {{form_start(set_form)}}
+            <div class="text-right">
+                <button id="carrier-save-btn" type="button">{{ 'common.save'|trans }}</button>
+            </div>
+            <div class="carrier">
+                <fieldset class="name-active">
+                    <legend>{{'common.set'|trans}}</legend>
+                    <div class="justify">
+                        <span class="id">{{ form_widget(set_form.id) }}</span>
+                        <span class="set-name">{{ form_widget(set_form.name) }}</span>
+                        <span class="value">{{ form_widget(set_form.value) }}</span>
+                        <span class="in-use">{{ form_widget(set_form.in_use) }}</span>
+                    </div>
+                    {{form_row(set_form.comment)}}
+                </fieldset>
+                <fieldset class="models-satisfies">
                     <div class="text-right">
-                        <button id="sets-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+                        <button id="set-save-btn" type="submit">{{ 'common.save'|trans }}</button>
                     </div>
                     <div class="set-form-inputs">
-
-                        {{form_row(set_form.categories)}}
-
-                        {% for category in set_form.categories %}
+                        {{form_row(set_form.satisfies)}}
+                        {% for category in set_form.satisfies %}
                             {{form_row(category)}}
                         {% endfor %}
 
                         {{form_row(set_form.models)}}
-
                         {% for model in set_form.models %}
                             {{form_row(model)}}
                         {% endfor %}
-
                     </div>
-                    {{form_end(set_form)}}
-                </div>
+                </fieldset>
+                {{form_end(set_form)}}
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
-    <!--script>
-        require(["app/admin/asset/set", "dojo/domReady!"], function (sets, set) {
-            set.run();
+    <script>
+        require(["app/admin/asset/sets", "dojo/domReady!"], function (sets) {
+            sets.run();
         });
-    </script-->
+    </script>
 {% endblock %}

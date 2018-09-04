@@ -51,6 +51,7 @@ class MenuBuilder
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'issue_types', ['label' => 'asset.issue_types', 'route' => 'app_admin_asset_issuetype_index'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'issue_workflow', ['label' => 'asset.issue_workflow', 'route' => 'app_admin_asset_issuestatus_workflow'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index'] );
+            $menu['admin']['admin-assets']['asset-configuration']->addChild( 'sets', ['label' => 'asset.sets', 'route' => 'app_admin_asset_set_index'] );
             $menu['admin']['admin-assets']['asset-configuration']->addChild( 'transfer_statuses', ['label' => 'asset.transfer_statuses', 'route' => 'app_admin_asset_transferstatus_index'] );
         }
 

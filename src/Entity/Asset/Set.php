@@ -10,9 +10,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use App\Entity\Traits\Versioned\Active;
 use App\Entity\Traits\Versioned\Comment;
 use App\Entity\Traits\Id;
+use App\Entity\Traits\Versioned\InUse;
 use App\Entity\Traits\Versioned\Name;
 use App\Entity\Traits\Satisfies;
 use App\Entity\Traits\Versioned\Value;
@@ -35,12 +35,13 @@ use App\Entity\Traits\History;
 class Set
 {
 
-    use Active,
+    use 
         Comment,
         Id,
         Name,
         Satisfies,
         Value,
+        InUse,
         TimestampableEntity,
         SoftDeleteableEntity,
         History;

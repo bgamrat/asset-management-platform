@@ -77,6 +77,10 @@ asset:
         Serial Number
     service_instructions:
         Service Instructions
+    set:
+        Set
+    sets:
+        Sets
     status:
         Status
     statuses:
