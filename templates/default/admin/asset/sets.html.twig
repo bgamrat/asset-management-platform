@@ -39,35 +39,34 @@
         <div id="set-view-dialog">
             {{form_start(set_form)}}
             <div class="text-right">
-                <button id="carrier-save-btn" type="button">{{ 'common.save'|trans }}</button>
+                <button id="set-save-btn" type="button">{{ 'common.save'|trans }}</button>
             </div>
-            <div class="carrier">
+            <div class="set">
                 <fieldset class="name-active">
-                    <legend>{{'common.set'|trans}}</legend>
+                    <legend>{{'asset.set'|trans}}</legend>
                     <div class="justify">
-                        <span class="id">{{ form_widget(set_form.id) }}</span>
                         <span class="set-name">{{ form_widget(set_form.name) }}</span>
                         <span class="value">{{ form_widget(set_form.value) }}</span>
                         <span class="in-use">{{ form_widget(set_form.in_use) }}</span>
                     </div>
                     {{form_row(set_form.comment)}}
                 </fieldset>
-                <fieldset class="models-satisfies">
-                    <div class="text-right">
-                        <button id="set-save-btn" type="submit">{{ 'common.save'|trans }}</button>
+                    <div class="justify">
+                        <fieldset class="satisfies">
+                            <legend>{{'common.satisfies'|trans}}</legend>
+                            {{form_row(set_form.satisfies)}}
+                            {% if set_form.satisfies.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
+                        </fieldset>
+                        <fieldset class="models">
+                            <legend>{{'asset.models'|trans}}</legend>
+                            {{form_row(set_form.models)}}
+                            {% if set_form.models.vars.allow_add %}
+                                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+                            {% endif %}
+                        </fieldset>
                     </div>
-                    <div class="set-form-inputs">
-                        {{form_row(set_form.satisfies)}}
-                        {% for category in set_form.satisfies %}
-                            {{form_row(category)}}
-                        {% endfor %}
-
-                        {{form_row(set_form.models)}}
-                        {% for model in set_form.models %}
-                            {{form_row(model)}}
-                        {% endfor %}
-                    </div>
-                </fieldset>
                 {{form_end(set_form)}}
             </div>
         </div>

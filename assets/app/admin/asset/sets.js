@@ -10,12 +10,11 @@ define([
     "dijit/form/Form",
     "dijit/form/TextBox",
     "dijit/form/ValidationTextBox",
+    "dijit/form/CurrencyTextBox",
     "dijit/form/CheckBox",
     "dijit/form/SimpleTextarea",
     "dijit/form/Button",
     "dijit/Dialog",
-    "dijit/layout/TabContainer",
-    "dijit/layout/ContentPane",
     "dstore/Rest",
     "dstore/SimpleQuery",
     "dstore/Trackable",
@@ -24,15 +23,16 @@ define([
     "dgrid/Editor",
     "put-selector/put",
     "app/common/contact",
-    "app/admin/asset/carrier_service",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
+    "dojo/i18n!app/nls/asset",
     "dojo/domReady!"
 ], function (declare, dom, domConstruct, on, xhr, aspect, query,
-        registry, Form, TextBox, ValidationTextBox, CheckBox, SimpleTextarea, Button, Dialog, TabContainer, ContentPane,
+        registry, Form, TextBox, ValidationTextBox, CurrencyTextBox, CheckBox, SimpleTextarea, Button,
+        Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xcontact, carrierService, lib, libGrid, core) {
+        xcontact, lib, libGrid, core, asset) {
     // "use strict";
     function run() {
         var action = null;
@@ -56,8 +56,8 @@ define([
         newBtn.on("click", function (event) {
             setId = null;
             nameInput.set("value", "");
-            contact.setData(null);
-            activeCheckBox.set("checked", true);
+            valueInput.set("value", null);
+            inUseCheckBox.set("checked", true);
             setViewDialog.set("title", core["new"]).show();
             action = "new";
         });
@@ -100,29 +100,23 @@ define([
 
         var inUseCheckBox = new CheckBox({}, "set_in_use");
         inUseCheckBox.startup();
-        /*
-         var modelStore = new JsonRest({
-         target: "/api/store/models?ca",
-         useRangeHeaders: false,
-         idProperty: "id"});
-         var modelFilteringSelect = new FilteringSelect({
-         store: modelStore,
-         labelAttr: "name",
-         searchAttr: "name",
-         pageSize: 25,
-         required: true
-         }, "asset_model");
-         modelFilteringSelect.startup();
-         modelFilteringSelect.on("change", function (evt) {
-         var item;
-         if( action === "new" ) {
-         item = this.get("item");
-         if( item !== null ) {
-         customAttributes.setData(item.customAttributes);
-         }
-         }
-         });
-                var categoryStore = new JsonRest({
+/*
+        var modelPrototypeNode = query("#set");
+
+        var modelStore = new JsonRest({
+            target: "/api/store/models?ca",
+            useRangeHeaders: false,
+            idProperty: "id"});
+        var modelFilteringSelect = new FilteringSelect({
+            store: modelStore,
+            labelAttr: "name",
+            searchAttr: "name",
+            pageSize: 25,
+            required: true
+        }, "asset_model");
+        modelFilteringSelect.startup();
+
+        var categoryStore = new JsonRest({
             target: '/api/store/categories',
             useRangeHeaders: false,
             idProperty: 'id'});
@@ -134,7 +128,7 @@ define([
             required: true
         }, select);
         categoryFilteringSelect.startup();
-         */
+*/
         var setForm = new Form({}, '[name="set"]');
         setForm.startup();
 
@@ -174,7 +168,7 @@ define([
                     label: core.id
                 },
                 name: {
-                    label: core.set,
+                    label: asset.set,
                     renderCell: function (object, value, td) {
                         put(td, "pre.name", object.name);
                         libGrid.renderContacts(object, object, td);
@@ -287,9 +281,6 @@ define([
                 match: new RegExp(filterInput.get("value").replace(/\W/, ""), "i")
             }));
         });
-
-        contact = xcontact.run("set_contacts");
-        setService.run();
 
         lib.pageReady();
     }

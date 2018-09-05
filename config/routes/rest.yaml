@@ -23,6 +23,11 @@ app_admin_asset_manufacturers:
     resource: App\Controller\Api\Admin\Asset\ManufacturersController
     prefix: /api
 
+app_admin_asset_sets:
+    type:     rest
+    resource: App\Controller\Api\Admin\Asset\SetsController
+    prefix: /api
+
 app_admin_asset_trailers:
     type:     rest
     resource: App\Controller\Api\Admin\Asset\TrailersController

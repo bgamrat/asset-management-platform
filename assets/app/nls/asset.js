@@ -26,6 +26,8 @@ define({
         "serial_number": "Serial Number",
         "service": "Service",
         "service_instructions": "Service Instructions",
+        "set": "Set",
+        "sets": "Sets",
         "status": "Status",
         "summary": "Summary",
         "supports": "Supports",

@@ -44,6 +44,7 @@ define({
         "history": "History",
         "id": "Id",
         "in": "In",
+        "in_use": "In Use",
         "instructions": "Instructions",
         "invalid": "Invalid",
         "invalid_form": "Invalid data",

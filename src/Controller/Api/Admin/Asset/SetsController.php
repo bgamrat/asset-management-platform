@@ -2,10 +2,10 @@
 
 Namespace App\Controller\Api\Admin\Asset;
 
-use App\Entity\Asset\Carrier;
+use App\Entity\Asset\Set;
 use App\Util\DStore;
 use App\Util\Form as FormUtil;
-use App\Form\Admin\Asset\CarrierType;
+use App\Form\Admin\Asset\SetType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\View\View as FOSRestView;
@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
-class CarriersController extends FOSRestController
+class SetsController extends FOSRestController
 {
 
     private $dstore;
@@ -31,7 +31,7 @@ class CarriersController extends FOSRestController
     /**
      * @View()
      */
-    public function getCarriersAction( Request $request )
+    public function getSetsAction( Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $dstore = $this->dstore->gridParams( $request, 'name' );
@@ -41,10 +41,9 @@ class CarriersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['c'] )
-                ->from( 'App\Entity\Asset\Carrier', 'c' )
-                ->leftJoin( 'c.contacts', 'cc' )
-                ->orderBy( 'c.' . $dstore['sort-field'], $dstore['sort-direction'] );
+        $queryBuilder = $em->createQueryBuilder()->select( ['s'] )
+                ->from( 'App\Entity\Asset\Set', 's' )
+                ->orderBy( 's.' . $dstore['sort-field'], $dstore['sort-direction'] );
         $limit = 0;
         if( $dstore['limit'] !== null )
         {
@@ -63,18 +62,18 @@ class CarriersController extends FOSRestController
             {
                 case DStore::LIKE:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->like( 'LOWER(c.name)', '?1' )
+                            $queryBuilder->expr()->like( 'LOWER(s.name)', '?1' )
                     );
                     break;
                 case DStore::GT:
                     $queryBuilder->where(
-                            $queryBuilder->expr()->gt( 'LOWER(c.name)', '?1' )
+                            $queryBuilder->expr()->gt( 'LOWER(s.name)', '?1' )
                     );
             }
             $queryBuilder->setParameter( 1, strtolower( $dstore['filter'][DStore::VALUE] ) );
         }
         $data = $queryBuilder->getQuery()->getResult();
-        $count = $em->getRepository( 'App\Entity\Asset\Carrier' )->count([]);
+        $count = $em->getRepository( 'App\Entity\Asset\Set' )->count([]);
         $view = FOSRestView::create();
         $view->setData( $data );
         $view->setHeader( 'Content-Range', 'items ' . $offset . '-' . ($offset + $limit) . '/' . $count );
@@ -85,7 +84,7 @@ class CarriersController extends FOSRestController
     /**
      * @View()
      */
-    public function getCarrierAction( $id )
+    public function getSetAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
@@ -93,14 +92,14 @@ class CarriersController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $carrier = $this->getDoctrine()
-                        ->getRepository( 'App\Entity\Asset\Carrier' )->find( $id );
-        if( $carrier !== null )
+        $set = $this->getDoctrine()
+                        ->getRepository( 'App\Entity\Asset\Set' )->find( $id );
+        if( $set !== null )
         {
 
             $formUtil = $this->formUtil;
-            $formUtil->saveDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdatedAt() );
-            $form = $this->createForm( CarrierType::class, $carrier, ['allow_extra_fields' => true] );
+            $formUtil->saveDataTimestamp( 'set' . $set->getId(), $set->getUpdatedAt() );
+            $form = $this->createForm( SetType::class, $set, ['allow_extra_fields' => true] );
 
             return $form->getViewData();
         }
@@ -113,15 +112,15 @@ class CarriersController extends FOSRestController
     /**
      * @View()
      */
-    public function postCarrierAction( $id, Request $request )
+    public function postSetAction( $id, Request $request )
     {
-        return $this->putCarrierAction( $id, $request );
+        return $this->putSetAction( $id, $request );
     }
 
     /**
      * @View()
      */
-    public function putCarrierAction( $id, Request $request )
+    public function putSetAction( $id, Request $request )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
@@ -129,30 +128,30 @@ class CarriersController extends FOSRestController
         $data = $request->request->all();
         if( $id === "null" )
         {
-            $carrier = new Carrier();
+            $set = new Set();
         }
         else
         {
             $em->getFilters()->disable( 'softdeleteable' );
-            $carrier = $em->getRepository( 'App\Entity\Asset\Carrier' )->find( $id );
+            $set = $em->getRepository( 'App\Entity\Asset\Set' )->find( $id );
             $formUtil = $this->formUtil;
-            if( $formUtil->checkDataTimestamp( 'carrier' . $carrier->getId(), $carrier->getUpdatedAt() ) === false )
+            if( $formUtil->checkDataTimestamp( 'set' . $set->getId(), $set->getUpdatedAt() ) === false )
             {
                 throw new Exception( "data.outdated", 400 );
             }
         }
-        $form = $this->createForm( CarrierType::class, $carrier, ['allow_extra_fields' => true] );
+        $form = $this->createForm( SetType::class, $set, ['allow_extra_fields' => true] );
         try
         {
             $form->submit( $data );
             if( $form->isValid() )
             {
-                $carrier = $form->getData();
-                $em->persist( $carrier );
+                $set = $form->getData();
+                $em->persist( $set );
                 $em->flush();
                 $response->setStatusCode( $request->getMethod() === 'POST' ? 201 : 204  );
                 $response->headers->set( 'Location', $this->generateUrl(
-                                'get_carrier', array('id' => $carrier->getId()), true // absolute
+                                'get_set', array('id' => $set->getId()), true // absolute
                         )
                 );
             }
@@ -174,14 +173,14 @@ class CarriersController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function patchCarrierAction( $id, Request $request )
+    public function patchSetAction( $id, Request $request )
     {
         $formProcessor = $this->formUtil;
         $data = $formProcessor->getJsonData( $request );
         $repository = $this->getDoctrine()
-                ->getRepository( 'App\Entity\Asset\Carrier' );
-        $carrier = $repository->find( $id );
-        if( $carrier !== null )
+                ->getRepository( 'App\Entity\Asset\Set' );
+        $set = $repository->find( $id );
+        if( $set !== null )
         {
             if( isset( $data['field'] ) && is_bool( $formProcessor->strToBool( $data['value'] ) ) )
             {
@@ -189,11 +188,11 @@ class CarriersController extends FOSRestController
                 switch( $data['field'] )
                 {
                     case 'active':
-                        $carrier->setActive( $value );
+                        $set->setActive( $value );
                         break;
                 }
 
-                $em->persist( $carrier );
+                $em->persist( $set );
                 $em->flush();
             }
         }
@@ -202,15 +201,15 @@ class CarriersController extends FOSRestController
     /**
      * @View(statusCode=204)
      */
-    public function deleteCarrierAction( $id )
+    public function deleteSetAction( $id )
     {
         $this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->enable( 'softdeleteable' );
-        $carrier = $em->getRepository( 'App\Entity\Asset\Carrier' )->find( $id );
-        if( $carrier !== null )
+        $set = $em->getRepository( 'App\Entity\Asset\Set' )->find( $id );
+        if( $set !== null )
         {
-            $em->remove( $carrier );
+            $em->remove( $set );
             $em->flush();
         }
         else

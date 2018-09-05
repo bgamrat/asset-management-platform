@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author bgamrat
  */
-class SetController extends Controller
+class SetsController extends Controller
 {
 
     /**
@@ -39,7 +39,7 @@ class SetController extends Controller
         else
         {
             return $this->render( 'admin/asset/sets.html.twig', [
-                        'set_form' => $form->createView(), 'no_hide' => true] );
+                        'set_form' => $form->createView()] );
         }
     }
 
