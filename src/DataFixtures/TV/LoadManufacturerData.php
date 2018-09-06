@@ -157,43 +157,6 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $sony->addModel( $hfrcode );
         $manager->persist( $hfrcode );
 
-        $bpu4000hfrhdcu2000 = new Model();
-        $bpu4000hfrhdcu2000->setCategory( $categoryRepository->findOneByName( 'Camera' ) );
-        $bpu4000hfrhdcu2000->setName( 'F55-BPU4000-HFR-HDCU2000' );
-        $bpu4000hfrhdcu2000->setContainer( false );
-        $bpu4000hfrhdcu2000->setCarnetValue( 5000 );
-        $bpu4000hfrhdcu2000->setDefaultContractValue( 1000 );
-        $bpu4000hfrhdcu2000->setDefaultEventValue( 200 );
-        $bpu4000hfrhdcu2000->addSatisfies( $categoryRepository->findOneByName( 'HD Video' ) );
-        $bpu4000hfrhdcu2000->addSatisfies( $categoryRepository->findOneByName( '4K Video' ) );
-        $bpu4000hfrhdcu2000->addSatisfies( $categoryRepository->findOneByName( '2x MO' ) );
-        $bpu4000hfrhdcu2000->addSatisfies( $categoryRepository->findOneByName( '3x MO' ) );
-        $bpu4000hfrhdcu2000->addSatisfies( $categoryRepository->findOneByName( '4x MO' ) );
-        $bpu4000hfrhdcu2000->addSatisfies( $categoryRepository->findOneByName( '6x MO' ) );
-        $bpu4000hfrhdcu2000->addRequire( $hfrcode );
-        $bpu4000hfrhdcu2000->addRequire( $bpu4000 );
-        $bpu4000hfrhdcu2000->addRequire( $hdcu2000 );
-        $sony->addModel( $bpu4000hfrhdcu2000 );
-        $manager->persist( $bpu4000hfrhdcu2000 );
-
-        $bpu4000hfrhdcu2500 = new Model();
-        $bpu4000hfrhdcu2500->setCategory( $categoryRepository->findOneByName( 'Camera' ) );
-        $bpu4000hfrhdcu2500->setName( 'F55-BPU4000-HFR-HDCU2500' );
-        $bpu4000hfrhdcu2500->setContainer( false );
-        $bpu4000hfrhdcu2500->setCarnetValue( 5000 );
-        $bpu4000hfrhdcu2500->setDefaultContractValue( 1000 );
-        $bpu4000hfrhdcu2500->setDefaultEventValue( 200 );
-        $bpu4000hfrhdcu2500->addSatisfies( $categoryRepository->findOneByName( 'HD Video' ) );
-        $bpu4000hfrhdcu2500->addSatisfies( $categoryRepository->findOneByName( '4K Video' ) );
-        $bpu4000hfrhdcu2500->addSatisfies( $categoryRepository->findOneByName( '2x MO' ) );
-        $bpu4000hfrhdcu2500->addSatisfies( $categoryRepository->findOneByName( '3x MO' ) );
-        $bpu4000hfrhdcu2500->addSatisfies( $categoryRepository->findOneByName( '4x MO' ) );
-        $bpu4000hfrhdcu2500->addSatisfies( $categoryRepository->findOneByName( '6x MO' ) );
-        $bpu4000hfrhdcu2000->addRequire( $hfrcode );
-        $bpu4000hfrhdcu2500->addRequire( $bpu4000 );
-        $bpu4000hfrhdcu2500->addRequire( $hdcu2500 );
-        $sony->addModel( $bpu4000hfrhdcu2500 );
-        $manager->persist( $bpu4000hfrhdcu2500 );
         $manager->persist( $sony );
         $manager->persist( $sonyManufacturer );
 

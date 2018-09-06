@@ -31,7 +31,9 @@ class CategoryType extends AbstractType
 
     public function configureOptions( OptionsResolver $resolver )
     {
-        
+        $resolver->setDefaults( [
+            'label' => false
+        ] );
     }
 
     public function getParent()

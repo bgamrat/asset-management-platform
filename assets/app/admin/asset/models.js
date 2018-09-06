@@ -18,13 +18,13 @@ define([
     //"use strict";
 
     var dataPrototype, prototypeNode, prototypeContent;
-    var categoryStore, categoryFilteringSelect = [];
-    var divIdInUse = "model_satisfies";
+    var modelStore, modelFilteringSelect = [];
+    var divIdInUse = "model_models";
     var addOneMoreControl = null;
 
 
     function setDivId(divId) {
-        divIdInUse = divId + "_satisfies";
+        divIdInUse = divId + "_models";
     }
 
     function getDivId() {
@@ -32,25 +32,25 @@ define([
     }
 
     function cloneNewNode() {
-        prototypeContent = dataPrototype.replace(/__satisfies__/g, categoryFilteringSelect.length);
+        prototypeContent = dataPrototype.replace(/__model__/g, modelFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
     }
 
     function createDijits() {
         var dijit;
         dijit = new FilteringSelect({
-            store: categoryStore,
+            store: modelStore,
             labelAttr: "name",
             searchAttr: "name",
             pageSize: 25
-        }, getDivId() + "_" + categoryFilteringSelect.length);
+        }, getDivId() + "_" + modelFilteringSelect.length);
         dijit.startup();
-        categoryFilteringSelect.push(dijit);
+        modelFilteringSelect.push(dijit);
     }
 
     function destroyRow(id, target) {
         var item;
-        item = categoryFilteringSelect.splice(id, 1);
+        item = modelFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
         domConstruct.destroy(target);
     }
@@ -63,17 +63,17 @@ define([
 
         prototypeNode = dom.byId(getDivId());
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
-        prototypeContent = dataPrototype.replace(/__satisfies__/g, categoryFilteringSelect.length);
+        prototypeContent = dataPrototype.replace(/__model__/g, modelFilteringSelect.length);
         domConstruct.place(prototypeContent, prototypeNode.parentNode, "last");
 
-        categoryStore = new JsonRest({
-            target: "/api/store/categories",
+        modelStore = new JsonRest({
+            target: "/api/store/models",
             useRangeHeaders: false,
             idProperty: "id"});
 
         createDijits();
 
-        addOneMoreControl = query(".satisfies .add-one-more-row");
+        addOneMoreControl = query(".models .add-one-more-row");
 
         addOneMoreControl.on("click", function (event) {
             cloneNewNode();
@@ -89,35 +89,35 @@ define([
     }
 
     function getData() {
-        var i, l = categoryFilteringSelect.length, returnData = [];
+        var i, l = modelFilteringSelect.length, returnData = [];
         for( i = 0; i < l; i++ ) {
-            if( categoryFilteringSelect[i].get("value") !== "" ) {
+            if( modelFilteringSelect[i].get("value") !== "" ) {
                 returnData.push(
-                        categoryFilteringSelect[i].get("value")
+                        modelFilteringSelect[i].get("value")
                         );
             }
         }
         return returnData.length > 0 ? returnData : null;
     }
 
-    function setData(categories) {
+    function setData(models) {
         var i, l, obj;
 
-        query(".form-row.satisfies", prototypeNode.parentNode).forEach(function (node, index) {
+        query(".form-row.models", prototypeNode.parentNode).forEach(function (node, index) {
             if( index !== 0 ) {
                 destroyRow(index, node);
             }
         });
-        categoryFilteringSelect[0].set("displayedValue", "");
-        if( typeof categories === "object" && categories !== null ) {
-            l = categories.length;
+        modelFilteringSelect[0].set("displayedValue", "");
+        if( typeof models === "object" && models !== null ) {
+            l = models.length;
             for( i = 0; i < l; i++ ) {
                 if (i !== 0) {
                     cloneNewNode();
                     createDijits();
                 }
-                obj = categories[i];
-                categoryFilteringSelect[i].set("displayedValue", obj.name);
+                obj = models[i];
+                modelFilteringSelect[i].set("displayedValue", obj.name);
             } 
         }
     }

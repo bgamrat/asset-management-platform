@@ -22,7 +22,8 @@ define([
     "dgrid/Selection",
     "dgrid/Editor",
     "put-selector/put",
-    "app/common/contact",
+    "app/admin/asset/models",
+    "app/admin/asset/satisfies",
     "app/lib/common",
     "app/lib/grid",
     "dojo/i18n!app/nls/core",
@@ -32,7 +33,7 @@ define([
         registry, Form, TextBox, ValidationTextBox, CurrencyTextBox, CheckBox, SimpleTextarea, Button,
         Dialog,
         Rest, SimpleQuery, Trackable, OnDemandGrid, Selection, Editor, put,
-        xcontact, lib, libGrid, core, asset) {
+        models,satisfies, lib, libGrid, core, asset) {
     // "use strict";
     function run() {
         var action = null;
@@ -100,35 +101,35 @@ define([
 
         var inUseCheckBox = new CheckBox({}, "set_in_use");
         inUseCheckBox.startup();
-/*
-        var modelPrototypeNode = query("#set");
+        /*
+         var modelPrototypeNode = query("#set");
 
-        var modelStore = new JsonRest({
-            target: "/api/store/models?ca",
-            useRangeHeaders: false,
-            idProperty: "id"});
-        var modelFilteringSelect = new FilteringSelect({
-            store: modelStore,
-            labelAttr: "name",
-            searchAttr: "name",
-            pageSize: 25,
-            required: true
-        }, "asset_model");
-        modelFilteringSelect.startup();
+         var modelStore = new JsonRest({
+         target: "/api/store/models?ca",
+         useRangeHeaders: false,
+         idProperty: "id"});
+         var modelFilteringSelect = new FilteringSelect({
+         store: modelStore,
+         labelAttr: "name",
+         searchAttr: "name",
+         pageSize: 25,
+         required: true
+         }, "asset_model");
+         modelFilteringSelect.startup();
 
-        var categoryStore = new JsonRest({
-            target: '/api/store/categories',
-            useRangeHeaders: false,
-            idProperty: 'id'});
-        var categoryFilteringSelect = new FilteringSelect({
-            store: categoryStore,
-            labelAttr: "name",
-            searchAttr: "name",
-            pageSize: 25,
-            required: true
-        }, select);
-        categoryFilteringSelect.startup();
-*/
+         var categoryStore = new JsonRest({
+         target: '/api/store/categories',
+         useRangeHeaders: false,
+         idProperty: 'id'});
+         var categoryFilteringSelect = new FilteringSelect({
+         store: categoryStore,
+         labelAttr: "name",
+         searchAttr: "name",
+         pageSize: 25,
+         required: true
+         }, select);
+         categoryFilteringSelect.startup();
+         */
         var setForm = new Form({}, '[name="set"]');
         setForm.startup();
 
@@ -225,7 +226,7 @@ define([
                     setViewDialog.show();
                     nameInput.set("value", set.name);
                     commentInput.set("value", set.comment);
-                    valueInput.set("value", asset.value);
+                    valueInput.set("value", set.value);
                     inUseCheckBox.set("checked", set.active === true);
                 }, lib.xhrError);
             }
@@ -282,6 +283,8 @@ define([
             }));
         });
 
+        satisfies.run('set');
+        models.run('set');
         lib.pageReady();
     }
     return {

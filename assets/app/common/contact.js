@@ -66,26 +66,28 @@ define([
             var addressProps;
             personId[i] = obj.id;
             nameSelect[i].set("displayedValue", obj.firstname + " " + obj.lastname);
-            if (obj.emails.length !== 0) {
+            if (typeof obj.emails !== "undefined" && obj.emails.length !== 0) {
                 l = obj.emails.length;
                 for (j = 0; j < l; j++) {
-                    emails += obj.emails[i].email.replace(/ (.*@.*)$|<br>/g,' <a href="mailto:$1">$1</a><br>');
+                    emails += obj.emails[j].email.replace(/ (.*@.*)$|<br>/g,' <a href="mailto:$1">$1</a><br>');
                 }
             }
-            if (obj.phones.length !== 0) {
+            if (typeof obj.phones !== "undefined" && obj.phones.length !== 0) {
                 l = obj.phones.length;
                 for (j = 0; j < l; j++) {
-                    phones += obj.phones[i].phone + "<br>";
+                    phones += obj.phones[j].phone + "<br>";
                 }
             }
-            l = obj.addresses.length;
-            addressProps = ["street1","street2","city","state_province","country"];
-            m = addressProps.length;
-            for (j = 0; j < l; j++) {
-                addresses += obj.addresses[j].type.type + "<br>";
-                for (k = 0; k < m; k++) {
-                    if (typeof obj.addresses[j][addressProps[k]]!== "undefined") {
-                        addresses += obj.addresses[j][addressProps[k]] + "<br>";
+            if (typeof obj.addresses !== "undefined") {
+                l = obj.addresses.length;
+                addressProps = ["street1","street2","city","state_province","country"];
+                m = addressProps.length;
+                for (j = 0; j < l; j++) {
+                    addresses += obj.addresses[j].type.type + "<br>";
+                    for (k = 0; k < m; k++) {
+                        if (typeof obj.addresses[j][addressProps[k]]!== "undefined") {
+                            addresses += obj.addresses[j][addressProps[k]] + "<br>";
+                        }
                     }
                 }
             }

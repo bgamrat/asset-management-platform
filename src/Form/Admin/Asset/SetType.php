@@ -38,7 +38,7 @@ class SetType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => false,
                     'delete_empty' => true,
-                    'prototype_name' => '__category__'
+                    'prototype_name' => '__satisfies__'
                 ] )
                 ->add( 'models', CollectionType::class, [
                     'entry_type' => ModelType::class,

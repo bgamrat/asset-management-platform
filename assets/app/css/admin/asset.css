@@ -5,8 +5,9 @@
 }
 .carrier-name,
 .manufacturer-name,
-.vendor-name,
-.trailer-name {
+.set-name,
+.trailer-name,
+.vendor-name {
     font-size: 1.5em;
     display: inline-block;
 }
@@ -247,8 +248,10 @@
     width: 150px;
     text-align: center;
 }
-#set-view-dialog .models,
-#set-view-dialog .satisfies {
-    border: 1px solid #ccc;
+#set-view-dialog .satisfies-and-models {
+    border-top: 1px solid #ddd;
+    padding: 15px;
+}
+#set-view-dialog .satisfies-and-models fieldset {
     padding: 15px;
 }
