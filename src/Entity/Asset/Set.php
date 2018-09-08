@@ -56,7 +56,7 @@ class Set
     private $id;
     /**
      * @var ArrayCollection $models
-     * @ORM\ManyToMany(targetEntity="Model", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="Model", cascade={"persist"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     protected $models;
 

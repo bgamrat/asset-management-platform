@@ -51,7 +51,7 @@ class Model
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models")
+     * @ORM\ManyToOne(targetEntity="Brand", inversedBy="models", fetch="EXTRA_LAZY")
      * @Gedmo\Versioned
      */
     private $brand;
@@ -86,7 +86,7 @@ class Model
      */
     private $defaultEventValue = 0.0;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends")
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="extends", fetch="EXTRA_LAZY")
      */
     private $extended_by;
     /**
@@ -98,7 +98,7 @@ class Model
      */
     private $extends;
     /**
-     * @ORM\ManyToMany(targetEntity="Model", mappedBy="requires")
+     * @ORM\ManyToMany(targetEntity="Model", mappedBy="requires", fetch="EXTRA_LAZY")
      */
     private $required_by;
     /**

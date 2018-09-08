@@ -41,7 +41,7 @@ class SetsController extends FOSRestController
         {
             $em->getFilters()->disable( 'softdeleteable' );
         }
-        $queryBuilder = $em->createQueryBuilder()->select( ['s'] )
+        $queryBuilder = $em->createQueryBuilder()->select( ['s.id', 's.name', 's.value', 's.comment', 's.in_use'] )
                 ->from( 'App\Entity\Asset\Set', 's' )
                 ->orderBy( 's.' . $dstore['sort-field'], $dstore['sort-direction'] );
         $limit = 0;
