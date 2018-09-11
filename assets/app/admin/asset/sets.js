@@ -81,7 +81,7 @@ define([
 
         var nameInput = new ValidationTextBox({
             trim: true,
-            pattern: "[A-Za-z\.\,\ \'-]{2,64}"
+            pattern: "[A-Za-z0-9\.\,\ \'-]{2,64}"
         }, "set_name");
         nameInput.startup();
 
@@ -101,35 +101,7 @@ define([
 
         var inUseCheckBox = new CheckBox({}, "set_in_use");
         inUseCheckBox.startup();
-        /*
-         var modelPrototypeNode = query("#set");
 
-         var modelStore = new JsonRest({
-         target: "/api/store/models?ca",
-         useRangeHeaders: false,
-         idProperty: "id"});
-         var modelFilteringSelect = new FilteringSelect({
-         store: modelStore,
-         labelAttr: "name",
-         searchAttr: "name",
-         pageSize: 25,
-         required: true
-         }, "asset_model");
-         modelFilteringSelect.startup();
-
-         var categoryStore = new JsonRest({
-         target: '/api/store/categories',
-         useRangeHeaders: false,
-         idProperty: 'id'});
-         var categoryFilteringSelect = new FilteringSelect({
-         store: categoryStore,
-         labelAttr: "name",
-         searchAttr: "name",
-         pageSize: 25,
-         required: true
-         }, select);
-         categoryFilteringSelect.startup();
-         */
         var setForm = new Form({}, '[name="set"]');
         setForm.startup();
 
@@ -144,7 +116,9 @@ define([
                     "name": nameInput.get("value"),
                     "comment": commentInput.get("value"),
                     "value": valueInput.get("value"),
-                    "in_use": inUseCheckBox.get("checked")
+                    "in_use": inUseCheckBox.get("checked"),
+                    "satisfies": satisfies.getData(),
+                    "models": models.getData(),
                 };
                 grid.collection.put(data).then(function (data) {
                     setViewDialog.hide();
@@ -173,7 +147,8 @@ define([
                     renderCell: function (object, value, td) {
                         put(td, "pre.name", object.name);
                         libGrid.renderContacts(object, object, td);
-                    }
+                    },
+                    className: "xset"
                 },
                 comment: {
                     label: core.comment
@@ -223,6 +198,8 @@ define([
                 grid.collection.get(id).then(function (set) {
                     action = "view";
                     setId = set.id;
+                    satisfies.setData(set.satisfies);
+                    models.setData(set.models);
                     setViewDialog.show();
                     nameInput.set("value", set.name);
                     commentInput.set("value", set.comment);

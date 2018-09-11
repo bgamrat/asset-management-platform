@@ -8,7 +8,7 @@
         <div class="form-row satisfies">
             <span class="type-select">{{ form_widget(form) }}</span>
             {% if form.parent.vars.allow_delete is defined %}
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="satisfies-__categories__"><i class="fa fa-remove"></i></span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="satisfies-__satisfies__"><i class="fa fa-remove"></i></span>
                 {% endif %}
         </div>{% endspaceless %}{% endblock %}
 
@@ -16,13 +16,13 @@
         <div class="form-row model">
             <span class="type-select">{{ form_widget(form) }}</span>
             {% if form.parent.vars.allow_delete is defined %}
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="models-__models__"><i class="fa fa-remove"></i></span>
+                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="models-__model__"><i class="fa fa-remove"></i></span>
                 {% endif %}
         </div>{% endspaceless %}{% endblock %}
 
 {% block admin_content %}
     <div id="set-wrapper">
-        <h1>{{ block ('title') }}</h1>
+        <h1><i class="fa fa-remove"></i>{{ block ('title') }}</h1>
         <div class="grid-controls">
             <div>
                 <button id="set-new-btn" type="button">{{ 'common.new'|trans }}</button>

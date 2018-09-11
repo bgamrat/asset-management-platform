@@ -18,8 +18,9 @@ Encore
         .addStyleEntry('css/dgrid', [
             './assets/vendor/dojo/dgrid/css/dgrid.css',
             './assets/vendor/dojo/dgrid/css/skins/tundra.css'])
+        .addStyleEntry('css/font-awesome', ['./assets/vendor/font-awesome/css/font-awesome.min.css'])
         .addStyleEntry('css/admin',
-                ['./assets/vendor/font-awesome/css/font-awesome.min.css',
+                [
                     './assets/app/css/admin/common.css',
                     './assets/app/css/admin/admin.css',
                     './assets/app/css/admin/user.css'])

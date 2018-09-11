@@ -36,7 +36,7 @@ class SetType extends AbstractType
                     'label' => false,
                     'empty_data' => null,
                     'allow_add' => true,
-                    'allow_delete' => false,
+                    'allow_delete' => true,
                     'delete_empty' => true,
                     'prototype_name' => '__satisfies__'
                 ] )
@@ -46,7 +46,7 @@ class SetType extends AbstractType
                     'label' => false,
                     'empty_data' => null,
                     'allow_add' => true,
-                    'allow_delete' => false,
+                    'allow_delete' => true,
                     'delete_empty' => true,
                     'prototype_name' => '__model__'
                 ] )
