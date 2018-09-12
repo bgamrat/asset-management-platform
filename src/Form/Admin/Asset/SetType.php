@@ -29,7 +29,7 @@ class SetType extends AbstractType
                 ->add( 'name', TextType::class )
                 ->add( 'value', MoneyType::class, ['currency' => 'USD'] )
                 ->add( 'comment', TextType::class )
-                ->add( 'in_use', CheckboxType::class )
+                ->add( 'in_use', CheckboxType::class, ['label' => 'common.in_use'] )
                 ->add( 'satisfies', CollectionType::class, [
                     'entry_type' => CategoryType::class,
                     'required' => false,

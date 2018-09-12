@@ -105,7 +105,7 @@ define([
                     link.textContent = email["email"];
                     li.appendChild(t);
                     li.appendChild(link);
-                    if( email["comment"] !== null && email["comment"] !== "" ) {
+                    if( typeof email["comment"] !== "undefined" && email["comment"] !== null && email["comment"] !== "" ) {
                         c = document.createTextNode(email["comment"]);
                         li.appendChild(c);
                     }
@@ -129,7 +129,10 @@ define([
         } else {
             type_text = object.type_text;
         }
-        put(td, "em", value.firstname + " " + value.lastname + " (" + type_text + ")");
+        if (typeof object.name === "undefined") {
+            object.name = object.firstname + " " + object.lastname;
+        }
+        put(td, "em", object.name + " (" + type_text + ")");
     }
 
     function renderPhone(object, value, td) {

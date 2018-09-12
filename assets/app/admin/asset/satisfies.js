@@ -49,7 +49,13 @@ define([
     }
 
     function destroyRow(id, target) {
-        var item;
+        var item, i;
+        for( i = 0; i < categoryFilteringSelect.length; i++ ) {
+            if( categoryFilteringSelect[i].get("id").replace(/\D/g, "") == id ) {
+                id = i;
+                break;
+            }
+        }
         item = categoryFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
         domConstruct.destroy(target);
@@ -108,7 +114,6 @@ define([
                 destroyRow(index, node);
             }
         });
-        categoryFilteringSelect[0].set("displayedValue", "");
         if( typeof categories === "object" && categories !== null ) {
             l = categories.length;
             for( i = 0; i < l; i++ ) {
@@ -117,8 +122,10 @@ define([
                     createDijits();
                 }
                 obj = categories[i];
-                categoryFilteringSelect[i].set("displayedValue", obj.name);
+                categoryFilteringSelect[i].set("displayedValue", obj.full_name);
             } 
+        } else {
+            categoryFilteringSelect[i].set("displayedValue", "");
         }
     }
 

@@ -49,7 +49,13 @@ define([
     }
 
     function destroyRow(id, target) {
-        var item;
+        var item, i;
+        for( i = 0; i < modelFilteringSelect.length; i++ ) {
+            if( modelFilteringSelect[i].get("id").replace(/\D/g, "") == id ) {
+                id = i;
+                break;
+            }
+        }
         item = modelFilteringSelect.splice(id, 1);
         item[0].destroyRecursive();
         domConstruct.destroy(target);
@@ -108,7 +114,6 @@ define([
                 destroyRow(index, node);
             }
         });
-        modelFilteringSelect[0].set("displayedValue", "");
         if( typeof models === "object" && models !== null ) {
             l = models.length;
             for( i = 0; i < l; i++ ) {

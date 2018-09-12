@@ -248,6 +248,9 @@
     width: 150px;
     text-align: center;
 }
+#set-wrapper .name {
+    font-weight: normal;
+}
 #set-view-dialog .satisfies-and-models {
     border-top: 1px solid #ddd;
     padding: 15px;

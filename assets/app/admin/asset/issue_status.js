@@ -109,7 +109,6 @@ define([
         dataPrototype = domAttr.get(prototypeNode, "data-prototype");
         prototypeContent = dataPrototype.replace(/__status__/g, nameInput.length);
         if (existingStatusRows === 0) {
-            console.log('zero');
             domConstruct.place(prototypeContent, "issue_statuses_statuses", "last");
             createDijits(true);
         }
