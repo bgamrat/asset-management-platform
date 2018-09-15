@@ -27,7 +27,7 @@ use App\Entity\Traits\History;
  * It defines the relationship between models
  *
  * @ORM\Table(name="xset")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\SetRepository")
  * @Gedmo\Loggable(logEntryClass="App\Entity\Asset\AssetLog")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  *

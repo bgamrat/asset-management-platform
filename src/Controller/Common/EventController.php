@@ -116,14 +116,14 @@ class EventController extends Controller
                             }
                             $satisfies[$categoryId] ++;
                         }
-
+                        if( !isset( $assetCollection[$modelId] ) )
+                        {
+                            $assetCollection[$modelId] = 0;
+                        }
+                        $assetCollection[$modelId] ++;
                         if( count( array_intersect( $requirements, $itemSatisfies ) ) > 0 )
                         {
-                            if( !isset( $assetCollection[$modelId] ) )
-                            {
-                                $assetCollection[$modelId] = 0;
-                            }
-                            $assetCollection[$modelId] ++;
+
                             $modelDependencies = $this->getDependencies( $a->getModel() );
                             if( !empty( $modelDependencies ) )
                             {
@@ -167,7 +167,8 @@ class EventController extends Controller
 
         foreach( $requiresCategoryQuantities as $categoryId => $rcq )
         {
-            if (!isset($assetBalance[$categoryId])) {
+            if( !isset( $assetBalance[$categoryId] ) )
+            {
                 $assetBalance[$categoryId] = clone($rcq);
             }
             if( isset( $satisfies[$categoryId] ) )
@@ -178,38 +179,97 @@ class EventController extends Controller
 
         $rentalEquipment = $event->getRentals();
         $rentals = [];
-        foreach ($rentalEquipment as $re) {
+        foreach( $rentalEquipment as $re )
+        {
             $cId = $re->getCategory()->getId();
             if( !isset( $assetBalance[$cId] ) )
             {
                 $cq = new CategoryQuantity();
-                $cq->setCategory($re->getCategory());
-                $cq->setQuantity(0);
+                $cq->setCategory( $re->getCategory() );
+                $cq->setQuantity( 0 );
                 $assetBalance[$cId] = $cq;
             }
-            if (!isset($rentals[$cId])) {
+            if( !isset( $rentals[$cId] ) )
+            {
                 $rentals[$cId] = 0;
             }
-            $assetBalance[$cId]->subtractQuantity($re->getQuantity());
+            $assetBalance[$cId]->subtractQuantity( $re->getQuantity() );
             $rentals[$cId] += $re->getQuantity();
         }
 
         $clientEquipment = $event->getClientEquipment();
         $clientProvided = [];
-        foreach ($clientEquipment as $ce) {
+        foreach( $clientEquipment as $ce )
+        {
             $cId = $ce->getCategory()->getId();
             if( !isset( $assetBalance[$cId] ) )
             {
                 $cq = new CategoryQuantity();
-                $cq->setCategory($ce->getCategory());
-                $cq->setQuantity(0);
+                $cq->setCategory( $ce->getCategory() );
+                $cq->setQuantity( 0 );
                 $assetBalance[$cId] = $cq;
             }
-            if (!isset($clientProvided[$cId])) {
+            if( !isset( $clientProvided[$cId] ) )
+            {
                 $clientProvided[$cId] = 0;
             }
-            $assetBalance[$cId]->subtractQuantity($ce->getQuantity());
+            $assetBalance[$cId]->subtractQuantity( $ce->getQuantity() );
             $clientProvided[$cId] += $ce->getQuantity();
+        }
+
+        $deficits = [];
+        foreach( $assetBalance as $cId => $ab )
+        {
+            if( $ab->getQuantity() > 0 )
+            {
+                if( !isset( $deficits[$cId] ) )
+                {
+                    $deficits[$cId] = 0;
+                }
+                $deficits[$cId] += $ab->getQuantity();
+            }
+        }
+
+        if( count( $deficits ) > 0 )
+        {
+            $categoryDeficits = array_keys( $deficits );
+            $sets = $em->getRepository( 'App\Entity\Asset\Set' )->findBySatisfies( $categoryDeficits );
+            if( !empty( $sets ) )
+            {
+                foreach( $sets as $s )
+                {
+                    $categoryId = $s['category_id'];
+                    $set = $s[0];
+                    $models = $set->getModels();
+                    $missingAssets = false;
+                    foreach( $models as $m )
+                    {
+                        $id = $m->getId();
+                        if( !isset( $assetCollection[$id] ) || $assetCollection[$id] === 0 )
+                        {
+                            $missingAssets = true;
+                        }
+                    }
+                    if( $missingAssets === false )
+                    {
+                        foreach( $models as $m )
+                        {
+                            $id = $m->getId();
+                            $assetCollection[$id] --;
+                        }
+                        $assetBalance[$categoryId]->subtractQuantity( 1 );
+                        $deficits[$categoryId] --;
+                        if( $deficits[$categoryId] <= 0 )
+                        {
+                            unset( $deficits[$categoryId] );
+                            if( empty( $deficits ) )
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         $columns = ['t.id', 't.updatedAt', 't.tracking_number', 'c.name AS carrier', 'c.tracking_url', 'cs.name AS carrier_service', 's.name AS status', 't.source_location_text', 't.destination_location_text', 'tb.amount'];

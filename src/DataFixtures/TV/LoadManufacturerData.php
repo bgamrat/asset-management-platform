@@ -116,36 +116,6 @@ class LoadManufacturerData extends AbstractFixture implements OrderedFixtureInte
         $sony->addModel( $hdcu2000 );
         $sony->addModel( $hdcu2500 );
 
-        $bpu4000hdcu2000 = new Model();
-        $bpu4000hdcu2000->setCategory( $categoryRepository->findOneByName( 'Camera' ) );
-        $bpu4000hdcu2000->setName( 'BPU4000-HDCU2000' );
-        $bpu4000hdcu2000->setContainer( false );
-        $bpu4000hdcu2000->setCarnetValue( 5000 );
-        $bpu4000hdcu2000->setDefaultContractValue( 1000 );
-        $bpu4000hdcu2000->setDefaultEventValue( 200 );
-        $bpu4000hdcu2000->addSatisfies( $categoryRepository->findOneByName( 'HD Video' ) );
-        $bpu4000hdcu2000->addSatisfies( $categoryRepository->findOneByName( '4K Video' ) );
-        $bpu4000hdcu2000->addSatisfies( $categoryRepository->findOneByName( '2x MO' ) );
-        $bpu4000hdcu2000->addRequire( $bpu4000 );
-        $bpu4000hdcu2000->addRequire( $hdcu2000 );
-        $sony->addModel( $bpu4000hdcu2000 );
-        $manager->persist( $bpu4000hdcu2000 );
-
-        $bpu4000hdcu2500 = new Model();
-        $bpu4000hdcu2500->setCategory( $categoryRepository->findOneByName( 'Camera' ) );
-        $bpu4000hdcu2500->setName( 'F55-BPU4000-HDCU2500' );
-        $bpu4000hdcu2500->setContainer( false );
-        $bpu4000hdcu2500->setCarnetValue( 5000 );
-        $bpu4000hdcu2500->setDefaultContractValue( 1000 );
-        $bpu4000hdcu2500->setDefaultEventValue( 200 );
-        $bpu4000hdcu2500->addSatisfies( $categoryRepository->findOneByName( 'HD Video' ) );
-        $bpu4000hdcu2500->addSatisfies( $categoryRepository->findOneByName( '4K Video' ) );
-        $bpu4000hdcu2500->addSatisfies( $categoryRepository->findOneByName( '2x MO' ) );
-        $bpu4000hdcu2500->addRequire( $bpu4000 );
-        $bpu4000hdcu2500->addRequire( $hdcu2500 );
-        $sony->addModel( $bpu4000hdcu2500 );
-        $manager->persist( $bpu4000hdcu2500 );
-
         $hfrcode = new Model();
         $hfrcode->setCategory( $categoryRepository->findOneByName( 'Code' ) );
         $hfrcode->setName( 'HFR Code' );
