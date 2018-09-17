@@ -145,6 +145,34 @@
             </div>
         </div>
         <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="event-client-equipment-heading">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" href="#event-client-equipment" aria-expanded="false" aria-controls="event-client-equipment">
+                        {{'common.client'|trans}} {{'asset.equipment'|trans}}
+                    </a>
+                </h4>
+            </div>
+            <div id="event-client-equipment" class="panel-collapse collapse in" role="tabpanel" aria-labeled-by="event-client-equipment-heading">
+                <div class="panel-body">
+                    {% include 'common/parts/event-client-equipment.html.twig' %}
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="event-rental-heading">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" href="#event-rental" aria-expanded="false" aria-controls="event-rental">
+                        {{'common.rentals'|trans}}
+                    </a>
+                </h4>
+            </div>
+            <div id="event-rentals" class="panel-collapse collapse in" role="tabpanel" aria-labeled-by="event-rental-heading">
+                <div class="panel-body">
+                    {% include 'common/parts/event-rentals.html.twig' %}
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="transfers-heading">
                 <h4 class="panel-title">
                     <a role="button" data-toggle="collapse" href="#transfers" aria-expanded="false" aria-controls="transfers">

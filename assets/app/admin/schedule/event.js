@@ -382,20 +382,18 @@ define([
                 }
                 grid.select(row);
                 grid.collection.get(id).then(function (event) {
-                    var equipmentLink, timestamp = new Date();
+                    var equipmentLink;
                     var eventVenue;
                     action = "view";
                     eventId = event.id;
                     nameInput.set("value", event.name);
                     if( event.start !== null ) {
-                        timestamp.setTime(event.start.timestamp * 1000);
-                        startInput.set('value', timestamp);
+                        startInput.set('value', event.start);
                     } else {
                         startInput.set('value', null);
                     }
                     if( event.end !== null ) {
-                        timestamp.setTime(event.end.timestamp * 1000);
-                        endInput.set('value', timestamp);
+                        endInput.set('value', event.end);
                     } else {
                         endInput.set('value', null);
                     }

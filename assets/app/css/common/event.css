@@ -10,6 +10,7 @@
     background-color: #ddd;
 }
 .available-list .quantity,
+.rental-equipment .quantity,
 .requires-available-list .quantity {
     font-weight: 700;
     text-align: right;

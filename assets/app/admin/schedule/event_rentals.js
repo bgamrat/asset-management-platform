@@ -156,7 +156,7 @@ define([
                 cloneNewNode();
                 createDijits();
                 obj = rentals[i];
-                categoryFilteringSelect[i].set('displayedValue', obj.category.fullName);
+                categoryFilteringSelect[i].set('displayedValue', obj.category.full_name);
                 vendorFilteringSelect[i].set('displayedValue', obj.vendor.name);
                 quantityInput[i].set('value', obj.quantity);
                 costInput[i].set('value', obj.cost);
