@@ -117,7 +117,7 @@
         "persvr/rql": "^0.3.3",
         "FortAwesome/Font-Awesome": "^4.7",
         "symfony/serializer-pack": "*",
-        "twbs/bootstrap": "^3.3",
+        "twbs/bootstrap": "^4.1",
         "kriszyp/xstyle": "^0.3.2",
         "symfony/dependency-injection": "^4.0",
         "symfony/yaml": "^4.0",
@@ -136,13 +136,13 @@
         "composer/composer": "^1.6",
         "composer/ca-bundle": "^1.1",
         "symfony/maker-bundle": "^1.4",
-        "symfony/dotenv": "^4.0",
         "symfony/webpack-encore-pack": "^1.0",
         "sensiolabs/security-checker": "^4.1",
         "symfony/templating": "^4.0",
         "symfony/requirements-checker": "^1.1",
         "jms/serializer-bundle": "^2.4",
-        "api-platform/api-pack": "^1.1"
+        "api-platform/api-pack": "^1.1",
+        "nelmio/cors-bundle": "^1.5"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -153,7 +153,8 @@
         "symfony/css-selector": "^4.0",
         "symfony/phpunit-bridge": "^4.0",
         "symfony/profiler-pack": "^1.0",
-        "symfony/web-server-bundle": "^4.0"
+        "symfony/web-server-bundle": "^4.0",
+        "symfony/dotenv": "^4.0"
 
     },
     "scripts": {
@@ -161,8 +162,8 @@
         "mvDgridDstore": "cp -rf vendor/sitepen/* assets/vendor/dojo; rm -rf vendor/sitepen/dgrid vendor/sitepen/dstore",
         "mvZyp": "cp -rf vendor/kriszyp/* assets/vendor/dojo; rm -rf vendor/kriszyp",
         "mvRql": "cp -rf vendor/persvr/* assets/vendor/dojo; rm -rf vendor/persvr",
-        "mvBootstrap": "cp -rf vendor/twbs/* public/vendor; rm -rf vendor/twbs/*",
-        "mvFontAwesome": "cp -rf vendor/fortawesome/font-awesome public/vendor; rm -rf vendor/fort-awesome/*",
+        "mvBootstrap": "cp -rf vendor/twbs/* assets/vendor;",
+        "mvFontAwesome": "cp -rf vendor/fortawesome/font-awesome assets/vendor;",
         "rmAllJS": "rm -rf public/vendor/dojo/* public/vendor/bootstrap/* public/vendor/fortawesome/*",
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
