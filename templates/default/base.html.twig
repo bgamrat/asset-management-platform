@@ -6,20 +6,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('build/css/bootstrap.css') }}">
-            <link rel="stylesheet" href="{{ asset('build/css/main.css') }}">
+            <!-- Add this to <head> -->
+            <link rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+            <link rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css">
             {% block additional_stylesheets %}
             {% endblock %}
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
     </head>
     <body role="document">
-
-        {% include 'user/parts/nav.html.twig' %}
 
         <div class="container content" role="main">
             <div class="row">
@@ -31,8 +26,11 @@
                     </h1>
                 </div>
             </div>
-            {% block body %}
-            {% endblock %}
+            <div id="app">
+                {% include 'user/parts/nav.html.twig' %}   
+                {% block body %}
+                {% endblock %}
+            </div>
             {% block fos_user_content %}
             {% endblock %}
         </div>
@@ -57,9 +55,11 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
-        {% block footer %}
-            {% include 'user/parts/page_footer_script.html.twig' %}
+        {% block javascripts %}
+            <!-- Add this after vue.js -->
+            <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+            <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+            <script src="{{ asset('build/js/app.js') }}"></script>
         {% endblock %}
-    {% block javascripts %}{% endblock %}
-</body>
+    </body>
 </html>

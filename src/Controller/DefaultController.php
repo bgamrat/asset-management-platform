@@ -25,15 +25,7 @@ class DefaultController extends Controller
      */
     public function testAction( Request $request )
     {
-        /*
-          $assetStatus = new AssetStatus();
-          $assetStatus->setName('~!');
-          $validator = $this->get('validator');
-          $constraint = $validator->getMetadataFor($assetStatus);
-         */
-        $testForm = $this->createForm( TestType::class, null );
-
-        return $this->render( 'public/test.html.twig', ['test_form' => $testForm->createView(), 'no_hide' => true ] );
+        return $this->render( 'public/index.html.twig' );
     }
 
 }
