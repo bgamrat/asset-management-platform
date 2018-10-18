@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
-            <!-- Add this to <head> -->
+            <link rel="stylesheet" href="//unpkg.com/font-awesome/css/font-awesome.min.css">
             <link rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css">
             <link rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css">
             {% block additional_stylesheets %}
@@ -15,19 +15,19 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     </head>
     <body role="document">
-
-        <div class="container content" role="main">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1>{{ block('title') }}
-                        {% if no_settings is not defined %}
-                            <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
-                            {% endif %}
-                    </h1>
+        <div id="app">
+            {% include 'common/parts/nav.html.twig' %}
+            <div class="container content" role="main">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1>{{ block('title') }}
+                            {% if no_settings is not defined %}
+                                <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
+                                {% endif %}
+                        </h1>
+                    </div>
                 </div>
-            </div>
-            <div id="app">
-                {% include 'user/parts/nav.html.twig' %}   
+
                 {% block body %}
                 {% endblock %}
             </div>

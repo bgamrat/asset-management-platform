@@ -1,22 +1,27 @@
 // assets/js/app.js
-import Vue from 'vue';
+import 'es6-promise/auto'
 
-import Example from './components/Example'
+        import Vue from 'vue'
+        import Vuex from 'vuex'
 
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import { Navbar } from 'bootstrap-vue/es/components';
+        import Example from './components/Example'
+        import AppNav from './components/Public/Navigation'
 
-Vue.use(BootstrapVue);
-Vue.use(Navbar);
+        import BootstrapVue from 'bootstrap-vue'
+        import 'bootstrap/dist/css/bootstrap.css'
+        import 'bootstrap-vue/dist/bootstrap-vue.css'
+        import { Navbar } from 'bootstrap-vue/es/components';
+
+Vue.use(Vuex)
+Vue.use(BootstrapVue)
+Vue.use(Navbar)
 /**
  * Create a fresh Vue Application instance
  */
+
 new Vue({
     el: '#app',
-    components: {Example, Navbar}
+    components: {example: Example}
 });
 
-
-
+/* Yay */

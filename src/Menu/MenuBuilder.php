@@ -161,7 +161,8 @@ class MenuBuilder
             }
             $menu['user']->addChild( 'edit_profile', array('label' => 'user.profile', 'route' => 'fos_user_profile_edit') )
                     ->setAttribute( 'icon', 'fa fa-edit' );
-            $menu['user']->addChild( 'logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
+            $menu['user']->addChild( 'logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'] )
+                    ->setAttribute('icon','fa fa-sign-out');
         }
         else
         {
