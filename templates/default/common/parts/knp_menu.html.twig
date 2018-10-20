@@ -4,9 +4,9 @@
 
 {% block list %}
     {% import "knp_menu.html.twig" as macros %}
-    <!-- list -->
+    <!-- list {{item.name}}-->
     {% if item.level == 0 %}
-    <b-navbar-nav>
+    <b-navbar-nav{{ macros.attributes(item.attributes) }}>
     {% endif %}
     {% if item.hasChildren and options.depth is not same as(0) and item.displayChildren %}
         {{ block('children') }}
@@ -70,16 +70,18 @@
 {# displaying the item #}
     {% import "knp_menu.html.twig" as macros %}
     {%- if attributes.dropdown is defined %}
-    <b-nav-item-dropdown{{ macros.attributes(attributes) }} text="{{block('label')}}">
+    <b-nav-item-dropdown{{ macros.attributes(attributes) }} text="{{block('label')}}" {% if item.attribute('right') is defined %}right{% endif %}>
     {%- endif %}
         {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}
-        {%- if item.level <= 1 %}
+        {%- if item.level <= 1 or not item.hasChildren %}
         <!-- linkElement {{item.level}} -->
-        {{ block('linkElement') }} 
+        {{ block('linkElement') }}
         {%- else %}
         <!-- dropdownElement {{item.level}} -->
         {{ block('dropdownElement') }}
         {%- endif %}
+        {%- else %}
+        {{ block('spanElement') }}
         {%- endif %}
         {# render the list of children#}
         {%- set childrenClasses = item.childrenAttribute('class') is not empty ? [item.childrenAttribute('class')] : [] %}
@@ -98,7 +100,7 @@
         {% import "knp_menu.html.twig" as macros %}
         <b-nav-item href="{{ item.uri }}"{{ macros.attributes(item.linkAttributes) }}>
             {% if item.attribute('icon') is not empty  %}
-                <i class="{{ item.attribute('icon') }}"></i> 
+                <i class="{{ item.attribute('icon') }}"></i>
             {% endif %}
             {{ block('label') }}
         </b-nav-item>
@@ -112,9 +114,9 @@
     {%- set attributes = attributes|merge({'class': classes|join(' ')}) %}
     <b-dropdown-item href="{{item.uri}}"{{ macros.attributes(attributes) }}>
         {% if item.attribute('icon') is not empty  %}
-            <i class="{{ item.attribute('icon') }}"></i> 
+            <i class="{{ item.attribute('icon') }}"></i>
         {% endif %}
-        {{ block('label') }} 
+        {{ block('label') }}
     </b-dropdown-item>
 {% endblock %}
 

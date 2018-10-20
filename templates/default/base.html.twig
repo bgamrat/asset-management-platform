@@ -16,23 +16,20 @@
     </head>
     <body role="document">
         <div id="app">
-            {% include 'common/parts/nav.html.twig' %}
-            <div class="container content" role="main">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h1>{{ block('title') }}
-                            {% if no_settings is not defined %}
-                                <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
-                                {% endif %}
-                        </h1>
-                    </div>
-                </div>
-
+            {% if omit_menu is not defined %}
+                {% include 'common/parts/nav.html.twig' %}
+            {% endif %}
+            <b-container>
+                <h1>{{ block('title') }}
+                    {% if no_settings is not defined %}
+                        <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
+                        {% endif %}
+                </h1>
                 {% block body %}
                 {% endblock %}
-            </div>
-            {% block fos_user_content %}
-            {% endblock %}
+                {% block fos_user_content %}
+                {% endblock %}
+            </b-container>
         </div>
 
         <div id="display-controls" class="modal fade" tabindex="-1" role="dialog">

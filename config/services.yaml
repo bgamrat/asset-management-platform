@@ -298,6 +298,13 @@ services:
     app.menu_builder:
         class: App\Menu\MenuBuilder
 
+    app.menu.admin:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createAdminMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: admin }
+
     app.menu.main:
         class: Knp\Menu\MenuItem
         factory: ['@app.menu_builder', 'createMainMenu']

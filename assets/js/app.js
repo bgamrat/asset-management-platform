@@ -5,16 +5,23 @@ import 'es6-promise/auto'
         import Vuex from 'vuex'
 
         import Example from './components/Example'
-        import AppNav from './components/Public/Navigation'
 
         import BootstrapVue from 'bootstrap-vue'
         import 'bootstrap/dist/css/bootstrap.css'
         import 'bootstrap-vue/dist/bootstrap-vue.css'
-        import { Navbar } from 'bootstrap-vue/es/components';
+        import { Navbar,Form } from 'bootstrap-vue/es/components';
+        import { Layout } from 'bootstrap-vue/es/components';
+ import { Button } from 'bootstrap-vue/es/components';
+
+Vue.use(Button);
+Vue.use(Layout);
 
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
 Vue.use(Navbar)
+Vue.use(Form);
+Vue.use(Layout);
+
 /**
  * Create a fresh Vue Application instance
  */
