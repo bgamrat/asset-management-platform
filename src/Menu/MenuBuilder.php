@@ -31,6 +31,12 @@ class MenuBuilder {
                 ->setExtra('translation_domain', $this->translator->getLocale());
 
         $menu->addChild('admin', ['route' => 'root', 'label' => 'common.home']);
+
+        $menu['admin']->addChild('calendar', ['label' => 'common.calendar', 'route' => 'calendar'])
+                ->setAttribute('icon', 'fa fa-calendar');
+        $menu['admin']->addChild('trailer', ['label' => 'asset.trailers', 'route' => 'trailers'])
+                ->setAttribute('icon', 'fa fa-truck');
+
         $menu['admin']->addChild('admin-assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_equipment_index'])
                 ->setAttribute('dropdown', true);
         $menu['admin']['admin-assets']->addChild('carriers', ['label' => 'common.carriers', 'route' => 'app_admin_asset_carrier_index']);
@@ -40,18 +46,6 @@ class MenuBuilder {
         $menu['admin']['admin-assets']->addChild('transfer', ['label' => 'asset.transfers', 'route' => 'app_admin_asset_transfer_index']);
         $menu['admin']['admin-assets']->addChild('trailers', ['label' => 'asset.trailers', 'route' => 'app_admin_asset_trailer_index']);
         $menu['admin']['admin-assets']->addChild('vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index']);
-        $menu['admin']['admin-assets']->addChild('asset-configuration', ['label' => 'common.configuration']);
-        if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
-            $menu['admin']['admin-assets']->setAttribute('dropdown', true);
-            $menu['admin']['admin-assets']['asset-configuration']->addChild('statuses', ['label' => 'asset.asset_statuses', 'route' => 'app_admin_asset_assetstatus_index']);
-            $menu['admin']['admin-assets']['asset-configuration']->addChild('categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index']);
-            $menu['admin']['admin-assets']['asset-configuration']->addChild('issue_statuses', ['label' => 'asset.issue_statuses', 'route' => 'app_admin_asset_issuestatus_index']);
-            $menu['admin']['admin-assets']['asset-configuration']->addChild('issue_types', ['label' => 'asset.issue_types', 'route' => 'app_admin_asset_issuetype_index']);
-            $menu['admin']['admin-assets']['asset-configuration']->addChild('issue_workflow', ['label' => 'asset.issue_workflow', 'route' => 'app_admin_asset_issuestatus_workflow']);
-            $menu['admin']['admin-assets']['asset-configuration']->addChild('location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index']);
-            $menu['admin']['admin-assets']['asset-configuration']->addChild('sets', ['label' => 'asset.sets', 'route' => 'app_admin_asset_sets_index']);
-            $menu['admin']['admin-assets']['asset-configuration']->addChild('transfer_statuses', ['label' => 'asset.transfer_statuses', 'route' => 'app_admin_asset_transferstatus_index']);
-        }
 
         $menu['admin']->addChild('admin-clients', ['label' => 'common.clients', 'route' => 'app_admin_client_client_index']);
 
@@ -61,42 +55,11 @@ class MenuBuilder {
         $menu['admin']['admin-schedule']->addChild('service', ['label' => 'common.service', 'route' => 'app_admin_schedule_service_index']);
         $menu['admin']['admin-schedule']->addChild('shop', ['label' => 'common.shop', 'route' => 'app_admin_schedule_shop_index']);
         $menu['admin']['admin-schedule']->addChild('park', ['label' => 'common.park', 'route' => 'app_admin_schedule_park_index']);
-        if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
-            $menu['admin']['admin-schedule']->setAttribute('dropdown', true);
 
-            $menu['admin']['admin-schedule']->addChild('schedule-configuration', ['label' => 'common.configuration']);
-            $menu['admin']['admin-schedule']['schedule-configuration']->addChild('event-role-types', ['label' => 'event.event_role_types', 'route' => 'app_admin_schedule_eventroletype_index']);
-            $menu['admin']['admin-schedule']['schedule-configuration']->addChild('time-span-types', ['label' => 'event.time_span_types', 'route' => 'app_admin_schedule_timespantype_index']);
-        }
+        $menu['admin']->addChild('admin-people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index']);
 
-        $menu['admin']->addChild('admin-staff', ['label' => 'common.staff']);
-        $menu['admin']['admin-staff']->addChild('staff', ['label' => 'common.staff', 'route' => 'app_admin_staff_staff_index']);
-        if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
-            $menu['admin']['admin-staff']->setAttribute('dropdown', true);
-            $menu['admin']['admin-staff']->addChild('staff-configuration', ['label' => 'common.configuration']);
-            $menu['admin']['admin-staff']['staff-configuration']->addChild('employment_statuses', ['label' => 'staff.employment_statuses', 'route' => 'app_admin_staff_employmentstatus_index']);
-            $menu['admin']['admin-staff']['staff-configuration']->addChild('roles', ['label' => 'common.roles', 'route' => 'app_admin_staff_role_index']);
-        }
-
-        $menu['admin']->addChild('admin-common', ['label' => 'common.common']);
-        $menu['admin']['admin-common']->addChild('people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index']);
-        if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
-            $menu['admin']['admin-common']->setAttribute('dropdown', true);
-            $menu['admin']['admin-common']->addChild('common-configuration', ['label' => 'common.configuration']);
-            $menu['admin']['admin-common']['common-configuration']->addChild('person-types', ['label' => 'common.person_types', 'route' => 'app_admin_common_persontype_index']);
-        }
-
-        if ($this->security->isGranted('ROLE_ADMIN_USER')) {
-            $menu['admin']->addChild('user', ['label' => 'common.users']);
-            $menu['admin']['user']->setAttribute('dropdown', true);
-            $menu['admin']['user']->addChild('users', ['label' => 'common.users', 'route' => 'app_admin_user_default_index']);
-            $menu['admin']['user']->addChild('invitations', ['label' => 'user.invitation', 'route' => 'app_admin_user_invitation_index']);
-            $menu['admin']['user']->addChild('groups', ['label' => 'common.groups', 'route' => 'app_admin_user_group_index']);
-        }
-
+        $menu['admin']->addChild('admin-staff', ['label' => 'common.staff', 'route' => 'app_admin_staff_staff_index']);
         $menu['admin']->addChild('admin-venues', ['label' => 'common.venues', 'route' => 'app_admin_venue_venue_index']);
-
-        // $menu->addChild( 'logout', ['class' => 'right', 'label' => 'common.log_out', 'route' => 'fos_user_security_logout'] );
 
         return $menu;
     }
@@ -121,6 +84,44 @@ class MenuBuilder {
         return $menu;
     }
 
+    public function createSuperAdminMenu(array $options) {
+        if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
+            $menu = $this->factory->createItem('super-admin', ['label' => 'common.admin'])
+                    ->setExtra('translation_domain', $this->translator->getLocale());
+            $menu->addChild('asset-configuration', ['label' => 'common.assets']);
+            $menu['asset-configuration']->setAttribute('dropdown', true);
+            $menu['asset-configuration']->addChild('statuses', ['label' => 'asset.asset_statuses', 'route' => 'app_admin_asset_assetstatus_index']);
+            $menu['asset-configuration']->addChild('categories', ['label' => 'asset.categories', 'route' => 'app_admin_asset_category_index']);
+            $menu['asset-configuration']->addChild('issue_statuses', ['label' => 'asset.issue_statuses', 'route' => 'app_admin_asset_issuestatus_index']);
+            $menu['asset-configuration']->addChild('issue_types', ['label' => 'asset.issue_types', 'route' => 'app_admin_asset_issuetype_index']);
+            $menu['asset-configuration']->addChild('issue_workflow', ['label' => 'asset.issue_workflow', 'route' => 'app_admin_asset_issuestatus_workflow']);
+            $menu['asset-configuration']->addChild('location_types', ['label' => 'asset.location_types', 'route' => 'app_admin_asset_locationtype_index']);
+            $menu['asset-configuration']->addChild('sets', ['label' => 'asset.sets', 'route' => 'app_admin_asset_sets_index']);
+            $menu['asset-configuration']->addChild('transfer_statuses', ['label' => 'asset.transfer_statuses', 'route' => 'app_admin_asset_transferstatus_index']);
+
+            $menu->addChild('schedule-configuration', ['label' => 'common.schedule']);
+            $menu['schedule-configuration']->setAttribute('dropdown', true);
+            $menu['schedule-configuration']->addChild('event-role-types', ['label' => 'event.event_role_types', 'route' => 'app_admin_schedule_eventroletype_index']);
+            $menu['schedule-configuration']->addChild('time-span-types', ['label' => 'event.time_span_types', 'route' => 'app_admin_schedule_timespantype_index']);
+
+            $menu->addChild('staff-configuration', ['label' => 'common.staff']);
+            $menu['staff-configuration']->setAttribute('dropdown', true);
+            $menu['staff-configuration']->addChild('employment_statuses', ['label' => 'staff.employment_statuses', 'route' => 'app_admin_staff_employmentstatus_index']);
+            $menu['staff-configuration']->addChild('roles', ['label' => 'common.roles', 'route' => 'app_admin_staff_role_index']);
+
+            $menu->addChild('common-configuration', ['label' => 'common.people']);
+            $menu['common-configuration']->setAttribute('dropdown', true);
+            $menu['common-configuration']->addChild('person-types', ['label' => 'common.person_types', 'route' => 'app_admin_common_persontype_index']);
+
+            $menu->addChild('super-user', ['label' => 'common.users']);
+            $menu['super-user']->setAttribute('dropdown', true);
+            $menu['super-user']->addChild('users', ['label' => 'common.users', 'route' => 'app_admin_user_default_index']);
+            $menu['super-user']->addChild('invitations', ['label' => 'user.invitation', 'route' => 'app_admin_user_invitation_index']);
+            $menu['super-user']->addChild('groups', ['label' => 'common.groups', 'route' => 'app_admin_user_group_index']);
+        }
+        return $menu;
+    }
+
     public function createTrailerMenu(array $options) {
         $menu = $this->factory->createItem('trailer');
 
@@ -132,7 +133,7 @@ class MenuBuilder {
 
     public function createUserMenu(array $options) {
         $menu = $this->factory->createItem('user');
-        $menu->setAttribute('class','ml-auto');
+        $menu->setAttribute('class', 'ml-auto');
 
         if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
             $user = $this->tokenStorage->getToken()->getUser();
@@ -142,11 +143,6 @@ class MenuBuilder {
                     ->setAttribute('dropdown', true)
                     ->setAttribute('icon', 'fa fa-user');
             $menu['user']->setLabel($username)->setExtra('translation_domain', false);
-
-            if ($this->security->isGranted('ROLE_ADMIN')) {
-                $menu['user']->addChild('admin', array('label' => 'common.admin', 'route' => 'app_admin_asset_equipment_index'))
-                        ->setAttribute('icon', 'fa fa-star-o');
-            }
             $menu['user']->addChild('edit_profile', array('label' => 'user.profile', 'route' => 'fos_user_profile_edit'))
                     ->setAttribute('icon', 'fa fa-edit');
             $menu['user']->addChild('logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'])

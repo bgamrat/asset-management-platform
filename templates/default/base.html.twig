@@ -19,7 +19,7 @@
             {% if omit_menu is not defined %}
                 {% include 'common/parts/nav.html.twig' %}
             {% endif %}
-            <b-container>
+            <b-container fluid>
                 <h1>{{ block('title') }}
                     {% if no_settings is not defined %}
                         <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>

@@ -326,6 +326,13 @@ services:
         tags:
         - { name: knp_menu.menu, alias: trailer }
 
+    app.menu.super-admin:
+        class: Knp\Menu\MenuItem
+        factory: ['@app.menu_builder', 'createSuperAdminMenu']
+        arguments: { $options: [] }
+        tags:
+        - { name: knp_menu.menu, alias: superadmin }
+
     app.menu.user:
         class: Knp\Menu\MenuItem
         factory: ['@app.menu_builder', 'createUserMenu']

@@ -2,9 +2,8 @@
 
 {% extends 'knp_menu.html.twig' %}
 
-{% block list %}
+{% block list %}{% spaceless %}
     {% import "knp_menu.html.twig" as macros %}
-    <!-- list {{item.name}}-->
     {% if item.level == 0 %}
     <b-navbar-nav{{ macros.attributes(item.attributes) }}>
     {% endif %}
@@ -14,9 +13,9 @@
     {% if item.level == 0 %}
     </b-navbar-nav>
     {% endif %}
-{% endblock %}
+{% endspaceless %}{% endblock %}
 
-{% block children %}
+{% block children %}{% spaceless %}
 {# save current variables #}
 {% set currentOptions = options %}
 {% set currentItem = item %}
@@ -36,9 +35,9 @@
 {# restore current variables #}
 {% set item = currentItem %}
 {% set options = currentOptions %}
-{% endblock %}
+{% endspaceless %}{% endblock %}
 
-{% block item %}
+{% block item %}{% spaceless %}
 {% if item.displayed %}
 {# building the class of the item #}
     {%- set classes = item.attribute('class') is not empty ? [item.attribute('class')] : [] %}
@@ -70,44 +69,37 @@
 {# displaying the item #}
     {% import "knp_menu.html.twig" as macros %}
     {%- if attributes.dropdown is defined %}
-    <b-nav-item-dropdown{{ macros.attributes(attributes) }} text="{{block('label')}}" {% if item.attribute('right') is defined %}right{% endif %}>
+    <b-nav-item-dropdown{{ macros.attributes(attributes) }} text="{{block('label')}}" left>
     {%- endif %}
         {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}
         {%- if item.level <= 1 or not item.hasChildren %}
-        <!-- linkElement {{item.level}} -->
         {{ block('linkElement') }}
         {%- else %}
-        <!-- dropdownElement {{item.level}} -->
         {{ block('dropdownElement') }}
         {%- endif %}
-        {%- else %}
-        {{ block('spanElement') }}
         {%- endif %}
         {# render the list of children#}
         {%- set childrenClasses = item.childrenAttribute('class') is not empty ? [item.childrenAttribute('class')] : [] %}
         {%- set childrenClasses = childrenClasses|merge(['menu_level_' ~ item.level]) %}
         {%- set listAttributes = item.childrenAttributes|merge({'class': childrenClasses|join(' ') }) %}
-        <!-- block list -->
         {{ block('list') }}
     {%- if attributes.dropdown is defined %}
     </b-nav-item-dropdown>
     {%- endif %}
 {% endif %}
-{% endblock %}
+{% endspaceless %}{% endblock %}
 
-{% block linkElement %}
-    {% spaceless %}
-        {% import "knp_menu.html.twig" as macros %}
-        <b-nav-item href="{{ item.uri }}"{{ macros.attributes(item.linkAttributes) }}>
-            {% if item.attribute('icon') is not empty  %}
-                <i class="{{ item.attribute('icon') }}"></i>
-            {% endif %}
-            {{ block('label') }}
-        </b-nav-item>
-    {% endspaceless %}
-{% endblock %}
+{% block linkElement %}{% spaceless %}
+    {% import "knp_menu.html.twig" as macros %}
+    <b-nav-item href="{{ item.uri }}"{{ macros.attributes(item.linkAttributes) }}>
+        {% if item.attribute('icon') is not empty  %}
+            <i class="{{ item.attribute('icon') }}"></i>
+        {% endif %}
+        {{ block('label') }}
+    </b-nav-item>
+{% endspaceless %}{% endblock %}
 
-{% block dropdownElement %}
+{% block dropdownElement %}{% spaceless %}
     {% import "knp_menu.html.twig" as macros %}
     {%- set classes = item.linkAttribute('class') is not empty ? [item.linkAttribute('class')] : [] %}
     {%- set attributes = item.linkAttributes %}
@@ -118,15 +110,15 @@
         {% endif %}
         {{ block('label') }}
     </b-dropdown-item>
-{% endblock %}
+{% endspaceless %}{% endblock %}
 
 {% block spanElement %}{% import "knp_menu.html.twig" as macros %}<b-nav-item{{ macros.attributes(item.labelAttributes) }} href="#">{{ block('label') }}</b-nav-item>{% endblock %}
 
-{% block label %}
+{% block label %}{% spaceless %}
     {%- set translation_domain = item.extra('translation_domain', 'messages') -%}
     {%- set label = item.label -%}
     {%- if translation_domain is not same as(false) -%}
     {%- set label = label|trans(item.extra('translation_params', {}), translation_domain) -%}
     {%- endif -%}
     {%- if options.allow_safe_labels and item.extra('safe_label', false) %}{{ label|raw }}{% else %}{{ label }}{% endif -%}
-{% endblock %}
+{% endspaceless %}{% endblock %}
