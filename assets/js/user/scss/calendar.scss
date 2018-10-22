@@ -1,0 +1,12 @@
+$break-small: 360px;
+
+.col {
+    @media screen and (max-width: $break-small) {
+        flex-basis: unset;
+    }
+}
+.card {
+    @media screen and (max-width: $break-small) {
+        border-color: #f0f;
+    }
+}

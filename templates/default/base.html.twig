@@ -53,10 +53,10 @@
         </div><!-- /.modal -->
 
         {% block javascripts %}
-            <!-- Add this after vue.js -->
             <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
             <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-            <script src="{{ asset('build/js/app.js') }}"></script>
+            {% block additional_javascripts %}
+            {% endblock %}
         {% endblock %}
     </body>
 </html>

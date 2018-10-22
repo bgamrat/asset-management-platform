@@ -1,10 +1,18 @@
 {% extends 'base.html.twig' %}
 {% import 'user/calendar/macros.html.twig' as macros %}
 
+{% block additional_stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/js/calendar.css') }}">
+{% endblock %}
+
+{% block additional_javascripts %}
+    <script src="{{ asset('build/js/calendar.js') }}"></script>
+{% endblock %}
+
 {% block title %}{{ 'common.calendar'|trans }}{% endblock %}
 
 {% block body %}
-
+<div class="calendar">
     <div class="row">
         <div class="col right"><small>{{ date|date('m/d/Y') }}</small></div>
     </div>
@@ -55,9 +63,8 @@
             </div>
         {% endfor %}
     </div>
+</div>
 {%endblock%}
 {% block modal_text %}
     <p>Calendar</p>
 {% endblock %}
-
-

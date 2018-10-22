@@ -7,8 +7,7 @@ Encore
         .setPublicPath('/build')
         //.cleanupOutputBeforeBuild()
         .enableSourceMaps(!Encore.isProduction())
-        .addEntry('js/app', './assets/js/app.js')
-        .addEntry('css/calendar', './assets/scss/calendar.scss')
+        .addEntry('js/calendar', './assets/js/user/calendar.js')
         // uncomment to create hashed filenames (e.g. app.abc123.css)
         .enableVersioning(Encore.isProduction())
         .enableVueLoader()
@@ -22,29 +21,14 @@ module.exports = Encore.getWebpackConfig(
                 contentBase: './dist'
             },
             module: {
-                rules: [
-                    {
-                        test: /\.css$/,
-                        use: [
-                            'style-loader',
-                            'css-loader'
-                        ]
-                    },
-                    {
-                        test: /\.scss$/,
-                        use: [
-                            {
-                                loader: "style-loader" // creates style nodes from JS strings
-                            },
-                            {
-                                loader: "css-loader" // translates CSS into CommonJS
-                            },
-                            {
-                                loader: "sass-loader" // compiles Sass to CSS
-                            }
-                        ]
-                    }
-                ]
-
+                rules:
+                        {
+                            test: /\.s?css$/,
+                            use: [
+                                'style-loader',
+                                'css-loader',
+                                'sass-loader'
+                            ]
+                        }
             }
         });
