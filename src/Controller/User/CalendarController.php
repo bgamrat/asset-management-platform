@@ -30,7 +30,8 @@ class CalendarController extends Controller
 
         return $this->render( 'user/calendar/index.html.twig', array(
                     'date' => $today,
-                    'events' => $events
+                    'events' => $events,
+                    'fluid' => true
                 ) );
     }
 

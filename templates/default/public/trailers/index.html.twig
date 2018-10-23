@@ -2,13 +2,7 @@
 
 {% block title %}{{ 'asset.trailers'|trans }}{% endblock %}
 
-{% block stylesheets %}
-    {% stylesheets
-            '@bootstrap_css'
-            '@main_css'
-            filter='cssrewrite' %}
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">  
-    {% endstylesheets %}  
+{% block additional_stylesheets %}
 {% endblock %}
 
 {% block body %}

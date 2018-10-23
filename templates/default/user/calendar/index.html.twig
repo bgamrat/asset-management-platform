@@ -13,9 +13,9 @@
 
 {% block body %}
 <div class="calendar">
-    <div class="row">
-        <div class="col right"><small>{{ date|date('m/d/Y') }}</small></div>
-    </div>
+    <b-row>
+        <b-col class="ml-auto text-right"><smalll>{{ date|date('m/d/Y') }}</small></b-col>
+    </b-row>
     {% for i in 0..1 %}
         <b-row>
             {% for day in ['sun','mon','tues','wed','thu','fri','sat'] %}
@@ -65,6 +65,7 @@
     </div>
 </div>
 {%endblock%}
+
 {% block modal_text %}
     <p>Calendar</p>
 {% endblock %}

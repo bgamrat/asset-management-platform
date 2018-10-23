@@ -19,7 +19,7 @@
             {% if omit_menu is not defined %}
                 {% include 'common/parts/nav.html.twig' %}
             {% endif %}
-            <b-container fluid>
+            <b-container {% if fluid is defined %}fluid{% endif %}>
                 <h1>{{ block('title') }}
                     {% if no_settings is not defined %}
                         <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
@@ -55,6 +55,7 @@
         {% block javascripts %}
             <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
             <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+            <script src="/build/js/app.js"></script>
             {% block additional_javascripts %}
             {% endblock %}
         {% endblock %}

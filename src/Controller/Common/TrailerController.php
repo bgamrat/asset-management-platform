@@ -24,7 +24,7 @@ class TrailerController extends Controller
     public function indexAction( Request $request )
     {
         $repository = $this->getDoctrine()
-                ->getRepository( '\Entity\Asset\Trailer' );
+                ->getRepository( 'App\Entity\Asset\Trailer' );
         $trailers = $repository->findAll();
         $equipment = [];
         foreach( $trailers as $trailer )

@@ -1,8 +1,14 @@
-$break-small: 360px;
+$break-small: 500px;
+$break-medium: 501px;
+$break-large: 960px;
 
 .col {
     @media screen and (max-width: $break-small) {
         flex-basis: unset;
+    }
+    @media screen and (min-width: $break-medium) and (max-width: $break-large) {
+        min-width: 25%;
+        max-width: 25%;
     }
 }
 .card {

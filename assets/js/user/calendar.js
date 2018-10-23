@@ -1,4 +1,4 @@
-// assets/js/app.js
+// assets/js/user/calendar.js
 import 'es6-promise/auto'
 import Vue from 'vue'
 import Vuex from 'vuex'
