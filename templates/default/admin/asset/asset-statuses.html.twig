@@ -1,70 +1,69 @@
 {% block title %}{{ 'asset.asset'|trans }} {{ 'asset.status'|trans }}{% endblock %}
-{% extends 'admin.base.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{% block additional_stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/js/asset-statuses.css') }}">
+{% endblock %}
+
 
 {% form_theme statuses_form _self %}
 
 {% block _asset_statuses_statuses_entry_row %}
     {% spaceless %}
-        <div class="form-row status">
-            <span class="id">{{ form_widget(form.id) }}</span>
-            <span class="available">{{ form_widget(form.available)}}</span>
-            <span class="name">{{ form_widget(form.name) }}</span>
-            <span class="comment">{{ form_widget(form.comment) }}</span>
-            <span class="default">{{ form_widget(form.default)}}</span>
-            <span class="in-use">{{ form_widget(form.in_use) }}</span>
-            {% if form.parent.vars.allow_delete %}
-                <span class="remove-form-row" title="{{'common.remove'|trans}}" id="asset-status-__status__"><i class="fa fa-remove"></i></span>
-            {% endif %}
-        </div>
+        <b-row>
+            <b-col class="id d-none">{{ form_widget(form.id) }}</b-col>
+            <b-col cols="1" class="text-center">{{ form_widget(form.available)}}</b-col>
+            <b-col cols="4" class="name">{{ form_widget(form.name) }}</b-col>
+            <b-col cols="4" class="comment">{{ form_widget(form.comment) }}</b-col>
+            <b-col cols="1" class="text-center">{{ form_widget(form.default)}}</b-col>
+            <b-col cols="1" class="text-center">{{ form_widget(form.in_use) }}</b-col>
+                {% if form.parent.vars.allow_delete %}
+                <b-col cols="1" class="remove-form-row" title="{{'common.remove'|trans}}" id="asset-status-__status__"><i class="fa fa-remove"></i></b-col>
+                {% endif %}
+        </b-row>
     {% endspaceless %}
 {% endblock %}
 
-{% block admin_content %}
-    <div id="status-wrapper">
-        <h1>{{ block ('title') }}</h1>
-        <div class="statuses">
-            {% for flash_message in app.session.flashBag.get('notice') %}
-                <div class="flash-notice">
-                    {{ flash_message|trans }}
-                </div>
-            {% endfor %}
-            {% if not statuses_form.vars.valid %}
-                <div class="form-errors statuses">
-                    {% for status in statuses_form.statuses %}
-                        {% if not status.vars.valid %}
-                            {{form_errors(status.name)}}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
-            {{form_start(statuses_form)}}
-            <div class="text-right">
-                <button id="statuses-save-btn" type="submit">{{ 'common.save'|trans }}</button>
-            </div>
-            <div class="form-row header">
-                <span class="available">{{ 'common.available'|trans }}</span>
-                <span class="name">{{ 'common.name'|trans }}</span>
-                <span class="comment">{{ 'common.comment'|trans }}</span>
-                <span class="default">{{ 'common.default'|trans }}</span>
-                <span class="in-use">{{ 'common.in_use'|trans }}</span>
-            </div>
-            {{form_row(statuses_form)}}
-            {% for status in statuses_form.statuses %}
-                {{form_row(status)}}
-            {% endfor %}
+{% block body %}
 
-            {% if statuses_form.statuses.vars.allow_add %}
-                <span class="add-one-more-row">{{ 'common.add_one_more'|trans}}</span>
+    <div class="statuses">
+        {% for flash_message in app.session.flashBag.get('notice') %}
+            <div class="flash-notice">
+                {{ flash_message|trans }}
+            </div>
+        {% endfor %}
+        {% if not statuses_form.vars.valid %}
+            <div class="form-errors statuses">
+                {% for status in statuses_form.statuses %}
+                    {% if not status.vars.valid %}
+                        {{form_errors(status.name)}}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        {{form_start(statuses_form)}}
+        <b-row>
+            <b-col>
+                <b-button class="float-right" id="statuses-save-btn" type="submit">{{ 'common.save'|trans }}</b-button>
+            </b-col>
+        </b-row>
+
+        <b-row class="form-row header">
+            <b-col cols="1" class="text-center">{{ 'common.available'|trans }}</b-col>
+            <b-col cols="4">{{ 'common.name'|trans }}</b-col>
+            <b-col cols="4">{{ 'common.comment'|trans }}</b-col>
+            <b-col cols="1" class="text-center">{{ 'common.default'|trans }}</b-col>
+            <b-col cols="1" class="text-center">{{ 'common.in_use'|trans }}</b-col>
+            <b-col cols="1"></b-col>
+        </b-row>
+        {{form_row(statuses_form)}}
+        {% for status in statuses_form.statuses %}
+            {{form_row(status)}}
+        {% endfor %}
+
+        {% if statuses_form.statuses.vars.allow_add %}
+            <b-button  class="float-right add-one-more-row">{{ 'common.add_one_more'|trans}}</b-button>
             {% endif %}
             {{form_end(statuses_form)}}
-        </div>
-    </div>
-{% endblock %}
 
-{% block javascripts %}
-    <script>
-        require(["app/admin/asset/asset_status"], function (status) {
-            status.run();
-        });
-    </script>
-{% endblock %}
+    {% endblock %}

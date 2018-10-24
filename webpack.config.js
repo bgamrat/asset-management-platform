@@ -9,6 +9,7 @@ Encore
         .enableSourceMaps(!Encore.isProduction())
         .addEntry('js/app', './assets/js/app.js')
         .addEntry('js/calendar', './assets/js/user/calendar.js')
+        //.addEntry('js/admin/asset/asset-status', './assets/js/admin/asset/asset-status.js')
         // uncomment to create hashed filenames (e.g. app.abc123.css)
         .enableVersioning(Encore.isProduction())
         .enableVueLoader()
