@@ -2,9 +2,12 @@
 {% extends 'base.html.twig' %}
 
 {% block additional_stylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/js/asset-statuses.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/admin/asset-status.css') }}">
 {% endblock %}
 
+{% block additional_javascripts %}
+    <script src="{{ asset('build/admin/asset-status.js') }}"></script>
+{% endblock %}
 
 {% form_theme statuses_form _self %}
 
@@ -44,7 +47,7 @@
         {{form_start(statuses_form)}}
         <b-row>
             <b-col>
-                <b-button class="float-right" id="statuses-save-btn" type="submit">{{ 'common.save'|trans }}</b-button>
+                <b-button size="sm" class="float-right" id="statuses-save-btn" type="submit">{{ 'common.save'|trans }}</b-button>
             </b-col>
         </b-row>
 
@@ -62,8 +65,10 @@
         {% endfor %}
 
         {% if statuses_form.statuses.vars.allow_add %}
-            <b-button  class="float-right add-one-more-row">{{ 'common.add_one_more'|trans}}</b-button>
-            {% endif %}
-            {{form_end(statuses_form)}}
+            <div id="addrow">
+                <addrow label="{{'common.add_one_more'|trans}}"></addrow>
+            </div>
+        {% endif %}
+        {{form_end(statuses_form)}}
 
     {% endblock %}
