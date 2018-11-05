@@ -1,25 +1,22 @@
+<template>
+    <div>
+        <admin-asset-status :label="label"></admin-asset-status>
+    </div>
+</template>
+
 <script>
-import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import AdminAssetStatus from '../../components/Admin/Asset/AssetStatus';
 
 export default {
     name: 'AdminAssetStatusView',
-
-   computed: {
-  }, mounted() {
-  }, props: {}, 
-  actions: { someOtherAction() { alert('someotheraction');}}
+    props: {label:{  type: String, default: 'Add Row'}},
+    components:{'admin-asset-status':AdminAssetStatus},
 
 };
 </script>
 
-<style lang="scss" scoped>
-h1 {
-  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-align: center;
-  font-weight: 100;
-  font-size: 3em;
-  letter-spacing: 0.05em;
-  color: #4b4b4b;
-}
+<style scoped>
+
 </style>
+
+

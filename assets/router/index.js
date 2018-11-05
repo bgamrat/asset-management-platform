@@ -7,9 +7,10 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/admin/asset/asset-status/',
+      path: '/',
       name: 'AdminAssetStatus',
-      components: {AdminAssetStatusView},
+      component: AdminAssetStatusView,
+      props: { label: 'Add Row' }
     }
   ],
 });

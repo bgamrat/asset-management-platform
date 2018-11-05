@@ -9,9 +9,7 @@ import store from './store';
 
 import Example from './components/User/Example'
 import BootstrapVue from 'bootstrap-vue'
-import { Navbar, Form, Layout, Button } from 'bootstrap-vue/es/components'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { Button, Navbar, Form, Layout } from 'bootstrap-vue/es/components'
 
 Vue.use(Button);
 Vue.use(Layout);
@@ -21,12 +19,13 @@ Vue.use(Form);
 
 Vue.config.productionTip = false;
 
-import './components/globals'
+//import './components/globals'
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
+  template: '<App />',
   components: { App },
 });
