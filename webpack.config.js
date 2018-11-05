@@ -28,8 +28,9 @@ module.exports = Encore.getWebpackConfig(
                             use: [
                                 'style-loader',
                                 'css-loader',
-                                'sass-loader'
+                                'sass-loader',
                             ]
-                        }
+                        },
+
             }
         });

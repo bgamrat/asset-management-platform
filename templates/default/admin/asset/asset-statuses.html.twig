@@ -65,9 +65,7 @@
         {% endfor %}
 
         {% if statuses_form.statuses.vars.allow_add %}
-            <div id="addrow">
-                <addrow id="add-asset-status" label="{{'common.add_one_more'|trans}}" action="assetstatus"></addrow>
-            </div>
+            <admin-asset-status label="{{'common.add_one_more'|trans}}"></admin-asset-status>
         {% endif %}
         {{form_end(statuses_form)}}
 
