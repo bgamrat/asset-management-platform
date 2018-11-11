@@ -73,7 +73,7 @@ class JsonRenderer implements RendererInterface
                 $node = [];
                 $node['id'] = $id;
                 $node['name'] = $translatedLabel;
-                $node['uri'] = $item->getUri();
+                $node['href'] = '/#'.$item->getUri();
                 $node['has_children'] = $item->hasChildren();
                 $node['level'] = $level;
                 if( $lastLevel !== null )

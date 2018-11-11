@@ -1,13 +1,20 @@
 <template>
     <div id="app">
-    HERE
-        <router-view />
+        <b-container fluid>
+            <navigation />
+            <router-view />
+        </b-container>
     </div>
 </template>
 
 <script>
+
+import Navigation from './views/Common/Navigation';
+
 export default {
-  name: 'app', };
+  name: 'app',
+  components: { 'navigation':Navigation },
+}
 </script>
 
 <style>

@@ -53,11 +53,11 @@ app_admin_common_people:
     resource: App\Controller\Api\Admin\Common\PeopleController
     prefix: /api
 
-app_admin_common_menu_store:
-    resource: app.admin.menu_store_controller
+app_api_menu:
+    resource: app.api.menu_store_controller
     type:     rest
-    controller: App\Controller\Api\Admin\Common\MenuStoreController
-    prefix: /api/menustore
+    controller: App\Controller\Api\MenuStoreController
+    prefix: /api/menu
 
 app_admin_schedule_events:
     type:     rest

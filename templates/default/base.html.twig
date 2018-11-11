@@ -16,9 +16,6 @@
     </head>
     <body role="document">
         <div id="app">
-            {% if omit_menu is not defined %}
-                {% include 'common/parts/nav.html.twig' %}
-            {% endif %}
             <b-container {% if fluid is defined %}fluid{% endif %}>
                 <h1>{{ block('title') }}
                     {% if no_settings is not defined %}
@@ -28,10 +25,12 @@
                 {% block body %}
                 {% endblock %}
                 {% block fos_user_content %}
-                {% endblock %}</div>
+                {% endblock %}
             </b-container>
         </div>
-
+        {% if omit_menu is not defined %}
+            {% include 'common/parts/nav.html.twig' %}
+        {% endif %}
         <div id="display-controls" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -55,6 +54,7 @@
         {% block javascripts %}
             <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
             <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+            <script>window.__INITIAL_STATE__ = '{ "data": [ ... ] }';</script>
             <script src="/build/app.js"></script>
             {% block additional_javascripts %}
             {% endblock %}

@@ -266,8 +266,8 @@ services:
         tags:
             - { name: knp_menu.voter }
 
-    app.admin.menu_store_controller:
-        class: App\Controller\Api\Admin\Common\MenuStoreController
+    app.api.menu_store_controller:
+        class: App\Controller\Api\MenuStoreController
 
     app.form.invitation:
         class: App\Form\User\InvitationFormType

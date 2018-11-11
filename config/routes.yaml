@@ -1,23 +1,6 @@
-# Using this routing configuration allows dependency injection from services.yml
-# It may not be perfect, but it is working
-app_admin_api_common_menustore_getadminmenus:
-    defaults: { _controller: app.admin.menu_store_controller::getAdminmenuAction }
-    path: /api/menustore/adminmenu
-    methods: GET
-
-app_admin_api_common_menustore_getadminmenus_alt:
-    defaults: { _controller: app.admin.menu_store_controller::getAdminmenuAction }
-    path: /api/menustore/adminmenu/
-    methods: GET
-
-app_admin_api_common_menustore_getadminmenus_parent:
-    defaults: { _controller: app.admin.menu_store_controller::getAdminmenuAction }
-    path: /api/menustore/adminmenu/?parent={parent}
-    methods: GET
-
-app_admin_api_common_menustore_getadminmenus_id:
-    defaults: { _controller: app.admin.menu_store_controller::getAdminmenuAction }
-    path: /api/menustore/adminmenu/{id}
+app_api_menu_store_controller:
+    defaults: { _controller: app.api.menu_store_controller::getMenuAction }
+    path: /api/menu/
     methods: GET
 
 static:
