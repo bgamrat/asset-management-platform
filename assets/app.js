@@ -10,6 +10,7 @@ import store from './store';
 import Example from './components/User/Example'
 import BootstrapVue from 'bootstrap-vue'
 import { Button, Navbar, Form, Layout } from 'bootstrap-vue/es/components'
+import { i18n } from './plugins/i18n.js';
 
 Vue.use(Button);
 Vue.use(Layout);
@@ -26,6 +27,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   template: '<App />',
   components: { App },
 });

@@ -368,6 +368,12 @@ services:
     fos_user.doctrine_registry:
         alias: doctrine
 
+    fos_user.login_manager:
+        class: FOS\UserBundle\Security\LoginManager
+
+    App\EventListener\AuthenticationListener:
+        arguments: ['@fos_user.login_manager','fos_user.firewall_name']
+
     Symfony\Component\Form\Form: ~
 
     session.memcached:
