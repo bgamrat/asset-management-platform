@@ -21,14 +21,26 @@ module.exports = Encore.getWebpackConfig(
             devServer: {
                 contentBase: './dist'
             },
+            parser: 'sugarss',
+            plugins: {
+                'postcss-import': {},
+                'postcss-preset-env': {},
+                'cssnano': {}
+            },
             module: {
                 rules:
                         {
                             test: /\.s?css$/,
                             use: [
-                                'style-loader',
-                                'css-loader',
-                                'sass-loader',
+                                'vue-style-loader',
+                                {loader: 'css-loader', options: {modules: true, importLoaders: 1}},
+                                'postcss-loader',
+                                {
+                                    loader: 'sass-loader',
+                                    options: {
+                                        indentedSyntax: true
+                                    }
+                                }
                             ]
                         },
 

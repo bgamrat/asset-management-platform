@@ -4,26 +4,25 @@ import AdminAssetStatusView from '../views/Admin/AssetStatus';
 import Home from '../views/Public/Home';
 import Login from '../views/Public/Login';
 
-
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-      {
-        path: '/',
-        name: 'Home',
-        component: Home,
-      },
-    {
-      path: '/admin/asset/asset-status',
-      name: 'AdminAssetStatus',
-      component: AdminAssetStatusView,
-      props: { label: 'Add Row' }
-    },
-    {
-        path: '/login',
-        name: 'Login',
-        component: Login
-    }
-  ],
+    routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: Home,
+        },
+        {
+            path: '/admin/asset/asset-status',
+            name: 'admin-asset-status',
+            component: AdminAssetStatusView,
+            props: {label: 'Add Row'}
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: Login
+        }
+    ],
 });

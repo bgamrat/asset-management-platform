@@ -58,8 +58,8 @@
 
 
 export default {
-    name: 'Login'
-
+    name: 'Login',
+    beforeMount(){ this.$emit('update:dialog',false) }
 };
 </script>
 

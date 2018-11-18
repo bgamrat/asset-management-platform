@@ -16,21 +16,7 @@
     </head>
     <body role="document">
         <div id="app">
-            <b-container {% if fluid is defined %}fluid{% endif %}>
-                <h1>{{ block('title') }}
-                    {% if no_settings is not defined %}
-                        <small data-toggle="modal" data-target="#display-controls"><i class="fa fa-gears"></i></small>
-                    {% endif %}
-                </h1>
-                {% block body %}
-                {% endblock %}
-                {% block fos_user_content %}
-                {% endblock %}
-            </b-container>
         </div>
-        {% if omit_menu is not defined %}
-            {% include 'common/parts/nav.html.twig' %}
-        {% endif %}
         <div id="display-controls" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">

@@ -8,7 +8,9 @@ export var i18n = new VueI18n({
     fallbackLocale: 'en',
     messages: {
         'en': {
+            'home': 'Home',
             'last_username': 'Last username',
+            'login': 'Login',
             'password': 'Password',
             'passwordreset': 'Password reset',
             'rememberme': 'Remember me',

@@ -7,16 +7,17 @@ import App from './App';
 import router from './router';
 import store from './store';
 
-import Example from './components/User/Example'
-import BootstrapVue from 'bootstrap-vue'
-import { Button, Navbar, Form, Layout } from 'bootstrap-vue/es/components'
+import Example from './components/User/Example';
+import BootstrapVue from 'bootstrap-vue';
+import { Button, Form, Layout, Modal, Navbar  } from 'bootstrap-vue/es/components';
 import { i18n } from './plugins/i18n.js';
 
+Vue.use(BootstrapVue);
 Vue.use(Button);
-Vue.use(Layout);
-Vue.use(BootstrapVue)
-Vue.use(Navbar)
 Vue.use(Form);
+Vue.use(Layout);
+Vue.use(Modal);
+Vue.use(Navbar);
 
 Vue.config.productionTip = false;
 
