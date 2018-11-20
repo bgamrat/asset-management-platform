@@ -1,5 +1,8 @@
 var Encore = require('@symfony/webpack-encore');
 
+var VueLoader = require('vue-loader')
+var ExtractTextPlugin = require("extract-text-webpack-plugin")
+
 Encore
         // the project directory where compiled assets will be stored
         .setOutputPath('public/build/')
@@ -15,34 +18,42 @@ Encore
         .enableSassLoader()
         ;
 
+;
 module.exports = Encore.getWebpackConfig(
         {
+            mode: 'development',
             devtool: 'inline-source-map',
-            devServer: {
-                contentBase: './dist'
-            },
-            parser: 'sugarss',
-            plugins: {
-                'postcss-import': {},
-                'postcss-preset-env': {},
-                'cssnano': {}
-            },
+  plugins: [
+    // ... Vue Loader plugin omitted
+    new ExtractTextPlugin("style.css")
+  ],
             module: {
-                rules:
-                        {
-                            test: /\.s?css$/,
-                            use: [
-                                'vue-style-loader',
-                                {loader: 'css-loader', options: {modules: true, importLoaders: 1}},
-                                'postcss-loader',
-                                {
-                                    loader: 'sass-loader',
-                                    options: {
-                                        indentedSyntax: true
-                                    }
-                                }
-                            ]
+                rules: [
+                    {
+                        test: /\.vue$/,
+                        loader: 'vue-loader',
+                        options: {
+                            preserveWhitespace: false,
+                            loaders: {
+                                css: ExtractTextPlugin.extract({
+                                    use: [
+                                        {
+                                            loader: 'css-loader',
+                                        }
+                                    ],
+                                    fallback: 'vue-style-loader'
+                                })
+                            }
                         },
+                        exclude: /node_modules/
+                    },
+                    // this will apply to both plain `.js` files
+                    // AND `<script>` blocks in `.vue` files
+                    {
+                        test: /\.js$/,
+                        loader: 'babel-loader'
+                    },
+                ]
+            },
 
-            }
         });

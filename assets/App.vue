@@ -10,8 +10,7 @@
             </header>
             <b-row v-if="error">
                 <b-col>
-                    <b-alert show variant="warning">
-                    </b-alert>
+                    <b-alert show variant="warning"></b-alert>
                 </b-col>
             </b-row>
             <router-view />
@@ -45,9 +44,10 @@ export default {
 #app {
   font-family: 'ComicSans','Avenir', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
-span >>> .btn-settings {
+header .btn-settings {
     height: 50px;
     vertical-align: middle;
     padding-top: 15px;
+    color: #008;
 }
 </style>
