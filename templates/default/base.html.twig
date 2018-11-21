@@ -10,41 +10,16 @@
             <link rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css">
             <link rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css">
             <link rel="stylesheet" href="/build/app.css">
-            {% block additional_stylesheets %}
-            {% endblock %}
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     </head>
     <body role="document">
         <div id="app">
         </div>
-        <div id="display-controls" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{{'common.controls'|trans}}</h4>
-                    </div>
-                    <div class="modal-body">
-                        {% block modal_text %}
-                        {% endblock %}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">{{ 'common.apply'|trans}}</button>
-                        <button type="button" class="btn btn-primary">{{ 'common.save'|trans}}</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
         {% block javascripts %}
             <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
             <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-            <script>window.__INITIAL_STATE__ = '{ "data": [ ... ] }';</script>
             <script src="/build/app.js"></script>
-            {% block additional_javascripts %}
-            {% endblock %}
         {% endblock %}
     </body>
 </html>

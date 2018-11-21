@@ -4,8 +4,8 @@
             <navigation />
             <header class="d-flex justify-content-between">
                 <h1 v-bind:title.sync="title">{{title}}</h1>
-                <div v-bind:dialog.sync="dialog">
-                    <b-btn v-if="dialog" v-b-modal.settings class="btn-settings"><i class="fa fa-gears"></i></b-btn>
+                <div v-bind:dialog.sync="dialog" v-if="dialog">
+                    <b-btn v-b-modal.settings variant="primary"><i class="fa fa-gears"></i></b-btn>
                 </div>
             </header>
             <b-row v-if="error">
@@ -28,26 +28,28 @@
 import Navigation from './views/Common/Navigation';
 
 export default {
-  name: 'app',
-  components: { 'navigation':Navigation },
-  data() { return { 'error': false, 'dialog' : true }},
-  beforeMount() {this.$router.push({path:'home',name:'home'})},
-  computed: {
+  name: 'app', components: { 
+      'navigation':Navigation 
+  }, props: { 
+      'dialog': { 
+          'default': false
+      }, 'message' : { 
+          'type' : String, 'default' : '' 
+      }
+  }, data() { 
+      return { 'error': false }
+  }, beforeMount() {
+      this.$router.push({path:'home', name:'home'})
+  }, computed: {
       title() {
+          document.title = this.$i18n.t(this.$route.name);
           return this.$i18n.t(this.$route.name);
       }
-  }
-}
+  }, }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #app {
-  font-family: 'ComicSans','Avenir', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-}
-header .btn-settings {
-    height: 50px;
-    vertical-align: middle;
-    padding-top: 15px;
-    color: #008;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
 </style>
