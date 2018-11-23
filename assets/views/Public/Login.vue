@@ -55,12 +55,10 @@
 </template>
 <script>
 export default {
-    name: 'Login',
-    mounted(){ 
-        this.$root.$emit('change:dialog',true);
-        this.$root.$emit('change:messagevariant','danger');
-       this.$root.$emit('change:message','Error');
-    }
+    name: 'Login', mounted(){
+    this.$store.dispatch('common_dialog/setDialog', {'available':true,'title':'I win!','content':'Yay!'})
+  }
+
 };
 </script>
 

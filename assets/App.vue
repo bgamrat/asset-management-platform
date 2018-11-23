@@ -4,7 +4,7 @@
             <navigation />
             <header class="d-flex justify-content-between">
                 <h1 v-bind:title.sync="title">{{title}}</h1>
-                <div v-bind:dialog.sync="dialog" v-if="dialog">
+                <div v-if="dialog.available">
                     <b-btn v-b-modal.settings variant="primary"><i class="fa fa-gears"></i></b-btn>
                 </div>
             </header>
@@ -14,8 +14,8 @@
                 </b-col>
             </b-row>
             <router-view />
-            <b-modal id="settings" title="Bootstrap-Vue">
-                <p>Hello from modal!</p>
+            <b-modal id="settings" :title="dialog.title">
+                {{dialog.content}}
             </b-modal>
             <footer>
             </footer>
@@ -25,27 +25,26 @@
 
 <script>
 
-import Navigation from './views/Common/Navigation';
+import { mapState, mapActions } from 'vuex'
+import Navigation from './views/Common/Navigation'
 
 export default {
-  name: 'app', components: { 
-      'navigation':Navigation 
-  }, props: { 
-      'dialog': { 
-          'default': false
-      }, 'message' : { 
-          'type' : String, 'default' : '' 
-      }
-  }, data() { 
-      return { 'error': false }
-  }, beforeMount() {
+  name: 'app', components: {
+      'navigation':Navigation
+  }, props: {
+      'message' : {
+          'type' : String, 'default' : ''
+      }, 'error': {
+              'type':Boolean, 'default': false
+      }, }, beforeMount() {
       this.$router.push({path:'home', name:'home'})
-  }, computed: {
+  }, data() { return { dialog_button: true }}, computed: mapState({
       title() {
           document.title = this.$i18n.t(this.$route.name);
           return this.$i18n.t(this.$route.name);
-      }
-  }, }
+      }, dialog:  state => state.common_dialog
+})
+}
 </script>
 
 <style lang="scss" scoped>

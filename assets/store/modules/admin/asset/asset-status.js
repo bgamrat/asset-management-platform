@@ -5,5 +5,5 @@ var addRow = () => {
 export default {
     name: 'admin-asset-status',
     namespaced: true,
-    actions: {addRow}
+    actions: { addRow }
 }

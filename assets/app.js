@@ -24,13 +24,13 @@ Vue.config.productionTip = false;
 //import './components/globals'
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  i18n,
-  template: '<App />',
-  components: { App },
+var app = new Vue({
+    el: '#app',
+    router,
+    store,
+    i18n,
+    template: '<App />',
+    components: {App},
 });
 
 console.log(Vue.version);
