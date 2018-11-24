@@ -15,6 +15,7 @@ export var i18n = new VueI18n({
             'passwordreset': 'Password reset',
             'rememberme': 'Remember me',
             'submit': 'Submit',
+            'success': 'Look, I am awesome',
             'username': 'Username'}
     }
 })

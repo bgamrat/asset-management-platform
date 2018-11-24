@@ -8,12 +8,14 @@
                     <b-btn v-b-modal.settings variant="primary"><i class="fa fa-gears"></i></b-btn>
                 </div>
             </header>
-            <b-row v-if="error">
+            <b-row v-if="message.visible">
                 <b-col>
-                    <b-alert show variant="warning"></b-alert>
+                    <b-alert show :variant="message.variant">{{message.message}}</b-alert>
                 </b-col>
             </b-row>
-            <router-view />
+            <transition name="slide-fade">
+                <router-view />
+            </transition>
             <b-modal id="settings" :title="dialog.title">
                 {{dialog.content}}
             </b-modal>
@@ -31,18 +33,14 @@ import Navigation from './views/Common/Navigation'
 export default {
   name: 'app', components: {
       'navigation':Navigation
-  }, props: {
-      'message' : {
-          'type' : String, 'default' : ''
-      }, 'error': {
-              'type':Boolean, 'default': false
-      }, }, beforeMount() {
+  }, props: { }, beforeMount() {
       this.$router.push({path:'home', name:'home'})
   }, data() { return { dialog_button: true }}, computed: mapState({
       title() {
           document.title = this.$i18n.t(this.$route.name);
           return this.$i18n.t(this.$route.name);
-      }, dialog:  state => state.common_dialog
+      }, dialog:  state => state.common_dialog,
+      message:  state => state.common_message,
 })
 }
 </script>
@@ -51,4 +49,5 @@ export default {
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
+
 </style>

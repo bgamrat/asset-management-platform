@@ -8,7 +8,7 @@ export default {
     },
     getters: {
         title: () => {
-            return state.title
+            return $t(state.title)
         },
         content: () => {
             return state.content
@@ -27,10 +27,15 @@ export default {
     },
     actions: {
         setDialog( {commit}, payload) {
-            commit('setAvailable', payload.available);
+            commit('setAvailable', payload.available === undefined || payload.available );
             commit('setTitle', payload.title);
             commit('setContent', payload.content);
+        },
+        enableDialog( {commit}) {
+            commit('setAvailable', true);
+        },
+        disableDialog( {commit}) {
+            commit('setAvailable', false);
         }
     }
-
 }

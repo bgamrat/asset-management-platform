@@ -20,8 +20,7 @@ export default {
     
     data() { return { items:  [0,1]}},
  
-    mounted: function () {
-        var self = this;
+    mounted() {
         fetch('/api/menu/')
                 .then(res=>res.json())
                 .then(res=> {

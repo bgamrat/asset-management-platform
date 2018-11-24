@@ -1,9 +1,14 @@
-<template></template>
+<template>
+
+</template>
 <script>
 export default {
     name: 'Home',
-    mounted(){ 
-      //  this.$root.$emit('change:dialog',true) 
-    }
-};
+    mounted(){
+        this.$store.dispatch('common_dialog/disableDialog');
+    },
+    created() {
+        this.$store.dispatch('common_message/hideMessage');
+    },
+}
 </script>
