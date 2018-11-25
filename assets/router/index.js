@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import AdminAssetStatusView from '../views/Admin/AssetStatus';
 import Home from '../views/Public/Home';
 import Login from '../views/Public/Login';
+import Logout from '../views/Public/Logout';
 
 Vue.use(Router);
 
@@ -23,6 +24,13 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: Login
-        }
+        },
+        {
+            path: '/logout',
+            name: 'logout',
+            component: Logout
+            
+        },
+        { path: '*', redirect: '/' }
     ],
 });

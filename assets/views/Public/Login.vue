@@ -3,13 +3,15 @@
         <form action="" method="post">
             <b-row>
                 <b-col>
-                    <input type="hidden" name="_csrf_token" :value="_csrf_token" />
+                    <input type="hidden" name="_csrf_token" :value="csrf_token" />
                     <b-form-group id="username-group"
                                   :label="$t('username')"
                                   label-for="username">
                         <b-form-input id="username"
                                       type="text"
                                       name="_username"
+                                      :value="username"
+                                      v-model.trim="username" 
                                       required>
                         </b-form-input>
                     </b-form-group>
@@ -23,6 +25,8 @@
                         <b-form-input id="password"
                                       type="password"
                                       name="_password"
+                                      :value="password"
+                                      v-model="password" 
                                       required>
                         </b-form-input>
                     </b-form-group>
@@ -32,6 +36,7 @@
                 <b-col>
                     <b-form-checkbox id="remember_me"
                                      name="_remember_me"
+                                     v-model="remember_me" 
                                      value="on">
                         {{ $t('rememberme') }}
                     </b-form-checkbox>
@@ -59,7 +64,9 @@ import { mapState, mapActions } from 'vuex'
 export default {
     name: 'Login',
     data() {
-        return { }
+        return {
+             username: '', password: '', remember_me: false 
+        }
     },
     mounted(){
         this.$store.dispatch('common_dialog/setDialog', {'title':'I win!', 'content':'Yay!'})
@@ -69,7 +76,25 @@ export default {
     },
     methods: {
         doSubmit() {
-            this.$store.dispatch('common_message/setMessage',{'visible':true,'variant':'success','message':this.$i18n.t('success')});
+            var formData = new FormData(), rm = document.getElementById("remember_me");
+            formData.append('_csrf_token',this.csrf_token);
+            formData.append('_username',this.username);
+            formData.append('_password',this.password);
+            if (rm.checked === true) {
+                formData.append('remember_me','on');
+            }
+            formData.append('_submit','Log in');
+            fetch('/login_check', { method: 'POST', credentials: 'same-origin',  redirect: 'manual', body: formData})
+                .then(res => res.json())
+                .then(res => {
+                    if (typeof res.error !== undefined) {
+                        // error message i18n is handled on the server side by FOS User Bundle
+                        this.$store.dispatch('common_message/setMessage',{'visible':true,'variant':'error','message':error});
+                    } else {
+                        this.$store.dispatch('common_message/setMessage',{'visible':true,'variant':'success','message':this.$i18n.t('success')});
+                        this.$router.push({path:'home', name:'home'})
+                    }
+                })
         },
         refreshCsrfToken() {
                 this.$store.dispatch('common_user/refreshCsrfToken').then(() => {
@@ -78,7 +103,7 @@ export default {
     },
     computed:
         mapState({
-            _csrf_token: state => state.common_user.csrf_token
+            csrf_token: state => state.common_user.csrf_token
         })
 }
 </script>
