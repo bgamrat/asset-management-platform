@@ -22,7 +22,8 @@ Soon (whenever)
 I don't have time to test other databases right now.  App was built with Postgres.
 - PHP 7.1+ (Symfony 4+)
 - composer
-- node / java to build JavaScript (Dojo)
+- yarn
+- node
 - web server - this was built on Apache
 
 ## Installation
@@ -43,11 +44,8 @@ I don't have time to test other databases right now.  App was built with Postgre
 5. Update the schema with **php bin/console doctrine:schema:update --force**
 6. Run **php bin/console doctrine:fixtures:load** to install the required base data types.  This will also allow you to
 create an admin user.  *dev* environments will also get demo data.
-7. To build the *Dojo* assets for production use, **cd assets/vendor; ./build.sh;**.  When in
-dev mode, the source JavaScript files are used to allow you to step through the code.
-Use **cd public; ln -sf /var/www/html/symfony-dev/assets src** to create a symlink for
-development (not on production).
-8. Run **./node_modules/.bin/encore** *(dev/production)* to dump the CSS. Building the client side code on my production server didn't go well
+7. To get the build components for the client-side assets for production use, **yarn install**.
+8. Run **yarn encore dev --watch** to dump the JavaScript and CSS. Building the client side code on my production server didn't go well
    Instead, tar up the files from your local machine and scp them up
      - tar up the client side files with **tar czf ~/public-build.tgz public/build**
      - scp them to the production server with **scp ~/public-build.tgz user@example.com:.**
@@ -62,7 +60,7 @@ development (not on production).
 
 (Updates)
 
-1. Local: **bin/build-css-js.sh**
+1. Local: *yarn encore dev --watch**
 2. Remote/Stage/Production: **cd /var/www/html/symfony-dev; tar mxzf public-build.tgz**
 
 ## Terminology

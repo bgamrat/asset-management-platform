@@ -11,6 +11,7 @@ export var i18n = new VueI18n({
             'home': 'Home',
             'last_username': 'Last username',
             'login': 'Login',
+            'logout': 'Log out',
             'password': 'Password',
             'passwordreset': 'Password reset',
             'rememberme': 'Remember me',

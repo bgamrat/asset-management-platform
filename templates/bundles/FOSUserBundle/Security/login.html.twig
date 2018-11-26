@@ -1,5 +1,5 @@
 {% if error %}
-{ "error": "{{ error.messageKey|trans(error.messageData, 'security') }}" }
+{ "error": true, "message": "{{ error.messageKey|trans(error.messageData, 'security') }}" }
 {% else %}
 { "csrf_token": "{{csrf_token}}" }
 {# Simplest solution :) #}

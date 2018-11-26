@@ -13,22 +13,18 @@
 </template>
 
 <script>
-import Vue from 'vue';
+import Vue from 'vue'
+import { mapState, mapActions } from 'vuex'
 
 export default {
     name: 'Navigation',
-    
-    data() { return { items:  [0,1]}},
- 
-    mounted() {
-        fetch('/api/menu/')
-                .then(res=>res.json())
-                .then(res=> {
-                   this.items = res
-
-        })
-        
+    created() {
+        this.$store.dispatch('common_navigation/refreshNavItems');
     },
+    computed:
+        mapState({
+            items: state => state.common_navigation.nav_items
+        })
 };
 </script>
 

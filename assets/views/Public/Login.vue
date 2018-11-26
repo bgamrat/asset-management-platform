@@ -84,14 +84,17 @@ export default {
                 formData.append('remember_me','on');
             }
             formData.append('_submit','Log in');
-            fetch('/login_check', { method: 'POST', credentials: 'same-origin',  redirect: 'manual', body: formData})
-                .then(res => res.json())
+            fetch('/login_check', { method: 'POST', credentials: 'same-origin',  body: formData})
                 .then(res => {
-                    if (typeof res.error !== undefined) {
-                        // error message i18n is handled on the server side by FOS User Bundle
-                        this.$store.dispatch('common_message/setMessage',{'visible':true,'variant':'error','message':error});
+                    if (/login$/.test(res.url)) {
+                        res.text().then(text => {
+                            var err = JSON.parse(text);
+                            // error message i18n is handled on the server side by FOS User Bundle
+                            this.$store.dispatch('common_message/setMessage',{'visible':true,'variant':'warning','message':err.message});
+                        });
                     } else {
-                        this.$store.dispatch('common_message/setMessage',{'visible':true,'variant':'success','message':this.$i18n.t('success')});
+                        // Authentication succeeded, go to the home page and refresh the navigation
+                        this.$store.dispatch('common_navigation/refreshNavItems');
                         this.$router.push({path:'home', name:'home'})
                     }
                 })
