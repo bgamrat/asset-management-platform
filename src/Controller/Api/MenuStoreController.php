@@ -26,9 +26,10 @@ class MenuStoreController extends FOSRestController
     public function getMenuAction( Request $request )
     {
         //$this->denyAccessUnlessGranted( 'ROLE_ADMIN', null, 'Unable to access this page!' );
-        $adminMenu = $this->menuBuilder->createUserMenu( [] );
+        $userMenu = $this->menuBuilder->createUserMenu( [] );
+        $adminMenu = $this->menuBuilder->createAdminMenu( [] );
         $renderer = $this->jsonRenderer;
-        return array_values( $renderer->render( $adminMenu ) );
+        return [ 'user' =>  $renderer->render( $userMenu ) , 'admin' => $renderer->render( $adminMenu )  ];
         //return $this->render( 'common/parts/nav.html.twig' );
     }
 
