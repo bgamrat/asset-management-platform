@@ -53,11 +53,11 @@ class JsonRenderer implements RendererInterface {
         $itemIterator = new \Knp\Menu\Iterator\RecursiveItemIterator($item);
 
         $iterator = new \RecursiveIteratorIterator($itemIterator, \RecursiveIteratorIterator::SELF_FIRST);
+        $pile = [];
 
         $tree = [];
-        $parent = null;
-        $levelParent[0] = null;
-
+        $lastNode = $lastParent = null;
+        $lastLevel = -1;
         $lastLevel = null;
         foreach ($iterator as $item) {
             $translatedLabel = $this->translator->trans($item->getLabel());
@@ -67,32 +67,32 @@ class JsonRenderer implements RendererInterface {
                 $node = [];
                 $node['id'] = $id;
                 $node['name'] = $translatedLabel;
-                $node['href'] = '/#' . $item->getUri();
-                $node['has_children'] = $item->hasChildren();
                 $node['level'] = $level;
-                $parent = null;
-                if ($lastLevel !== null) {
-                    if ($level > $lastLevel) {
-                        $parent = $levelParent[$level] = $lastNode['id'];
-                    } else {
-                        $parent = $levelParent[$level];
-                    }
-                    $lastParent = $parent;
-                }
-                $node['parent'] = $parent;
-                if ($parent !== null) {
-                    if (!isset($tree[$parent]['children'])) {
-                        $tree[$parent]['children'] = [];
-                    }
-                    $tree[$parent]['children'][] = $node;
+                $node['href'] = '/#'.$item->getUri(); // @TODO: Move this to client side
+                $node['parent'] = $item->getParent()->getName();
+                $node['has_children'] = $item->hasChildren();
+                $node['children'] = [];
+                $pile[$id] = $node;
+                if ($level === 1) {
+                    $tree[$id] =& $pile[$id];
                 } else {
-                    $tree[$id] = $node;
+                    if ($level > $lastLevel) {
+                        $pile[$lastNode]['children'][] = & $pile[$id];
+                        $lastParent = $lastNode;
+                    } else {
+                        if ($level < $lastLevel) {
+                            $lastParent = $pile[$lastParent]['parent'];
+                            $pile[$lastParent]['children'][] = & $pile[$id];
+                        } else {
+                            $pile[$lastParent]['children'][] = & $pile[$id];
+                        }
+                    }
                 }
                 $lastLevel = $level;
-                $lastNode = $node;
+                $lastNode = $id;
             }
         }
-        return $tree;
+        return array_values($tree);
     }
 
 }

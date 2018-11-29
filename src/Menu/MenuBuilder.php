@@ -27,39 +27,39 @@ class MenuBuilder {
     }
 
     public function createAdminMenu(array $options) {
-        $menu = $this->factory->createItem('root', ['label' => 'common.admin'])
+        $menu = $this->factory->createItem('admin', ['label' => 'common.admin'])
                 ->setExtra('translation_domain', $this->translator->getLocale());
 
         $menu->addChild('admin', ['route' => 'root', 'label' => 'common.home']);
 
-        $menu['admin']->addChild('calendar', ['label' => 'common.calendar', 'route' => 'calendar'])
+        $menu->addChild('calendar', ['label' => 'common.calendar', 'route' => 'calendar'])
                 ->setAttribute('icon', 'fa fa-calendar');
-        $menu['admin']->addChild('trailer', ['label' => 'asset.trailers', 'route' => 'trailers'])
+        $menu->addChild('trailer', ['label' => 'asset.trailers', 'route' => 'trailers'])
                 ->setAttribute('icon', 'fa fa-truck');
 
-        $menu['admin']->addChild('admin-assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_equipment_index'])
+        $menu->addChild('admin-assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_equipment_index'])
                 ->setAttribute('dropdown', true);
-        $menu['admin']['admin-assets']->addChild('carriers', ['label' => 'common.carriers', 'route' => 'app_admin_asset_carrier_index']);
-        $menu['admin']['admin-assets']->addChild('equipment', ['label' => 'asset.equipment', 'route' => 'app_admin_asset_equipment_index']);
-        $menu['admin']['admin-assets']->addChild('issues', ['label' => 'common.issues', 'route' => 'app_admin_asset_issue_index']);
-        $menu['admin']['admin-assets']->addChild('manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index']);
-        $menu['admin']['admin-assets']->addChild('transfer', ['label' => 'asset.transfers', 'route' => 'app_admin_asset_transfer_index']);
-        $menu['admin']['admin-assets']->addChild('trailers', ['label' => 'asset.trailers', 'route' => 'app_admin_asset_trailer_index']);
-        $menu['admin']['admin-assets']->addChild('vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index']);
+        $menu['admin-assets']->addChild('carriers', ['label' => 'common.carriers', 'route' => 'app_admin_asset_carrier_index']);
+        $menu['admin-assets']->addChild('equipment', ['label' => 'asset.equipment', 'route' => 'app_admin_asset_equipment_index']);
+        $menu['admin-assets']->addChild('issues', ['label' => 'common.issues', 'route' => 'app_admin_asset_issue_index']);
+        $menu['admin-assets']->addChild('manufacturers', ['label' => 'asset.manufacturers', 'route' => 'app_admin_asset_manufacturer_index']);
+        $menu['admin-assets']->addChild('transfer', ['label' => 'asset.transfers', 'route' => 'app_admin_asset_transfer_index']);
+        $menu['admin-assets']->addChild('trailers', ['label' => 'asset.trailers', 'route' => 'app_admin_asset_trailer_index']);
+        $menu['admin-assets']->addChild('vendors', ['label' => 'asset.vendors', 'route' => 'app_admin_asset_vendor_index']);
 
-        $menu['admin']->addChild('admin-clients', ['label' => 'common.clients', 'route' => 'app_admin_client_client_index']);
+        $menu->addChild('admin-clients', ['label' => 'common.clients', 'route' => 'app_admin_client_client_index']);
 
-        $menu['admin']->addChild('admin-schedule', ['label' => 'common.schedule', 'route' => 'app_admin_schedule_default_index'])
+        $menu->addChild('admin-schedule', ['label' => 'common.schedule', 'route' => 'app_admin_schedule_default_index'])
                 ->setAttribute('dropdown', true);
-        $menu['admin']['admin-schedule']->addChild('events', ['label' => 'common.events', 'route' => 'app_admin_schedule_event_index']);
-        $menu['admin']['admin-schedule']->addChild('service', ['label' => 'common.service', 'route' => 'app_admin_schedule_service_index']);
-        $menu['admin']['admin-schedule']->addChild('shop', ['label' => 'common.shop', 'route' => 'app_admin_schedule_shop_index']);
-        $menu['admin']['admin-schedule']->addChild('park', ['label' => 'common.park', 'route' => 'app_admin_schedule_park_index']);
+        $menu['admin-schedule']->addChild('events', ['label' => 'common.events', 'route' => 'app_admin_schedule_event_index']);
+        $menu['admin-schedule']->addChild('service', ['label' => 'common.service', 'route' => 'app_admin_schedule_service_index']);
+        $menu['admin-schedule']->addChild('shop', ['label' => 'common.shop', 'route' => 'app_admin_schedule_shop_index']);
+        $menu['admin-schedule']->addChild('park', ['label' => 'common.park', 'route' => 'app_admin_schedule_park_index']);
 
-        $menu['admin']->addChild('admin-people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index']);
+        $menu->addChild('admin-people', ['label' => 'common.people', 'route' => 'app_admin_common_person_index']);
 
-        $menu['admin']->addChild('admin-staff', ['label' => 'common.staff', 'route' => 'app_admin_staff_staff_index']);
-        $menu['admin']->addChild('admin-venues', ['label' => 'common.venues', 'route' => 'app_admin_venue_venue_index']);
+        $menu->addChild('admin-staff', ['label' => 'common.staff', 'route' => 'app_admin_staff_staff_index']);
+        $menu->addChild('admin-venues', ['label' => 'common.venues', 'route' => 'app_admin_venue_venue_index']);
 
         return $menu;
     }

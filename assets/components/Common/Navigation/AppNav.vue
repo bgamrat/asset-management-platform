@@ -1,6 +1,6 @@
 <template>
     <b-navbar-nav>
-        <a-children v-for="item in items" v-bind:key="item.id" v-bind:item="item" />
+        <a-children v-for="item in items" :key="item.id" :item="item" />
     </b-navbar-nav>
 </template>
 
@@ -9,7 +9,7 @@
 import Children from './Children'
 
 export default {
-    name: 'Navigation',
+    name: 'AppNav',
     components: {
         'a-children': Children
     },
