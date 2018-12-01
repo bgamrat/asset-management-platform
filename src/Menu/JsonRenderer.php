@@ -71,6 +71,7 @@ class JsonRenderer implements RendererInterface {
                 $node['href'] = '/#'.$item->getUri(); // @TODO: Move this to client side
                 $node['parent'] = $item->getParent()->getName();
                 $node['has_children'] = $item->hasChildren();
+                $node['icon'] = $item->getAttribute('icon', false);
                 $node['children'] = [];
                 $pile[$id] = $node;
                 if ($level === 1) {

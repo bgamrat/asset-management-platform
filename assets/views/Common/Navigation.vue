@@ -12,12 +12,14 @@
                 <a-nav :items="items.user" />
             </b-collapse>
         </b-navbar>
-        <b-navbar toggleable="md" type="light" variant="warning">
-            <b-navbar-toggle target="superadmin_nav_collapse"></b-navbar-toggle>
-            <b-collapse is-nav id="superadmin_nav_collapse">
-                <a-nav :items="items.super_admin" />
-            </b-collapse>
-        </b-navbar>
+            <template :v-if="items.super_admin.length > 0">
+            <b-navbar toggleable="md" type="dark" variant="secondary">
+                <b-navbar-toggle target="superadmin_nav_collapse"></b-navbar-toggle>
+                <b-collapse is-nav id="superadmin_nav_collapse">
+                    <a-nav :items="items.super_admin" />
+                </b-collapse>
+            </b-navbar>
+        </template>
     </div>
 </template>
 

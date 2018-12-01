@@ -8,6 +8,7 @@ export var i18n = new VueI18n({
     fallbackLocale: 'en',
     messages: {
         'en': {
+            'admin-asset-status': 'Admin Asset Status',
             'home': 'Home',
             'last_username': 'Last username',
             'login': 'Login',
