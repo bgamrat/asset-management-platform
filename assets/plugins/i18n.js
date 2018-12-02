@@ -9,6 +9,7 @@ export var i18n = new VueI18n({
     messages: {
         'en': {
             'admin-asset-status': 'Admin Asset Status',
+            'app-name': 'Moving Pieces',
             'home': 'Home',
             'last_username': 'Last username',
             'login': 'Login',

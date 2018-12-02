@@ -2,11 +2,15 @@ export default {
     name: 'dialog',
     namespaced: true,
     state: {
+        icon: 'fa fa-gears',
         title: 'Title!',
         content: 'Content!',
         available: false
     },
     getters: {
+        icon: () => {
+            return state.icon
+        },
         title: () => {
             return $t(state.title)
         },
@@ -21,6 +25,9 @@ export default {
         setContent(state, content) {
             state.content = content;
         },
+        setIcon(state, icon) {
+            state.icon = icon;
+        },
         setTitle(state, title) {
             state.title = title;
         }
@@ -30,6 +37,7 @@ export default {
             commit('setAvailable', payload.available === undefined || payload.available );
             commit('setTitle', payload.title);
             commit('setContent', payload.content);
+            commit('setIcon',payload.icon);
         },
         enableDialog( {commit}) {
             commit('setAvailable', true);

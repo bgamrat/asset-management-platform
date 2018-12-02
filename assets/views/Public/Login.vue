@@ -69,7 +69,7 @@ export default {
         }
     },
     mounted(){
-        this.$store.dispatch('common_dialog/setDialog', {'title':'I win!', 'content':'Yay!'})
+        this.$store.dispatch('common_dialog/setDialog', {'icon':'fa fa-question','title':'I win!', 'content':'Yay!'})
     },
     created(){
         this.refreshCsrfToken();

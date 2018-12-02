@@ -2,7 +2,7 @@ export default {
     name: 'common_navigation',
     namespaced: true,
     state: {
-        nav_items: {}
+        nav_items: { user: [], admin: [], super_admin: []}
     },
     getters: {
         nav_items: () => {
@@ -22,7 +22,6 @@ export default {
                         .then(res => {
                             commit('setNavItems', res);
                             resolve();
-
                         })
             })
         }

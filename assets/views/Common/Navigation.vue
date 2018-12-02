@@ -12,7 +12,7 @@
                 <a-nav :items="items.user" />
             </b-collapse>
         </b-navbar>
-            <template :v-if="items.super_admin.length > 0">
+        <template :v-if="super_admin">
             <b-navbar toggleable="md" type="dark" variant="secondary">
                 <b-navbar-toggle target="superadmin_nav_collapse"></b-navbar-toggle>
                 <b-collapse is-nav id="superadmin_nav_collapse">
@@ -36,6 +36,11 @@ export default {
     created() {
         this.$store.dispatch('common_navigation/refreshNavItems');
     },
+    watch:
+        mapState({
+            super_admin: state => state.common_navigation.nav_items.super_admin.length > 1
+        })
+    ,
     computed:
         mapState({
             items: state => state.common_navigation.nav_items

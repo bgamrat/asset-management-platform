@@ -1,5 +1,11 @@
 <template>
-
+    <div>
+        <b-row>
+            <b-col>
+                <img id="logo" class="mx-auto" width="500" height="auto" src="images/logo.jpg" alt="logo" title="Moving Pieces" />
+            </b-col>
+        </b-row>
+    </div>
 </template>
 <script>
 export default {
@@ -12,3 +18,10 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+#logo {
+    width: 500px;
+    display: block;
+}
+</style>

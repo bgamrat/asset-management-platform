@@ -1,5 +1,7 @@
-# mobile-asset-management-platform
+# moving-pieces
 ---
+
+![alt text](https://github.com/bgamrat/asset-management-platform/raw/master/public/images/logo.png "Moving Pieces logo")
 
 ## Overview
 

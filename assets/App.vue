@@ -3,9 +3,9 @@
         <b-container fluid>
             <navigation />
             <header class="d-flex justify-content-between">
-                <h1 v-bind:title.sync="title">{{title}}</h1>
+                <h1 :title.sync="title">{{title}}</h1>
                 <div v-if="dialog.available">
-                    <b-btn v-b-modal.settings variant="primary"><i class="fa fa-gears"></i></b-btn>
+                    <b-btn class="dialog-btn" v-b-modal.settings variant="primary"><i :class="dialog.icon"></i></b-btn>
                 </div>
             </header>
             <b-row v-if="message.visible">
@@ -49,5 +49,7 @@ export default {
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
-
+.dialog-btn {
+    margin: 15px;
+}
 </style>
