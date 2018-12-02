@@ -1,7 +1,7 @@
 # moving-pieces
 ---
 
-![alt text](https://github.com/bgamrat/asset-management-platform/raw/master/public/images/logo.png "Moving Pieces logo")
+![alt text](https://github.com/bgamrat/asset-management-platform/raw/vue/public/images/logo.png "Moving Pieces logo")
 
 ## Overview
 
