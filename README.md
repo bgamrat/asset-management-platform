@@ -11,7 +11,7 @@ Proof of concept - not fully operational
 
 ** Migrating to [Vue.js](https://vuejs.org/), including the use of [Vuex](https://vuex.vuejs.org/) and [Bootstrap + Vue](https://bootstrap-vue.js.org/)
 
-** (Vue branch)[https://github.com/bgamrat/asset-management-platform/tree/vue]
+** [Vue branch](https://github.com/bgamrat/asset-management-platform/tree/vue)
 
 Nothing works. Well, you can log in and the navigation updates.
 
