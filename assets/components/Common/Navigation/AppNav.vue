@@ -1,5 +1,5 @@
 <template>
-    <b-navbar-nav>
+    <b-navbar-nav :class="xclass">
         <a-children v-for="item in items" :key="item.id" :item="item" />
     </b-navbar-nav>
 </template>
@@ -14,7 +14,8 @@ export default {
         'a-children': Children
     },
     props: {
-            items: {}
+            items: {},
+            xclass: ''
     }
 };
 </script>

@@ -1,3 +1,7 @@
 api_platform:
+    enable_fos_user: true
     mapping:
-        paths: ['%kernel.project_dir%/src/Entity']
+        paths: []
+    resource_class_directories: 
+        - '%kernel.project_dir%/src/Entity'
+        - '%kernel.project_dir%/src/Entity/Asset'

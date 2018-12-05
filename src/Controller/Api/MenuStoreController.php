@@ -29,11 +29,15 @@ class MenuStoreController extends FOSRestController {
     public function getMenuAction(Request $request) {
         $renderer = $this->jsonRenderer;
         $menu = [];
-        $menu['user'] = $renderer->render($this->menuBuilder->createUserMenu([]));
+        $menu['user'] = [];
+        if ($this->security->isGranted('ROLE_USER')) {
+            $menu['user'] = $renderer->render($this->menuBuilder->createUserMenu([]));
+        }
         $menu['admin'] = [];
         if ($this->security->isGranted('ROLE_ADMIN')) {
             $menu['admin'] = $renderer->render($this->menuBuilder->createAdminMenu([]));
         }
+        $menu['account'] = $renderer->render($this->menuBuilder->createAccountMenu([]));
         $menu['super_admin'] = [];
         if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
             $menu['super_admin'] = $renderer->render($this->menuBuilder->createSuperAdminMenu([]));

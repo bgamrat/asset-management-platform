@@ -2,7 +2,7 @@
     <div>
         <form action="" method="post">
             <b-row>
-                <b-col>
+                <b-col cols="12" sm="6">
                     <input type="hidden" name="_csrf_token" :value="csrf_token" />
                     <b-form-group id="username-group"
                                   :label="$t('username')"
@@ -18,7 +18,7 @@
                 </b-col>
             </b-row>
             <b-row>
-                <b-col>
+                <b-col cols="12" sm="6">
                     <b-form-group id="password-group"
                                   :label="$t('password')"
                                   label-for="password">

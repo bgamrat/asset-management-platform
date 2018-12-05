@@ -25,17 +25,37 @@ class MenuBuilder {
         $this->tokenStorage = $tokenStorage;
         $this->translator = $translator;
     }
+    
+    public function createAccountMenu(array $options) {
+        $menu = $this->factory->createItem('account');
+
+        $menu->setAttribute('class', 'ml-auto');
+
+        if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $user = $this->tokenStorage->getToken()->getUser();
+            $username = $user->getUsername();
+            $menu->addChild('user')
+                    ->setExtra('translation_domain', 'App')
+                    ->setAttribute('dropdown', true)
+                    ->setAttribute('icon', 'fa fa-user');
+            $menu['user']->setLabel($username)->setExtra('translation_domain', false);
+            $menu['user']->addChild('edit_profile', array('label' => 'user.profile', 'route' => 'fos_user_profile_edit'))
+                    ->setAttribute('icon', 'fa fa-edit');
+            $menu['user']->addChild('logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'])
+                    ->setAttribute('icon', 'fa fa-sign-out');
+        } else {
+            $menu->addChild('login', ['label' => 'common.log_in', 'route' => 'fos_user_security_login'])
+                    ->setAttribute('icon', 'fa fa-login');
+        }
+
+        return $menu;
+    }
 
     public function createAdminMenu(array $options) {
         $menu = $this->factory->createItem('admin', ['label' => 'common.admin'])
                 ->setExtra('translation_domain', $this->translator->getLocale());
 
         $menu->addChild('admin', ['route' => 'root', 'label' => 'common.home']);
-
-        $menu->addChild('calendar', ['label' => 'common.calendar', 'route' => 'calendar'])
-                ->setAttribute('icon', 'fa fa-calendar');
-        $menu->addChild('trailer', ['label' => 'asset.trailers', 'route' => 'trailers'])
-                ->setAttribute('icon', 'fa fa-truck');
 
         $menu->addChild('admin-assets', ['label' => 'common.assets', 'route' => 'app_admin_asset_equipment_index'])
                 ->setAttribute('dropdown', true);
@@ -133,26 +153,11 @@ class MenuBuilder {
 
     public function createUserMenu(array $options) {
         $menu = $this->factory->createItem('user');
-        $menu->setAttribute('class', 'ml-auto');
 
-        if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $user = $this->tokenStorage->getToken()->getUser();
-            $username = $user->getUsername();
-            $menu->addChild('user')
-                    ->setExtra('translation_domain', 'App')
-                    ->setAttribute('dropdown', true)
-                    ->setAttribute('icon', 'fa fa-user');
-            $menu['user']->setLabel($username)->setExtra('translation_domain', false);
-            $menu['user']->addChild('edit_profile', array('label' => 'user.profile', 'route' => 'fos_user_profile_edit'))
-                    ->setAttribute('icon', 'fa fa-edit');
-            $menu['user']->addChild('logout', ['label' => 'common.log_out', 'route' => 'fos_user_security_logout'])
-                    ->setAttribute('icon', 'fa fa-sign-out');
-        } else {
-            $menu->addChild('login', ['label' => 'common.log_in', 'route' => 'fos_user_security_login'])
-                    ->setAttribute('icon', 'fa fa-login');
-        }
-
+        $menu->addChild('calendar', ['label' => 'common.calendar', 'route' => 'calendar'])
+                ->setAttribute('icon', 'fa fa-calendar');
+        $menu->addChild('trailer', ['label' => 'asset.trailers', 'route' => 'trailers'])
+                ->setAttribute('icon', 'fa fa-truck');
         return $menu;
     }
-
 }
