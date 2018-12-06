@@ -42,6 +42,14 @@ module.exports = Encore.getWebpackConfig(
                                         }
                                     ],
                                     fallback: 'vue-style-loader'
+                                }),
+                                scss: ExtractTextPlugin.extract({
+                                    use: [
+                                        {
+                                            loader: 'scss-loader',
+                                        }
+                                    ],
+                                    fallback: 'vue-style-loader'
                                 })
                             }
                         },

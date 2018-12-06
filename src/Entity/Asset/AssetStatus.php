@@ -2,6 +2,7 @@
 
 Namespace App\Entity\Asset;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -20,6 +21,10 @@ use App\Entity\Traits\XDefault;
  * @UniqueEntity("name")
  * @UniqueEntity("id")
  * @ORM\Cache()
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get","post","put"}
+ * )
  */
 class AssetStatus
 {

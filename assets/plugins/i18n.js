@@ -8,6 +8,7 @@ export var i18n = new VueI18n({
     fallbackLocale: 'en',
     messages: {
         'en': {
+            'add_row': 'Add Row',
             'admin-asset-status': 'Admin Asset Status',
             'app-name': 'Moving Pieces',
             'available': 'Available',

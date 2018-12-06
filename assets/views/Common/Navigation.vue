@@ -47,8 +47,5 @@ export default {
 </script>
 
 <style  scoped>
-#super-admin:empty {
-    display:none;
-}
 </style>
 

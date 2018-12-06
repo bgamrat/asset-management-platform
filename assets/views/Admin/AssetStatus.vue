@@ -1,23 +1,54 @@
 <template>
     <div>
-        <admin-asset-status :label="label"></admin-asset-status>
+        <div class="block">
+        <b-row class="font-weight-bold header">
+            <b-col col sm="1"> {{ $t('available') }}</b-col>
+            <b-col col sm="4"> {{ $t('name') }}</b-col>
+            <b-col col sm="5"> {{ $t('comment') }}</b-col>
+            <b-col col sm="1"> {{ $t('default') }}</b-col>
+            <b-col col sm="1"> {{ $t('in_use') }}</b-col>
+        </b-row>
+        <asset-status-row v-for="item in items" :key="item.id" :item="item" />
+        </div>
+        <div v-on:add-row="addRow">
+            <div id="addrow">
+                <addrow :label="$t('add_row')"></addrow>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import AdminAssetStatus from '../../components/Admin/Asset/AssetStatus';
+
+import { mapState } from 'vuex'
+import AdminAssetStatusRow from '../../components/Admin/Asset/AssetStatusRow';
+import AddRow from '../../components/Common/AddRow';
 
 export default {
-    name: 'AdminAssetStatusView',
-    props: {
-        label:{ type: String, default: 'Add Row'}
-    },
-    components:{'admin-asset-status':AdminAssetStatus},
+    name: 'AdminAssetStatusView', components: {
+        'addrow': AddRow, 'asset-status-row': AdminAssetStatusRow
+    }, beforeCreate() {
+        this.$store.dispatch('admin_asset_asset_status/load');
+    }, computed:
+        mapState({
+            items: state => state.admin_asset_asset_status.items
+        }), methods: {
+        addRow() {
+            alert('Add row');
+        }
+            }
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+@import "node_modules/bootstrap/scss/bootstrap";
+.header > * {
+    text-align: center;
+}
+.block {
+    padding: 7px 0;
+    margin: 7px 0;
+    border-top: 1px solid theme-color-level(dark, -10);
+    border-bottom: 1px solid theme-color-level(dark, -10);
+}
 </style>
-
-
