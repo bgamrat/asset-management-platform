@@ -2,7 +2,8 @@ export default {
     name: 'admin_asset_asset_status',
     namespaced: true,
     state: {
-        items: []
+        items: [],
+        item: {available: false, name: '', comment: '', default: false, inUse: true}
     },
     getters: {
         items: () => {
@@ -10,6 +11,12 @@ export default {
         }
     },
     mutations: {
+        addItem(state) {
+            state.items.push(state.item)
+        },
+        removeItem(state, index) {
+            state.items.splice(index);
+        },
         setItems(state, items) {
             state.items = items
         },
@@ -24,6 +31,12 @@ export default {
                             resolve();
                         })
             })
+        },
+        add( {commit}) {
+            commit('addItem');
+        },
+        remove({commit},row){
+            commit('removeItem',row)
         }
     }
 }

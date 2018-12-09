@@ -1,5 +1,4 @@
 var Encore = require('@symfony/webpack-encore');
-
 var VueLoader = require('vue-loader')
 var ExtractTextPlugin = require("extract-text-webpack-plugin")
 
@@ -17,16 +16,15 @@ Encore
         .enableVueLoader()
         .enableSassLoader()
         ;
-
 ;
 module.exports = Encore.getWebpackConfig(
         {
             mode: 'development',
             devtool: 'inline-source-map',
-  plugins: [
-    // ... Vue Loader plugin omitted
-    new ExtractTextPlugin("style.css")
-  ],
+            plugins: [
+                // ... Vue Loader plugin omitted
+                new ExtractTextPlugin("style.css")
+            ],
             module: {
                 rules: [
                     {
@@ -60,8 +58,8 @@ module.exports = Encore.getWebpackConfig(
                     {
                         test: /\.js$/,
                         loader: 'babel-loader'
-                    },
+                    }
                 ]
-            },
+            }
 
         });

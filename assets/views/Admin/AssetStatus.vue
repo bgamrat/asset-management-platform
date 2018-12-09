@@ -3,18 +3,15 @@
         <div class="block">
         <b-row class="font-weight-bold header">
             <b-col col sm="1"> {{ $t('available') }}</b-col>
-            <b-col col sm="4"> {{ $t('name') }}</b-col>
+            <b-col col sm="3"> {{ $t('name') }}</b-col>
             <b-col col sm="5"> {{ $t('comment') }}</b-col>
             <b-col col sm="1"> {{ $t('default') }}</b-col>
             <b-col col sm="1"> {{ $t('in_use') }}</b-col>
+            <b-col col sm="1"><i class="fa fa-delete"></i></b-col>
         </b-row>
         <asset-status-row v-for="item in items" :key="item.id" :item="item" />
         </div>
-        <div v-on:add-row="addRow">
-            <div id="addrow">
-                <addrow :label="$t('add_row')"></addrow>
-            </div>
-        </div>
+        <addrow v-on:add-row="addRow" />
     </div>
 </template>
 
@@ -34,14 +31,13 @@ export default {
             items: state => state.admin_asset_asset_status.items
         }), methods: {
         addRow() {
-            alert('Add row');
+            this.$store.dispatch('admin_asset_asset_status/add')
         }
-            }
+    }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "node_modules/bootstrap/scss/bootstrap";
 .header > * {
     text-align: center;
 }
