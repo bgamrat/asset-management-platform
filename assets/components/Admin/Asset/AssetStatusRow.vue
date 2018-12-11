@@ -2,8 +2,8 @@
     <b-row class="asset-status-row">
         <input type="hidden" :value="item.id" />
         <b-col cols="3" sm="1"><b-form-checkbox v-model="item.available"></b-form-checkbox></b-col>
-        <b-col cols="9" sm="4"><b-form-input type="text" :value="item.name"></b-form-input></b-col>
-        <b-col cols="10" sm="5"><b-form-input type="text" :value="item.comment"></b-form-input></b-col>
+        <b-col cols="9" sm="3"><b-form-input type="text" :value="item.name"></b-form-input></b-col>
+        <b-col cols="9" sm="5"><b-form-input type="text" :value="item.comment"></b-form-input></b-col>
         <b-col cols="1" sm="1">
             <template v-if=item.default>
             <b-form-radio name="default"></b-form-radio>
@@ -13,6 +13,7 @@
             </template>
         </b-col>
         <b-col cols="1" sm="1"><b-form-checkbox v-model="item.inUse"></b-form-checkbox></b-col>
+        <b-col cols="1" sm="1"><i class="fa fa-remove"></i></b-col>
     </b-row>
 </template>
 
@@ -29,13 +30,17 @@ export default {
 <style scoped lang="scss">
 @import "node_modules/bootstrap/scss/bootstrap";
 .asset-status-row {
-    margin: 5px;
-    padding: 7px;
+    margin: 5px 0;
+    padding: 7px 0;
+    div {
+        text-align: center;
+    }
+    input[type="checkbox"],
+    label {
+        display: none;
+    }
 }
 .asset-status-row:nth-child(even) {
     background-color: theme-color-level(dark, -10);
-}
-.asset-status-row > div {
-    text-align: center;
 }
 </style>

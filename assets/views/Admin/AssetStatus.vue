@@ -1,15 +1,15 @@
 <template>
     <div>
         <div class="block">
-        <b-row class="font-weight-bold header">
-            <b-col col sm="1"> {{ $t('available') }}</b-col>
-            <b-col col sm="3"> {{ $t('name') }}</b-col>
-            <b-col col sm="5"> {{ $t('comment') }}</b-col>
-            <b-col col sm="1"> {{ $t('default') }}</b-col>
-            <b-col col sm="1"> {{ $t('in_use') }}</b-col>
-            <b-col col sm="1"><i class="fa fa-delete"></i></b-col>
-        </b-row>
-        <asset-status-row v-for="item in items" :key="item.id" :item="item" />
+            <b-row class="font-weight-bold a-header">
+                <b-col cols="3" sm="1"> {{ $t('available') }}</b-col>
+                <b-col cols="9" sm="3"> {{ $t('name') }}</b-col>
+                <b-col cols="9" sm="5"> {{ $t('comment') }}</b-col>
+                <b-col cols="1" sm="1"> {{ $t('default') }}</b-col>
+                <b-col cols="1" sm="1"> {{ $t('in_use') }}</b-col>
+                <b-col cols="1" sm="1"> {{ $t('remove') }}</b-col>
+            </b-row>
+            <asset-status-row v-for="item in items" :key="item.id" :item="item" />
         </div>
         <addrow v-on:add-row="addRow" />
     </div>
@@ -38,12 +38,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header > * {
-    text-align: center;
+.a-header {
+    margin-bottom: 7px;
+    div {
+        text-align: center;
+    }
 }
 .block {
-    padding: 7px 0;
-    margin: 7px 0;
     border-top: 1px solid theme-color-level(dark, -10);
     border-bottom: 1px solid theme-color-level(dark, -10);
 }

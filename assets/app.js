@@ -9,7 +9,7 @@ import store from './store';
 
 import Example from './components/User/Example';
 import BootstrapVue from 'bootstrap-vue';
-import { Button, Form, Layout, Modal, Navbar  } from 'bootstrap-vue/es/components';
+import { Button, Form, Layout, Modal, Navbar, Table } from 'bootstrap-vue/es/components';
 import { i18n } from './plugins/i18n.js';
 
 Vue.use(BootstrapVue);
@@ -18,6 +18,7 @@ Vue.use(Form);
 Vue.use(Layout);
 Vue.use(Modal);
 Vue.use(Navbar);
+Vue.use(Table);
 
 Vue.config.productionTip = false;
 
