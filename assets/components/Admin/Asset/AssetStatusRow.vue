@@ -13,7 +13,7 @@
             </template>
         </b-col>
         <b-col cols="1" sm="1"><b-form-checkbox v-model="item.inUse"></b-form-checkbox></b-col>
-        <b-col cols="1" sm="1"><i class="fa fa-remove"></i></b-col>
+        <b-col cols="1" sm="1"><i class="fa fa-remove" v-on:click="$emit('remove')"></i></b-col>
     </b-row>
 </template>
 
@@ -22,7 +22,7 @@
 export default {
     name: 'AdminAssetStatusRow',
     props: {
-            item: { type : Object }
+            item: { type : Object },
     }
 };
 </script>

@@ -14,9 +14,6 @@ export default {
         addItem(state) {
             state.items.push(state.item)
         },
-        removeItem(state, index) {
-            state.items.splice(index);
-        },
         setItems(state, items) {
             state.items = items
         },
@@ -35,8 +32,5 @@ export default {
         add( {commit}) {
             commit('addItem');
         },
-        remove({commit},row){
-            commit('removeItem',row)
-        }
     }
 }

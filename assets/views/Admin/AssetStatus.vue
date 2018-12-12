@@ -9,7 +9,7 @@
                 <b-col cols="1" sm="1"> {{ $t('in_use') }}</b-col>
                 <b-col cols="1" sm="1"> {{ $t('remove') }}</b-col>
             </b-row>
-            <asset-status-row v-for="item in items" :key="item.id" :item="item" />
+            <asset-status-row v-for="(item, key, index) in items" :key="item.id" :item="item" v-on:remove="items.splice(index, 1)" />
         </div>
         <addrow v-on:add-row="addRow" />
     </div>
