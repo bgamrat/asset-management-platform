@@ -32,5 +32,17 @@ export default {
         add( {commit}) {
             commit('addItem');
         },
+        update( {commit,state}) {
+            return new Promise((resolve) => {
+                fetch('/api/asset_statuses.json',
+                        {'method': 'POST', 'body': JSON.stringify(state.items), 'headers': 'Content-Type:application/json'})
+                        .then(res => res.json())
+                        .then(res => {
+                            alert('ha');
+                            console.log(res);
+                            resolve();
+                        })
+            })
+        }
     }
 }

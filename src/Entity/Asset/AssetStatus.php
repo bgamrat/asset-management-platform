@@ -22,8 +22,9 @@ use App\Entity\Traits\XDefault;
  * @UniqueEntity("id")
  * @ORM\Cache()
  * @ApiResource(
- *     collectionOperations={"get","post","put"},
- *     itemOperations={"get"}
+ *     collectionOperations={"get","post",
+ *          "bulk"={"method"="POST"}},
+ *     itemOperations={"get","put"}
  * )
  */
 class AssetStatus
