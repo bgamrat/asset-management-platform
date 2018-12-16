@@ -12,7 +12,7 @@
             <asset-status-row v-for="(item, key, index) in items" :key="item.id" :item="item" v-on:remove="items.splice(index, 1)" />
         </div>
         <addrow v-on:add-row="addRow" />
-        <update-button v-on:update="update" />
+        <save-button v-on:save="save" />
     </div>
 </template>
 
@@ -21,11 +21,11 @@
 import { mapState } from 'vuex'
 import AdminAssetStatusRow from '../../components/Admin/Asset/AssetStatusRow';
 import AddRow from '../../components/Common/AddRow';
-import UpdateButton from '../../components/Common/UpdateButton';
+import SaveButton from '../../components/Common/SaveButton';
 
 export default {
     name: 'AdminAssetStatusView', components: {
-        'addrow': AddRow, 'asset-status-row': AdminAssetStatusRow, 'update-button': UpdateButton
+        'addrow': AddRow, 'asset-status-row': AdminAssetStatusRow, 'save-button': SaveButton
     }, beforeCreate() {
         this.$store.dispatch('admin_asset_asset_status/load');
     }, computed:
@@ -35,8 +35,8 @@ export default {
         addRow() {
             this.$store.dispatch('admin_asset_asset_status/add')
         },
-        update(){
-            this.$store.dispatch('admin_asset_asset_status/update')
+        save(){
+            this.$store.dispatch('admin_asset_asset_status/save')
         }
     }
 };

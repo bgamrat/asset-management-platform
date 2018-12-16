@@ -2,6 +2,7 @@
 
 Namespace App\Entity\Traits;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -18,6 +19,7 @@ trait Name
      *     htmlPattern = "^[a-zA-Z0-9x\.\,\ \+\(\)'-]{2,32}$",
      *     message = "invalid.name {{ value }}",
      *     match=true)
+     * @Groups({"read", "write"})
      */
     private $name;
     

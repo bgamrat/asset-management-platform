@@ -3,6 +3,7 @@
 Namespace App\Entity\Asset;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -19,12 +20,12 @@ use App\Entity\Traits\XDefault;
  * @ORM\Table(name="asset_status")
  * @ORM\Entity()
  * @UniqueEntity("name")
- * @UniqueEntity("id")
  * @ORM\Cache()
  * @ApiResource(
- *     collectionOperations={"get","post",
- *          "bulk"={"method"="POST"}},
- *     itemOperations={"get","put"}
+ *     collectionOperations={"get","post","put","patch"},
+ *     itemOperations={"get","post","put","patch"},
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}}
  * )
  */
 class AssetStatus
@@ -43,6 +44,7 @@ class AssetStatus
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\OneToMany(targetEntity="Asset", mappedBy="id")
+     * @Groups({"read"})
      */
     private $id;
 }

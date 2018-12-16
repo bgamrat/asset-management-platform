@@ -1,30 +1,37 @@
 <template>
     <b-row class="asset-status-row">
-        <input type="hidden" :value="item.id" />
-        <b-col cols="3" sm="1"><b-form-checkbox v-model="item.available"></b-form-checkbox></b-col>
-        <b-col cols="9" sm="3"><b-form-input type="text" :value="item.name"></b-form-input></b-col>
-        <b-col cols="9" sm="5"><b-form-input type="text" :value="item.comment"></b-form-input></b-col>
+        <input type="hidden" :value="localitem.index" />
+        <input type="hidden" :value="localitem.id" />
+        <b-col cols="3" sm="1"><b-form-checkbox v-model="localitem.available"></b-form-checkbox></b-col>
+        <b-col cols="9" sm="3"><b-form-input type="text" v-model="localitem.name"></b-form-input></b-col>
+        <b-col cols="9" sm="5"><b-form-input type="text" v-model="localitem.comment"></b-form-input></b-col>
         <b-col cols="1" sm="1">
-            <template v-if=item.default>
+            <template v-if=localitem.default>
             <b-form-radio name="default"></b-form-radio>
             </template>
             <template v-else>
             <b-form-radio name="default" checked=false></b-form-radio>
             </template>
         </b-col>
-        <b-col cols="1" sm="1"><b-form-checkbox v-model="item.inUse"></b-form-checkbox></b-col>
+        <b-col cols="1" sm="1"><b-form-checkbox v-model="localitem.inUse"></b-form-checkbox></b-col>
         <b-col cols="1" sm="1"><i class="fa fa-remove" v-on:click="$emit('remove')"></i></b-col>
     </b-row>
 </template>
 
 <script>
-
 export default {
     name: 'AdminAssetStatusRow',
     props: {
             item: { type : Object },
+    },
+    computed: {
+        localitem: {
+            get() {
+                return Object.assign({}, this.item);
+            },
+        }
     }
-};
+}
 </script>
 
 <style scoped lang="scss">

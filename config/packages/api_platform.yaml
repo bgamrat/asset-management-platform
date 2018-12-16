@@ -5,3 +5,6 @@ api_platform:
     resource_class_directories: 
         - '%kernel.project_dir%/src/Entity'
         - '%kernel.project_dir%/src/Entity/Asset'
+    formats:
+        json:
+            mime_types: ['application/json']

@@ -3,7 +3,7 @@ export default {
     namespaced: true,
     state: {
         items: [],
-        item: {available: false, name: '', comment: '', default: false, inUse: true}
+        item: {index: 0, id: null, available: false, name: '', comment: '', default: false, inUse: true}
     },
     getters: {
         items: () => {
@@ -12,10 +12,22 @@ export default {
     },
     mutations: {
         addItem(state) {
+            state.item.index = state.items.length - 1;
             state.items.push(state.item)
         },
+        setItem(state, item) {
+            console.update('setItem');
+            var index = item.index;
+            state.items[index] = item;
+            state.items[index].dirty = true;
+        },
         setItems(state, items) {
-            state.items = items
+            var i, l;
+            state.items = items;
+            l = state.items.length;
+            for (i = 0; i < l; i++) {
+                state.items[i].index = i;
+            }
         },
     },
     actions: {
@@ -32,17 +44,35 @@ export default {
         add( {commit}) {
             commit('addItem');
         },
-        update( {commit,state}) {
-            return new Promise((resolve) => {
-                fetch('/api/asset_statuses.json',
-                        {'method': 'POST', 'body': JSON.stringify(state.items), 'headers': 'Content-Type:application/json'})
-                        .then(res => res.json())
-                        .then(res => {
-                            alert('ha');
-                            console.log(res);
-                            resolve();
-                        })
-            })
+        update ({commit},item) {
+            console.log('update');
+            commit('setItem',item);
+        },
+        save( {commit, state}) {
+            var i, l;
+            l = state.items.length;
+            for (i = 0; i < l; i++) {
+                if (typeof state.items[i].dirty !== "undefined") {
+                    new Promise((resolve) => {
+                        var url;
+                        var id = state.items[i].id;
+                        url = id === null ? '' : '/' + state.items[i].id;
+                        if (id === null) {
+                            delete state.items[i].id;
+                        }
+                        fetch('/api/asset_statuses' + url + '.json',
+                                {'method': id === null ? 'POST' : 'PUT',
+                                    'body': JSON.stringify(state.items[i]),
+                                    'headers': new Headers({'Content-Type': 'application/json; charset=utf-8'})})
+                                .then(res => res.json())
+                                .then(res => {
+                                    console.log(res);
+                                    resolve();
+                                })
+                    })
+                }
+            }
+            ;
         }
     }
 }

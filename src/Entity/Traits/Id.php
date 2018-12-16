@@ -2,6 +2,7 @@
 
 Namespace App\Entity\Traits;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 trait Id
 {
 
@@ -14,7 +15,7 @@ trait Id
     /**
      * Set id
      *
-     * @param string $id
+     * @param int $id
      *
      * @return Status
      */
@@ -28,7 +29,7 @@ trait Id
     /**
      * Get id
      *
-     * @return string
+     * @return int
      */
     public function getId()
     {
