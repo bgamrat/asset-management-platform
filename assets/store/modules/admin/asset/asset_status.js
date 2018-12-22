@@ -3,7 +3,7 @@ export default {
     namespaced: true,
     state: {
         items: [],
-        item: {index: 0, id: null, available: false, name: '', comment: '', default: false, inUse: true}
+        item: {index: 0, id: null, available: false, name: '', comment: '', default: false, inUse: true, dirty: true}
     },
     getters: {
         items: () => {
@@ -15,8 +15,10 @@ export default {
             state.item.index = state.items.length - 1;
             state.items.push(state.item)
         },
+        removeItem(state,index){
+            state.items.splice(index,1);
+        },
         setItem(state, item) {
-            console.update('setItem');
             var index = item.index;
             state.items[index] = item;
             state.items[index].dirty = true;
@@ -44,10 +46,7 @@ export default {
         add( {commit}) {
             commit('addItem');
         },
-        update ({commit},item) {
-            console.log('update');
-            commit('setItem',item);
-        },
+
         save( {commit, state}) {
             var i, l;
             l = state.items.length;
@@ -73,6 +72,12 @@ export default {
                 }
             }
             ;
-        }
+        },
+        remove ({commit}, index) {
+            commit('removeItem',index);
+        },
+        update ({commit}, item) {
+            commit('setItem',item);
+        },
     }
 }

@@ -24,11 +24,13 @@ export default {
     props: {
             item: { type : Object },
     },
-    computed: {
-        localitem: {
-            get() {
-                return Object.assign({}, this.item);
-            },
+    data() {
+            return  { localitem : Object.assign({}, this.item) }
+    },
+    watch: {
+        localitem: { handler(value){
+            this.$emit('changed',value);
+        }, deep: true
         }
     }
 }

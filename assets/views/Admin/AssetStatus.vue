@@ -9,7 +9,9 @@
                 <b-col cols="1" sm="1"> {{ $t('in_use') }}</b-col>
                 <b-col cols="1" sm="1"> {{ $t('remove') }}</b-col>
             </b-row>
-            <asset-status-row v-for="(item, key, index) in items" :key="item.id" :item="item" v-on:remove="items.splice(index, 1)" />
+            <asset-status-row v-for="(item, key, index) in items" :key="item.id" :item="item"
+            v-on:changed="update"
+            v-on:remove="removeRow(index)" />
         </div>
         <addrow v-on:add-row="addRow" />
         <save-button v-on:save="save" />
@@ -34,6 +36,12 @@ export default {
         }), methods: {
         addRow() {
             this.$store.dispatch('admin_asset_asset_status/add')
+        },
+        update(value) {
+            this.$store.dispatch('admin_asset_asset_status/update',value)
+        },
+        removeRow(index) {
+            this.$store.dispatch('admin_asset_asset_status/remove',index)
         },
         save(){
             this.$store.dispatch('admin_asset_asset_status/save')
