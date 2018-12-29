@@ -10,7 +10,7 @@
             </header>
             <b-row v-if="message.visible">
                 <b-col>
-                    <b-alert show :variant="message.variant">{{message.message}}</b-alert>
+                    <b-alert show dismissible fade :variant="message.variant">{{message.message}}</b-alert>
                 </b-col>
             </b-row>
             <transition name="slide-fade">

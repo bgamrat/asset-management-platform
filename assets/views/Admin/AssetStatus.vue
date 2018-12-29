@@ -21,9 +21,10 @@
 <script>
 
 import { mapState } from 'vuex'
-import AdminAssetStatusRow from '../../components/Admin/Asset/AssetStatusRow';
-import AddRow from '../../components/Common/AddRow';
-import SaveButton from '../../components/Common/SaveButton';
+
+import AddRow from '../../components/Common/AddRow'
+import AdminAssetStatusRow from '../../components/Admin/Asset/AssetStatusRow'
+import SaveButton from '../../components/Common/SaveButton'
 
 export default {
     name: 'AdminAssetStatusView', components: {
@@ -35,7 +36,7 @@ export default {
             items: state => state.admin_asset_asset_status.items
         }), methods: {
         addRow() {
-            this.$store.dispatch('admin_asset_asset_status/add')
+            this.$store.dispatch('admin_asset_asset_status/add');
         },
         update(value) {
             this.$store.dispatch('admin_asset_asset_status/update',value)
@@ -44,7 +45,11 @@ export default {
             this.$store.dispatch('admin_asset_asset_status/remove',index)
         },
         save(){
+            this.$store.dispatch('common_message/hideMessage');
             this.$store.dispatch('admin_asset_asset_status/save')
+                    .then(() => {
+                        this.$store.dispatch('common_message/setMessage',{variant:'success',message:'Success',visible:true});
+            });
         }
     }
 };
