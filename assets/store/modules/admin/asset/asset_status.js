@@ -17,16 +17,23 @@ export default {
             state.item.index = state.items.length - 1;
             state.items.push(state.item)
         },
+        markItemsClean(state) {
+            let i, l;
+            l = state.items.length;
+            for (i = 0; i < l; i++) {
+                state.items[i].dirty = false;
+            }
+        },
         removeItem(state, index) {
             state.items.splice(index, 1);
         },
         setItem(state, item) {
-            var index = item.index;
-            state.items[index] = item;
+            let index = item.index;
+            state.items[index] = Object.assign({},item);
             state.items[index].dirty = true;
         },
         setItems(state, items) {
-            var i, l;
+            let i, l;
             state.items = items;
             l = state.items.length;
             for (i = 0; i < l; i++) {
@@ -36,20 +43,27 @@ export default {
         },
     },
     actions: {
+        add( {commit}) {
+            commit('addItem');
+        },
+        clean( {commit}) {
+            commit('markItemsClean');
+        },
         load( {commit}){
             return new Promise((resolve, reject) => {
-                assetStatusApi.get().then(items => {
-                    commit('setItems', items)
-                    resolve();
-                })
+                assetStatusApi.get()
+                        .then((items) => {
+                            commit('setItems', items)
+                            resolve();
+                        })
             }, (err => {
                 reject(err)
             }))
         },
-        add( {commit}) {
-            commit('addItem');
+        remove( {commit}, index) {
+            commit('removeItem', index);
         },
-        save( {commit, state}) {
+        save( {state}) {
             let i, l, promises = [];
             l = state.items.length;
             for (i = 0; i < l; i++) {
@@ -59,9 +73,6 @@ export default {
             }
             return Promise.all(promises);
             ;
-        },
-        remove( {commit}, index) {
-            commit('removeItem', index);
         },
         update( {commit}, item) {
             commit('setItem', item);

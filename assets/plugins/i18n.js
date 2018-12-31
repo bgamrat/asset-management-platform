@@ -26,7 +26,7 @@ export var i18n = new VueI18n({
             'remove' : 'Remove',
             'save': 'Save',
             'submit': 'Submit',
-            'success': 'Look, I am awesome',
+            'success': 'Success',
             'update': 'Update',
             'username': 'Username'}
     }

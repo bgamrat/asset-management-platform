@@ -27,7 +27,7 @@ export default {
             item: { type : Object },
     },
     data() {
-            return  { localitem : Object.assign({}, this.item) }
+        return  { localitem : Object.assign({},this.item) }
     },
     watch: {
         localitem: { handler(value){

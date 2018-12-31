@@ -48,8 +48,10 @@ export default {
             this.$store.dispatch('common_message/hideMessage');
             this.$store.dispatch('admin_asset_asset_status/save')
                     .then(() => {
-                        this.$store.dispatch('common_message/setMessage',{variant:'success',message:'Success',visible:true});
-            });
+                        this.$store.dispatch('common_message/setMessage', {variant:'success', message:this.$i18n.t('success'), visible:true});
+                        this.$store.dispatch('admin_asset_asset_status/clean');}
+                    ,(err) => {
+                        this.$store.dispatch('common_message/setMessage', {variant:'danger', message:err.message, visible:true})})
         }
     }
 };
