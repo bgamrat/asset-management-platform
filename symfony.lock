@@ -1,16 +1,4 @@
 {
-    "api-platform/api-pack": {
-        "version": "1.1.0"
-    },
-    "api-platform/core": {
-        "version": "2.1",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "2.1",
-            "ref": "18727d8f229306860b46955f438e1897421da689"
-        }
-    },
     "behat/transliterator": {
         "version": "v1.2.0"
     },
@@ -311,6 +299,9 @@
             "ref": "e3868d2f4a5104f19f844fe551099a00c6562527"
         }
     },
+    "symfony/contracts": {
+        "version": "v1.0.2"
+    },
     "symfony/css-selector": {
         "version": "v4.0.8"
     },
@@ -535,6 +526,9 @@
     },
     "symfony/var-dumper": {
         "version": "v4.0.8"
+    },
+    "symfony/var-exporter": {
+        "version": "v4.2.1"
     },
     "symfony/web-link": {
         "version": "v4.0.8"

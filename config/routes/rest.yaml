@@ -57,7 +57,7 @@ app_admin_common_menu_store:
     resource: app.admin.menu_store_controller
     type:     rest
     controller: App\Controller\Api\Admin\Common\MenuStoreController
-    prefix: /api/menustore
+    prefix: /api
 
 app_admin_schedule_events:
     type:     rest
