@@ -14,7 +14,7 @@ export default {
     },
     mutations: {
         addItem(state) {
-            state.item.index = state.items.length - 1;
+            state.item.index = state.items.length;
             state.items.push(state.item)
         },
         markItemsClean(state) {

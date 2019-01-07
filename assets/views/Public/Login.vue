@@ -11,7 +11,7 @@
                                       type="text"
                                       name="_username"
                                       :value="username"
-                                      v-model.trim="username" 
+                                      v-model.trim="username"
                                       required>
                         </b-form-input>
                     </b-form-group>
@@ -26,7 +26,7 @@
                                       type="password"
                                       name="_password"
                                       :value="password"
-                                      v-model="password" 
+                                      v-model="password"
                                       required>
                         </b-form-input>
                     </b-form-group>

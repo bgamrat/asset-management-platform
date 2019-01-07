@@ -1,17 +1,23 @@
 <template>
     <div>
         <div class="block">
-            <b-row class="font-weight-bold a-header">
-                <b-col cols="3" sm="1"> {{ $t('available') }}</b-col>
-                <b-col cols="9" sm="3"> {{ $t('name') }}</b-col>
-                <b-col cols="9" sm="5"> {{ $t('comment') }}</b-col>
-                <b-col cols="1" sm="1"> {{ $t('default') }}</b-col>
-                <b-col cols="1" sm="1"> {{ $t('in_use') }}</b-col>
-                <b-col cols="1" sm="1"> {{ $t('remove') }}</b-col>
-            </b-row>
-            <asset-status-row v-for="(item, key, index) in items" :key="item.id" :item="item"
-            v-on:changed="update"
-            v-on:remove="removeRow(index)" />
+                <table class="table table-sm table-hover">
+                <thead>
+                    <tr class="font-weight-bold a-header">
+                        <th scope="col"> {{ $t('available') }}</th>
+                        <th scope="col"> {{ $t('name') }}</th>
+                        <th scope="col"> {{ $t('comment') }}</th>
+                        <th scope="col"> {{ $t('default') }}</th>
+                        <th scope="col"> {{ $t('in_use') }}</th>
+                        <th scope="col"> {{ $t('remove') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <asset-status-row v-for="(item, key, index) in items" :key="item.id" :item="item"
+                        v-on:changed="update"
+                        v-on:remove="removeRow"></asset-status-row>
+                </tbody>
+            </table>
         </div>
         <addrow v-on:add-row="addRow" />
         <save-button v-on:save="save" />
@@ -42,6 +48,7 @@ export default {
             this.$store.dispatch('admin_asset_asset_status/update',value)
         },
         removeRow(index) {
+            console.log(arguments);
             this.$store.dispatch('admin_asset_asset_status/remove',index)
         },
         save(){

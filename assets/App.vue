@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <b-container fluid>
-            <navigation />
+            <navigation></navigation>
             <header class="d-flex justify-content-between">
                 <h1 :title.sync="title">{{title}}</h1>
                 <div v-if="dialog.available">
@@ -14,7 +14,7 @@
                 </b-col>
             </b-row>
             <transition name="slide-fade">
-                <router-view />
+                <router-view></router-view>
             </transition>
             <b-modal id="settings" :title="dialog.title">
                 {{dialog.content}}

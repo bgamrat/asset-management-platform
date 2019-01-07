@@ -16,7 +16,7 @@
             </b-collapse>
         </b-navbar>
         <template v-if=items.super_admin.length>
-            <b-navbar toggleable="md" type="dark" variant="secondary">
+            <b-navbar toggleable="md" type="dark" variant="secondary" class="super-admin-navbar">
                 <b-navbar-toggle target="superadmin_nav_collapse"></b-navbar-toggle>
                 <b-collapse is-nav id="superadmin_nav_collapse">
                     <a-nav :items="items.super_admin" />
@@ -46,6 +46,9 @@ export default {
 };
 </script>
 
-<style  scoped>
+<style scoped>
+.super-admin-navbar {
+    height: 30px;
+}
 </style>
 
