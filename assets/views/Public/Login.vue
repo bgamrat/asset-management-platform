@@ -1,9 +1,9 @@
 <template>
     <div>
-        <form action="" method="post">
+        <b-form @submit="onSubmit">
             <b-row>
                 <b-col cols="12" sm="6">
-                    <input type="hidden" name="_csrf_token" :value="csrf_token" />
+                    <input type="hidden" name="_csrf_token" v-model="csrf_token" />
                     <b-form-group id="username-group"
                                   :label="$t('username')"
                                   label-for="username">
@@ -44,8 +44,7 @@
             </b-row>
             <b-row>
                 <b-col>
-                    <b-button type="button" v-on:click="doSubmit" variant="primary">{{ $t('submit') }}</b-button>
-                    <input type="hidden" id="_submit" name="_submit" value="submit">
+                    <b-button type="submit" variant="primary">{{ $t('submit') }}</b-button>
                 </b-col>
             </b-row>
             <b-row>
@@ -55,7 +54,7 @@
                     </b-link>
                 </b-col>
             </b-row>
-        </form>
+        </b-form>
     </div>
 </template>
 <script>
@@ -68,14 +67,12 @@ export default {
              username: '', password: '', remember_me: false 
         }
     },
-    mounted(){
-        this.$store.dispatch('common_dialog/setDialog', {'icon':'fa fa-question','title':'I win!', 'content':'Yay!'})
-    },
     created(){
         this.refreshCsrfToken();
     },
     methods: {
-        doSubmit() {
+        onSubmit(evt) {
+            evt.preventDefault();
             var formData = new FormData(), rm = document.getElementById("remember_me");
             formData.append('_csrf_token',this.csrf_token);
             formData.append('_username',this.username);
@@ -83,14 +80,15 @@ export default {
             if (rm.checked === true) {
                 formData.append('remember_me','on');
             }
-            formData.append('_submit','Log in');
+            formData.append('_submit','submit');
             fetch('/login_check', { method: 'POST', credentials: 'same-origin',  body: formData})
                 .then(res => {
                     if (/login$/.test(res.url)) {
                         res.text().then(text => {
                             var err = JSON.parse(text);
                             // error message i18n is handled on the server side by FOS User Bundle
-                            this.$store.dispatch('common_message/setMessage',{'visible':true,'variant':'warning','message':err.message});
+                            this.$store.dispatch('common_message/setMessage',{'visible':true,'variant':'danger','message':err.message});
+                            this.refreshCsrfToken()
                         });
                     } else {
                         // Authentication succeeded, go to the home page and refresh the navigation

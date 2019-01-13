@@ -67,7 +67,7 @@ export default {
 <style lang="scss" scoped>
 .a-header {
     margin-bottom: 7px;
-    div {
+    th {
         text-align: center;
     }
 }
