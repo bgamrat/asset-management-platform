@@ -77,7 +77,7 @@
     },
     "scripts": {
 	"mvBootstrap": "cp -rf vendor/twbs/* assets/vendor;",
-        "mvFontAwesome": "cp -rf vendor/fortawesome/font-awesome assets/vendor;",
+        "mvFontAwesome": "cp -rf vendor/components/font-awesome assets/vendor;",
         "rmAllJS": "rm -rf public/vendor/bootstrap/* public/vendor/fortawesome/*",
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
