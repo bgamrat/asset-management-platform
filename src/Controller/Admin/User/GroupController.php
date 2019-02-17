@@ -5,21 +5,19 @@ Namespace App\Controller\Admin\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\User\GroupType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of DefaultController
  *
  * @author bgamrat
  */
-class GroupController extends Controller
+class GroupController extends AbstractController
 {
 
     /**
-     * @Route("/admin/user/group/")
-     * @Method("GET")
+     * @Route("/admin/user/group/", methods={"GET"})
      */
     public function indexAction( Request $request )
     {

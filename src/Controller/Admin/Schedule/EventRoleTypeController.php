@@ -3,9 +3,8 @@
 Namespace App\Controller\Admin\Schedule;
 
 use App\Form\Admin\Schedule\EventRoleTypesType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +15,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class EventRoleTypeController extends Controller
+class EventRoleTypeController extends AbstractController
 {
 
     /**
-     * @Route("/admin/schedule/event-role-type")
-     * @Method("GET")
+     * @Route("/admin/schedule/event-role-type", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -39,8 +37,7 @@ class EventRoleTypeController extends Controller
     }
 
     /**
-     * @Route("/admin/schedule/event-role-type/save")
-     * @Method("POST")
+     * @Route("/admin/schedule/event-role-type/save", methods={"POST"})
      */
     public function saveAction( Request $request )
     {

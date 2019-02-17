@@ -5,21 +5,19 @@ Namespace App\Controller\Admin\Asset;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\Asset\IssueType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of IssueController
  *
  * @author bgamrat
  */
-class IssueController extends Controller
+class IssueController extends AbstractController
 {
 
     /**
-     * @Route("/admin/asset/issues")
-     * @Method("GET")
+     * @Route("/admin/asset/issues", methods={"GET"})
      */
     public function indexAction( Request $request )
     {

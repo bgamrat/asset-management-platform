@@ -4,8 +4,8 @@ Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Asset\Category;
 use App\Form\Admin\Asset\SetType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author bgamrat
  */
-class SetsController extends Controller
+class SetsController extends AbstractController
 {
 
     /**

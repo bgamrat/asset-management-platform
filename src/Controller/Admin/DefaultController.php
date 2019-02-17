@@ -4,20 +4,18 @@ Namespace App\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of DefaultController
  *
  * @author bgamrat
  */
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     /**
-     * @Route("/admin/venue/index")
-     * @Method("GET")
+     * @Route("/admin/venue/index", methods={"GET"})
      */
     public function indexAction( Request $request )
     {

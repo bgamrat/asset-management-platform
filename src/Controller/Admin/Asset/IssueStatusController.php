@@ -5,9 +5,8 @@ Namespace App\Controller\Admin\Asset;
 use App\Entity\Asset\IssueStatus;
 use App\Form\Admin\Asset\IssueStatusesType;
 use App\Form\Admin\Asset\IssueWorkflowType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +17,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class IssueStatusController extends Controller
+class IssueStatusController extends AbstractController
 {
 
     /**
-     * @Route("/admin/asset/issue-status")
-     * @Method("GET")
+     * @Route("/admin/asset/issue-status", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -38,8 +36,7 @@ class IssueStatusController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/issue-status/save")
-     * @Method("POST")
+     * @Route("/admin/asset/issue-status/save", methods={"POST"})
      */
     public function saveAction( Request $request )
     {
@@ -83,8 +80,7 @@ class IssueStatusController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/issue/workflow")
-     * @Method("GET")
+     * @Route("/admin/asset/issue/workflow", methods={"GET"})
      */
     public function workflowAction( Request $request )
     {
@@ -104,8 +100,7 @@ class IssueStatusController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/issue/workflow/save")
-     * @Method("POST")
+     * @Route("/admin/asset/issue/workflow/save", methods={"POST"})
      */
     public function workflowSaveAction( Request $request )
     {

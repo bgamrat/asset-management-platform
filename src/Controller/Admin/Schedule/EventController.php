@@ -2,9 +2,8 @@
 
 Namespace App\Controller\Admin\Schedule;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +16,11 @@ use App\Form\Common\PersonType;
  *
  * @author bgamrat
  */
-class EventController extends Controller
+class EventController extends AbstractController
 {
 
     /**
-     * @Route("/admin/schedule/event")
-     * @Method("GET")
+     * @Route("/admin/schedule/event", methods={"GET"})
      */
     public function indexAction( Request $request )
     {

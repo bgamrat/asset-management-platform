@@ -2,9 +2,9 @@
 
 Namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class LegacyBridgeController extends Controller
+class LegacyBridgeController extends AbstractController
 {
     public function indexAction()
     {

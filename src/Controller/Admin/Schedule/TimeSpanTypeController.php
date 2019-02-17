@@ -4,9 +4,8 @@ Namespace App\Controller\Admin\Schedule;
 
 use App\Entity\Schedule\TimeSpanType;
 use App\Form\Admin\Schedule\TimeSpanTypesType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +16,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class TimeSpanTypeController extends Controller
+class TimeSpanTypeController extends AbstractController
 {
 
     /**
-     * @Route("/admin/schedule/time-span-type")
-     * @Method("GET")
+     * @Route("/admin/schedule/time-span-type", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -40,8 +38,7 @@ class TimeSpanTypeController extends Controller
     }
 
     /**
-     * @Route("/admin/schedule/time-span-type/save")
-     * @Method("POST")
+     * @Route("/admin/schedule/time-span-type/save", methods={"POST"})
      */
     public function saveAction( Request $request )
     {

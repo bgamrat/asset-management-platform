@@ -4,12 +4,8 @@ Namespace App\Controller\Admin\Venue;
 
 use App\Form\Admin\Venue\VenueType;
 use App\Form\Admin\Venue\ContractType;
-
-;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,12 +16,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class VenueController extends Controller
+class VenueController extends AbstractController
 {
 
     /**
-     * @Route("/admin/venue/venue")
-     * @Method("GET")
+     * @Route("/admin/venue/venue", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -40,8 +35,7 @@ class VenueController extends Controller
     }
 
     /**
-     * @Route("/admin/venue/{id}/equipment")
-     * @Method("GET")
+     * @Route("/admin/venue/{id}/equipment", methods={"GET"})
      */
     public function viewVenueEquipmentAction( $id )
     {

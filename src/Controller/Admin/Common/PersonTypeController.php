@@ -4,9 +4,8 @@ Namespace App\Controller\Admin\Common;
 
 use App\Entity\Common\PersonType;
 use App\Form\Admin\Common\PersonTypesType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +16,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class PersonTypeController extends Controller
+class PersonTypeController extends AbstractController
 {
 
     /**
-     * @Route("/admin/common/person-type")
-     * @Method("GET")
+     * @Route("/admin/common/person-type", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -38,8 +36,7 @@ class PersonTypeController extends Controller
     }
 
     /**
-     * @Route("/admin/common/person-type/save")
-     * @Method("POST")
+     * @Route("/admin/common/person-type/save", methods={"POST"})
      */
     public function saveAction( Request $request )
     {

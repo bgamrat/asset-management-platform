@@ -5,21 +5,19 @@ Namespace App\Controller\Admin\Common;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Common\PersonType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of PersonController
  *
  * @author bgamrat
  */
-class PersonController extends Controller
+class PersonController extends AbstractController
 {
 
     /**
-     * @Route("/admin/common/person")
-     * @Method("GET")
+     * @Route("/admin/common/person", methods={"GET"})
      */
     public function indexAction( Request $request )
     {

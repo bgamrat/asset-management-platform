@@ -4,9 +4,8 @@ Namespace App\Controller\Admin\Staff;
 
 use App\Entity\Staff\EmploymentStatus;
 use App\Form\Admin\Staff\EmploymentStatusesType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +16,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class EmploymentStatusController extends Controller
+class EmploymentStatusController extends AbstractController
 {
 
     /**
-     * @Route("/admin/staff/employment-status-type")
-     * @Method("GET")
+     * @Route("/admin/staff/employment-status-type", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -38,8 +36,7 @@ class EmploymentStatusController extends Controller
     }
 
     /**
-     * @Route("/admin/staff/employment-status/save")
-     * @Method("POST")
+     * @Route("/admin/staff/employment-status/save", methods={"POST"})
      */
     public function saveAction( Request $request )
     {

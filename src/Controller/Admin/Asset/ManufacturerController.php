@@ -6,21 +6,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\Asset\ModelType;
 use App\Form\Admin\Asset\ManufacturerType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of AssetController
  *
  * @author bgamrat
  */
-class ManufacturerController extends Controller
+class ManufacturerController extends AbstractController
 {
 
     /**
-     * @Route("/admin/asset/manufacturers")
-     * @Method("GET")
+     * @Route("/admin/asset/manufacturers", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -34,8 +32,7 @@ class ManufacturerController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/manufacturer/{mname}/brand/{bname}")
-     * @Method("GET")
+     * @Route("/admin/asset/manufacturer/{mname}/brand/{bname}", methods={"GET"})
      */
     public function getManufacturerBrandAction( $mname, $bname )
     {

@@ -5,21 +5,19 @@ Namespace App\Controller\Admin\Asset;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\Asset\TransferType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of TransferController
  *
  * @author bgamrat
  */
-class TransferController extends Controller
+class TransferController extends AbstractController
 {
 
     /**
-     * @Route("/admin/asset/transfer")
-     * @Method("GET")
+     * @Route("/admin/asset/transfer", methods={"GET"})
      */
     public function indexAction( Request $request )
     {

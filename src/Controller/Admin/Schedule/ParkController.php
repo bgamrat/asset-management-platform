@@ -4,20 +4,18 @@ Namespace App\Controller\Admin\Schedule;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of ParkController
  *
  * @author bgamrat
  */
-class ParkController extends Controller
+class ParkController extends AbstractController
 {
     /**
-     * @Route("/admin/schedule/park")
-     * @Method("GET")
+     * @Route("/admin/schedule/park", methods={"GET"})
      */
     public function indexAction( Request $request )
     {

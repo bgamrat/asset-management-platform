@@ -4,9 +4,8 @@ Namespace App\Controller\Common;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Admin\Asset\TrailerType;
 use App\Entity\Common\CategoryQuantity;
 
@@ -15,12 +14,11 @@ use App\Entity\Common\CategoryQuantity;
  *
  * @author bgamrat
  */
-class EventController extends Controller
+class EventController extends AbstractController
 {
 
     /**
-     * @Route("/admin/schedule/event/{id}")
-     * @Method("GET")
+     * @Route("/admin/schedule/event/{id}", methods={"GET"})
      */
     public function viewAction( $id )
     {

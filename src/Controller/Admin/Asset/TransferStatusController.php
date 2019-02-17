@@ -4,9 +4,8 @@ Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Asset\TransferStatus;
 use App\Form\Admin\Asset\TransferStatusesType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +16,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class TransferStatusController extends Controller
+class TransferStatusController extends AbstractController
 {
 
     /**
-     * @Route("/admin/asset/transfer-status")
-     * @Method("GET")
+     * @Route("/admin/asset/transfer-status", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -40,8 +38,7 @@ class TransferStatusController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/transfer-status/save")
-     * @Method("POST")
+     * @Route("/admin/asset/transfer-status/save", methods={"POST"})
      */
     public function saveAction( Request $request )
     {

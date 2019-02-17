@@ -5,21 +5,19 @@ Namespace App\Controller\Admin\Asset;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\Asset\TrailerType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of TrailerController
  *
  * @author bgamrat
  */
-class TrailerController extends Controller
+class TrailerController extends AbstractController
 {
 
     /**
-     * @Route("/admin/asset/trailer/index", name="app_admin_asset_trailer_index")
-     * @Method("GET")
+     * @Route("/admin/asset/trailer/index", name="app_admin_asset_trailer_index", methods={"GET"})
      */
     public function adminIndexAction( Request $request )
     {

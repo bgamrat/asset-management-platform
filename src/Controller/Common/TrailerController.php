@@ -5,21 +5,19 @@ Namespace App\Controller\Common;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\Asset\TrailerType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of TrailerController
  *
  * @author bgamrat
  */
-class TrailerController extends Controller
+class TrailerController extends AbstractController
 {
 
     /**
-     * @Route("/trailers/", name="trailers")
-     * @Method("GET")
+     * @Route("/trailers/", name="trailers", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -39,8 +37,7 @@ class TrailerController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/trailer/{name}", name="app_admin_asset_trailer_view", defaults={"name": "index"})
-     * @Method("GET")
+     * @Route("/admin/asset/trailer/{name}", name="app_admin_asset_trailer_view", defaults={"name": "index"}, methods={"GET"})
      */
     public function viewAction( $name )
     {
@@ -58,8 +55,7 @@ class TrailerController extends Controller
     }
 
     /**
-     * @Route("/admin/trailer/{name}/equipment-by-category")
-     * @Method("GET")
+     * @Route("/admin/trailer/{name}/equipment-by-category", methods={"GET"})
      */
     public function viewTrailerEquipmentAction( $name )
     {

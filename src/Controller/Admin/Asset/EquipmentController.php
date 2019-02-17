@@ -5,7 +5,7 @@ Namespace App\Controller\Admin\Asset;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\Asset\AssetType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author bgamrat
  */
-class EquipmentController extends Controller
+class EquipmentController extends AbstractController
 {
 
     /**

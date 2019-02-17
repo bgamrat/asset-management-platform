@@ -4,9 +4,8 @@ Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Asset\LocationType;
 use App\Form\Admin\Asset\LocationTypesType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +16,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class LocationTypeController extends Controller
+class LocationTypeController extends AbstractController
 {
 
     /**
-     * @Route("/admin/asset/location-type")
-     * @Method("GET")
+     * @Route("/admin/asset/location-type", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -41,8 +39,7 @@ class LocationTypeController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/location-type/save")
-     * @Method("POST")
+     * @Route("/admin/asset/location-type/save", methods={"POST"})
      */
     public function saveAction( Request $request )
     {

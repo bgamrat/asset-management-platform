@@ -5,21 +5,19 @@ Namespace App\Controller\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\Asset\VendorType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Description of VendorController
  *
  * @author bgamrat
  */
-class VendorController extends Controller
+class VendorController extends AbstractController
 {
 
     /**
-     * @Route("/vendor/", name="vendor")
-     * @Method("GET")
+     * @Route("/vendor/", name="vendor", methods={"GET"})
      */
     public function indexAction( Request $request )
     {

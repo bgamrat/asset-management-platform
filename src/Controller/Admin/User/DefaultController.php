@@ -6,9 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\Admin\User\InvitationType;
 use App\Form\Admin\User\UserType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Invitation;
 
 /**
@@ -16,12 +15,11 @@ use App\Entity\Invitation;
  *
  * @author bgamrat
  */
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
 
     /**
-     * @Route("/admin/user/")
-     * @Method("GET")
+     * @Route("/admin/user/", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -40,8 +38,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/admin/user/invite")
-     * @Method("POST")
+     * @Route("/admin/user/invite", methods={"POST"})
      */
     public function inviteUserAction( Request $request )
     {

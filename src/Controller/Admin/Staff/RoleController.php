@@ -3,9 +3,8 @@
 Namespace App\Controller\Admin\Staff;
 
 use App\Form\Admin\Staff\RoleType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,13 +15,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class RoleController extends Controller
+class RoleController extends AbstractController
 {
 
     /**
-     * @Route("/admin/staff/role")
-     * @Route("/admin/staff/role/{name}", name="app_admin_staff_role_get")
-     * @Method("GET")
+     * @Route("/admin/staff/role", methods={"GET"})
+     * @Route("/admin/staff/role/{name}", name="app_admin_staff_role_get", methods={"GET"})
      */
     public function indexAction( $name = null )
     {
@@ -45,8 +43,7 @@ class RoleController extends Controller
     }
 
     /**
-     * @Route("/admin/staff/role/save")
-     * @Method("POST")
+     * @Route("/admin/staff/role/save", methods={"POST"})
      */
     public function saveAction( Request $request )
     {

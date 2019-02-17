@@ -4,10 +4,8 @@ Namespace App\Controller\Admin\Client;
 
 use App\Form\Admin\Client\ClientType;
 use App\Form\Admin\Client\ContractType;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +16,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class ClientController extends Controller
+class ClientController extends AbstractController
 {
 
     /**
-     * @Route("/admin/client/client")
-     * @Method("GET")
+     * @Route("/admin/client/client", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -36,8 +33,7 @@ class ClientController extends Controller
     }
 
     /**
-     * @Route("/admin/contract/{id}/equipment")
-     * @Method("GET")
+     * @Route("/admin/contract/{id}/equipment", methods={"GET"})
      */
     public function viewContractEquipmentAction( $id )
     {
@@ -56,8 +52,7 @@ class ClientController extends Controller
     }
 
     /**
-     * @Method("GET")
-     * @Route("/admin/client/{name}/contract/{cname}")
+     * @Route("/admin/client/{name}/contract/{cname}", methods={"GET"})
      */
     public function contractAction( Request $request )
     {

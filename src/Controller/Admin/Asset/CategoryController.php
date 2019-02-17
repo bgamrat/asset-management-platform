@@ -4,9 +4,8 @@ Namespace App\Controller\Admin\Asset;
 
 use App\Entity\Asset\Category;
 use App\Form\Admin\Asset\CategoriesType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +16,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author bgamrat
  */
-class CategoryController extends Controller
+class CategoryController extends AbstractController
 {
 
     /**
-     * @Route("/admin/asset/category")
-     * @Method("GET")
+     * @Route("/admin/asset/category", methods={"GET"})
      */
     public function indexAction( Request $request )
     {
@@ -38,8 +36,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * @Route("/admin/asset/category/save")
-     * @Method("POST")
+     * @Route("/admin/asset/category/save", methods={"POST"})
      */
     public function saveAction( Request $request )
     {
