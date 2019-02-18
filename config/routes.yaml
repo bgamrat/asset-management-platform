@@ -1,7 +1,7 @@
-app_api_menu_store_controller:
-    defaults: { _controller: app.api.menu_store_controller::getMenuAction }
-    path: /api/menu/
-    methods: GET
+#app_api_menu_store_controller:
+#    defaults: { _controller: app.api.menu_store_controller::getMenuAction }
+#    path: /api/menu/
+#    methods: GET
 
 static:
     path: /privacy

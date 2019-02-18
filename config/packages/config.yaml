@@ -1,5 +1,5 @@
 imports:
-    - { resource: fos_rest.yaml }
+#    - { resource: fos_rest.yaml }
     - { resource: framework.yaml }
     - { resource: framework_extra.yaml }
     - { resource: knp_menu.yaml }
@@ -10,15 +10,15 @@ imports:
 parameters:
     locale: en
 
-fos_rest:
-    format_listener:
-        enabled: true
-        rules:
-            -
-                # http://symfony.com/doc/current/bundles/FOSRestBundle/format_listener.html
-                path: ^/admin/user
-                priorities: ['json', 'html', 'xml','form']
-                fallback_format: ~
-                methods: [ 'get', 'post', 'put', 'delete']
-            - { path: '^/api', priorities: ['json'], fallback_format: json, prefer_extension: false }
-            - { path: '^/', stop: true }
+#fos_rest:
+#    format_listener:
+#        enabled: true
+#        rules:
+#            -
+#                # http://symfony.com/doc/current/bundles/FOSRestBundle/format_listener.html
+#                path: ^/admin/user
+#                priorities: ['json', 'html', 'xml','form']
+#               fallback_format: ~
+#                methods: [ 'get', 'post', 'put', 'delete']
+#            - { path: '^/api', priorities: ['json'], fallback_format: json, prefer_extension: false }
+#            - { path: '^/', stop: true }

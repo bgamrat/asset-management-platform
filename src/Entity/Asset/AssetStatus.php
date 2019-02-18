@@ -21,12 +21,7 @@ use App\Entity\Traits\XDefault;
  * @ORM\Entity()
  * @UniqueEntity("name")
  * @ORM\Cache()
- * @ApiResource(
- *     collectionOperations={"get","post","put","patch"},
- *     itemOperations={"get","post","put","patch"},
- *     normalizationContext={"groups"={"read"}},
- *     denormalizationContext={"groups"={"write"}}
- * )
+ * @ApiResource
  */
 class AssetStatus
 {
